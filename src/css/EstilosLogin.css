@@ -1,0 +1,116 @@
+/* Contenedor izquierdo con imagen de fondo */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.login-left {
+  background: url('/public/images/fondoLogin2.jpg') no-repeat center center;
+  background-size: cover;
+  position: relative;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-align: center;
+}
+
+
+
+.overlay p {
+  font-size: 48px;
+  font-weight: bold;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+  color: #fff;
+}
+
+/* Contenedor del login */
+.login-container {
+  display: flex;
+  height: 100vh;
+}
+
+.login-right {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  padding: 20px;
+  background-color: #f4f6f9;
+}
+
+.login-form {
+  width: 100%;
+  max-width: 400px; /* Limita el ancho del formulario */
+}
+
+.login-form h2 {
+  margin-bottom: 20px;
+}
+
+.login-form .form-floating {
+  margin-bottom: 15px;
+}
+
+.login-form .form-floating label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.login-form .form-floating input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+}
+
+.login-form button {
+  width: 40%;
+  padding: 10px;
+  background: #208cff;
+  border: none;
+  color: white;
+  border-radius: 20px;
+  cursor: pointer;
+  margin: auto;
+  text-align: center;
+  position: relative; /* Necesario para el pseudo-elemento */
+  overflow: hidden; /* Oculta el brillo que sobresalga del botón */
+  transition: all 0.2s ease-out;
+}
+
+.login-form button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%; /* Empieza fuera del botón */
+  width: 100%;
+  height: 100%;
+  background: rgba(34, 146, 238, 0.4); /* Color del brillo */
+  transform: skewX(-45deg); /* Esquina diagonal para el efecto */
+  transition: all 0.4s ease-out;
+}
+
+.login-form button:hover::before {
+  left: 100%; /* Mueve el brillo hacia la derecha */
+}
+
+.login-form button:active::before {
+  left: -100%; /* Vuelve de derecha a izquierda al hacer clic */
+}
+
+.login-form button:hover {
+  background: #1862b1;
+  font-weight: bold;
+}
+
+
+.error {
+  color: red;
+  font-size: 14px;
+  margin-bottom: 10px;
+  text-align: center;
+}

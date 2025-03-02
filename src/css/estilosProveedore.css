@@ -1,0 +1,55 @@
+.tabla-container {
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tablaGeneral table {
+    font-size: 16px;
+    color: #333;
+}
+
+.tablaGeneral .rdt_TableHead {
+    background-color: #4caf50;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    text-align: center;
+}
+
+.tablaGeneral .rdt_TableRow {
+    transition: background 0.3s;
+}
+
+.tablaGeneral .rdt_TableRow:hover {
+    background-color: #e8f5e9;
+}
+
+.btn-action {
+    padding: 8px;
+    border-radius: 50%;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.btn-action.edit {
+    background-color: #2196f3;
+    color: white;
+}
+
+.btn-action.delete {
+    background-color: #f44336;
+    color: white;
+}
+
+.btn-action.activate {
+    background-color: #4caf50;
+    color: white;
+}
+
+.btn-action:hover {
+    transform: scale(1.1);
+}

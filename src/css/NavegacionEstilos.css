@@ -1,0 +1,33 @@
+  .card {
+    background-color: #f8f9fa; /* Fondo gris claro */
+    border: 1px solid grey;
+  }
+  
+  .breadcrumb {
+    background-color: transparent; /* Fondo transparente para el breadcrumb */
+    padding: 0; /* Quitar el padding extra */
+  }
+  
+  .breadcrumb-item a {
+    color: #007bff; /* Color azul para los enlaces */
+    font-weight: bold;
+  }
+  
+  .breadcrumb-item.active {
+    color: #6c757d; /* Color gris para el item activo */
+  }
+  
+  .breadcrumb-item + .breadcrumb-item::before {
+    content: '>'; /* Cambiar el separador */
+    color: #6c757d;
+    padding: 0 8px;
+  }
+  
+  .card-shadow {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  }
+  
+  .card.rounded {
+    border-radius: 10px; /* Bordes redondeados suaves */
+  }
+  

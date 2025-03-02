@@ -1,0 +1,33 @@
+
+.btn-add-stock{
+    min-width: 35px;
+    width: auto;
+    height: 35px;
+    background-color: rgb(218, 121, 11);
+    line-height: 15px;
+    color: #fff;
+    border: none;
+    border-radius: 0.375rem;
+    padding: 0.5rem;
+    transition: background-color 0.3s ease;
+}
+
+.btn-add-stock:hover {
+    background-color: #b67600;
+    color: white;
+}
+
+.input-add-stock{
+    border: 1px solid #00b652!important;
+}
+.btn-transferir-directo{
+    min-width: 35px;
+    width: auto;
+    background-color: rgb(11, 125, 218)!important;
+    line-height: 15px;
+    color: #fff!important;
+    border: none;
+    border-radius: 0.375rem;
+    padding: 0.5rem;
+    transition: background-color 0.3s ease;
+}

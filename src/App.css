@@ -1,0 +1,557 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Poppins&display=swap');
+p,span, text,h6{
+  font-family: "Poppins", serif;
+}
+
+
+h3,h2,h1,h4,h5{
+  font-family: "Caveat", serif;
+  font-size: 35px!important;
+  color: #5f2956 !important;
+}
+h4{
+  color: #008080!important;
+}
+.tituloCard{
+  color: #34485c!important;
+}
+
+/* Otros estilos específicos */
+button {
+  font-family: "Caveat", serif;
+}
+/* Estilos base */
+.main-container {
+  display: flex;
+  height: 100vh;
+  background-color: #f0f7ff;
+  overflow: auto;
+}
+/* Contenido  del sistema y cabcera*/
+.content {
+  margin-left: 250px;
+  transition: margin-left 0.3s ease, width 0.3s ease;
+  width: calc(100% - 250px);
+}
+
+.content.open {
+  margin-left: 250px;
+}
+
+.content:not(.open) {
+  margin-left: 80px;
+  width: calc(100% - 80px);
+}
+/* ============================== */
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  /* background-color: #0e182c; */
+  background-color: #ffffff;
+  color: #0e182c;
+  overflow-y: hidden;
+  transition: all 0.3s ease, border-radius 0.3s ease; /* Agregado efecto suave para border-radius */
+  width: 250px; 
+  z-index: 1000;
+  border-right: 1px solid rgb(238, 238, 238);
+}
+.sidebar:hover{
+  width: 250px;
+  overflow-y: auto; /* Activa el scroll al pasar el mouse */
+  max-height: 100%; /* Asegura que la altura máxima se mantenga */
+  text-align: left;
+}
+/* Sidebar comprimido */
+.sidebar.compressed {
+  width: 80px; /* Ancho del sidebar comprimido */
+}
+/* Cabecera del Sidebar */
+.sidebar-header {
+  background-color: #ffffff;
+  color: #2a2f30; /* Texto blanco */
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centrado horizontal */
+  padding: 15px; /* Espaciado */
+  gap: 10px; /* Espacio entre ícono y título */
+  transition: height 0.3s ease;
+}
+
+/* Ícono de la cabecera */
+.sidebar-header .header-icon {
+  font-size: 1.8rem; /* Tamaño del ícono */
+}
+
+/* Título de la cabecera */
+.sidebar-header .header-title {
+  font-size: 1.2rem;
+  font-weight: 500;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+/* DISEÑO PARA E SCROL DEL SIDEBAR */
+/* Estilo para el scrollbar del sidebar */
+/* Estilo para el scrollbar del sidebar */
+.sidebar::-webkit-scrollbar {
+  width: 8px; /* Ancho del scrollbar */
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: #f3f3f3; /* Color del pulgar del scrollbar */
+  border-radius: 10px; /* Redondear el pulgar del scrollbar */
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background-color: #a7a7a7a1; /* Color del pulgar al pasar el mouse */
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background-color: #fff4f4; /* Fondo del track */
+  border-radius: 10px;
+}
+
+.sidebar::-webkit-scrollbar-track:hover {
+  background-color: #e2e2e2; /* Fondo del track al pasar el mouse */
+}
+
+/* ================================================================= */
+
+
+/* ESTILOS APRA EL ACORDEON */
+.accordion-button {
+  background-color: transparent !important; /* Sin fondo */
+  color: inherit; /* Mantiene el color del texto */
+  box-shadow: none !important; /* Elimina sombras */
+}
+
+.accordion-button:not(.collapsed) {
+  background-color: transparent !important; /* Sin fondo incluso cuando está expandido */
+  color: inherit;
+}
+
+.accordion-button:focus {
+  box-shadow: none !important; /* Elimina el efecto al hacer clic */
+  outline: none !important; /* Sin contorno */
+}
+.submenu-list{
+  list-style: none;
+}
+.submenu-list .submenu-item{
+  width: 100%;
+  height: 40px;
+  margin-bottom: 4px;
+  position: relative;
+}
+.submenu-list .submenu-item a{
+  text-decoration: none;
+  color: #404c58;
+  width: 100%!important;
+  position: relative;
+  display: block;
+  height: 100%;
+  padding: 8px 10px;
+  transition: background ease-out 0.3s;
+}
+.submenu-list .submenu-item a:hover{
+  background-color: #cedde4;
+  border-radius: 5px;
+  padding: 8px 10px;
+}
+
+/* Estilo para la opción activa */
+.submenu-item.active {
+  background: white;
+  color: #ffffff!important; /* Texto blanco */
+  border-left: 4px solid #007be0;
+  border-radius: 0px;
+}
+
+/* Ajustes para el enlace dentro de la opción activa */
+.submenu-item.active a{
+  color: #196cca;
+  font-weight: bold; /* Resalta el texto */
+ 
+}
+/* ============================================== */
+
+
+/* Items dentro del sidebar */
+.menu-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  height: 50px; /* Altura consistente */
+  margin: 5px auto; /* Márgenes dinámicos */
+  padding: 10px; /* Espaciado interno */
+  border-radius: 5px; /* Esquinas redondeadas */
+  background-color: transparent; /* Fondo inicial */
+  cursor: pointer; /* Hace clickeable todo el contenedor */
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Transición suave */
+  text-transform: capitalize;
+}
+
+/* Para asegurar que el hijo no sobresalga de los 250px del contenedor */
+.sidebar .menu-item {
+  max-width: calc(100% - 10px); /* Resta 10px (5px por lado) para asegurar que el hijo no sobresalga */
+  margin-left: auto; /* Centrado horizontal */
+  margin-right: auto;
+  text-align: center; /* Asegura que los íconos estén centrados */
+  padding-left: 20px;
+}
+
+/* Centrar los íconos en el sidebar comprimido */
+.sidebar.compressed .menu-item {
+  height: 60px;
+  width: 100%;
+  justify-content: center; /* Centra todo el contenido horizontalmente */
+  padding: 10px 23px; /* Ajusta el padding para reducir espacio */
+  cursor: pointer;
+  text-align: center;
+}
+
+.sidebar.compressed .icon {
+  margin: 0; /* Asegúrate de que no haya margen extra alrededor del ícono */
+  font-size: 20px;
+}
+
+/* Efecto hover y activo para items */
+.menu-item:hover,
+.menu-item.active {
+  width: 100%;
+  background-color: #354c69;
+  transition: background-color 0.3s ease; /* Efecto suave */
+  
+}
+
+.menu-list .link-opcion{
+  text-decoration: none;
+}
+/* Ícono con tamaño adecuado */
+ .icon {
+  font-size: 18px;
+  flex-shrink: 0; /* Evita que el ícono se reduzca */
+  color: #2d374d;
+  transition: transform 0.3s ease; /* Suaviza cambios de tamaño */
+}
+/* Texto de las opciones */
+.menu-item span {
+  flex-grow: 1; /* Permite al texto ocupar espacio restante */
+  text-align: left;
+  color: #2d374d;
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* Sidebar comprimido: Oculta texto */
+.sidebar.compressed .menu-item span {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Estilo para la opción activa */
+.menu-item.active {
+  background: white;
+  color: #ffffff!important; /* Texto blanco */
+  border-left: 4px solid #007be0;
+  border-radius: 0px;
+}
+.menu-item.active span{
+  color: #007be0!important;
+  font-weight: bold;
+}
+.menu-item.active .icon{
+  font-size: 17px;
+  flex-shrink: 0; /* Evita que el ícono se reduzca */
+  color: #007be0!important;
+}
+/* Ajustes para el enlace dentro de la opción activa */
+.menu-item.active a{
+  color: #ffffff;
+  font-weight: bold; /* Resalta el texto */
+ 
+}
+
+/* Ícono dentro de la opción activa */
+.menu-item.active .icon {
+  transform: scale(1.2); /* Ícono agrandado */
+}
+
+/* Efecto hover para elementos no activos */
+.menu-item:hover:not(.active) {
+  background-color: #bbbbbb; /* Fondo azul oscuro */
+}
+
+
+
+/* Sidebar comprimido (oculta el título de la cabecera) */
+.sidebar.compressed .sidebar-header .header-title {
+  opacity: 0;
+  visibility: hidden;
+}
+
+
+/* ========== Header ========== */
+.navbar {
+  background-color: transparent; /* Fondo transparente */
+  color: #ecf0f1; /* Texto blanco */
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 1001; /* Encima del sidebar */
+}
+
+.sidebar-toggle {
+  background: none;
+  border: none;
+  color: #ecf0f1;
+  cursor: pointer;
+  font-size: 1.25rem;
+}
+
+.navbar-title {
+  margin: 0;
+  font-size: 1.5rem; /* Título del navbar */
+  font-weight: 500;
+}
+
+.navbar-icon {
+  background: none;
+  border: none;
+  color: #ecf0f1;
+  cursor: pointer;
+  font-size: 1.25rem;
+}
+
+.card-platos{
+  transition: all ease-out 0.2s;
+}
+.card-platos:active{
+  transform: scale(1.1,1.1);
+}
+
+.card{
+  border-radius: 10px !important; /* Redondeo */
+  transition: box-shadow 0.3s ease-in-out; /* Efecto suave */
+  border: none!important;
+  overflow: hidden;
+}
+
+
+.card-header {
+  background-color: white!important;
+  font-weight: bold; 
+  border: none!important;
+  border-top-left-radius: 15px; /* Ajuste del borde redondeado */
+  border-top-right-radius: 15px; /* Ajuste del borde redondeado */
+}
+
+.titulo-card-especial{
+  color: #1d3549!important;
+}
+/* Estilo general para las tarjetas de estadísticas */
+.stats-card {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 15px; /* Bordes redondeados */
+  background-color: #f8f9fa; /* Fondo claro */
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  display: flex; /* Usamos Flexbox */
+  align-items: center; /* Alineación vertical */
+  padding: 5px; /* Espaciado interno */
+}
+
+.stats-card:hover {
+  transform: translateY(-5px); /* Animación al pasar el mouse */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo para el contenedor del ícono */
+.stats-card .card-body {
+  display: flex;
+  align-items: center; /* Alineación vertical del ícono y el texto */
+}
+
+.stats-card .icon {
+  font-size: 2.5rem; /* Tamaño del ícono */
+  color: #007be098; /* Color azul del ícono */
+  margin-right: 5px; /* Espaciado a la derecha del ícono */
+  position: absolute;
+  top: 25%;
+  left: 20px;
+}
+
+.stats-card .card-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #777777; /* Color oscuro */
+}
+
+.stats-card .card-text {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #007be0; /* Color azul del texto */
+}
+
+.nombreUsuarioTabla{
+  text-transform: capitalize;
+}
+.badge-user{
+  display: inline-block;
+  background-color: #edf6ff; /* Azul Bootstrap */
+  color: rgb(86, 121, 161);
+  padding: 2px 8px;
+  border-radius: 5px;
+  font-size: 0.7rem;
+  margin-top: 4px; /* Espaciado entre nombre y badge */
+  font-weight: bold;
+}
+
+/* ESTILOS PARA TABLAS GENERALES */
+
+/* Estilo para las filas de la tabla */
+.tablaGeneral .rdt_TableBody .rdt_TableRow {
+  background-color: #fbfdff !important; 
+  transition: background-color 0.2s ease; 
+}
+
+/* Efecto hover para las filas */
+.tablaGeneral .rdt_TableBody .rdt_TableRow:hover {
+  background-color: #eef2f8 !important; /* Color de fondo al hacer hover */
+  cursor: pointer; /* Cambia el cursor al pasar el mouse */
+}
+
+/* Estilo para las celdas de la tabla */
+.tablaGeneral .rdt_TableBody .rdt_TableCell {
+  background-color: transparent !important; /* Transparente para heredar el fondo de la fila */
+}
+
+
+/* Remover cualquier fondo de cuerpo de tabla adicional */
+.cuerpo-tabla {
+  background-color: transparent !important; /* Quitar fondo adicional si existe */
+}
+
+
+
+  /* COLORES PARA BOTONES DE ACCION DEL SISTEMA */
+  .btn-editar {
+    min-width: 35px;
+    width: auto;
+    height: 35px;
+    line-height: 15px;
+    color: #464646;
+    border: none;
+    border-radius: 0.375rem;
+    padding: 0.5rem;
+    transition: background-color 0.3s ease;
+}
+
+.btn-editar:hover {
+    background-color: #202020;
+    color: white;
+}
+
+.btn-eliminar {
+    min-width: 35px;
+    width: auto;
+    height: 35px;
+    line-height: 15px;
+    color: #dc3545;
+    border: 1px solid #dc3545;
+    border-radius: 0.375rem;
+    padding: 0.5rem;
+    transition: background-color 0.3s ease;
+}
+
+.btn-eliminar:hover {
+    background-color: #c82333;
+    color: white;
+}
+.btn-guardar{
+    min-width: 35px;
+    width: 200px;
+    height: 50px;
+    line-height: 15px;
+    background-color: #007be0;
+    color: #e2ecff;
+    border:none;
+    border-radius: 0.375rem;
+    padding: 0.5rem;
+    transition: background-color 0.3s ease;
+}
+.btn-guardar:hover{
+  background-color: #104e81;
+  color: #c9d6f0;
+}
+
+.btn-cerrar-modal{
+  min-width: 35px;
+  width:100px;
+  height: 50px;
+  line-height: 15px;
+  background-color: #393f44;
+  color: #e2ecff;
+  border:none;
+  border-radius: 0.375rem;
+  padding: 0.5rem;
+  transition: background-color 0.3s ease;
+}
+.btn-cerrar-modal:hover{
+background-color: #202427;
+color: #c9d6f0;
+}
+
+.btn {
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px; /* Esquinas redondeadas */
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Transiciones suaves */
+}
+
+
+/* Estado active */
+.btn:active {
+  background-color: #004080; /* Color más oscuro al hacer clic */
+  transform: scale(0.95); /* Reduce ligeramente el tamaño en el clic */
+}
+
+.modal-sin-borde .modal-content {
+  border: none;
+  box-shadow: none;
+}
+
+/* ========== Responsivo ========== */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 80px; /* Sidebar comprimido por defecto en pantallas pequeñas */
+    border-radius: 0; /* Eliminar el redondeo en pantallas pequeñas */
+  }
+
+  .content {
+    margin-left: 80px; /* Ajuste para pantallas pequeñas */
+    width: calc(100% - 80px);
+  }
+
+  .sidebar.open {
+    width: 200px; /* Menor ancho para pantallas pequeñas */
+  }
+
+  .content.open {
+    margin-left: 200px;
+    width: calc(100% - 200px);
+  }
+}

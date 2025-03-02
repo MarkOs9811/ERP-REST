@@ -1,0 +1,42 @@
+.categoriaActiva{
+    width: 10px!important;
+    height: 10px;
+    background-color:rgb(26, 100, 175);
+    margin-right: 10px;
+}
+.categoriaFalse{
+    width: 10px!important;
+    height: 10px;
+    background-color:rgb(218, 19, 79);
+    margin-right: 10px;
+}
+
+.borderInferior {
+    border-top: none;
+    border-bottom: 1px solid #dee2e6!important; /* color similar al borde estándar de Bootstrap */
+   
+}
+.btn-agregar-plato{
+    width: 100%;
+    background-color: #f0b000 !important;
+    border: none;
+    color: rgb(73, 50, 6)!important;
+    transition: transform 0.3s ease-out, background-color 0.3s ease-out; /* Más control en la transición */ 
+    border-radius: 5px; /* Opcional: Añade esquinas redondeadas */
+    cursor: pointer; /* Asegura que parezca clicable */
+}
+.btn-agregar-categoria {
+    width: auto;
+    background-color: #00a4aa !important;
+    border: none;
+    color: white;
+    transition: transform 0.3s ease-out, background-color 0.3s ease-out; /* Más control en la transición */
+    padding: 0.5rem 1rem; /* Opcional: Mejora el tamaño del botón */
+    border-radius: 5px; /* Opcional: Añade esquinas redondeadas */
+    cursor: pointer; /* Asegura que parezca clicable */
+}
+
+.btn:active {
+    
+    transform: scale(1.1); /* No es necesario especificar los dos ejes si se escalan igual */
+}

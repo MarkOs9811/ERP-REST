@@ -1,0 +1,95 @@
+/* Estilos para la superposición del modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1050; /* Asegúrate de que esté por encima de otros elementos */
+    padding: 20px; /* Espaciado */
+    
+}
+
+/* Estilos para el contenido del modal */
+.contenido-model {
+    background: white;
+    padding: 30px;
+    border-radius: 10px!important;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    max-width: 500px; /* Máximo ancho */
+    width: 100%; /* Responsivo */
+    animation: fadeIn 0.2s ease-out; /* Animación de aparición */
+}
+
+/* Animación de desvanecimiento */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Título del modal */
+h3 {
+    margin-bottom: 15px;
+    font-weight: 500;
+    color: #333;
+}
+
+/* Nombre de la persona a eliminar */
+.modal-name-delete {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #dc3545; /* Rojo para resaltar el nombre */
+    margin-bottom: 20px;
+    text-transform: capitalize;
+    
+}
+
+/* Estilos para los botones */
+button {
+    margin: 10px;
+}
+
+/* Botón de Confirmar */
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}
+
+/* Botón de Cancelar */
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
