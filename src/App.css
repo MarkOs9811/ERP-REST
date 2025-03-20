@@ -2,8 +2,9 @@
 p,span, text,h6{
   font-family: "Poppins", serif;
 }
-
-
+body{
+  overflow: hidden!important;
+}
 h3,h2,h1,h4,h5{
   font-family: "Caveat", serif;
   font-size: 35px!important;
@@ -23,15 +24,35 @@ button {
 /* Estilos base */
 .main-container {
   display: flex;
-  height: 100vh;
-  background-color: #f0f7ff;
-  overflow: auto;
+  background-color: #f0f2f5;
+ 
 }
+
+/* CONTENEDOR CUERPO y submenu SCROLL */
+.row-cuerpo{
+  display: flex;
+  align-items: stretch;
+}
+.contenedor-submenu {
+  width: 250px;
+  /* Ajusta el ancho según prefieras */
+  min-width: 200px;  
+  
+}
+
+.cuerpo-contenedor {
+ 
+}
+
+
+/* ====== */
 /* Contenido  del sistema y cabcera*/
 .content {
   margin-left: 250px;
   transition: margin-left 0.3s ease, width 0.3s ease;
   width: calc(100% - 250px);
+  height: 100%;
+  padding-bottom: 100px;
 }
 
 .content.open {
@@ -39,7 +60,7 @@ button {
 }
 
 .content:not(.open) {
-  margin-left: 80px;
+  margin-left: 60px;
   width: calc(100% - 80px);
 }
 /* ============================== */
@@ -50,13 +71,13 @@ button {
   left: 0;
   height: 100%;
   /* background-color: #0e182c; */
-  background-color: #ffffff;
+  background-color: #eefaff;
   color: #0e182c;
   overflow-y: hidden;
   transition: all 0.3s ease, border-radius 0.3s ease; /* Agregado efecto suave para border-radius */
   width: 250px; 
   z-index: 1000;
-  border-right: 1px solid rgb(238, 238, 238);
+  /* border-right: 1px solid rgb(238, 238, 238); */
 }
 .sidebar:hover{
   width: 250px;
@@ -66,11 +87,11 @@ button {
 }
 /* Sidebar comprimido */
 .sidebar.compressed {
-  width: 80px; /* Ancho del sidebar comprimido */
+  width: 60px; /* Ancho del sidebar comprimido */
 }
 /* Cabecera del Sidebar */
 .sidebar-header {
-  background-color: #ffffff;
+  background-color: #d33c3c;
   color: #2a2f30; /* Texto blanco */
   display: flex;
   align-items: center;
@@ -82,7 +103,7 @@ button {
 
 /* Ícono de la cabecera */
 .sidebar-header .header-icon {
-  font-size: 1.8rem; /* Tamaño del ícono */
+  font-size: 1.3rem; /* Tamaño del ícono */
 }
 
 /* Título de la cabecera */
@@ -93,32 +114,33 @@ button {
 }
 /* DISEÑO PARA E SCROL DEL SIDEBAR */
 /* Estilo para el scrollbar del sidebar */
-/* Estilo para el scrollbar del sidebar */
-.sidebar::-webkit-scrollbar {
-  width: 8px; /* Ancho del scrollbar */
+/* Scrollbar en navegadores basados en WebKit */
+.cuerpo-contenedor::-webkit-scrollbar {
+  width: 8px;
+  /* Ancho del scroll */
 }
 
-.sidebar::-webkit-scrollbar-thumb {
-  background-color: #f3f3f3; /* Color del pulgar del scrollbar */
-  border-radius: 10px; /* Redondear el pulgar del scrollbar */
-}
-
-.sidebar::-webkit-scrollbar-thumb:hover {
-  background-color: #a7a7a7a1; /* Color del pulgar al pasar el mouse */
-}
-
-.sidebar::-webkit-scrollbar-track {
-  background-color: #fff4f4; /* Fondo del track */
+.cuerpo-contenedor::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  /* Color de fondo del track */
   border-radius: 10px;
 }
 
-.sidebar::-webkit-scrollbar-track:hover {
-  background-color: #e2e2e2; /* Fondo del track al pasar el mouse */
+.cuerpo-contenedor::-webkit-scrollbar-thumb {
+  background: #888;
+  /* Color del thumb (barra deslizante) */
+  border-radius: 10px;
 }
 
+.cuerpo-contenedor::-webkit-scrollbar-thumb:hover {
+  background: #555;
+  /* Color cuando se pasa el mouse */
+}
 /* ================================================================= */
-
-
+/* CABECERA PRINCIPAL */
+.header-contenido{
+  background-color: #d33c3c!important;
+}
 /* ESTILOS APRA EL ACORDEON */
 .accordion-button {
   background-color: transparent !important; /* Sin fondo */
@@ -135,16 +157,14 @@ button {
   box-shadow: none !important; /* Elimina el efecto al hacer clic */
   outline: none !important; /* Sin contorno */
 }
-.submenu-list{
-  list-style: none;
-}
-.submenu-list .submenu-item{
+
+ .subMenu{
   width: 100%;
-  height: 40px;
+  height: auto;
   margin-bottom: 4px;
   position: relative;
 }
-.submenu-list .submenu-item a{
+.subMenu a{
   text-decoration: none;
   color: #404c58;
   width: 100%!important;
@@ -154,14 +174,14 @@ button {
   padding: 8px 10px;
   transition: background ease-out 0.3s;
 }
-.submenu-list .submenu-item a:hover{
+.subMenu a:hover{
   background-color: #cedde4;
   border-radius: 5px;
   padding: 8px 10px;
 }
 
 /* Estilo para la opción activa */
-.submenu-item.active {
+.subMenu .active {
   background: white;
   color: #ffffff!important; /* Texto blanco */
   border-left: 4px solid #007be0;
@@ -169,7 +189,7 @@ button {
 }
 
 /* Ajustes para el enlace dentro de la opción activa */
-.submenu-item.active a{
+.subMenu.active a{
   color: #196cca;
   font-weight: bold; /* Resalta el texto */
  
@@ -182,22 +202,24 @@ button {
   list-style: none;
   padding: 0;
   margin: 0;
+  height: auto;
 }
-
+.menu-footer{
+  position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding-bottom: 10px;
+    /* Espaciado opcional */
+}
 .menu-item {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 10px;
+  justify-content: flex-start; /* Cambia a flex-start para alinear a la izquierda */
+  /* gap: 10px; */
   width: 100%;
   height: 50px; /* Altura consistente */
   margin: 5px auto; /* Márgenes dinámicos */
-  padding: 10px; /* Espaciado interno */
-  border-radius: 5px; /* Esquinas redondeadas */
-  background-color: transparent; /* Fondo inicial */
-  cursor: pointer; /* Hace clickeable todo el contenedor */
-  transition: background-color 0.3s ease, transform 0.3s ease; /* Transición suave */
-  text-transform: capitalize;
+ 
 }
 
 /* Para asegurar que el hijo no sobresalga de los 250px del contenedor */
@@ -211,7 +233,7 @@ button {
 
 /* Centrar los íconos en el sidebar comprimido */
 .sidebar.compressed .menu-item {
-  height: 60px;
+  height: 40px;
   width: 100%;
   justify-content: center; /* Centra todo el contenido horizontalmente */
   padding: 10px 23px; /* Ajusta el padding para reducir espacio */
@@ -221,7 +243,7 @@ button {
 
 .sidebar.compressed .icon {
   margin: 0; /* Asegúrate de que no haya margen extra alrededor del ícono */
-  font-size: 20px;
+  font-size: 17px;
 }
 
 /* Efecto hover y activo para items */
@@ -233,12 +255,13 @@ button {
   
 }
 
-.menu-list .link-opcion{
-  text-decoration: none;
+.link-opcion{
+  width: 100%;
+  height: 100%;
 }
 /* Ícono con tamaño adecuado */
  .icon {
-  font-size: 18px;
+  font-size: 15px;
   flex-shrink: 0; /* Evita que el ícono se reduzca */
   color: #2d374d;
   transition: transform 0.3s ease; /* Suaviza cambios de tamaño */
@@ -253,11 +276,7 @@ button {
   transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
-/* Sidebar comprimido: Oculta texto */
-.sidebar.compressed .menu-item span {
-  opacity: 0;
-  visibility: hidden;
-}
+
 
 /* Estilo para la opción activa */
 .menu-item.active {
@@ -271,9 +290,10 @@ button {
   font-weight: bold;
 }
 .menu-item.active .icon{
-  font-size: 17px;
+  font-size: 14px;
   flex-shrink: 0; /* Evita que el ícono se reduzca */
   color: #007be0!important;
+  font-weight: bold!important;
 }
 /* Ajustes para el enlace dentro de la opción activa */
 .menu-item.active a{
@@ -305,11 +325,11 @@ button {
 .navbar {
   background-color: transparent; /* Fondo transparente */
   color: #ecf0f1; /* Texto blanco */
-  padding: 10px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   z-index: 1001; /* Encima del sidebar */
+  height: 59px;
 }
 
 .sidebar-toggle {
@@ -342,7 +362,7 @@ button {
 }
 
 .card{
-  border-radius: 10px !important; /* Redondeo */
+  /* Redondeo */
   transition: box-shadow 0.3s ease-in-out; /* Efecto suave */
   border: none!important;
   overflow: hidden;

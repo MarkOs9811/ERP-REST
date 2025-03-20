@@ -1,14 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  isCompressed: false,
+  isCompressed: true,
 };
 
 const sideBarSlice = createSlice({
   name: "sidebar",
   initialState,
   reducers: {
-    toggleSidebar: (state, action) => { // ⚠️ CAMBIO: Usar "toggleSidebar" en vez de "toggleSideBar"
+    toggleSidebar: (state, action) => {
+      // ⚠️ CAMBIO: Usar "toggleSidebar" en vez de "toggleSideBar"
       state.isCompressed = action.payload;
     },
   },

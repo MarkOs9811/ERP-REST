@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useMemo, useEffect } from "react";
 import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -9,9 +9,10 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { useQuery } from "@tanstack/react-query";
 import { getVentas } from "../service/ObtenerVentasDetalle";
 
-// Registrar los módulos necesarios
+// Registrar los módulos necesarios para ChartJS
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -22,65 +23,55 @@ ChartJS.register(
 );
 
 const GraficoBarVentas = () => {
-  const [listVentas, setListVentas] = useState([]);
-  const [chartData, setChartData] = useState({
-    labels: [],
-    datasets: [],
+  // React Query para obtener las ventas
+  const {
+    data: listVentas = [],
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["ventas"],
+    queryFn: getVentas,
   });
 
-  const fetchVentas = async () => {
-    const result = await getVentas();
-    if (result.success) {
-      setListVentas(result.data);
-    } else {
-      console.error("Error:", result.message);
-    }
-  };
+  // Procesar datos para el gráfico
+  const chartData = useMemo(() => {
+    if (!listVentas.length) return { labels: [], datasets: [] };
 
-  useEffect(() => {
-    fetchVentas();
-  }, []);
+    const monthlyTotals = new Array(12).fill(0);
 
-  useEffect(() => {
-    if (listVentas.length > 0) {
-      // Inicializar un array para los totales mensuales
-      const monthlyTotals = new Array(12).fill(0);
+    listVentas.forEach((venta) => {
+      const month = new Date(venta.fechaVenta).getMonth();
+      monthlyTotals[month] += venta.total;
+    });
 
-      // Sumar las ventas por mes
-      listVentas.forEach((venta) => {
-        const month = new Date(venta.fechaVenta).getMonth();
-        monthlyTotals[month] += venta.total;
-      });
-
-      // Actualizar los datos del gráfico
-      setChartData({
-        labels: [
-          "Enero",
-          "Febrero",
-          "Marzo",
-          "Abril",
-          "Mayo",
-          "Junio",
-          "Julio",
-          "Agosto",
-          "Septiembre",
-          "Octubre",
-          "Noviembre",
-          "Diciembre",
-        ],
-        datasets: [
-          {
-            label: "Ventas",
-            data: monthlyTotals,
-            backgroundColor: "rgba(75, 192, 192, 0.6)",
-            borderColor: "rgba(75, 192, 192, 1)",
-            borderWidth: 1,
-          },
-        ],
-      });
-    }
+    return {
+      labels: [
+        "Enero",
+        "Febrero",
+        "Marzo",
+        "Abril",
+        "Mayo",
+        "Junio",
+        "Julio",
+        "Agosto",
+        "Septiembre",
+        "Octubre",
+        "Noviembre",
+        "Diciembre",
+      ],
+      datasets: [
+        {
+          label: "Ventas",
+          data: monthlyTotals,
+          backgroundColor: "rgba(75, 192, 192, 0.6)",
+          borderColor: "rgba(75, 192, 192, 1)",
+          borderWidth: 1,
+        },
+      ],
+    };
   }, [listVentas]);
 
+  // Configuración de opciones del gráfico
   const options = {
     responsive: true,
     plugins: {
@@ -93,6 +84,9 @@ const GraficoBarVentas = () => {
       },
     },
   };
+
+  // Mostrar mensaje mientras se obtienen los datos
+  if (isLoading) return <p>Cargando gráfico...</p>;
 
   return <Bar data={chartData} options={options} />;
 };

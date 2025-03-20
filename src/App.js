@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
-  HashRouter as Router,
-  // BrowserRouter as Router, // Cambiado de BrowserRouter a HashRouter
+  // HashRouter as Router,
+  BrowserRouter as Router, // Cambiado de BrowserRouter a HashRouter
   Routes,
   Route,
   Navigate,
@@ -49,6 +49,10 @@ import { Solicitudes } from "./pages/moduloAlmacen/Solicitudes";
 import { Kardex } from "./pages/moduloAlmacen/Kardex";
 import { ReportesAlmacen } from "./pages/moduloAlmacen/ReportesAlmacen";
 import { AjustesAlmacen } from "./pages/moduloAlmacen/AjustesAlmancen";
+import { Compras } from "./pages/Compras";
+import { SubMenu } from "./components/SubMenu";
+import { PedidosWsp } from "./components/PedidosWsp";
+import { MensajeriaPedido } from "./components/componenteVender/MensajeriaPedido";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 function App() {
@@ -83,114 +87,150 @@ function App() {
               path="/*"
               element={
                 <PrivateRoute>
-                  <div className="main-container">
+                  <div className="main-container p-0 m-0 h-screen flex">
                     <SideBar />
-                    <div className={`content ${isCompressed ? "" : "open"}`}>
-                      <Header />
-                      <Navegacion />
-                      <div className="container-fluid py-3 px-3 ">
-                        <ToastContainer />
-                        <Routes>
-                          <Route path="/" element={<Home />} />
-                          <Route path="/usuarios" element={<Usuarios />} />
-                          <Route
-                            path="/almacen/productos"
-                            element={<Almacen />}
-                          />
-                          {/* RUTAS PARA MODULO ALMACEN */}
-                          <Route
-                            path="/almacen/registro"
-                            element={<Registro />}
-                          />
-                          <Route
-                            path="/almacen/transferencia"
-                            element={<Transferencias />}
-                          />
-                          <Route
-                            path="/almacen/solicitud"
-                            element={<Solicitudes />}
-                          />
-                          <Route path="/almacen/kardex" element={<Kardex />} />
-                          <Route
-                            path="/almacen/reportes"
-                            element={<ReportesAlmacen />}
-                          />
-                          <Route
-                            path="/almacen/ajustes"
-                            element={<AjustesAlmacen />}
-                          />
+                    <div
+                      className={`content ${
+                        isCompressed ? "" : "open"
+                      } w-100 bg-dark p-0`}
+                    >
+                      <div className="card p-0 m-0 rounded-0 vh-100">
+                        {/* Header fijo */}
+                        <div className="card-header p-0 rounded-0 m-0 shrink-0">
+                          <Header />
+                          <Navegacion />
+                        </div>
+                        {/* Cuerpo flexible con scroll interno si es necesario */}
+                        <div className="card-body bg-light p-0 h-100">
+                          <div className="row px-2 h-100 ">
+                            <div className="col-md-2  h-100 d-flex align-items-center justify-content-center pe-2 py-2">
+                              <div className="card h-100 w-100">
+                                <SubMenu />
+                              </div>
+                            </div>
+                            <div className="col-md-10  h-100 d-flex align-items-center justify-content-center p-2 overflow-auto">
+                              <Routes>
+                                <Route path="/" element={<Home />} />
+                                <Route
+                                  path="/usuarios"
+                                  element={<Usuarios />}
+                                />
+                                <Route
+                                  path="/almacen/productos"
+                                  element={<Almacen />}
+                                />
+                                {/* RUTAS PARA MODULO ALMACEN */}
+                                <Route
+                                  path="/almacen/registro"
+                                  element={<Registro />}
+                                />
+                                <Route
+                                  path="/almacen/transferencia"
+                                  element={<Transferencias />}
+                                />
+                                <Route
+                                  path="/almacen/solicitud"
+                                  element={<Solicitudes />}
+                                />
+                                <Route
+                                  path="/almacen/kardex"
+                                  element={<Kardex />}
+                                />
+                                <Route
+                                  path="/almacen/reportes"
+                                  element={<ReportesAlmacen />}
+                                />
+                                <Route
+                                  path="/almacen/ajustes"
+                                  element={<AjustesAlmacen />}
+                                />
+                                {/* RUTAS PARA MODULO COMPRAS */}
 
-                          {/* RUTAS PARA MODULO VENTAS */}
-                          <Route
-                            path="/ventas/misVentas"
-                            element={<Ventas />}
-                          />
-                          <Route
-                            path="/ventas/inventario"
-                            element={<Inventario />}
-                          />
-                          <Route
-                            path="/ventas/solicitud"
-                            element={<Solicitud />}
-                          />
-                          <Route
-                            path="/ventas/solicitud/realizarSolicitud"
-                            element={<RealizarSolicitud />}
-                          />
-                          <Route
-                            path="/ventas/reportes"
-                            element={<Reportes />}
-                          />
-                          <Route
-                            path="/ventas/ajustes-ventas"
-                            element={<AjustesVentas />}
-                          />
+                                <Route path="/compras/" element={<Compras />} />
+                                {/* RUTAS PARA MODULO VENTAS */}
+                                <Route
+                                  path="/ventas/misVentas"
+                                  element={<Ventas />}
+                                />
+                                <Route
+                                  path="/ventas/inventario"
+                                  element={<Inventario />}
+                                />
+                                <Route
+                                  path="/ventas/solicitud"
+                                  element={<Solicitud />}
+                                />
+                                <Route
+                                  path="/ventas/solicitud/realizarSolicitud"
+                                  element={<RealizarSolicitud />}
+                                />
+                                <Route
+                                  path="/ventas/reportes"
+                                  element={<Reportes />}
+                                />
+                                <Route
+                                  path="/ventas/ajustes-ventas"
+                                  element={<AjustesVentas />}
+                                />
 
-                          <Route path="/ventas/cajas" element={<Cajas />} />
-                          <Route
-                            path="/vender/*"
-                            element={
-                              <CajaProtectedRoute>
-                                <Routes>
-                                  <Route
-                                    path="ventasMesas"
-                                    element={<Vender />}
-                                  />
-                                  <Route
-                                    path="ventasLlevar"
-                                    element={<ToLlevar />}
-                                  />
-                                  <Route
-                                    path="ventasMesas/platos"
-                                    element={<ToMesa />}
-                                  />
-                                  <Route
-                                    path="ventasMesas/preVenta"
-                                    element={<PreventaMesa />}
-                                  />
-                                  <Route
-                                    path="ventasMesas/detallesPago"
-                                    element={<DetallesPago />}
-                                  />
-                                  <Route
-                                    path="cerrarCaja"
-                                    element={<CerrarCaja />}
-                                  />
-                                </Routes>
-                              </CajaProtectedRoute>
-                            }
-                          />
-                          <Route path="/abrirCaja" element={<AbrirCaja />} />
-                          <Route
-                            path="/proveedores"
-                            element={<Proveedores />}
-                          />
-                          <Route
-                            path="/configuracion"
-                            element={<Configuracion />}
-                          />
-                          <Route path="/platos" element={<MenuPlato />} />
-                        </Routes>
+                                <Route
+                                  path="/ventas/cajas"
+                                  element={<Cajas />}
+                                />
+                                <Route
+                                  path="/vender/*"
+                                  element={
+                                    <CajaProtectedRoute>
+                                      <Routes>
+                                        <Route
+                                          path="ventasMesas"
+                                          element={<Vender />}
+                                        />
+                                        <Route
+                                          path="ventasLlevar"
+                                          element={<ToLlevar />}
+                                        />
+                                        <Route
+                                          path="ventasMesas/platos"
+                                          element={<ToMesa />}
+                                        />
+                                        <Route
+                                          path="ventasMesas/preVenta"
+                                          element={<PreventaMesa />}
+                                        />
+                                        <Route
+                                          path="ventasMesas/detallesPago"
+                                          element={<DetallesPago />}
+                                        />
+                                        <Route
+                                          path="cerrarCaja"
+                                          element={<CerrarCaja />}
+                                        />
+                                        <Route
+                                          path="mensajeriaPedido"
+                                          element={<MensajeriaPedido />}
+                                        />
+                                      </Routes>
+                                    </CajaProtectedRoute>
+                                  }
+                                />
+                                <Route
+                                  path="/abrirCaja"
+                                  element={<AbrirCaja />}
+                                />
+                                <Route
+                                  path="/proveedores"
+                                  element={<Proveedores />}
+                                />
+                                <Route
+                                  path="/configuracion"
+                                  element={<Configuracion />}
+                                />
+                                <Route path="/platos" element={<MenuPlato />} />
+                              </Routes>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>

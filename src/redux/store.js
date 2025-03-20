@@ -6,6 +6,7 @@ import pedidoLlevar from "./pedidoLlevarSlice";
 import tipoVentaReducer from "./tipoVentaSlice";
 import categoriaReducer from "./categoriaPlatosSlice";
 import sideBarReducer from "./sideBarSlice";
+import subMenuReducer from "./subMenuSlice";
 
 const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ const store = configureStore({
     tipoVenta: tipoVentaReducer,
     categoriaFiltroPlatos: categoriaReducer,
     sidebar: sideBarReducer,
+    subMenu: subMenuReducer,
   },
 });
 
