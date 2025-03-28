@@ -228,9 +228,9 @@ export function PreventaMesa() {
     navigate("/vender/ventasMesas/detallesPago");
   };
   return (
-    <div className="row g-3">
+    <div className="row g-2 w-100 h-100">
       <div className="col-md-3">
-        <div className="card p-3 shadow-sm">
+        <div className="card shadow-sm flex-grow-1 h-100 d-flex flex-column p-2">
           <div className="card-header d-flex align-items-center justify-content-center">
             <button
               className="btn btn-outline-dark me-auto"
@@ -239,12 +239,15 @@ export function PreventaMesa() {
               <ArrowBackOutline color={"auto"} />
               Volver
             </button>
-            <h3 className="text-center text-auto align-middle mx-3">Cuenta</h3>
+
             <h6 className="text-center fw-bold align-middle h2 text-success">
               Mesa {mesa}
             </h6>
           </div>
-          <div className="card-body p-0 d-flex flex-column">
+          <div
+            className="card-body overflow-auto"
+            style={{ height: "calc(100vh - 215px)" }}
+          >
             {preventas.length > 0 ||
             (pedido.mesas[idMesa] && pedido.mesas[idMesa].items.length > 0) ? (
               <>
@@ -447,8 +450,8 @@ export function PreventaMesa() {
         </div>
       </div>
       <div className="col-md-9 d-flex flex-column ">
-        <div className="card shadow-sm flex-grow-1">
-          <div className="card-header d-flex flex-wrap bg-white border-bottom py-3">
+        <div className="card shadow-sm flex-grow-1 h-100 d-flex flex-column">
+          <div className="card-header d-flex flex-wrap bg-white border-bottom">
             <div className="d-flex align-items-center gap-2 w-100">
               <h4 className="mb-0 text-dark">Platos</h4>
 
@@ -458,7 +461,10 @@ export function PreventaMesa() {
               </div>
             </div>
           </div>
-          <div className="card-body ">
+          <div
+            className="card-body overflow-auto"
+            style={{ height: "calc(100vh - 480px)" }}
+          >
             <div className="justify-content-start contenedor-platos pb-5">
               {productos
                 .filter(

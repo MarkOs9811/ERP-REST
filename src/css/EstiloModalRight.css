@@ -1,0 +1,102 @@
+.modal-right-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1050;
+    display: flex;
+    justify-content: flex-end;
+    /* Removemos la transición de opacidad */
+}
+
+/* Eliminamos estas clases ya que no queremos el desvanecimiento */
+/* .modal-right-overlay.closing {
+    opacity: 0;
+} */
+
+.modal-right-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Removemos la transición de opacidad del backdrop */
+}
+
+/* Eliminamos esta regla también */
+/* .modal-right-overlay.closing .modal-right-backdrop {
+    opacity: 0;
+} */
+
+.modal-right-container {
+    position: relative;
+    height: 100vh;
+    background-color: white;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    z-index: 1051;
+}
+
+.slide-in {
+    animation: slideIn 0.3s ease-out forwards;
+}
+
+.slide-out {
+    animation: slideOut 0.3s ease-in forwards;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(100%);
+    }
+}
+
+/* El resto de tus estilos permanecen igual */
+.modal-right-header {
+    padding: 1rem;
+    border-bottom: 1px solid #dee2e6;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-right-title {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.modal-right-close-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.modal-right-body {
+    padding: 1rem;
+    max-height: calc(100vh - 150px);
+    overflow-y: auto;
+}
+
+.modal-right-footer {
+    padding: 1rem;
+    border-top: 1px solid #dee2e6;
+    display: flex;
+    justify-content: flex-end;
+}

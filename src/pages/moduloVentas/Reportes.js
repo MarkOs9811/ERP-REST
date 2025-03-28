@@ -18,21 +18,30 @@ export function Reportes() {
   };
 
   return (
-    <div className="card shadow-sm p-3">
-      <h3 className="mb-4">Reportes</h3>
-      <div className="row g-3 mb-4">
-        <FormularioReporte
-          titulo="Reporte de Ventas"
-          onSubmit={handleReporte1}
-        />
-        <FormularioReporte
-          titulo="Reporte de Compras"
-          onSubmit={handleReporte2}
-        />
-        <FormularioReporte
-          titulo="Reporte de Inventarios"
-          onSubmit={handleReporte3}
-        />
+    <div className="container-fluid w-100 h-100 p-0">
+      <div className="card   bg-transparent my-1 flex-grow-1 h-100 d-flex flex-column p-0">
+        <div
+          className="card-body overflow-x-hidden overflow-y-auto"
+          style={{ height: "calc(100vh -480px)" }}
+        >
+          <div className="row g-3 mb-4">
+            <div className="col-md-12">
+              <h3 className="mb-4">Reportes</h3>{" "}
+            </div>
+            <FormularioReporte
+              titulo="Reporte de Ventas"
+              onSubmit={handleReporte1}
+            />
+            <FormularioReporte
+              titulo="Reporte de Compras"
+              onSubmit={handleReporte2}
+            />
+            <FormularioReporte
+              titulo="Reporte de Inventarios"
+              onSubmit={handleReporte3}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

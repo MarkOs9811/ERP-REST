@@ -11,32 +11,41 @@ export function Solicitud() {
     navigate("/ventas/solicitud/realizarSolicitud");
   };
   return (
-    <div className="row g-3">
-      <div className="col-lg-12">
-        <div className="card shadow-sm">
-          <div className="card-header border-bottom d-flex justify-content-between align-content-center">
-            <div className="m-2">
-              <h3>Mis Solicitudes</h3>
-            </div>
-            <div className="d-flex align-items-center">
-              <div className="d-flex">
-                <input
-                  className="form-control"
-                  placeholder="Buscar..."
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                />
+    <div className="container-fluid w-100 h-100 p-0">
+      <div className="card bg-transparent  my-1 flex-grow-1 h-100 d-flex flex-column p-0">
+        <div
+          className="card-body overflow-y-auto overflow-x-hidden"
+          style={{ height: "calc(100vh - 480px)" }}
+        >
+          <div className="row g-2">
+            <div className="col-lg-12">
+              <div className="card shadow-sm">
+                <div className="card-header border-bottom d-flex justify-content-between align-content-center">
+                  <div className="m-2">
+                    <h3>Mis Solicitudes</h3>
+                  </div>
+                  <div className="d-flex align-items-center">
+                    <div className="d-flex">
+                      <input
+                        className="form-control"
+                        placeholder="Buscar..."
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                      />
+                    </div>
+                    <button
+                      className="btn ms-2"
+                      onClick={() => handleGoAddSolicitud()}
+                    >
+                      <FontAwesomeIcon icon={faPlus} className="icon" />
+                    </button>
+                  </div>
+                </div>
+                <div className="card-body p-0">
+                  <SolicitudesList search={search} />
+                </div>
               </div>
-              <button
-                className="btn ms-2"
-                onClick={() => handleGoAddSolicitud()}
-              >
-                <FontAwesomeIcon icon={faPlus} className="icon" />
-              </button>
             </div>
-          </div>
-          <div className="card-body p-0">
-            <SolicitudesList search={search} />
           </div>
         </div>
       </div>

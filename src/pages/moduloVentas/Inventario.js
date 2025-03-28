@@ -58,137 +58,146 @@ export function Inventario() {
     }
   }, []);
   return (
-    <div className="row g-3">
-      <div className="col-lg-12">
-        <div className="row g-3">
-          <div className="col-sm-12 col-md-3 col-lg-3">
-            <div className="card shadow-sm p-3">
-              {loading ? (
-                <Cargando />
-              ) : error ? (
-                <p>Error al cargar datos</p>
-              ) : (
-                <>
-                  <div>
-                    <span className="position-absolute opacity-50">
-                      <StorefrontOutline
-                        color={"#ea8d1c"}
-                        width={"80px"}
-                        height={"80px"}
-                      />
-                    </span>
+    <div className="container-fluid w-100 h-100 p-0">
+      <div className="card bg-transparent  my-1 flex-grow-1 h-100 d-flex flex-column p-0 ">
+        <div
+          className="card-body overflow-y-auto overflow-x-hidden"
+          style={{ height: "calc(100vh - 480px)" }}
+        >
+          <div className="row g-2">
+            <div className="col-lg-12">
+              <div className="row g-2">
+                <div className="col-sm-12 col-md-3 col-lg-3">
+                  <div className="card shadow-sm p-3">
+                    {loading ? (
+                      <Cargando />
+                    ) : error ? (
+                      <p>Error al cargar datos</p>
+                    ) : (
+                      <>
+                        <div>
+                          <span className="position-absolute opacity-50">
+                            <StorefrontOutline
+                              color={"#ea8d1c"}
+                              width={"80px"}
+                              height={"80px"}
+                            />
+                          </span>
+                        </div>
+                        <div className="text-end">
+                          <h4 className="mb-1 text-dark">Productos</h4>
+                          <p className="h1 mb-0">{productosConteo}</p>
+                        </div>
+                      </>
+                    )}
                   </div>
-                  <div className="text-end">
-                    <h4 className="mb-1 text-dark">Productos</h4>
-                    <p className="h1 mb-0">{productosConteo}</p>
+                </div>
+                <div className="col-sm-12 col-md-3 col-lg-3">
+                  <div className="card shadow-sm p-3 d-flex flex-wrap">
+                    {loading ? (
+                      <Cargando />
+                    ) : error ? (
+                      <p>Error al cargar el stock</p>
+                    ) : (
+                      <>
+                        <div>
+                          <span className="position-absolute opacity-50">
+                            <FileTrayStackedOutline
+                              color={"#1c9fea"}
+                              height="80px"
+                              width={"80px"}
+                              className="position-absolute text-dark"
+                            />
+                          </span>
+                        </div>
+                        <div className="text-end">
+                          <h4 className="mb-1 text-dark">Stock Total</h4>
+                          <p className="h1 mb-0">{stockTotal}</p>
+                        </div>
+                      </>
+                    )}
                   </div>
-                </>
-              )}
-            </div>
-          </div>
-          <div className="col-sm-12 col-md-3 col-lg-3">
-            <div className="card shadow-sm p-3 d-flex flex-wrap">
-              {loading ? (
-                <Cargando />
-              ) : error ? (
-                <p>Error al cargar el stock</p>
-              ) : (
-                <>
-                  <div>
-                    <span className="position-absolute opacity-50">
-                      <FileTrayStackedOutline
-                        color={"#1c9fea"}
-                        height="80px"
-                        width={"80px"}
-                        className="position-absolute text-dark"
-                      />
-                    </span>
+                </div>
+                <div className="col-sm-12 col-md-3 col-lg-3">
+                  <div className="card shadow-sm p-3">
+                    {loading ? (
+                      <Cargando />
+                    ) : error ? (
+                      <p>Error al cargar datos</p>
+                    ) : (
+                      <>
+                        <div>
+                          <span className="position-absolute opacity-50">
+                            <CashOutline
+                              color={"#1eca74"}
+                              width={"80px"}
+                              height={"80px"}
+                            />
+                          </span>
+                        </div>
+                        <div className="text-end">
+                          <h4 className="mb-1 text-dark">Valor Total</h4>
+                          <p className="h1 mb-0">S/.{valorTotal}</p>
+                        </div>
+                      </>
+                    )}
                   </div>
-                  <div className="text-end">
-                    <h4 className="mb-1 text-dark">Stock Total</h4>
-                    <p className="h1 mb-0">{stockTotal}</p>
+                </div>
+                <div className="col-sm-12 col-md-3 col-lg-3">
+                  <div className="card shadow-sm p-3">
+                    {loading ? (
+                      <Cargando />
+                    ) : error ? (
+                      <p>Error al cargar datos</p>
+                    ) : (
+                      <>
+                        <div>
+                          <span className="position-absolute opacity-50">
+                            <AlertCircleOutline
+                              color={"#ca1e1e"}
+                              width={"80px"}
+                              height={"80px"}
+                            />
+                          </span>
+                        </div>
+                        <div className="text-end">
+                          <h4 className="mb-1 text-danger">Por Vencer</h4>
+                          <p className="h1 mb-0">{porVencer}</p>
+                        </div>
+                      </>
+                    )}
                   </div>
-                </>
-              )}
-            </div>
-          </div>
-          <div className="col-sm-12 col-md-3 col-lg-3">
-            <div className="card shadow-sm p-3">
-              {loading ? (
-                <Cargando />
-              ) : error ? (
-                <p>Error al cargar datos</p>
-              ) : (
-                <>
-                  <div>
-                    <span className="position-absolute opacity-50">
-                      <CashOutline
-                        color={"#1eca74"}
-                        width={"80px"}
-                        height={"80px"}
-                      />
-                    </span>
-                  </div>
-                  <div className="text-end">
-                    <h4 className="mb-1 text-dark">Valor Total</h4>
-                    <p className="h1 mb-0">S/.{valorTotal}</p>
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
-          <div className="col-sm-12 col-md-3 col-lg-3">
-            <div className="card shadow-sm p-3">
-              {loading ? (
-                <Cargando />
-              ) : error ? (
-                <p>Error al cargar datos</p>
-              ) : (
-                <>
-                  <div>
-                    <span className="position-absolute opacity-50">
-                      <AlertCircleOutline
-                        color={"#ca1e1e"}
-                        width={"80px"}
-                        height={"80px"}
-                      />
-                    </span>
-                  </div>
-                  <div className="text-end">
-                    <h4 className="mb-1 text-danger">Por Vencer</h4>
-                    <p className="h1 mb-0">{porVencer}</p>
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="col-lg-12">
-        <div className="card shadow-sm">
-          <div className="card-header p-0 border-bottom d-flex justify-content-between align-items-center">
-            <div className="m-3">
-              <h3 className="card-title mb-0 titulo-card-especial">
-                Mi Inventario
-              </h3>
-            </div>
-            <div className="d-flex align-items-center">
-              <div className="d-flex">
-                <input
-                  type="text"
-                  placeholder="Buscar..."
-                  className="form-control"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                />
+                </div>
               </div>
-              <button className="btn ms-2">
-                <FontAwesomeIcon icon={faPlus} className="icon" />
-              </button>
             </div>
-          </div>
-          <div className="card-body p-0">
-            <InventarioList search={search} />
+            <div className="col-lg-12">
+              <div className="card shadow-sm">
+                <div className="card-header p-0 border-bottom d-flex justify-content-between align-items-center">
+                  <div className="m-3">
+                    <h3 className="card-title mb-0 titulo-card-especial">
+                      Mi Inventario
+                    </h3>
+                  </div>
+                  <div className="d-flex align-items-center">
+                    <div className="d-flex">
+                      <input
+                        type="text"
+                        placeholder="Buscar..."
+                        className="form-control"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                      />
+                    </div>
+                    <button className="btn ms-2">
+                      <FontAwesomeIcon icon={faPlus} className="icon" />
+                    </button>
+                  </div>
+                </div>
+                <div className="card-body p-0">
+                  <InventarioList search={search} />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -9,13 +9,13 @@ export function SubMenu() {
   const location = useLocation(); // Obtiene la URL actual
 
   return (
-    <div className="row g-2">
-      <div className="col-md-12 col-sm-12  ">
-        <div className="bg-transparent justify-content-center">
+    <div className="row ps-3  pe-1 my-0 w-100 h-100">
+      <div className="col-md-12 col-sm-12 p-0 " style={{ height: "auto" }}>
+        <div className="card  justify-content-center bg-transparent flex-grow-1  d-flex flex-column m-0">
           <p className="h6 align-middle my-3 mx-3 fw-bold">
             {capitalizeFirstLetter(moduloAplicado)}
           </p>
-          <div className="subMenu ">
+          <div className="subMenu card-body w-100">
             {moduloAplicado && (
               <ul className="list-unstyled ">
                 {moduloAplicado === "rr-hh" && (
@@ -165,6 +165,15 @@ export function SubMenu() {
                       }
                     >
                       <Link to="/vender/ventasLlevar">Llevar</Link>
+                    </li>
+                    <li
+                      className={
+                        location.pathname === "/vender/pedidosWeb"
+                          ? "active"
+                          : ""
+                      }
+                    >
+                      <Link to="/vender/pedidosWeb">Pedidos</Link>
                     </li>
                   </>
                 )}
@@ -332,8 +341,11 @@ export function SubMenu() {
         </div>
       </div>
       {/* Sección de PedidosWsp separada del menú */}
-      <div className="col-md-12 col-sm-12 mt-0 ">
-        {moduloAplicado === "vender" && <PedidosWsp />}
+      <div
+        className="col-md-12 col-sm-12 p-0 "
+        style={{ height: "calc(100vh - 353px)" }}
+      >
+        {/* {moduloAplicado === "vender" && <PedidosWsp />} */}
       </div>
     </div>
   );

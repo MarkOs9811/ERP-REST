@@ -53,6 +53,8 @@ import { Compras } from "./pages/Compras";
 import { SubMenu } from "./components/SubMenu";
 import { PedidosWsp } from "./components/PedidosWsp";
 import { MensajeriaPedido } from "./components/componenteVender/MensajeriaPedido";
+import ToastAlert from "./components/componenteToast/ToastAlert";
+import { PedidosWeb } from "./pages/PedidosWeb";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 function App() {
@@ -92,23 +94,25 @@ function App() {
                     <div
                       className={`content ${
                         isCompressed ? "" : "open"
-                      } w-100 bg-dark p-0`}
+                      } w-100  p-0`}
                     >
                       <div className="card p-0 m-0 rounded-0 vh-100">
                         {/* Header fijo */}
-                        <div className="card-header p-0 rounded-0 m-0 shrink-0">
+                        <div className="card-header p-0 rounded-0 m-0 shrink-0 ">
                           <Header />
                           <Navegacion />
                         </div>
                         {/* Cuerpo flexible con scroll interno si es necesario */}
-                        <div className="card-body bg-light p-0 h-100">
-                          <div className="row px-2 h-100 ">
-                            <div className="col-md-2  h-100 d-flex align-items-center justify-content-center pe-2 py-2">
-                              <div className="card h-100 w-100">
-                                <SubMenu />
-                              </div>
+                        <div
+                          className="card-body  p-0 h-100"
+                          style={{ background: "#f9f6f6" }}
+                        >
+                          <div className="row h-100 py-2">
+                            <div className="col-md-2 h-100 d-flex align-items-center justify-content-center p-0 ">
+                              <SubMenu />
                             </div>
-                            <div className="col-md-10  h-100 d-flex align-items-center justify-content-center p-2 overflow-auto">
+                            <div className="col-md-10 h-100 d-flex align-items-center justify-content-center overflow-auto pe-3 p-0">
+                              <ToastContainer />
                               <Routes>
                                 <Route path="/" element={<Home />} />
                                 <Route
@@ -147,6 +151,7 @@ function App() {
                                 {/* RUTAS PARA MODULO COMPRAS */}
 
                                 <Route path="/compras/" element={<Compras />} />
+
                                 {/* RUTAS PARA MODULO VENTAS */}
                                 <Route
                                   path="/ventas/misVentas"
@@ -193,6 +198,10 @@ function App() {
                                         <Route
                                           path="ventasMesas/platos"
                                           element={<ToMesa />}
+                                        />
+                                        <Route
+                                          path="pedidosWeb"
+                                          element={<PedidosWeb />}
                                         />
                                         <Route
                                           path="ventasMesas/preVenta"

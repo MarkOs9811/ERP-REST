@@ -254,7 +254,7 @@ export function ProveedorList({ search, updateList }) {
         dense
         customStyles={customDataTableStyles}
         fixedHeader
-        fixedHeaderScrollHeight="500px"
+        fixedHeaderScrollHeight="100vh"
         striped={true}
         conditionalRowStyles={conditionalRowStyles} // Estilos condicionales aplicados aquí
         paginationComponentOptions={{

@@ -7,6 +7,7 @@ import tipoVentaReducer from "./tipoVentaSlice";
 import categoriaReducer from "./categoriaPlatosSlice";
 import sideBarReducer from "./sideBarSlice";
 import subMenuReducer from "./subMenuSlice";
+import pedidoWebReducer from "./pedidoWebSlice";
 
 const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ const store = configureStore({
     categoriaFiltroPlatos: categoriaReducer,
     sidebar: sideBarReducer,
     subMenu: subMenuReducer,
+    pedidoWeb: pedidoWebReducer,
   },
 });
 

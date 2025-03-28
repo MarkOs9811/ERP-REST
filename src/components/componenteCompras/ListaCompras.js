@@ -110,7 +110,7 @@ export function ListaCompras() {
         dense
         fixedHeader
         customStyles={customDataTableStyles}
-        fixedHeaderScrollHeight="500px"
+        fixedHeaderScrollHeight="100vh"
         striped={true}
         paginationComponentOptions={{
           rowsPerPageText: "Filas por página:",

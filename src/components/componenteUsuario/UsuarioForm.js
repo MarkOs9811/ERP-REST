@@ -44,7 +44,7 @@ export function UsuarioForm({ handleCloseModal }) {
           axiosInstance.get("/cargos"),
           axiosInstance.get("/horarios"),
         ]);
-        setAreas(areasRes.data);
+        setAreas(areasRes.data.data);
         setCargos(cargosRes.data);
         setHorarios(horariosRes.data);
       } catch (error) {

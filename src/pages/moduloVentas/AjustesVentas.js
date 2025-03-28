@@ -22,13 +22,20 @@ export default function AjustesVentas() {
   };
 
   return (
-    <div className="card shadow-sm p-3">
-      <div className="row g-3">
-        <div className="col-lg-12">
-          <h4>Configuracion Ventas</h4>
-        </div>
-        <div className="col-lg-12">
-          <MetodoPago metodos={metodos} onToggle={handleToggle} />
+    <div className="container-fluid w-100 h-100 p-0 m-0">
+      <div className="card bg-transparent my-1 flex-grow-1 h-100 d-flex flex-column p-0">
+        <div
+          className="card-body overflow-x-hidden overflow-y-auto"
+          style={{ height: "calc(100vh -480px)" }}
+        >
+          <div className="row g-3">
+            <div className="col-lg-12">
+              <h4>Configuracion Ventas</h4>
+            </div>
+            <div className="col-lg-12">
+              <MetodoPago metodos={metodos} onToggle={handleToggle} />
+            </div>
+          </div>
         </div>
       </div>
     </div>

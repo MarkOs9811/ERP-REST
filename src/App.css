@@ -220,6 +220,7 @@ button {
   height: 50px; /* Altura consistente */
   margin: 5px auto; /* Márgenes dinámicos */
  
+ 
 }
 
 /* Para asegurar que el hijo no sobresalga de los 250px del contenedor */

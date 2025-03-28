@@ -45,11 +45,14 @@ export function OpcionesPago(props) {
   } = useForm();
 
   return (
-    <div className="card p-3 shadow-sm">
+    <div className="card p-3 hadow-sm flex-grow-1 h-100 d-flex flex-column ">
       <div className="card-header">
         <h5>Detalles del Pago</h5>
       </div>
-      <div className="card-body">
+      <div
+        className="card-body overflow-auto"
+        style={{ height: "calc(100vh - 480px)" }}
+      >
         {/* Métodos de pago */}
         <div className="mt-0">
           <h6>Método de pago</h6>

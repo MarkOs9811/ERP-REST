@@ -7,7 +7,7 @@
     /* Llega hasta el final */
     left: 0;
     right: 0;
-    height: calc(100vh - 280px)!important;
+  
     /* Ajusta la altura restando el espacio superior */
     overflow-y: auto;
     /* Activa el scroll si es necesario */
@@ -91,5 +91,5 @@
 
     /* estilos para el chat */
     .burbuja-myMsn{
-        background-color: #d14e4e;
+        background-color: #929292;
     }

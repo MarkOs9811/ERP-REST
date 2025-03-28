@@ -15,6 +15,10 @@ const tipoVentaSlice = createSlice({
     setMesa: (state) => {
       state.estado = "mesa";
     },
+    // Cambiar estado a "mesa"
+    setWeb: (state) => {
+      state.estado = "web";
+    },
     // Cambiar estado dinámicamente
     setEstado: (state, action) => {
       state.estado = action.payload; // El payload contiene "llevar" o "mesa"
@@ -23,5 +27,5 @@ const tipoVentaSlice = createSlice({
 });
 
 // Exportar acciones y reducer
-export const { setLlevar, setMesa, setEstado } = tipoVentaSlice.actions;
+export const { setLlevar, setMesa, setEstado, setWeb } = tipoVentaSlice.actions;
 export default tipoVentaSlice.reducer;

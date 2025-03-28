@@ -28,10 +28,10 @@ export function PedidosWsp() {
       navigate(`/vender/mensajeriaPedido?pedido=${pedidoString}`);
     },
     [navigate]
-  ); // ✅ Evitar recrear la función en cada render
+  ); 
 
   return (
-    <div className="card contenedor-pedidosWsp">
+    <div className="card shadow-sm contenedor-pedidosWsp h-100">
       <div className="header-bandeja">
         <img src="/images/wsp.png" width={30} alt="WhatsApp" /> Pedidos WhatsApp
       </div>

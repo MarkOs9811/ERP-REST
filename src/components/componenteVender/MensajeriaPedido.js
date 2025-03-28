@@ -16,18 +16,31 @@ import { CardPlatos } from "./CardPlatos";
 import { useDispatch, useSelector } from "react-redux";
 import { capitalizeFirstLetter } from "../../hooks/FirstLetterUp";
 import { GetPlatos } from "../../service/GetPlatos";
+import CarritoComprasWsp from "./CarritoComprasWsp";
+import {
+  addItem,
+  removeItem,
+  clearPedidoWeb,
+} from "../../redux/pedidoWebSlice";
+import ModalRight from "../componentesReutilizables/ModalRight";
 
 export function MensajeriaPedido() {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const [newMessage, setNewMessage] = useState("");
-  //   const pedidos = useSelector((state) => state.pedidoLlevar);
+  const pedidosWeb = useSelector((state) => state.pedidoWeb.items);
+  const pedidosWebPlato = useSelector((state) => state.pedidoWeb);
+  const totalPlatos = pedidosWeb.length; // Cantidad de platos únicos en el pedido
+
   const { id } = useParams();
   const [searchParams] = useSearchParams();
+
   const categoriaFiltroPlatos = useSelector(
     (state) => state.categoriaFiltroPlatos.estado
   );
+
   // ✅ Memoizamos el pedido para evitar renders innecesarios
   const pedido = useMemo(() => {
     try {
@@ -89,7 +102,6 @@ export function MensajeriaPedido() {
     queryKey: ["productos"], // id podría no ser necesario si los productos son generales
     queryFn: GetPlatos,
   });
-  console.log("lista de platos ", productos);
 
   const handleAddPlatoPreventa = (producto) => {
     // Añadir el plato para la mesa actual
@@ -100,18 +112,18 @@ export function MensajeriaPedido() {
     dispatch(removeItem({ id: productoId }));
   };
   const handleEliminarTodo = () => {
-    dispatch(clearPedidoLlevar());
+    dispatch(clearPedidoWeb());
   };
 
   const hanldleRealizarPago = () => {
     dispatch(setEstado("llevar"));
     navigate("/vender/ventasMesas/detallesPago");
   };
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
   return (
-    <div className="row g-2 h-100 w-100">
+    <div className="row g-2 h-100 w-100 ">
       {/* Card principal */}
-      <div className="col-md-5 col-sm-12 ">
+      <div className="col-md-4 col-sm-12 ">
         <div className="card shadow-sm h-100 d-flex flex-column">
           {/* Header con ID del pedido y opciones */}
           <div className="card-header d-flex justify-content-between align-items-center bg-light text-dark">
@@ -200,9 +212,9 @@ export function MensajeriaPedido() {
           </div>
         </div>
       </div>
-      <div className="col-md-7 d-flex flex-column ">
-        <div className="card shadow-sm flex-grow-1 h-100 d-flex flex-column">
-          <div className="card-header d-flex flex-wrap bg-white border-bottom py-3">
+      <div className="col-md-8 d-flex flex-column ">
+        <div className="card flex-grow-1 h-100 d-flex flex-column ">
+          <div className="card-header d-flex flex-wrap bg-white border-bottom  ">
             <div className="d-flex align-items-center gap-2 w-100">
               <h4 className="mb-0 text-dark">Platos</h4>
 
@@ -214,10 +226,10 @@ export function MensajeriaPedido() {
           </div>
 
           <div
-            className="card-body overflow-auto"
+            className="card-body overflow-y-auto overflow-x-hidden"
             style={{ height: "calc(100vh - 480px)" }}
           >
-            <div className="justify-content-start contenedor-platos pb-5 overflow-auto">
+            <div className="justify-content-start contenedor-platos pb-5">
               {isLoadingProductos ? <p>Cargando productos...</p> : null}
               {errorProductos ? <p>Error: {errorProductos.message}</p> : null}
               {productos && productos.length > 0 ? (
@@ -229,7 +241,7 @@ export function MensajeriaPedido() {
                   )
                   .map((producto) => {
                     const mesaId = id; // Mesa actual desde useParams
-                    const isSelected = pedido?.items?.some(
+                    const isSelected = pedidosWebPlato?.items?.some(
                       (item) => item.id === producto.id
                     );
                     return (
@@ -250,6 +262,30 @@ export function MensajeriaPedido() {
             </div>
           </div>
         </div>
+        <CarritoComprasWsp
+          cantidad={totalPlatos}
+          onOpenModal={() => setIsModalOpen(true)}
+        />
+
+        <ModalRight
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          title="Pedidos Web"
+          submitText="Confirmar Pedido"
+          onSubmit={() => {
+            console.log("Acción confirmada");
+            setIsModalOpen(false);
+          }}
+        >
+          {/* Contenido personalizado del modal */}
+          <div className="card p-3">
+            <div className="card-header">
+              <p className="h3">Lista de pedido</p>
+            </div>
+            <p>Este es el contenido personalizado del modal.</p>
+            <input type="text" className="form-control" placeholder="Ejemplo" />
+          </div>
+        </ModalRight>
       </div>
     </div>
   );

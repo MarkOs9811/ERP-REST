@@ -16,6 +16,7 @@ import { clearPedidoLlevar } from "../../redux/pedidoLlevarSlice";
 import { clearPedido } from "../../redux/pedidoSlice";
 import { DetallePedido } from "./tareasVender/DetallePedido";
 import { RealizarPago } from "./tareasVender/RealizarPago";
+import { ToLlevar } from "./ToLlevar";
 
 export function DetallesPago() {
   // VARIABELS EN REDUX SI ES QUE LO HAY
@@ -66,6 +67,8 @@ export function DetallesPago() {
     }
   };
 
+  // AQUI EJECUTAMOS SI LA LISTA DE PREVENTA ES PARA MESA O PARA LLEVAR EL CUAL DETERMINARÁ
+  // LA LISTA QUE S EVA APAGAR SEA PARA MESA O SI ES PARA LLEVAR
   useEffect(() => {
     if (estadoTipoVenta === "llevar") {
       setPreventas(pedidoLlevar.items);
@@ -75,6 +78,7 @@ export function DetallesPago() {
       setPreventas([]);
     }
   }, [estadoTipoVenta, idMesa, caja, pedidoLlevar]);
+  // ======================
 
   // calculo para el total e igv
   const totalPreventa = preVentas
@@ -310,7 +314,7 @@ export function DetallesPago() {
   // =======================================================================
 
   return (
-    <div className="row g-3 h-100">
+    <div className="row g-2 h-100 w-100">
       {/* Columna DetallePedido */}
       <div className="col-lg-3 col-md-4 col-sm-6 col-12 d-flex flex-column">
         <DetallePedido

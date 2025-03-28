@@ -44,72 +44,89 @@ export function Usuarios() {
   };
 
   return (
-    <div className="row g-3">
-      {/* Tarjetas de estadísticas */}
-      <div className="col-md-4">
-        <div className="card shadow-sm text-center stats-card ">
-          <div className="card-body">
-            <FontAwesomeIcon icon={faUsers} className="icon mb-2" size="2x" />
-            <h6 className="card-title mt-2">Total de Usuarios</h6>
-            <p className="card-text mx-2">{estadisticas.totalUsuarios}</p>
-          </div>
-        </div>
-      </div>
-
-      <div className="col-md-4">
-        <div className="card shadow-sm text-center stats-card">
-          <div className="card-body">
-            <FontAwesomeIcon
-              icon={faUserCheck}
-              className="icon mb-2"
-              size="2x"
-            />
-            <h6 className="card-title mt-2">Usuarios Activos</h6>
-            <p className="card-text mx-2">{estadisticas.usuariosActivos}</p>
-          </div>
-        </div>
-      </div>
-
-      <div className="col-md-4">
-        <div className="card shadow-sm text-center stats-card">
-          <div className="card-body">
-            <FontAwesomeIcon
-              icon={faWarehouse}
-              className="icon mb-2"
-              size="2x"
-            />
-            <h6 className="card-title mt-2">Cargo: Almacén</h6>
-            <p className="card-text mx-2">{estadisticas.usuariosAlmacen}</p>
-          </div>
-        </div>
-      </div>
-
-      <div className="col-md-12 ">
-        <div className="card border-0 shadow-sm">
-          <div className="card-header border-bottom d-flex justify-content-between align-items-center">
-            <div className="m-2">
-              <h4 className="card-title mb-0 titulo-card-especial">
-                Lista de Usuarios
-              </h4>
-            </div>
-
-            <div className="d-flex align-items-center">
-              <div className="d-flex">
-                <input
-                  type="text"
-                  placeholder="Buscar..."
-                  className="form-control"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                />
-                <button className="btn ms-2" onClick={handleOpenModal}>
-                  <FontAwesomeIcon icon={faPlus} className="icon" />
-                </button>
+    <div className="contianer-fluid p-2 w-100 h-100">
+      <div className="card flex-grow-1 d-flex flex-column bg-transparent h-100">
+        <div
+          className="card-body overflow-y-auto overflow-x-hidden"
+          style={{ height: "calc(100vh -480px)" }}
+        >
+          <div className="row g-3 ">
+            {/* Tarjetas de estadísticas */}
+            <div className="col-md-4">
+              <div className="card shadow-sm text-center stats-card ">
+                <div className="card-body">
+                  <FontAwesomeIcon
+                    icon={faUsers}
+                    className="icon mb-2"
+                    size="2x"
+                  />
+                  <h6 className="card-title mt-2">Total de Usuarios</h6>
+                  <p className="card-text mx-2">{estadisticas.totalUsuarios}</p>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="card-body cuerpo-tabla p-0">
-            <UsuariosList search={search} updateList={updateList} />
+
+            <div className="col-md-4">
+              <div className="card shadow-sm text-center stats-card">
+                <div className="card-body">
+                  <FontAwesomeIcon
+                    icon={faUserCheck}
+                    className="icon mb-2"
+                    size="2x"
+                  />
+                  <h6 className="card-title mt-2">Usuarios Activos</h6>
+                  <p className="card-text mx-2">
+                    {estadisticas.usuariosActivos}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="col-md-4">
+              <div className="card shadow-sm text-center stats-card">
+                <div className="card-body">
+                  <FontAwesomeIcon
+                    icon={faWarehouse}
+                    className="icon mb-2"
+                    size="2x"
+                  />
+                  <h6 className="card-title mt-2">Cargo: Almacén</h6>
+                  <p className="card-text mx-2">
+                    {estadisticas.usuariosAlmacen}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="col-md-12 ">
+              <div className="card border-0 shadow-sm">
+                <div className="card-header border-bottom d-flex justify-content-between align-items-center">
+                  <div className="m-2">
+                    <h4 className="card-title mb-0 titulo-card-especial">
+                      Lista de Usuarios
+                    </h4>
+                  </div>
+
+                  <div className="d-flex align-items-center">
+                    <div className="d-flex">
+                      <input
+                        type="text"
+                        placeholder="Buscar..."
+                        className="form-control"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                      />
+                      <button className="btn ms-2" onClick={handleOpenModal}>
+                        <FontAwesomeIcon icon={faPlus} className="icon" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div className="card-body cuerpo-tabla p-0">
+                  <UsuariosList search={search} updateList={updateList} />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

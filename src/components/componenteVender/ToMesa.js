@@ -96,8 +96,6 @@ export function ToMesa() {
   // FUNCION PARA REALIZAR EL PEDIDO Y VOLVER A MESAS
   const handleAddPlatoPreventaMesas = async () => {
     try {
-      // Formatear los datos para enviar al backend
-      console.log(caja.id);
       const datosPreventa = Object.keys(mesas).flatMap((mesaId) => {
         return mesas[mesaId].items.map((item) => ({
           idCaja: caja.id, // ID de la caja
@@ -131,16 +129,13 @@ export function ToMesa() {
   };
 
   return (
-    <div className="row g-3 ">
+    <div className="row g-2 h-100 w-100">
       {/* Columna de la cuenta */}
 
-      <div className="col-md-3 h-100">
-        <div
-          className="card shadow-sm d-flex flex-column"
-          style={{ height: "100%" }}
-        >
+      <div className="col-md-3">
+        <div className="card shadow-sm d-flex flex-column h-100 overflow-auto">
           {/* Título */}
-          <div className="card-header p-3 d-flex justify-content-between align-items-center border-bottom">
+          <div className="card-header  d-flex justify-content-between align-items-center border-bottom">
             {/* Botón de volver */}
             <button
               className="btn btn-outline-dark d-flex align-items-center"
@@ -288,9 +283,9 @@ export function ToMesa() {
       </div>
 
       {/* Columna de los productos */}
-      <div className="col-md-9 d-flex flex-column ">
+      <div className="col-md-9 d-flex flex-column">
         <div className="card shadow-sm flex-grow-1">
-          <div className="card-header d-flex flex-wrap bg-white border-bottom py-3">
+          <div className="card-header d-flex flex-wrap bg-white border-bottom ">
             <div className="d-flex align-items-center gap-2 w-100">
               <h4 className="mb-0 text-dark">Platos</h4>
 
@@ -300,8 +295,10 @@ export function ToMesa() {
               </div>
             </div>
           </div>
-
-          <div className="card-body ">
+          <div
+            className="card-body overflow-auto"
+            style={{ height: "calc(100vh - 480px)" }}
+          >
             <div className="justify-content-start contenedor-platos pb-5">
               {productos
                 .filter(

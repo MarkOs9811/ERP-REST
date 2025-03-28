@@ -45,8 +45,8 @@ export function MesasList() {
   if (error) return <p>{error}</p>;
 
   return (
-    <div className="card ">
-      <div className="card-header d-flex justify-content-between align-items-center">
+    <div className="card flex-grow-1 h-100 d-flex flex-column shadow-sm">
+      <div className="card-header d-flex justify-content-between align-items-center p-4">
         <h3 className="m-0 size-auto">Mesas</h3>
         <div className="d-flex align-middle">
           <p className="align-middle mx-2 fw-normal">
@@ -79,7 +79,10 @@ export function MesasList() {
         </div>
       </div>
 
-      <div className="mesas-container">
+      <div
+        className="mesas-container card-body overflow-y-auto overflow-x-hidden"
+        style={{ height: "calc(100vh - 480px)" }}
+      >
         {mesas.map((mesa) => (
           <button
             key={mesa.id}

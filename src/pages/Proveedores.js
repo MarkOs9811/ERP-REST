@@ -18,36 +18,45 @@ export function Proveedores() {
   const handleAddProveedor = () => setShowModal(true);
 
   return (
-    <div className="row">
-      <div className="col-md-12">
-        <div className="card shadow-sm ">
-          <div className="card-header  border-bottom d-flex justify-content-between align-items-center">
-            <div className="m-2">
-              <h4 className="card-title mb-0 titulo-card-especial">
-                Proveedores
-              </h4>
-            </div>
+    <div className="container-fluid w-100 h-100 p-2">
+      <div className="card bg-transparent h-100 flex-grow-1 d-flex flex-column">
+        <div
+          className="card-body overflow-y-auto overflow-x-hidden"
+          style={{ heigh: "calc(100vh - 480px)" }}
+        >
+          <div className="row g-3">
+            <div className="col-md-12">
+              <div className="card shadow-sm ">
+                <div className="card-header  border-bottom d-flex justify-content-between align-items-center">
+                  <div className="m-2">
+                    <h4 className="card-title mb-0 titulo-card-especial">
+                      Proveedores
+                    </h4>
+                  </div>
 
-            <div className="d-flex align-items-center">
-              <div className="d-flex">
-                <input
-                  type="text"
-                  placeholder="Buscar..."
-                  className="form-control"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                />
-                <button
-                  className="btn ms-3"
-                  onClick={() => handleAddProveedor()}
-                >
-                  <FontAwesomeIcon icon={faPlus} className="icon" />
-                </button>
+                  <div className="d-flex align-items-center">
+                    <div className="d-flex">
+                      <input
+                        type="text"
+                        placeholder="Buscar..."
+                        className="form-control"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                      />
+                      <button
+                        className="btn ms-3"
+                        onClick={() => handleAddProveedor()}
+                      >
+                        <FontAwesomeIcon icon={faPlus} className="icon" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div className="card-body p-0">
+                  <ProveedorList search={search} updateList={updateList} />
+                </div>
               </div>
             </div>
-          </div>
-          <div className="card-body p-0">
-            <ProveedorList search={search} updateList={updateList} />
           </div>
         </div>
       </div>

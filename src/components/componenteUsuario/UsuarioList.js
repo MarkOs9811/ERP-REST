@@ -315,7 +315,7 @@ export function UsuariosList({ search, updateList }) {
         dense
         fixedHeader
         customStyles={customDataTableStyles}
-        fixedHeaderScrollHeight="500px"
+        fixedHeaderScrollHeight="100vh"
         striped={true}
         conditionalRowStyles={conditionalRowStyles}
         //selectableRows={true} //con este se activa un check  porc ada fila selccionble
