@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getPreventaMesa } from "../../service/preventaService";
 import "../../css/EstilosPlatos.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   handleInputChange,
   handleSelectChange,
@@ -17,6 +17,8 @@ import { clearPedido } from "../../redux/pedidoSlice";
 import { DetallePedido } from "./tareasVender/DetallePedido";
 import { RealizarPago } from "./tareasVender/RealizarPago";
 import { ToLlevar } from "./ToLlevar";
+import { clearPedidoWeb } from "../../redux/pedidoWebSlice";
+import { getPedidosPendientes } from "../../service/GetPedidosPendientes";
 
 export function DetallesPago() {
   // VARIABELS EN REDUX SI ES QUE LO HAY
@@ -25,6 +27,7 @@ export function DetallesPago() {
   const estadoTipoVenta = useSelector((state) => state.tipoVenta.estado);
   const usuarioLogeado = JSON.parse(localStorage.getItem("user"));
   const pedidoLlevar = useSelector((state) => state.pedidoLlevar);
+  const pedidoWeb = useSelector((state) => state.pedidoWeb);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -39,6 +42,10 @@ export function DetallesPago() {
   const [direccion, setDireccion] = useState("");
   const [numeroCuotas, setNumeroCuotas] = useState("");
 
+  // PARA OBTENER EL ID DEL PEDIDO UNICAMENTE CUANDO ES PEDIDO WEB
+  const { idPedidoWeb } = useParams();
+
+  console.log("id del pedido web" + idPedidoWeb);
   // REACTK HOOK FORM
   const {
     register,
@@ -72,6 +79,9 @@ export function DetallesPago() {
   useEffect(() => {
     if (estadoTipoVenta === "llevar") {
       setPreventas(pedidoLlevar.items);
+    } else if (estadoTipoVenta === "web") {
+      dispatch(clearPedidoWeb());
+      setPreventas(pedidoWeb.items);
     } else if (idMesa && caja?.id) {
       getPreventeMesa();
     } else {
@@ -185,6 +195,9 @@ export function DetallesPago() {
       if (estadoTipoVenta == "llevar") {
         navigate("/vender/ventasLlevar");
         dispatch(clearPedidoLlevar());
+      } else if (estadoTipoVenta == "web") {
+        navigate("/vender/pedidosWeb");
+        dispatch(clearPedidoWeb());
       } else {
         navigate("/vender/ventasMesas");
         dispatch(clearPedido());
@@ -261,7 +274,7 @@ export function DetallesPago() {
     // Inicializar variables
     let data = {};
     let pedidoToLlevar = null;
-
+    let pedidoToWeb = null;
     // Verificar el estado del tipo de venta y construir el objeto `data`
     if (estadoTipoVenta === "mesa") {
       // Datos para ventas en mesa
@@ -277,7 +290,7 @@ export function DetallesPago() {
         idUsuario: usuarioLogeado?.id ?? null, // Validar idUsuario
         tipoVenta: estadoTipoVenta,
       };
-    } else {
+    } else if (estadoTipoVenta === "llevar") {
       // Construir el objeto para pedido "llevar"
       pedidoToLlevar = pedidoLlevar?.items ?? [];
 
@@ -291,6 +304,20 @@ export function DetallesPago() {
         pedidoToLlevar, // Agregar pedido a llevar
         idCaja: caja?.id ?? null, // Validar idCaja
         idMesa: null, // idMesa es null porque es "llevar"
+        idUsuario: usuarioLogeado?.id ?? null, // Validar idUsuario
+        tipoVenta: estadoTipoVenta,
+      };
+    } else {
+      data = {
+        metodoPago: metodoPagoFinal,
+        totalPreventa: totalPreventa ?? 0, // Total preventa
+        comprobante: comprobante ?? "", // Tipo de comprobante
+        cuotas: numeroCuotas ?? 0, // Cuotas si aplica
+        tarjeta: typeTarjeta ?? null, // Tipo de tarjeta (Débito o Crédito)
+        datosCliente: datosCliente ?? {}, // Validar datosCliente
+        idPedidoWeb: idPedidoWeb, // Agregar pedido a web
+        idCaja: caja?.id ?? null, // Validar idCaja
+        idMesa: null, // idMesa es null porque es "web"
         idUsuario: usuarioLogeado?.id ?? null, // Validar idUsuario
         tipoVenta: estadoTipoVenta,
       };

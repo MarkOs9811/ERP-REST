@@ -10,6 +10,7 @@ export function PlatoEditar({ dataPlato, handleCloseModal }) {
   const [fotoPreview, setFotoPreview] = useState(null);
   const [categorias, setCategorias] = useState([]);
   const [fotoFile, seetFotoFile] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const BASE_URL = process.env.REACT_APP_BASE_URL;
   const {
     register,
@@ -42,7 +43,15 @@ export function PlatoEditar({ dataPlato, handleCloseModal }) {
   }, [dataPlato]);
 
   const onSubmit = async (data) => {
+    if (isSubmitting) return; // Evitar múltiples envíos
+    setIsSubmitting(true);
+
     try {
+      if (!dataPlato?.id) {
+        ToastAlert("error", "ID del plato no está definido");
+        return;
+      }
+
       const formData = new FormData();
       formData.append("nombre", data.nombre);
       formData.append("descripcion", data.descripcion);
@@ -53,28 +62,26 @@ export function PlatoEditar({ dataPlato, handleCloseModal }) {
         formData.append("foto", fotoFile);
       }
 
-      // Realiza la solicitud PUT directamente
+      const platoId = Number(dataPlato.id);
+      if (isNaN(platoId)) {
+        ToastAlert("error", "ID del plato no es válido");
+        return;
+      }
+
       const response = await axiosInstanceJava.put(
-        `/platos/${dataPlato.id}`,
+        `/platos/${platoId}`,
         formData
       );
 
       if (response.data.success) {
-        ToastAlert("success", "Actualizacion Existosa!");
+        ToastAlert("success", "Actualización Exitosa!");
         reset();
         handleCloseModal();
-      } else {
-        ToastAlert("error", response.data.message);
       }
     } catch (error) {
-      if (error.response && error.response.data) {
-        ToastAlert(
-          "error",
-          error.response.data.message || "Error de validación"
-        );
-      } else {
-        ToastAlert("error", "Error de conexión");
-      }
+      // Manejo de errores...
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -92,7 +99,12 @@ export function PlatoEditar({ dataPlato, handleCloseModal }) {
   });
   return (
     <div>
-      <form onSubmit={handleSubmit(onSubmit)} className="px-2">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+        }}
+        className="px-2"
+      >
         <div className="card d-flex">
           <label htmlFor="foto" className="form-label">
             Foto Plato
@@ -206,7 +218,13 @@ export function PlatoEditar({ dataPlato, handleCloseModal }) {
           <button className="btn-cerrar-modal mx-3" onClick={handleCloseModal}>
             Cerrar
           </button>
-          <button className="btn-guardar">Guardar Cambios</button>
+          <button
+            className="btn-guardar"
+            onClick={handleSubmit(onSubmit)}
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Guardando..." : "Guardar Cambios"}
+          </button>
         </div>
       </form>
     </div>

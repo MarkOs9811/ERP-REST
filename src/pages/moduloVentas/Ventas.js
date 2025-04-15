@@ -55,10 +55,10 @@ export function Ventas() {
 
   return (
     <div className="container-fluid w-100 h-100 p-0">
-      <div className="card bg-transparent  my-1 flex-grow-1 h-100 d-flex flex-column p-0 m-0">
+      <div className="card bg-transparent  my-0 flex-grow-1 h-100 d-flex flex-column p-0 m-0 shadow-sm">
         <div
-          className="card-body overflow-y-auto overflow-x-hidden"
-          style={{ height: "calc(100vh - 480px)" }}
+          className="card-body overflow-y-auto overflow-x-hidden p-0 pe-2"
+          style={{ height: "calc(100vh - 280px)" }}
         >
           <div className="row g-2 ">
             <div className="col-lg-6">
@@ -88,12 +88,12 @@ export function Ventas() {
                     </div>
                   </div>
                 </div>
-                <div className="col-lg-6">
+                <div className="col-lg-6 col-md-12">
                   <div className="card p-2 shadow-sm h-100">
                     <GraficoLineaDayVentas />
                   </div>
                 </div>
-                <div className="col-lg-6">
+                <div className="col-lg-6 col-md-12">
                   <div className="card p-2 shadow-sm h-100">
                     <GraficoBarVentas />
                   </div>
@@ -101,10 +101,10 @@ export function Ventas() {
               </div>
             </div>
             <div className="col-lg-6">
-              <div className="row g-3">
+              <div className="row g-2">
                 <div className="col-lg-12">
                   <div className="card shadow-sm h-100">
-                    <div className="row g-3">
+                    <div className="row g-2">
                       <div className="col-md-4">
                         <div className="card mb-0 m-0 text-center p-4">
                           <p className="h6 tituloCard">Este Mes</p>

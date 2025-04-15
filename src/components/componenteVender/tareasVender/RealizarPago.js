@@ -1,4 +1,5 @@
 import { CheckmarkDoneOutline } from "react-ionicons";
+import BotonAnimado from "../../componentesReutilizables/BotonAnimado";
 
 export function RealizarPago({
   totalPreventa,
@@ -37,16 +38,9 @@ export function RealizarPago({
         </div>
       </div>
       <div className="card-footer mt-4 p-0 border-0">
-        <button
-          type="button"
-          className="btn-realizarPedido w-100 h-100 p-3"
-          onClick={() => handleCrearJson()}
-          disabled={loading}
-        >
-          <CheckmarkDoneOutline color={"auto"} />
-          {loading ? "Cargando..." : "Realizar Pago"}
-          {error && <div className="alert alert-danger">{error}</div>}
-        </button>
+        <BotonAnimado onClick={handleCrearJson} loading={loading} error={error}>
+          Realizar Pago
+        </BotonAnimado>
       </div>
     </div>
   );

@@ -50,6 +50,7 @@
     "bootstrap": "^5.3.3",
     "chart.js": "^4.4.7",
     "electron-is-dev": "^3.0.1",
+    "framer-motion": "^12.6.3",
     "ionicons": "^7.4.0",
     "js-cookie": "^3.0.5",
     "moment": "^2.30.1",

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   AlarmOutline,
   CheckmarkDoneCircleOutline,
@@ -6,9 +7,13 @@ import {
   HourglassOutline,
   MegaphoneOutline,
   PrintOutline,
+  ReceiptOutline,
 } from "react-ionicons";
+import NotificacionBtn from "../../componentesReutilizables/componentesPedidosWeb/NotificacionBtn";
 
 export function ModalFooter({ selectedPedido }) {
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
+  const [modalOpen, setModalOpen] = useState(false);
   return (
     <div className="card-footer d-flex justify-content-between align-items-center">
       {/* Estado del pedido */}
@@ -45,6 +50,32 @@ export function ModalFooter({ selectedPedido }) {
 
       {/* Botones según el estado */}
       <div className="d-flex gap-2">
+        <div className="comprobante-container">
+          {/* Miniatura */}
+          <button
+            src={`${BASE_URL}/storage/${selectedPedido.fotoComprobante}`}
+            alt="Comprobante"
+            width={50}
+            className="comprobante-thumbnail btn-sm ms-2 p-1 fw-bold px-2"
+            onClick={() => setModalOpen(true)}
+          >
+            <ReceiptOutline color={"auto"} /> Ver Pago
+          </button>
+
+          {/* Modal */}
+          {modalOpen && (
+            <div className="modal-overlay" onClick={() => setModalOpen(false)}>
+              <div className="modal-content">
+                <img
+                  src={`${BASE_URL}/storage/${selectedPedido.fotoComprobante}`}
+                  alt="Comprobante en grande"
+                  width={350}
+                  className="comprobante-grande mx-auto"
+                />
+              </div>
+            </div>
+          )}
+        </div>
         {/* Estado 3: "Pagar en Caja" */}
         {selectedPedido.estado_pedido === 3 && (
           <button
@@ -61,12 +92,7 @@ export function ModalFooter({ selectedPedido }) {
             <button className="btn btn-sm btn-light p-1 ms-auto">
               <PrintOutline size={14} />
             </button>
-            <button
-              className="btn btn-sm btn-light p-1 ms-auto"
-              title="Notificar al cliente"
-            >
-              <MegaphoneOutline size={14} />
-            </button>
+            <NotificacionBtn pedido={selectedPedido} />
           </>
         )}
 
@@ -79,12 +105,7 @@ export function ModalFooter({ selectedPedido }) {
             <button className="btn btn-sm btn-light p-1 ms-auto">
               <PrintOutline size={14} />
             </button>
-            <button
-              className="btn btn-sm btn-light p-1 ms-auto"
-              title="Notificar al cliente"
-            >
-              <MegaphoneOutline size={14} />
-            </button>
+            <NotificacionBtn pedido={selectedPedido} />
           </>
         )}
 

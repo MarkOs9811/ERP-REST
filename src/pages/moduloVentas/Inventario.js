@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { InventarioList } from "../../components/componenteInventario/InventarioList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { GetInventario } from "../../service/GetInventario";
-import { useEstadoAsyn } from "../../hooks/EstadoAsync";
 import { Cargando } from "../../components/componentesReutilizables/Cargando";
 import {
   AlertCircleOutline,
@@ -16,160 +16,98 @@ import {
 
 export function Inventario() {
   const [search, setSearch] = useState("");
-  const [porVencer, setPorVencer] = useState("");
-  const [stockTotal, setStockTotal] = useState("");
-  const [valorTotal, setsetValorTotal] = useState("");
-  const [productosConteo, setProductosConteo] = useState("");
 
-  const calcularTotal = useCallback(async () => {
-    const result = await GetInventario();
-    if (result.success) {
-      let sumaTotal = 0;
-      let valorTotal = 0;
-      let productPorVencer = 0;
-      let inventario = result.data;
-      const today = new Date(); // Fecha actual
-      const oneMonthAhead = new Date(today);
-      oneMonthAhead.setMonth(today.getMonth() + 1); // Fecha actual + 1 mes
+  // Usamos React Query para manejar el estado y caching de los datos
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["inventario"],
+    queryFn: GetInventario,
+    staleTime: 5 * 60 * 1000, // 5 minutos de cache
+    refetchOnWindowFocus: false, // Evita recargar al cambiar de pestaña
+  });
 
-      inventario.forEach((items) => {
-        sumaTotal += items.stock;
-        valorTotal += parseFloat(items.precio) * parseFloat(items.stock);
-        const fechaVencimiento = new Date(items.fecha_vencimiento); // Fecha de vencimiento del producto
+  // Calculamos los valores basados en los datos
+  const metrics = data?.success
+    ? calculateMetrics(data.data)
+    : {
+        productosConteo: 0,
+        porVencer: 0,
+        stockTotal: 0,
+        valorTotal: "0.00",
+      };
 
-        // Verificar si el producto ya venció o si está cerca de vencer
-        if (fechaVencimiento < today || fechaVencimiento <= oneMonthAhead) {
-          productPorVencer += 1;
-        }
-      });
-      let conteo = inventario.length;
-      setProductosConteo(conteo);
-      setPorVencer(productPorVencer);
-      setStockTotal(sumaTotal);
-      setsetValorTotal(valorTotal.toFixed(2));
-      setHasError(true);
-    }
-  }, []);
-  const { loading, error, execute } = useEstadoAsyn(calcularTotal);
-  const [hasError, setHasError] = useState(false);
-  useEffect(() => {
-    if (!hasError) {
-      execute();
-    }
-  }, []);
   return (
     <div className="container-fluid w-100 h-100 p-0">
-      <div className="card bg-transparent  my-1 flex-grow-1 h-100 d-flex flex-column p-0 ">
+      <div className="card bg-transparent my-0 flex-grow-1 h-100 d-flex flex-column p-0">
         <div
-          className="card-body overflow-y-auto overflow-x-hidden"
+          className="card-body overflow-y-auto overflow-x-hidden p-0 pe-2"
           style={{ height: "calc(100vh - 480px)" }}
         >
           <div className="row g-2">
             <div className="col-lg-12">
               <div className="row g-2">
-                <div className="col-sm-12 col-md-3 col-lg-3">
-                  <div className="card shadow-sm p-3">
-                    {loading ? (
-                      <Cargando />
-                    ) : error ? (
-                      <p>Error al cargar datos</p>
-                    ) : (
-                      <>
-                        <div>
-                          <span className="position-absolute opacity-50">
-                            <StorefrontOutline
-                              color={"#ea8d1c"}
-                              width={"80px"}
-                              height={"80px"}
-                            />
-                          </span>
-                        </div>
-                        <div className="text-end">
-                          <h4 className="mb-1 text-dark">Productos</h4>
-                          <p className="h1 mb-0">{productosConteo}</p>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                </div>
-                <div className="col-sm-12 col-md-3 col-lg-3">
-                  <div className="card shadow-sm p-3 d-flex flex-wrap">
-                    {loading ? (
-                      <Cargando />
-                    ) : error ? (
-                      <p>Error al cargar el stock</p>
-                    ) : (
-                      <>
-                        <div>
-                          <span className="position-absolute opacity-50">
-                            <FileTrayStackedOutline
-                              color={"#1c9fea"}
-                              height="80px"
-                              width={"80px"}
-                              className="position-absolute text-dark"
-                            />
-                          </span>
-                        </div>
-                        <div className="text-end">
-                          <h4 className="mb-1 text-dark">Stock Total</h4>
-                          <p className="h1 mb-0">{stockTotal}</p>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                </div>
-                <div className="col-sm-12 col-md-3 col-lg-3">
-                  <div className="card shadow-sm p-3">
-                    {loading ? (
-                      <Cargando />
-                    ) : error ? (
-                      <p>Error al cargar datos</p>
-                    ) : (
-                      <>
-                        <div>
-                          <span className="position-absolute opacity-50">
-                            <CashOutline
-                              color={"#1eca74"}
-                              width={"80px"}
-                              height={"80px"}
-                            />
-                          </span>
-                        </div>
-                        <div className="text-end">
-                          <h4 className="mb-1 text-dark">Valor Total</h4>
-                          <p className="h1 mb-0">S/.{valorTotal}</p>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                </div>
-                <div className="col-sm-12 col-md-3 col-lg-3">
-                  <div className="card shadow-sm p-3">
-                    {loading ? (
-                      <Cargando />
-                    ) : error ? (
-                      <p>Error al cargar datos</p>
-                    ) : (
-                      <>
-                        <div>
-                          <span className="position-absolute opacity-50">
-                            <AlertCircleOutline
-                              color={"#ca1e1e"}
-                              width={"80px"}
-                              height={"80px"}
-                            />
-                          </span>
-                        </div>
-                        <div className="text-end">
-                          <h4 className="mb-1 text-danger">Por Vencer</h4>
-                          <p className="h1 mb-0">{porVencer}</p>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                </div>
+                <MetricCard
+                  loading={isLoading}
+                  error={isError}
+                  icon={
+                    <StorefrontOutline
+                      color={"#ea8d1c"}
+                      width={"80px"}
+                      height={"80px"}
+                    />
+                  }
+                  title="Productos"
+                  value={metrics.productosConteo}
+                  errorMessage="Error al cargar datos"
+                />
+
+                <MetricCard
+                  loading={isLoading}
+                  error={isError}
+                  icon={
+                    <FileTrayStackedOutline
+                      color={"#1c9fea"}
+                      height="80px"
+                      width={"80px"}
+                    />
+                  }
+                  title="Stock Total"
+                  value={metrics.stockTotal}
+                  errorMessage="Error al cargar el stock"
+                />
+
+                <MetricCard
+                  loading={isLoading}
+                  error={isError}
+                  icon={
+                    <CashOutline
+                      color={"#1eca74"}
+                      width={"80px"}
+                      height={"80px"}
+                    />
+                  }
+                  title="Valor Total"
+                  value={`S/.${metrics.valorTotal}`}
+                  errorMessage="Error al cargar datos"
+                />
+
+                <MetricCard
+                  loading={isLoading}
+                  error={isError}
+                  icon={
+                    <AlertCircleOutline
+                      color={"#ca1e1e"}
+                      width={"80px"}
+                      height={"80px"}
+                    />
+                  }
+                  title="Por Vencer"
+                  value={metrics.porVencer}
+                  errorMessage="Error al cargar datos"
+                  isDanger
+                />
               </div>
             </div>
+
             <div className="col-lg-12">
               <div className="card shadow-sm">
                 <div className="card-header p-0 border-bottom d-flex justify-content-between align-items-center">
@@ -203,4 +141,66 @@ export function Inventario() {
       </div>
     </div>
   );
+}
+
+// Componente auxiliar para las tarjetas de métricas
+function MetricCard({
+  loading,
+  error,
+  icon,
+  title,
+  value,
+  errorMessage,
+  isDanger = false,
+}) {
+  return (
+    <div className="col-sm-12 col-md-3 col-lg-3">
+      <div className="card shadow-sm p-3">
+        {loading ? (
+          <Cargando />
+        ) : error ? (
+          <p>{errorMessage}</p>
+        ) : (
+          <>
+            <div>
+              <span className="position-absolute opacity-50">{icon}</span>
+            </div>
+            <div className="text-end">
+              <h4 className={`mb-1 ${isDanger ? "text-danger" : "text-dark"}`}>
+                {title}
+              </h4>
+              <p className="h1 mb-0">{value}</p>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// Función auxiliar para calcular las métricas
+function calculateMetrics(inventario) {
+  let sumaTotal = 0;
+  let valorTotal = 0;
+  let productPorVencer = 0;
+  const today = new Date();
+  const oneMonthAhead = new Date(today);
+  oneMonthAhead.setMonth(today.getMonth() + 1);
+
+  inventario.forEach((items) => {
+    sumaTotal += items.stock;
+    valorTotal += parseFloat(items.precio) * parseFloat(items.stock);
+    const fechaVencimiento = new Date(items.fecha_vencimiento);
+
+    if (fechaVencimiento < today || fechaVencimiento <= oneMonthAhead) {
+      productPorVencer += 1;
+    }
+  });
+
+  return {
+    productosConteo: inventario.length,
+    porVencer: productPorVencer,
+    stockTotal: sumaTotal,
+    valorTotal: valorTotal.toFixed(2),
+  };
 }

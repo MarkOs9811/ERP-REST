@@ -8,7 +8,6 @@ const GraficoLineaEjemplo = () => {
   const chartRef = useRef(null);
   const [smooth, setSmooth] = useState(false);
 
-  // 🔹 Obtener ventas con React Query
   const {
     data: ventas,
     isLoading,
@@ -18,46 +17,60 @@ const GraficoLineaEjemplo = () => {
     queryFn: getVentas,
   });
 
-  // 🔹 Procesar datos de ventas sin useMemo
+  // Función para obtener la cantidad de días en un mes específico
+  const getDiasDelMes = (año, mes) => {
+    return new Date(año, mes + 1, 0).getDate();
+  };
+
   let ventasProcesadas = null;
 
   if (ventas) {
-    const ventasPorMes = {
-      actual: Array(31).fill(0),
-      pasado: Array(31).fill(0),
-    };
-
     const hoy = new Date();
     const mesActual = hoy.getMonth();
-    const mesPasado = mesActual === 0 ? 11 : mesActual - 1;
     const añoActual = hoy.getFullYear();
+    const mesPasado = mesActual === 0 ? 11 : mesActual - 1;
     const añoPasado = mesActual === 0 ? añoActual - 1 : añoActual;
+
+    const diasMesActual = getDiasDelMes(añoActual, mesActual);
+    const diasMesPasado = getDiasDelMes(añoPasado, mesPasado);
+
+    const ventasPorMes = {
+      actual: Array(diasMesActual).fill(0),
+      pasado: Array(diasMesPasado).fill(0),
+    };
 
     ventas.forEach((venta) => {
       const fecha = new Date(venta.fechaVenta);
-      let dia = fecha.getDate() - 1;
+      const dia = fecha.getDate() - 1;
 
       if (fecha.getFullYear() === añoActual && fecha.getMonth() === mesActual) {
-        if (dia >= 0 && dia < 31) ventasPorMes.actual[dia] += venta.total;
+        if (dia >= 0 && dia < diasMesActual) {
+          ventasPorMes.actual[dia] += venta.total;
+        }
       } else if (
         fecha.getFullYear() === añoPasado &&
         fecha.getMonth() === mesPasado
       ) {
-        if (dia >= 0 && dia < 31) ventasPorMes.pasado[dia] += venta.total;
+        if (dia >= 0 && dia < diasMesPasado) {
+          ventasPorMes.pasado[dia] += venta.total;
+        }
       }
     });
 
     ventasProcesadas = ventasPorMes;
   }
 
-  // 🔹 Si está cargando o hay error
   if (isLoading) return <Cargando />;
   if (isError) return <p>Error al cargar datos. Intente nuevamente.</p>;
   if (!ventasProcesadas) return <p>No hay datos disponibles.</p>;
 
-  // 🔹 Datos del gráfico
+  const maxDias = Math.max(
+    ventasProcesadas.actual.length,
+    ventasProcesadas.pasado.length
+  );
+
   const datosGrafico = {
-    labels: Array.from({ length: 31 }, (_, i) => i + 1),
+    labels: Array.from({ length: maxDias }, (_, i) => i + 1),
     datasets: [
       {
         label: "Ventas Mes Actual S/.",

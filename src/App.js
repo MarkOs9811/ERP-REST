@@ -55,9 +55,17 @@ import { PedidosWsp } from "./components/PedidosWsp";
 import { MensajeriaPedido } from "./components/componenteVender/MensajeriaPedido";
 import ToastAlert from "./components/componenteToast/ToastAlert";
 import { PedidosWeb } from "./pages/PedidosWeb";
+import { AreasCargo } from "./pages/AreasCargos";
+import { ListaTrabajadorCargo } from "./pages/moduloPlanilla/ListaTrabajadorCargo";
+import { ListaTrabajador } from "./pages/moduloPlanilla/ListaTrabajador";
+import { IngresoPlanilla } from "./pages/moduloPlanilla/IngresoPlanilla";
+import { TakeAsistencia } from "./pages/TakeAsistencia";
+import { Asistencia } from "./pages/moduloPlanilla/Asistencia";
+import { HorasExtras } from "./pages/moduloPlanilla/HorasExtras";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 function App() {
+  const moduloAplicado = useSelector((state) => state.subMenu.moduloAplicado);
   const isCompressed = useSelector((state) => state.sidebar.isCompressed);
 
   // useEffect para poder actualizar el logo icono y el nombre en el proyecto - pestaña
@@ -84,6 +92,7 @@ function App() {
         <Router>
           <Routes>
             <Route path="/login" element={<Login />} />
+            <Route path="/tomarAsistencia" element={<TakeAsistencia />} />
 
             <Route
               path="/*"
@@ -107,11 +116,23 @@ function App() {
                           className="card-body  p-0 h-100"
                           style={{ background: "#f9f6f6" }}
                         >
-                          <div className="row h-100 py-2">
-                            <div className="col-md-2 h-100 d-flex align-items-center justify-content-center p-0 ">
+                          <div className="row h-100 py-2 g-0">
+                            <div
+                              className={` ${
+                                moduloAplicado === ""
+                                  ? "d-none"
+                                  : "col-md-2 h-100 d-flex align-items-center justify-content-center p-0"
+                              }`}
+                            >
                               <SubMenu />
                             </div>
-                            <div className="col-md-10 h-100 d-flex align-items-center justify-content-center overflow-auto pe-3 p-0">
+                            <div
+                              className={`h-100 d-flex align-items-center justify-content-center overflow-auto pe-3 p-0 ${
+                                moduloAplicado === ""
+                                  ? "col-md-12 mx-2"
+                                  : "col-md-10 "
+                              }`}
+                            >
                               <ToastContainer />
                               <Routes>
                                 <Route path="/" element={<Home />} />
@@ -148,6 +169,44 @@ function App() {
                                   path="/almacen/ajustes"
                                   element={<AjustesAlmacen />}
                                 />
+                                {/* RUTAS PARA MODULO RECURSOS HUMANOS PLANILLAS */}
+                                <Route path="/rr-hh">
+                                  <Route
+                                    index
+                                    element={<ListaTrabajadorCargo />}
+                                  />
+                                  <Route
+                                    path="planilla"
+                                    element={<ListaTrabajadorCargo />}
+                                  />
+                                </Route>
+                                <Route path="/rr.hh">
+                                  <Route
+                                    index
+                                    element={<ListaTrabajadorCargo />}
+                                  />
+                                  <Route
+                                    path="planilla"
+                                    element={<ListaTrabajadorCargo />}
+                                  />
+                                  <Route
+                                    path="planilla/ListaTrabajador/:idCargo?"
+                                    element={<ListaTrabajador />}
+                                  />
+                                  <Route
+                                    path="ingreso-a-planilla"
+                                    element={<IngresoPlanilla />}
+                                  />
+                                  <Route
+                                    path="asistencia"
+                                    element={<Asistencia />}
+                                  />
+                                  <Route
+                                    path="horas-extras"
+                                    element={<HorasExtras />}
+                                  />
+                                </Route>
+
                                 {/* RUTAS PARA MODULO COMPRAS */}
 
                                 <Route path="/compras/" element={<Compras />} />
@@ -182,6 +241,8 @@ function App() {
                                   path="/ventas/cajas"
                                   element={<Cajas />}
                                 />
+
+                                {/* RUTAS PARA MODULO DE VENDER */}
                                 <Route
                                   path="/vender/*"
                                   element={
@@ -208,7 +269,7 @@ function App() {
                                           element={<PreventaMesa />}
                                         />
                                         <Route
-                                          path="ventasMesas/detallesPago"
+                                          path="ventasMesas/detallesPago/:idPedidoWeb?"
                                           element={<DetallesPago />}
                                         />
                                         <Route
@@ -223,6 +284,7 @@ function App() {
                                     </CajaProtectedRoute>
                                   }
                                 />
+                                {/* ====================== */}
                                 <Route
                                   path="/abrirCaja"
                                   element={<AbrirCaja />}
@@ -230,6 +292,10 @@ function App() {
                                 <Route
                                   path="/proveedores"
                                   element={<Proveedores />}
+                                />
+                                <Route
+                                  path="/areas-y-cargos"
+                                  element={<AreasCargo />}
                                 />
                                 <Route
                                   path="/configuracion"

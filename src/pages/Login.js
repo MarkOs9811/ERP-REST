@@ -12,6 +12,7 @@ import {
   faUnlockKeyhole,
 } from "@fortawesome/free-solid-svg-icons";
 import { faUser, faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
+import { ArrowForwardOutline } from "react-ionicons";
 
 export const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -83,6 +84,14 @@ export const Login = () => {
               width={350}
               style={{ position: "relative" }}
             />
+          </div>
+          <div class="border-0 my-3 p-3 rounded-0 card-asistencia">
+            <a href="/tomarAsistencia" class="btn-asistencia p-3">
+              <span>
+                <ArrowForwardOutline color={"auto"} />
+                Ir asistencia
+              </span>
+            </a>
           </div>
         </div>
 

@@ -20,6 +20,7 @@ import {
   ArchiveOutline,
   CubeOutline,
   MegaphoneOutline,
+  ManOutline,
 } from "react-ionicons";
 
 export function SideBar() {
@@ -48,7 +49,7 @@ export function SideBar() {
     proveedores: CubeOutline,
     compras: CalendarOutline,
     platos: FastFoodOutline,
-    "rr-hh": HomeOutline,
+    "rr-hh": ManOutline,
     finanzas: TrendingUpOutline,
     "areas-y-cargos": BusinessOutline,
     configuracion: SettingsOutline,
@@ -165,7 +166,7 @@ export function SideBar() {
               data-bs-toggle="tooltip"
               data-bs-placement="right"
               title="Inicio"
-              onClick={() => handleModuloSeleccionado("Inicio")}
+              onClick={() => handleModuloSeleccionado("")}
             >
               <HomeOutline color={"#auto"} />
               {!isCompressed && <span className="ms-2">Inicio</span>}
@@ -205,7 +206,7 @@ export function SideBar() {
           <Link
             to={"/configuracion"}
             className="link-opcion"
-            onClick={() => handleModuloSeleccionado("Configuracion")}
+            onClick={() => handleModuloSeleccionado("")}
           >
             <li
               className={`menu-item ${

@@ -341,12 +341,12 @@ export function SubMenu() {
         </div>
       </div>
       {/* Sección de PedidosWsp separada del menú */}
-      <div
+      {/* <div
         className="col-md-12 col-sm-12 p-0 "
-        style={{ height: "calc(100vh - 353px)" }}
-      >
-        {/* {moduloAplicado === "vender" && <PedidosWsp />} */}
-      </div>
+        style={{ height: "calc(100vh - 553px)" }}
+      > */}
+      {/* {moduloAplicado === "vender" && <PedidosWsp />} */}
+      {/* </div> */}
     </div>
   );
 }

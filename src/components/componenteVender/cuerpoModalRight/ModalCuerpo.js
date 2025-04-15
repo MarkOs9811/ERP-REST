@@ -1,9 +1,13 @@
+import { auto } from "@popperjs/core";
 import { capitalizeFirstLetter } from "../../../hooks/FirstLetterUp";
+import { useState } from "react";
 
 export function ModalCuerpo({ selectedPedido }) {
+ 
+
   return (
-    <div className="card-body h-100">
-      <ul className="list-group">
+    <div className="card-body h-100 p-0">
+      <ul className="list-group m-3">
         {selectedPedido?.detalles_pedido?.length > 0 ? (
           <>
             {selectedPedido.detalles_pedido.map((detalle) => (

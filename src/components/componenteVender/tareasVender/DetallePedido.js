@@ -11,8 +11,6 @@ export function DetallePedido({
   mesa,
   igv,
 }) {
-  // CAPTURAR SI ES QUE EXISTE LOS ESTADOS EN REDUX
-
   const navigate = useNavigate();
 
   const handleVolverPreVenta = () => {
@@ -21,14 +19,19 @@ export function DetallePedido({
   const handleVolverLlevar = () => {
     navigate(`/vender/ventasLlevar`);
   };
+  const handleVolverPedidoWeb = () => {
+    navigate(`/vender/pedidosWeb`);
+  };
   return (
     <div className="card p-3 shadow-sm" style={{ height: "100%" }}>
       <div className="card-header d-flex align-items-center justify-content-cente">
         <button
           className="btn btn-outline-dark me-auto"
           onClick={() =>
-            estadoTipoVenta == "llevar"
+            estadoTipoVenta === "llevar"
               ? handleVolverLlevar()
+              : estadoTipoVenta === "web"
+              ? handleVolverPedidoWeb()
               : handleVolverPreVenta()
           }
         >
@@ -36,8 +39,12 @@ export function DetallePedido({
           Volver
         </button>
         <h4 className="text-center text-auto align-middle mx-3">Cuenta </h4>
-        <h6 className="text-center fw-bold align-middle h2 text-success">
-          {estadoTipoVenta == "llevar" ? "Llevar" : "Mesa" + mesa + " "}
+        <h6 className="text-center fw-bold align-middle h4 text-success">
+          {estadoTipoVenta === "llevar"
+            ? "Llevar"
+            : mesa
+            ? `Mesa ${mesa}`
+            : "Web Pedido"}
         </h6>
       </div>
 

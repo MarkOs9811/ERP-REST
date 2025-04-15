@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import customDataTableStyles from "../../css/estilosComponentesTable/DataTableStyles";
 import { useEstadoAsyn } from "../../hooks/EstadoAsync";
 import { Cargando } from "../componentesReutilizables/Cargando";
@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faPowerOff } from "@fortawesome/free-solid-svg-icons";
 import { faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { AlertCircleOutline } from "react-ionicons";
+import { useQuery } from "@tanstack/react-query";
 
 export function InventarioList({ search }) {
   const [inventario, setInvetario] = useState([]);
@@ -37,6 +38,16 @@ export function InventarioList({ search }) {
     }
   }, []);
 
+  const {
+    data: inventarioData,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["inventario"],
+    queryFn: GetInventario,
+    select: (data) => (data.success ? data.data : []),
+  });
+
   const { loading, error, execute } = useEstadoAsyn(fetchInventario);
   const [hasError, setHasError] = useState(false); // Para manejar el estado de error
 
@@ -48,11 +59,13 @@ export function InventarioList({ search }) {
   }, []);
 
   // Filtro de búsqueda
-  useEffect(() => {
-    const resultado = inventario.filter((item) => {
-      // Cambié el nombre de la variable 'inventario' a 'item' para evitar confusión
-      const { nombre, marca, presentacion, descripcion, codigoProd } = item; // 'item' es el objeto de cada fila
-      const searchLower = search.toLowerCase(); // Asegurándonos de que 'search' está en minúsculas
+  const filteredInventario = useMemo(() => {
+    if (!inventarioData) return [];
+
+    return inventarioData.filter((item) => {
+      const { nombre, marca, presentacion, descripcion, codigoProd } = item;
+      const searchLower = search.toLowerCase();
+
       return (
         (nombre && nombre.toLowerCase().includes(searchLower)) ||
         (marca && marca.toLowerCase().includes(searchLower)) ||
@@ -61,8 +74,7 @@ export function InventarioList({ search }) {
         (codigoProd && codigoProd.toLowerCase().includes(searchLower))
       );
     });
-    setFilterInventario(resultado); // Establecemos los resultados filtrados en el estado
-  }, [search, inventario]); // Esto depende tanto de 'search' como de 'inventario'
+  }, [search, inventarioData]);
 
   // Definimos las columnas de la tabla
   const columns = [
@@ -217,21 +229,9 @@ export function InventarioList({ search }) {
     },
     // Aquí puedes agregar más columnas si lo necesitas
   ];
-
-  // Si está cargando, mostramos el componente de carga
-  if (loading) {
-    return <Cargando />;
-  }
-
-  // Si hay un error, mostramos el mensaje de error
-  if (error) {
-    return (
-      <div className="error-message">
-        <h2>Error:</h2>
-        <pre>{error.message || "Hubo un problema desconocido"}</pre>
-      </div>
-    );
-  }
+  // Paso 3: Renderizado
+  if (isLoading) return <div>Cargando...</div>;
+  if (isError) return <div>Error al cargar el inventario</div>;
 
   // Renderizamos la tabla cuando todo está correcto
   return (
@@ -239,7 +239,7 @@ export function InventarioList({ search }) {
       <DataTable
         className="tablaGeneral"
         columns={columns}
-        data={filterInventario || []}
+        data={filteredInventario || []}
         pagination
         responsive
         dense

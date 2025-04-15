@@ -7,10 +7,58 @@ import {
   MegaphoneOutline,
 } from "react-ionicons";
 
-import ModalRight from "../../components/componentesReutilizables/ModalRight";
+import NotificacionBtn from "../componentesReutilizables/componentesPedidosWeb/NotificacionBtn";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { setEstado } from "../../redux/tipoVentaSlice";
+import { GetPedidoWeb } from "../../service/GetPedidoWeb";
+import { useQuery } from "@tanstack/react-query";
+import { addItem } from "../../redux/pedidoWebSlice";
 
 const PedidoCard = ({ pedido, onOpenModal }) => {
   // Definir clases y estilos basados en el estado
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const {
+    data: pedidoData,
+    isLoading,
+    isError,
+    refetch,
+  } = useQuery({
+    queryKey: ["pedido", pedido.id], // Usamos la propiedad 'queryKey' en vez de pasar un arreglo
+    queryFn: () => GetPedidoWeb({ id: pedido.id }), // Definimos la función que obtiene los datos
+    enabled: false, // Solo ejecutamos si 'pedido.id' está disponible
+  });
+
+  const handleRealizarPago = async () => {
+    try {
+      const { data } = await refetch(); // ejecuta manualmente la consulta
+
+      if (!data || data.length === 0) {
+        console.error("No se encontró el pedido o está vacío");
+        return;
+      }
+
+      // Recorrer todos los ítems del pedido y despacharlos al carrito
+      data.forEach((item) => {
+        const { id, precio, cantidad } = item;
+        const nombre = item.plato?.nombre || "Sin nombre";
+
+        const itemToAdd = { id, nombre, precio, cantidad };
+
+        console.log("🛒 Item que entra a addItem:", itemToAdd);
+
+        dispatch(addItem(itemToAdd));
+      });
+
+      // Estado "web" y navegación
+      dispatch(setEstado("web"));
+      navigate(`/vender/ventasMesas/detallesPago/${pedido.id}`);
+    } catch (error) {
+      console.error("Error al realizar pago:", error);
+    }
+  };
+
   const estadoClases = {
     3: {
       bgColor: "bg-light",
@@ -38,12 +86,7 @@ const PedidoCard = ({ pedido, onOpenModal }) => {
           <button className="btn btn-sm btn-light p-1 ms-auto">
             <PrintOutline size={14} />
           </button>
-          <button
-            className="btn btn-sm btn-light p-1 ms-auto"
-            title="Notificar al cliente"
-          >
-            <MegaphoneOutline size={14} />
-          </button>
+          <NotificacionBtn pedido={pedido} />
         </div>
       ),
     },
@@ -54,18 +97,16 @@ const PedidoCard = ({ pedido, onOpenModal }) => {
       icono: <CheckmarkOutline color="#28a745" size={16} />,
       botones: (
         <div className="d-flex flex-column justify-content-end gap-2 p-0 me-2">
-          <button className="btn btn-sm btn-light border  p-1 ms-auto">
+          <button
+            className="btn btn-sm btn-light border  p-1 ms-auto"
+            onClick={() => handleRealizarPago()}
+          >
             <CheckmarkOutline size={14} />
           </button>
           <button className="btn btn-sm btn-light  p-1 ms-auto">
             <PrintOutline size={14} />
           </button>
-          <button
-            className="btn btn-sm btn-light  p-1 ms-auto"
-            title="Notificar al cliente"
-          >
-            <MegaphoneOutline size={14} />
-          </button>
+          <NotificacionBtn pedido={pedido} />
         </div>
       ),
     },

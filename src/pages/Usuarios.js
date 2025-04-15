@@ -44,13 +44,13 @@ export function Usuarios() {
   };
 
   return (
-    <div className="contianer-fluid p-2 w-100 h-100">
-      <div className="card flex-grow-1 d-flex flex-column bg-transparent h-100">
+    <div className="contianer-fluid w-100 h-100 p-0">
+      <div className="card bg-transparent my-0 flex-grow-1 h-100 d-flex flex-column p-0 m-0">
         <div
-          className="card-body overflow-y-auto overflow-x-hidden"
-          style={{ height: "calc(100vh -480px)" }}
+          className="card-body overflow-y-auto overflow-x-hidden p-0 pe-2"
+          style={{ height: "calc(100vh - 280px)" }}
         >
-          <div className="row g-3 ">
+          <div className="row g-2">
             {/* Tarjetas de estadísticas */}
             <div className="col-md-4">
               <div className="card shadow-sm text-center stats-card ">

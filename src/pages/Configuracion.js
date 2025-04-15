@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useDropzone } from 'react-dropzone';
-import axiosInstance from '../api/AxiosInstance';
-import ToastAlert from '../components/componenteToast/ToastAlert';
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useDropzone } from "react-dropzone";
+import axiosInstance from "../api/AxiosInstance";
+import ToastAlert from "../components/componenteToast/ToastAlert";
 
 export function Configuracion() {
   const [logoActual, setLogoActual] = useState(null);
@@ -14,7 +14,7 @@ export function Configuracion() {
   useEffect(() => {
     const fetchDatosEmpresa = async () => {
       try {
-        const response = await axiosInstance.get('/configuracion/getMiEmpresa');
+        const response = await axiosInstance.get("/configuracion/getMiEmpresa");
         if (response.data) {
           setDatosEmpresa(response.data);
           setLogoActual(`${BASE_URL}/${response.data.logo}`);
@@ -28,7 +28,7 @@ export function Configuracion() {
           });
         }
       } catch (error) {
-        console.error('Error al cargar datos de la empresa:', error.message);
+        console.error("Error al cargar datos de la empresa:", error.message);
       }
     };
 
@@ -45,37 +45,40 @@ export function Configuracion() {
   const onSubmit = async (data) => {
     try {
       const formData = new FormData();
-      formData.append('nombre', data.nombre);
-      formData.append('ruc', data.ruc);
-      formData.append('correo', data.correo);
-      formData.append('numero', data.numero);
-      formData.append('direccion', data.direccion);
+      formData.append("nombre", data.nombre);
+      formData.append("ruc", data.ruc);
+      formData.append("correo", data.correo);
+      formData.append("numero", data.numero);
+      formData.append("direccion", data.direccion);
 
       if (logoFile) {
-        formData.append('logo', logoFile); // Solo adjunta el archivo si se seleccionó uno nuevo
+        formData.append("logo", logoFile); // Solo adjunta el archivo si se seleccionó uno nuevo
       }
 
-      const response = await axiosInstance.post('/configuracion/updateMiempresa', formData);
+      const response = await axiosInstance.post(
+        "/configuracion/updateMiempresa",
+        formData
+      );
 
       if (response.status === 200) {
-        ToastAlert('success','Datos actualizados correctamente');
+        ToastAlert("success", "Datos actualizados correctamente");
       } else {
-        ToastAlert('error','Error al actualizar los datos');
+        ToastAlert("error", "Error al actualizar los datos");
       }
     } catch (error) {
       if (error.response) {
-        ToastAlert('error',`Error: ${error.response.data.message || 'Algo salió mal.'}`);
+        ToastAlert(
+          "error",
+          `Error: ${error.response.data.message || "Algo salió mal."}`
+        );
       } else {
-        
-        ToastAlert('error',`Error:${error}`);
+        ToastAlert("error", `Error:${error}`);
       }
     }
   };
 
- 
-
   const { getRootProps, getInputProps } = useDropzone({
-    accept: 'image/*', // Aceptar cualquier imagen
+    accept: "image/*", // Aceptar cualquier imagen
     onDrop: (acceptedFiles) => {
       const file = acceptedFiles[0];
       if (file) {
@@ -87,116 +90,169 @@ export function Configuracion() {
   });
 
   return (
-    <div className="row mt-4">
-      <div className="col-md-12">
-        <div className="card border-0 p-4 shadow-sm rounded">
-          <h3 className="mb-4">Configuración de la Empresa</h3>
-          
-          {/* Mostrar el logo actual si existe */}
-          {logoActual && <img src={logoActual} alt="Logo de la empresa" className="img-fluid mb-3" style={{ maxWidth: '150px' }} />}
+    <div className="container-fluid w-100 h-100 p-0">
+      <div className="card bg-transparent my-0 flex-grow-1 h-100 d-flex flex-column p-0 m-0">
+        <div
+          className="card-body overflow-y-auto overflow-x-hidden p-0 pe-2"
+          style={{ height: "calc(100vh - 280px)" }}
+        >
+          <div className="row g-2">
+            <div className="col-md-12">
+              <div className="card border-0 p-4 shadow-sm rounded">
+                <h3 className="mb-4">Configuración de la Empresa</h3>
 
-          {/* Mostrar la previsualización del logo si ha sido cargado */}
-          {logoPreview && (
-            <img
-              src={logoPreview}
-              alt="Logo Previsualizado"
-              className="img-fluid mb-3"
-              style={{
-                maxWidth: '150px',
-                borderRadius: '8px',
-                border: '2px solid #ddd',
-              }}
-            />
-          )}
-
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="mb-4">
-              <label htmlFor="logo" className="form-label">Logo de la Empresa</label>
-              <div {...getRootProps()} className="dropzone border p-4 text-center" style={{ cursor: 'pointer' }}>
-                <input {...getInputProps()} id="logo" name="logo" className="d-none" />
-                {!logoPreview && (
-                  <p className="text-muted">Haz clic o arrastra para cargar el logo</p>
+                {/* Mostrar el logo actual si existe */}
+                {logoActual && (
+                  <img
+                    src={logoActual}
+                    alt="Logo de la empresa"
+                    className="img-fluid mb-3"
+                    style={{ maxWidth: "150px" }}
+                  />
                 )}
-                <button type="button" className="btn btn-outline-primary mt-2">Seleccionar archivo</button>
+
+                {/* Mostrar la previsualización del logo si ha sido cargado */}
+                {logoPreview && (
+                  <img
+                    src={logoPreview}
+                    alt="Logo Previsualizado"
+                    className="img-fluid mb-3"
+                    style={{
+                      maxWidth: "150px",
+                      borderRadius: "8px",
+                      border: "2px solid #ddd",
+                    }}
+                  />
+                )}
+
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <div className="mb-4">
+                    <label htmlFor="logo" className="form-label">
+                      Logo de la Empresa
+                    </label>
+                    <div
+                      {...getRootProps()}
+                      className="dropzone border p-4 text-center"
+                      style={{ cursor: "pointer" }}
+                    >
+                      <input
+                        {...getInputProps()}
+                        id="logo"
+                        name="logo"
+                        className="d-none"
+                      />
+                      {!logoPreview && (
+                        <p className="text-muted">
+                          Haz clic o arrastra para cargar el logo
+                        </p>
+                      )}
+                      <button
+                        type="button"
+                        className="btn btn-outline-primary mt-2"
+                      >
+                        Seleccionar archivo
+                      </button>
+                    </div>
+                    <p className="text-danger">{errors.logo?.message}</p>
+                  </div>
+
+                  {/* Otros campos del formulario */}
+                  <div className="mb-3">
+                    <label htmlFor="ruc" className="form-label">
+                      RUC
+                    </label>
+                    <input
+                      type="text"
+                      id="ruc"
+                      className="form-control"
+                      {...register("ruc", {
+                        required: "El RUC es obligatorio",
+                      })}
+                      defaultValue={datosEmpresa?.ruc || ""}
+                    />
+                    <p className="text-danger">{errors.ruc?.message}</p>
+                  </div>
+
+                  <div className="mb-3">
+                    <label htmlFor="nombre" className="form-label">
+                      Nombre de la Empresa
+                    </label>
+                    <input
+                      type="text"
+                      id="nombre"
+                      className="form-control"
+                      {...register("nombre", {
+                        required: "El nombre es obligatorio",
+                      })}
+                      defaultValue={datosEmpresa?.nombre || ""}
+                    />
+                    <p className="text-danger">{errors.nombre?.message}</p>
+                  </div>
+
+                  <div className="mb-3">
+                    <label htmlFor="correo" className="form-label">
+                      Correo Electrónico
+                    </label>
+                    <input
+                      type="email"
+                      id="correo"
+                      className="form-control"
+                      {...register("correo", {
+                        required: "El correo es obligatorio",
+                        pattern: {
+                          value:
+                            /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/,
+                          message: "Correo electrónico inválido",
+                        },
+                      })}
+                      defaultValue={datosEmpresa?.correo || ""}
+                    />
+                    <p className="text-danger">{errors.correo?.message}</p>
+                  </div>
+
+                  <div className="mb-3">
+                    <label htmlFor="numero" className="form-label">
+                      Número de Teléfono
+                    </label>
+                    <input
+                      type="tel"
+                      id="numero"
+                      className="form-control"
+                      {...register("numero", {
+                        required: "El número de teléfono es obligatorio",
+                        pattern: {
+                          value: /^[0-9]{9}$/,
+                          message: "Número de teléfono inválido",
+                        },
+                      })}
+                      defaultValue={datosEmpresa?.numero || ""}
+                    />
+                    <p className="text-danger">{errors.numero?.message}</p>
+                  </div>
+
+                  <div className="mb-3">
+                    <label htmlFor="direccion" className="form-label">
+                      Dirección
+                    </label>
+                    <input
+                      type="text"
+                      id="direccion"
+                      className="form-control"
+                      {...register("direccion", {
+                        required: "La dirección es obligatoria",
+                      })}
+                      defaultValue={datosEmpresa?.direccion || ""}
+                    />
+                    <p className="text-danger">{errors.direccion?.message}</p>
+                  </div>
+
+                  <button type="submit" className="btn btn-primary w-100">
+                    Actualizar Datos
+                  </button>
+                </form>
               </div>
-              <p className="text-danger">{errors.logo?.message}</p>
             </div>
-
-            {/* Otros campos del formulario */}
-            <div className="mb-3">
-              <label htmlFor="ruc" className="form-label">RUC</label>
-              <input
-                type="text"
-                id="ruc"
-                className="form-control"
-                {...register('ruc', { required: 'El RUC es obligatorio' })}
-                defaultValue={datosEmpresa?.ruc || ''}
-              />
-              <p className="text-danger">{errors.ruc?.message}</p>
-            </div>
-
-            <div className="mb-3">
-              <label htmlFor="nombre" className="form-label">Nombre de la Empresa</label>
-              <input
-                type="text"
-                id="nombre"
-                className="form-control"
-                {...register('nombre', { required: 'El nombre es obligatorio' })}
-                defaultValue={datosEmpresa?.nombre || ''}
-              />
-              <p className="text-danger">{errors.nombre?.message}</p>
-            </div>
-
-            <div className="mb-3">
-              <label htmlFor="correo" className="form-label">Correo Electrónico</label>
-              <input
-                type="email"
-                id="correo"
-                className="form-control"
-                {...register('correo', {
-                  required: 'El correo es obligatorio',
-                  pattern: {
-                    value: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/,
-                    message: 'Correo electrónico inválido',
-                  },
-                })}
-                defaultValue={datosEmpresa?.correo || ''}
-              />
-              <p className="text-danger">{errors.correo?.message}</p>
-            </div>
-
-            <div className="mb-3">
-              <label htmlFor="numero" className="form-label">Número de Teléfono</label>
-              <input
-                type="tel"
-                id="numero"
-                className="form-control"
-                {...register('numero', {
-                  required: 'El número de teléfono es obligatorio',
-                  pattern: {
-                    value: /^[0-9]{9}$/,
-                    message: 'Número de teléfono inválido',
-                  },
-                })}
-                defaultValue={datosEmpresa?.numero || ''}
-              />
-              <p className="text-danger">{errors.numero?.message}</p>
-            </div>
-
-            <div className="mb-3">
-              <label htmlFor="direccion" className="form-label">Dirección</label>
-              <input
-                type="text"
-                id="direccion"
-                className="form-control"
-                {...register('direccion', { required: 'La dirección es obligatoria' })}
-                defaultValue={datosEmpresa?.direccion || ''}
-              />
-              <p className="text-danger">{errors.direccion?.message}</p>
-            </div>
-
-            <button type="submit" className="btn btn-primary w-100">Actualizar Datos</button>
-          </form>
+          </div>
         </div>
       </div>
     </div>

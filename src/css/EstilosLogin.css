@@ -114,3 +114,68 @@
   margin-bottom: 10px;
   text-align: center;
 }
+
+.card-asistencia {
+  position: absolute;
+  bottom: 0px;
+  /* Ajusta la distancia desde la parte inferior */
+  right: 20px;
+  /* Ajusta la distancia desde la derecha */
+  width: 400px;
+  /* Mantén el ancho de la card */
+  background: none;
+}
+
+.btn-asistencia {
+  display: block;
+  color: #fff;
+  bottom: 0px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 400;
+  height: 60px;
+  line-height: 30px;
+  margin: 0 auto 2em;
+  max-width: 300px;
+  width: 300px;
+  text-align: center;
+  position: relative;
+  text-decoration: none;
+  text-transform: uppercase;
+  vertical-align: middle;
+  overflow: hidden;
+  background-color: #bd1717;
+  border-radius: 40px;
+  transition: all 0.3s ease;
+  box-shadow: 10px 5px 10px 5px rgba(0, 0, 0, 0.2);
+}
+
+.btn-asistencia span {
+  position: relative;
+  z-index: 1;
+}
+
+.btn-asistencia::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0) 0%, rgba(245, 0, 0, 0.4) 50%, rgba(255, 255, 255, 0) 100%);
+  transform: skewX(-25deg);
+  transition: all 0.7s ease;
+}
+
+.btn-asistencia:hover::before {
+  left: 100%;
+  transition: all 0.7s ease;
+}
+
+.btn-asistencia:hover {
+  background-color: #940000;
+  color: white;
+  transform: scale(1.05);
+  font-weight: bolder;
+  box-shadow: 0px 5px 10px 5px rgba(0, 0, 0, 0.2);
+}
