@@ -67,7 +67,7 @@
   border-radius: 10px;
 }
 
-.login-form button {
+.button-normal-login {
   width: 40%;
   padding: 10px;
   background: #208cff;
@@ -82,7 +82,7 @@
   transition: all 0.2s ease-out;
 }
 
-.login-form button::before {
+.login-form .button-normal-login::before {
   content: '';
   position: absolute;
   top: 0;
@@ -94,7 +94,7 @@
   transition: all 0.4s ease-out;
 }
 
-.login-form button:hover::before {
+.login-form .button-normal-login:hover::before {
   left: 100%; /* Mueve el brillo hacia la derecha */
 }
 
@@ -179,3 +179,19 @@
   font-weight: bolder;
   box-shadow: 0px 5px 10px 5px rgba(0, 0, 0, 0.2);
 }
+
+ .btn-google {
+   padding: 10px 20px;
+   background-color: #ffffff;
+   color: rgb(46, 46, 46);
+   border: 1px solid grey;
+   border-radius: 4px;
+   font-size: 16px;
+   cursor: pointer;
+   display: flex;
+   align-items: center;
+ }
+
+ .btn-google:hover {
+   background-color: #c5c5c5!important;
+ }

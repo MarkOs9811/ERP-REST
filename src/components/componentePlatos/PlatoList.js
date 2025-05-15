@@ -5,7 +5,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import axiosInstance from "../../api/AxiosInstance";
 import DataTable from "react-data-table-component";
 import customDataTableStyles from "../../css/estilosComponentesTable/DataTableStyles";
@@ -15,33 +15,32 @@ import { PlatoEditar } from "./PlatoEdit";
 import { Modal } from "react-bootstrap";
 import axiosInstanceJava from "../../api/AxiosInstanceJava";
 import ModalAlertQuestion from "../componenteToast/ModalAlertQuestion";
+import { GetPlatos } from "../../service/GetPlatos";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+
+import { Cargando } from "../componentesReutilizables/Cargando";
+import ToastAlert from "../componenteToast/ToastAlert";
+import ModalAlertActivar from "../componenteToast/ModalAlertActivar";
 
 export function PlatoList({ search, upDateList }) {
-  const [platosList, setPlatosList] = useState([]);
-  const [filterPlatos, setFilterPlatos] = useState([]);
-
   const BASE_URL_JAVA = process.env.REACT_APP_BASE_URL_JAVA;
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-  const getPlatos = async () => {
-    try {
-      const response = await axiosInstanceJava.get("/platos");
-      if (response.data.success) {
-        const platos = response.data.data.map((plato) => ({
-          ...plato,
-          estado: parseInt(plato.estado, 10), // Convertir 'estado' a número
-        }));
-        setPlatosList(platos);
-        setFilterPlatos(platos);
-      } else {
-        console.log(response.data.message);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const queryClient = useQueryClient();
+  const {
+    data: platosList = [],
+    isLoading: loadingPlatos,
+    isError: errorPlatos,
+  } = useQuery({
+    queryKey: ["platos"],
+    queryFn: GetPlatos,
+    retry: 1,
+    refetchOnWindowFocus: false,
+  });
 
   const [showModalEditar, setShowModalEditar] = useState(false);
   const [dataPlato, setDataPlato] = useState([]);
+  const [filterPlatos, setFilterPlatos] = useState([]);
 
   const handleOpenEditar = (dataPlato) => {
     setShowModalEditar(true);
@@ -51,10 +50,10 @@ export function PlatoList({ search, upDateList }) {
   const handleCloseEditarCat = () => {
     setShowModalEditar(false);
     setDataPlato([]);
-    getPlatos();
+    queryClient.invalidateQueries({ queryKey: ["platos"] });
   };
 
-  // Filtrar registros según búsqueda
+  // 🔍 Filtrar según búsqueda
   useEffect(() => {
     const result = platosList.filter((plato) => {
       const { nombre, categoria, descripcion, precio } = plato;
@@ -70,11 +69,10 @@ export function PlatoList({ search, upDateList }) {
     setFilterPlatos(result);
   }, [search, platosList]);
 
-  useEffect(() => {
-    getPlatos();
-  }, [upDateList]);
-
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+  const [modalActivar, setModalActivar] = useState(false);
+  const [nombrePlato, setNombrePlato] = useState("");
+  const [idPlatoActivar, setIdPlatoActivar] = useState("");
   const [arrayPlato, setArrayPlato] = useState([]);
 
   const handleEliminarQuestion = (plato) => {
@@ -87,16 +85,51 @@ export function PlatoList({ search, upDateList }) {
     setArrayPlato([]);
   };
 
-  const handleEliminar = () => {
-    alert();
+  const handleEliminar = async (id) => {
+    try {
+      const response = await axiosInstance.put(`/combos/desactivar/ ${id}`);
+      if (response.data.success) {
+        ToastAlert("success", "Platos desactivado correctamente");
+        queryClient.invalidateQueries({ queryKey: ["platos"] });
+      } else {
+        ToastAlert("error", "Ocurrio un error", response.data.message);
+      }
+    } catch (error) {
+      ToastAlert("error", "Error conexion", error);
+    }
   };
+
+  const handleActivarPlato = async (id) => {
+    try {
+      const response = await axiosInstance.put(`/combos/activar/${id}`);
+      if (response.data.success) {
+        ToastAlert("success", "Activado correctamente");
+        queryClient.invalidateQueries({ queryKey: ["platos"] });
+      } else {
+        ToastAlert("error", "Ocurrió un error al activar el combo");
+      }
+    } catch (error) {
+      ToastAlert("error", "Error de conexion", error);
+    }
+  };
+
   const columns = [
     {
       name: "Foto",
       selector: (row) => (
         <img
-          src={`${BASE_URL_JAVA}/${row.foto}`}
+          src={
+            row.foto
+              ? `${BASE_URL}/storage/${row.foto}`
+              : "/images/img-default.jpg"
+          }
           alt="Foto del Plato"
+          onError={(e) => {
+            // Solo reemplaza la imagen si aún no es la imagen por defecto
+            if (!e.target.src.includes("img-default.jpg")) {
+              e.target.src = "/images/img-default.jpg";
+            }
+          }}
           style={{
             width: "50px",
             height: "50px",
@@ -107,6 +140,7 @@ export function PlatoList({ search, upDateList }) {
       ),
       sortable: false, // No tiene sentido ordenar por imagen
       wrap: false,
+      grow: 0,
     },
     {
       name: "Nombre",
@@ -166,6 +200,11 @@ export function PlatoList({ search, upDateList }) {
                 data-bs-toggle="tooltip"
                 data-bs-placement="top"
                 title="Activar Plato"
+                onClick={() => {
+                  setModalActivar(true);
+                  setNombrePlato(row?.nombre);
+                  setIdPlatoActivar(row?.id);
+                }}
               >
                 <FontAwesomeIcon icon={faPowerOff} />
               </button>
@@ -180,25 +219,36 @@ export function PlatoList({ search, upDateList }) {
   useTooltips(platosList);
   return (
     <div>
-      <DataTable
-        className="tablaGeneral"
-        columns={columns}
-        data={filterPlatos}
-        pagination
-        responsive
-        dense
-        customStyles={customDataTableStyles}
-        fixedHeader
-        fixedHeaderScrollHeight="500px"
-        striped={true}
-        // conditionalRowStyles={conditionalRowStyles} // Estilos condicionales aplicados aquí
-        paginationComponentOptions={{
-          rowsPerPageText: "Filas por página:",
-          rangeSeparatorText: "de",
-          selectAllRowsItem: true,
-          selectAllRowsItemText: "Todos",
-        }}
-      />
+      {loadingPlatos ? (
+        <div className="text-center p-4">
+          <p>
+            <Cargando />
+          </p>
+        </div>
+      ) : errorPlatos ? (
+        <div className="text-center p-4 text-danger">
+          <p>Error al cargar los platos.</p>
+        </div>
+      ) : (
+        <DataTable
+          className="tablaGeneral"
+          columns={columns}
+          data={filterPlatos || []}
+          pagination
+          responsive
+          dense
+          customStyles={customDataTableStyles}
+          fixedHeader
+          striped={true}
+          paginationComponentOptions={{
+            rowsPerPageText: "Filas por página:",
+            rangeSeparatorText: "de",
+            selectAllRowsItem: true,
+            selectAllRowsItemText: "Todos",
+          }}
+        />
+      )}
+
       {/* // modal para editar un PLATO */}
       <Modal
         show={showModalEditar}
@@ -226,6 +276,15 @@ export function PlatoList({ search, upDateList }) {
         tipo={"Plato"}
         handleEliminar={handleEliminar}
         handleCloseModal={handleCloseModalQuestionEliminar}
+      />
+
+      <ModalAlertActivar
+        show={modalActivar}
+        idActivar={idPlatoActivar}
+        nombre={nombrePlato}
+        handleActivar={handleActivarPlato}
+        handleCloseModal={() => setModalActivar(false)}
+        tipo={"Plato"}
       />
     </div>
   );

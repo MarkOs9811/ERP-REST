@@ -8,6 +8,7 @@ import {
   faCoins,
   faClock,
   faBuilding,
+  faUnlockKeyhole,
 } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
 import ToastAlert from "../componenteToast/ToastAlert";
@@ -340,6 +341,30 @@ export function UsuarioForm({ handleCloseModal }) {
           </label>
           {errors.correo && (
             <div className="invalid-feedback">{errors.correo.message}</div>
+          )}
+        </div>
+      </div>
+      {/* Tipo de logeo*/}
+      <div className="mb-3">
+        <div className="form-floating">
+          <select
+            id="horario"
+            className={`form-select ${errors.tipoAuth ? "is-invalid" : ""}`} // Aplica is-invalid si hay errores
+            {...register("tipoAuth", {
+              required: "El tipoAuth es obligatorio",
+            })}
+          >
+            <option value="">Seleccione...</option>
+
+            <option value={"manual"}>Cuentas manuales</option>
+            <option value={"google Oauth2"}>Google Oauth2</option>
+          </select>
+          <label htmlFor="tipoAuth">
+            <FontAwesomeIcon icon={faUnlockKeyhole} className="me-2" />
+            Tipo de authenticación
+          </label>
+          {errors.tipoAuth && (
+            <div className="invalid-feedback">{errors.tipoAuth.message}</div> // Mensaje de error
           )}
         </div>
       </div>

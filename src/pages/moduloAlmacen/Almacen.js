@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import "../../css/EstilosAlmacen.css";
 import { Navigate, useNavigate } from "react-router-dom";
+import { AddOutline } from "react-ionicons";
 export function Almacen() {
   const [updateList, setUpdateList] = useState(false);
   const [search, setSearch] = useState("");
@@ -34,7 +35,7 @@ export function Almacen() {
                 onChange={(e) => setSearch(e.target.value)}
               />
               <button className="btn ms-2" onClick={() => handleAgregar()}>
-                <FontAwesomeIcon icon={faPlus} className="icon" />
+                <AddOutline color={"auto"} />
               </button>
             </div>
           </div>

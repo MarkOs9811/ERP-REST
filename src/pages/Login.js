@@ -13,6 +13,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faUser, faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import { ArrowForwardOutline } from "react-ionicons";
+import { faGoogle } from "@fortawesome/free-brands-svg-icons";
+import RippleWrapper from "../components/componentesReutilizables/RippleWrapper";
 
 export const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -169,14 +171,31 @@ export const Login = () => {
               </div>
             </div>
 
-            <div className="d-flex justify-content-center align-items-center w-100 m-auto">
+            <div className="d-flex justify-content-center align-items-center w-100 m-auto mb-3">
               <button
                 type="submit"
-                className="login-form button"
+                className="login-form button-normal-login"
                 disabled={loading}
               >
                 {loading ? "Iniciando sesión..." : "Ingresar"}
               </button>
+            </div>
+            <p className="ms-auto text-center">ó</p>
+            <div className="d-flex justify-content-center align-items-center w-100 m-auto">
+              <RippleWrapper className="rounded">
+                <button
+                  type="button"
+                  id="google-signin-btn"
+                  className="btn-google"
+                  onClick={() => {
+                    window.location.href =
+                      "https://5e7e-38-25-9-205.ngrok-free.app/api/auth/google/redirect"; //Cambiar URl de mi bbackend
+                  }}
+                >
+                  <FontAwesomeIcon icon={faGoogle} className="mx-2" />
+                  Iniciar sesión con Google
+                </button>
+              </RippleWrapper>
             </div>
           </form>
         </div>

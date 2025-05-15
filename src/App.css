@@ -8,10 +8,10 @@ body{
 h3,h2,h1,h4,h5{
   font-family: "Caveat", serif;
   font-size: 35px!important;
-  color: #5f2956 !important;
+  color: #5f2929 !important;
 }
 h4{
-  color: #008080!important;
+  color: #1d2b2b!important;
 }
 .tituloCard{
   color: #34485c!important;
@@ -24,8 +24,11 @@ button {
 /* Estilos base */
 .main-container {
   display: flex;
-  background-color: #f0f2f5;
+
  
+}
+.contenido {
+  background: linear-gradient(to right, #edf6ff, #fafdff);
 }
 
 /* CONTENEDOR CUERPO y submenu SCROLL */
@@ -38,10 +41,6 @@ button {
   /* Ajusta el ancho según prefieras */
   min-width: 200px;  
   
-}
-
-.cuerpo-contenedor {
- 
 }
 
 
@@ -71,8 +70,8 @@ button {
   left: 0;
   height: 100%;
   /* background-color: #0e182c; */
-  background-color: #eefaff;
-  color: #0e182c;
+  background-color: #1d2530;
+  color: #ffffff;
   overflow-y: hidden;
   transition: all 0.3s ease, border-radius 0.3s ease; /* Agregado efecto suave para border-radius */
   width: 250px; 
@@ -88,6 +87,7 @@ button {
 /* Sidebar comprimido */
 .sidebar.compressed {
   width: 60px; /* Ancho del sidebar comprimido */
+  overflow-x: hidden;
 }
 /* Cabecera del Sidebar */
 .sidebar-header {
@@ -112,6 +112,8 @@ button {
   font-weight: 500;
   transition: opacity 0.3s ease, visibility 0.3s ease;
 }
+
+
 /* DISEÑO PARA E SCROL DEL SIDEBAR */
 /* Estilo para el scrollbar del sidebar */
 /* Scrollbar en navegadores basados en WebKit */
@@ -139,7 +141,7 @@ button {
 /* ================================================================= */
 /* CABECERA PRINCIPAL */
 .header-contenido{
-  background-color: #d33c3c!important;
+  background-color: #ffffff!important;
 }
 /* ESTILOS APRA EL ACORDEON */
 .accordion-button {
@@ -158,12 +160,14 @@ button {
   outline: none !important; /* Sin contorno */
 }
 
+/* el submenu es opciones de MODULO */
  .subMenu{
   width: 100%;
   height: auto;
   margin-bottom: 4px;
   position: relative;
 }
+
 .subMenu a{
   text-decoration: none;
   color: #404c58;
@@ -175,17 +179,16 @@ button {
   transition: background ease-out 0.3s;
 }
 .subMenu a:hover{
-  background-color: #cedde4;
-  border-radius: 5px;
+  background-color: #e0e0e0;
+
   padding: 8px 10px;
 }
 
 /* Estilo para la opción activa */
 .subMenu .active {
-  background: white;
   color: #ffffff!important; /* Texto blanco */
-  border-left: 4px solid #007be0;
   border-radius: 0px;
+  border-left: 5px solid #d33c3c;
 }
 
 /* Ajustes para el enlace dentro de la opción activa */
@@ -196,13 +199,14 @@ button {
 }
 /* ============================================== */
 
-
+/* ==================================================== */
 /* Items dentro del sidebar */
 .menu-list {
   list-style: none;
   padding: 0;
   margin: 0;
   height: auto;
+  overflow-x: hidden;
 }
 .menu-footer{
   position: absolute;
@@ -219,10 +223,50 @@ button {
   width: 100%;
   height: 50px; /* Altura consistente */
   margin: 5px auto; /* Márgenes dinámicos */
- 
- 
+  
+}
+.menu-item:hover {
+  background-color: #3c4550!important; /* Cambia el color de fondo al pasar el mouse */
+ border-radius: 8px;
+  cursor: pointer; /* Cambia el cursor al pasar el mouse */
+  transition: background-color 0.3s ease; /* Efecto suave */
+
+}
+/* Estilo para la opción activa */
+.menu-item.active {
+  background: #414141;
+  color: #ffffff !important;
+  /* Texto blanco */
+  border-radius: 8px;
+  font-weight: bold;
 }
 
+.menu-item.active span {
+  color: #f1f9ff !important;
+  font-weight: bold;
+
+}
+
+.menu-item.active .icon {
+  font-size: 14px;
+  flex-shrink: 0;
+  /* Evita que el ícono se reduzca */
+  font-weight: bold !important;
+}
+
+/* Ajustes para el enlace dentro de la opción activa */
+.menu-item.active a {
+  color: #ffffff;
+  font-weight: bold;
+  /* Resalta el texto */
+
+}
+
+/* Ícono dentro de la opción activa */
+.menu-item.active .icon {
+  transform: scale(1.2);
+  /* Ícono agrandado */
+}
 /* Para asegurar que el hijo no sobresalga de los 250px del contenedor */
 .sidebar .menu-item {
   max-width: calc(100% - 10px); /* Resta 10px (5px por lado) para asegurar que el hijo no sobresalga */
@@ -247,31 +291,19 @@ button {
   font-size: 17px;
 }
 
-/* Efecto hover y activo para items */
-.menu-item:hover,
-.menu-item.active {
-  width: 100%;
-  background-color: #354c69;
-  transition: background-color 0.3s ease; /* Efecto suave */
-  
-}
 
-.link-opcion{
-  width: 100%;
-  height: 100%;
-}
 /* Ícono con tamaño adecuado */
  .icon {
   font-size: 15px;
   flex-shrink: 0; /* Evita que el ícono se reduzca */
-  color: #2d374d;
+  color: #ffffff;
   transition: transform 0.3s ease; /* Suaviza cambios de tamaño */
 }
 /* Texto de las opciones */
 .menu-item span {
   flex-grow: 1; /* Permite al texto ocupar espacio restante */
   text-align: left;
-  color: #2d374d;
+  color: #ffffff;
   visibility: visible;
   opacity: 1;
   transition: opacity 0.3s ease, visibility 0.3s ease;
@@ -279,34 +311,7 @@ button {
 
 
 
-/* Estilo para la opción activa */
-.menu-item.active {
-  background: white;
-  color: #ffffff!important; /* Texto blanco */
-  border-left: 4px solid #007be0;
-  border-radius: 0px;
-}
-.menu-item.active span{
-  color: #007be0!important;
-  font-weight: bold;
-}
-.menu-item.active .icon{
-  font-size: 14px;
-  flex-shrink: 0; /* Evita que el ícono se reduzca */
-  color: #007be0!important;
-  font-weight: bold!important;
-}
-/* Ajustes para el enlace dentro de la opción activa */
-.menu-item.active a{
-  color: #ffffff;
-  font-weight: bold; /* Resalta el texto */
- 
-}
 
-/* Ícono dentro de la opción activa */
-.menu-item.active .icon {
-  transform: scale(1.2); /* Ícono agrandado */
-}
 
 /* Efecto hover para elementos no activos */
 .menu-item:hover:not(.active) {
@@ -501,6 +506,7 @@ button {
 }
 .btn-guardar{
     min-width: 35px;
+    
     width: 200px;
     height: 50px;
     line-height: 15px;
@@ -508,13 +514,14 @@ button {
     color: #e2ecff;
     border:none;
     border-radius: 0.375rem;
-    padding: 0.5rem;
+    padding: 0.6rem;
     transition: background-color 0.3s ease;
 }
 .btn-guardar:hover{
   background-color: #104e81;
   color: #c9d6f0;
 }
+
 
 .btn-cerrar-modal{
   min-width: 35px;
@@ -553,6 +560,96 @@ color: #c9d6f0;
 .modal-sin-borde .modal-content {
   border: none;
   box-shadow: none;
+}
+
+/* BOTON PRINPAL PARA VENDER */
+.boton-venta {
+  display: inline-flex;
+  height: 50px;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background-color: #ffffff;
+  border: none;
+  font-weight: 500;
+  font-size: 15px;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+.boton-venta.activo {
+  border-bottom: 4px solid #152a49;
+  /* azul activo */
+  background-color: #f0f6ff;
+}
+.boton-venta svg,
+.boton-venta img {
+  display: block;
+}
+
+.boton-venta:hover {
+  background-color: #f2f2f2;
+  transform: scale(1.02);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.boton-venta:active {
+  transform: scale(0.98);
+  opacity: 0.9;
+}
+
+/* ESTILOS GENERALE SAPRA BADGE */
+
+.badge-ok {
+  background-color: #4CAF50;
+  /* Verde suave, tipo éxito */
+  color: #fff;
+  
+  font-size: 0.85rem;
+  border-radius: 12px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.badge-fail {
+  background-color: #e74c3c;
+  /* Rojo medio fuerte, serio */
+  color: #fff;
+  
+  font-size: 0.85rem;
+  border-radius: 12px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.badge-alert {
+  background-color: #f39c12;
+  /* Naranja vibrante pero controlado */
+  color: #212529;
+  /* Texto oscuro */
+  
+  font-size: 0.85rem;
+  border-radius: 12px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.badge-aviso {
+  background-color: #95a5a6;
+  /* Gris sobrio tipo info */
+  color: #fff;
+  
+  font-size: 0.85rem;
+  border-radius: 12px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.dropdown-menu {
+  z-index: 9999!important;
+  box-shadow:1px 3px 10px 0px rgba(0,0,0,0.2)!important;
+  border: none!important;
 }
 
 /* ========== Responsivo ========== */

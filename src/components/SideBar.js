@@ -22,12 +22,14 @@ import {
   MegaphoneOutline,
   ManOutline,
 } from "react-ionicons";
+import RippleWrapper from "./componentesReutilizables/RippleWrapper";
+import { setSidebarCompressed, toggleSidebar } from "../redux/sideBarSlice";
 
 export function SideBar() {
   const location = useLocation();
   const navigate = useNavigate();
   const BASE_URL = process.env.REACT_APP_BASE_URL;
-  const miEmpresa = JSON.parse(localStorage.getItem("miEmpresa")) || {};
+  const miEmpresa = JSON.parse(localStorage.getItem("empresa")) || {};
 
   const fotoEmpresa = miEmpresa.logo
     ? `${BASE_URL}/storage/${miEmpresa.logo}`
@@ -126,10 +128,11 @@ export function SideBar() {
   // Manejar la selección de un módulo
   const handleModuloSeleccionado = (nombreOpcion) => {
     dispatch(subMenuClick(nombreOpcion));
+    dispatch(setSidebarCompressed(false));
   };
 
   return (
-    <div className={`sidebar ${isCompressed ? "compressed" : ""}`}>
+    <div className={`sidebar compressed`}>
       <div className="sidebar-header  d-flex">
         {fotoEmpresa && (
           <img
@@ -144,83 +147,75 @@ export function SideBar() {
             }}
           />
         )}
-        {!isCompressed && (
-          <span className="header-title">
-            {capitalizeWords(miEmpresa.nombre)}
-          </span>
-        )}
       </div>
 
       <div className="sidebar-menu">
         <ul className="menu-list ">
           {/* Ícono de Inicio */}
-          <li
-            className={`menu-item  p-0 py-2 ${
-              location.pathname === `/` ? "active" : ""
-            } ${isCompressed ? "center" : ""}`}
+
+          <Link
+            to={"/"}
+            className="link-opcion"
+            title="Inicio"
+            onClick={() => handleModuloSeleccionado("")}
           >
-            <Link
-              to={`/`}
-              className="link-opcion"
-              key="Inicio"
-              data-bs-toggle="tooltip"
-              data-bs-placement="right"
-              title="Inicio"
-              onClick={() => handleModuloSeleccionado("")}
+            <li
+              className={`menu-item text-center ${
+                location.pathname === `/` ? "active" : ""
+              }`}
             >
-              <HomeOutline color={"#auto"} />
-              {!isCompressed && <span className="ms-2">Inicio</span>}
-            </Link>
-          </li>
+              <HomeOutline color={"auto"} className={"ms-auto text-center"} />
+            </li>
+          </Link>
 
           {/* Módulos dinámicos */}
           {orderedRoles.map((role) => {
+            if (role.nombre.toLowerCase() === "vender") return null; // ⛔ Omitir si es "vender"
+
             const roleUrl = formatRoleToUrl(role.nombre);
             const isActive = location.pathname.startsWith(`/${roleUrl}`);
-            const IconComponent = getIconForRole(role.nombre); // Obtener el componente del icono
+            const IconComponent = getIconForRole(role.nombre);
 
             return (
-              <li
+              <Link
                 key={role.id}
-                className={`menu-item  p-0 py-2  ${isActive ? "active" : ""} ${
-                  isCompressed ? "center" : ""
-                }`}
+                to={`/${roleUrl}`}
+                className="link-opcion"
+                data-bs-toggle="tooltip"
+                data-bs-placement="right"
+                title={role.nombre}
+                onClick={() => handleModuloSeleccionado(roleUrl)}
               >
-                <Link
-                  to={`/${roleUrl}`}
-                  className="link-opcion  "
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="right"
-                  title={role.nombre}
-                  onClick={() => handleModuloSeleccionado(roleUrl)}
+                <li
+                  className={`menu-item p-0 py-2 ${isActive ? "active" : ""}`}
                 >
-                  <IconComponent color={"auto"} />
-                  {!isCompressed && <span className="">{role.nombre}</span>}
-                </Link>
-              </li>
+                  <IconComponent color={"auto"} className={"text-center"} />
+                </li>
+              </Link>
             );
           })}
         </ul>
         {/* Configuración y Salir */}
         <div className="menu-footer d-flex flex-column mt-auto">
-          <Link
-            to={"/configuracion"}
-            className="link-opcion"
-            onClick={() => handleModuloSeleccionado("")}
-          >
-            <li
-              className={`menu-item ${
-                location.pathname === `/configuracion` ? "active" : ""
-              } ${isCompressed ? "center" : ""}`}
+          <RippleWrapper className="rounded-md">
+            <Link
+              to={"/configuracion"}
+              className="link-opcion"
+              onClick={() => handleModuloSeleccionado("")}
             >
-              <SettingsOutline color={"auto"} />
-              {!isCompressed && <span>Configuración</span>}
-            </li>
-          </Link>
+              <li
+                className={`menu-item ${
+                  location.pathname === `/configuracion` ? "active" : ""
+                }`}
+              >
+                <SettingsOutline color={"auto"} />
+              </li>
+            </Link>
+          </RippleWrapper>
+
           <Link onClick={cerrarSession} className="logout-btn link-opcion">
-            <li className={`menu-item ${isCompressed ? "center" : ""}`}>
+            <li className={`menu-item`}>
               <LogOutOutline color={"auto"} />
-              {!isCompressed && <span>Salir</span>}
             </li>
           </Link>
         </div>

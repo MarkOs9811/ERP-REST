@@ -16,7 +16,9 @@ import { faCheckCircle } from "@fortawesome/free-regular-svg-icons";
 import { CategoriaEditar } from "./CategoriaEditar";
 import { Modal } from "react-bootstrap";
 import { useTooltips } from "../../hooks/UseToolTips";
-
+import { GetCategoriaPlatos } from "../../service/accionesPlatos/GetCategoriaPlatos";
+import { useQuery } from "@tanstack/react-query";
+import { Cargando } from "../componentesReutilizables/Cargando";
 export function CategoriaList() {
   const [categoria, setCategoria] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -39,26 +41,35 @@ export function CategoriaList() {
   // };
 
   //   EJEMPLO CONSUMIENDO MI API CREADA CON SPRING BOOT
-  const getCategorias = async () => {
-    try {
-      const response = await axiosInstanceJava.get("/categorias"); // La URL base ya está configurada
-      if (response.data.success) {
-        const categorias = response.data.data.map((categoria) => ({
-          ...categoria,
-          estado: parseInt(categoria.estado, 10), // Convertir 'estado' a número
-        }));
-        setCategoria(categorias);
-      } else {
-        console.log("Error al obtener las categorías");
-      }
-    } catch (error) {
-      console.error("Error de conexión", error);
-    }
-  };
+  // const getCategorias = async () => {
+  //   try {
+  //     const response = await axiosInstanceJava.get("/categorias"); // La URL base ya está configurada
+  //     if (response.data.success) {
+  //       const categorias = response.data.data.map((categoria) => ({
+  //         ...categoria,
+  //         estado: parseInt(categoria.estado, 10), // Convertir 'estado' a número
+  //       }));
+  //       setCategoria(categorias);
+  //     } else {
+  //       console.log("Error al obtener las categorías");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error de conexión", error);
+  //   }
+  // };
 
-  useEffect(() => {
-    getCategorias();
-  }, []);
+  const {
+    data: categoriasList = [],
+    isLoading: loadingCategorias,
+    isError: errorCategorias,
+  } = useQuery({
+    queryKey: ["categorias"],
+    queryFn: GetCategoriaPlatos,
+    retry: 1,
+    refetchOnWindowFocus: false,
+  });
+
+  console.log(categoriasList);
 
   useTooltips(categoria);
   // Filtrar las categorías basadas en la búsqueda
@@ -207,7 +218,7 @@ export function CategoriaList() {
   };
 
   return (
-    <div className="card p-0">
+    <div className="card p-0 shadow-sm h-100">
       <div className="card-header d-flex justify-content-between align-items-center mb-2">
         <h5 className="mb-0">Categorías</h5>
         {/* Botón para abrir el modal */}
@@ -241,66 +252,77 @@ export function CategoriaList() {
 
       {/* Lista de categorías */}
       <div className="list-group">
-        {filteredCategorias.map((categoria) => (
-          <div
-            className="d-flex justify-content-between align-items-center borderInferior p-3"
-            key={categoria.id}
-          >
-            <div className="d-flex flex-column justify-content-center">
-              <div className="d-flex align-items-center">
-                <div
-                  className={`rounded-circle ${
-                    categoria.estado === 1
-                      ? "categoriaActiva"
-                      : "categoriaFalse"
-                  }`}
-                ></div>
-                <span>
-                  {categoria.nombre.charAt(0).toUpperCase() +
-                    categoria.nombre.slice(1)}
+        {loadingCategorias ? (
+          <div className="text-center p-4">
+            <Cargando />
+          </div>
+        ) : errorCategorias ? (
+          <div className="text-center p-4 text-danger">
+            <p>Error al cargar los platos.</p>
+          </div>
+        ) : (
+          categoriasList.map((categoria) => (
+            <div
+              className="d-flex justify-content-between align-items-center borderInferior p-3"
+              key={categoria.id}
+            >
+              <div className="d-flex flex-column justify-content-center">
+                <div className="d-flex align-items-center">
+                  <div
+                    className={`rounded-circle ${
+                      categoria.estado === 1
+                        ? "categoriaActiva"
+                        : "categoriaFalse"
+                    }`}
+                  ></div>
+                  <span className="ms-2">
+                    {categoria.nombre.charAt(0).toUpperCase() +
+                      categoria.nombre.slice(1)}
+                  </span>
+                </div>
+                <span className="badge bg-light text-dark rounded-pill mt-1">
+                  5 platos
                 </span>
               </div>
-              <span className="badge bg-light text-dark rounded-pill mt-1">
-                5 platos
-              </span>
-            </div>
-            <div className="ms-auto">
-              <button
-                type="button"
-                className="btn text-secondary btn-sm me-2"
-                onClick={() => handleOpenEditarCat(categoria)}
-              >
-                <FontAwesomeIcon icon={faPenToSquare} />
-              </button>
 
-              {categoria.estado === 1 ? (
-                // Botón de eliminar si estado es 1
+              <div className="ms-auto">
                 <button
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="right"
-                  title="Eliminar Categoria"
-                  className="btn text-danger btn-sm"
-                  onClick={() =>
-                    handleEliminarCat(categoria.id, categoria.nombre)
-                  }
+                  type="button"
+                  className="btn text-secondary btn-sm me-2"
+                  onClick={() => handleOpenEditarCat(categoria)}
                 >
-                  <FontAwesomeIcon icon={faTrashCan} />
+                  <FontAwesomeIcon icon={faPenToSquare} />
                 </button>
-              ) : (
-                // Botón de activar si estado no es 1
-                <button
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="top"
-                  title="Activar Categoria"
-                  className="btn text-success btn-sm"
-                  onClick={() => handleActivar(categoria.id, categoria.nombre)}
-                >
-                  <FontAwesomeIcon icon={faCheckCircle} />
-                </button>
-              )}
+
+                {categoria.estado === 1 ? (
+                  <button
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="right"
+                    title="Eliminar Categoria"
+                    className="btn text-danger btn-sm"
+                    onClick={() =>
+                      handleEliminarCat(categoria.id, categoria.nombre)
+                    }
+                  >
+                    <FontAwesomeIcon icon={faTrashCan} />
+                  </button>
+                ) : (
+                  <button
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Activar Categoria"
+                    className="btn text-success btn-sm"
+                    onClick={() =>
+                      handleActivar(categoria.id, categoria.nombre)
+                    }
+                  >
+                    <FontAwesomeIcon icon={faCheckCircle} />
+                  </button>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
 
       {/* Modal para agregar nueva categoría */}

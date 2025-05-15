@@ -19,6 +19,9 @@ export const CardPlatos = ({
         src={`${BASE_URL}/storage/${item.foto}`}
         alt={item.nombre}
         className="card-img-top"
+        onError={(e) => {
+          e.target.src = "/images/img-default.jpg";
+        }}
         style={{
           maxWidth: "auto",
           maxHeight: "80px",

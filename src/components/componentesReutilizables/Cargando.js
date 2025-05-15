@@ -4,7 +4,7 @@ export function Cargando() {
       <img
         src="/utilitarios/cargando.gif" // Ruta del GIF
         alt="Cargando..."
-        style={{ width: "50px", height: "50px" }} // Ajustar tamaño
+        style={{ width: "50px", height: "auto", opacity:0.2}} // Ajustar tamaño
       />
     </div>
   );

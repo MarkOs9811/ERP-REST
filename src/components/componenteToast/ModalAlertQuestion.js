@@ -31,7 +31,7 @@ function ModalAlertQuestion({
         {" "}
         {/* Agregar clase show */}
         <div className="contenido-model bg-white">
-          <h3>¿Estás seguro de eliminar este {tipo}?</h3>
+          <p className="h5">¿Estás seguro de eliminar este {tipo}?</p>
           <h4 className="modal-name-delete">
             {nombre || "Nombre no disponible"}
           </h4>

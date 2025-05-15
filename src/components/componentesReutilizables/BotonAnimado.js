@@ -7,32 +7,28 @@ import {
 
 const BotonAnimado = ({
   children,
-  type = "button", // Valor por defecto
+  type = "button",
   loading = false,
   error = null,
   onClick,
-  ...props // Captura todas las props adicionales (como form, className, etc.)
+  className = "btn-realizarPedido w-auto h-100 p-3",
+  icon, // Nueva prop para icono personalizado
+  loadingIcon = <ReloadOutline color="auto" rotate />, // Icono de carga por defecto
+  successIcon = <CheckmarkDoneOutline color="auto" />, // Icono de éxito por defecto
+  ...props
 }) => {
   return (
     <motion.button
-      whileHover={{ scale: 1.03 }}
-      whileTap={{ scale: 0.97 }}
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-      className="btn-realizarPedido w-auto h-100 p-3"
-      type={type} // Tipo dinámico (button/submit/reset)
-      onClick={type === "button" ? onClick : undefined} // Solo usa onClick si es type="button"
+      className={className}
+      type={type}
+      onClick={type === "button" ? onClick : undefined}
       disabled={loading}
-      {...props} // Pasa todas las props adicionales al botón nativo
+      {...props}
     >
-      {/* Si está cargando, mostrar el ícono de carga */}
-      {loading ? (
-        <ReloadOutline color={"auto"} rotate />
-      ) : (
-        <CheckmarkDoneOutline color={"auto"} />
-      )}
-      {loading ? "Cargando..." : children}
+      {
+        loading ? loadingIcon : icon || successIcon // Usa el icono personalizado si está definido
+      }
+      {children}
 
       {error && <div className="alert alert-danger mt-2">{error}</div>}
     </motion.button>

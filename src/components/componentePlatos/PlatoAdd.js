@@ -60,9 +60,13 @@ export function PlatoAdd({ handleCloseModal }) {
     if (fotoPreview) {
       formDataToSend.append("foto", formData.foto); // Asegúrate de que "foto" es el campo correcto
     }
+
     try {
       // Envía la solicitud con axios
-      const response = await axiosInstanceJava.post("/platos", formDataToSend);
+      const response = await axiosInstance.post(
+        "/gestionPlatos/addPlatos",
+        formDataToSend
+      );
 
       if (response.data.success) {
         ToastAlert("success", "Registro exitoso!");

@@ -6,6 +6,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { GetInventario } from "../../service/GetInventario";
 import { Cargando } from "../../components/componentesReutilizables/Cargando";
 import {
+  AddOutline,
   AlertCircleOutline,
   CashOutline,
   CodeSlashOutline,
@@ -127,7 +128,7 @@ export function Inventario() {
                       />
                     </div>
                     <button className="btn ms-2">
-                      <FontAwesomeIcon icon={faPlus} className="icon" />
+                      <AddOutline color={"auto"} />
                     </button>
                   </div>
                 </div>

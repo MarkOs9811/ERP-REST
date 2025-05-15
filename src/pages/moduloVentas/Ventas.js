@@ -6,6 +6,7 @@ import GraficoLineaEjemplo from "../../graficosChar/GraficoLineVentas";
 import GraficoLineaDayVentas from "../../graficosChar/GraficoLineDayVentas";
 import "../../css/EstilosVentas.css";
 import { getVentas } from "../../service/ObtenerVentasDetalle";
+import { ContenedorPrincipal } from "../../components/componentesReutilizables/ContenedorPrincipal";
 
 export function Ventas() {
   const [search, setSearch] = useState("");
@@ -54,113 +55,102 @@ export function Ventas() {
       : "Igual que el mes pasado :|";
 
   return (
-    <div className="container-fluid w-100 h-100 p-0">
-      <div className="card bg-transparent  my-0 flex-grow-1 h-100 d-flex flex-column p-0 m-0 shadow-sm">
-        <div
-          className="card-body overflow-y-auto overflow-x-hidden p-0 pe-2"
-          style={{ height: "calc(100vh - 280px)" }}
-        >
-          <div className="row g-2 ">
-            <div className="col-lg-6">
-              <div className="row g-2 h-100">
-                <div className="col-md-12">
-                  <div className="card shadow-sm h-100">
-                    <div className="card-header d-flex p-4">
-                      <div>
-                        <h1 className="text-primary">¡Buen día!</h1>
-                        <p className="fw-normal text-secondary">
-                          Esto es lo que sucede con tus Ventas Hoy
-                        </p>
-                        <p className="totalVentasTitulo mb-0">
-                          S/.{totalVentas}
-                        </p>
-                        <small className="text-secondary fw-normal">
-                          {situacion}
-                        </small>
-                      </div>
-                      <div className="ms-auto">
-                        <img
-                          src="/images/store.png"
-                          alt="tienda"
-                          className="store-image img-fluid"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-6 col-md-12">
-                  <div className="card p-2 shadow-sm h-100">
-                    <GraficoLineaDayVentas />
-                  </div>
-                </div>
-                <div className="col-lg-6 col-md-12">
-                  <div className="card p-2 shadow-sm h-100">
-                    <GraficoBarVentas />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-6">
-              <div className="row g-2">
-                <div className="col-lg-12">
-                  <div className="card shadow-sm h-100">
-                    <div className="row g-2">
-                      <div className="col-md-4">
-                        <div className="card mb-0 m-0 text-center p-4">
-                          <p className="h6 tituloCard">Este Mes</p>
-                          <p className="h4 text-dark fw-normal">
-                            S/{totalVentas}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="col-md-4">
-                        <div className="card mb-0 m-0 text-center p-4">
-                          <p className="h6 tituloCard">Mes Pasado</p>
-                          <p className="h4 text-dark fw-normal">
-                            S/ {totalVentasMesPasado}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="col-md-4">
-                        <div className="card mb-0 m-0 text-center p-4">
-                          <p className="h6 tituloCard">Diferencia</p>
-                          <p className="h4 text-dark fw-normal">
-                            S/ {diferenciaVentas}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-12 col-md-12 col-sm-12">
-                  <div className="card p-3 shadow-sm h-100">
-                    <GraficoLineaEjemplo />
-                  </div>
-                </div>
-              </div>
-            </div>
+    <ContenedorPrincipal>
+      <div className="row g-3">
+        <div className="col-lg-6">
+          <div className="row g-3 h-100">
             <div className="col-md-12">
-              <div className="card shadow-sm">
-                <div className="card-header d-flex justify-content-between">
-                  <h3>Ventas</h3>
+              <div className="card shadow-sm h-100">
+                <div className="card-header d-flex p-4">
                   <div>
-                    <input
-                      type="text"
-                      placeholder="Buscar..."
-                      className="form-control"
-                      value={search}
-                      onChange={(e) => setSearch(e.target.value)}
+                    <h1 className="text-primary">¡Buen día!</h1>
+                    <p className="fw-normal text-secondary">
+                      Esto es lo que sucede con tus Ventas Hoy
+                    </p>
+                    <p className="totalVentasTitulo mb-0">S/.{totalVentas}</p>
+                    <small className="text-secondary fw-normal">
+                      {situacion}
+                    </small>
+                  </div>
+                  <div className="ms-auto">
+                    <img
+                      src="/images/store.png"
+                      alt="tienda"
+                      className="store-image img-fluid"
                     />
                   </div>
                 </div>
-                <div className="card-body p-0">
-                  <ListVentas search={search} />
-                </div>
+              </div>
+            </div>
+            <div className="col-lg-6 col-md-12">
+              <div className="card p-2 shadow-sm h-100">
+                <GraficoLineaDayVentas />
+              </div>
+            </div>
+            <div className="col-lg-6 col-md-12">
+              <div className="card p-2 shadow-sm h-100">
+                <GraficoBarVentas />
               </div>
             </div>
           </div>
         </div>
+        <div className="col-lg-6">
+          <div className="row g-2">
+            <div className="col-lg-12">
+              <div className="card shadow-sm h-100">
+                <div className="row g-2">
+                  <div className="col-md-4">
+                    <div className="card mb-0 m-0 text-center p-4">
+                      <p className="h6 tituloCard">Este Mes</p>
+                      <p className="h4 text-dark fw-normal">S/{totalVentas}</p>
+                    </div>
+                  </div>
+                  <div className="col-md-4">
+                    <div className="card mb-0 m-0 text-center p-4">
+                      <p className="h6 tituloCard">Mes Pasado</p>
+                      <p className="h4 text-dark fw-normal">
+                        S/ {totalVentasMesPasado}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="col-md-4">
+                    <div className="card mb-0 m-0 text-center p-4">
+                      <p className="h6 tituloCard">Diferencia</p>
+                      <p className="h4 text-dark fw-normal">
+                        S/ {diferenciaVentas}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="col-lg-12 col-md-12 col-sm-12">
+              <div className="card p-3 shadow-sm h-100">
+                <GraficoLineaEjemplo />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="col-md-12">
+          <div className="card shadow-sm">
+            <div className="card-header d-flex justify-content-between">
+              <h3>Ventas</h3>
+              <div>
+                <input
+                  type="text"
+                  placeholder="Buscar..."
+                  className="form-control"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </div>
+            </div>
+            <div className="card-body p-0">
+              <ListVentas search={search} />
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </ContenedorPrincipal>
   );
 }

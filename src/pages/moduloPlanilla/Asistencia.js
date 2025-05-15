@@ -50,10 +50,7 @@ export function Asistencia() {
       // Solo reintentar si no es error 500
       return error.response?.status !== 500 && failureCount < 1;
     },
-    retryDelay: 3000, // 3 segundos entre reintentos
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-    refetchOnMount: false,
+    retry: 1,
   });
 
   const totalEmpleados = listUsuario?.totalEmpleados;

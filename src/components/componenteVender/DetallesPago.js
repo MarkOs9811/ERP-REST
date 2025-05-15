@@ -19,6 +19,7 @@ import { RealizarPago } from "./tareasVender/RealizarPago";
 import { ToLlevar } from "./ToLlevar";
 import { clearPedidoWeb } from "../../redux/pedidoWebSlice";
 import { getPedidosPendientes } from "../../service/GetPedidosPendientes";
+import { ContenedorPrincipal } from "../componentesReutilizables/ContenedorPrincipal";
 
 export function DetallesPago() {
   // VARIABELS EN REDUX SI ES QUE LO HAY
@@ -341,62 +342,64 @@ export function DetallesPago() {
   // =======================================================================
 
   return (
-    <div className="row g-2 h-100 w-100">
-      {/* Columna DetallePedido */}
-      <div className="col-lg-3 col-md-4 col-sm-6 col-12 d-flex flex-column">
-        <DetallePedido
-          idMesa={idMesa}
-          mesa={mesa}
-          caja={caja}
-          estadoTipoVenta={estadoTipoVenta}
-          preVentas={preVentas}
-          totalPreventa={totalPreventa}
-          igv={igv}
-        />
-      </div>
+    <ContenedorPrincipal>
+      <div className="row g-3 h-auto">
+        {/* Columna DetallePedido */}
+        <div className="col-lg-3 col-md-4 col-sm-6 col-12 d-flex flex-column">
+          <DetallePedido
+            idMesa={idMesa}
+            mesa={mesa}
+            caja={caja}
+            estadoTipoVenta={estadoTipoVenta}
+            preVentas={preVentas}
+            totalPreventa={totalPreventa}
+            igv={igv}
+          />
+        </div>
 
-      {/* Columna OpcionesPago */}
-      <div className="col-lg-6 col-md-8 col-sm-12 col-12 d-flex flex-column">
-        <OpcionesPago
-          handleSelectMetodo={handleSelectMetodo}
-          handleSelectCardType={handleSelectCardType}
-          handleTypeTarjeta={handleTypeTarjeta}
-          handleSlectComprobante={handleSlectComprobante}
-          handleShowDatosClientes={handleShowDatosClientes}
-          handleShowFactura={handleShowFactura}
-          handleSelectChange={handleSelectChange}
-          handleInputChange={handleInputChange}
-          metodoSeleccionado={metodoSeleccionado}
-          clienteFactura={clienteFactura}
-          clienteBoleta={clienteBoleta}
-          tarjetas={tarjetas}
-          typeTarjeta={typeTarjeta}
-          tipoComporbante={tipoComporbante}
-          comprobante={comprobante}
-          tipoDocumento={tipoDocumento}
-          numeroDocumento={numeroDocumento}
-          setNombres={setNombres}
-          setApellidos={setApellidos}
-          setRuc={setRuc}
-          setRazonSocial={setRazonSocial}
-          setDireccion={setDireccion}
-          cuotas={cuotas}
-          setNumeroCuotas={setNumeroCuotas}
-          setTipoDocumento={setTipoDocumento}
-          setNumeroDocumento={setNumeroDocumento}
-        />
-      </div>
+        {/* Columna OpcionesPago */}
+        <div className="col-lg-6 col-md-8 col-sm-12 col-12 d-flex flex-column">
+          <OpcionesPago
+            handleSelectMetodo={handleSelectMetodo}
+            handleSelectCardType={handleSelectCardType}
+            handleTypeTarjeta={handleTypeTarjeta}
+            handleSlectComprobante={handleSlectComprobante}
+            handleShowDatosClientes={handleShowDatosClientes}
+            handleShowFactura={handleShowFactura}
+            handleSelectChange={handleSelectChange}
+            handleInputChange={handleInputChange}
+            metodoSeleccionado={metodoSeleccionado}
+            clienteFactura={clienteFactura}
+            clienteBoleta={clienteBoleta}
+            tarjetas={tarjetas}
+            typeTarjeta={typeTarjeta}
+            tipoComporbante={tipoComporbante}
+            comprobante={comprobante}
+            tipoDocumento={tipoDocumento}
+            numeroDocumento={numeroDocumento}
+            setNombres={setNombres}
+            setApellidos={setApellidos}
+            setRuc={setRuc}
+            setRazonSocial={setRazonSocial}
+            setDireccion={setDireccion}
+            cuotas={cuotas}
+            setNumeroCuotas={setNumeroCuotas}
+            setTipoDocumento={setTipoDocumento}
+            setNumeroDocumento={setNumeroDocumento}
+          />
+        </div>
 
-      {/* Columna RealizarPago */}
-      <div className="col-lg-3 col-md-12 col-sm-12 col-12 d-flex flex-column">
-        <RealizarPago
-          totalPreventa={totalPreventa}
-          igv={igv}
-          handleCrearJson={handleCrearJson}
-          loading={loading}
-          error={loading}
-        />
+        {/* Columna RealizarPago */}
+        <div className="col-lg-3 col-md-12 col-sm-12 col-12 d-flex flex-column">
+          <RealizarPago
+            totalPreventa={totalPreventa}
+            igv={igv}
+            handleCrearJson={handleCrearJson}
+            loading={loading}
+            error={loading}
+          />
+        </div>
       </div>
-    </div>
+    </ContenedorPrincipal>
   );
 }

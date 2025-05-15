@@ -67,6 +67,10 @@ export function CategoriaPlatos() {
                 .replace(/[^a-z0-9\-]/g, "")}.png`}
               alt={categoria.nombre}
               loading="lazy"
+              onError={(e) => {
+                // Si la imagen original no se encuentra, cambia la fuente a la imagen por defecto
+                e.target.src = "/images/img-default.jpg";
+              }}
             />
           </div>
           <div className="categoria-plato-text">

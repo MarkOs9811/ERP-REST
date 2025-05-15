@@ -6,6 +6,7 @@ const ModalRight = ({
   isOpen,
   onClose,
   title,
+  subtitulo = "",
   children,
   submitText = "Guardar",
   onSubmit,
@@ -45,8 +46,11 @@ const ModalRight = ({
         style={{ width }}
       >
         {/* Resto del código del modal permanece igual */}
-        <div className="modal-right-header">
-          <h3 className="modal-right-title">{title}</h3>
+        <div className="modal-right-header ">
+          <div>
+            <h3 className="modal-right-title">{title}</h3>
+            <p className="text-muted">{subtitulo}</p>
+          </div>
           <button className="modal-right-close-btn" onClick={handleClose}>
             <Close color={"#000"} />
           </button>

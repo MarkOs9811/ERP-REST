@@ -18,13 +18,13 @@ export function Header() {
       <nav className="container-fluid d-flex align-items-center justify-content-between p-0 m-0">
         {/* Botón de compresión de sidebar */}
         <div className="p-0 m-0">
-          <h5 className="m-0 p-0 text-white">Fire Wok</h5>
+          <h5 className="mx-2 p-0 text-dark">Fire Wok</h5>
         </div>
 
         {/* Icono de usuario */}
         {/* Contenedor del usuario en la barra de navegación */}
-        <div className="navbar-right d-flex align-items-center ms-auto gap-3 p-0">
-          <button className="btn text-white">
+        <div className="navbar-right d-flex align-items-center ms-auto gap-3 p-0 px-3">
+          <button className="btn text-dark">
             {/* Icono de Notificaciones */}
             <NotificationsOutline
               color={"auto"}
@@ -34,7 +34,7 @@ export function Header() {
 
           {/* Muestra el correo del usuario */}
           {user && user.correo ? (
-            <p className="mb-0 text-capitalize">
+            <p className="mb-0 text-capitalize text-dark">
               {user.empleado.persona.nombre
                 .toLowerCase() // Convierte todo a minúsculas
                 .split(" ") // Divide el nombre en palabras

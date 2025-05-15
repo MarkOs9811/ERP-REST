@@ -7,15 +7,15 @@ import { PedidosWsp } from "./PedidosWsp";
 export function SubMenu() {
   const moduloAplicado = useSelector((state) => state.subMenu.moduloAplicado);
   const location = useLocation(); // Obtiene la URL actual
-
+  const isCompressed = useSelector((state) => state.sidebar.isCompressed);
   return (
-    <div className="row ps-3  pe-1 my-0 w-100 h-100">
-      <div className="col-md-12 col-sm-12 p-0 " style={{ height: "auto" }}>
+    <div className="row ps-3 my-0 w-100 h-100">
+      <div className={`col-md-12 col-sm-12 p-0`} style={{ height: "auto" }}>
         <div className="card  justify-content-center bg-transparent flex-grow-1  d-flex flex-column m-0">
           <p className="h6 align-middle my-3 mx-3 fw-bold">
             {capitalizeFirstLetter(moduloAplicado)}
           </p>
-          <div className="subMenu card-body w-100">
+          <div className="subMenu card-body w-100 px-2">
             {moduloAplicado && (
               <ul className="list-unstyled ">
                 {moduloAplicado === "rr-hh" && (

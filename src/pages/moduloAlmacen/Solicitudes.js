@@ -2,6 +2,7 @@ import { useState } from "react";
 import { SolicitudesLista } from "../../components/componenteAlmacen/SolicitudesLista";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { AddOutline } from "react-ionicons";
 
 export function Solicitudes() {
   const [showModal, setShowModal] = useState(false);
@@ -41,7 +42,7 @@ export function Solicitudes() {
                     onChange={(e) => setSearch(e.target.value)}
                   />
                   <button className="btn ms-2" onClick={handleOpenModal}>
-                    <FontAwesomeIcon icon={faPlus} className="icon" />
+                    <AddOutline color={"auto"} />
                   </button>
                 </div>
               </div>

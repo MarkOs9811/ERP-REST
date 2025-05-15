@@ -1,6 +1,4 @@
 import React from "react";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import "../../css/ModalAlertQuestion.css"; // Importar CSS correctamente
 
 function ModalGeneral({
@@ -9,10 +7,11 @@ function ModalGeneral({
   handleAccion,
   handleCloseModal,
   mensaje,
+  cuerpo, // Nuevo prop opcional para el contenido adicional
 }) {
   const handleConfirm = async () => {
     try {
-      // Ejecutar la función de eliminación pasando el ID
+      // Ejecutar la función de acción pasando el ID
       const success = await handleAccion(idProceso);
       if (success) {
         handleCloseModal();
@@ -27,13 +26,12 @@ function ModalGeneral({
   return (
     show && (
       <div className={`modal-overlay ${show ? "show" : ""} m-0 p-0`}>
-        {" "}
-        {/* Agregar clase show */}
         <div className="contenido-model bg-white">
           <h3>{mensaje}</h3>
-          <h4 className="modal-name-delete"></h4>
+          {cuerpo && <div className="modal-body">{cuerpo}</div>}{" "}
+          {/* Renderizar el cuerpo si se proporciona */}
           <div>
-            <button onClick={handleConfirm} className="btn btn-danger  mx-2">
+            <button onClick={handleConfirm} className="btn btn-danger mx-2">
               Confirmar
             </button>
             <button onClick={handleCloseModal} className="btn btn-secondary">

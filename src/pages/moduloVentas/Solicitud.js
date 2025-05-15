@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { SolicitudesList } from "../../components/componentesModuloVentas/SolicitudesList";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { AddOutline } from "react-ionicons";
 
 export function Solicitud() {
   const navigate = useNavigate();
@@ -37,7 +38,7 @@ export function Solicitud() {
                       className="btn ms-2"
                       onClick={() => handleGoAddSolicitud()}
                     >
-                      <FontAwesomeIcon icon={faPlus} className="icon" />
+                      <AddOutline color={"auto"} />
                     </button>
                   </div>
                 </div>

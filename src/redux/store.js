@@ -8,6 +8,7 @@ import categoriaReducer from "./categoriaPlatosSlice";
 import sideBarReducer from "./sideBarSlice";
 import subMenuReducer from "./subMenuSlice";
 import pedidoWebReducer from "./pedidoWebSlice";
+import productoTransferirReducer from "./productoTransferirSlice";
 
 const store = configureStore({
   reducer: {
@@ -20,6 +21,7 @@ const store = configureStore({
     sidebar: sideBarReducer,
     subMenu: subMenuReducer,
     pedidoWeb: pedidoWebReducer,
+    productoTransferir: productoTransferirReducer,
   },
 });
 

@@ -8,27 +8,42 @@ const ToastAlert = (type, message) => {
     closeOnClick: true,
     pauseOnHover: true,
     draggable: true,
-    // Para habilitar HTML en los mensajes
     bodyClassName: "toast-body",
   };
 
-  if (type === "success") {
-    toast.success(
-      <span dangerouslySetInnerHTML={{ __html: message }} />,
-      options
-    );
-  } else if (type === "error") {
-    toast.error(
-      <span dangerouslySetInnerHTML={{ __html: message }} />,
-      options
-    );
-  } else if (type === "info") {
-    toast.info(<span dangerouslySetInnerHTML={{ __html: message }} />, options);
-  } else if (type === "warning") {
-    toast.warning(
-      <span dangerouslySetInnerHTML={{ __html: message }} />,
-      options
-    );
+  switch (type) {
+    case "success":
+      toast.success(
+        <span dangerouslySetInnerHTML={{ __html: message }} />,
+        options
+      );
+      break;
+    case "error":
+      toast.error(
+        <span dangerouslySetInnerHTML={{ __html: message }} />,
+        options
+      );
+      break;
+    case "info":
+      toast.info(
+        <span dangerouslySetInnerHTML={{ __html: message }} />,
+        options
+      );
+      break;
+    case "warning":
+      toast.warning(
+        <span dangerouslySetInnerHTML={{ __html: message }} />,
+        options
+      );
+      break;
+    case "loading":
+      toast.loading(
+        <span dangerouslySetInnerHTML={{ __html: message }} />,
+        options
+      );
+      break;
+    default:
+      toast(<span dangerouslySetInnerHTML={{ __html: message }} />, options);
   }
 };
 

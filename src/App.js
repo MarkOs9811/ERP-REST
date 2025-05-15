@@ -62,6 +62,11 @@ import { IngresoPlanilla } from "./pages/moduloPlanilla/IngresoPlanilla";
 import { TakeAsistencia } from "./pages/TakeAsistencia";
 import { Asistencia } from "./pages/moduloPlanilla/Asistencia";
 import { HorasExtras } from "./pages/moduloPlanilla/HorasExtras";
+import { AdelantoSueldo } from "./pages/moduloPlanilla/AdelantoSueldo";
+import { Vacaciones } from "./pages/moduloPlanilla/Vacaciones";
+import { AjustesPlanilla } from "./pages/moduloPlanilla/AjustesPlanilla";
+import { GoogleRedirectHandler } from "./pages/GoogleRedirectHandler";
+import { Eventos } from "./pages/moduloIncidencias/Eventos";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 function App() {
@@ -91,6 +96,7 @@ function App() {
       <CajaProvider>
         <Router>
           <Routes>
+            <Route path="/google" element={<GoogleRedirectHandler />} />
             <Route path="/login" element={<Login />} />
             <Route path="/tomarAsistencia" element={<TakeAsistencia />} />
 
@@ -100,11 +106,7 @@ function App() {
                 <PrivateRoute>
                   <div className="main-container p-0 m-0 h-screen flex">
                     <SideBar />
-                    <div
-                      className={`content ${
-                        isCompressed ? "" : "open"
-                      } w-100  p-0`}
-                    >
+                    <div className={`content  w-100  p-0`}>
                       <div className="card p-0 m-0 rounded-0 vh-100">
                         {/* Header fijo */}
                         <div className="card-header p-0 rounded-0 m-0 shrink-0 ">
@@ -112,26 +114,32 @@ function App() {
                           <Navegacion />
                         </div>
                         {/* Cuerpo flexible con scroll interno si es necesario */}
-                        <div
-                          className="card-body  p-0 h-100"
-                          style={{ background: "#f9f6f6" }}
-                        >
-                          <div className="row h-100 py-2 g-0">
+                        <div className="card-body  p-0 h-100 contenido">
+                          <div className="row h-100 py-2 g-0 d-flex">
+                            {/* SubMenu (se contrae/expande con animación) */}
                             <div
-                              className={` ${
-                                moduloAplicado === ""
-                                  ? "d-none"
-                                  : "col-md-2 h-100 d-flex align-items-center justify-content-center p-0"
-                              }`}
+                              className={`h-100 d-flex align-items-center justify-content-center p-0 
+                              ${isCompressed ? "col-0" : "col-md-2"} 
+                              transition-all overflow-hidden`} // <- Claves para la animación
+                              style={{
+                                transition:
+                                  "width 0.3s ease, min-width 0.3s ease", // Animación suave
+                                width: isCompressed ? "0" : "16.666%", // 16.666% = col-md-2
+                                minWidth: isCompressed ? "0" : "16.666%", // Evita colapso
+                              }}
                             >
                               <SubMenu />
                             </div>
+
+                            {/* Contenido principal (también animado) */}
                             <div
-                              className={`h-100 d-flex align-items-center justify-content-center overflow-auto pe-3 p-0 ${
-                                moduloAplicado === ""
-                                  ? "col-md-12 mx-2"
-                                  : "col-md-10 "
-                              }`}
+                              className={`h-100 d-flex align-items-center justify-content-center overflow-auto p-0 
+                              ${isCompressed ? "col-12" : "col-md-10"} 
+                              transition-all`}
+                              style={{
+                                transition: "width 0.3s ease, margin 0.3s ease", // Animación para width/margin
+                                width: isCompressed ? "100%" : "83.333%", // 83.333% = col-md-10
+                              }}
                             >
                               <ToastContainer />
                               <Routes>
@@ -204,6 +212,18 @@ function App() {
                                   <Route
                                     path="horas-extras"
                                     element={<HorasExtras />}
+                                  />
+                                  <Route
+                                    path="adelanto-sueldo"
+                                    element={<AdelantoSueldo />}
+                                  />
+                                  <Route
+                                    path="vacaciones"
+                                    element={<Vacaciones />}
+                                  />
+                                  <Route
+                                    path="ajustes"
+                                    element={<AjustesPlanilla />}
                                   />
                                 </Route>
 
@@ -297,6 +317,10 @@ function App() {
                                   path="/areas-y-cargos"
                                   element={<AreasCargo />}
                                 />
+                                {/* RUTAS PARA MODULO INCIDENCIAS */}
+                                <Route path="/incidencias">
+                                  <Route index element={<Eventos />} />
+                                </Route>
                                 <Route
                                   path="/configuracion"
                                   element={<Configuracion />}

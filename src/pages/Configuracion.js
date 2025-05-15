@@ -3,6 +3,16 @@ import { useForm } from "react-hook-form";
 import { useDropzone } from "react-dropzone";
 import axiosInstance from "../api/AxiosInstance";
 import ToastAlert from "../components/componenteToast/ToastAlert";
+import { ContenedorPrincipal } from "../components/componentesReutilizables/ContenedorPrincipal";
+import {
+  BusinessOutline,
+  CloudDownloadOutline,
+  DocumentTextOutline,
+  HelpCircleOutline,
+  LinkOutline,
+  PersonOutline,
+  SettingsOutline,
+} from "react-ionicons";
 
 export function Configuracion() {
   const [logoActual, setLogoActual] = useState(null);
@@ -90,15 +100,102 @@ export function Configuracion() {
   });
 
   return (
-    <div className="container-fluid w-100 h-100 p-0">
-      <div className="card bg-transparent my-0 flex-grow-1 h-100 d-flex flex-column p-0 m-0">
-        <div
-          className="card-body overflow-y-auto overflow-x-hidden p-0 pe-2"
-          style={{ height: "calc(100vh - 280px)" }}
-        >
-          <div className="row g-2">
+    <ContenedorPrincipal>
+      <div className="row g-3">
+        <div className="col-md-12">
+          <div className="row g-3">
             <div className="col-md-12">
-              <div className="card border-0 p-4 shadow-sm rounded">
+              <div className="card shadow-sm h-100">
+                <ul className="list-group list-group-horizontal text-center border-0 w-100 overflow-auto">
+                  <a
+                    href="#"
+                    className="list-group-item list-group-item-action d-flex flex-column flex-sm-row align-items-center justify-content-center p-3 border-0 flex-fill"
+                  >
+                    <PersonOutline
+                      height="24px"
+                      width="24px"
+                      color="#000"
+                      className="mb-1 mb-sm-0 me-sm-2"
+                    />
+                    <p className="h6 m-0">Mis Datos</p>
+                  </a>
+                  <a
+                    href="#"
+                    className="list-group-item list-group-item-action d-flex flex-column flex-sm-row align-items-center justify-content-center p-3 border-0 flex-fill"
+                  >
+                    <BusinessOutline
+                      height="24px"
+                      width="24px"
+                      color="#000"
+                      className="mb-1 mb-sm-0 me-sm-2"
+                    />
+                    <p className="h6 m-0">Empresa</p>
+                  </a>
+                  <a
+                    href="#"
+                    className="list-group-item list-group-item-action d-flex flex-column flex-sm-row align-items-center justify-content-center p-3 border-0 flex-fill"
+                  >
+                    <LinkOutline
+                      height="24px"
+                      width="24px"
+                      color="#000"
+                      className="mb-1 mb-sm-0 me-sm-2"
+                    />
+                    <p className="h6 m-0">Integraciones</p>
+                  </a>
+                  <a
+                    href="#"
+                    className="list-group-item list-group-item-action d-flex flex-column flex-sm-row align-items-center justify-content-center p-3 border-0 flex-fill"
+                  >
+                    <DocumentTextOutline
+                      height="24px"
+                      width="24px"
+                      color="#000"
+                      className="mb-1 mb-sm-0 me-sm-2"
+                    />
+                    <p className="h6 m-0">Servicio Sunat</p>
+                  </a>
+                  <a
+                    href="#"
+                    className="list-group-item list-group-item-action d-flex flex-column flex-sm-row align-items-center justify-content-center p-3 border-0 flex-fill"
+                  >
+                    <SettingsOutline
+                      height="24px"
+                      width="24px"
+                      color="#000"
+                      className="mb-1 mb-sm-0 me-sm-2"
+                    />
+                    <p className="h6 m-0">Generales</p>
+                  </a>
+                  <a
+                    href="#"
+                    className="list-group-item list-group-item-action d-flex flex-column flex-sm-row align-items-center justify-content-center p-3 border-0 flex-fill"
+                  >
+                    <CloudDownloadOutline
+                      height="24px"
+                      width="24px"
+                      color="#000"
+                      className="mb-1 mb-sm-0 me-sm-2"
+                    />
+                    <p className="h6 m-0">Backup y Mantenimiento</p>
+                  </a>
+                  <a
+                    href="#"
+                    className="list-group-item list-group-item-action d-flex flex-column flex-sm-row align-items-center justify-content-center p-3 border-0 flex-fill"
+                  >
+                    <HelpCircleOutline
+                      height="24px"
+                      width="24px"
+                      color="#000"
+                      className="mb-1 mb-sm-0 me-sm-2"
+                    />
+                    <p className="h6 m-0">Soporte y Contacto</p>
+                  </a>
+                </ul>
+              </div>
+            </div>
+            <div className="col-md-12">
+              <div className="card border-0 p-4 shadow-sm rounded h-100">
                 <h3 className="mb-4">Configuración de la Empresa</h3>
 
                 {/* Mostrar el logo actual si existe */}
@@ -255,6 +352,6 @@ export function Configuracion() {
           </div>
         </div>
       </div>
-    </div>
+    </ContenedorPrincipal>
   );
 }

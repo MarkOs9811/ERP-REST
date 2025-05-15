@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CajasList } from "../../components/componentesModuloVentas/CajasList";
 import { useState } from "react";
 import { RegistroCajas } from "../../components/componentesModuloVentas/RegistrosCajasList";
+import { AddOutline } from "react-ionicons";
 
 export function Cajas() {
   const [search, setSearch] = useState("");
@@ -29,7 +30,7 @@ export function Cajas() {
                       {/* Input de búsqueda y botón */}
                       <div className="col-12 col-md-6 d-flex flex-column flex-md-row align-items-center justify-content-md-end">
                         <button className="btn  ms-0 ms-md-2">
-                          <FontAwesomeIcon icon={faPlus} className="icon" />
+                          <AddOutline color={"auto"} />
                         </button>
                       </div>
                     </div>

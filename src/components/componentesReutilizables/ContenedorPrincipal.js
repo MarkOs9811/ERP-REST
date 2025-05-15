@@ -8,7 +8,7 @@ export const ContenedorPrincipal = ({
     <div className="container-fluid w-100 h-100 p-0">
       <div className="card bg-transparent my-0 flex-grow-1 h-100 d-flex flex-column p-0 m-0">
         <div
-          className="card-body overflow-y-auto overflow-x-hidden p-0"
+          className="card-body overflow-y-auto overflow-x-hidden py-2  mx-2"
           style={{ height: `calc(100vh - ${alturaPersonalizada})` }}
         >
           {children}
