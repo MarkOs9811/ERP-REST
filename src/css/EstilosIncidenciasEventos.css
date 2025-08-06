@@ -1,0 +1,197 @@
+.event-form {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.event-header {
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 1rem;
+}
+
+.section-title {
+    color: #1e3c69;
+    font-size: 1.1rem;
+}
+
+
+.input-group-text {
+    background-color: #f8f9fa;
+}
+
+/* Estilo general para el calendario */
+.fc {
+    font-family:sans-serif;
+    /* Usar la fuente de Google Calendar */
+}
+
+/* Color de fondo y bordes del calendario */
+.fc-daygrid-day {
+    background-color: #fff;
+    /* Fondo blanco para cada celda */
+    border: 1px solid #ddd;
+    /* Bordes suaves */
+}
+
+/* Estilo para los eventos */
+.fc-event {
+    background-color: #4285f4;
+    /* Color azul (como el de Google Calendar) */
+    color: white;
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 12px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+}
+
+/* Cambiar color cuando el evento está seleccionado */
+.fc-event-selected {
+    background-color: #34a853;
+    /* Verde */
+}
+
+/* Cambiar color cuando el evento está en hover */
+.fc-event:hover {
+    background-color: #365a94;
+    /* Color amarillo en hover */
+    cursor: pointer;
+}
+
+/* Iconos de los eventos */
+.fc-event-icon {
+    margin-right: 8px;
+    font-size: 14px;
+}
+
+/* Color de los encabezados de los días de la semana (Lun, Mar, Mié...) */
+.fc-day-header {
+    background-color: #f1f3f4;
+    color: #5f6368;
+    font-weight: bold;
+    padding: 5px;
+    text-align: center;
+    font-size: 14px;
+}
+
+/* Estilo para la franja del día de hoy */
+.fc-day-today {
+    background-color: #e8f0fe;
+    color: #1a73e8;
+    font-weight: bold;
+}
+
+/* Estilo para las celdas del día */
+.fc-day-cell-google {
+    background-color: #fafafa;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+}
+
+/* Estilo para la cabecera de los días */
+.fc-day-header-google {
+    background-color: #f4f4f4;
+    color: #666;
+    font-size: 16px;
+    font-weight: normal;
+    padding: 6px;
+    border-radius: 3px;
+}
+
+/* Tooltip de los eventos */
+.google-calendar-tooltip {
+    font-size: 14px;
+    max-width: 300px;
+    background-color: #f4f4f4;
+    color: #333;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+/* Estilo del calendario cuando está en vista de semana */
+.fc-timegrid-col {
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+
+/* estilos para el popup abierto */
+.popover-content {
+    width: 100% !important;
+    background-color: #f6fbff !important;
+    margin: 0px !important;
+    color: #333;
+}
+/* Estilo del contenido del tippy */
+.tippy-content {
+    padding: 20px;
+    width: 350px !important;
+    margin: 0!important;
+    border: 1px solid #9c9c9c;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2)!important;
+    /* Sombra un poco más prominente */
+    background-color: #f6fbff !important;
+    
+}
+
+/* ========== TEMA OSCURO INCIDENCIAS EVENTOS ESTILO MODERNO CON ROJO CORPORATIVO ========== */
+body.dark-theme .event-form {
+    background: #23272b !important;
+    color: #cfd8dc !important;
+}
+body.dark-theme .event-header {
+    border-bottom: 1px solid #313a46 !important;
+    background: #23272b !important;
+    color: #ee5252 !important;
+}
+body.dark-theme .section-title {
+    color: #ee5252 !important;
+}
+body.dark-theme .input-group-text {
+    background-color: #212b36 !important;
+    color: #cfd8dc !important;
+}
+body.dark-theme .fc {
+    background: #151a20 !important;
+    color: #cfd8dc !important;
+}
+body.dark-theme .fc-daygrid-day,
+body.dark-theme .fc-timegrid-col,
+body.dark-theme .fc-day-cell-google {
+    background-color: #23272b !important;
+    border: 1px solid #313a46 !important;
+    color: #cfd8dc !important;
+}
+body.dark-theme .fc-day-header,
+body.dark-theme .fc-day-header-google {
+    background-color: #212b36 !important;
+    color: #cfd8dc !important;
+}
+body.dark-theme .fc-day-today {
+    background-color: #313a46 !important;
+    color: #ee5252 !important;
+    font-weight: bold;
+}
+body.dark-theme .fc-event {
+    background-color: #ee5252 !important;
+    color: #fff !important;
+}
+body.dark-theme .fc-event-selected {
+    background-color: #34a853 !important;
+    color: #fff !important;
+}
+body.dark-theme .fc-event:hover {
+    background-color: #b32b2b !important;
+    color: #fff !important;
+}
+body.dark-theme .fc-event-icon {
+    color: #ffe066 !important;
+}
+body.dark-theme .google-calendar-tooltip,
+body.dark-theme .popover-content,
+body.dark-theme .tippy-content {
+    background-color: #23272b !important;
+    color: #cfd8dc !important;
+    border: 1px solid #313a46 !important;
+}
+
+

@@ -1,0 +1,76 @@
+.categoriaActiva{
+    width: 10px!important;
+    height: 10px;
+    background-color:rgb(26, 100, 175);
+    margin-right: 10px;
+}
+.categoriaFalse{
+    width: 10px!important;
+    height: 10px;
+    background-color:rgb(218, 19, 79);
+    margin-right: 10px;
+}
+
+.borderInferior {
+    border-top: none;
+    border-bottom: 1px solid #dee2e6!important; /* color similar al borde estándar de Bootstrap */
+   
+}
+.btn-agregar-plato{
+    width: 100%;
+    background-color: #f0b000 !important;
+    border: none;
+    color: rgb(73, 50, 6)!important;
+    transition: transform 0.3s ease-out, background-color 0.3s ease-out; /* Más control en la transición */ 
+    border-radius: 5px; /* Opcional: Añade esquinas redondeadas */
+    cursor: pointer; /* Asegura que parezca clicable */
+}
+.btn-agregar-categoria {
+    width: auto;
+    background-color: #00a4aa !important;
+    border: none;
+    color: white;
+    transition: transform 0.3s ease-out, background-color 0.3s ease-out; /* Más control en la transición */
+    padding: 0.5rem 1rem; /* Opcional: Mejora el tamaño del botón */
+    border-radius: 5px; /* Opcional: Añade esquinas redondeadas */
+    cursor: pointer; /* Asegura que parezca clicable */
+}
+
+.btn:active {
+    
+    transform: scale(1.1); /* No es necesario especificar los dos ejes si se escalan igual */
+}
+
+/* ========== TEMA OSCURO CATEGORÍA PLATOS ESTILO MODERNO ========== */
+body.dark-theme .categoriaActiva {
+    background-color: #2196f3 !important; /* Azul de acento para activo */
+}
+
+body.dark-theme .categoriaFalse {
+    background-color: #ee5252 !important; /* Rojo corporativo para inactivo */
+}
+
+body.dark-theme .borderInferior {
+    border-bottom: 1px solid #313a46 !important;
+}
+
+body.dark-theme .btn-agregar-plato {
+    background-color: #ee5252 !important;
+    color: #fff !important;
+}
+
+body.dark-theme .btn-agregar-plato:hover {
+    background-color: #b32b2b !important;
+    color: #fff !important;
+}
+
+body.dark-theme .btn-agregar-categoria {
+    background-color: #2196f3 !important;
+    color: #fff !important;
+}
+
+body.dark-theme .btn-agregar-categoria:hover {
+    background-color: #1769aa !important;
+    color: #fff !important;
+}
+/* ========== FIN TEMA OSCURO CATEGORÍA PLATOS ESTILO MODERNO ========== */

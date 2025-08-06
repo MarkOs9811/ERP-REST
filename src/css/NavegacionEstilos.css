@@ -1,0 +1,85 @@
+.card {
+   
+    border: 1px solid grey;
+    
+  }
+  
+  .breadcrumb {
+    background-color: transparent; /* Fondo transparente para el breadcrumb */
+    padding: 0; /* Quitar el padding extra */
+  }
+  
+  .breadcrumb-item a {
+    color: #007bff; /* Color azul para los enlaces */
+    font-weight: bold;
+  }
+  
+  .breadcrumb-item.active {
+    color: #6c757d; /* Color gris para el item activo */
+  }
+  
+  .breadcrumb-item + .breadcrumb-item::before {
+    content: '>'; /* Cambiar el separador */
+    color: #6c757d;
+    padding: 0 8px;
+  }
+  
+  .card-shadow {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  }
+  
+  .card.rounded {
+    border-radius: 10px; /* Bordes redondeados suaves */
+  }
+/* ========== TEMA OSCURO NAVEGACIÓN ESTILO MODERNO ========== */
+body.dark-theme .card {
+    background: #212b36 !important;
+    color: #cfd8dc !important;
+    border: 1px solid #313a46 !important;
+}
+
+body.dark-theme .card-shadow {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25) !important;
+}
+
+body.dark-theme .card.rounded {
+    border-radius: 10px !important;
+}
+
+body.dark-theme .breadcrumb {
+    background-color: transparent !important;
+}
+
+body.dark-theme .breadcrumb-item a {
+    color: #ee5252 !important;
+    font-weight: bold;
+}
+
+body.dark-theme .breadcrumb-item.active {
+    color: #cfd8dc !important;
+}
+
+body.dark-theme .breadcrumb-item + .breadcrumb-item::before {
+    color: #6c757d !important;
+    padding: 0 8px;
+}
+/* ========== FIN TEMA OSCURO NAVEGACIÓN ESTILO MODERNO ========== */
+/* ========== BREADCRUMB NAVEGACIÓN DARK MODE ========== */
+body.dark-theme .breadcrumb-nav .fw-semibold,
+body.dark-theme .breadcrumb-nav .text-decoration-none.fw-semibold {
+  color: #cfd8dc !important;
+}
+
+body.dark-theme .breadcrumb-nav a.text-decoration-none.fw-semibold:hover {
+  color: #ee5252 !important;
+  text-decoration: underline;
+}
+
+body.dark-theme .breadcrumb-nav .small span {
+  color: #888 !important;
+}
+
+body.dark-theme .breadcrumb-nav .fw-semibold[style*="opacity: 0.7"] {
+  color: #888 !important;
+  opacity: 1 !important;
+}

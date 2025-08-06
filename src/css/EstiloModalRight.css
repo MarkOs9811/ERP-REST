@@ -1,0 +1,157 @@
+.modal-right-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1050;
+    display: flex;
+    justify-content: flex-end;
+    /* Removemos la transición de opacidad */
+}
+
+/* Eliminamos estas clases ya que no queremos el desvanecimiento */
+/* .modal-right-overlay.closing {
+    opacity: 0;
+} */
+
+/* IMAGEN COMPROBANTE MINIATURA */
+.comprobante-thumbnail{
+    cursor: pointer;
+background: rgb(134, 31, 179);
+   
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+.modal-right-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.2);
+    /* Removemos la transición de opacidad del backdrop */
+}
+
+/* Eliminamos esta regla también */
+/* .modal-right-overlay.closing .modal-right-backdrop {
+    opacity: 0;
+} */
+
+.modal-right-container {
+    position: relative;
+    height: 100vh;
+    background-color: white;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    z-index: 1051;
+}
+
+.slide-in {
+    animation: slideIn 0.3s ease-out forwards;
+}
+
+.slide-out {
+    animation: slideOut 0.3s ease-in forwards;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(100%);
+    }
+}
+
+/* El resto de tus estilos permanecen igual */
+.modal-right-header {
+    padding: 1rem;
+    border-bottom: 1px solid #dee2e6;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-right-title {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.modal-right-close-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.modal-right-body {
+    padding: 1rem;
+    max-height: calc(100vh - 150px);
+    overflow-y: auto;
+}
+
+.modal-right-footer {
+    padding: 1rem;
+    border-top: 1px solid #dee2e6;
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* ========== TEMA OSCURO PARA MODAL RIGHT ESTILO MODERNO CON ROJO CORPORATIVO ========== */
+body.dark-theme .modal-right-container {
+    background: linear-gradient(120deg, #202122 80%, #212b36 100%) !important;
+    color: #cfd8dc !important;
+    box-shadow: -2px 0 24px rgba(0,0,0,0.45) !important;
+    border-left: 1.5px solid #313a46 !important;
+}
+body.dark-theme .modal-right-header {
+    border-bottom: 1.5px solid #313a46 !important;
+    background: #202122 !important;
+    color: #ee5252 !important;
+}
+body.dark-theme .modal-right-title {
+    color: #ee5252 !important;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+body.dark-theme .modal-right-close-btn {
+    color: #ee5252 !important;
+    transition: color 0.2s;
+}
+body.dark-theme .modal-right-close-btn:hover {
+    color: #fff !important;
+    background: #ee5252 !important;
+    border-radius: 50%;
+}
+body.dark-theme .modal-right-body {
+    background: #202122 !important;
+    color: #cfd8dc !important;
+}
+body.dark-theme .modal-right-footer {
+    border-top: 1.5px solid #313a46 !important;
+    background: #202122 !important;
+}
+body.dark-theme .comprobante-thumbnail {
+    background: linear-gradient(90deg, #ee5252 60%, #ff7675 100%) !important;
+    color: #fff !important;
+    border: none !important;
+    box-shadow: 0 2px 8px rgba(238,82,82,0.10);
+}
+body.dark-theme .modal-right-backdrop {
+    background-color: rgba(21,26,32,0.85) !important;
+}
+/* ========== FIN TEMA OSCURO MODAL RIGHT ESTILO MODERNO ========== */

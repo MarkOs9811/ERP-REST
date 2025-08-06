@@ -1,0 +1,18 @@
+.icon-background  {
+    position: absolute;
+    top: 10px;
+    /* Ajusta según necesites */
+    right: 15px;
+    /* Ajusta según necesites */
+    width: 60px;
+    /* Tamaño del fondo circular */
+    height: 60px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: #9dbada;
+    opacity: 0.7;
+    transform: rotate(10deg);
+}

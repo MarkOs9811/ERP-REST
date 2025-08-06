@@ -1,0 +1,146 @@
+/* Ajusta el contenedor para que ocupe toda la altura restante */
+.contenedor-pedidosWsp {
+   
+    top: 0;
+    /* Empieza desde la parte superior */
+    bottom: 0;
+    /* Llega hasta el final */
+    left: 0;
+    right: 0;
+  
+    /* Ajusta la altura restando el espacio superior */
+    overflow-y: auto;
+    /* Activa el scroll si es necesario */
+  
+
+    /* Solo para visualizar el área */
+}
+/* Header */
+.header-bandeja {
+    background: #2b9954;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* Lista de pedidos */
+.lista-pedidos {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Ítem de pedido */
+.pedido-item {
+    background: #f7f7f7;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.pedido-item:hover {
+    background: #e0ffe0;
+    transform: scale(1.02);
+}
+
+/* Info del pedido */
+.pedido-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    font-weight: bold;
+    
+}
+
+/* Nombre del cliente */
+.cliente {
+    color: #075e54;
+}
+
+/* Hora del mensaje */
+.hora {
+    font-size: 12px;
+    color: gray;
+}
+
+/* Mensaje del pedido */
+.pedido-mensaje {
+    font-size: 14px;
+    color: #333;
+    margin-top: 5px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+/* No hay pedidos */
+.no-pedidos {
+    text-align: center;
+    font-size: 14px;
+    color: gray;
+    padding: 20px;
+}
+
+
+    /* estilos para el chat */
+    .burbuja-myMsn{
+        background-color: #929292;
+    }
+/* ========== TEMA OSCURO PEDIDOS WSP ESTILO MODERNO ========== */
+body.dark-theme .contenedor-pedidosWsp {
+    background: #70b0ff !important;
+    color: #cfd8dc !important;
+}
+
+body.dark-theme .header-bandeja {
+    background: #0064cf !important;
+    color: #2b9954 !important;
+}
+
+body.dark-theme .lista-pedidos {
+    background: transparent !important;
+}
+
+body.dark-theme .pedido-item {
+    background: #5c6975 !important;
+    color: #cfd8dc !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.18) !important;
+}
+
+body.dark-theme .pedido-item:hover {
+    background: #263a2e !important;
+    color: #fff !important;
+}
+
+body.dark-theme .pedido-info {
+    color: #cfd8dc !important;
+}
+
+body.dark-theme .cliente {
+    color: #2b9954 !important;
+}
+
+body.dark-theme .hora {
+    color: #888 !important;
+}
+
+body.dark-theme .pedido-mensaje {
+    color: #cfd8dc !important;
+}
+
+body.dark-theme .no-pedidos {
+    color: #888 !important;
+}
+
+body.dark-theme .burbuja-myMsn {
+    background-color: #313a46 !important;
+    color: #fff !important;
+}
+/* ========== FIN TEMA OSCURO PEDIDOS WSP ESTILO MODERNO ========== */

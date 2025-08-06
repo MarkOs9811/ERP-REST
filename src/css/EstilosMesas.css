@@ -1,0 +1,110 @@
+.mesas-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: left;
+  padding: 16px;
+}
+
+.mesa-card {
+  position: relative;
+  background-color: #fff;
+  border:none;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  flex-grow: 1;
+  flex-basis: 200px;
+  text-align: left;
+  transition: transform 0.2s;
+  overflow: hidden;
+}
+
+.mesa-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-size: 150px;
+  background-repeat: no-repeat;
+  background-position: right center;
+  opacity: 0.3;
+  /* Opacidad de la imagen */
+  z-index: 1;
+  /* Asegura que la imagen esté detrás del contenido */
+  pointer-events: none;
+  /* Permite interactuar con el contenido del card */
+}
+
+.mesa-card.disponible::after {
+  background-image: url("../../public/images/img-disponible-mesa.svg");
+  background-color: #d0f0e1;
+  border-left:2px solid #0b884e;
+}
+
+.mesa-card.en-atencion::after {
+  background-image: url("../../public/images/img-en-atencion.svg");
+  background-color: #f0d0d0;
+  border-left:2px solid #920404;
+}
+
+.mesa-card:hover {
+  transform: scale(1.05);
+  /* Efecto de zoom al pasar el mouse */
+}
+
+.mesa-numero {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  z-index: 2;
+  /* Asegura que el texto esté encima de la imagen */
+  position: relative;
+}
+
+.mesa-card p {
+  margin: 8px 0;
+  font-size: 0.9em;
+  color: #555;
+  z-index: 2;
+  /* Asegura que el texto esté encima de la imagen */
+  position: relative;
+}
+
+/* ========== TEMA OSCURO MESAS ESTILO MODERNO CON ROJO CORPORATIVO ========== */
+body.dark-theme .mesas-container {
+  background: #151a20 !important;
+}
+
+body.dark-theme .mesa-card {
+  background-color: #212b36 !important;
+  color: #cfd8dc !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25) !important;
+  border: none !important;
+}
+
+body.dark-theme .mesa-card::after {
+  opacity: 0.18 !important;
+  /* Mantiene la imagen de fondo pero más sutil en dark mode */
+}
+
+body.dark-theme .mesa-card.disponible::after {
+  background-color: #223a2e !important;
+  border-left: 2px solid #27ae60 !important;
+}
+
+body.dark-theme .mesa-card.en-atencion::after {
+  background-color: #3a2323 !important;
+  border-left: 2px solid #ee5252 !important;
+}
+
+body.dark-theme .mesa-numero {
+  color: #fff !important;
+}
+
+body.dark-theme .mesa-card p {
+  color: #cfd8dc !important;
+}
+/* ========== FIN TEMA OSCURO MESAS ESTILO MODERNO ========== */
