@@ -163,124 +163,122 @@ export function PedidosWeb() {
   const [selectedPedido, setSelectedPedido] = useState(null); // Estado para el pedido seleccionado
 
   return (
-    <ContenedorPrincipal>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <div className="row g-3 ">
-          {[
-            {
-              key: "pendientes",
-              title: "Pendientes - Pago",
-              color: "#ebf3fa",
-              border: "#7ab0e0",
-              icon: <Hourglass color={"auto"} height="35px" width="35px" />,
-            },
-            {
-              key: "proceso",
-              title: "En Proceso",
-              color: "#eef4f9",
-              border: "#5a7a98",
-              icon: <CookingPot color={"auto"} height="35px" width="35px" />,
-            },
-            {
-              key: "listos",
-              title: "Listo - Para recoger",
-              color: "#f6fef9",
-              border: "#28A745",
-              icon: <Check color={"auto"} height="35px" width="35px" />,
-            },
-          ].map(({ key, title, border, icon }) => (
-            <div key={key} className="col-md-4 d-flex flex-column ">
-              <div
-                className="shadow-sm flex-grow-1 h-100 d-flex flex-column rounded "
-                style={{
-                  borderTop: `10px solid ${border}`,
+    <DragDropContext onDragEnd={onDragEnd}>
+      <div className="row g-3 ">
+        {[
+          {
+            key: "pendientes",
+            title: "Pendientes - Pago",
+            color: "#ebf3fa",
+            border: "#7ab0e0",
+            icon: <Hourglass color={"auto"} height="35px" width="35px" />,
+          },
+          {
+            key: "proceso",
+            title: "En Proceso",
+            color: "#eef4f9",
+            border: "#5a7a98",
+            icon: <CookingPot color={"auto"} height="35px" width="35px" />,
+          },
+          {
+            key: "listos",
+            title: "Listo - Para recoger",
+            color: "#f6fef9",
+            border: "#28A745",
+            icon: <Check color={"auto"} height="35px" width="35px" />,
+          },
+        ].map(({ key, title, border, icon }) => (
+          <div key={key} className="col-md-4 d-flex flex-column ">
+            <div
+              className="shadow-sm flex-grow-1 h-100 d-flex flex-column rounded "
+              style={{
+                borderTop: `10px solid ${border}`,
 
-                  borderRadius: "0.5rem",
-                }}
-              >
-                <div className="d-flex card-header bg-transparent border-bottom p-1 ">
-                  <h3 className="text-dark">{title}</h3>
-                  <div className="text-end ms-auto">{icon}</div>
-                </div>
-                <Droppable droppableId={key}>
-                  {(provided) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.droppableProps}
-                      className="card-body overflow-auto p-3 shadow cardbody-pedidosWeb"
-                      style={{ height: "calc(100vh - 215px)" }}
-                    >
-                      {isLoading && <Cargando />}
-                      {isError && (
-                        <div className="error">
-                          Error al cargar Pedidos Pendientes
-                        </div>
-                      )}
-                      {pedidos[key].map((pedido, index) => (
-                        <Draggable
-                          key={pedido.id}
-                          draggableId={pedido.id.toString()}
-                          index={index}
-                        >
-                          {(provided) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                            >
-                              <PedidoCard
-                                pedido={pedido}
-                                onOpenModal={() => {
-                                  setSelectedPedido(pedido); // Guardar el pedido seleccionado
-                                  setIsModalOpen(true); // Abrir el modal
-                                }}
-                              />
-                            </div>
-                          )}
-                        </Draggable>
-                      ))}
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
+                borderRadius: "0.5rem",
+              }}
+            >
+              <div className="d-flex card-header bg-transparent border-bottom p-1 ">
+                <h3 className="text-dark">{title}</h3>
+                <div className="text-end ms-auto">{icon}</div>
               </div>
+              <Droppable droppableId={key}>
+                {(provided) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                    className="card-body overflow-auto p-3 shadow cardbody-pedidosWeb"
+                    style={{ height: "calc(100vh - 215px)" }}
+                  >
+                    {isLoading && <Cargando />}
+                    {isError && (
+                      <div className="error">
+                        Error al cargar Pedidos Pendientes
+                      </div>
+                    )}
+                    {pedidos[key].map((pedido, index) => (
+                      <Draggable
+                        key={pedido.id}
+                        draggableId={pedido.id.toString()}
+                        index={index}
+                      >
+                        {(provided) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                          >
+                            <PedidoCard
+                              pedido={pedido}
+                              onOpenModal={() => {
+                                setSelectedPedido(pedido); // Guardar el pedido seleccionado
+                                setIsModalOpen(true); // Abrir el modal
+                              }}
+                            />
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
             </div>
-          ))}
-        </div>
-        <ModalRight
-          isOpen={isModalOpen}
-          onClose={() => {
-            setIsModalOpen(false);
-            setSelectedPedido(null); // Limpiar el pedido seleccionado al cerrar
-          }}
-          title="Detalles del Pedido"
-          submitText="Pagar"
-          hideFooter={true}
-          onSubmit={() => {
-            setIsModalOpen(false);
-          }}
-        >
-          {selectedPedido ? (
-            <div className="p-0 rounded-0 border-none ">
-              {/* ============================= */}
-              {/* CABECERA DEL MODAL*/}
-              {/* ============================= */}
-              <ModalCabecera selectedPedido={selectedPedido} />
-              {/* ============================= */}
-              {/* CUERPO DEL MODAL*/}
-              {/* ============================= */}
-              <ModalCuerpo selectedPedido={selectedPedido} />
+          </div>
+        ))}
+      </div>
+      <ModalRight
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+          setSelectedPedido(null); // Limpiar el pedido seleccionado al cerrar
+        }}
+        title="Detalles del Pedido"
+        submitText="Pagar"
+        hideFooter={true}
+        onSubmit={() => {
+          setIsModalOpen(false);
+        }}
+      >
+        {selectedPedido ? (
+          <div className="p-0 rounded-0 border-none ">
+            {/* ============================= */}
+            {/* CABECERA DEL MODAL*/}
+            {/* ============================= */}
+            <ModalCabecera selectedPedido={selectedPedido} />
+            {/* ============================= */}
+            {/* CUERPO DEL MODAL*/}
+            {/* ============================= */}
+            <ModalCuerpo selectedPedido={selectedPedido} />
 
-              {/* ============================= */}
-              {/* PIES DEL MODAL*/}
-              {/* ============================= */}
-              <ModalFooter selectedPedido={selectedPedido} />
-            </div>
-          ) : (
-            <p>Cargando detalles...</p>
-          )}
-        </ModalRight>
-      </DragDropContext>
-    </ContenedorPrincipal>
+            {/* ============================= */}
+            {/* PIES DEL MODAL*/}
+            {/* ============================= */}
+            <ModalFooter selectedPedido={selectedPedido} />
+          </div>
+        ) : (
+          <p>Cargando detalles...</p>
+        )}
+      </ModalRight>
+    </DragDropContext>
   );
 }

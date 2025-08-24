@@ -81,48 +81,40 @@ export function UsuarioForm({ handleCloseModal }) {
   const onSubmit = async (data) => {
     const formDataToSend = new FormData();
 
-    // Agregar todos los campos automáticamente
     Object.keys(data).forEach((key) => {
       formDataToSend.append(key, data[key]);
     });
 
-    // Añadir la foto si existe
     if (fotoPreview) {
       formDataToSend.append("fotoPerfil", formData.fotoPerfil);
     }
 
-    // Depuración en consola
-    console.log("Datos enviados:");
-    formDataToSend.forEach((value, key) => {
-      console.log(`${key}:`, value);
-    });
-
     try {
-      // Llamada a la API con axios
       const response = await axiosInstance.post(
         "/storeUsuario",
         formDataToSend
       );
 
-      // Verificar respuesta del servidor
       if (response.data.success) {
-        ToastAlert("success", "Usuario registrado correctamente");
+        ToastAlert("success", response.data.success);
         queryClient.invalidateQueries({ queryKey: ["usuarios"] });
         setTimeout(() => handleCloseModal(), 500);
       } else {
-        ToastAlert("error", response.data.message);
+        ToastAlert(
+          "error",
+          response.data.message || "Ocurrió un error inesperado"
+        );
       }
     } catch (error) {
-      console.error("Error al enviar el formulario:", error);
-
-      // Manejo de errores del servidor
-      if (error.response && error.response.data && error.response.data.errors) {
+      if (error.response?.status === 422 && error.response.data.errors) {
         const errors = error.response.data.errors;
         let errorMessages = "";
         for (let field in errors) {
           errorMessages += `${errors[field].join(", ")}\n`;
         }
         ToastAlert("error", errorMessages.trim());
+      } else if (error.response?.status === 409) {
+        ToastAlert("error", error.response.data.error);
       } else {
         ToastAlert("error", "Error al registrar el usuario");
       }

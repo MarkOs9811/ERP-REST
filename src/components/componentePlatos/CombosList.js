@@ -12,7 +12,7 @@ import ModalAlertQuestion from "../componenteToast/ModalAlertQuestion";
 import ModalAlertActivar from "../componenteToast/ModalAlertActivar";
 import ToastAlert from "../componenteToast/ToastAlert";
 import axiosInstance from "../../api/AxiosInstance";
-import { EllipsisVertical } from "lucide-react";
+import { EllipsisVerticalIcon } from "lucide-react";
 
 export function CombosList() {
   const [search, setSearch] = useState("");
@@ -148,7 +148,7 @@ export function CombosList() {
         ) : (
           <div className="row">
             {visibleCombos.map((combo) => (
-              <div className="col-md-4 mb-3" key={combo.id}>
+              <div className="col-md-3 mb-3" key={combo.id}>
                 <div
                   className="card h-100 shadow-sm border position-relative"
                   style={{
@@ -161,7 +161,7 @@ export function CombosList() {
                   }}
                 >
                   {/* Overlay bloqueado si combo está inactivo */}
-                  {combo.estado === 0 && (
+                  {combo.estado == 0 && (
                     <div
                       className="position-absolute w-100 h-100 d-flex flex-column justify-content-center align-items-center"
                       style={{
@@ -199,13 +199,13 @@ export function CombosList() {
 
                     <div className="dropdown position-relative ">
                       <button
-                        className="btn p-0 position-absolute"
+                        className="btn p-0 m-0"
                         type="button"
                         id="dropdownMenu2"
                         data-bs-toggle="dropdown"
                         aria-expanded="false"
                       >
-                        <EllipsisVertical color={"auto"} />
+                        <EllipsisVerticalIcon className="text-auto" />
                       </button>
                       <ul
                         className="dropdown-menu dropdown-menu-bottom"

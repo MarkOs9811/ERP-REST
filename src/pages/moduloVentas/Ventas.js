@@ -10,6 +10,7 @@ import { ContenedorPrincipal } from "../../components/componentesReutilizables/C
 
 export function Ventas() {
   const [search, setSearch] = useState("");
+  const [selectedDate, setSelectedDate] = useState("");
 
   const {
     data: ventasData,
@@ -65,6 +66,26 @@ export function Ventas() {
       ? "Menos que el mes pasado :("
       : "Igual que el mes pasado :|";
 
+  const hoy = new Date();
+  const totalVentasHoy = ventas
+    .filter((venta) => {
+      const fecha = new Date(venta.created_at);
+      return (
+        fecha.getDate() === hoy.getDate() &&
+        fecha.getMonth() === hoy.getMonth() &&
+        fecha.getFullYear() === hoy.getFullYear()
+      );
+    })
+    .reduce((sum, venta) => sum + parseFloat(venta.total || 0), 0)
+    .toFixed(2);
+
+  const formatToDMY = (isoDate) => {
+    if (!isoDate) return "";
+    const [year, month, day] = isoDate.split("-");
+    const shortYear = year.slice(2); // "2025" -> "25"
+    return `${parseInt(day)}/${parseInt(month)}/${shortYear}`;
+  };
+
   return (
     <ContenedorPrincipal>
       <div className="row g-3">
@@ -78,7 +99,9 @@ export function Ventas() {
                     <p className="fw-normal text-secondary">
                       Esto es lo que sucede con tus Ventas Hoy
                     </p>
-                    <p className="totalVentasTitulo mb-0">S/.{totalVentas}</p>
+                    <p className="totalVentasTitulo mb-0">
+                      S/.{totalVentasHoy}
+                    </p>
                     <small className="text-secondary fw-normal">
                       {situacion}
                     </small>
@@ -144,18 +167,36 @@ export function Ventas() {
         </div>
         <div className="col-md-12">
           <div className="card shadow-sm">
-            <div className="card-header d-flex justify-content-between">
+            <div className="card-header d-flex flex-column flex-md-row justify-content-between gap-2">
               <h3>Ventas</h3>
-              <div>
+              <div className="d-flex flex-column flex-md-row gap-2 ">
+                {/* Filtro por texto */}
                 <input
                   type="text"
                   placeholder="Buscar..."
                   className="form-control"
                   value={search}
-                  onChange={(e) => setSearch(e.target.value)}
+                  onChange={(e) => {
+                    setSearch(e.target.value);
+                    setSelectedDate(""); // limpiar fecha si escribes texto
+                  }}
+                />
+
+                {/* Filtro por fecha */}
+                <input
+                  type="date"
+                  className="form-control"
+                  value={selectedDate}
+                  onChange={(e) => {
+                    const rawDate = e.target.value;
+                    setSelectedDate(rawDate);
+                    const formatted = formatToDMY(rawDate); // sin errores de zona horaria
+                    setSearch(formatted);
+                  }}
                 />
               </div>
             </div>
+
             <div className="card-body p-0">
               <ListVentas search={search} />
             </div>

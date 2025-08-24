@@ -8,7 +8,7 @@ import BotonAnimado from "../../components/componentesReutilizables/BotonAnimado
 import Pusher from "pusher-js";
 import "../../css/EstilosCocina.css";
 import Masonry from "react-masonry-css";
-import { Printer } from "lucide-react";
+import { Printer, PrinterIcon } from "lucide-react";
 
 const estados = {
   0: { texto: "En proceso", clase: "badge bg-warning text-dark" },
@@ -97,7 +97,7 @@ function TarjetaPedido({ pedido }) {
       </div>
       <div className="card-footer d-flex">
         <button className="btn-sm btn btn-outline-dark">
-          <Printer color={"auto"} />
+          <PrinterIcon className="text-auto" />
         </button>
         <BotonAnimado className="btn-realizarPedido h6 p-1 ms-auto">
           Marcar Listo

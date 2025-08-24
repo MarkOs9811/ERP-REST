@@ -6,8 +6,7 @@ import ToastAlert from "../components/componenteToast/ToastAlert";
 import { useNavigate } from "react-router-dom";
 import { handlePrecioInput, validatePrecio } from "../hooks/InputHandlers";
 import { useForm } from "react-hook-form";
-import DataTable from "react-data-table-component";
-import customDataTableStyles from "../css/estilosComponentesTable/DataTableStyles";
+
 import { useQuery } from "@tanstack/react-query";
 import { TablasGenerales } from "../components/componentesReutilizables/TablasGenerales";
 import { ContenedorPrincipal } from "../components/componentesReutilizables/ContenedorPrincipal";
@@ -16,6 +15,7 @@ import {
   BanknoteArrowDown,
   ChartColumnBig,
   Lock,
+  LockIcon,
   WalletMinimal,
 } from "lucide-react";
 
@@ -282,7 +282,7 @@ export function CerrarCaja() {
                       error={error}
                       className="btn btn-danger px-4 py-2 ms-auto"
                       onClick={() => handleQuestionCaja(caja)}
-                      icon={<Lock color={"auto"} />}
+                      icon={<LockIcon className={"color-auto"} />}
                     >
                       Cerrar Caja
                     </BotonAnimado>

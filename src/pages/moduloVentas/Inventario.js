@@ -6,10 +6,11 @@ import { Cargando } from "../../components/componentesReutilizables/Cargando";
 
 import { ContenedorPrincipal } from "../../components/componentesReutilizables/ContenedorPrincipal";
 import { Plus, StickyNote, Store, TriangleAlert } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export function Inventario() {
   const [search, setSearch] = useState("");
-
+  const navigate = useNavigate();
   // Usamos React Query para manejar el estado y caching de los datos
   const { data, isLoading, isError } = useQuery({
     queryKey: ["inventario"],
@@ -103,8 +104,13 @@ export function Inventario() {
                     onChange={(e) => setSearch(e.target.value)}
                   />
                 </div>
-                <button className="btn mx-2 btn-outline-secondary">
-                  <Plus color={"auto"} />
+                <button
+                  className="btn mx-2 btn-outline-dark"
+                  onClick={() =>
+                    navigate("/ventas/solicitud/realizarSolicitud")
+                  }
+                >
+                  <Plus className="text-auto" />
                 </button>
               </div>
             </div>

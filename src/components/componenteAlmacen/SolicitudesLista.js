@@ -9,7 +9,7 @@ import { ModalDetallesSolicitud } from "./componenteSolicitud/ModalDetallesSolic
 import { Modal } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-regular-svg-icons";
-import { CheckCheck, Clock } from "lucide-react";
+import { CheckCheck, CheckCheckIcon, Clock, Clock1 } from "lucide-react";
 
 export function SolicitudesLista({ search, updateList }) {
   const rowColors = ["#1dae79", "#d34242", "#4c7d9a", "#ff9800"];
@@ -66,7 +66,7 @@ export function SolicitudesLista({ search, updateList }) {
       const persona = empleado?.persona || {};
       const { nombre, apellidos, telefono, documento_identidad } = persona;
 
-      const estadoTexto = estado === 1 ? "Resuelta" : "Pendiente";
+      const estadoTexto = estado == 1 ? "Resuelta" : "Pendiente";
 
       return (
         (email && email.toLowerCase().includes(searchLower)) ||
@@ -132,13 +132,13 @@ export function SolicitudesLista({ search, updateList }) {
         return row.estado === 1 ? (
           <span className="badge bg-success m-2">
             <small>
-              <CheckCheck color="auto" /> Resuelta
+              <CheckCheckIcon className="text-auto" /> Resuelta
             </small>
           </span>
         ) : (
           <span className="badge bg-warning m-2 text-dark">
             <small>
-              <Clock color="auto" /> Pendiente
+              <Clock1 className="text-auto" /> Pendiente
             </small>
           </span>
         );
@@ -209,7 +209,6 @@ export function SolicitudesLista({ search, updateList }) {
           <ModalDetallesSolicitud
             handleCloseModal={handleCloseModal}
             data={infoSolicitud}
-            actualizarTabla={actualizarTabla}
           />
         </Modal.Body>
       </Modal>

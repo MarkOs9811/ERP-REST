@@ -190,7 +190,7 @@ export const Login = () => {
                   className="btn-google"
                   onClick={() => {
                     window.location.href =
-                      "https://cc00a15a5d20.ngrok-free.app/api/auth/google/redirect"; //Cambiar URl de mi bbackend
+                      "https://6a876a5ef21b.ngrok-free.app/api/auth/google/redirect"; //Cambiar URl de mi bbackend
                   }}
                 >
                   <FontAwesomeIcon icon={faGoogle} className="mx-2" />

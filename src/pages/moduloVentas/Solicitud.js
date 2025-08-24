@@ -19,6 +19,7 @@ export function Solicitud() {
             <div className="card-header border-bottom d-flex justify-content-between align-content-center">
               <div className="m-2">
                 <h3>Mis Solicitudes</h3>
+                <small>Solicitudes para el almacen</small>
               </div>
               <div className="d-flex align-items-center">
                 <div className="d-flex">
@@ -30,10 +31,10 @@ export function Solicitud() {
                   />
                 </div>
                 <button
-                  className="btn ms-2"
+                  className="btn ms-2 btn-outline-dark"
                   onClick={() => handleGoAddSolicitud()}
                 >
-                  <Plus color={"auto"} />
+                  <Plus className="text-auto" />
                 </button>
               </div>
             </div>

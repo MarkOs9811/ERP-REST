@@ -9,9 +9,9 @@ import {
 
 export function AccesosRapidos() {
   return (
-    <div className="col-md-3">
-      <div className="card h-100">
-        <div className="card-body">
+    <div className="container">
+      <div className="card h-100 d-flex">
+        <div className="card-body d-flex">
           <h5 className="text-dark mb-3">Accesos Rápidos</h5>
           <div className="row g-2 text-dark ">
             {[

@@ -103,8 +103,11 @@ export function Usuarios() {
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                   />
-                  <button className="btn ms-2" onClick={handleOpenModal}>
-                    <Plus color={"auto"} />
+                  <button
+                    className="btn ms-2 btn-outline-dark"
+                    onClick={handleOpenModal}
+                  >
+                    <Plus className="color-auto" />
                   </button>
                 </div>
               </div>

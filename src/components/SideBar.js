@@ -25,7 +25,7 @@ import {
   Users,
 } from "lucide-react";
 
-export function SideBar({ setMousePos }) {
+export function SideBar() {
   const location = useLocation();
   const navigate = useNavigate();
   const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -118,7 +118,7 @@ export function SideBar({ setMousePos }) {
     const mouseX = event.clientX;
     const mouseY = event.clientY;
 
-    setMousePos({ x: mouseX, y: mouseY }); // 👈 actualiza la posición
+    // 👈 actualiza la posición
     dispatch(subMenuClick(nombreOpcion));
     dispatch(setSidebarCompressed(true));
   };
@@ -154,7 +154,7 @@ export function SideBar({ setMousePos }) {
             to={"/"}
             className="link-opcion "
             title="Inicio"
-            onMouseEnter={(e) => handleModuloSeleccionado("accesos rapido", e)}
+            onClick={(e) => handleModuloSeleccionado("accesos rapido", e)}
           >
             <li
               className={`menu-item  p-0 py-2  ${
@@ -181,7 +181,7 @@ export function SideBar({ setMousePos }) {
                 data-bs-toggle="tooltip"
                 data-bs-placement="right"
                 title={role.nombre}
-                onMouseEnter={(e) => handleModuloSeleccionado(roleUrl, e)} // al entrar
+                onClick={(e) => handleModuloSeleccionado(roleUrl, e)} // al entrar
               >
                 <li
                   className={`menu-item p-0 py-2 ${isActive ? "active" : ""}`}
@@ -198,7 +198,7 @@ export function SideBar({ setMousePos }) {
               <Link
                 to={"/configuracion"}
                 className="link-opcion"
-                onMouseEnter={(e) => handleModuloSeleccionado("", e)}
+                onClick={(e) => handleModuloSeleccionado("", e)}
               >
                 <li
                   className={`menu-item  p-0 py-2 ${

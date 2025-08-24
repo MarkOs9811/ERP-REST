@@ -19,8 +19,8 @@ export function SubMenu() {
 
   const cargo = JSON.parse(localStorage.getItem("user")) || {};
   return (
-    <div className="card p-0">
-      <div
+    <div className="card p-0 w-100 mt-0 shadow-sm z-1">
+      {/* <div
         className="card-header  mb-0 w-100 rounded-0"
         style={{
           backgroundImage: "url('/images/fondo_submenu.svg')",
@@ -36,13 +36,13 @@ export function SubMenu() {
         >
           {capitalizeFirstLetter(moduloAplicado)}
         </p>
-      </div>
-      <div className="subMenu card-body ">
+      </div> */}
+      <div className="subMenu card-body p-0 m-auto ">
         {moduloAplicado && (
-          <ul className="list-unstyled ">
+          <ul className="list-unstyled d-flex gap-4">
             {moduloAplicado === "accesos rapido" && (
               <div className="container p-0">
-                <div className="row g-3 d-flex">
+                <div className="row m-0 p-0">
                   {[
                     {
                       icon: (
@@ -127,14 +127,14 @@ export function SubMenu() {
                   ]
                     .filter((item) => item.show)
                     .map((item, index) => (
-                      <div key={index}>
+                      <div key={index} className="w-auto">
                         <div
                           className={` ${item.className} text-dark w-100 text-left`}
                           style={{ cursor: "pointer" }}
                           onClick={() => navigate(item.path)}
                         >
                           <RippleWrapper>
-                            <div className="btn d-flex w-100 p-2 m-0 align-items-center">
+                            <div className="btn d-flex w-100  m-0 align-items-center">
                               <div className="border rounded-pill p-2 mx-3 border-secondary">
                                 {item.icon}
                               </div>

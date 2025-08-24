@@ -16,8 +16,10 @@ import axiosInstance from "../../api/AxiosInstance";
 import { Cargando } from "../componentesReutilizables/Cargando";
 import { TablasGenerales } from "../componentesReutilizables/TablasGenerales";
 import { Redo } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export function AlmacenList({ search, updateList }) {
+  const navigate = useNavigate();
   const [almacen, setAlmacen] = useState([]);
   const [filterAlmacen, setFilteredAlmacen] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -221,6 +223,7 @@ export function AlmacenList({ search, updateList }) {
                   data-bs-toggle="tooltip"
                   data-bs-placement="right"
                   title="Transferir Producto"
+                  onClick={() => navigate("/almacen/transferencia")}
                 >
                   <Redo className="text-auto" />
                 </button>

@@ -19,6 +19,7 @@ export function MesasList() {
     refetchOnWindowFocus: false,
     retry: 1,
   });
+  console.log("Mesas recibidas:", mesas, Array.isArray(mesas));
 
   const handleMesaAddPlato = (id) => {
     dispatch(setIdPreventaMesa(id));
@@ -31,14 +32,15 @@ export function MesasList() {
 
   if (loading) return <p>Cargando mesas...</p>;
   if (error) return <p>{error}</p>;
-
+  // si no es array, inicialízalo vacío
+  const listaMesas = Array.isArray(mesas) ? mesas : [];
   return (
-    <div className="card flex-grow-1 d-flex flex-column shadow-sm">
-      <div className="card-header d-flex justify-content-between align-items-center p-4">
+    <div className="card flex-grow-1 d-flex flex-column shadow-sm m-0">
+      <div className="card-header d-flex justify-content-between align-items-center">
         <h3 className="m-0 size-auto">Mesas</h3>
         <div className="d-flex align-middle">
-          <p className="align-middle mx-2 fw-normal">
-            {mesas.filter((mesa) => mesa.estado === 1).length} Disponibles
+          <p className="align-middle  fw-normal">
+            {listaMesas.filter((mesa) => mesa.estado === 1).length} Disponibles
             <span
               className="mx-2"
               style={{
@@ -48,11 +50,11 @@ export function MesasList() {
                 borderRadius: "50%",
                 backgroundColor: "#10ba82",
               }}
-            ></span>{" "}
+            ></span>
           </p>
           <span className="fw-normal"> | </span>
           <p className="align-middle mx-2 fw-normal">
-            {mesas.filter((mesa) => mesa.estado === 0).length} En atención
+            {listaMesas.filter((mesa) => mesa.estado === 0).length} En atención
             <span
               className="mx-2"
               style={{
@@ -62,13 +64,13 @@ export function MesasList() {
                 borderRadius: "50%",
                 backgroundColor: "red",
               }}
-            ></span>{" "}
+            ></span>
           </p>
         </div>
       </div>
 
       <div className="mesas-container card-body overflow-y-auto overflow-x-hidden">
-        {mesas.map((mesa) => (
+        {listaMesas.map((mesa) => (
           <button
             key={mesa.id}
             className={`mesa-card m-3 ${
@@ -81,27 +83,8 @@ export function MesasList() {
             }
           >
             <h6 className="mesa-numero">Mesa {mesa.numero}</h6>
-
             <p>Piso: {mesa.piso}</p>
             <p>Capacidad: {mesa.capacidad}</p>
-            <p>
-              <span
-                style={{
-                  display: "inline-block",
-                  width: "10px",
-                  height: "10px",
-                  borderRadius: "50%",
-                  backgroundColor: mesa.estado === 1 ? "#10ba82" : "red",
-                }}
-              ></span>{" "}
-              <span
-                className={`fw-bold ${
-                  mesa.estado === 1 ? "text-success" : "text-danger"
-                }`}
-              >
-                {mesa.estado === 1 ? "Disponible" : "En atención"}
-              </span>
-            </p>
           </button>
         ))}
       </div>

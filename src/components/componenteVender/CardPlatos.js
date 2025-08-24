@@ -1,4 +1,4 @@
-import { MinusCircle, Plus } from "lucide-react";
+import { MinusIcon, PlusIcon } from "lucide-react";
 
 export const CardPlatos = ({
   item,
@@ -31,7 +31,7 @@ export const CardPlatos = ({
         <p className="nombre-plato mb-3 fw-bold">
           {capitalizeFirstLetter(item.nombre)}
         </p>
-        <span className="rounded-pill  p-1 fw-bold precioCard text-danger h6">
+        <span className="rounded-pill  px-2 fw-bold precioCard  ">
           S/. {item.precio}
         </span>
       </div>
@@ -44,7 +44,7 @@ export const CardPlatos = ({
               onClick={() => handleRemove(item.id)}
             >
               <span className="me-2">
-                <MinusCircle color={"auto"} />
+                <MinusIcon className={"text-auto"} />
               </span>
               1
             </button>
@@ -54,7 +54,7 @@ export const CardPlatos = ({
               onClick={() => handleAdd(item)}
             >
               <span className="me-2">
-                <Plus color={"auto"} />
+                <PlusIcon className={"text-auto"} />
               </span>
               1
             </button>
@@ -66,7 +66,7 @@ export const CardPlatos = ({
             onClick={() => handleAdd(item)}
           >
             <span className="me-2">
-              <Plus color={"auto"} />
+              <PlusIcon className={"text-auto"} />
             </span>
             Agregar
           </button>

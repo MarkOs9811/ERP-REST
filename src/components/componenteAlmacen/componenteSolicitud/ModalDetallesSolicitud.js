@@ -7,17 +7,18 @@ import axiosInstance from "../../../api/AxiosInstance";
 import ToastAlert from "../../componenteToast/ToastAlert";
 import {
   Box,
-  Check,
-  FileAxis3d,
-  GitCompare,
+  CheckCheck,
+  FileAxis3D,
+  GitCompareIcon,
   Info,
-  Printer,
-  UserRound,
+  PrinterIcon,
+  UserRoundIcon,
 } from "lucide-react";
-export function ModalDetallesSolicitud({ data, actualizarTabla }) {
+import { useQueryClient } from "@tanstack/react-query";
+export function ModalDetallesSolicitud({ data, handleCloseModal }) {
   // FUNCIONES PARA ELIMINAR Y ACTIVAR
   const [modalQuestion, setModalQuestion] = useState(false);
-
+  const queryClient = useQueryClient();
   const [idProceso, setIdProceso] = useState(null);
 
   // funcion para eliminar un registro - modal
@@ -26,21 +27,17 @@ export function ModalDetallesSolicitud({ data, actualizarTabla }) {
     setIdProceso(id);
   };
 
-  const handleCloseModal = () => {
-    setModalQuestion(false);
-    setIdProceso(null);
-  };
-
-  const handleAccion = async (id) => {
+  const handleCambiarEstado = async (id) => {
     try {
-      const response = await axiosInstance.put("/solicitudes/cambioEstado", {
+      const response = await axiosInstance.post("/solicitudes/cambioEstado", {
         id,
       });
 
       if (response.data.success) {
         ToastAlert("success", "Cambio de estado correctamente");
-        actualizarTabla();
-        return true; // Indicar que la acción fue exitosa
+        queryClient.invalidateQueries(["solicitudes"]);
+        handleCloseModal(false);
+        return true;
       } else {
         ToastAlert("error", response.data.error || "Error en la actualización");
         return false;
@@ -60,12 +57,12 @@ export function ModalDetallesSolicitud({ data, actualizarTabla }) {
           <div className="card border h-100">
             <div className="card-header">
               <p className="h6 mt-3">
-                <FileAxis3d color={"auto"} className={"me-2"} />
+                <FileAxis3D className="text-auto me-2" />
                 Información General
               </p>
             </div>
             <div className="card-body d-flex flex-column align-items-center justify-content-center">
-              <UserRound color={"auto"} height="50px" width="50px" />
+              <UserRoundIcon className="text-auto" height="50px" width="50px" />
               <span id="detalleSolicitante" className="mt-2">
                 {capitalizeFirstLetter(data?.nombre_solicitante)}
               </span>
@@ -86,7 +83,7 @@ export function ModalDetallesSolicitud({ data, actualizarTabla }) {
           <div className="card border h-100">
             <div className="card-header">
               <p className=" h6 mt-3">
-                <Box color={"auto"} className={"me-2"} /> Detalles del Producto
+                <Box className="text-auto me-2" /> Detalles del Producto
               </p>
             </div>
             <div className="card-body">
@@ -114,7 +111,7 @@ export function ModalDetallesSolicitud({ data, actualizarTabla }) {
           <div className="card border h-100">
             <div className="card-header">
               <p className="h6 mt-3">
-                <Info color={"auto"} className={"me-2"} /> Información Adicional
+                <Info className="text-auto me-2" /> Información Adicional
               </p>
             </div>
             <div className="card-body">
@@ -146,11 +143,11 @@ export function ModalDetallesSolicitud({ data, actualizarTabla }) {
       {/* Pie del modal: Botones de acción */}
       <div className="modal-footer mt-2 border-0">
         <button type="button" className="btn-primary btn float-start me-auto">
-          <Printer color={"auto"} /> Imprimir
+          <PrinterIcon className="text-auto" /> Imprimir
         </button>
         {data?.estado == 1 ? (
           <h4>
-            <Check color={"auto"} /> Atendido
+            <CheckCheck className="text-auto" /> Atendido
           </h4>
         ) : (
           <button
@@ -158,7 +155,7 @@ export function ModalDetallesSolicitud({ data, actualizarTabla }) {
             className="btn-guardar"
             onClick={() => handleQuestionEstado(data.id)}
           >
-            <GitCompare color={"auto"} />
+            <GitCompareIcon className="text-auto" />
             Cambiar Estado
           </button>
         )}
@@ -168,8 +165,8 @@ export function ModalDetallesSolicitud({ data, actualizarTabla }) {
         show={modalQuestion}
         idProceso={idProceso}
         mensaje={"¿Cambiar estado a Atendido?"}
-        handleAccion={handleAccion}
-        handleCloseModal={handleCloseModal}
+        handleAccion={handleCambiarEstado}
+        handleCloseModal={() => setModalQuestion(false)}
       />
     </div>
   );

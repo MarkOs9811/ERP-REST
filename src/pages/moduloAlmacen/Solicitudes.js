@@ -37,11 +37,11 @@ export function Solicitudes() {
                 onChange={(e) => setSearch(e.target.value)}
               />
               <button
-                className="btn ms-2"
+                className="btn ms-2 btn-outline-dark"
                 onClick={handleOpenModal}
                 title="Realiza una solicitud"
               >
-                <Plus color={"auto"} />
+                <Plus className="color-auto" />
               </button>
             </div>
           </div>

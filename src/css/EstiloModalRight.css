@@ -100,8 +100,17 @@ background: rgb(134, 31, 179);
 
 .modal-right-body {
     padding: 1rem;
-    max-height: calc(100vh - 150px);
     overflow-y: auto;
+}
+
+.modal-right-body.with-footer {
+    max-height: calc(100vh - 150px);
+    /* solo si hay footer */
+}
+
+.modal-right-body.full-height {
+    height: calc(100vh - 70px);
+    /* ajusta el 70px a la altura real del header */
 }
 
 .modal-right-footer {

@@ -56,10 +56,10 @@ export function Reportes() {
             tipo="ventas"
           />
           <FormularioReporte
-            titulo="Reporte de Compras"
+            titulo="Reporte de Cajas"
             onSubmit={handleReporte1}
-            isLoading={loadingTipo === "compras"}
-            tipo="compras"
+            isLoading={loadingTipo === "cajas"}
+            tipo={"cajas"}
           />
           <FormularioReporte
             titulo="Reporte de Inventario"
@@ -68,10 +68,10 @@ export function Reportes() {
             tipo={"inventario"}
           />
           <FormularioReporte
-            titulo="Reporte de Cajas"
+            titulo="Reporte de Compras"
             onSubmit={handleReporte1}
-            isLoading={loadingTipo === "cajas"}
-            tipo={"cajas"}
+            isLoading={loadingTipo === "compras"}
+            tipo="compras"
           />
         </div>
       </div>

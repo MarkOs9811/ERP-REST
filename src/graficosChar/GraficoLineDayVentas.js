@@ -28,7 +28,7 @@ ChartJS.register(
 
 const GraficoLineaDayVentas = () => {
   const chartRef = useRef(null);
-  const [smooth, setSmooth] = useState(false);
+  const [smooth, setSmooth] = useState(true); // Cambia a true para curvas suaves
 
   const {
     data: listVentas = [],
@@ -76,7 +76,7 @@ const GraficoLineaDayVentas = () => {
           borderColor: "rgba(54, 162, 235, 1)",
           backgroundColor: "rgba(54, 162, 235, 0.2)",
           fill: true,
-          tension: smooth ? 0.4 : 0,
+          tension: 0.4, // Valor alto para curvas más suaves
           pointRadius: 4,
           pointHoverRadius: 6,
         },

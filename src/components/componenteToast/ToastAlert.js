@@ -2,12 +2,13 @@ import { toast } from "react-toastify";
 
 const ToastAlert = (type, message) => {
   const options = {
-    position: "top-right",
+    position: "top-center", // <- cambio aquí
     autoClose: 3000,
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: true,
     draggable: true,
+    theme: "dark",
     bodyClassName: "toast-body",
   };
 

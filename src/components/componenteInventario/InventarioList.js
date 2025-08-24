@@ -2,16 +2,32 @@ import { useState, useEffect, useCallback, useMemo } from "react";
 import { useEstadoAsyn } from "../../hooks/EstadoAsync";
 import { GetInventario } from "../../service/GetInventario";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPowerOff } from "@fortawesome/free-solid-svg-icons";
-import { faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import {
+  faEye,
+  faEyeSlash,
+  faPenToSquare,
+  faTrashCan,
+} from "@fortawesome/free-regular-svg-icons";
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { TablasGenerales } from "../componentesReutilizables/TablasGenerales";
 import { Alert } from "react-bootstrap";
+import ModalAlertQuestion from "../componenteToast/ModalAlertQuestion";
+import axiosInstance from "../../api/AxiosInstance";
+import ToastAlert from "../componenteToast/ToastAlert";
+import ModalAlertActivar from "../componenteToast/ModalAlertActivar";
+import ModalRight from "../componentesReutilizables/ModalRight";
+import { FormEditarInventario } from "./FormEditarInventario";
 
 export function InventarioList({ search }) {
   const [inventario, setInvetario] = useState([]);
   const [filterInventario, setFilterInventario] = useState([]);
+  const queryClient = useQueryClient();
+
+  const [modalEdit, setModalEdit] = useState(false);
+  const [questionEliminar, setQuestionEliminar] = useState(false);
+  const [questionActivar, setQuestionActivar] = useState(false);
+  const [dataProducto, setdataProducto] = useState([]);
 
   const fetchInventario = useCallback(async () => {
     const result = await GetInventario();
@@ -32,7 +48,6 @@ export function InventarioList({ search }) {
     queryFn: GetInventario,
     select: (data) => (data.success ? data.data : []),
   });
-
   const { loading, error, execute } = useEstadoAsyn(fetchInventario);
   const [hasError, setHasError] = useState(false); // Para manejar el estado de error
 
@@ -60,11 +75,70 @@ export function InventarioList({ search }) {
       );
     });
   }, [search, inventarioData]);
-  const handleQuestionActivar = (id, nombre) => {
-    if (window.confirm(`¿Estás seguro de activar el producto ${nombre}?`))
-      console.log(`Producto ${nombre} con ID ${id} activado.`);
-    // Aquí puedes agregar la lógica para activar el producto
+
+  const handleOcultarProducto = async (id) => {
+    try {
+      const response = await axiosInstance.put(`/inventario/desactivar/${id}`);
+
+      if (response.data.success) {
+        ToastAlert("success", "Producto desactivado correctamente");
+        queryClient.invalidateQueries(["inventario"]);
+      } else {
+        ToastAlert("error", "Ocurrió un error al desactivar");
+      }
+    } catch (error) {
+      ToastAlert("Error", "Error de conexión" + error);
+    }
   };
+  const handleActivarProducto = async (id) => {
+    try {
+      const response = await axiosInstance.put(`/inventario/activar/${id}`);
+
+      if (response.data.success) {
+        ToastAlert("success", "Producto activado correctamente");
+        queryClient.invalidateQueries(["inventario"]);
+      } else {
+        ToastAlert("error", "Ocurrió un error al activar");
+      }
+    } catch (error) {
+      ToastAlert("Error", "Error de conexión" + error);
+    }
+  };
+
+  const handleEliminarProducto = async (idProd) => {
+    try {
+      const response = await axiosInstance.delete(`/inventario/${idProd}`);
+
+      if (response.data.success) {
+        ToastAlert("success", "Producto eliminado correctamente");
+
+        // Invalida la consulta para que se vuelva a cargar la tabla
+        queryClient.invalidateQueries(["inventario"]);
+      } else {
+        ToastAlert("error", "Error al eliminar el producto");
+      }
+    } catch (error) {
+      ToastAlert("error", "Error de conexión", error.message);
+    }
+  };
+
+  const handleActualizarProducto = async (idProd) => {
+    try {
+      const response = await axiosInstance.delete(`/inventario/${idProd}`);
+
+      if (response.data.success) {
+        ToastAlert("success", "Producto eliminado correctamente");
+
+        // Invalida la consulta para que se vuelva a cargar la tabla
+        queryClient.invalidateQueries(["inventario"]);
+      } else {
+        ToastAlert("error", "Error al eliminar el producto");
+      }
+    } catch (error) {
+      ToastAlert("error", "Error de conexión", error.message);
+    }
+  };
+
   // Definimos las columnas de la tabla
   const columns = [
     {
@@ -82,23 +156,50 @@ export function InventarioList({ search }) {
           <div className="d-flex justify-content-around flex-wrap p-2">
             {estado == 1 ? (
               <>
-                <button className="btn-editar me-2" title="Editar Producto">
+                <button
+                  className="btn-editar me-2"
+                  title="Editar Producto"
+                  onClick={() => {
+                    setModalEdit(true);
+                    setdataProducto(row);
+                  }}
+                >
                   <FontAwesomeIcon icon={faPenToSquare} />
                 </button>
-                <button className="btn-eliminar">
+                <button
+                  className="btn-eliminar"
+                  title="Eliminar el producto"
+                  onClick={() => {
+                    setQuestionEliminar(true);
+                    setdataProducto(row);
+                  }}
+                >
                   <FontAwesomeIcon
                     icon={faTrashCan}
                     title="Eliminar Producto"
                   />
+                </button>
+                <button
+                  className=" btn-desactivar ms-2"
+                  onClick={() => {
+                    setQuestionEliminar(true);
+                    setdataProducto(row);
+                  }}
+                  title="Ocultar producto"
+                >
+                  <FontAwesomeIcon icon={faEyeSlash} />
                 </button>
               </>
             ) : (
               <button
                 className="btn btn-outline-success"
                 title="Activar el producto"
-                onClick={() => handleQuestionActivar(row.id, row.nombre)}
+                onClick={() => {
+                  setQuestionActivar(true);
+                  setdataProducto(row);
+                }}
               >
-                <FontAwesomeIcon icon={faPowerOff} />
+                <FontAwesomeIcon icon={faEye} />
               </button>
             )}
           </div>
@@ -218,6 +319,45 @@ export function InventarioList({ search }) {
   return (
     <div>
       <TablasGenerales datos={filteredInventario} columnas={columns} />
+
+      <ModalAlertQuestion
+        show={questionEliminar}
+        tipo={"Producto"}
+        nombre={dataProducto.nombre}
+        pregunta="¿Estas seguro de eliminar "
+        idEliminar={dataProducto.id}
+        handleCloseModal={() => setQuestionEliminar(false)}
+        handleEliminar={handleEliminarProducto}
+      />
+      <ModalAlertQuestion
+        show={questionEliminar}
+        tipo={"Producto"}
+        pregunta="¿Estas seguro de desactivar "
+        nombre={dataProducto.nombre}
+        idEliminar={dataProducto.id}
+        handleCloseModal={() => setQuestionEliminar(false)}
+        handleEliminar={handleOcultarProducto}
+      />
+
+      <ModalAlertActivar
+        show={questionActivar}
+        tipo={"Producto"}
+        nombre={dataProducto.nombre}
+        idActivar={dataProducto.id}
+        handleCloseModal={() => setQuestionActivar(false)}
+        handleActivar={handleActivarProducto}
+      />
+
+      <ModalRight
+        isOpen={modalEdit}
+        onClose={() => setModalEdit(false)}
+        title="Editar Producto"
+        hideFooter={true}
+      >
+        {({ handleClose }) => (
+          <FormEditarInventario data={dataProducto} onCancel={handleClose} />
+        )}
+      </ModalRight>
     </div>
   );
 }

@@ -5,7 +5,7 @@ import { GetMesas } from "../../service/GetMesas";
 import { GetAlmacen } from "../../service/serviceAlmacen/GetAlmacen";
 import { getPedidosPendientes } from "../../service/GetPedidosPendientes";
 import { UsuariosActivosHome } from "./UsuariosActivosHome";
-import { CircleAlert, Clock9 } from "lucide-react";
+import { CircleAlert, Clock1, Clock9 } from "lucide-react";
 
 export function InformacionRapidaHome({}) {
   const {
@@ -88,7 +88,7 @@ export function InformacionRapidaHome({}) {
             <div className="card h-100 shadow-sm card-pedidos-pendientes">
               <div className="card-body d-flex align-items-center ">
                 <div className="badge-ico badge-ico-pedidos-pendientes me-3">
-                  <Clock9 color={"auto"} height="40px" width="40px" />
+                  <Clock9 className="text-auto" />
                 </div>
                 <div>
                   <p className="h6" style={{ color: "white" }}>
@@ -105,7 +105,7 @@ export function InformacionRapidaHome({}) {
             <div className="card h-100 shadow-sm card-alerta-almacen">
               <div className="card-body d-flex align-items-center">
                 <div className="badge-ico badge-ico-almacen me-3">
-                  <CircleAlert color={"auto"} height="40px" width="40px" />
+                  <CircleAlert className="text-auto" />
                 </div>
                 <div>
                   <p className="h6" style={{ color: "white" }}>

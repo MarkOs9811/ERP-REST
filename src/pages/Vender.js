@@ -2,9 +2,5 @@ import { ContenedorPrincipal } from "../components/componentesReutilizables/Cont
 import { MesasList } from "../components/componenteVender/MesasList";
 
 export function Vender() {
-  return (
-    <ContenedorPrincipal>
-      <MesasList />
-    </ContenedorPrincipal>
-  );
+  return <MesasList />;
 }

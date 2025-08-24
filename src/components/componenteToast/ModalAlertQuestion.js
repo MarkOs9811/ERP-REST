@@ -1,4 +1,3 @@
-
 import "react-toastify/dist/ReactToastify.css";
 import "../../css/ModalAlertQuestion.css"; // Importar CSS correctamente
 import { useQueryClient } from "@tanstack/react-query";
@@ -10,6 +9,7 @@ function ModalAlertQuestion({
   handleEliminar,
   handleCloseModal,
   tipo,
+  pregunta = "¿Estás seguro de eliminar este",
 }) {
   const queryClient = useQueryClient();
   const handleConfirm = async () => {
@@ -17,8 +17,6 @@ function ModalAlertQuestion({
       // Ejecutar la función de eliminación pasando el ID
       const success = await handleEliminar(idEliminar);
       if (success) {
-        queryClient.invalidateQueries({ queryKey: ["usuarios"] });
-
         handleCloseModal();
       } else {
         handleCloseModal();
@@ -34,7 +32,9 @@ function ModalAlertQuestion({
         {" "}
         {/* Agregar clase show */}
         <div className="contenido-model bg-white">
-          <p className="h5">¿Estás seguro de eliminar este {tipo}?</p>
+          <p className="h5">
+            {pregunta} {tipo}?
+          </p>
           <h4 className="modal-name-delete">
             {nombre || "Nombre no disponible"}
           </h4>

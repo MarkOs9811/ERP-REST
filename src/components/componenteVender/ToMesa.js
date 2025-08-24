@@ -24,7 +24,7 @@ import {
   GetPlatosVender,
 } from "../../service/accionesVender/GetPlatosVender";
 import { Cargando } from "../componentesReutilizables/Cargando";
-import { CheckCheck, Minus } from "lucide-react";
+import { CheckCheck, CheckCheckIcon, Minus, MinusIcon } from "lucide-react";
 
 export function ToMesa() {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -205,7 +205,7 @@ export function ToMesa() {
                                   handleRemovePlatoPreventa(item.id)
                                 }
                               >
-                                <Minus color={"auto"} />
+                                <MinusIcon className="text-auto" />
                               </button>
                             </td>
                           </tr>
@@ -268,7 +268,11 @@ export function ToMesa() {
                     className="btn-realizarPedido btn-block w-100 p-3"
                     onClick={() => handleAddPlatoPreventaMesas()}
                   >
-                    <CheckCheck color={"auto"} height="30px" width="30px" />{" "}
+                    <CheckCheckIcon
+                      className="text-auto"
+                      height="30px"
+                      width="30px"
+                    />{" "}
                     Realizar Pedido
                   </button>
                 </>

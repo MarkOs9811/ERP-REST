@@ -30,7 +30,7 @@ const ModalRight = ({
     setTimeout(() => {
       setShouldRender(false);
       onClose();
-    }, 300); // 300ms coincide con la duración de la animación
+    }, 300); // 300ms = duración animación
   };
 
   if (!shouldRender) return null;
@@ -40,31 +40,40 @@ const ModalRight = ({
       <div className="modal-right-backdrop" onClick={handleClose} />
 
       <div
-        className={`modal-right-container p-0 m-0  ${
+        className={`modal-right-container p-0 m-0 d-flex flex-column h-100 ${
           isClosing ? "slide-out" : "slide-in"
         }`}
         style={{ width }}
       >
-        {/* Resto del código del modal permanece igual */}
-        <div className="modal-right-header ">
+        {/* Header */}
+        <div className="modal-right-header p-1 flex-shrink-0">
           <div>
-            <h3 className="modal-right-title">
+            <h3 className="modal-right-title ms-3">
               {capitalizeFirstLetter(title)}
             </h3>
             <p className="text-muted-auto">{subtitulo}</p>
           </div>
           <button
             type="button"
-            class="btn-close btn-close-auto"
+            className="btn-close btn-close-auto"
             aria-label="Close"
             onClick={handleClose}
           ></button>
         </div>
 
-        <div className="modal-right-body  p-4">{children}</div>
+        <div
+          className={`modal-right-body p-3 overflow-auto ${
+            hideFooter ? "full-height" : "with-footer"
+          }`}
+        >
+          {typeof children === "function"
+            ? children({ handleClose })
+            : children}
+        </div>
 
+        {/* Footer opcional */}
         {!hideFooter && (
-          <div className="modal-right-footer">
+          <div className="modal-right-footer flex-shrink-0">
             <button className="btn-cerrar-modal ms-2" onClick={handleClose}>
               {cancelText}
             </button>

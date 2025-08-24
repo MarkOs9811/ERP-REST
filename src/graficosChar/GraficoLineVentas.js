@@ -1,10 +1,10 @@
 import React, { useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Line } from "react-chartjs-2";
+import { Bar } from "react-chartjs-2"; // Cambia Line por Bar
 import { getVentas } from "../service/ObtenerVentasDetalle";
 import { Cargando } from "../components/componentesReutilizables/Cargando";
 
-const GraficoLineaEjemplo = () => {
+const GraficoBarEjemplo = () => {
   const chartRef = useRef(null);
   const [smooth, setSmooth] = useState(false);
 
@@ -74,16 +74,12 @@ const GraficoLineaEjemplo = () => {
       {
         label: "Ventas Mes Actual S/.",
         data: ventasProcesadas.actual,
-        borderColor: "rgba(54, 162, 235, 1)",
-        backgroundColor: "rgba(54, 162, 235, 0.2)",
-        fill: true,
+        backgroundColor: "rgba(54, 162, 235, 0.7)",
       },
       {
         label: "Ventas Mes Pasado",
         data: ventasProcesadas.pasado,
-        borderColor: "rgba(255, 99, 132, 1)",
-        backgroundColor: "rgba(255, 99, 132, 0.2)",
-        fill: true,
+        backgroundColor: "rgba(255, 99, 132, 0.7)",
       },
     ],
   };
@@ -96,19 +92,14 @@ const GraficoLineaEjemplo = () => {
         text: "Ventas Mensuales",
       },
     },
-    elements: {
-      line: {
-        tension: smooth ? 0.4 : 0,
-      },
-    },
   };
 
   return (
     <div style={{ width: "100%", maxWidth: "800px", margin: "0 auto" }}>
       <h3 className="text-primary">Durante el Mes</h3>
-      <Line ref={chartRef} data={datosGrafico} options={options} />
+      <Bar ref={chartRef} data={datosGrafico} options={options} />
     </div>
   );
 };
 
-export default GraficoLineaEjemplo;
+export default GraficoBarEjemplo;

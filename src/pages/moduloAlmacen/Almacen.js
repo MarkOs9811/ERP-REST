@@ -32,8 +32,11 @@ export function Almacen() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
-              <button className="btn ms-2" onClick={() => handleAgregar()}>
-                <Plus color={"auto"} />
+              <button
+                className="btn ms-2 btn-outline-dark"
+                onClick={() => handleAgregar()}
+              >
+                <Plus className="color-auto" />
               </button>
             </div>
           </div>

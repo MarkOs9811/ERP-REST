@@ -82,6 +82,7 @@ import { Mantenimiento } from "./components/componenteConfiguracion/Mantenimient
 import { SoporteContacto } from "./components/componenteConfiguracion/SoporteContacto";
 import { CocinaDespacho } from "./pages/modulosVender/CocinaDespacho";
 import { setSidebarCompressed } from "./redux/sideBarSlice";
+import LayoutPOS from "./LayoutPOS";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 function App() {
@@ -103,34 +104,6 @@ function App() {
     }
   }, []);
 
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const submenuRef = useRef(null);
-  const getAdjustedTop = () => {
-    const padding = 80;
-    const windowHeight = window.innerHeight;
-
-    // Medimos la altura real del contenido
-    const submenuHeight =
-      submenuRef.current?.getBoundingClientRect().height || 0;
-
-    let proposedTop = mousePos.y - submenuHeight / 2;
-
-    if (proposedTop < padding) return padding;
-
-    if (proposedTop + submenuHeight > windowHeight - padding) {
-      return windowHeight - submenuHeight - padding;
-    }
-
-    return proposedTop;
-  };
-
-  const getAdjustedLeft = () => {
-    return 0; // Fijo desde la izquierda (ajústalo según tu layout)
-  };
-
-  const handleMouseQuitar = () => {
-    dispatch(setSidebarCompressed(false));
-  };
   return (
     <AuthProvider>
       <CajaProvider>
@@ -145,42 +118,22 @@ function App() {
               element={
                 <PrivateRoute>
                   <div className="main-container p-0 m-0 h-screen flex">
-                    <SideBar setMousePos={setMousePos} />
+                    <SideBar />
                     <div className={`content  w-100  p-0`}>
                       <div className="card p-0 m-0 rounded-0 vh-100">
                         {/* Header fijo */}
                         <div className="card-header p-0 rounded-0 m-0 shrink-0 ">
                           <Header />
                           <Navegacion />
+                          <SubMenu />
                         </div>
 
                         {/* Cuerpo flexible con scroll interno si es necesario */}
                         <div className="card-body  shadow-none p-0 h-100 contenido">
-                          <div className="row h-100 py-2 g-0 d-flex ">
-                            {/* SubMenu (se contrae/expande con animación) */}
-                            <div
-                              ref={submenuRef}
-                              onMouseLeave={() => handleMouseQuitar()}
-                              className={`p-0 ms-2 transition-all overflow-hidden position-absolute
-                                ${isCompressed ? "d-block" : "d-none"}`}
-                              style={{
-                                top: `${getAdjustedTop()}px`,
-                                left: `${getAdjustedLeft()}px`,
-                                width: "250px",
-                                height: "auto", // <- Dinámico
-                                zIndex: 1000,
-                                boxShadow: "1px 8px 10px 5px rgba(0,0,0,0.1)",
-                                borderTopRightRadius: "25px",
-                                borderBottomRightRadius: "25px",
-                                borderBottomLeftRadius: "25px",
-                                backgroundColor: "#fff", // para asegurar que tenga fondo visible
-                              }}
-                            >
-                              <SubMenu />
-                            </div>
+                          <div className="row h-100 g-0 d-flex ">
                             {/* Contenido principal (también animado) */}
                             <div
-                              className={`h-100 d-flex align-items-center justify-content-center overflow-auto p-0
+                              className={`h-100  flex-column align-items-center justify-content-center overflow-auto p-0
                               transition-all`}
                               style={{
                                 transition: "width 0.3s ease, margin 0.3s ease", // Animación para width/margin
@@ -302,49 +255,6 @@ function App() {
                                   />
                                   <Route path="cajas" element={<Cajas />} />
                                 </Route>
-                                {/* RUTAS PARA MODULO DE VENDER */}
-                                <Route
-                                  path="/vender/*"
-                                  element={
-                                    <CajaProtectedRoute>
-                                      <Routes>
-                                        <Route
-                                          path="ventasMesas"
-                                          element={<Vender />}
-                                        />
-                                        <Route
-                                          path="ventasLlevar"
-                                          element={<ToLlevar />}
-                                        />
-                                        <Route
-                                          path="ventasMesas/platos"
-                                          element={<ToMesa />}
-                                        />
-                                        <Route
-                                          path="pedidosWeb"
-                                          element={<PedidosWeb />}
-                                        />
-                                        <Route
-                                          path="ventasMesas/preVenta"
-                                          element={<PreventaMesa />}
-                                        />
-                                        <Route
-                                          path="ventasMesas/detallesPago/:idPedidoWeb?"
-                                          element={<DetallesPago />}
-                                        />
-                                        <Route
-                                          path="cerrarCaja"
-                                          element={<CerrarCaja />}
-                                        />
-                                        <Route
-                                          path="cocina"
-                                          element={<CocinaDespacho />}
-                                        />
-                                      </Routes>
-                                    </CajaProtectedRoute>
-                                  }
-                                />
-                                {/* ====================== */}
 
                                 {/* RUTA PARA UNICAMENTE COCINA */}
                                 <Route
@@ -454,6 +364,34 @@ function App() {
                 </PrivateRoute>
               }
             />
+            {/* RUTAS PARA MODULO DE VENDER */}
+            <Route
+              path="/vender/*"
+              element={
+                <CajaProtectedRoute>
+                  <LayoutPOS>
+                    <ToastContainer />
+                    <Routes>
+                      <Route path="ventasMesas" element={<Vender />} />
+                      <Route path="ventasLlevar" element={<ToLlevar />} />
+                      <Route path="ventasMesas/platos" element={<ToMesa />} />
+                      <Route path="pedidosWeb" element={<PedidosWeb />} />
+                      <Route
+                        path="ventasMesas/preVenta"
+                        element={<PreventaMesa />}
+                      />
+                      <Route
+                        path="ventasMesas/detallesPago/:idPedidoWeb?"
+                        element={<DetallesPago />}
+                      />
+                      <Route path="cerrarCaja" element={<CerrarCaja />} />
+                      <Route path="cocina" element={<CocinaDespacho />} />
+                    </Routes>
+                  </LayoutPOS>
+                </CajaProtectedRoute>
+              }
+            />
+            {/* ====================== */}
           </Routes>
         </Router>
       </CajaProvider>

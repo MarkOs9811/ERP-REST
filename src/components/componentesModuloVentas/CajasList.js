@@ -37,6 +37,7 @@ export function CajasList({ search }) {
     refetchOnWindowFocus: false,
   });
 
+  console.log("CajasList data:", cajas);
   if (isLoading) {
     return <Cargando />;
   }
@@ -175,7 +176,7 @@ export function CajasList({ search }) {
                   </ul>
                 </div>
               </div>
-              <div className="card-body">
+              <div className="card-body d-flex">
                 <span
                   className={`badge ${
                     item.estado === 1
@@ -191,6 +192,7 @@ export function CajasList({ search }) {
                       : "Cerrado"
                     : "Deshabilitado"}
                 </span>
+                <span className="ms-auto">{item.sedes.nombre}</span>
               </div>
             </div>
           </div>

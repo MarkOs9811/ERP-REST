@@ -27,7 +27,7 @@ export function MenuPlato() {
   return (
     <ContenedorPrincipal>
       <div className="row g-3 w-100">
-        <div className="col-md-12 col-lg-8">
+        <div className="col-md-12 col-lg-12">
           <div className="card shadow-sm h-100">
             <div className="card-header border-bottom d-flex justify-content-between align-items-center mb-2">
               <h5 className="mb-0">Menú</h5>
@@ -54,15 +54,11 @@ export function MenuPlato() {
             </div>
           </div>
         </div>
-        <div className="col-md-12 col-lg-4">
-          <row className="g-6">
-            <div className="col-md-12 mb-3">
-              <CombosList />
-            </div>
-            <div className="col-md-12">
-              <CategoriaList />
-            </div>
-          </row>
+        <div className="col-sm-12 col-lg-8">
+          <CombosList />
+        </div>
+        <div className="col-sm-12 col-lg-4">
+          <CategoriaList />
         </div>
       </div>
 

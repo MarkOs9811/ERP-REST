@@ -14,9 +14,13 @@ import {
   CloudDownload,
   Eye,
 } from "lucide-react";
+import ModalRight from "../componentesReutilizables/ModalRight";
+import { ModalDetallesVentas } from "./ModalDetallesVentas";
 
 export function ListVentas({ search }) {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
+  const [modalDetallesVenta, setModalDetallesVenta] = useState(false);
+  const [dataVentas, setDataVentas] = useState([]);
 
   // React Query: obtener ventas con `useQuery`
   const {
@@ -28,30 +32,48 @@ export function ListVentas({ search }) {
     queryFn: getVentas,
   });
 
-  console.log(listVentas);
   // Estado para la lista filtrada
   const [filteredVentas, setFilteredVentas] = useState([]);
 
   // Filtrado cuando cambia `search` o `listVentas`
   useEffect(() => {
+    const formatToDMY = (isoDate) => {
+      if (!isoDate) return "";
+      const [year, month, day] = isoDate.split("-");
+      const shortYear = year.slice(2);
+      return `${parseInt(day)}/${parseInt(month)}/${shortYear}`;
+    };
+
     if (!search) {
       setFilteredVentas(listVentas);
       return;
     }
 
     const searchLower = search.toLowerCase();
+
     const result = listVentas.filter((venta) => {
-      const { id, documento, total, metodoPago, user, fechaVenta } = venta;
-      return [
-        id && String(id),
-        documento === "B" ? "Boleta" : documento === "F" ? "Factura" : "Otro",
-        total && `S/. ${total.toFixed(2)}`,
-        metodoPago?.nombre,
-        user?.email,
+      const {
+        id,
+        documento,
+        total,
+        metodo_pago: metodoPago,
+        usuario: user,
         fechaVenta,
-      ]
-        .filter(Boolean)
-        .some((field) => field.toLowerCase().includes(searchLower));
+      } = venta;
+
+      const camposAFiltrar = [
+        id !== undefined ? String(id) : "",
+        documento === "B" ? "Boleta" : documento === "F" ? "Factura" : "Otro",
+        !isNaN(Number(total)) ? `S/. ${Number(total).toFixed(2)}` : "",
+        metodoPago?.nombre || "",
+        user?.email || "",
+        fechaVenta || "", // formato ISO
+        formatToDMY(fechaVenta) || "", // formato dd/mm/yy
+      ];
+
+      return camposAFiltrar.some((campo) =>
+        String(campo).toLowerCase().includes(searchLower)
+      );
     });
 
     setFilteredVentas(result);
@@ -62,9 +84,6 @@ export function ListVentas({ search }) {
     window.open(url, "_blank");
   };
 
-  const handleDetallesVenta = (id) => {
-    console.log("Detalles de la venta con ID:", id);
-  };
   const columns = [
     {
       name: "ID",
@@ -80,7 +99,10 @@ export function ListVentas({ search }) {
           {/* Botón para ver detalles */}
           <button
             className="btn-editar align-items-center "
-            onClick={() => handleDetallesVenta(row.id)}
+            onClick={() => {
+              setDataVentas(row);
+              setModalDetallesVenta(true);
+            }}
             title="Detalles"
           >
             <Eye height="16px" width="16px" className="text-auto" />
@@ -273,6 +295,16 @@ export function ListVentas({ search }) {
       {isLoading && <Cargando />}
       {isError && <div className="error">Error al cargar ventas</div>}
       <TablasGenerales columnas={columns} datos={filteredVentas} />
+
+      <ModalRight
+        isOpen={modalDetallesVenta}
+        onClose={() => setModalDetallesVenta(false)}
+        title="Detalles de la Venta"
+        submitText="Imprimir"
+        cancelText="Cerrar"
+      >
+        <ModalDetallesVentas dataVentas={dataVentas} />
+      </ModalRight>
     </div>
   );
 }

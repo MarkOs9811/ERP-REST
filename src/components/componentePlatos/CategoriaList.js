@@ -18,44 +18,20 @@ import { useTooltips } from "../../hooks/UseToolTips";
 import { GetCategoriaPlatos } from "../../service/accionesPlatos/GetCategoriaPlatos";
 import { useQuery } from "@tanstack/react-query";
 import { Cargando } from "../componentesReutilizables/Cargando";
+import ModalRight from "../componentesReutilizables/ModalRight";
+import { useForm } from "react-hook-form";
+
 export function CategoriaList() {
   const [categoria, setCategoria] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [newCategoria, setNewCategoria] = useState({ nombre: "" });
+  const [modalAddCategoria, setModalAddCategoria] = useState(false);
 
-  // INICIALIZANDO TOLOLTIPS
-  // Obtener las categorías desde la API
-
-  // const getCategorias = async () => {
-  //   try {
-  //     const response = await axiosInstance.get("gestionPlatos/getCategoria");
-  //     if (response.data.data) {
-  //       setCategoria(response.data.data);
-  //     } else {
-  //       console.log("Error al obtener las categorias");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error de conexión", error);
-  //   }
-  // };
-
-  //   EJEMPLO CONSUMIENDO MI API CREADA CON SPRING BOOT
-  // const getCategorias = async () => {
-  //   try {
-  //     const response = await axiosInstanceJava.get("/categorias"); // La URL base ya está configurada
-  //     if (response.data.success) {
-  //       const categorias = response.data.data.map((categoria) => ({
-  //         ...categoria,
-  //         estado: parseInt(categoria.estado, 10), // Convertir 'estado' a número
-  //       }));
-  //       setCategoria(categorias);
-  //     } else {
-  //       console.log("Error al obtener las categorías");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error de conexión", error);
-  //   }
-  // };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm();
 
   const {
     data: categoriasList = [],
@@ -68,46 +44,41 @@ export function CategoriaList() {
     refetchOnWindowFocus: false,
   });
 
-  console.log(categoriasList);
-
   useTooltips(categoria);
+
   // Filtrar las categorías basadas en la búsqueda
-  const filteredCategorias = categoria.filter((cat) =>
+  const filteredCategorias = categoriasList.filter((cat) =>
     cat.nombre.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Manejar el registro de una nueva categoría
-  const handleRegisterCategoria = async () => {
+  const handleRegisterCategoria = async (data) => {
     try {
       const response = await axiosInstance.post(
         "/gestionPlatos/registerCategoria",
-        newCategoria
+        { nombre: data.nombre }
       );
 
       if (response.data.success) {
-        setCategoria([...categoria, response.data.data]); // Actualiza la lista con la nueva categoría
-        setNewCategoria({ nombre: "" }); // Resetea el formulario
         ToastAlert("success", "Categoría registrada exitosamente");
+        reset();
+        setModalAddCategoria(false);
       } else {
-        // Si hay un mensaje específico en la respuesta, lo mostramos
         ToastAlert(
           "error",
           response.data.message || "Error al registrar la categoría"
         );
       }
     } catch (error) {
-      // Verifica si el error viene con una respuesta de la API
       if (error.response) {
         const status = error.response.status;
         if (status === 400) {
-          // Errores de validación o datos incorrectos
           ToastAlert(
             "error",
             error.response.data.message ||
               "El nombre de la categoría ya existe."
           );
         } else if (status === 500) {
-          // Error interno del servidor
           ToastAlert(
             "error",
             "Ocurrió un error en el servidor. Inténtalo más tarde."
@@ -116,7 +87,6 @@ export function CategoriaList() {
           ToastAlert("error", "Ocurrió un error inesperado.");
         }
       } else {
-        // Error de conexión u otro problema fuera del control del servidor
         ToastAlert("error", "Error de conexión. Por favor, verifica tu red.");
       }
     }
@@ -157,24 +127,20 @@ export function CategoriaList() {
 
   const handleEliminarCategoria = async (idCat) => {
     try {
-      // Realiza la solicitud POST para cambiar el estado del usuario
       const response = await axiosInstance.get(
         `/gestionPlatos/deleteCategoria/${idCat}`
       );
 
       if (response.data.success) {
         ToastAlert("success", "Categoria eliminada");
-        // getCategorias();
         return true;
       } else {
         ToastAlert("error", "Error al eliminar");
-        // getCategorias();
-        return false; // Error al cambiar el estado
+        return false;
       }
     } catch (error) {
       ToastAlert("error", "Error de conexion");
-      // getCategorias();
-      return false; // Error en la conexión
+      return false;
     }
   };
 
@@ -185,16 +151,13 @@ export function CategoriaList() {
       );
       if (response.data.success) {
         ToastAlert("success", response.data.message);
-        // getCategorias();
         return true;
       } else {
         ToastAlert("error", response.data.message);
-        // getCategorias();
         return false;
       }
     } catch (error) {
       ToastAlert("error", error.data.message);
-      // getCategorias();
       return false;
     }
   };
@@ -220,18 +183,16 @@ export function CategoriaList() {
     <div className="card p-0 shadow-sm h-100">
       <div className="card-header d-flex justify-content-between align-items-center mb-2">
         <h5 className="mb-0">Categorías</h5>
-        {/* Botón para abrir el modal */}
         <button
           className="btn btn-agregar-categoria btn-sm rounded-pill px-2 text-white"
-          data-bs-toggle="modal"
-          data-bs-target="#modalNuevaCategoria"
+          onClick={() => setModalAddCategoria(true)}
         >
           Nuevo <FontAwesomeIcon icon={faPlus} />
         </button>
       </div>
 
       {/* Buscador */}
-      <div className="mb-3">
+      <div className="mb-3 mx-4">
         <div className="input-group">
           <input
             type="text"
@@ -250,7 +211,7 @@ export function CategoriaList() {
       </div>
 
       {/* Lista de categorías */}
-      <div className="list-group">
+      <div className="list-group card-body p-3">
         {loadingCategorias ? (
           <div className="text-center p-4">
             <Cargando />
@@ -260,7 +221,7 @@ export function CategoriaList() {
             <p>Error al cargar los platos.</p>
           </div>
         ) : (
-          categoriasList.map((categoria) => (
+          filteredCategorias.map((categoria) => (
             <div
               className="d-flex justify-content-between align-items-center borderInferior p-3"
               key={categoria.id}
@@ -325,70 +286,56 @@ export function CategoriaList() {
       </div>
 
       {/* Modal para agregar nueva categoría */}
-      <div
-        className="modal fade"
-        id="modalNuevaCategoria"
-        tabIndex="-1"
-        aria-labelledby="modalNuevaCategoriaLabel"
-        aria-hidden="true"
+      <ModalRight
+        isOpen={modalAddCategoria}
+        onClose={() => setModalAddCategoria(false)}
+        hideFooter={true}
+        title={"Nueva Categoría"}
       >
-        <div className="modal-dialog modal-dialog-centered ">
-          <div className="modal-content border-0 ">
-            <div className="modal-header">
-              <h5 className="modal-title" id="modalNuevaCategoriaLabel">
-                Nueva Categoría
-              </h5>
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div className="modal-body">
-              <div className="form-floating mb-3">
-                <input
-                  type="text"
-                  id="nombreCategoria"
-                  className="form-control"
-                  placeholder=" "
-                  value={newCategoria.nombre}
-                  onChange={(e) =>
-                    setNewCategoria({ ...newCategoria, nombre: e.target.value })
-                  }
-                />
-                <label htmlFor="nombreCategoria" className="form-label">
-                  Nombre de la categoría
-                </label>
-              </div>
-            </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn-cerrar-modal"
-                data-bs-dismiss="modal"
-              >
-                Cancelar
-              </button>
-              <button
-                type="button"
-                className="btn-guardar"
-                onClick={handleRegisterCategoria}
-                data-bs-dismiss="modal"
-              >
-                Guardar
-              </button>
-            </div>
+        <form
+          className="card gap-3 border-0 h-100"
+          onSubmit={handleSubmit(handleRegisterCategoria)}
+        >
+          <div className="modal-body mb-3">
+            <label htmlFor="nombreCategoria" className="form-label">
+              Nombre de la categoría
+            </label>
+            <input
+              type="text"
+              id="nombreCategoria"
+              className={`form-control ${errors.nombre ? "is-invalid" : ""}`}
+              {...register("nombre", { required: "El nombre es obligatorio" })}
+              placeholder="Ej: Bebidas, Postres, etc."
+              autoFocus
+            />
+            {errors.nombre && (
+              <div className="invalid-feedback">{errors.nombre.message}</div>
+            )}
           </div>
-        </div>
-      </div>
+          <div className="modal-footer gap-2 ">
+            <button
+              type="button"
+              className="btn-cerrar-modal"
+              onClick={() => {
+                reset();
+                setModalAddCategoria(false);
+              }}
+            >
+              Cancelar
+            </button>
+            <button type="submit" className="btn-guardar">
+              Guardar
+            </button>
+          </div>
+        </form>
+      </ModalRight>
+
       {/* // modal para editar un CATEGORIA */}
       <Modal show={isModalOpen} onHide={handleCloseEditarCat} centered>
         <Modal.Header closeButton>
           <Modal.Title>Actualizar Categoria</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {/* Pasa handleCloseModal como prop a CATEGORIA */}
           <CategoriaEditar
             handleCloseModal={handleCloseEditarCat}
             dataCategoria={dataCat}

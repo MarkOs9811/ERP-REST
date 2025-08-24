@@ -9,11 +9,20 @@ import { faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 
 import { TablasGenerales } from "../componentesReutilizables/TablasGenerales";
 import { CheckCheck } from "lucide-react";
+import ModalAlertQuestion from "../componenteToast/ModalAlertQuestion";
+import axiosInstance from "../../api/AxiosInstance";
+import ToastAlert from "../componenteToast/ToastAlert";
+import ModalRight from "../componentesReutilizables/ModalRight";
+import { FormEditarSolicitud } from "./FormEditarSolicitud";
 
 export function SolicitudesList({ search }) {
   const [misSolicitudes, setMisSolicitudes] = useState([]);
   const [filterSolicitudes, setFilterSolicitudes] = useState([]);
   const [hasError, setHasError] = useState(false);
+
+  const [alertEliminar, setAlertEliminar] = useState(false);
+  const [dataSolicitud, setDatoSolicitud] = useState([]);
+  const [modalEditarSoli, setModalEditarSoli] = useState(false);
 
   useEffect(() => {
     const resultado = misSolicitudes.filter((items) => {
@@ -58,6 +67,24 @@ export function SolicitudesList({ search }) {
     }
   }, []);
 
+  const hanldeEliminarSoli = async (id) => {
+    try {
+      const response = await axiosInstance.delete(`/solicitudes/${id}`);
+      if (response.data.success) {
+        await execute();
+        ToastAlert("success", "Solicitud eliminada con exito");
+        return true;
+      } else {
+        ToastAlert("error", "Ocurrió un error al eliminar la solicitud");
+        return false;
+      }
+    } catch (error) {
+      ToastAlert("error", "Error de conexión", error);
+      console.error("Error al eliminar la solicitud:", error);
+      return false;
+    }
+  };
+
   if (loading) {
     return <Cargando />;
   }
@@ -84,23 +111,51 @@ export function SolicitudesList({ search }) {
           <div className="d-flex justify-content-around py-2">
             {estado == 0 ? (
               <>
-                <button className="btn-editar me-2" title="Editar Solicitud">
+                <button
+                  className="btn-editar me-2"
+                  title="Editar Solicitud"
+                  onClick={() => {
+                    setModalEditarSoli(true);
+                    setDatoSolicitud(row);
+                  }}
+                >
                   <FontAwesomeIcon icon={faPenToSquare} />
                 </button>
                 <button
                   className="btn-eliminar me-2"
                   title="Eliminar Solicitud"
+                  onClick={() => {
+                    setAlertEliminar(true);
+                    setDatoSolicitud(row);
+                  }}
                 >
                   <FontAwesomeIcon icon={faTrashCan} />
                 </button>
               </>
             ) : (
               <button className="btn btn-guardar w-100">
-                <CheckCheck color={"auto"} />
+                <CheckCheck className="text-auto" />
                 Revisada
               </button>
             )}
           </div>
+        );
+      },
+      sortable: true,
+      wrap: true,
+    },
+    {
+      name: "estado",
+      cell: (row) => {
+        const { estado } = row;
+        return estado == 1 ? (
+          <span className="badge bg-success m-2">
+            <small>Resuelta</small>
+          </span>
+        ) : (
+          <span className="badge bg-warning m-2 text-dark">
+            <small>Pendiente</small>
+          </span>
         );
       },
       sortable: true,
@@ -154,6 +209,29 @@ export function SolicitudesList({ search }) {
   return (
     <div>
       <TablasGenerales datos={filterSolicitudes} columnas={columns} />
+
+      <ModalAlertQuestion
+        show={alertEliminar}
+        idEliminar={dataSolicitud?.id}
+        handleCloseModal={() => setAlertEliminar(false)}
+        handleEliminar={hanldeEliminarSoli}
+        tipo={"solicitud"}
+        nombre={dataSolicitud?.nombre_producto}
+      />
+      <ModalRight
+        isOpen={modalEditarSoli}
+        onClose={() => setModalEditarSoli(false)}
+        title={"Editar Solicitud"}
+        hideFooter={true}
+        width={"650px"}
+      >
+        {({ handleClose }) => (
+          <FormEditarSolicitud
+            dataSolicitud={dataSolicitud}
+            onClose={handleClose}
+          />
+        )}
+      </ModalRight>
     </div>
   );
 }

@@ -1,4 +1,3 @@
-
 import "../../css/ModalAlertQuestion.css"; // Importar CSS correctamente
 
 function ModalGeneral({
