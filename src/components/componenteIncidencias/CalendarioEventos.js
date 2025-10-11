@@ -4,7 +4,7 @@ import ModalRight from "../componentesReutilizables/ModalRight";
 import { AgregarEvento } from "./AgregarEvento";
 import { GetEventos } from "../../service/serviceIncidenciasEventos/GetEventos";
 import { useQuery } from "@tanstack/react-query";
-import { Plus } from "lucide-react";
+import { Plus, PlusIcon } from "lucide-react";
 
 export function CalendarioEventos() {
   const [showModalEvento, setShowModalEvento] = useState(false);
@@ -42,7 +42,7 @@ export function CalendarioEventos() {
             className="btn btn-outline-dark"
             onClick={() => setShowModalEvento(true)}
           >
-            <Plus color={"auto"} /> Crear Evento
+            <PlusIcon className="text-auto" /> Crear Evento
           </button>
         </div>
       </div>

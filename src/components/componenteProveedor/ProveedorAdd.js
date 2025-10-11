@@ -10,8 +10,12 @@ import {
   faPhone,
 } from "@fortawesome/free-solid-svg-icons";
 import ToastAlert from "../componenteToast/ToastAlert"; // Componente para notificaciones
-import { handleInputChange, handleSelectChange,limitTelefonoInput, validateTelefono  } from "../../hooks/InputHandlers";
-
+import {
+  handleInputChange,
+  handleSelectChange,
+  limitTelefonoInput,
+  validateTelefono,
+} from "../../hooks/InputHandlers";
 
 export function ProveedorAdd({ handleCloseModal }) {
   const {
@@ -33,6 +37,7 @@ export function ProveedorAdd({ handleCloseModal }) {
         "/proveedores/addProveedores",
         data
       );
+
       if (response.data.success) {
         ToastAlert("success", response.data.message);
         reset();
@@ -41,14 +46,21 @@ export function ProveedorAdd({ handleCloseModal }) {
         ToastAlert("error", response.data.message);
       }
     } catch (error) {
-      ToastAlert("error", "Error al agregar proveedor");
+      if (error.response) {
+        const backendError =
+          error.response.data.message ||
+          (error.response.data.errors &&
+            Object.values(error.response.data.errors).flat().join(" - "));
+
+        ToastAlert("error", backendError || "Ocurrió un error en el servidor");
+      } else {
+        ToastAlert("error", "No hay conexión con el servidor");
+      }
       console.error(error);
     } finally {
       setLoading(false);
     }
   };
-
- 
 
   return (
     <div>
@@ -65,9 +77,12 @@ export function ProveedorAdd({ handleCloseModal }) {
                   required: "Este campo es obligatorio",
                 })}
                 value={tipoDocumento}
-                onChange={handleSelectChange(setTipoDocumento, setValue, "tipo_documento", [
-                  { name: "numero_documento", setter: setNumeroDocumento },
-                ])}
+                onChange={handleSelectChange(
+                  setTipoDocumento,
+                  setValue,
+                  "tipo_documento",
+                  [{ name: "numero_documento", setter: setNumeroDocumento }]
+                )}
               >
                 <option value="DNI">DNI</option>
                 <option value="RUC">RUC</option>
@@ -108,7 +123,13 @@ export function ProveedorAdd({ handleCloseModal }) {
                     } caracteres`,
                   },
                 })}
-                onChange={handleInputChange(setNumeroDocumento, setValue, "numero_documento", /^\d*$/, tipoDocumento === "DNI" ? 8 : 11)}
+                onChange={handleInputChange(
+                  setNumeroDocumento,
+                  setValue,
+                  "numero_documento",
+                  /^\d*$/,
+                  tipoDocumento === "DNI" ? 8 : 11
+                )}
               />
               <label>
                 <FontAwesomeIcon icon={faIdCard} /> Número de Documento
@@ -126,12 +147,14 @@ export function ProveedorAdd({ handleCloseModal }) {
             <div className="form-floating mb-3">
               <input
                 type="text"
-                className={`form-control ${errors.telefono ? "is-invalid" : ""}`}
+                className={`form-control ${
+                  errors.telefono ? "is-invalid" : ""
+                }`}
                 id="telefono"
                 placeholder="Teléfono"
                 {...register("telefono", {
                   required: "Este campo es obligatorio",
-                  validate: validateTelefono, 
+                  validate: validateTelefono,
                 })}
                 onInput={limitTelefonoInput}
               />
@@ -139,7 +162,9 @@ export function ProveedorAdd({ handleCloseModal }) {
                 <FontAwesomeIcon icon={faPhone} /> Teléfono
               </label>
               {errors.telefono && (
-                <div className="invalid-feedback">{errors.telefono.message}</div>
+                <div className="invalid-feedback">
+                  {errors.telefono.message}
+                </div>
               )}
             </div>
           </div>

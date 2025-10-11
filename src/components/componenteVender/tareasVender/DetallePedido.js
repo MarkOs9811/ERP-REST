@@ -1,7 +1,5 @@
-
-import { CircleChevronLeft } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
 
 export function DetallePedido({
   preVentas,
@@ -34,7 +32,7 @@ export function DetallePedido({
               : handleVolverPreVenta()
           }
         >
-          <CircleChevronLeft color={"auto"} />
+          <ChevronLeft className="text-auto" />
           Volver
         </button>
         <h4 className="text-center text-auto align-middle mx-3">Cuenta </h4>

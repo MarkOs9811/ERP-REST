@@ -6,7 +6,7 @@ import { Cargando } from "../../components/componentesReutilizables/Cargando";
 import { capitalizeFirstLetter } from "../../hooks/FirstLetterUp";
 import ModalRight from "../../components/componentesReutilizables/ModalRight";
 import { useState } from "react";
-import {  useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { FormularioVacaciones } from "../../components/componentePlanillas/componenteVacaciones/FormularioVacaciones";
 import { GetUsuarios } from "../../service/GetUsuarios";
 import axiosInstance from "../../api/AxiosInstance";
@@ -287,18 +287,21 @@ export function Vacaciones() {
               className="form-control"
             />
           </div>
-          <button className="btn btn-sm btn-outline-dark" title="Reporte">
-            <FileText className="me-1" color={"auto"} />
+          <button
+            className="btn btn-sm btn-outline-dark btn-sm"
+            title="Reporte"
+          >
+            <FileText className="me-1 text-auto" />
             Reporte
           </button>
           <button
-            className="btn btn-sm btn-outline-dark mx-2"
+            className="btn btn-sm btn-outline-dark btn-sm mx-2"
             title="Agregar"
             onClick={() => {
               setIsModalOpen(true); // Abrir el modal
             }}
           >
-            <Plus className="me-1" color={"auto"} />
+            <Plus className="me-1 text-auto" />
             Agregar
           </button>
         </div>

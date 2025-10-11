@@ -8,9 +8,11 @@ import { addItem } from "../../redux/pedidoWebSlice";
 import {
   AlarmClock,
   CheckCheck,
+  CheckCheckIcon,
   Megaphone,
   Phone,
   Printer,
+  PrinterIcon,
   UserRound,
 } from "lucide-react";
 
@@ -70,7 +72,7 @@ const PedidoCard = ({ pedido, onOpenModal }) => {
             className="btn btn-sm btn-light p-1 ms-auto"
             title="Notificar al cliente"
           >
-            <Megaphone size={"auto"} color={"auto"} />
+            <Megaphone size={"auto"} className="text-auto" />
           </button>
         </div>
       ),
@@ -83,9 +85,9 @@ const PedidoCard = ({ pedido, onOpenModal }) => {
       botones: (
         <div className="d-flex flex-column justify-content-end gap-2 p-0 me-2">
           <button className="btn btn-sm btn-light p-1 ms-auto">
-            <Printer size={14} color={"auto"} />
+            <Printer size={14} className="text-auto" />
           </button>
-          <NotificacionBtn pedido={pedido} color={"auto"} />
+          <NotificacionBtn pedido={pedido} className="text-auto" />
         </div>
       ),
     },
@@ -100,12 +102,12 @@ const PedidoCard = ({ pedido, onOpenModal }) => {
             className="btn btn-sm btn-light border  p-1 ms-auto"
             onClick={() => handleRealizarPago()}
           >
-            <CheckCheck size={14} color={"auto"} />
+            <CheckCheckIcon size={14} className="text-auto" />
           </button>
           <button className="btn btn-sm btn-light  p-1 ms-auto">
-            <Printer size={14} color={"auto"} />
+            <PrinterIcon size={14} className="text-auto" />
           </button>
-          <NotificacionBtn pedido={pedido} color={"auto"} />
+          <NotificacionBtn pedido={pedido} className="text-auto" />
         </div>
       ),
     },
@@ -128,11 +130,11 @@ const PedidoCard = ({ pedido, onOpenModal }) => {
           <div className="fw-bold mb-1">{pedido.codigo_pedido}</div>
           <div className="text-muted small">
             <div className="d-flex align-items-center">
-              <UserRound className="me-1" size={12} color={"auto"} />
+              <UserRound className="me-1 text-auto" size={12} />
               {pedido.nombre_cliente || "Cliente"}
             </div>
             <div className="d-flex align-items-center">
-              <Phone className="me-1" size={12} color={"auto"} />
+              <Phone className="me-1 text-auto" size={12} />
               {pedido.numero_cliente}
             </div>
           </div>

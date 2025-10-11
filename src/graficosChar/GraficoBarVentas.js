@@ -11,6 +11,7 @@ import {
 } from "chart.js";
 import { useQuery } from "@tanstack/react-query";
 import { getVentas } from "../service/ObtenerVentasDetalle";
+import { CalendarDays, Store } from "lucide-react";
 
 // Registrar módulos necesarios para ChartJS
 ChartJS.register(
@@ -70,8 +71,8 @@ const GraficoBarVentas = () => {
         {
           label: "Ventas por Mes (S/.)",
           data: roundedTotals,
-          backgroundColor: "rgba(75, 192, 192, 0.6)",
-          borderColor: "rgba(75, 192, 192, 1)",
+          backgroundColor: "rgba(75, 126, 192, 0.6)",
+          borderColor: "rgba(75, 112, 192, 1)",
           borderWidth: 1,
         },
       ],
@@ -85,8 +86,7 @@ const GraficoBarVentas = () => {
         position: "top",
       },
       title: {
-        display: true,
-        text: "Ventas Mensuales",
+        display: false,
       },
     },
     scales: {
@@ -104,7 +104,22 @@ const GraficoBarVentas = () => {
   if (isLoading) return <p>Cargando gráfico...</p>;
   if (isError) return <p>Error al cargar datos.</p>;
 
-  return <Bar data={chartData} options={options} />;
+  return (
+    <div>
+      <div className="mb-3 d-flex gap-2 align-middle justify-content-left">
+        <span className="alert border-0 alert-primary text-primary p-2 mb-0">
+          <Store size={25} className="text-auto" />
+        </span>
+        <h6 className="mb-1 d-flex flex-column gap-1">
+          <span className="fw-bold">Ventas por mes</span>
+          <p className="text-muted small mb-0">
+            Ventas totales agrupadas por mes en el año actual.
+          </p>
+        </h6>
+      </div>
+      <Bar data={chartData} options={options} />
+    </div>
+  );
 };
 
 export default GraficoBarVentas;

@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../api/AxiosInstance";
 import { useDispatch, useSelector } from "react-redux";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import ModalAlertQuestion from "../componenteToast/ModalAlertQuestion";
 
 import { addItem, clearPedido } from "../../redux/pedidoSlice";
@@ -11,57 +11,54 @@ import ToastAlert from "../componenteToast/ToastAlert";
 import { capitalizeFirstLetter } from "../../hooks/FirstLetterUp";
 import { TransferirToMesa } from "./tareasVender/TransferirToMesa";
 import { setIdPreventaMesa } from "../../redux/mesaSlice";
-import { getPreventaMesa } from "../../service/preventaService";
 import { setEstado } from "../../redux/tipoVentaSlice";
 import { CategoriaPlatos } from "./tareasVender/CategoriaPlatos";
 import { ContenedorPrincipal } from "../componentesReutilizables/ContenedorPrincipal";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { GetPlatosVender } from "../../service/accionesVender/GetPlatosVender";
 import {
   BanIcon,
   BanknoteArrowDown,
   CheckCheck,
-  CircleChevronLeft,
+  ChevronLeft,
   FileText,
-  MinusCircle,
+  Minus,
   Repeat,
-  UserRound,
 } from "lucide-react";
+import { getPreventaMesa } from "../../service/preventaService";
 export function PreventaMesa() {
   const idMesa = useSelector((state) => state.mesa.idPreventaMesa);
   const categoriaFiltroPlatos = useSelector(
     (state) => state.categoriaFiltroPlatos.estado
   );
-  const caja = useSelector((state) => state.caja.caja);
-  const [preventas, setPreventas] = useState([]);
-
   const navigate = useNavigate();
 
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const caja = useSelector((state) => state.caja.caja);
+
   const [mesa, setMesa] = useState(null);
   // extrayendo datos desde store de redux
   const dispatch = useDispatch();
+  const queryClient = useQueryClient();
   const pedido = useSelector((state) => state.pedido);
   const mesas = useSelector((state) => state.pedido.mesas);
   const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-  const getPreventeMesa = async () => {
-    const result = await getPreventaMesa(idMesa, caja.id);
-    if (result.success) {
-      setPreventas(result.preventas);
-      const numeroMesa = result.preventas[0]?.mesa?.numero;
-      if (numeroMesa) {
-        setMesa(numeroMesa);
-      }
-    } else {
-      console.error(result.message);
-    }
-  };
-
-  useEffect(() => {
-    getPreventeMesa();
-  }, [idMesa, caja]);
+  // llamando a la preventa
+  const {
+    data: preventas = [],
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ["preventaMesa", idMesa, caja?.id],
+    queryFn: () => getPreventaMesa(idMesa, caja.id), // ✅ aquí ejecutas con params
+    enabled: !!idMesa && !!caja?.id, // ✅ se ejecuta solo si existen params
+    onSuccess: (data) => {
+      const numeroMesa = data.preventas?.[0]?.mesa?.numero;
+      if (numeroMesa) setMesa(numeroMesa);
+    },
+  });
 
   // Obtener productos desde la API
   const {
@@ -111,7 +108,7 @@ export function PreventaMesa() {
       );
       if (response.data.success) {
         ToastAlert("success", "Pedido eliminado de la mesa");
-        getPreventeMesa();
+        queryClient.invalidateQueries(["preventaMesa", idMesa, caja?.id]);
       } else {
         console.log(response.data.message);
       }
@@ -211,6 +208,9 @@ export function PreventaMesa() {
     dispatch(setEstado("mesa"));
     navigate("/vender/ventasMesas/detallesPago");
   };
+
+  if (isLoading) return <p>Cargando preventas...</p>;
+  if (isError) return <p>Error: {error.message}</p>;
   return (
     <ContenedorPrincipal>
       <div className="row g-3 w-100 h-100">
@@ -221,7 +221,7 @@ export function PreventaMesa() {
                 className="btn btn-outline-dark me-auto"
                 onClick={() => handleVolverMesas()}
               >
-                <CircleChevronLeft color={"auto"} />
+                <ChevronLeft className="text-auto" />
                 Volver
               </button>
 
@@ -230,7 +230,7 @@ export function PreventaMesa() {
               </h6>
             </div>
             <div className="card-body overflow-auto">
-              {preventas.length > 0 ||
+              {preventas?.length > 0 ||
               (pedido.mesas[idMesa] &&
                 pedido.mesas[idMesa].items.length > 0) ? (
                 <>
@@ -268,7 +268,7 @@ export function PreventaMesa() {
                                   handleRemovePlatoPreventa(item.id)
                                 }
                               >
-                                <MinusCircle color={"auto"} />
+                                <Minus className="text-auto" />
                               </button>
                             </td>
                           </tr>
@@ -331,13 +331,13 @@ export function PreventaMesa() {
                   <div className="mt-4">
                     <div className="row g-2">
                       {/* Realizar Pago */}
-                      <div className="col-12 col-lg-4">
+                      <div className="col-12 col-lg-12">
                         <button
                           className="btn-realizarPedido w-100 h-100 p-3"
                           onClick={() => handleRealizarPago()}
                         >
                           <BanknoteArrowDown
-                            color={"auto"}
+                            className="text-auto"
                             height="24px"
                             width="24px"
                           />{" "}
@@ -346,7 +346,7 @@ export function PreventaMesa() {
                       </div>
 
                       {/* Botones restantes */}
-                      <div className="col-12 col-lg-8">
+                      <div className="col-12 col-lg-12">
                         <div className="row g-2">
                           {/* Actualizar Pedido */}
                           <div className="col-12">
@@ -355,7 +355,7 @@ export function PreventaMesa() {
                               onClick={handleAddPlatoPreventaMesas}
                             >
                               <CheckCheck
-                                color={"auto"}
+                                className="text-auto"
                                 height="20px"
                                 width="20px"
                               />{" "}
@@ -366,22 +366,25 @@ export function PreventaMesa() {
                           {/* Más Opciones */}
                           <div className="col-12">
                             <div className="row g-2">
-                              <div className="col-12 col-sm-4 col-lg-4">
-                                <button className="btn btn-outline-dark w-100 d-flex align-items-center justify-content-center p-3">
-                                  <UserRound
-                                    color="auto"
-                                    height="15px"
-                                    width="15px"
+                              <div className="col-12">
+                                <button
+                                  className="btn btn-outline-dark w-100 d-flex align-items-center justify-content-center p-3"
+                                  onClick={() => handleTranferirToMesa()}
+                                >
+                                  <Repeat
+                                    className="text-auto"
+                                    height="20px"
+                                    width="20px"
                                   />
-                                  <small className="ms-0 align-middle">
-                                    Clientes
-                                  </small>
+                                  <span className="ms-2 align-middle">
+                                    Mover a Otra Mesa
+                                  </span>
                                 </button>
                               </div>
-                              <div className="col-12 col-sm-4 col-lg-4">
+                              <div className="col-lg-6 col-sm-4 col-lg-4">
                                 <button className="btn btn-outline-dark w-100 d-flex align-items-center justify-content-center p-3">
                                   <FileText
-                                    color="auto"
+                                    className="text-auto"
                                     height="15px"
                                     width="15px"
                                   />
@@ -390,7 +393,7 @@ export function PreventaMesa() {
                                   </small>
                                 </button>
                               </div>
-                              <div className="col-12 col-sm-4 col-lg-4">
+                              <div className="col-lg-6 col-sm-4 col-lg-4">
                                 <button
                                   className="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center p-3"
                                   onClick={() =>
@@ -398,28 +401,13 @@ export function PreventaMesa() {
                                   }
                                 >
                                   <BanIcon
-                                    color="auto"
+                                    className="text-auto"
                                     height="15px"
                                     width="15px"
                                   />
                                   <small className="ms-0 align-middle">
                                     Cancelar
                                   </small>
-                                </button>
-                              </div>
-                              <div className="col-12">
-                                <button
-                                  className="btn btn-outline-dark w-100 d-flex align-items-center justify-content-center p-3"
-                                  onClick={() => handleTranferirToMesa()}
-                                >
-                                  <Repeat
-                                    color="auto"
-                                    height="20px"
-                                    width="20px"
-                                  />
-                                  <span className="ms-2 align-middle">
-                                    Mover a Otra Mesa
-                                  </span>
                                 </button>
                               </div>
                             </div>

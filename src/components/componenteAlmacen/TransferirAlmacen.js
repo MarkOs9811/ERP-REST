@@ -16,7 +16,9 @@ import {
   Check,
   CheckCheck,
   CircleMinus,
+  Minus,
   Plus,
+  PlusIcon,
   Search,
   Trash2,
 } from "lucide-react";
@@ -121,7 +123,7 @@ export function TransferirAlmacen() {
     }
   }, [searchTerm, dataAlmacen?.length]);
   return (
-    <div className="row g-3 h-100">
+    <div className="row g-3 ">
       <div className="col-lg-4 col-md-4 col-sm-12">
         <div className="card border h-100  bg-light">
           <div className="card-header  bg-light d-flex align-content-between align-align-items-center border-bottom ">
@@ -205,7 +207,7 @@ export function TransferirAlmacen() {
                       </div>
                     </div>
                     <div>
-                      <span className="badge badge-info text-auto">
+                      <span className="badge bg-light text-muted">
                         Stock {item.cantidad}
                       </span>
                       <span className="badge badge-ok">
@@ -267,7 +269,7 @@ export function TransferirAlmacen() {
                           dispatch(removeProductoSeleccionado({ id: item.id }));
                         }}
                       >
-                        <Trash2 color={"auto"} />
+                        <Trash2 className="text-auto" />
                       </button>
                       <CheckCheck color="#28a745" width="20px" height="20px" />
 
@@ -292,7 +294,7 @@ export function TransferirAlmacen() {
                           }}
                           disabled={item.cantidad <= 1}
                         >
-                          <CircleMinus color={"auto"} />
+                          <Minus className="text-auto" />
                         </button>
 
                         <span className="px-2 fw-bold text-secondary">
@@ -308,7 +310,7 @@ export function TransferirAlmacen() {
                             );
                           }}
                         >
-                          <Plus color={"auto"} />
+                          <PlusIcon className="text-auto" />
                         </button>
                       </div>
 

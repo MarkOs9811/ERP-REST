@@ -16,21 +16,21 @@ export function ModalCuerpo({ selectedPedido }) {
                   className="d-flex flex-column mx-2 text-start"
                   style={{ flex: 2 }}
                 >
-                  <span>{capitalizeFirstLetter(detalle.plato.nombre)}</span>
+                  <span>{capitalizeFirstLetter(detalle?.plato?.nombre)}</span>
                   <small className="text-muted">
                     Precio Unit. S/
-                    {parseFloat(detalle.plato.precio).toFixed(2)}
+                    {parseFloat(detalle?.plato?.precio).toFixed(2)}
                   </small>
                 </div>
 
                 {/* Cantidad centrada */}
                 <div className="text-center" style={{ flex: 1 }}>
-                  <p className="mb-0">{detalle.cantidad}</p>
+                  <p className="mb-0">{detalle?.cantidad}</p>
                 </div>
 
                 {/* Total alineado a la derecha */}
                 <div className="text-end" style={{ flex: 1 }}>
-                  <strong>S/{parseFloat(detalle.precio).toFixed(2)}</strong>
+                  <strong>S/{parseFloat(detalle?.precio).toFixed(2)}</strong>
                 </div>
               </li>
             ))}

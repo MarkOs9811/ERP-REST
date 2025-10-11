@@ -18,6 +18,7 @@ import { DetallePedido } from "./tareasVender/DetallePedido";
 import { RealizarPago } from "./tareasVender/RealizarPago";
 import { clearPedidoWeb } from "../../redux/pedidoWebSlice";
 import { ContenedorPrincipal } from "../componentesReutilizables/ContenedorPrincipal";
+import { useQuery } from "@tanstack/react-query";
 
 export function DetallesPago() {
   // VARIABELS EN REDUX SI ES QUE LO HAY
@@ -53,52 +54,41 @@ export function DetallesPago() {
     formState: { errors },
     reset,
   } = useForm();
-  const [preVentas, setPreventas] = useState([]);
-  const [mesa, setMesa] = useState(null);
 
-  const getPreventeMesa = async () => {
-    try {
-      const result = await getPreventaMesa(idMesa, caja.id);
-      if (result.success) {
-        setPreventas(result.preventas);
-        const numeroMesa = result.preventas[0]?.mesa?.numero;
-        if (numeroMesa) {
-          setMesa(numeroMesa);
-        }
-      } else {
-        console.error(result.message);
-      }
-    } catch (error) {
-      console.error("Error al obtener las preventas de la mesa:", error);
-    }
-  };
+  const {
+    data: preventasMesa,
+    isLoading,
+    isError,
+    error: errorPreventaMesa,
+  } = useQuery({
+    queryKey: ["preventasMesa", idMesa, caja?.id],
+    queryFn: () => getPreventaMesa(idMesa, caja.id),
+    enabled: !!idMesa && !!caja?.id, // solo si existen ambos
+  });
 
+  let preventas = [];
   // AQUI EJECUTAMOS SI LA LISTA DE PREVENTA ES PARA MESA O PARA LLEVAR EL CUAL DETERMINARÁ
   // LA LISTA QUE S EVA APAGAR SEA PARA MESA O SI ES PARA LLEVAR
-  useEffect(() => {
-    if (estadoTipoVenta === "llevar") {
-      setPreventas(pedidoLlevar.items);
-    } else if (estadoTipoVenta === "web") {
-      dispatch(clearPedidoWeb());
-      setPreventas(pedidoWeb.items);
-    } else if (idMesa && caja?.id) {
-      getPreventeMesa();
-    } else {
-      setPreventas([]);
-    }
-  }, [estadoTipoVenta, idMesa, caja, pedidoLlevar]);
+  if (estadoTipoVenta === "llevar") {
+    preventas = pedidoLlevar.items;
+  } else if (estadoTipoVenta === "web") {
+    dispatch(clearPedidoWeb()); // 👀 esto podría dispararse varias veces
+    preventas = pedidoWeb.items;
+  } else if (idMesa && caja?.id) {
+    preventas = preventasMesa ?? [];
+  }
   // ======================
-
+  const mesa = preventasMesa?.[0]?.mesa?.numero ?? null;
   // calculo para el total e igv
-  const totalPreventa = preVentas
+  const totalPreventa = (preventas ?? [])
     .reduce(
       (acc, item) => acc + item.cantidad * (item.plato?.precio || item.precio),
       0
     )
     .toFixed(2);
 
-  // Calcular el IGV
   const igv = (totalPreventa * 0.18).toFixed(2);
+
   // =====================================
 
   const [metodoSeleccionado, setMetodoSeleccionado] = useState(null);
@@ -338,7 +328,8 @@ export function DetallesPago() {
   };
 
   // =======================================================================
-
+  if (isLoading) return <p>Cargando preventas...</p>;
+  if (isError) return <p>Error: {error.message}</p>;
   return (
     <ContenedorPrincipal>
       <div className="row g-3 h-100">
@@ -349,7 +340,7 @@ export function DetallesPago() {
             mesa={mesa}
             caja={caja}
             estadoTipoVenta={estadoTipoVenta}
-            preVentas={preVentas}
+            preVentas={preventas}
             totalPreventa={totalPreventa}
             igv={igv}
           />

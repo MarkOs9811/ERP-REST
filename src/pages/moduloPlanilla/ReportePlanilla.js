@@ -5,6 +5,7 @@ import { ContenedorPrincipal } from "../../components/componentesReutilizables/C
 import FormularioReporteGeneral from "../../components/componentesReporte/FormularioReporteGeneral";
 import FormularioReportes from "../../components/componentesReporte/FormularioReporte";
 import ModalReportes from "../../components/componentesReutilizables/ModalReportes";
+import { EstadoIntegraciones } from "../../hooks/EstadoIntegraciones";
 
 export function ReportePlanilla() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -43,6 +44,16 @@ export function ReportePlanilla() {
       setLoadingTipo(""); // desactiva el loading
     }
   };
+
+  const {
+    data: estadoGoogleConfig,
+    isLoading,
+    isError,
+    error,
+  } = EstadoIntegraciones("Google Service");
+
+  if (isLoading) return <p>Cargando estado...</p>;
+  if (isError) return <p>Error: {error.message}</p>;
   return (
     <ContenedorPrincipal>
       <div className="card shadow-sm border-0  p-3">
@@ -55,30 +66,35 @@ export function ReportePlanilla() {
             onSubmit={handleReporte1}
             isLoading={loadingTipo === "planilla"}
             tipo="planilla"
+            estadoIntegracionGoogle={estadoGoogleConfig}
           />
           <FormularioReportes
             titulo="Reporte de Asistencias"
             onSubmit={handleReporte1}
             isLoading={loadingTipo === "asistencias"}
             tipo="asistencias"
+            estadoIntegracionGoogle={estadoGoogleConfig}
           />
           <FormularioReportes
             titulo="Reporte de Horas extras"
             onSubmit={handleReporte1}
             isLoading={loadingTipo === "horasExtras"}
             tipo="horasExtras"
+            estadoIntegracionGoogle={estadoGoogleConfig}
           />
           <FormularioReportes
             titulo="Reporte de Adelanto Sueldo"
             onSubmit={handleReporte1}
             isLoading={loadingTipo === "adelantoSueldo"}
             tipo="adelantoSueldo"
+            estadoIntegracionGoogle={estadoGoogleConfig}
           />
           <FormularioReportes
             titulo="Reporte de Vacaciones"
             onSubmit={handleReporte1}
             isLoading={loadingTipo === "vacaciones"}
             tipo="vacaciones"
+            estadoIntegracionGoogle={estadoGoogleConfig}
           />
         </div>
       </div>

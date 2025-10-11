@@ -31,7 +31,7 @@ export function ListVentas({ search }) {
     queryKey: ["ventas"],
     queryFn: getVentas,
   });
-
+  console.log(listVentas);
   // Estado para la lista filtrada
   const [filteredVentas, setFilteredVentas] = useState([]);
 

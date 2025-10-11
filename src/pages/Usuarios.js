@@ -10,7 +10,8 @@ import {
 import { Modal } from "react-bootstrap";
 import axiosInstance from "../api/AxiosInstance";
 import { ContenedorPrincipal } from "../components/componentesReutilizables/ContenedorPrincipal";
-import { Plus } from "lucide-react";
+import { FileChartColumnIncreasing, Plus, PlusIcon } from "lucide-react";
+import { GetReporteExcel } from "../service/accionesReutilizables/GetReporteExcel";
 
 export function Usuarios() {
   const [showModal, setShowModal] = useState(false);
@@ -46,45 +47,6 @@ export function Usuarios() {
   return (
     <ContenedorPrincipal>
       <div className="row g-3">
-        {/* Tarjetas de estadísticas */}
-        <div className="col-md-4">
-          <div className="card shadow-sm text-center stats-card ">
-            <div className="card-body">
-              <FontAwesomeIcon icon={faUsers} className="icon mb-2" size="2x" />
-              <h6 className="card-title mt-2">Total de Usuarios</h6>
-              <p className="card-text mx-2">{estadisticas.totalUsuarios}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="col-md-4">
-          <div className="card shadow-sm text-center stats-card">
-            <div className="card-body">
-              <FontAwesomeIcon
-                icon={faUserCheck}
-                className="icon mb-2"
-                size="2x"
-              />
-              <h6 className="card-title mt-2">Usuarios Activos</h6>
-              <p className="card-text mx-2">{estadisticas.usuariosActivos}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="col-md-4">
-          <div className="card shadow-sm text-center stats-card">
-            <div className="card-body">
-              <FontAwesomeIcon
-                icon={faWarehouse}
-                className="icon mb-2"
-                size="2x"
-              />
-              <h6 className="card-title mt-2">Cargo: Almacén</h6>
-              <p className="card-text mx-2">{estadisticas.usuariosAlmacen}</p>
-            </div>
-          </div>
-        </div>
-
         <div className="col-md-12 ">
           <div className="card border-0 shadow-sm">
             <div className="card-header border-bottom d-flex justify-content-between align-items-center">
@@ -104,10 +66,19 @@ export function Usuarios() {
                     onChange={(e) => setSearch(e.target.value)}
                   />
                   <button
-                    className="btn ms-2 btn-outline-dark"
+                    className="btn mx-2 btn-outline-dark"
                     onClick={handleOpenModal}
                   >
-                    <Plus className="color-auto" />
+                    <PlusIcon className="color-auto" />
+                  </button>
+
+                  <button
+                    type="button"
+                    className="btn btn-dark"
+                    onClick={() => GetReporteExcel("/reporteUsuarios")}
+                    title="Descargar Reporte de usuarios"
+                  >
+                    <FileChartColumnIncreasing className="text-auto" />
                   </button>
                 </div>
               </div>

@@ -3,13 +3,20 @@ import { TablasGenerales } from "../../components/componentesReutilizables/Tabla
 import { useQuery } from "@tanstack/react-query";
 import { Cargando } from "../../components/componentesReutilizables/Cargando";
 import { GetCuentasPorPagar } from "../../service/serviceFinanzas/GetCuentasPorPagar";
-import { ArrowBigRight, Coins, File, List } from "lucide-react";
+import { ArrowRightIcon, Coins, File, List } from "lucide-react";
+import ModalRight from "../../components/componentesReutilizables/ModalRight";
+import { useState } from "react";
+import { DetallesCuotasPagar } from "../../components/componentesFinanzas/cuotasPorPagar/DetallesCuotasPagar";
 
 export function CuentasPorPagar() {
+  const [modalCuotasPagar, setModalCuotasPagar] = useState(false);
+  const [dataCuotasPagar, setDataCuotasPagar] = useState([]);
+
   const {
     data: cuentasPorPagar,
     isLoading,
     isError,
+    refetch,
   } = useQuery({
     queryKey: ["cuentasPorPagar"],
     queryFn: () => GetCuentasPorPagar(),
@@ -23,6 +30,11 @@ export function CuentasPorPagar() {
 
   const columnas = [
     { name: "ID", selector: (row) => <small>{row.id}</small>, sortable: true },
+    {
+      name: "Proveedor",
+      selector: (row) => <small>{row?.proveedor?.nombre}</small>,
+      sortable: true,
+    },
     {
       name: "Descripción",
       selector: (row) => <small>{row.descripcion}</small>,
@@ -90,16 +102,19 @@ export function CuentasPorPagar() {
       selector: (row) => (
         <button
           className="btn btn-outline-dark"
-          // onClick={() => verCuotas(row.id)}
+          onClick={() => {
+            setModalCuotasPagar(true);
+            setDataCuotasPagar(row);
+          }}
         >
           <List
-            color={"auto"}
+            className="text-auto"
             height="20px"
             width="20px"
             style={{ verticalAlign: "middle" }}
           />
-          <ArrowBigRight
-            color={"auto"}
+          <ArrowRightIcon
+            className="text-auto"
             height="20px"
             width="20px"
             style={{ verticalAlign: "middle", marginLeft: 4 }}
@@ -130,6 +145,20 @@ export function CuentasPorPagar() {
             </div>
           </div>
         </div>
+        {/* Modales */}
+        <ModalRight
+          isOpen={modalCuotasPagar}
+          onClose={() => setModalCuotasPagar(false)}
+          title={"Detalle de Cuotas"}
+          width="70%"
+          hideFooter={true}
+        >
+          <DetallesCuotasPagar
+            data={dataCuotasPagar}
+            refetch={refetch}
+            estadoModal={setModalCuotasPagar}
+          />
+        </ModalRight>
       </div>
     </ContenedorPrincipal>
   );

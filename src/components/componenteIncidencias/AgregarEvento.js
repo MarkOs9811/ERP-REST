@@ -4,6 +4,15 @@ import axiosInstance from "../../api/AxiosInstance";
 import ToastAlert from "../componenteToast/ToastAlert";
 import { useQueryClient } from "@tanstack/react-query";
 import "../../css/EstilosIncidenciasEventos.css";
+import {
+  AlertOctagon,
+  Calendar,
+  Calendar1,
+  PenIcon,
+  Square,
+  SquaresExclude,
+  TextIcon,
+} from "lucide-react";
 
 export function AgregarEvento() {
   const queryClient = useQueryClient();
@@ -66,7 +75,7 @@ export function AgregarEvento() {
             <label className="form-label fw-bold">Título del evento *</label>
             <div className="input-group">
               <span className="input-group-text">
-                <i className="bi bi-pencil-square"></i>
+                <PenIcon className="text-auto" />
               </span>
               <input
                 className={`form-control ${errors.summary ? "is-invalid" : ""}`}
@@ -79,7 +88,7 @@ export function AgregarEvento() {
             </div>
             {errors.summary && (
               <div className="invalid-feedback d-flex align-items-center">
-                <i className="bi bi-exclamation-circle me-2"></i>
+                <AlertOctagon />
                 {errors.summary.message}
               </div>
             )}
@@ -89,7 +98,7 @@ export function AgregarEvento() {
             <label className="form-label fw-bold">Descripción</label>
             <div className="input-group">
               <span className="input-group-text align-items-start">
-                <i className="bi bi-text-paragraph"></i>
+                <TextIcon className="text-auto" />
               </span>
               <textarea
                 className="form-control"
@@ -113,7 +122,7 @@ export function AgregarEvento() {
               <label className="form-label fw-bold">Inicio *</label>
               <div className="input-group">
                 <span className="input-group-text">
-                  <i className="bi bi-calendar"></i>
+                  <Calendar1 className="text-auto" />
                 </span>
                 <input
                   type="datetime-local"
@@ -135,7 +144,7 @@ export function AgregarEvento() {
               <label className="form-label fw-bold">Fin *</label>
               <div className="input-group">
                 <span className="input-group-text">
-                  <i className="bi bi-calendar"></i>
+                  <Calendar1 className="text-auto" />
                 </span>
                 <input
                   type="datetime-local"

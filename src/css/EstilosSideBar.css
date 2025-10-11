@@ -9,7 +9,7 @@
     color: #ffffff;
     overflow-y: hidden;
     transition: all 0.3s ease, border-radius 0.3s ease;
-    width: 250px;
+    width: 80px;
     z-index: 1000;
 }
 .sidebar-toggle {
@@ -20,14 +20,14 @@
     font-size: 1.25rem;
 }
 .sidebar:hover {
-    width: 250px;
+    width: 80px;
     overflow-y: auto;
     max-height: 100%;
     text-align: left;
 }
 
 .sidebar.compressed {
-    width: 60px;
+    width: 80px;
     overflow-x: hidden;
 }
 

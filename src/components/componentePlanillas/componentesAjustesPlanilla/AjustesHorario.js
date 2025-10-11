@@ -75,13 +75,13 @@ export function AjustesHorario() {
         <div className="d-flex justify-content-center">
           {/* Botón Editar */}
           <button className=" btn-editar btn-sm" title="Editar">
-            <Pencil color={"auto"} />
+            <Pencil className="text-auto" />
           </button>
 
           {/* Botón Eliminar o Activar */}
           {row.estado === 1 ? (
             <button className="btn-eliminar btn-sm ms-2" title="Eliminar">
-              <Trash2 color={"auto"} />
+              <Trash2 className="text-auto" />
             </button>
           ) : (
             <button className="btn btn-success btn-sm ms-2" title="Activar">
@@ -98,17 +98,17 @@ export function AjustesHorario() {
     <div className="card shadow-sm h-100">
       <div className="card-header d-flex justify-content-between align-items-center p-3 border-bottom">
         <h4 className=" mb-0">
-          <Timer color={"auto"} /> Horarios
+          <Timer className="text-auto" /> Horarios
         </h4>
         <div className="d-flex ms-auto mx-2">
           <input type="text" placeholder="Buscar..." className="form-control" />
         </div>
         <button className="btn btn-sm btn-outline-dark" title="Reporte">
-          <FileText className="me-1" color={"auto"} />
+          <FileText className="me-1 text-auto" />
           Reporte
         </button>
         <button className="btn btn-sm btn-outline-dark mx-2" title="Agregar">
-          <Plus className="" color={"auto"} />
+          <Plus className=" text-auto" />
         </button>
       </div>
       <div className="card-body p-0">

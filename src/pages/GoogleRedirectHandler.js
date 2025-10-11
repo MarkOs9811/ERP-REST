@@ -2,10 +2,12 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import ToastAlert from "../components/componenteToast/ToastAlert";
+import { useDispatch } from "react-redux";
+import { abrirCaja } from "../redux/cajaSlice";
 
 export const GoogleRedirectHandler = () => {
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const token = params.get("token");
@@ -20,8 +22,21 @@ export const GoogleRedirectHandler = () => {
           },
         })
         .then((response) => {
+          const cajaData = {
+            nombre: response.data?.caja?.caja?.nombreCaja ?? "",
+            id: response.data?.caja?.caja?.id ?? null,
+            estado:
+              response.data?.caja?.caja?.estadoCaja == 1
+                ? "abierto"
+                : "cerrado",
+          };
           localStorage.setItem("user", JSON.stringify(response.data.user));
           localStorage.setItem("roles", JSON.stringify(response.data.roles));
+
+          localStorage.setItem("caja", JSON.stringify(cajaData));
+
+          dispatch(abrirCaja(cajaData));
+
           localStorage.setItem(
             "empresa",
             JSON.stringify(response.data.miEmpresa)

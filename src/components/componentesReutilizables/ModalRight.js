@@ -47,7 +47,7 @@ const ModalRight = ({
       >
         {/* Header */}
         <div className="modal-right-header p-1 flex-shrink-0">
-          <div>
+          <div className="modal-right-header-content d-flex align-items-center p-3">
             <h3 className="modal-right-title ms-3">
               {capitalizeFirstLetter(title)}
             </h3>
@@ -74,7 +74,10 @@ const ModalRight = ({
         {/* Footer opcional */}
         {!hideFooter && (
           <div className="modal-right-footer flex-shrink-0">
-            <button className="btn-cerrar-modal ms-2" onClick={handleClose}>
+            <button
+              className="btn-cerrar-modal ms-2"
+              onClick={onCancel || handleClose}
+            >
               {cancelText}
             </button>
             <button className="btn-guardar ms-2" onClick={onSubmit}>

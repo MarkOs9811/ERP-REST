@@ -5,13 +5,15 @@ import { useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { toggleSidebar } from "../redux/sideBarSlice";
-import { StoreIcon } from "lucide-react";
+import { Megaphone, StoreIcon } from "lucide-react";
 
 export function Navegacion() {
   const location = useLocation(); // Obtiene la ubicación actual
   const pathnames = location.pathname.split("/").filter((x) => x);
   const navigate = useNavigate();
 
+  const rolesLocalStorage = JSON.parse(localStorage.getItem("roles")) || [];
+  console.log(rolesLocalStorage);
   // Mapea las rutas a nombres amigables
   const routeNames = {
     "": "Inicio",
@@ -101,13 +103,26 @@ export function Navegacion() {
             )}
           </div>
         </div>
-        <div className="d-flex me-3 gap-2 align-items-center">
-          <button
-            className="btn btn-outline-dark d-flex align-items-center gap-1"
-            onClick={() => navigate("/vender/ventasMesas")}
-          >
-            <StoreIcon /> POS
-          </button>
+        <div className="d-flex align-items-center ">
+          {rolesLocalStorage.some((rol) => rol.nombre === "incidencias") && (
+            <div className="d-flex me-3 gap-2 align-items-center">
+              <button
+                className="btn btn-outline-dark d-flex align-items-center gap-1"
+                onClick={() => navigate("/incidencias")}
+              >
+                <Megaphone className="text-auto" />
+                Incidencias
+              </button>
+            </div>
+          )}
+          <div className="d-flex me-3 gap-2 align-items-center">
+            <button
+              className="btn btn-outline-dark d-flex align-items-center gap-1"
+              onClick={() => navigate("/vender/ventasMesas")}
+            >
+              <StoreIcon /> POS
+            </button>
+          </div>
         </div>
       </nav>
     </div>

@@ -152,14 +152,14 @@ export function Asistencia() {
         if (row?.estadoAsistencia === "a tiempo") {
           return (
             <div className="badge bg-success-gradient fw-bold">
-              <CircleCheckBig color={"auto"} /> A tiempo
+              <CircleCheckBig /> A tiempo
             </div>
           );
         } else if (row?.estadoAsistencia === "tardanza") {
           return (
             <div className="badge bg-danger-gradient fw-bold">
               {" "}
-              <BellRing color={"auto"} /> Tardanza
+              <BellRing /> Tardanza
             </div>
           );
         } else {
@@ -246,7 +246,7 @@ export function Asistencia() {
           <div className="card shadow-sm h-100">
             <div className="card-header d-flex justify-content-between align-items-center p-3">
               <p className="h4 mb-0">
-                <CalendarCheck className="me-2" color="auto" />
+                <CalendarCheck className="me-2 color-auto" />
                 Asistencia de hoy
               </p>
               <div className="d-flex ms-auto mx-2">
@@ -257,7 +257,7 @@ export function Asistencia() {
                 />
               </div>
               <button className="btn btn-sm btn-outline-dark">
-                <FileText className="me-1" color={"auto"} />
+                <FileText className="me-1 text-auto" />
                 Reporte
               </button>
             </div>
@@ -293,11 +293,11 @@ export function Asistencia() {
           <div className="card shadow-sm h-100">
             <div className="card-header d-flex justify-content-between align-items-center p-3">
               <p className="h4 mb-0">
-                <ChartColumnBig className="me-2" color="auto" />
+                <ChartColumnBig className="me-2 color-auto" />
                 Gráfico de Asistencias
               </p>
               <button className="btn btn-sm btn-outline-dark">
-                <FileText className="me-1" color={"auto"} />
+                <FileText className="me-1 text-auto" />
                 Reporte
               </button>
             </div>
@@ -314,7 +314,7 @@ export function Asistencia() {
             <div className="card-header p-3">
               <div className="d-flex justify-content-between align-items-center">
                 <p className="h4 mb-0">
-                  <CalendarCheck className="me-2" color="auto" />
+                  <CalendarCheck className="me-2 color-auto" />
                   Asistencias Mensual
                 </p>
                 <div className="d-flex align-items-center">
@@ -325,7 +325,7 @@ export function Asistencia() {
                     <input type="date" className="form-control" />
                   </div>
                   <button className="btn btn-sm btn-outline-dark">
-                    <FileText className="me-1" color={"auto"} />
+                    <FileText className="me-1 text-auto" />
                     Reporte
                   </button>
                 </div>

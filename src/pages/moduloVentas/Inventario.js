@@ -5,8 +5,15 @@ import { GetInventario } from "../../service/GetInventario";
 import { Cargando } from "../../components/componentesReutilizables/Cargando";
 
 import { ContenedorPrincipal } from "../../components/componentesReutilizables/ContenedorPrincipal";
-import { Plus, StickyNote, Store, TriangleAlert } from "lucide-react";
+import {
+  FileChartColumnIncreasing,
+  Plus,
+  StickyNote,
+  Store,
+  TriangleAlert,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteExcel";
 
 export function Inventario() {
   const [search, setSearch] = useState("");
@@ -111,6 +118,13 @@ export function Inventario() {
                   }
                 >
                   <Plus className="text-auto" />
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-dark"
+                  onClick={() => GetReporteExcel("/reporteInventarioTodo")}
+                >
+                  <FileChartColumnIncreasing className="text-auto" />
                 </button>
               </div>
             </div>

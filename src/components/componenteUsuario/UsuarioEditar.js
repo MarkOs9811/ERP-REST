@@ -13,6 +13,7 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
     nombres: "",
     apellidos: "",
     correo_electronico: "",
+    sede: "",
     area: "",
     cargo: "",
     salario: "",
@@ -22,6 +23,8 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
 
   const [cargos, setCargos] = useState([]);
   const [areas, setAreas] = useState([]);
+  const [sedes, setSedes] = useState([]);
+
   const [horarios, setHorarios] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -43,6 +46,11 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
       // Cargar los horarios
       const horariosResponse = await axiosInstance.get("/horarios");
       setHorarios(horariosResponse.data);
+
+      // Cargar sedes
+      const sedesResponse = await axiosInstance.get("/sedesAll");
+
+      setSedes(sedesResponse.data.data || []); // Extraer solo el array de "data"
     } catch (err) {
       setError("Hubo un error al cargar los datos auxiliares.");
     }
@@ -57,6 +65,7 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
         apellidos: data.empleado?.persona.apellidos || "",
         correo_electronico: data.empleado?.persona.correo || "",
         area: data.empleado?.area?.id || "",
+        sede: data.sede?.id || "",
         cargo: data.empleado?.cargo?.id || "",
         salario: data.empleado?.salario || "",
         horario: data.empleado?.horario?.id || "",
@@ -242,7 +251,27 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
               <label htmlFor="correo_electronico">Correo Electrónico</label>
             </div>
           </div>
-
+          {/* Seede */}
+          <div className="mb-3">
+            <div className="form-floating">
+              <select
+                id="sede"
+                className="form-select"
+                value={formData.sede}
+                onChange={(e) =>
+                  setFormData({ ...formData, sede: parseInt(e.target.value) })
+                }
+              >
+                <option value="">Seleccione un sede</option>
+                {sedes.map((sede) => (
+                  <option key={sede.id} value={sede.id}>
+                    {sede.nombre}
+                  </option>
+                ))}
+              </select>
+              <label htmlFor="sede">Sede</label>
+            </div>
+          </div>
           {/* Área */}
           <div className="mb-3">
             <div className="form-floating">

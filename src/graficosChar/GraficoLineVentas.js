@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Bar } from "react-chartjs-2"; // Cambia Line por Bar
 import { getVentas } from "../service/ObtenerVentasDetalle";
 import { Cargando } from "../components/componentesReutilizables/Cargando";
+import { CalendarDays } from "lucide-react";
 
 const GraficoBarEjemplo = () => {
   const chartRef = useRef(null);
@@ -88,7 +89,7 @@ const GraficoBarEjemplo = () => {
     responsive: true,
     plugins: {
       title: {
-        display: true,
+        display: false,
         text: "Ventas Mensuales",
       },
     },
@@ -96,7 +97,17 @@ const GraficoBarEjemplo = () => {
 
   return (
     <div style={{ width: "100%", maxWidth: "800px", margin: "0 auto" }}>
-      <h3 className="text-primary">Durante el Mes</h3>
+      <div className="mb-3 d-flex gap-2 align-middle justify-content-left">
+        <span className="alert border-0 alert-danger text-danger p-2 mb-0">
+          <CalendarDays size={25} className="text-auto" />
+        </span>
+        <h6 className="mb-1 d-flex flex-column gap-1">
+          <span className="fw-bold">Ventas del mes</span>
+          <p className="text-muted small mb-0">
+            ventas del mes actual y del anterior
+          </p>
+        </h6>
+      </div>
       <Bar ref={chartRef} data={datosGrafico} options={options} />
     </div>
   );

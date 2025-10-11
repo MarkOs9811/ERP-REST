@@ -19,8 +19,8 @@ export function ProveedorList({ search, updateList }) {
     try {
       const response = await axiosInstance.get("/proveedores/getProveedores");
       if (response.data.success) {
-        setProveedores(response.data.proveedor);
-        setFilterProveedores(response.data.proveedor);
+        setProveedores(response.data.data);
+        setFilterProveedores(response.data.data);
       } else {
         console.log(response.data.message);
       }

@@ -28,7 +28,7 @@ export function PedidosWsp() {
       navigate(`/vender/mensajeriaPedido?pedido=${pedidoString}`);
     },
     [navigate]
-  ); 
+  );
 
   return (
     <div className="card shadow-sm contenedor-pedidosWsp h-100">

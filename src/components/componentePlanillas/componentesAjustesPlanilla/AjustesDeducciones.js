@@ -63,10 +63,10 @@ export function AjustesDeducciones() {
       cell: (row) => (
         <div className="d-flex justify-content-center">
           <button className=" btn-editar mx-1" title="Editar">
-            <Pencil className="" color={"auto"} />
+            <Pencil className="text-auto" />
           </button>
           <button className="btn-eliminar" title="Eliminar">
-            <Trash2 className="" color={"auto"} />
+            <Trash2 className="text-auto" />
           </button>
         </div>
       ),
@@ -79,17 +79,17 @@ export function AjustesDeducciones() {
     <div className="card shadow-sm h-100">
       <div className="card-header d-flex justify-content-between align-items-center p-3 border-bottom">
         <h4 className=" mb-0">
-          <CircleMinus color={"auto"} /> Deducciones
+          <CircleMinus className="text-auto" /> Deducciones
         </h4>
         <div className="d-flex ms-auto mx-2">
           <input type="text" placeholder="Buscar..." className="form-control" />
         </div>
         <button className="btn btn-sm btn-outline-dark" title="Reporte">
-          <FileText className="me-1" color={"auto"} />
+          <FileText className="me-1 text-auto" />
           Reporte
         </button>
         <button className="btn btn-sm btn-outline-dark mx-2" title="Agregar">
-          <Plus className="" color={"auto"} />
+          <Plus className="text-auto" />
         </button>
       </div>
       <div className="card-body p-0">

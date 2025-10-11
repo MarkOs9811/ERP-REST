@@ -2,13 +2,14 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import BotonAnimado from "../componentesReutilizables/BotonAnimado";
 import RippleWrapper from "../componentesReutilizables/RippleWrapper";
-import { FileText } from "lucide-react";
+import { FileText, FileTextIcon } from "lucide-react";
 
 export default function FormularioReporte({
   titulo,
   onSubmit,
   isLoading,
   tipo,
+  estadoIntegracionGoogle,
 }) {
   const {
     register,
@@ -32,17 +33,29 @@ export default function FormularioReporte({
               })}
             />
 
-            <div className="d-grid w-50 p-3 mx-auto">
-              <RippleWrapper className={"p-3"}>
-                <BotonAnimado
-                  type="submit"
-                  loading={isLoading}
-                  className="btn-realizarPedido w-100 h-100 p-2 h6"
-                  icon={isLoading ? undefined : <FileText color="auto" />}
-                >
-                  {isLoading ? "Generando..." : "Generar Reporte"}
-                </BotonAnimado>
-              </RippleWrapper>
+            <div className="d-grid w-100 p-3 mx-auto">
+              <>
+                {estadoIntegracionGoogle?.estado === 1 ? (
+                  <RippleWrapper className="p-0">
+                    <BotonAnimado
+                      type="submit"
+                      loading={isLoading}
+                      className="btn-realizarPedido rounded-none btn-sm px-3 h6 py-2"
+                      icon={
+                        !isLoading ? (
+                          <FileTextIcon className="me-1 text-auto" />
+                        ) : undefined
+                      }
+                    >
+                      {isLoading ? "Generando..." : "Generar Reporte"}
+                    </BotonAnimado>
+                  </RippleWrapper>
+                ) : (
+                  <small className="text-muted">
+                    No disponible, inicie sesión con su cuenta de Google
+                  </small>
+                )}
+              </>
             </div>
           </form>
         </div>

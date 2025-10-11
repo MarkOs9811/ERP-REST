@@ -5,6 +5,9 @@ import { GetKardex } from "../../service/GetKardex";
 
 import { ContenedorPrincipal } from "../../components/componentesReutilizables/ContenedorPrincipal";
 import { ArrowDown, ArrowUp, FileText } from "lucide-react";
+import ToastAlert from "../../components/componenteToast/ToastAlert";
+import axiosInstance from "../../api/AxiosInstance";
+import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteExcel";
 
 export function Kardex() {
   const [search, setSearch] = useState("");
@@ -39,6 +42,14 @@ export function Kardex() {
     listaKardex();
   }, [listaKardex]);
 
+  const handleReporteSalida = async () => {
+    GetReporteExcel("/reporteKardexExcelSalida");
+  };
+
+  const handleReporteEntrada = async () => {
+    GetReporteExcel("/reporteKardexExcelEntrada");
+  };
+
   return (
     <ContenedorPrincipal>
       <div className="row g-3">
@@ -68,7 +79,11 @@ export function Kardex() {
 
             <div className="d-flex align-items-center">
               <p className="mx-4 h1"> {entradas}</p>
-              <button className="btn btn-sm">
+              <button
+                type="button"
+                className="btn btn-sm"
+                onClick={() => handleReporteEntrada()}
+              >
                 <FileText color="#0288D1" width="24px" height="24px" />
               </button>
             </div>
@@ -105,7 +120,11 @@ export function Kardex() {
             {/* Número de Salidas y Botón */}
             <div className="d-flex align-items-center">
               <p className="mx-4 h1 mb-0">{salidas}</p>
-              <button className="btn btn-sm">
+              <button
+                type="button"
+                className="btn btn-sm"
+                onClick={() => handleReporteSalida()}
+              >
                 <FileText color="#D32F2F" width="24px" height="24px" />
               </button>
             </div>

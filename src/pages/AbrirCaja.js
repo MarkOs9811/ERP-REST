@@ -78,11 +78,13 @@ export function AbrirCaja() {
             {...register("caja", { required: "Seleccione una caja" })}
           >
             <option value="">Seleccione...</option>
-            {caja.map((cajas) => (
-              <option key={cajas.id} value={cajas.id}>
-                {cajas.nombreCaja}
-              </option>
-            ))}
+            {caja
+              .filter((cajas) => cajas.estadoCaja == 0)
+              .map((cajas) => (
+                <option key={cajas.id} value={cajas.id}>
+                  {cajas.nombreCaja}
+                </option>
+              ))}
           </select>
           <label htmlFor="caja">
             <FontAwesomeIcon icon={faCashRegister} /> Seleccionar Caja

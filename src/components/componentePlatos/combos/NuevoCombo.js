@@ -6,13 +6,16 @@ import { Cargando } from "../../componentesReutilizables/Cargando";
 import { useMutation } from "@tanstack/react-query";
 import axiosInstance from "../../../api/AxiosInstance";
 import ToastAlert from "../../componenteToast/ToastAlert";
-import { BottleWine, Flame, Hamburger, Soup, WandSparkles } from "lucide-react";
+import {
+  BottleWine,
+  Flame,
+  Hamburger,
+  Soup,
+  WandSparkles,
+  WandSparklesIcon,
+} from "lucide-react";
 
-export function NuevoCombo({ onClose, onSuccess }) {
-  const configuracion = JSON.parse(localStorage.getItem("configuracion"));
-  const openAIConfig = configuracion.find(
-    (item) => item.nombre === "Open AI" && item.estado === 1
-  );
+export function NuevoCombo({ onClose, onSuccess, estadoOpenAi }) {
   const {
     register,
     handleSubmit,
@@ -229,93 +232,92 @@ export function NuevoCombo({ onClose, onSuccess }) {
           </div>
         </div>
         {/* Ítems generados por IA */}
-        {openAIConfig && (
-          <div className="card  p-2 border">
-            {/* Botón IA */}
-
-            <div className="card-header">
-              <div className="d-flex justify-content-start align-items-center mb-4 flex-column">
-                <button
-                  type="button"
-                  className={`btn d-flex align-items-center ${
-                    bloqueado ? "btn-secondary disabled" : "btn-outline-dark"
-                  }`}
-                  onClick={handleGenerarCombo}
-                  disabled={bloqueado}
-                >
-                  {bloqueado ? (
-                    <>
-                      <span
-                        className="spinner-border spinner-border-sm me-2"
-                        role="status"
-                        aria-hidden="true"
-                      ></span>
-                      Creando combo con IA...
-                    </>
-                  ) : (
-                    <>
-                      <WandSparkles className="me-2" color={"auto"} />
-                      Deja que la IA lo cree
-                    </>
-                  )}
-                </button>
-                <small className="text-muted fst-italic mt-1">
-                  Intenta crear el combo con la inteligencia artificial
-                </small>
-              </div>
-            </div>
-            <div className="card-body">
-              {bloqueado ? (
-                <div className="d-flex flex-column align-items-center py-4">
-                  <Cargando />
-                </div>
-              ) : isError ? (
-                <div className="alert alert-danger">
-                  Hubo un error al obtener el combo.
+        <>
+          {estadoOpenAi?.estado === 1 && (
+            <div className="card p-2 border">
+              {/* Botón IA */}
+              <div className="card-header">
+                <div className="d-flex justify-content-start align-items-center mb-4 flex-column">
                   <button
                     type="button"
-                    className="btn btn-sm btn-danger mt-2"
+                    className={`btn d-flex align-items-center ${
+                      bloqueado ? "btn-secondary disabled" : "btn-outline-dark"
+                    }`}
                     onClick={handleGenerarCombo}
                     disabled={bloqueado}
                   >
-                    Reintentar
+                    {bloqueado ? (
+                      <>
+                        <span
+                          className="spinner-border spinner-border-sm me-2"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
+                        Creando combo con IA...
+                      </>
+                    ) : (
+                      <>
+                        <WandSparklesIcon className="me-2 text-auto" />
+                        Deja que la IA lo cree
+                      </>
+                    )}
                   </button>
+                  <small className="text-muted fst-italic mt-1">
+                    Intenta crear el combo con la inteligencia artificial
+                  </small>
                 </div>
-              ) : dataComboAi?.nombre ? (
-                <div className="mb-4">
-                  <h5 className="card-title">{dataComboAi.nombre}</h5>
-                  <p className="card-text">{dataComboAi.descripcion}</p>
+              </div>
 
-                  <div className="d-flex flex-wrap gap-2">
-                    {selectedItems.map((nombre, index) => (
-                      <span key={index} className="badge bg-primary">
-                        {nombre}
-                        <button
-                          onClick={(e) => {
-                            e.preventDefault();
-                            removeItem(nombre);
-                          }}
-                          className="btn-close btn-close-white ms-2"
-                        />
-                      </span>
-                    ))}
+              <div className="card-body">
+                {bloqueado ? (
+                  <div className="d-flex flex-column align-items-center py-4">
+                    <Cargando />
                   </div>
-                  <div className="me-auto mt-3 float-end">
-                    <p className="h3">
-                      S/.
-                      {dataComboAi.precioCombo}
-                    </p>
+                ) : isError ? (
+                  <div className="alert alert-danger">
+                    Hubo un error al obtener el combo.
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-danger mt-2"
+                      onClick={handleGenerarCombo}
+                      disabled={bloqueado}
+                    >
+                      Reintentar
+                    </button>
                   </div>
-                </div>
-              ) : (
-                <p className="text-muted">
-                  Presiona el botón para generar un combo
-                </p>
-              )}
+                ) : dataComboAi?.nombre ? (
+                  <div className="mb-4">
+                    <h5 className="card-title">{dataComboAi.nombre}</h5>
+                    <p className="card-text">{dataComboAi.descripcion}</p>
+
+                    <div className="d-flex flex-wrap gap-2">
+                      {selectedItems.map((nombre, index) => (
+                        <span key={index} className="badge bg-primary">
+                          {nombre}
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault();
+                              removeItem(nombre);
+                            }}
+                            className="btn-close btn-close-white ms-2"
+                          />
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="me-auto mt-3 float-end">
+                      <p className="h3">S/.{dataComboAi.precioCombo}</p>
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-muted">
+                    Presiona el botón para generar un combo
+                  </p>
+                )}
+              </div>
             </div>
-            {/* Estado del contenido */}
-          </div>
-        )}
+          )}
+        </>
       </div>
 
       {/* Botón de envío */}

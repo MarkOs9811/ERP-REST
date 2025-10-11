@@ -16,6 +16,7 @@ export default function FormularioReporte({
   onSubmit,
   isLoading,
   tipo,
+  estadoIntegracionGoogle,
 }) {
   const {
     register,
@@ -86,16 +87,26 @@ export default function FormularioReporte({
             </div>
           </div>
           <div className="card-footer px-3 bg-white border-top d-flex justify-content-end">
-            <RippleWrapper className="p-0">
-              <BotonAnimado
-                type="submit"
-                loading={isLoading}
-                className="btn-realizarPedido rounded-none btn-sm px-3 h6 py-2"
-                icon={isLoading ? undefined : <FileTextIcon className="me-1" />}
-              >
-                {isLoading ? "Generando..." : "Generar Reporte"}
-              </BotonAnimado>
-            </RippleWrapper>
+            <>
+              {estadoIntegracionGoogle?.estado === 1 ? (
+                <RippleWrapper className="p-0">
+                  <BotonAnimado
+                    type="submit"
+                    loading={isLoading}
+                    className="btn-realizarPedido rounded-none btn-sm px-3 h6 py-2"
+                    icon={
+                      !isLoading ? <FileTextIcon className="me-1" /> : undefined
+                    }
+                  >
+                    {isLoading ? "Generando..." : "Generar Reporte"}
+                  </BotonAnimado>
+                </RippleWrapper>
+              ) : (
+                <small className="text-muted">
+                  No disponible, inicie sesión con su cuenta de Google
+                </small>
+              )}
+            </>
           </div>
         </form>
       </div>

@@ -1,7 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import RippleWrapper from "./components/componentesReutilizables/RippleWrapper";
 import {
-  ArrowBigLeft,
   ChevronLeft,
   HandPlatter,
   Inbox,
@@ -21,9 +20,9 @@ export default function LayoutPOS({ children }) {
     <div className="w-full h-screen flex flex-col bg-gray-100">
       {/* Barra de botones POS */}
       <div className="p-2 shadow d-flex gap-2 bg-white">
-        <button className="btn btn-dark" onClick={() => navigate("/")}>
+        <button className="btn btn-outline-dark" onClick={() => navigate("/")}>
           <ChevronLeft className="color-auto" />
-          Volver
+          Salir
         </button>
         <div className="d-flex gap-2 flex-wrap justify-content-between flex-grow-1">
           {/* Mesas */}

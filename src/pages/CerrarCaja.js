@@ -18,6 +18,8 @@ import {
   LockIcon,
   WalletMinimal,
 } from "lucide-react";
+import { cerrarCaja } from "../redux/cajaSlice";
+import { useDispatch } from "react-redux";
 
 export const fetchCajaClose = async (cajaId) => {
   try {
@@ -46,6 +48,7 @@ export function CerrarCaja() {
   const [tituloModal, setTituloModal] = useState(null);
   const [idCaja, setIdCaja] = useState(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const caja = JSON.parse(localStorage.getItem("caja"));
 
   // Consulta con React Query para obtener los datos de la caja
@@ -99,6 +102,7 @@ export function CerrarCaja() {
 
       if (response.data.success) {
         localStorage.removeItem("caja");
+        dispatch(cerrarCaja());
         ToastAlert("success", response.data.message);
         navigate("/abrirCaja");
       } else {

@@ -13,14 +13,17 @@ export function ModalDetallesVentas({ dataVentas }) {
     pedido = {},
   } = dataVentas;
 
-  const detallePedidos = pedido.detalle_pedidos || [];
+  const detallePedidos =
+    pedido?.detalle_pedidos || dataVentas?.pedido_web?.detalles_pedido || [];
 
   const documento = boleta
     ? `Boleta B001-${boleta.numero}`
     : factura
     ? `Factura F001-${factura.numero}`
     : "Documento no disponible";
+
   if (!dataVentas) return <div>Cargando...</div>;
+
   return (
     <div className="container py-3">
       {/* Encabezado */}
@@ -57,21 +60,28 @@ export function ModalDetallesVentas({ dataVentas }) {
               </tr>
             </thead>
             <tbody>
-              {detallePedidos.map((item) => (
-                <tr key={item.id}>
-                  <td>{item.producto?.nombre || "Producto desconocido"}</td>
-                  <td className="text-center">{item.cantidad}</td>
-                  <td className="text-end">
-                    S/ {parseFloat(item.precio_unitario).toFixed(2)}
-                  </td>
-                  <td className="text-end">
-                    S/{" "}
-                    {(item.cantidad * parseFloat(item.precio_unitario)).toFixed(
-                      2
-                    )}
-                  </td>
-                </tr>
-              ))}
+              {detallePedidos.map((item) => {
+                // Tomar precio desde detalle o desde plato
+                const precio =
+                  parseFloat(item.precio_unitario) ||
+                  parseFloat(item.plato?.precio) ||
+                  0;
+
+                const subtotal = (item.cantidad * precio).toFixed(2);
+
+                return (
+                  <tr key={item.id}>
+                    <td>
+                      {item.producto?.nombre ||
+                        item.plato?.nombre ||
+                        "Desconocido"}
+                    </td>
+                    <td className="text-center">{item.cantidad}</td>
+                    <td className="text-end">S/ {precio.toFixed(2)}</td>
+                    <td className="text-end">S/ {subtotal}</td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

@@ -1,19 +1,13 @@
-import { useState } from "react";
 import Categorias from "../../components/componenteAlmacen/componentesAjustesAlmacen/Categorias";
 import UnidadMedida from "../../components/componenteAlmacen/componentesAjustesAlmacen/UnidadMedida";
 import { ContenedorPrincipal } from "../../components/componentesReutilizables/ContenedorPrincipal";
 import { GetUnidades } from "../../service/serviceAlmacen/GetUnidades";
 import { GetCategoria } from "../../service/serviceAlmacen/GetCategoria";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import ModalAlertQuestion from "../../components/componenteToast/ModalAlertQuestion";
-import ModalAlertActivar from "../../components/componenteToast/ModalAlertActivar";
+import axiosInstance from "../../api/AxiosInstance";
+import ToastAlert from "../../components/componenteToast/ToastAlert";
 
 export function AjustesAlmacen() {
-  const [modalShowDesactivar, setModalShowDesactivar] = useState(false);
-  const [modalShowActivar, setModalShowActivar] = useState(false);
-  const [itemSeleccionado, setItemSeleccionado] = useState(null);
-  const [tipoEntidad, setTipoEntidad] = useState(null); // "categoria" o "unidad"
-
   const queryClient = useQueryClient();
 
   const { data: categorias = [] } = useQuery({
@@ -30,42 +24,38 @@ export function AjustesAlmacen() {
     refetchOnWindowFocus: false,
   });
 
-  const handleToggle = (item, tipo) => {
-    setItemSeleccionado(item);
-    setTipoEntidad(tipo);
-
-    if (item.estado == 1) {
-      setModalShowDesactivar(true);
-    } else {
-      setModalShowActivar(true);
+  const handleCambiarEstadoCategoria = async (id) => {
+    try {
+      // Petición para cambiar el estado (bandera) del cat3egoria
+      const response = await axiosInstance.put(`/categorias-estado/${id}`);
+      if (response.data.success) {
+        ToastAlert("success", "Estado del categoria  actualizado");
+        queryClient.invalidateQueries(["metodosPago"]);
+      } else {
+        ToastAlert("error", "No se pudo actualizar el estado");
+      }
+      // Refresca la lista de categorias
+    } catch (error) {
+      ToastAlert("error", "Error al cambiar el estado del categoria ");
+      console.error("Error al cambiar el estado del categoria :", error);
     }
   };
 
-  const confirmarCambioEstado = async () => {
-    console.log(
-      `Cambiando estado de ${tipoEntidad}:`,
-      itemSeleccionado?.nombre
-    );
-
-    // Aquí deberías usar la lógica para cambiar el estado del item
-    // Por ejemplo:
-    // await axiosInstance.patch(`/${tipoEntidad}s/${itemSeleccionado.id}/toggle`);
-
-    // Refresca la data según el tipo de entidad
-    if (tipoEntidad === "categoria") {
-      queryClient.invalidateQueries({ queryKey: ["categoriasAlmacen"] });
-    } else if (tipoEntidad === "unidad") {
-      queryClient.invalidateQueries({ queryKey: ["unidadesMedidas"] });
+  const handleCambiarEstadoUnidades = async (id) => {
+    try {
+      // Petición para cambiar el estado (bandera) del cat3egoria
+      const response = await axiosInstance.put(`/unidadMedida-estado/${id}`);
+      if (response.data.success) {
+        ToastAlert("success", "Estado del unidadMedida  actualizado");
+        queryClient.invalidateQueries(["metodosPago"]);
+      } else {
+        ToastAlert("error", "No se pudo actualizar el estado");
+      }
+      // Refresca la lista de unidadMedidas
+    } catch (error) {
+      ToastAlert("error", "Error al cambiar el estado del unidadMedida ");
+      console.error("Error al cambiar el estado del unidadMedida :", error);
     }
-
-    cerrarModales();
-  };
-
-  const cerrarModales = () => {
-    setModalShowDesactivar(false);
-    setModalShowActivar(false);
-    setItemSeleccionado(null);
-    setTipoEntidad(null);
   };
 
   return (
@@ -79,37 +69,17 @@ export function AjustesAlmacen() {
             <div className="col-lg-6">
               <Categorias
                 categorias={categorias}
-                onToggle={(categoria) => handleToggle(categoria, "categoria")}
+                onToggle={handleCambiarEstadoCategoria}
               />
             </div>
             <div className="col-lg-6">
               <UnidadMedida
                 unidades={unidades}
-                onToggle={(unidad) => handleToggle(unidad, "unidad")}
+                onToggle={handleCambiarEstadoUnidades}
               />
             </div>
           </div>
         </div>
-
-        {/* Modal para desactivar */}
-        <ModalAlertQuestion
-          show={modalShowDesactivar}
-          idEliminar={itemSeleccionado?.id}
-          nombre={itemSeleccionado?.nombre}
-          tipo="desactivar"
-          handleEliminar={confirmarCambioEstado}
-          handleCloseModal={cerrarModales}
-        />
-
-        {/* Modal para activar */}
-        <ModalAlertActivar
-          show={modalShowActivar}
-          idEliminar={itemSeleccionado?.id}
-          nombre={itemSeleccionado?.nombre}
-          tipo="activar"
-          handleEliminar={confirmarCambioEstado}
-          handleCloseModal={cerrarModales}
-        />
       </div>
     </ContenedorPrincipal>
   );

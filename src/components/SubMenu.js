@@ -1,6 +1,5 @@
 import { useSelector } from "react-redux";
-import { Link, useLocation, useNavigate } from "react-router-dom"; // Importa useLocation
-import { capitalizeFirstLetter } from "../hooks/FirstLetterUp";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import RippleWrapper from "./componentesReutilizables/RippleWrapper";
 import {
@@ -20,23 +19,6 @@ export function SubMenu() {
   const cargo = JSON.parse(localStorage.getItem("user")) || {};
   return (
     <div className="card p-0 w-100 mt-0 shadow-sm z-1">
-      {/* <div
-        className="card-header  mb-0 w-100 rounded-0"
-        style={{
-          backgroundImage: "url('/images/fondo_submenu.svg')",
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "bottom",
-          color: "white",
-        }}
-      >
-        <p
-          className="h6 align-middle fw-bold "
-          style={{ textShadow: "1px 1px 5px rgba(0, 0, 0, 0.5)" }}
-        >
-          {capitalizeFirstLetter(moduloAplicado)}
-        </p>
-      </div> */}
       <div className="subMenu card-body p-0 m-auto ">
         {moduloAplicado && (
           <ul className="list-unstyled d-flex gap-4">

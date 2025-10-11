@@ -51,6 +51,27 @@ export function RegistrosCajasList({ search }) {
       center: false,
     },
     {
+      name: "Estado",
+      cell: (row) => {
+        const abierta = row.fechaCierre === null && row.horaCierre === null;
+        return (
+          <span
+            style={{
+              backgroundColor: abierta ? "#d1fae5" : "#f3f4f6", // verde suave si abierta, gris claro si cerrada
+              color: abierta ? "#065f46" : "#374151", // verde oscuro / gris oscuro
+              fontWeight: "600",
+              padding: "6px 12px",
+              borderRadius: "12px",
+              display: "inline-block",
+              textTransform: "capitalize",
+            }}
+          >
+            {abierta ? "En venta" : "Cerrada"}
+          </span>
+        );
+      },
+    },
+    {
       name: "Usuario",
       selector: (row) =>
         `${row.usuario?.empleado?.persona?.nombre || ""} ${
@@ -117,10 +138,29 @@ export function RegistrosCajasList({ search }) {
       center: true,
     },
   ];
-
+  const conditionalRowStyles = [
+    {
+      when: (row) => row.fechaCierre === null && row.horaCierre === null,
+      style: {
+        color: "#065f46",
+        fontWeight: "bold",
+      },
+    },
+    {
+      when: (row) => row.fechaCierre !== null && row.horaCierre !== null,
+      style: {
+        backgroundColor: "#f9fafb", // gris claro
+        color: "#374151",
+      },
+    },
+  ];
   return (
     <div>
-      <TablasGenerales datos={registrosCajasFilter} columnas={column} />
+      <TablasGenerales
+        datos={registrosCajasFilter}
+        columnas={column}
+        conditionalRowStyles={conditionalRowStyles}
+      />
       {loadingRegistrosCajas && <div>Cargando registros...</div>}
       {errorRegistrosCajas && <div>Error al cargar registros</div>}
     </div>

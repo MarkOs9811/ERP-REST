@@ -2,7 +2,7 @@ import { ContenedorPrincipal } from "../../components/componentesReutilizables/C
 import "../../css/EstilosFinanzas.css";
 import { FlujoCaja } from "../../components/componentesFinanzas/FlujoCaja";
 import { ResumenActivosPasivos } from "../../components/componentesFinanzas/ResumenActivosPasivos";
-import { Calculator, ChartColumnBig, Plus } from "lucide-react";
+import { Calculator, ChartColumnBig, Plus, PlusIcon } from "lucide-react";
 
 export function Presupuestos() {
   return (
@@ -25,12 +25,12 @@ export function Presupuestos() {
 
               <div className="d-flex ms-auto">
                 <button className="btn btn-outline-primary ms-auto mx-2  d-flex align-items-center p-2">
-                  <Plus color={"auto"} className={"mx-2"} />
+                  <PlusIcon className={"text-auto mx-2"} />
                   Registrar saldo
                 </button>
 
                 <button className="btn btn-outline-dark ms-auto mx-2 d-flex align-items-center p-2">
-                  <Plus color={"auto"} className={"mx-2"} />
+                  <PlusIcon className={"text-auto mx-2"} />
                   Crear Presupuesto
                 </button>
               </div>

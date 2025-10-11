@@ -4,6 +4,7 @@ import ModalReportes from "../../components/componentesReutilizables/ModalReport
 import axiosInstance from "../../api/AxiosInstance";
 import { ContenedorPrincipal } from "../../components/componentesReutilizables/ContenedorPrincipal";
 import ToastAlert from "../../components/componenteToast/ToastAlert";
+import { EstadoIntegraciones } from "../../hooks/EstadoIntegraciones";
 
 export function Reportes() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -42,6 +43,15 @@ export function Reportes() {
     }
   };
 
+  const {
+    data: estadoGoogleConfig,
+    isLoading,
+    isError,
+    error,
+  } = EstadoIntegraciones("Google Service");
+
+  if (isLoading) return <p>Cargando estado...</p>;
+  if (isError) return <p>Error: {error.message}</p>;
   return (
     <ContenedorPrincipal>
       <div className="card shadow-sm border-0  p-3">
@@ -54,24 +64,28 @@ export function Reportes() {
             onSubmit={handleReporte1}
             isLoading={loadingTipo === "ventas"}
             tipo="ventas"
+            estadoIntegracionGoogle={estadoGoogleConfig}
           />
           <FormularioReporte
             titulo="Reporte de Cajas"
             onSubmit={handleReporte1}
             isLoading={loadingTipo === "cajas"}
             tipo={"cajas"}
+            estadoIntegracionGoogle={estadoGoogleConfig}
           />
           <FormularioReporte
             titulo="Reporte de Inventario"
             onSubmit={handleReporte1}
             isLoading={loadingTipo === "inventario"}
             tipo={"inventario"}
+            estadoIntegracionGoogle={estadoGoogleConfig}
           />
           <FormularioReporte
             titulo="Reporte de Compras"
             onSubmit={handleReporte1}
             isLoading={loadingTipo === "compras"}
             tipo="compras"
+            estadoIntegracionGoogle={estadoGoogleConfig}
           />
         </div>
       </div>

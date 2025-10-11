@@ -1,5 +1,10 @@
 import { File, Mail } from "lucide-react";
 import { ContenedorPrincipal } from "../../components/componentesReutilizables/ContenedorPrincipal";
+import { FormularioFirmarDoc } from "../../components/componentesFinanzas/FormularioFirmarDoc";
+import {
+  ListaDcoumentosFirmados,
+  ListaDocumentosFirmados,
+} from "../../components/componentesFinanzas/ListaDocumentosFirmados";
 
 export function FirmasSolicitud() {
   return (
@@ -21,11 +26,21 @@ export function FirmasSolicitud() {
 
               <div className="d-flex ms-auto">
                 <button className="btn btn-outline-dark ms-auto mx-2 d-flex align-items-center p-2">
-                  <File color={"auto"} className={"mx-2"} />
+                  <File className={"mx-2 text-auto"} />
                   Reportes
                 </button>
               </div>
             </div>
+          </div>
+        </div>
+        <div className="col-md-6">
+          <div className="card shadow-sm">
+            <FormularioFirmarDoc />
+          </div>
+        </div>
+        <div className="col-md-6">
+          <div className="card p-0">
+            <ListaDocumentosFirmados />
           </div>
         </div>
       </div>

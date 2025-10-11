@@ -15,7 +15,13 @@ import { ContenedorPrincipal } from "../componentesReutilizables/ContenedorPrinc
 import { useQuery } from "@tanstack/react-query";
 import { GetPlatosVender } from "../../service/accionesVender/GetPlatosVender";
 import { Cargando } from "../componentesReutilizables/Cargando";
-import { CheckCheck, Minus, Trash2 } from "lucide-react";
+import {
+  CheckCheck,
+  CheckCheckIcon,
+  Minus,
+  MinusIcon,
+  Trash2,
+} from "lucide-react";
 
 export function ToLlevar() {
   const { id } = useParams();
@@ -102,7 +108,7 @@ export function ToLlevar() {
                                   handleRemovePlatoPreventa(item.id)
                                 }
                               >
-                                <Minus color={"auto"} />
+                                <MinusIcon className="text-auto" />
                               </button>
                             </td>
                           </tr>
@@ -165,14 +171,18 @@ export function ToLlevar() {
                     className="btn-realizarPedido btn-block w-100 p-3 mt-3"
                     onClick={() => hanldleRealizarPago()}
                   >
-                    <CheckCheck color={"auto"} height="30px" width="30px" />{" "}
+                    <CheckCheckIcon
+                      className="text-auto"
+                      height="30px"
+                      width="30px"
+                    />{" "}
                     Pagar
                   </button>
                   <button
                     className="btn-danger btn rounded btn-block w-100 p-3 mt-3"
                     onClick={() => handleEliminarTodo()}
                   >
-                    <Trash2 color={"auto"} height="30px" width="30px" />{" "}
+                    <Trash2 className="text-auto" height="30px" width="30px" />{" "}
                     Eliminar Todo
                   </button>
                 </>

@@ -22,7 +22,7 @@ export function GraficoIAhome() {
   });
 
   const {
-    data: ventasIAResponse = { data: [] },
+    data: ventasIAResponse = [],
     isLoading: isLoadingVentasIA,
     isError: isErrorVentasIA,
   } = useQuery({
@@ -34,24 +34,6 @@ export function GraficoIAhome() {
 
   // Asegurarse de que ventasIA sea un array
   const ventasIA = Array.isArray(ventasIAResponse) ? ventasIAResponse : [];
-
-  const {
-    data: usuariosActivos = [],
-    isLoading: isLoadingUsuarios,
-    isError: isErrorUsuarios,
-  } = useQuery({
-    queryKey: ["usuariosActivos"],
-    queryFn: async () => {
-      // Simulación de datos de usuarios activos
-      return [
-        { id: 1, nombre: "Juan Pérez", hora: "08:30 AM" },
-        { id: 2, nombre: "María Gómez", hora: "09:15 AM" },
-        { id: 3, nombre: "Carlos Ruiz", hora: "10:00 AM" },
-      ];
-    },
-    refetchOnWindowFocus: false,
-    retry: 1,
-  });
 
   // Obtener recomendaciones
   const {
@@ -96,13 +78,14 @@ export function GraficoIAhome() {
 
   // Procesar datos para el gráfico de predicciones (ventasIA)
   const prediccionesPorFecha = ventasIA.reduce((acc, prediccion) => {
-    const fecha = prediccion.fecha; // Fecha de la predicción
-    acc[fecha] = prediccion.probabilidad * 50; // Escalar probabilidad para que sea visible en el gráfico
+    const fecha = new Date(prediccion.fecha).toISOString().split("T")[0];
+    acc[fecha] = Number(prediccion.total) || 0;
     return acc;
   }, {});
 
+  // Crear array alineado a labels
   const dataPredicciones = labels.map(
-    (fecha) => prediccionesPorFecha[fecha] || 0 // Si no hay predicción para una fecha, usar 0
+    (fecha) => prediccionesPorFecha[fecha] || 0
   );
 
   // Configuración del gráfico

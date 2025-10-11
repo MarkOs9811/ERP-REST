@@ -18,6 +18,7 @@ import ToastAlert from "../componenteToast/ToastAlert";
 import ModalAlertActivar from "../componenteToast/ModalAlertActivar";
 import ModalRight from "../componentesReutilizables/ModalRight";
 import { FormEditarInventario } from "./FormEditarInventario";
+import { AlertCircle } from "lucide-react";
 
 export function InventarioList({ search }) {
   const [inventario, setInvetario] = useState([]);
@@ -258,7 +259,7 @@ export function InventarioList({ search }) {
                   <span>{row.fecha_vencimiento}</span>
                   <div className="d-flex align-items-center">
                     <small>
-                      <Alert className="text-auto me-2" size={20} />
+                      <AlertCircle className="text-auto me-2" size={20} />
                     </small>
                     <span>Por Vencer</span>
                   </div>
@@ -270,7 +271,7 @@ export function InventarioList({ search }) {
                   <span>{row.fecha_vencimiento}</span>
                   <div className="d-flex align-items-center">
                     <small>
-                      <Alert className="me-2 text-auto" size={20} />
+                      <AlertCircle className="me-2 text-auto" size={20} />
                     </small>
                     <span>Vencido</span>
                   </div>

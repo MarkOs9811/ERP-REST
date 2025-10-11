@@ -15,12 +15,15 @@ import { faUser, faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import RippleWrapper from "../components/componentesReutilizables/RippleWrapper";
 import { ArrowBigRight } from "lucide-react";
+import { useAuth } from "../AuthContext";
+import { abrirCaja } from "../redux/cajaSlice";
+import { useDispatch } from "react-redux";
 
 export const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   // Inicializamos useForm
   const {
     register,
@@ -31,31 +34,41 @@ export const Login = () => {
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+  const { login } = useAuth();
 
   const onSubmit = async (data) => {
-    if (errors.email || errors.password) return; // Verifica si hay errores
+    if (errors.email || errors.password) return;
     setLoading(true);
+
     try {
-      //cambiar  la url cuando el backend estè en produccion o servidor
       const response = await axios.post("http://erp-api.test/api/login", {
         email: data.email,
         password: data.password,
       });
 
       if (response.data.token) {
-        localStorage.setItem("token", response.data.token);
-        localStorage.setItem("user", JSON.stringify(response.data.user));
+        // ✅ ahora usas el login del AuthContext
+        login(response.data.token, response.data.user);
+
+        // Si quieres guardar extras (roles, caja, empresa) puedes hacerlo aquí
+        const cajaData = {
+          nombre: response.data?.caja?.caja?.nombreCaja ?? "",
+          id: response.data?.caja?.caja?.id ?? null,
+          estado:
+            response.data?.caja?.caja?.estadoCaja == 1 ? "abierto" : "cerrado",
+        };
+
         localStorage.setItem("roles", JSON.stringify(response.data.roles));
+        localStorage.setItem("caja", JSON.stringify(cajaData));
+
+        dispatch(abrirCaja(cajaData));
+
         localStorage.setItem(
           "fotoPerfil",
-          JSON.stringify(response.data.user.fotoPerfil)
+          JSON.stringify(response.data?.user?.fotoPerfil)
         );
-        localStorage.setItem(
-          "miEmpresa",
-          JSON.stringify(response.data.miEmpresa)
-        );
+        localStorage.setItem("empresa", JSON.stringify(response.data?.empresa));
 
-        console.log(response.data.user.fotoPerfil);
         ToastAlert("success", "Inicio de sesión exitoso");
         setTimeout(() => {
           navigate("/");
@@ -190,7 +203,7 @@ export const Login = () => {
                   className="btn-google"
                   onClick={() => {
                     window.location.href =
-                      "https://6a876a5ef21b.ngrok-free.app/api/auth/google/redirect"; //Cambiar URl de mi bbackend
+                      "https://6667b0c21abc.ngrok-free.app/api/auth/google/redirect"; //Cambiar URl de mi bbackend
                   }}
                 >
                   <FontAwesomeIcon icon={faGoogle} className="mx-2" />

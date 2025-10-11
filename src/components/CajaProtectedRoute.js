@@ -6,7 +6,7 @@ import { useCaja } from "../../src/CajaContext";
 export const CajaProtectedRoute = ({ children }) => {
   const { caja } = useCaja();
 
-  if (!caja || caja.estado != "abierto") {
+  if (!caja || caja.estado !== "abierto") {
     return <Navigate to="/abrirCaja" replace />;
   }
 

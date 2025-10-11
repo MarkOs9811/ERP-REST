@@ -298,18 +298,21 @@ export function AdelantoSueldo() {
               className="form-control"
             />
           </div>
-          <button className="btn btn-sm btn-outline-dark" title="Reporte">
-            <FileText className="me-1" color={"auto"} />
+          <button
+            className="btn btn-sm btn-outline-dark btn-sm"
+            title="Reporte"
+          >
+            <FileText className="me-1 text-auto" />
             Reporte
           </button>
           <button
-            className="btn btn-sm btn-outline-dark mx-2"
+            className="btn btn-sm btn-outline-dark btn-sm mx-2"
             title="Agregar"
             onClick={() => {
               setIsModalOpen(true); // Abrir el modal
             }}
           >
-            <Plus className="me-1" color={"auto"} />
+            <Plus className="me-1 text-auto" />
             Agregar
           </button>
         </div>

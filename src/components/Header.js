@@ -9,11 +9,11 @@ import { capitalizeFirstLetter } from "../hooks/FirstLetterUp";
 import { Bell, Moon, Sun } from "lucide-react";
 export function Header() {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
-  const fotoPerfilLocal = JSON.parse(localStorage.getItem("fotoPerfil"));
+  const fotoPerfilLocal = JSON.parse(localStorage.getItem("user"));
   const user = JSON.parse(localStorage.getItem("user"));
   const cajaDetalles = JSON.parse(localStorage.getItem("caja"));
   const cargo = JSON.parse(localStorage.getItem("user")) || {};
-  const fotoPerfil = `${BASE_URL}/storage/${fotoPerfilLocal}`;
+  const fotoPerfil = `${BASE_URL}/storage/${fotoPerfilLocal.fotoPerfil}`;
 
   // PARA MOSTRAR LOS PANELES
   const [showPerfilPanel, setShowPerfilPanel] = useState(false);
@@ -57,18 +57,24 @@ export function Header() {
         {/* Icono de usuario */}
         {/* Contenedor del usuario en la barra de navegación */}
         <div className="navbar-right d-flex align-items-center ms-auto gap-2 p-0 px-4">
+          {fotoPerfilLocal && (
+            <RippleWrapper>
+              <span type="button" className="badge bg-secondary">
+                {capitalizeFirstLetter(fotoPerfilLocal.sede.nombre)}
+              </span>
+            </RippleWrapper>
+          )}
           {["administrador", "atencion al cliente", "cocinero"].includes(
             cargo?.empleado?.cargo?.nombre
           ) &&
             cajaDetalles && (
               <RippleWrapper>
-                <button type="button" className="boton-venta">
+                <span type="button" className="badge bg-success">
                   {cajaDetalles.nombre}
-                </button>
+                </span>
               </RippleWrapper>
             )}
 
-          {/* Botón de tema oscuro/claro */}
           <button
             className="btn btn-auto rounded-pill d-flex align-items-center justify-content-center"
             title="Cambiar tema"

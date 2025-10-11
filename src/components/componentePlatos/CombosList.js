@@ -13,6 +13,8 @@ import ModalAlertActivar from "../componenteToast/ModalAlertActivar";
 import ToastAlert from "../componenteToast/ToastAlert";
 import axiosInstance from "../../api/AxiosInstance";
 import { EllipsisVerticalIcon } from "lucide-react";
+import { EstadoIntegraciones } from "../../hooks/EstadoIntegraciones";
+import { EditCombo } from "./combos/EditCombo";
 
 export function CombosList() {
   const [search, setSearch] = useState("");
@@ -26,6 +28,9 @@ export function CombosList() {
   const [nombreCombo, setNombreCombo] = useState("");
   const [idEliminar, setIdEliminar] = useState("");
   const [idActivarCombo, setIdActivarCombo] = useState("");
+
+  const [modalEditCombo, setModalEditCombo] = useState(false);
+  const [dataCombo, setDataCombo] = useState(false);
 
   const {
     data: platosList = [],
@@ -107,6 +112,17 @@ export function CombosList() {
     }
   };
 
+  const {
+    data: estadoOpenAi,
+    isLoading: isLoadingOpen,
+    isError: isErrorOpen,
+    error,
+    refetch: refetchSunat,
+  } = EstadoIntegraciones("Open Ai", { enabled: false });
+
+  if (isLoadingOpen) return <p>Cargando estado...</p>;
+  if (isErrorOpen) return <p>Error: {error.message}</p>;
+
   return (
     <div className="card shadow-sm h-100">
       <div className="card-header border-bottom d-flex justify-content-between align-items-center mb-2">
@@ -125,7 +141,10 @@ export function CombosList() {
             />
             <button
               className="btn btn-agregar-plato btn-sm rounded-pill mx-3"
-              onClick={() => setIsModalOpen(true)}
+              onClick={() => {
+                setIsModalOpen(true);
+                refetchSunat();
+              }}
             >
               Nuevo Combo
               <FontAwesomeIcon icon={faPlus} color={"auto"} />
@@ -212,7 +231,14 @@ export function CombosList() {
                         aria-labelledby="dropdownMenu2"
                       >
                         <li>
-                          <button className="dropdown-item" type="button">
+                          <button
+                            className="dropdown-item"
+                            type="button"
+                            onClick={() => {
+                              setModalEditCombo(true);
+                              setDataCombo(combo);
+                            }}
+                          >
                             Editar
                           </button>
                         </li>
@@ -263,7 +289,21 @@ export function CombosList() {
           <NuevoCombo
             onClose={() => setIsModalOpen(false)}
             onSuccess={handleUpdateCombos}
+            estadoOpenAi={estadoOpenAi}
           />
+        </div>
+      </ModalRight>
+
+      <ModalRight
+        isOpen={modalEditCombo}
+        onClose={() => {
+          setModalEditCombo(false);
+        }}
+        title="Editar Comboo"
+        hideFooter={true}
+      >
+        <div className="modal-body p-3">
+          <EditCombo dataCombo={dataCombo} />
         </div>
       </ModalRight>
 

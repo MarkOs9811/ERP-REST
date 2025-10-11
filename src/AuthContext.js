@@ -1,10 +1,13 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { cerrarCaja } from "./redux/cajaSlice";
 
 const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
+  const dispatch = useDispatch();
   const [isAuthenticated, setIsAuthenticated] = useState(
     !!localStorage.getItem("token")
   );
@@ -16,10 +19,8 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    localStorage.clear();
-    localStorage.removeItem("configuracion");
-    localStorage.removeItem("caja");
-    localStorage.removeItem("empresa");
+    localStorage.clear(); // ya borra todo
+    dispatch(cerrarCaja()); // actualiza Redux
     setIsAuthenticated(false);
   };
 

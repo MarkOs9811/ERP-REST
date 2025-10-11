@@ -8,6 +8,8 @@ import { Modal } from "react-bootstrap";
 import { ContenedorPrincipal } from "../components/componentesReutilizables/ContenedorPrincipal";
 import { CombosList } from "../components/componentePlatos/CombosList";
 import { useQueryClient } from "@tanstack/react-query";
+import { GetReporteExcel } from "../service/accionesReutilizables/GetReporteExcel";
+import { FileChartColumnIncreasing } from "lucide-react";
 
 export function MenuPlato() {
   const [search, setSearch] = useState("");
@@ -45,6 +47,14 @@ export function MenuPlato() {
                     onClick={handleAddPlato}
                   >
                     Nuevo Plato <FontAwesomeIcon icon={faPlus} />
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-dark"
+                    onClick={() => GetReporteExcel("/reportePlatosTodos")}
+                    title="Descargar Reporte de Platos"
+                  >
+                    <FileChartColumnIncreasing className="text-auto" />
                   </button>
                 </div>
               </div>

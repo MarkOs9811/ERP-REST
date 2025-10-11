@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ContenedorPrincipal } from "../../components/componentesReutilizables/ContenedorPrincipal";
 import { GetHorasExtras } from "../../service/GetHorasExtras";
 import { GetUsuarios } from "../../service/GetUsuarios";
@@ -13,11 +13,13 @@ import { useForm } from "react-hook-form";
 import { FormularioAddHorasExtras } from "../../components/componentePlanillas/componentesHorasExtras/FormularioAddHorasExtras";
 import axiosInstance from "../../api/AxiosInstance";
 import ToastAlert from "../../components/componenteToast/ToastAlert";
-import { Eye, FileText, Pencil, Plus, Trash2 } from "lucide-react";
+import { Eye, EyeIcon, FileText, Pencil, Plus, Trash2 } from "lucide-react";
 
 export function HorasExtras() {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const queryClient = useQueryClient();
 
   const { data: usuarios, isLoading: isLoadingUsuarios } = useQuery({
     queryFn: GetUsuarios,
@@ -56,7 +58,7 @@ export function HorasExtras() {
     console.log("Antes de eliminar:", empleadosSeleccionados);
     setValue(
       "empleados",
-      empleadosSeleccionados.filter((usuario) => usuario.id !== usuarioId)
+      empleadosSeleccionados.filter((usuario) => usuario?.id !== usuarioId)
     );
   };
 
@@ -89,11 +91,14 @@ export function HorasExtras() {
             );
           });
         }
+        queryClient.refetchQueries(["horasExtras"]);
       } else {
         // Caso: Un solo usuario
         const resultado = response.data;
         if (resultado.success) {
           ToastAlert("success", resultado.message); // Mostrar mensaje de éxito
+
+          queryClient.refetchQueries(["horasExtras"]);
           reset(); // Reiniciar el formulario
         } else {
           ToastAlert("error", `Error: ${resultado.message}`); // Mostrar mensaje de error
@@ -159,16 +164,16 @@ export function HorasExtras() {
     {
       name: "Empleado",
       selector: (row) =>
-        `${row.usuario.empleado.persona.nombre} ${row.usuario.empleado.persona.apellidos}`,
+        `${row.usuario?.empleado.persona.nombre} ${row.usuario?.empleado.persona.apellidos}`,
       sortable: true,
       cell: (row) => (
         <div>
           <div>
-            {row.usuario.empleado.persona.nombre}{" "}
-            {row.usuario.empleado.persona.apellidos}
+            {row.usuario?.empleado.persona.nombre}{" "}
+            {row.usuario?.empleado.persona.apellidos}
           </div>
           <small className="fw-bold" style={{ color: "rgb(1, 98, 110)" }}>
-            {row.usuario.empleado.persona.documento_identidad}
+            {row.usuario?.empleado.persona.documento_identidad}
           </small>
         </div>
       ),
@@ -226,32 +231,35 @@ export function HorasExtras() {
         <div>
           {row.estado === 1 ? (
             <>
-              <button className="btn btn-outline-dark" title="Ver detalles">
-                <Eye color={"auto"} />
+              <button
+                className="btn btn-outline-dark btn-sm"
+                title="Ver detalles"
+              >
+                <EyeIcon className="text-auto" />
               </button>
               <button
-                className="btn btn-outline-danger"
+                className="btn btn-outline-danger btn-sm"
                 title="Eliminar registro"
                 onClick={() => eliminarHoraExtra(row.id)}
               >
-                <Trash2 color={"auto"} />
+                <Trash2 className="text-auto" />
               </button>
             </>
           ) : (
             <>
               <button
-                className="btn btn-outline-dark"
+                className="btn btn-outline-dark btn-sm"
                 title="Editar Hora extra"
                 onClick={() => getEditHorasExtras(row.id)}
               >
-                <Pencil color={"auto"} />
+                <Pencil className="text-auto" />
               </button>
               <button
-                className="btn btn-outline-danger"
+                className="btn btn-outline-danger btn-sm"
                 title="Eliminar registro"
                 onClick={() => eliminarHoraExtra(row.id)}
               >
-                <Trash2 color={"auto"} />
+                <Trash2 className="text-auto" />
               </button>
             </>
           )}
@@ -272,18 +280,21 @@ export function HorasExtras() {
               className="form-control"
             />
           </div>
-          <button className="btn btn-sm btn-outline-dark" title="Reporte">
-            <FileText className="me-1" color={"auto"} />
+          <button
+            className="btn btn-sm btn-outline-dark btn-sm"
+            title="Reporte"
+          >
+            <FileText className="me-1 text-auto" />
             Reporte
           </button>
           <button
-            className="btn btn-sm btn-outline-dark mx-2"
+            className="btn btn-sm btn-outline-dark btn-sm mx-2"
             title="Agregar"
             onClick={() => {
               setIsModalOpen(true); // Abrir el modal
             }}
           >
-            <Plus className="me-1" color={"auto"} />
+            <Plus className="me-1 text-auto" />
             Agregar
           </button>
         </div>

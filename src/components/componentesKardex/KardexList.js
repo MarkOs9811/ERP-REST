@@ -4,25 +4,17 @@ import { useEstadoAsyn } from "../../hooks/EstadoAsync";
 
 import { GetKardex } from "../../service/GetKardex";
 import { TablasGenerales } from "../componentesReutilizables/TablasGenerales";
-import { ArrowBigUp, ArrowDown, CalendarDays, FileText } from "lucide-react";
+import {
+  ArrowDownLeft,
+  ArrowUpRight,
+  CalendarDays,
+  FileText,
+} from "lucide-react";
 
 export function KardexList({ search }) {
   const [kardex, setKardex] = useState([]);
   const [filterKardexList, setFilterKardexList] = useState();
   const BASE_URL = process.env.REACT_APP_BASE_URL;
-
-  const rowColors = ["#fff", "#fff", "#fff", "#fff"]; // Colores alternados
-  const conditionalRowStyles = [
-    {
-      when: (row) => row,
-      style: (row) => {
-        const index = row.id % rowColors.length; // Alterna colores según el ID
-        return {
-          borderLeftColor: rowColors[index],
-        };
-      },
-    },
-  ];
 
   const fetchKardex = useCallback(async () => {
     try {
@@ -110,28 +102,14 @@ export function KardexList({ search }) {
           >
             {isEntrada ? (
               <>
-                <ArrowBigUp
-                  color="#0288D1"
-                  height="30px"
-                  width="30px"
-                  style={{
-                    transform: "rotate(45deg)",
-                  }}
-                />
+                <ArrowUpRight color="#0288D1" height="30px" width="30px" />
                 <p className="d-flex center text-center m-auto text-muted">
                   Entrada
                 </p>
               </>
             ) : (
               <>
-                <ArrowDown
-                  color="#D32F2F"
-                  height="30px"
-                  width="30px"
-                  style={{
-                    transform: "rotate(45deg)",
-                  }}
-                />
+                <ArrowDownLeft color="#D32F2F" height="30px" width="30px" />
                 <p className="d-flex center text-center m-auto text-muted">
                   Salida
                 </p>

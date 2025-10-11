@@ -1,12 +1,14 @@
 import {
+  Banknote,
   BanknoteArrowDown,
   CreditCard,
   ReceiptText,
   User,
   WalletCards,
 } from "lucide-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { EstadoIntegraciones } from "../../../hooks/EstadoIntegraciones";
 
 export function OpcionesPago(props) {
   const {
@@ -39,11 +41,21 @@ export function OpcionesPago(props) {
   } = props;
   const {
     register,
-    handleSubmit,
+
     setValue,
     formState: { errors },
-    reset,
   } = useForm();
+
+  const {
+    data: estadoSunat,
+    isLoading,
+    isError,
+    error,
+    refetch: refetchSunat,
+  } = EstadoIntegraciones("sunat", { enabled: false });
+
+  if (isLoading) return <p>Cargando Sunat...</p>;
+  if (isError) return <p>Error: {error.message}</p>;
 
   return (
     <div className="card p-3 hadow-sm flex-grow-1 h-100 d-flex flex-column ">
@@ -72,9 +84,10 @@ export function OpcionesPago(props) {
               onClick={() => {
                 handleSelectMetodo("efectivo");
                 handleSelectCardType(false);
+                refetchSunat();
               }}
             >
-              <BanknoteArrowDown color={"auto"} /> Efectivo
+              <Banknote className="text-auto" /> Efectivo
             </button>
             <button
               type="button"
@@ -88,7 +101,7 @@ export function OpcionesPago(props) {
                 handleSelectCardType(true);
               }}
             >
-              <CreditCard color={"auto"} /> Tarjeta
+              <CreditCard className="text-auto" /> Tarjeta
             </button>
             <button
               type="button"
@@ -100,6 +113,7 @@ export function OpcionesPago(props) {
               onClick={() => {
                 handleSelectMetodo("yape");
                 handleSelectCardType(false);
+                refetchSunat();
               }}
             >
               <img
@@ -120,6 +134,7 @@ export function OpcionesPago(props) {
               onClick={() => {
                 handleSelectMetodo("plin");
                 handleSelectCardType(false);
+                refetchSunat();
               }}
             >
               <img
@@ -168,15 +183,16 @@ export function OpcionesPago(props) {
             </button>
           </div>
         </div>
-
         {/* Opciones de Boleta/Factura */}
         <div className={`mt-4 ${tipoComporbante ? "d-block" : "d-none"}`}>
           <h6>Tipo de documento</h6>
+
           <div
-            className="btn-group w-100"
+            className="btn-group w-100 d-flex align-content-center"
             role="group"
             aria-label="Tipo de Documento"
           >
+            {/* Boleta siempre visible */}
             <button
               type="button"
               className={`boton-opcion-pago p-3 w-50 ${
@@ -188,21 +204,29 @@ export function OpcionesPago(props) {
                 handleSlectComprobante("B");
               }}
             >
-              <ReceiptText color={"auto"} /> Boleta
+              <ReceiptText color="auto" /> Boleta
             </button>
-            <button
-              type="button"
-              className={`boton-opcion-pago p-3 w-50 ${
-                comprobante === "F" ? "btn-seleccionado" : "btn-outline-dark"
-              }`}
-              onClick={() => {
-                handleShowFactura(true);
-                handleShowDatosClientes(true);
-                handleSlectComprobante("F");
-              }}
-            >
-              <ReceiptText color={"auto"} /> Factura
-            </button>
+
+            {/* Factura visible solo si Sunat está habilitado */}
+            {estadoSunat?.estado === 1 ? (
+              <button
+                type="button"
+                className={`boton-opcion-pago p-3 w-50 ${
+                  comprobante === "F" ? "btn-seleccionado" : "btn-outline-dark"
+                }`}
+                onClick={() => {
+                  handleShowFactura(true);
+                  handleShowDatosClientes(true);
+                  handleSlectComprobante("F");
+                }}
+              >
+                <ReceiptText color="auto" /> Factura
+              </button>
+            ) : (
+              <small className="position-relative d-flex align-items-center ps-2">
+                Solo se guardará como una venta normal
+              </small>
+            )}
           </div>
         </div>
         {/* ====0 */}
@@ -350,7 +374,7 @@ export function OpcionesPago(props) {
           </div>
 
           {/* razon social */}
-          <div class="form-floating mb-3">
+          <div className="form-floating mb-3">
             <input
               type="text"
               className="form-control"
@@ -365,7 +389,7 @@ export function OpcionesPago(props) {
           </div>
 
           {/* Nombres y Apellidos */}
-          <div class="form-floating">
+          <div className="form-floating">
             <input
               type="text"
               className="form-control"
@@ -378,8 +402,7 @@ export function OpcionesPago(props) {
               <i className="fa-solid fa-location-dot"></i> Dirección
             </label>
           </div>
-        </div>
-
+        </div>{" "}
         {/* CREDITO  para mostrar cuotas*/}
         <div className={`mt-4 ${cuotas ? "d-block" : "d-none"}`}>
           <h6>Ingrese el numero de cuotas</h6>
@@ -396,7 +419,7 @@ export function OpcionesPago(props) {
               style={{ border: "1px solid black" }}
               placeholder=" "
             />
-            <label for="cuotas">Nº de Cuotas</label>
+            <label htmlFor="cuotas">Nº de Cuotas</label>
           </div>
         </div>
       </div>

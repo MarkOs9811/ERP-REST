@@ -15,11 +15,9 @@ import { TablasGenerales } from "../componentesReutilizables/TablasGenerales";
 // LOS PROPS SON PARAMETROS QUE SE ESTA RECIEBIENDO EN ESTA FUNCTION COMO "SEARCH" Y "UPDATELIST"
 export function UsuariosList({ search, updateList }) {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
-  const queryClient = useQueryClient();
 
   const [filteredUsuarios, setFilteredUsuarios] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [usuarioEdit, setUsuarioEdit] = useState([]);
   const [showConfirm, setShowConfirm] = useState(false);

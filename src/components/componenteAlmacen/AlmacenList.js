@@ -275,6 +275,12 @@ export function AlmacenList({ search, updateList }) {
       sortable: true,
     },
     {
+      name: "Precio Uni",
+      selector: (row) => "S/." + row.precioUnit || "No disponible",
+      sortable: true,
+      wrap: true,
+    },
+    {
       name: "Medida",
       selector: (row) => row.unidad.nombre || "No disponible",
       sortable: true,

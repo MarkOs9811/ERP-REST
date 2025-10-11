@@ -7,7 +7,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import ToastAlert from "../../componenteToast/ToastAlert";
 import axiosInstance from "../../../api/AxiosInstance";
 import { clearProductoSelececcionado } from "../../../redux/productoTransferirSlice";
-import { FileAxis3d } from "lucide-react";
+import { File, FileAxis3d } from "lucide-react";
 
 export function DestinoTransferir() {
   const [archivo, setArchivo] = useState(null);
@@ -121,7 +121,7 @@ export function DestinoTransferir() {
         </label>
         <div className="input-group">
           <span className="input-group-text bg-white">
-            <FileAxis3d color="auto" />
+            <File className="text-auto" />
           </span>
           <input
             type="file"

@@ -3,19 +3,45 @@ import { TablasGenerales } from "../../components/componentesReutilizables/Tabla
 import { useQuery } from "@tanstack/react-query";
 import { GetCuentasPorCobrar } from "../../service/serviceFinanzas/GetCuentasPorCobrar";
 import { Cargando } from "../../components/componentesReutilizables/Cargando";
-import { ArrowRight, Coins, List } from "lucide-react";
+import {
+  ArrowRight,
+  ArrowRightIcon,
+  Coins,
+  List,
+  ListCheck,
+} from "lucide-react";
+import { use, useEffect, useState } from "react";
+import ModalRight from "../../components/componentesReutilizables/ModalRight";
+import { DetallesCuotasCliente } from "../../components/componentesFinanzas/cuotasPorCobrar/DetallesCuotasCliente";
 
 export function CuentasPorCobrar() {
+  const [modalDetalleCuotas, setModalDetalleCuotas] = useState(false);
+  const [dataCuotasCobrar, setDataCuotasCobrar] = useState([]);
   const {
     data: cuentasPorCobrar,
     isLoading,
     isError,
+    refetch,
   } = useQuery({
     queryKey: ["cuentasPorCobrar"],
     queryFn: () => GetCuentasPorCobrar(),
     refetchOnWindowFocus: false,
     retry: false,
   });
+  useEffect(() => {
+    if (
+      modalDetalleCuotas &&
+      dataCuotasCobrar?.id &&
+      cuentasPorCobrar?.cuentas_por_cobrar
+    ) {
+      const cuentaActualizada = cuentasPorCobrar.cuentas_por_cobrar.find(
+        (c) => c.id === dataCuotasCobrar.id
+      );
+      if (cuentaActualizada) {
+        setDataCuotasCobrar(cuentaActualizada);
+      }
+    }
+  }, [cuentasPorCobrar, modalDetalleCuotas, dataCuotasCobrar?.id]);
 
   const datos = cuentasPorCobrar?.cuentas_por_cobrar || [];
   const columnas = [
@@ -141,15 +167,21 @@ export function CuentasPorCobrar() {
     {
       name: "Ver cuotas",
       selector: (row) => (
-        <button className="btn btn-outline-dark">
-          <List
-            color={"auto"}
+        <button
+          className="btn btn-outline-dark"
+          onClick={() => {
+            setModalDetalleCuotas(true);
+            setDataCuotasCobrar(row);
+          }}
+        >
+          <ListCheck
+            className="text-auto"
             height="20px"
             width="20px"
             style={{ verticalAlign: "middle" }}
           />
-          <ArrowRight
-            color={"auto"}
+          <ArrowRightIcon
+            className="text-auto"
             height="20px"
             width="20px"
             style={{ verticalAlign: "middle", marginLeft: 4 }}
@@ -185,6 +217,20 @@ export function CuentasPorCobrar() {
             </div>
           </div>
         </div>
+        {/* Modales */}
+        <ModalRight
+          isOpen={modalDetalleCuotas}
+          onClose={() => setModalDetalleCuotas(false)}
+          title={"Detalle de Cuotas"}
+          width="70%"
+          hideFooter={true}
+        >
+          <DetallesCuotasCliente
+            data={dataCuotasCobrar}
+            refetch={refetch}
+            estadoModal={setModalDetalleCuotas}
+          />
+        </ModalRight>
       </div>
     </ContenedorPrincipal>
   );

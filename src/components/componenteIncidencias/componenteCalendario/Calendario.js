@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import ReactDOM from "react-dom";
+import { useState } from "react";
+import { renderToString } from "react-dom/server";
+
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -20,8 +21,6 @@ const Calendario = ({ eventos }) => {
   const [popover, setPopover] = useState(null);
 
   const getIconHTML = (type) => {
-    const iconContainer = document.createElement("div");
-
     const iconProps = {
       color: "#2b394b",
       height: "20px",
@@ -35,7 +34,7 @@ const Calendario = ({ eventos }) => {
         icon = <User {...iconProps} />;
         break;
       case "reminder":
-        icon = <BellRing {...iconProps} />; // Icono de campana
+        icon = <BellRing {...iconProps} />;
         break;
       case "alert":
         icon = <CircleAlert {...iconProps} />;
@@ -50,8 +49,7 @@ const Calendario = ({ eventos }) => {
         icon = <CalendarDays {...iconProps} />;
     }
 
-    ReactDOM.render(icon, iconContainer);
-    return iconContainer.innerHTML;
+    return renderToString(icon);
   };
 
   const renderEventContent = (eventInfo) => {

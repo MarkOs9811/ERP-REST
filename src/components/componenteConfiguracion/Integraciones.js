@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
 
 import { GetConfi } from "../../service/accionesConfiguracion/GetConfi";
 import { Cargando } from "../componentesReutilizables/Cargando";
@@ -9,18 +8,26 @@ import {
   BellRing,
   Cloud,
   FileText,
-  Globe2,
+  ChromeIcon,
   Key,
   MessageCircleMore,
   User,
   Wheat,
 } from "lucide-react";
+import ModalRight from "../componentesReutilizables/ModalRight";
+import { GoogleFormIntegracion } from "./confiIntegraciones/GoogleFormIntegracion";
+import axiosInstance from "../../api/AxiosInstance";
+import { OpenAiFormIntegracion } from "./confiIntegraciones/OpenAiFormIntegracion";
+import { TwilioFromIntegracion } from "./confiIntegraciones/TwilioFromIntegracion";
+import { TesseractFormIntegracion } from "./confiIntegraciones/TesseractFormIntegracion";
+
+import "../../css/estilosConfiguracion/EstiloIntegraciones.css";
 
 // Función para retornar el icono según el nombre
 function getIcon(nombre) {
   const n = nombre.toLowerCase();
   if (n.includes("google"))
-    return <Globe2 color="#489ee7" height="32px" width="32px" />;
+    return <ChromeIcon color="#c20a0aff" height="32px" width="32px" />;
   if (n.includes("sunat") || n.includes("greenter"))
     return <FileText color="#5a7a98" height="32px" width="32px" />;
   if (n.includes("openai") || n.includes("chatgpt"))
@@ -39,6 +46,9 @@ function getIcon(nombre) {
 }
 
 export function Integraciones() {
+  const [openModal, setOpenModal] = useState(false);
+  const [tituloModal, setTituloModal] = useState("");
+  const [data, setData] = useState([]);
   const {
     data: configuracion = [],
     isLoading,
@@ -53,7 +63,7 @@ export function Integraciones() {
 
   // Filtrar solo las de tipo "integracion"
   const integraciones = configuracion.filter(
-    (item) => item.tipo?.toLowerCase() === "integracion"
+    (item) => item.tipo?.toLowerCase() == "integracion"
   );
 
   // Inicializa switches solo si está vacío y hay integraciones
@@ -61,29 +71,32 @@ export function Integraciones() {
   if (Object.keys(switches).length === 0 && integraciones.length > 0) {
     const initial = {};
     integraciones.forEach((item) => {
-      initial[item.id] = item.estado === 1;
+      initial[item.id] = item.estado == 1;
     });
     setSwitches(initial);
   }
 
-  const handleSwitch = (id) => {
-    setSwitches((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
-    ToastAlert("info", "cambiando estado de la integracion" + id);
-  };
+  const handleSwitch = async (id) => {
+    try {
+      const newValue = !switches[id]; // calcular el nuevo valor
+      setSwitches((prev) => ({
+        ...prev,
+        [id]: newValue,
+      }));
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = useForm();
+      const response = await axiosInstance.put(`/activarServicio/${id}`, {
+        estado: newValue ? 1 : 0, // enviar el valor correcto
+      });
 
-  const onSubmit = (data) => {
-    // Aquí puedes manejar el envío de todas las configuraciones
-    console.log("Datos enviados:", data);
+      if (response.data.success) {
+        ToastAlert("success", "Estado de la integración actualizado");
+      } else {
+        ToastAlert("error", "Error al actualizar el estado de la integración");
+      }
+    } catch (error) {
+      console.error("Error al actualizar el estado de la integración:", error);
+      ToastAlert("error", "Error al actualizar el estado de la integración");
+    }
   };
 
   if (isLoading) {
@@ -110,7 +123,7 @@ export function Integraciones() {
     <div className="container w-100 p-3">
       <div className="row g-3">
         {integraciones.map((item) => (
-          <div className="col-md-6" key={item.id}>
+          <div className="col-md-4 col-xl-6 col-sm-12" key={item.id}>
             <div
               className="card border-0 shadow-sm p-4 h-100"
               style={{ borderRadius: 18 }}
@@ -146,7 +159,12 @@ export function Integraciones() {
                 <button
                   type="button"
                   className="btn btn-outline-dark btn-sm"
-                  // Aquí puedes abrir tu modal cuando lo implementes
+                  disabled={!switches[item.id]}
+                  onClick={() => {
+                    setOpenModal(true);
+                    setTituloModal(item.nombre);
+                    setData(item);
+                  }}
                 >
                   Configurar
                 </button>
@@ -155,6 +173,26 @@ export function Integraciones() {
           </div>
         ))}
       </div>
+
+      <ModalRight
+        isOpen={openModal}
+        onClose={() => setOpenModal(false)}
+        title={tituloModal}
+        hideFooter={true}
+      >
+        {tituloModal === "Google Service" && (
+          <GoogleFormIntegracion dataIntegracion={data} />
+        )}
+        {tituloModal === "Open AI" && (
+          <OpenAiFormIntegracion dataIntegracion={data} />
+        )}
+        {tituloModal === "Twilio" && (
+          <TwilioFromIntegracion dataIntegracion={data} />
+        )}
+        {tituloModal === "tesseract" && (
+          <TesseractFormIntegracion dataIntegracion={data} />
+        )}
+      </ModalRight>
     </div>
   );
 }

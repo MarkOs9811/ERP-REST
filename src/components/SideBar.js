@@ -9,12 +9,10 @@ import {
   Archive,
   Building2,
   Calendar,
+  Hamburger,
   Home,
-  LogOut,
   LogOutIcon,
   Megaphone,
-  OutdentIcon,
-  Sandwich,
   Settings,
   Settings2,
   ShoppingBag,
@@ -24,6 +22,8 @@ import {
   User,
   Users,
 } from "lucide-react";
+import { useAuth } from "../AuthContext";
+import { capitalizeFirstLetter } from "../hooks/FirstLetterUp";
 
 export function SideBar() {
   const location = useLocation();
@@ -49,8 +49,8 @@ export function SideBar() {
     vender: ShoppingCart,
     proveedores: Truck, // En lugar de CubeOutline (para logística)
     compras: Calendar,
-    platos: Sandwich, // Para FastFoodOutline
-    "rr-hh": User, // En lugar de ManOutline
+    platos: Hamburger, // Para FastFoodOutline
+    "rr-hh": Users, // En lugar de ManOutline
     finanzas: TrendingUp,
     "areas-y-cargos": Building2, // En lugar de BusinessOutline
     configuracion: Settings,
@@ -79,7 +79,7 @@ export function SideBar() {
       .trim();
     return icons[roleKey] || Home; // Icono por defecto: Home
   };
-
+  const { logout } = useAuth();
   // Cerrar sesión
   const cerrarSession = async () => {
     try {
@@ -90,9 +90,7 @@ export function SideBar() {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      localStorage.removeItem("roles");
+      logout();
       navigate("/login");
     } catch (error) {
       console.error("Error al cerrar sesión:", error);
@@ -115,21 +113,13 @@ export function SideBar() {
 
   // Manejar la selección de un módulo
   const handleModuloSeleccionado = (nombreOpcion, event) => {
-    const mouseX = event.clientX;
-    const mouseY = event.clientY;
-
     // 👈 actualiza la posición
     dispatch(subMenuClick(nombreOpcion));
     dispatch(setSidebarCompressed(true));
   };
 
-  const handleMouseQuitar = (nombreOpcion) => {
-    dispatch(subMenuClick(nombreOpcion));
-    dispatch(setSidebarCompressed(false));
-  };
-
   return (
-    <div className={`sidebar compressed z-3`}>
+    <div className={`sidebar compressed `}>
       <div className="sidebar-header  d-flex">
         {fotoEmpresa && (
           <img
@@ -146,29 +136,38 @@ export function SideBar() {
         )}
       </div>
 
-      <div className="sidebar-menu">
-        <ul className="menu-list ">
+      <div className="sidebar-menu my-2">
+        <ul className="menu-list h-100">
           {/* Ícono de Inicio */}
 
           <Link
             to={"/"}
-            className="link-opcion "
+            className="link-opcion text-decoration-none"
             title="Inicio"
             onClick={(e) => handleModuloSeleccionado("accesos rapido", e)}
           >
             <li
-              className={`menu-item  p-0 py-2  ${
+              className={`menu-item  p-0 py-2  h-100 ${
                 location.pathname === `/` ? "active" : ""
               }`}
             >
-              <Home className="icon-lucide" />
+              <div className="d-flex flex-column align-items-center m-auto">
+                <Home className="icon-lucide" />
+                <small
+                  className="small text-white"
+                  style={{ fontSize: "10px" }}
+                >
+                  Inicio
+                </small>
+              </div>
             </li>
           </Link>
 
           {/* Módulos dinámicos */}
           {orderedRoles.map((role) => {
-            if (role.nombre.toLowerCase() === "vender") return null; // ⛔ Omitir si es "vender"
-
+            if (role.nombre.toLowerCase() === "vender") return null;
+            if (role.nombre.toLowerCase() === "incidencias") return null;
+            if (role.nombre.toLowerCase() === "usuarios") return null;
             const roleUrl = formatRoleToUrl(role.nombre);
             const isActive = location.pathname.includes(`/${roleUrl}`);
             const IconComponent = getIconForRole(role.nombre);
@@ -177,16 +176,26 @@ export function SideBar() {
               <Link
                 key={role.id}
                 to={`/${roleUrl}`}
-                className="link-opcion"
+                className="link-opcion text-decoration-none"
                 data-bs-toggle="tooltip"
                 data-bs-placement="right"
                 title={role.nombre}
                 onClick={(e) => handleModuloSeleccionado(roleUrl, e)} // al entrar
               >
                 <li
-                  className={`menu-item p-0 py-2 ${isActive ? "active" : ""}`}
+                  className={`menu-item p-0 py-2 my-2 h-100 ${
+                    isActive ? "active" : ""
+                  }`}
                 >
-                  <IconComponent className="icon-lucide" />
+                  <div className="d-flex flex-column m-auto align-items-center">
+                    <IconComponent className="icon-lucide" />
+                    <small
+                      className="small text-white"
+                      style={{ fontSize: "10px" }}
+                    >
+                      {capitalizeFirstLetter(role.nombre)}
+                    </small>
+                  </div>
                 </li>
               </Link>
             );
@@ -197,22 +206,42 @@ export function SideBar() {
             <RippleWrapper className="rounded-md">
               <Link
                 to={"/configuracion"}
-                className="link-opcion"
+                className="link-opcion text-decoration-none"
                 onClick={(e) => handleModuloSeleccionado("", e)}
               >
                 <li
-                  className={`menu-item  p-0 py-2 ${
+                  className={`menu-item  p-0 py-2 h-100 ${
                     location.pathname.includes("/configuracion") ? "active" : ""
                   }`}
                 >
-                  <Settings2 className="icon-lucide" />
+                  <div className="d-flex flex-column align-items-center m-auto">
+                    <Settings2 className="icon-lucide" />
+                    <small
+                      className="small text-white"
+                      style={{ fontSize: "10px" }}
+                    >
+                      Ajustes
+                    </small>
+                  </div>
                 </li>
               </Link>
             </RippleWrapper>
 
-            <Link onClick={cerrarSession} className="logout-btn link-opcion">
-              <li className={`menu-item  p-0 py-2 `}>
-                <LogOutIcon className="icon-lucide " />
+            <Link
+              onClick={cerrarSession}
+              className="logout-btn link-opcion text-decoration-none"
+              title="Cerrar sesión"
+            >
+              <li className={`menu-item  p-0 py-2 h-100 `}>
+                <div className="d-flex flex-column align-items-center m-auto">
+                  <LogOutIcon className="icon-lucide " />
+                  <small
+                    className="small text-white"
+                    style={{ fontSize: "10px" }}
+                  >
+                    Salir
+                  </small>
+                </div>
               </li>
             </Link>
           </div>

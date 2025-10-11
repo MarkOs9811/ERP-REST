@@ -5,6 +5,7 @@ import { ContenedorPrincipal } from "../../components/componentesReutilizables/C
 import { useState } from "react";
 import ModalReportes from "../../components/componentesReutilizables/ModalReportes";
 import { Cargando } from "../../components/componentesReutilizables/Cargando";
+import { EstadoIntegraciones } from "../../hooks/EstadoIntegraciones";
 
 export function ReportesAlmacen() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -44,6 +45,16 @@ export function ReportesAlmacen() {
     }
   };
 
+  const {
+    data: estadoGoogleConfig,
+    isLoading,
+    isError,
+    error,
+  } = EstadoIntegraciones("Google Service");
+
+  if (isLoading) return <p>Cargando estado...</p>;
+  if (isError) return <p>Error: {error.message}</p>;
+
   return (
     <ContenedorPrincipal>
       <div className="card shadow-sm p-3">
@@ -54,24 +65,28 @@ export function ReportesAlmacen() {
             onSubmit={handleReporte1}
             isLoading={loadingTipo === "almacen"}
             tipo="almacen"
+            estadoIntegracionGoogle={estadoGoogleConfig}
           />
           <FormularioReporte
             titulo="Reporte de Movimientos"
             onSubmit={handleReporte1}
             isLoading={loadingTipo === "movimiento"}
             tipo="movimiento"
+            estadoIntegracionGoogle={estadoGoogleConfig}
           />
           <FormularioReporte
             titulo="Reporte de Kardex"
             onSubmit={handleReporte1}
             isLoading={loadingTipo === "kardex"}
             tipo="kardex"
+            estadoIntegracionGoogle={estadoGoogleConfig}
           />
           <FormularioReporte
             titulo="Reporte de Solcitudes"
             onSubmit={handleReporte1}
             isLoading={loadingTipo === "solicitudes"}
             tipo="solicitudes"
+            estadoIntegracionGoogle={estadoGoogleConfig}
           />
         </div>
       </div>

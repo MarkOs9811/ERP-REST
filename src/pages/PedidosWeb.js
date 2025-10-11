@@ -14,7 +14,7 @@ import { ModalFooter } from "../components/componenteVender/cuerpoModalRight/Mod
 import { ModalCabecera } from "../components/componenteVender/cuerpoModalRight/ModalCabecera";
 import { ModalCuerpo } from "../components/componenteVender/cuerpoModalRight/ModalCuerpo";
 import { ContenedorPrincipal } from "../components/componentesReutilizables/ContenedorPrincipal";
-import { Check, CookingPot, Hourglass } from "lucide-react";
+import { Check, CheckCheck, CookingPot, Hourglass } from "lucide-react";
 
 export function PedidosWeb() {
   const queryClient = useQueryClient();
@@ -171,21 +171,27 @@ export function PedidosWeb() {
             title: "Pendientes - Pago",
             color: "#ebf3fa",
             border: "#7ab0e0",
-            icon: <Hourglass color={"auto"} height="35px" width="35px" />,
+            icon: (
+              <Hourglass className="text-auto" height="35px" width="35px" />
+            ),
           },
           {
             key: "proceso",
             title: "En Proceso",
             color: "#eef4f9",
             border: "#5a7a98",
-            icon: <CookingPot color={"auto"} height="35px" width="35px" />,
+            icon: (
+              <CookingPot className="text-auto" height="35px" width="35px" />
+            ),
           },
           {
             key: "listos",
             title: "Listo - Para recoger",
             color: "#f6fef9",
             border: "#28A745",
-            icon: <Check color={"auto"} height="35px" width="35px" />,
+            icon: (
+              <CheckCheck className="text-auto" height="35px" width="35px" />
+            ),
           },
         ].map(({ key, title, border, icon }) => (
           <div key={key} className="col-md-4 d-flex flex-column ">

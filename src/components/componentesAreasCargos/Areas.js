@@ -9,7 +9,7 @@ import { AddArea } from "./componentesAreas/AddAreas";
 import { useForm } from "react-hook-form";
 import ToastAlert from "../componenteToast/ToastAlert";
 import axiosInstance from "../../api/AxiosInstance";
-import { Plus } from "lucide-react";
+import { Plus, PlusIcon } from "lucide-react";
 
 export function Areas() {
   const [modalAddAreas, setModalAddArea] = useState();
@@ -62,11 +62,11 @@ export function Areas() {
         <p className="h4  align-middle mb-0">Areas</p>
         <button
           type="button"
-          className="btn ms-auto border"
+          className="btn btn-outline-dark"
           title="Agregar un cargo"
           onClick={() => setModalAddArea(true)}
         >
-          <Plus color={"auto"} />
+          <PlusIcon className="text-auto" />
         </button>
       </div>
       <div className="card-body">

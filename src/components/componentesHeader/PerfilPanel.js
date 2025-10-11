@@ -9,9 +9,11 @@ import {
 } from "lucide-react";
 import axiosInstance from "../../api/AxiosInstance";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../AuthContext";
 
 export function PerfilPanel({ show, onClose, user, fotoPerfil }) {
   const navigate = useNavigate();
+  const { logout } = useAuth();
   const cerrarSession = async () => {
     try {
       await axiosInstance.post(
@@ -23,9 +25,7 @@ export function PerfilPanel({ show, onClose, user, fotoPerfil }) {
           },
         }
       );
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      localStorage.removeItem("roles");
+      logout();
       navigate("/login");
     } catch (error) {
       console.error("Error al cerrar sesión:", error);

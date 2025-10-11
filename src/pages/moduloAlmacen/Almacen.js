@@ -3,8 +3,9 @@ import { AlmacenList } from "../../components/componenteAlmacen/AlmacenList";
 import "../../css/EstilosAlmacen.css";
 import { useNavigate } from "react-router-dom";
 import { ContenedorPrincipal } from "../../components/componentesReutilizables/ContenedorPrincipal";
-import { Plus } from "lucide-react";
+import { FileChartColumnIncreasing, Plus } from "lucide-react";
 import { useState } from "react";
+import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteExcel";
 export function Almacen() {
   const [updateList, setUpdateList] = useState(false);
   const [search, setSearch] = useState("");
@@ -37,6 +38,14 @@ export function Almacen() {
                 onClick={() => handleAgregar()}
               >
                 <Plus className="color-auto" />
+              </button>
+              <button
+                type="button"
+                className="btn btn-dark mx-2"
+                onClick={() => GetReporteExcel("/reporteAlmacenTodo")}
+                title="Descargar Reporte de Platos"
+              >
+                <FileChartColumnIncreasing className="text-auto" />
               </button>
             </div>
           </div>

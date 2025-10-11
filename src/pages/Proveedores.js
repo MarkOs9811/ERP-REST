@@ -4,7 +4,8 @@ import { ProveedorList } from "../components/componenteProveedor/ProveedorList";
 import { Modal } from "react-bootstrap";
 import { ProveedorAdd } from "../components/componenteProveedor/ProveedorAdd";
 import { ContenedorPrincipal } from "../components/componentesReutilizables/ContenedorPrincipal";
-import { Plus } from "lucide-react";
+import { FileChartColumnIncreasing, Plus, PlusIcon } from "lucide-react";
+import { GetReporteExcel } from "../service/accionesReutilizables/GetReporteExcel";
 
 export function Proveedores() {
   const [search, setSearch] = useState("");
@@ -40,10 +41,18 @@ export function Proveedores() {
                     onChange={(e) => setSearch(e.target.value)}
                   />
                   <button
-                    className="btn ms-3"
+                    className="btn mx-3 btn-outline-dark"
                     onClick={() => handleAddProveedor()}
                   >
-                    <Plus color={"auto"} />
+                    <PlusIcon className="text-auto" />
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-dark"
+                    onClick={() => GetReporteExcel("/reporteProveedores")}
+                    title="Descargar Reporte de proveedores"
+                  >
+                    <FileChartColumnIncreasing className="text-auto" />
                   </button>
                 </div>
               </div>

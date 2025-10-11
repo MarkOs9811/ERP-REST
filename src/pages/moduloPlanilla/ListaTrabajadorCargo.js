@@ -4,93 +4,88 @@ import { capitalizeFirstLetter } from "../../hooks/FirstLetterUp";
 
 import { useNavigate } from "react-router-dom";
 import { ContenedorPrincipal } from "../../components/componentesReutilizables/ContenedorPrincipal";
-import {
-  BriefcaseBusiness,
-  ChevronRight,
-  User,
-  UsersRound,
-} from "lucide-react";
+import { IdCard, UserCheck2, Users } from "lucide-react";
+import { Usuarios } from "../Usuarios";
 
 export function ListaTrabajadorCargo() {
-  const navigate = useNavigate();
-  const {
-    data: listaCargos,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ["cargos"],
-    queryFn: GetCargos,
-  });
-
-  const handleClickCargo = (cargo) => {
-    navigate(`/rr-hh/planilla/listaTrabajador/${cargo.id}`);
-  };
-
-  // Función para obtener un icono según el cargo
-  const getIconForCargo = (nombreCargo) => {
-    const lowerName = nombreCargo.toLowerCase();
-    if (lowerName.includes("gerente") || lowerName.includes("jefe")) {
-      return <BriefcaseBusiness color={"auto"} height="30px" width="30px" />;
-    }
-    return <User color={"auto"} height="30px" width="30px" />;
-  };
-
   return (
     <ContenedorPrincipal>
-      <div className="row g-3 ">
-        {isLoading && <p>Cargando cargos...</p>}
-        {isError && <p>Error al cargar los cargos.</p>}
-
-        {listaCargos &&
-          listaCargos.map((cargo) => (
-            <div
-              key={cargo.id}
-              className=" col-lg-4 col-md-6 col-sm-12 p-2 d-flex justify-content-center"
-            >
-              <div
-                className="card p-0 w-100 btn text-center card-cargo shadow-sm overflow-hidden"
-                style={{
-                  cursor: "pointer",
-                  transition: "0.3s",
-                  border: "none",
-                  borderRadius: "12px",
-                }}
-                onClick={() => handleClickCargo(cargo)}
-              >
-                {/* Nuevo diseño interno de la tarjeta */}
-                <div className="card-body p-0">
-                  <div className="bg-gradient-to-r from-blue-500 to-blue-600 p-4 ">
-                    <div className="d-flex justify-content-between align-items-center">
-                      <div className="d-flex align-items-center gap-3">
-                        <div className="bg-muted bg-opacity- p-2 rounded-circle">
-                          {getIconForCargo(cargo.nombre)}
-                        </div>
-                        <div className="text-start">
-                          <h3 className="mb-0 text-dark fw-bold">
-                            {capitalizeFirstLetter(cargo.nombre)}
-                          </h3>
-                          <small className="d-flex align-items-center gap-1">
-                            <UsersRound
-                              color={"auto"}
-                              height="16px"
-                              width="16px"
-                            />
-                            {cargo.empleados?.length ?? 0} trabajador(es)
-                          </small>
-                        </div>
-                      </div>
-                      <ChevronRight color="auto" height="20px" width="20px" />
-                    </div>
-                  </div>
-                  <div className="p-3 bg-light">
-                    <small className="text-muted">
-                      Haz clic para ver detalles
-                    </small>
-                  </div>
+      <div className="row gap-2 w-100 m-auto d-flex justify-content-center">
+        <div className="col-md-12 row g-3 my-0">
+          {/* Total de Usuarios */}
+          <div className="col-md-4">
+            <div className="card border-0 shadow-sm h-100 stats-card">
+              <div className="card-body d-flex align-items-center">
+                <div
+                  className="rounded-circle d-flex align-items-center justify-content-center me-3"
+                  style={{
+                    width: "55px",
+                    height: "55px",
+                    background: "#e9f2ff",
+                  }}
+                >
+                  <Users className="text-primary" size={26} />
+                </div>
+                <div>
+                  <h6 className="fw-bold text-muted mb-1">Total de Usuarios</h6>
+                  {/* <p className="h4 fw-bold text-dark mb-0">{totalUsuarios}</p> */}
                 </div>
               </div>
             </div>
-          ))}
+          </div>
+
+          {/* Usuarios Activos */}
+          <div className="col-md-4">
+            <div className="card border-0 shadow-sm h-100 stats-card">
+              <div className="card-body d-flex align-items-center">
+                <div
+                  className="rounded-circle d-flex align-items-center justify-content-center me-3"
+                  style={{
+                    width: "55px",
+                    height: "55px",
+                    background: "#e6f9f0",
+                  }}
+                >
+                  <UserCheck2 className="text-success" size={26} />
+                </div>
+                <div>
+                  <h6 className="fw-bold text-muted mb-1">Usuarios Activos</h6>
+                  <p className="h4 fw-bold text-dark mb-0">
+                    {/* {totalUsuariosActivos} */}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Cuentas Manuales */}
+          <div className="col-md-4">
+            <div className="card border-0 shadow-sm h-100 stats-card">
+              <div className="card-body d-flex align-items-center">
+                <div
+                  className="rounded-circle d-flex align-items-center justify-content-center me-3"
+                  style={{
+                    width: "55px",
+                    height: "55px",
+                    background: "#fff3e6",
+                  }}
+                >
+                  <IdCard className="text-warning" size={26} />
+                </div>
+                <div>
+                  <h6 className="fw-bold text-muted mb-1">Cuentas Manuales</h6>
+                  <p className="h4 fw-bold text-dark mb-0">
+                    {/* {usuariosCunetasManuales} */}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="col-md-12">
+          <Usuarios />
+        </div>
       </div>
     </ContenedorPrincipal>
   );

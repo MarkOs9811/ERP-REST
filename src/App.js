@@ -83,15 +83,14 @@ import { SoporteContacto } from "./components/componenteConfiguracion/SoporteCon
 import { CocinaDespacho } from "./pages/modulosVender/CocinaDespacho";
 import { setSidebarCompressed } from "./redux/sideBarSlice";
 import LayoutPOS from "./LayoutPOS";
+import { ErrorVista } from "./pages/ErrorVista";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 function App() {
-  const isCompressed = useSelector((state) => state.sidebar.isCompressed);
-  const dispatch = useDispatch();
   // useEffect para poder actualizar el logo icono y el nombre en el proyecto - pestaña
   useEffect(() => {
     // Obtener datos de la empresa desde localStorage
-    const miEmpresa = JSON.parse(localStorage.getItem("miEmpresa"));
+    const miEmpresa = JSON.parse(localStorage.getItem("empresa"));
 
     if (miEmpresa) {
       // Actualizar el título de la página
@@ -109,6 +108,7 @@ function App() {
       <CajaProvider>
         <Router>
           <Routes>
+            <Route path="/errorVista" element={<ErrorVista />} />
             <Route path="/google" element={<GoogleRedirectHandler />} />
             <Route path="/login" element={<Login />} />
             <Route path="/tomarAsistencia" element={<TakeAsistencia />} />
@@ -119,7 +119,7 @@ function App() {
                 <PrivateRoute>
                   <div className="main-container p-0 m-0 h-screen flex">
                     <SideBar />
-                    <div className={`content  w-100  p-0`}>
+                    <div className={`content p-0`}>
                       <div className="card p-0 m-0 rounded-0 vh-100">
                         {/* Header fijo */}
                         <div className="card-header p-0 rounded-0 m-0 shrink-0 ">
@@ -144,34 +144,110 @@ function App() {
                                 <Route path="/" element={<Home />} />
                                 <Route
                                   path="/usuarios"
-                                  element={<Usuarios />}
+                                  element={
+                                    <PrivateRoute
+                                      allowedRoles={[
+                                        "usuario",
+                                        "administrador",
+                                      ]}
+                                    >
+                                      <Usuarios />
+                                    </PrivateRoute>
+                                  }
                                 />
+
                                 {/* RUTAS PARA MODULO ALMACEN */}
                                 <Route path="/almacen">
-                                  <Route index element={<Almacen />} />
                                   <Route
-                                    path="/almacen/registro"
-                                    element={<Registro />}
+                                    index
+                                    element={
+                                      <PrivateRoute
+                                        allowedRoles={[
+                                          "almacen",
+                                          "administrador",
+                                        ]}
+                                      >
+                                        <Almacen />
+                                      </PrivateRoute>
+                                    }
                                   />
                                   <Route
-                                    path="/almacen/transferencia"
-                                    element={<Transferencias />}
+                                    path="registro"
+                                    element={
+                                      <PrivateRoute
+                                        allowedRoles={[
+                                          "almacen",
+                                          "administrador",
+                                        ]}
+                                      >
+                                        <Registro />
+                                      </PrivateRoute>
+                                    }
                                   />
                                   <Route
-                                    path="/almacen/solicitud"
-                                    element={<Solicitudes />}
+                                    path="transferencia"
+                                    element={
+                                      <PrivateRoute
+                                        allowedRoles={[
+                                          "almacen",
+                                          "administrador",
+                                        ]}
+                                      >
+                                        <Transferencias />
+                                      </PrivateRoute>
+                                    }
                                   />
                                   <Route
-                                    path="/almacen/kardex"
-                                    element={<Kardex />}
+                                    path="solicitud"
+                                    element={
+                                      <PrivateRoute
+                                        allowedRoles={[
+                                          "almacen",
+                                          "administrador",
+                                        ]}
+                                      >
+                                        <Solicitudes />
+                                      </PrivateRoute>
+                                    }
                                   />
                                   <Route
-                                    path="/almacen/reportes"
-                                    element={<ReportesAlmacen />}
+                                    path="kardex"
+                                    element={
+                                      <PrivateRoute
+                                        allowedRoles={[
+                                          "almacen",
+                                          "administrador",
+                                        ]}
+                                      >
+                                        <Kardex />
+                                      </PrivateRoute>
+                                    }
                                   />
                                   <Route
-                                    path="/almacen/ajustes"
-                                    element={<AjustesAlmacen />}
+                                    path="reportes"
+                                    element={
+                                      <PrivateRoute
+                                        allowedRoles={[
+                                          "almacen",
+                                          "administrador",
+                                        ]}
+                                      >
+                                        <ReportesAlmacen />
+                                      </PrivateRoute>
+                                    }
+                                  />
+                                  <Route
+                                    path="ajustes"
+                                    element={
+                                      <PrivateRoute
+                                        allowedRoles={[
+                                          "almacen",
+                                          "administrador",
+                                        ]}
+                                      >
+                                        <AjustesAlmacen />
+                                      </PrivateRoute>
+                                    }
                                   />
                                 </Route>
 
@@ -179,151 +255,452 @@ function App() {
                                 <Route path="/rr-hh">
                                   <Route
                                     index
-                                    element={<ListaTrabajadorCargo />}
+                                    element={
+                                      <PrivateRoute
+                                        allowedRoles={[
+                                          "RR.HH",
+                                          "administrador",
+                                        ]}
+                                      >
+                                        <ListaTrabajadorCargo />
+                                      </PrivateRoute>
+                                    }
                                   />
                                   <Route
                                     path="planilla"
-                                    element={<ListaTrabajadorCargo />}
-                                  />
-                                </Route>
-                                <Route path="/rr-hh">
-                                  <Route
-                                    index
-                                    element={<ListaTrabajadorCargo />}
-                                  />
-                                  <Route
-                                    index
-                                    element={<ListaTrabajadorCargo />}
+                                    element={
+                                      <PrivateRoute
+                                        allowedRoles={[
+                                          "RR.HH",
+                                          "administrador",
+                                        ]}
+                                      >
+                                        <ListaTrabajadorCargo />
+                                      </PrivateRoute>
+                                    }
                                   />
                                   <Route
                                     path="planilla/ListaTrabajador/:idCargo?"
-                                    element={<ListaTrabajador />}
+                                    element={
+                                      <PrivateRoute
+                                        allowedRoles={[
+                                          "RR.HH",
+                                          "administrador",
+                                        ]}
+                                      >
+                                        <ListaTrabajador />
+                                      </PrivateRoute>
+                                    }
                                   />
                                   <Route
                                     path="ingreso-a-planilla"
-                                    element={<IngresoPlanilla />}
+                                    element={
+                                      <PrivateRoute
+                                        allowedRoles={[
+                                          "RR.HH",
+                                          "administrador",
+                                        ]}
+                                      >
+                                        <IngresoPlanilla />
+                                      </PrivateRoute>
+                                    }
                                   />
                                   <Route
                                     path="asistencia"
-                                    element={<Asistencia />}
+                                    element={
+                                      <PrivateRoute
+                                        allowedRoles={[
+                                          "RR.HH",
+                                          "administrador",
+                                        ]}
+                                      >
+                                        <Asistencia />
+                                      </PrivateRoute>
+                                    }
                                   />
                                   <Route
                                     path="horas-extras"
-                                    element={<HorasExtras />}
+                                    element={
+                                      <PrivateRoute
+                                        allowedRoles={[
+                                          "RR.HH",
+                                          "administrador",
+                                        ]}
+                                      >
+                                        <HorasExtras />
+                                      </PrivateRoute>
+                                    }
                                   />
                                   <Route
                                     path="adelanto-sueldo"
-                                    element={<AdelantoSueldo />}
+                                    element={
+                                      <PrivateRoute
+                                        allowedRoles={[
+                                          "RR.HH",
+                                          "administrador",
+                                        ]}
+                                      >
+                                        <AdelantoSueldo />
+                                      </PrivateRoute>
+                                    }
                                   />
                                   <Route
                                     path="vacaciones"
-                                    element={<Vacaciones />}
+                                    element={
+                                      <PrivateRoute
+                                        allowedRoles={[
+                                          "RR.HH",
+                                          "administrador",
+                                        ]}
+                                      >
+                                        <Vacaciones />
+                                      </PrivateRoute>
+                                    }
                                   />
                                   <Route
                                     path="reportes"
-                                    element={<ReportePlanilla />}
+                                    element={
+                                      <PrivateRoute
+                                        allowedRoles={[
+                                          "RR.HH",
+                                          "administrador",
+                                        ]}
+                                      >
+                                        <ReportePlanilla />
+                                      </PrivateRoute>
+                                    }
                                   />
                                   <Route
                                     path="ajustes"
-                                    element={<AjustesPlanilla />}
+                                    element={
+                                      <PrivateRoute
+                                        allowedRoles={[
+                                          "RR.HH",
+                                          "administrador",
+                                        ]}
+                                      >
+                                        <AjustesPlanilla />
+                                      </PrivateRoute>
+                                    }
                                   />
                                 </Route>
+
                                 {/* RUTAS PARA MODULO COMPRAS */}
-                                <Route path="/compras/" element={<Compras />} />
+                                <Route
+                                  path="/compras"
+                                  element={
+                                    <PrivateRoute
+                                      allowedRoles={[
+                                        "compras",
+                                        "administrador",
+                                      ]}
+                                    >
+                                      <Compras />
+                                    </PrivateRoute>
+                                  }
+                                />
+
                                 {/* RUTAS PARA MODULO VENTAS */}
                                 <Route path="/ventas">
-                                  <Route index element={<Ventas />} />
+                                  <Route
+                                    index
+                                    element={
+                                      <PrivateRoute
+                                        allowedRoles={[
+                                          "ventas",
+                                          "administrador",
+                                        ]}
+                                      >
+                                        <Ventas />
+                                      </PrivateRoute>
+                                    }
+                                  />
                                   <Route
                                     path="inventario"
-                                    element={<Inventario />}
+                                    element={
+                                      <PrivateRoute
+                                        allowedRoles={[
+                                          "ventas",
+                                          "administrador",
+                                        ]}
+                                      >
+                                        <Inventario />
+                                      </PrivateRoute>
+                                    }
                                   />
                                   <Route
                                     path="solicitud"
-                                    element={<Solicitud />}
+                                    element={
+                                      <PrivateRoute
+                                        allowedRoles={[
+                                          "ventas",
+                                          "administrador",
+                                        ]}
+                                      >
+                                        <Solicitud />
+                                      </PrivateRoute>
+                                    }
                                   />
                                   <Route
                                     path="solicitud/realizarSolicitud"
-                                    element={<RealizarSolicitud />}
+                                    element={
+                                      <PrivateRoute
+                                        allowedRoles={[
+                                          "ventas",
+                                          "administrador",
+                                        ]}
+                                      >
+                                        <RealizarSolicitud />
+                                      </PrivateRoute>
+                                    }
                                   />
                                   <Route
                                     path="reportes"
-                                    element={<Reportes />}
+                                    element={
+                                      <PrivateRoute
+                                        allowedRoles={[
+                                          "ventas",
+                                          "administrador",
+                                        ]}
+                                      >
+                                        <Reportes />
+                                      </PrivateRoute>
+                                    }
                                   />
                                   <Route
                                     path="ajustes-ventas"
-                                    element={<AjustesVentas />}
+                                    element={
+                                      <PrivateRoute
+                                        allowedRoles={[
+                                          "ventas",
+                                          "administrador",
+                                        ]}
+                                      >
+                                        <AjustesVentas />
+                                      </PrivateRoute>
+                                    }
                                   />
-                                  <Route path="cajas" element={<Cajas />} />
+                                  <Route
+                                    path="cajas"
+                                    element={
+                                      <PrivateRoute
+                                        allowedRoles={[
+                                          "ventas",
+                                          "administrador",
+                                        ]}
+                                      >
+                                        <Cajas />
+                                      </PrivateRoute>
+                                    }
+                                  />
                                 </Route>
 
                                 {/* RUTA PARA UNICAMENTE COCINA */}
                                 <Route
                                   path="/vender/cocina"
-                                  element={<CocinaDespacho />}
+                                  element={
+                                    <PrivateRoute
+                                      allowedRoles={["cocina", "administrador"]}
+                                    >
+                                      <CocinaDespacho />
+                                    </PrivateRoute>
+                                  }
                                 />
-                                {/* ====================== */}
-                                <Route
-                                  path="/abrirCaja"
-                                  element={<AbrirCaja />}
-                                />
+
+                                {/* Proveedores */}
                                 <Route
                                   path="/proveedores"
-                                  element={<Proveedores />}
+                                  element={
+                                    <PrivateRoute
+                                      allowedRoles={[
+                                        "proveedores",
+                                        "administrador",
+                                      ]}
+                                    >
+                                      <Proveedores />
+                                    </PrivateRoute>
+                                  }
                                 />
+
+                                {/* Áreas y cargos */}
                                 <Route
                                   path="/areas-y-cargos"
-                                  element={<AreasCargo />}
+                                  element={
+                                    <PrivateRoute
+                                      allowedRoles={[
+                                        "areas y cargos",
+                                        "administrador",
+                                      ]}
+                                    >
+                                      <AreasCargo />
+                                    </PrivateRoute>
+                                  }
                                 />
+
                                 {/* RUTAS PARA MODULO INCIDENCIAS */}
                                 <Route path="/incidencias">
-                                  <Route index element={<Eventos />} />
+                                  <Route
+                                    index
+                                    element={
+                                      <PrivateRoute
+                                        allowedRoles={[
+                                          "incidencias",
+                                          "administrador",
+                                        ]}
+                                      >
+                                        <Eventos />
+                                      </PrivateRoute>
+                                    }
+                                  />
                                 </Route>
 
-                                <Route path="/platos" element={<MenuPlato />} />
+                                {/* Platos */}
+                                <Route
+                                  path="/platos"
+                                  element={
+                                    <PrivateRoute
+                                      allowedRoles={["platos", "administrador"]}
+                                    >
+                                      <MenuPlato />
+                                    </PrivateRoute>
+                                  }
+                                />
 
                                 {/* RUTAS PARA MODULO FINANZAS */}
                                 <Route path="/finanzas">
                                   <Route
                                     index
-                                    element={<InformesFinancieros />}
+                                    element={
+                                      <PrivateRoute
+                                        allowedRoles={[
+                                          "finanzas",
+                                          "administrador",
+                                        ]}
+                                      >
+                                        <InformesFinancieros />
+                                      </PrivateRoute>
+                                    }
                                   />
                                   <Route
                                     path="informes-financieros"
-                                    element={<InformesFinancieros />}
+                                    element={
+                                      <PrivateRoute
+                                        allowedRoles={[
+                                          "finanzas",
+                                          "administrador",
+                                        ]}
+                                      >
+                                        <InformesFinancieros />
+                                      </PrivateRoute>
+                                    }
                                   />
                                   <Route
                                     path="presupuestos"
-                                    element={<Presupuestos />}
+                                    element={
+                                      <PrivateRoute
+                                        allowedRoles={[
+                                          "finanzas",
+                                          "administrador",
+                                        ]}
+                                      >
+                                        <Presupuestos />
+                                      </PrivateRoute>
+                                    }
                                   />
                                   <Route
                                     path="ajustes"
-                                    element={<AjustesFinanzas />}
+                                    element={
+                                      <PrivateRoute
+                                        allowedRoles={[
+                                          "finanzas",
+                                          "administrador",
+                                        ]}
+                                      >
+                                        <AjustesFinanzas />
+                                      </PrivateRoute>
+                                    }
                                   />
                                   <Route
                                     path="reportesFinanzas"
-                                    element={<ReportesFinanzas />}
+                                    element={
+                                      <PrivateRoute
+                                        allowedRoles={[
+                                          "finanzas",
+                                          "administrador",
+                                        ]}
+                                      >
+                                        <ReportesFinanzas />
+                                      </PrivateRoute>
+                                    }
                                   />
                                   <Route
                                     path="firmar-solicitud"
-                                    element={<FirmasSolicitud />}
+                                    element={
+                                      <PrivateRoute
+                                        allowedRoles={[
+                                          "finanzas",
+                                          "administrador",
+                                        ]}
+                                      >
+                                        <FirmasSolicitud />
+                                      </PrivateRoute>
+                                    }
                                   />
                                   <Route
                                     path="libro-diario"
-                                    element={<LibroDiario />}
+                                    element={
+                                      <PrivateRoute
+                                        allowedRoles={[
+                                          "finanzas",
+                                          "administrador",
+                                        ]}
+                                      >
+                                        <LibroDiario />
+                                      </PrivateRoute>
+                                    }
                                   />
                                   <Route
                                     path="libro-mayor"
-                                    element={<LibroMayor />}
+                                    element={
+                                      <PrivateRoute
+                                        allowedRoles={[
+                                          "finanzas",
+                                          "administrador",
+                                        ]}
+                                      >
+                                        <LibroMayor />
+                                      </PrivateRoute>
+                                    }
                                   />
                                   <Route
                                     path="cuentas-por-cobrar"
-                                    element={<CuentasPorCobrar />}
+                                    element={
+                                      <PrivateRoute
+                                        allowedRoles={[
+                                          "finanzas",
+                                          "administrador",
+                                        ]}
+                                      >
+                                        <CuentasPorCobrar />
+                                      </PrivateRoute>
+                                    }
                                   />
                                   <Route
                                     path="cuentas-por-pagar"
-                                    element={<CuentasPorPagar />}
+                                    element={
+                                      <PrivateRoute
+                                        allowedRoles={[
+                                          "finanzas",
+                                          "administrador",
+                                        ]}
+                                      >
+                                        <CuentasPorPagar />
+                                      </PrivateRoute>
+                                    }
                                   />
                                 </Route>
+
+                                {/* Configuración */}
                                 <Route
                                   path="/configuracion"
                                   element={<Configuracion />}
@@ -354,6 +731,10 @@ function App() {
                                     element={<SoporteContacto />}
                                   />
                                 </Route>
+                                <Route
+                                  path="/abrirCaja"
+                                  element={<AbrirCaja />}
+                                />
                               </Routes>
                             </div>
                           </div>
