@@ -48,21 +48,22 @@ const ModalRight = ({
         {/* Header */}
         <div className="modal-right-header p-1 flex-shrink-0">
           <div className="modal-right-header-content d-flex align-items-center p-3">
+            <button
+              type="button"
+              className="btn-close btn-close-auto"
+              aria-label="Close"
+              onClick={handleClose}
+              title="Cerrar Modal"
+            ></button>
             <h3 className="modal-right-title ms-3">
               {capitalizeFirstLetter(title)}
             </h3>
             <p className="text-muted-auto">{subtitulo}</p>
           </div>
-          <button
-            type="button"
-            className="btn-close btn-close-auto"
-            aria-label="Close"
-            onClick={handleClose}
-          ></button>
         </div>
 
         <div
-          className={`modal-right-body p-3 overflow-auto ${
+          className={`modal-right-body m-0 p-0 overflow-auto ${
             hideFooter ? "full-height" : "with-footer"
           }`}
         >

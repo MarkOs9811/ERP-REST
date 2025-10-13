@@ -51,7 +51,7 @@ const GraficoMetodoPago = () => {
 
   return (
     <div className="p-2" style={{ maxWidth: 400 }}>
-      <div className="mb-3 d-flex gap-2 align-middle justify-content-left">
+      <div className="mb-3 d-flex gap-2 align-middle justify-content-left p-3">
         <span className="alert border-0 alert-success text-success p-2 mb-0">
           <PieChart size={25} />
         </span>
@@ -111,7 +111,7 @@ const GraficoMetodoPago = () => {
           </div>
         </div>
       ))}
-      <div className="text-left mt-4">
+      <div className="text-left mt-4 p-3">
         <span className="text-muted small">
           <Crown className="mb-1" /> Método más usado:{" "}
           <span className="fw-bold text-success">{metodoTop?.metodo}</span>

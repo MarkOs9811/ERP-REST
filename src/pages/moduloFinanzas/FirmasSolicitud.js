@@ -1,10 +1,7 @@
 import { File, Mail } from "lucide-react";
 import { ContenedorPrincipal } from "../../components/componentesReutilizables/ContenedorPrincipal";
 import { FormularioFirmarDoc } from "../../components/componentesFinanzas/FormularioFirmarDoc";
-import {
-  ListaDcoumentosFirmados,
-  ListaDocumentosFirmados,
-} from "../../components/componentesFinanzas/ListaDocumentosFirmados";
+import { ListaDocumentosFirmados } from "../../components/componentesFinanzas/ListaDocumentosFirmados";
 
 export function FirmasSolicitud() {
   return (

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import {
   //HashRouter as Router, // PARA produccion
   BrowserRouter as Router, // para desarrollo
@@ -41,7 +41,6 @@ import { RealizarSolicitud } from "./pages/moduloVentas/RealizarSolicitud";
 import { Reportes } from "./pages/moduloVentas/Reportes";
 import AjustesVentas from "./pages/moduloVentas/AjustesVentas";
 import { Registro } from "./pages/moduloAlmacen/Registro";
-import { useDispatch, useSelector } from "react-redux";
 import { Transferencias } from "./pages/moduloAlmacen/Transferencias";
 import { Solicitudes } from "./pages/moduloAlmacen/Solicitudes";
 import { Kardex } from "./pages/moduloAlmacen/Kardex";
@@ -81,7 +80,6 @@ import { ServicioSunat } from "./components/componenteConfiguracion/ServicioSuna
 import { Mantenimiento } from "./components/componenteConfiguracion/Mantenimiento";
 import { SoporteContacto } from "./components/componenteConfiguracion/SoporteContacto";
 import { CocinaDespacho } from "./pages/modulosVender/CocinaDespacho";
-import { setSidebarCompressed } from "./redux/sideBarSlice";
 import LayoutPOS from "./LayoutPOS";
 import { ErrorVista } from "./pages/ErrorVista";
 

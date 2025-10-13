@@ -2,6 +2,7 @@ import { Doughnut } from "react-chartjs-2";
 import { Chart, ArcElement, Tooltip, Legend } from "chart.js";
 import { useQuery } from "@tanstack/react-query";
 import { GetInformesFinancieros } from "../service/serviceFinanzas/GetInformesFinancieros";
+import { CreditCard } from "lucide-react";
 
 Chart.register(ArcElement, Tooltip, Legend);
 
@@ -64,8 +65,19 @@ export function GraficoCuentasPorCobrar() {
   };
 
   return (
-    <div className="w-50 h-100 ms-auto me-auto">
-      <Doughnut data={data} options={options} />
+    <div className="w-100 h-100 ms-auto m-auto d-flex flex-column">
+      <div className="mb-3 d-flex gap-2 align-middle justify-content-left p-3">
+        <span className="alert border-0 alert-primary text-primary p-2 mb-0">
+          <CreditCard size={25} />
+        </span>
+        <h6 className="mb-1 d-flex flex-column gap-1">
+          <span className="fw-bold">Ventas al credito</span>
+          <p className="text-muted small mb-0">Cuentas por cobrar</p>
+        </h6>
+      </div>
+      <div className="m-auto center">
+        <Doughnut data={data} options={options} />
+      </div>
     </div>
   );
 }

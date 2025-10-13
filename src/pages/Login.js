@@ -18,6 +18,7 @@ import { ArrowBigRight } from "lucide-react";
 import { useAuth } from "../AuthContext";
 import { abrirCaja } from "../redux/cajaSlice";
 import { useDispatch } from "react-redux";
+import { motion } from "framer-motion";
 
 export const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -196,20 +197,23 @@ export const Login = () => {
             </div>
             <p className="ms-auto text-center">ó</p>
             <div className="d-flex justify-content-center align-items-center w-100 m-auto">
-              <RippleWrapper className="rounded">
-                <button
-                  type="button"
-                  id="google-signin-btn"
-                  className="btn-google"
-                  onClick={() => {
-                    window.location.href =
-                      "https://6667b0c21abc.ngrok-free.app/api/auth/google/redirect"; //Cambiar URl de mi bbackend
-                  }}
-                >
-                  <FontAwesomeIcon icon={faGoogle} className="mx-2" />
-                  Iniciar sesión con Google
-                </button>
-              </RippleWrapper>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                type="button"
+                id="google-signin-btn"
+                className="btn-google d-flex align-items-center justify-content-center gap-2 px-4 py-2 rounded-3 shadow-sm border border-light"
+                onClick={() => {
+                  window.location.href =
+                    "https://00c7599a4511.ngrok-free.app/api/auth/google/redirect"; // Cambiar URL de mi backend
+                }}
+              >
+                <FontAwesomeIcon icon={faGoogle} className="mx-2" />
+                Iniciar sesión con Google
+              </motion.button>
             </div>
           </form>
         </div>

@@ -72,7 +72,7 @@ export function PlatoMasVendido() {
     .sort((a, b) => b[1].cantidad - a[1].cantidad) // Ordenar por cantidad descendente
     .slice(0, 3); // Tomar los 3 primeros
   return (
-    <div className=" card h-100 p-2 shadow-sm">
+    <div className=" h-100 p-2">
       <div className="card-header d-flex justify-content-between align-items-center p-3">
         <div className="mb-3 d-flex gap-2 align-middle justify-content-center">
           <span className="alert border-0 alert-danger text-danger p-2 mb-0">
