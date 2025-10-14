@@ -42,6 +42,7 @@ export const Login = () => {
     setLoading(true);
 
     try {
+<<<<<<< HEAD
       const response = await axios.post("http://127.0.0.1:8000/api/login", {
         email: data.email,
         password: data.password,
@@ -50,6 +51,12 @@ export const Login = () => {
       //   email: data.email,
       //   password: data.password,
       // });
+=======
+      const response = await axios.post("http://erp-api.test/api/login", {
+        email: data.email,
+        password: data.password,
+      });
+>>>>>>> f272555182cdf657ff95d99c13fb70dafc6ec7c9
 
       if (response.data.token) {
         // ✅ ahora usas el login del AuthContext
