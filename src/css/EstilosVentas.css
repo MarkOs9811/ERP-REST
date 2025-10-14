@@ -1,0 +1,84 @@
+.card {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.card-header {
+    background-color: #ffffff!important;
+    padding: 20px;
+    position: relative;
+}
+
+
+.store-image {
+    width: 180px;
+    /* Se ajusta al tamaño del contenedor */
+    height: auto;
+    /* Mantiene la proporción */
+    border-radius: 4px;
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.2));
+    opacity: 0.6;
+    top: 50;
+    right: 0;
+    position: absolute;
+}
+
+.card-body-ventasDahs {
+    padding: 20px;
+    background: #f2fbff;
+}
+
+.totalVentasTitulo{
+    font-size:60px!important;
+    color: #7099d8;
+    font-weight: normal;
+}
+
+
+/* estilos para ajustes de ventas */
+.custom-control-input:checked ~ .custom-control-label::before {
+    background-color: #0d6efd; /* Bootstrap primary color */
+    border-color: #0d6efd;
+  }
+  
+  .custom-control-input:focus ~ .custom-control-label::before {
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+  }
+  
+  .custom-control-input:not(:checked) ~ .custom-control-label::before {
+    background-color: #e9ecef;
+    border-color: #ced4da;
+  }
+/* ========== TEMA OSCURO PARA VENTAS ========== */
+body.dark-theme .card {
+    background: #1c252e !important;
+    color: #cfd8dc !important;
+    border-color: #232c36 !important;
+}
+body.dark-theme .card-header {
+    background-color: #1c252e !important;
+    color: #fff !important;
+}
+body.dark-theme .card-body-ventasDahs {
+    background: #151a20 !important;
+    color: #cfd8dc !important;
+}
+body.dark-theme .totalVentasTitulo {
+    color: #ee5252 !important;
+}
+body.dark-theme .store-image {
+    filter: drop-shadow(2px 2px 8px rgba(0,0,0,0.4));
+    opacity: 0.8;
+}
+body.dark-theme .custom-control-input:checked ~ .custom-control-label::before {
+    background-color: #ee5252 !important;
+    border-color: #ee5252 !important;
+}
+body.dark-theme .custom-control-input:not(:checked) ~ .custom-control-label::before {
+    background-color: #313a46 !important;
+    border-color: #232c36 !important;
+}
+body.dark-theme .custom-control-input:focus ~ .custom-control-label::before {
+    box-shadow: 0 0 0 0.2rem rgba(238, 82, 82, 0.25) !important;
+}
+/* ========== FIN TEMA OSCURO VENTAS ESTILO MODERNO ========== */

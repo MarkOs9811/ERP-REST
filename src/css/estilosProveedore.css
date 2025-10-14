@@ -1,0 +1,110 @@
+.tabla-container {
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tablaGeneral table {
+    font-size: 16px;
+    color: #333;
+}
+
+.tablaGeneral .rdt_TableHead {
+    background-color: #4caf50;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    text-align: center;
+}
+
+.tablaGeneral .rdt_TableRow {
+    transition: background 0.3s;
+}
+
+.tablaGeneral .rdt_TableRow:hover {
+    background-color: #e8f5e9;
+}
+
+.btn-action {
+    padding: 8px;
+    border-radius: 50%;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.btn-action.edit {
+    background-color: #2196f3;
+    color: white;
+}
+
+.btn-action.delete {
+    background-color: #f44336;
+    color: white;
+}
+
+.btn-action.activate {
+    background-color: #4caf50;
+    color: white;
+}
+
+.btn-action:hover {
+    transform: scale(1.1);
+}
+
+/* ========== TEMA OSCURO PROVEEDORES ESTILO MODERNO CON ROJO CORPORATIVO ========== */
+body.dark-theme .tabla-container {
+    background: #212b36 !important;
+    color: #cfd8dc !important;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.25) !important;
+}
+
+body.dark-theme .tablaGeneral table {
+    color: #cfd8dc !important;
+    background: #212b36 !important;
+}
+
+body.dark-theme .tablaGeneral .rdt_TableHead {
+    background-color: #23272b !important;
+    color: #ee5252 !important;
+}
+
+body.dark-theme .tablaGeneral .rdt_TableRow {
+    background: #23272b !important;
+    color: #cfd8dc !important;
+    transition: background 0.3s;
+}
+
+body.dark-theme .tablaGeneral .rdt_TableRow:hover {
+    background-color: #313a46 !important;
+    color: #fff !important;
+}
+
+body.dark-theme .btn-action {
+    background-color: #313a46 !important;
+    color: #cfd8dc !important;
+    border: none !important;
+}
+
+body.dark-theme .btn-action.edit {
+    background-color: #2196f3 !important;
+    color: #fff !important;
+}
+
+body.dark-theme .btn-action.delete {
+    background-color: #ee5252 !important;
+    color: #fff !important;
+}
+
+body.dark-theme .btn-action.activate {
+    background-color: #27ae60 !important;
+    color: #fff !important;
+}
+
+body.dark-theme .btn-action:hover {
+    transform: scale(1.1);
+    filter: brightness(1.1);
+}
+/* ========== FIN TEMA OSCURO PROVEEDORES ESTILO MODERNO ========== */

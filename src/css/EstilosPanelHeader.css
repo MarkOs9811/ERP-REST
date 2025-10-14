@@ -1,0 +1,76 @@
+/* Panel de notificaciones - tema claro */
+.offcanvas-end-custom-notify {
+    background: #fff !important;
+    color: #222 !important;
+}
+
+/* Fondo de la lista de notificaciones en tema claro */
+.notificaciones-panel-list {
+    background: #fff !important;
+}
+
+/* para el panel de pefil */
+body.dark-theme .offcanvas-end-custom {
+    background: #23272f !important;
+    color: #f1f1f1 !important;
+}
+
+body.dark-theme .offcanvas-end-custom hr {
+    border-color: #444 !important;
+}
+
+body.dark-theme .offcanvas-end-custom .btn {
+    color: #f1f1f1;
+}
+
+/* para el panel de notificaciones */
+body.dark-theme .offcanvas-end-custom-notify {
+    background: #23272f !important;
+    color: #f1f1f1 !important;
+}
+
+body.dark-theme .offcanvas-end-custom-notify .border-bottom {
+    border-bottom: 1px solid #444 !important;
+}
+
+body.dark-theme .offcanvas-end-custom-notify .btn,
+body.dark-theme .offcanvas-end-custom-notify .btn-link,
+body.dark-theme .offcanvas-end-custom-notify .btn-sm {
+    color: #f1f1f1 !important;
+    background: transparent;
+}
+
+body.dark-theme .offcanvas-end-custom-notify .btn-light {
+    background: #2c313a !important;
+    color: #fff !important;
+    border-color: #444 !important;
+}
+
+body.dark-theme .offcanvas-end-custom-notify .bg-light {
+    background: #2c313a !important;
+    color: #f1f1f1 !important;
+}
+
+body.dark-theme .offcanvas-end-custom-notify .text-muted {
+    color: #b0b0b0 !important;
+}
+
+body.dark-theme .offcanvas-end-custom-notify .badge.bg-info {
+    background: #3a8fd7 !important;
+    color: #fff !important;
+}
+
+body.dark-theme .offcanvas-end-custom-notify .btn-close {
+    filter: invert(1);
+}
+
+body.dark-theme .offcanvas-end-custom-notify .bg-notify-unread {
+    background: #23272f !important;
+}
+
+.notificaciones-panel-list {
+    background: #f8f9fa;
+}
+
+body.dark-theme .notificaciones-panel-list {
+    background: #23272f; }

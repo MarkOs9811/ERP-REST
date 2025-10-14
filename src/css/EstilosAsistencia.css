@@ -1,0 +1,144 @@
+/* Tardanza - Rojo intenso pero refinado */
+.card-tardanza {
+    background: #b83d3d;
+    background: linear-gradient(90deg,
+            rgba(184, 61, 61, 1) 0%,
+            rgba(210, 90, 90, 1) 50%,
+            rgba(230, 120, 120, 1) 100%);
+}
+
+/* Tiempo - Verde fresco y profesional */
+.card-tiempo {
+    background: #2e9e6d;
+    background: linear-gradient(90deg,
+            rgba(46, 158, 109, 1) 0%,
+            rgba(80, 190, 120, 1) 50%,
+            rgba(120, 220, 150, 1) 100%);
+}
+
+/* Ausentes - Gris con profundidad */
+.card-ausentes {
+    background: #5a6661;
+    background: linear-gradient(90deg,
+            rgba(90, 102, 97, 1) 0%,
+            rgba(130, 140, 135, 1) 50%,
+            rgba(170, 180, 175, 1) 100%);
+}
+
+/* Total - Azul corporativo vibrante */
+.card-total {
+    background: #1a73c7;
+    background: linear-gradient(74deg,
+            rgba(26, 115, 199, 1) 0%,
+            rgba(50, 160, 220, 1) 50%,
+            rgba(90, 190, 240, 1) 100%);
+}
+
+/* Asegurar contraste para texto blanco */
+.card-tardanza,
+.card-tiempo,
+.card-ausentes,
+.card-total {
+    color: white !important;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+/* Degradado suave para "A tiempo" */
+.bg-success-gradient {
+    background: linear-gradient(135deg, #3fb488 0%, #2ed573 100%);
+    color: white;
+    border: none;
+}
+
+/* Degradado suave para "Tardanza" */
+.bg-danger-gradient {
+    background: linear-gradient(135deg, #dd566a 0%, #df6d77 100%);
+    color: rgb(255, 235, 235);
+    border: none;
+   
+}
+
+/* Degradado suave para otros estados */
+.bg-secondary-gradient {
+    background: linear-gradient(135deg, #dfe6e9 0%, #b2bec3 100%);
+    color: #2d3436;
+    border: none;
+}
+
+/* Estilo base mejorado para badges */
+.badge {
+    padding: 0.45em 1.1em;
+    border-radius: 12px;
+    /* Bordes ligeramente menos redondeados */
+   
+    font-size: 0.82em;
+    letter-spacing: 0.3px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    /* Borde sutil para dar profundidad */
+}
+
+/* Efecto hover sutil */
+.badge:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* ========== TEMA OSCURO ASISTENCIA ESTILO MODERNO CON ROJO CORPORATIVO ========== */
+body.dark-theme .card-tardanza {
+    background: linear-gradient(90deg, #b83d3d 0%, #ee5252 50%, #c0392b 100%) !important;
+    color: #fff !important;
+}
+body.dark-theme .card-tiempo {
+    background: linear-gradient(90deg, #2e9e6d 0%, #3fb488 50%, #2ed573 100%) !important;
+    color: #fff !important;
+}
+body.dark-theme .card-ausentes {
+    background: linear-gradient(90deg, #313a46 0%, #23272b 100%) !important;
+    color: #cfd8dc !important;
+}
+body.dark-theme .card-total {
+    background: linear-gradient(74deg, #1a73c7 0%, #3a7ca5 50%, #212b36 100%) !important;
+    color: #fff !important;
+}
+body.dark-theme .bg-success-gradient {
+    background: linear-gradient(135deg, #3fb488 0%, #2ed573 100%) !important;
+    color: #fff !important;
+}
+body.dark-theme .bg-danger-gradient {
+    background: linear-gradient(135deg, #ee5252 0%, #df6d77 100%) !important;
+    color: #fff !important;
+}
+body.dark-theme .bg-secondary-gradient {
+    background: linear-gradient(135deg, #23272b 0%, #313a46 100%) !important;
+    color: #cfd8dc !important;
+}
+body.dark-theme .badge {
+    background: #23272b !important;
+    color: #ee5252 !important;
+    border: 1px solid #313a46 !important;
+}
+body.dark-theme .badge:hover {
+    background: #313a46 !important;
+    color: #fff !important;
+    border: 1px solid #ee5252 !important;
+}
+body.dark-theme input,
+body.dark-theme select,
+body.dark-theme textarea {
+    background: #23272b !important;
+    color: #cfd8dc !important;
+    border: 1px solid #313a46 !important; /* Gris oscuro, NO rojo */
+}
+body.dark-theme input:focus,
+body.dark-theme select:focus,
+body.dark-theme textarea:focus {
+    border-color: #3a7ca5 !important; /* Azul de acento, NO rojo */
+    outline: none !important;
+}
+body.dark-theme .asistencia-label,
+body.dark-theme label {
+    color: #cfd8dc !important;
+}
+/* ========== FIN TEMA OSCURO ASISTENCIA ESTILO MODERNO ========== */

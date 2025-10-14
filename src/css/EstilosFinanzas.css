@@ -1,0 +1,106 @@
+.icon-background  {
+    position: absolute;
+    top: 10px;
+    /* Ajusta según necesites */
+    right: 15px;
+    /* Ajusta según necesites */
+    width: 60px;
+    /* Tamaño del fondo circular */
+    height: 60px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: #9dbada;
+    opacity: 0.7;
+    transform: rotate(10deg);
+}
+
+
+/* Encabezado */
+.reportes-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.reportes-header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+}
+
+.reportes-header p {
+    color: #6b7280;
+    font-size: 1.1rem;
+}
+
+/* Grid de tarjetas */
+.reportes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2rem;
+}
+
+/* Tarjetas */
+.reporte-card {
+    background: #fff;
+    border-radius: 1.2rem;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+    border: 1px solid #f1f1f1;
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.reporte-card:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    transform: translateY(-4px);
+}
+
+/* Iconos */
+.icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.icon-blue {
+    color: #3b82f6;
+}
+
+.icon-red {
+    color: #ef4444;
+}
+
+.icon-green {
+    color: #10b981;
+}
+
+.icon-emerald {
+    color: #059669;
+}
+
+.icon-indigo {
+    color: #6366f1;
+}
+
+.icon-orange {
+    color: #f97316;
+}
+
+.icon-teal {
+    color: #14b8a6;
+}
+
+.reporte-card p {
+    font-size: 0.9rem;
+    color: #6b7280;
+}
+
+
+body.dark-theme .reporte-card {
+    background-color: #1f2937;
+    border: 1px solid  #4e5c6e;
+}

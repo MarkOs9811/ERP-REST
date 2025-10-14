@@ -1,0 +1,89 @@
+.categoria-platos-container {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.categoria-plato-card {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.img-categoria {
+    width: 40px;
+    height: auto;
+   
+    filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));
+    /* Puedes ajustar los valores de drop-shadow para cambiar la dirección, distancia y desenfoque de la sombra */
+}
+
+
+
+
+.categoria-plato-text p {
+    font-size: 0.8rem ;
+    text-align: center;
+    word-wrap: break-word;
+    word-break: break-all;
+    overflow-wrap: break-word;
+    white-space: normal;   
+    color: #804209;
+    font-weight: bold;
+}
+.categoriaSelect {
+    background: linear-gradient(135deg, #f97676, #f31212);
+    /* Degradado de amarillo a naranja */
+    border: 2px solid #e67e22;
+    /* Borde destacado */
+    color: #fff!important;
+    /* Texto blanco para contraste */
+    font-weight: bold;
+    /* Texto en negrita */
+  
+    /* Aumenta ligeramente el tamaño */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+   
+    /* Animación suave */
+    border-radius: 8px;
+    /* Bordes redondeados */
+}
+
+
+/* ========== TEMA OSCURO CATEGORÍAS PLATOS ESTILO MODERNO ========== */
+
+
+body.dark-theme .categoria-plato-card {
+    background: #212b36 !important;
+    border: 1.5px solid #313a46 !important;
+    color: #cfd8dc !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25) !important;
+}
+
+body.dark-theme .categoria-plato-card:active {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3) !important;
+}
+
+body.dark-theme .img-categoria {
+    filter: drop-shadow(0px 1px 2px rgba(0,0,0,0.5)) !important;
+}
+
+body.dark-theme .categoria-plato-icon {
+    color: #ee5252 !important;
+}
+
+body.dark-theme .categoria-plato-text p {
+    color: #cfd8dc !important;
+}
+
+body.dark-theme .categoriaSelect {
+    background: linear-gradient(135deg, #ee5252, #b32b2b) !important;
+    border: 2px solid #ee5252 !important;
+    color: #fff !important;
+    font-weight: bold;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25) !important;
+}
+
+body.dark-theme .categoriaSelect p,
+body.dark-theme .categoriaSelect .categoria-plato-icon {
+    color: #fff !important;
+}
+/* ========== FIN TEMA OSCURO CATEGORÍAS PLATOS ESTILO MODERNO ========== */
