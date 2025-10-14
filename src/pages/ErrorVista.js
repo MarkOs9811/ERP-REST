@@ -25,7 +25,7 @@ export function ErrorVista() {
 
         {/* Descripción */}
         <p className="text-lg text-gray-600 mb-4">
-          No tienes permisos para acceder a esta página.
+          No tienes permisos para acceder a esta página. :c
         </p>
 
         {/* Botón */}
