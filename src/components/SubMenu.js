@@ -135,6 +135,7 @@ export function SubMenu() {
                 const subrutas = [
                   "/rr-hh/ingreso-a-planilla",
                   "/rr-hh/asistencia",
+                  "/rr-hh/nomina",
                   "/rr-hh/horas-extras",
                   "/rr-hh/adelanto-sueldo",
                   "/rr-hh/vacaciones",
@@ -156,7 +157,17 @@ export function SubMenu() {
                         Planilla
                       </Link>
                     </li>
-
+                    <li
+                      className={`p-0 d-flex ${
+                        location.pathname.startsWith("/rr-hh/nomina")
+                          ? "active"
+                          : ""
+                      }`}
+                    >
+                      <Link to="/rr-hh/nomina" className="w-100 p-2">
+                        Nomina
+                      </Link>
+                    </li>
                     <li
                       className={`p-0 d-flex ${
                         location.pathname.startsWith(

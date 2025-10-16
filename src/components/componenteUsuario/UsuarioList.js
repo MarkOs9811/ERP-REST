@@ -41,7 +41,6 @@ export function UsuariosList({ search, updateList }) {
     retry: 1,
   });
 
-  console.log(usuariosData);
   // funcion efect para filtrar datos de la tabla
   useEffect(() => {
     const result = usuariosData.filter((usuario) => {

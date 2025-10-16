@@ -2,7 +2,7 @@ import "../../css/ModalAlertQuestion.css";
 
 function ModalGeneral({
   show,
-  idProceso,
+  idProceso = null,
   handleAccion,
   handleCloseModal,
   mensaje,
@@ -11,7 +11,10 @@ function ModalGeneral({
 }) {
   const handleConfirm = async () => {
     try {
-      const success = await handleAccion(idProceso);
+      const success = idProceso
+        ? await handleAccion(idProceso)
+        : await handleAccion();
+
       handleCloseModal();
     } catch (error) {
       handleCloseModal();

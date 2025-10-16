@@ -12,10 +12,10 @@ import { motion } from "framer-motion";
 export function BotonMotionGeneral({
   text = "Botón",
   icon = null,
-  color1 = "#4f9aff",
-  color2 = "#6fc3ff",
+  color1 = "#ebebebff",
+  color2 = "#e2e2e2ff",
   onClick = () => {},
-  classDefault = "btn d-flex align-items-center gap-1 px-3 py-2 rounded-3 border shadow-sm ms-auto text-dark",
+  classDefault = "btn d-flex align-items-center gap-1 px-3 py-2 w-auto rounded-3 border-0 shadow-sm ms-auto text-dark",
 }) {
   return (
     <motion.button

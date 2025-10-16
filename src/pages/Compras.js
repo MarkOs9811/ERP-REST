@@ -29,6 +29,8 @@ export function Compras() {
   const { data, isLoading, error } = useQuery({
     queryKey: ["compras"],
     queryFn: GetCompras,
+    refetchOnWindowFocus: false,
+    retry: 1,
   });
   const compras = data?.compras || [];
   const totalCompras = compras.length;

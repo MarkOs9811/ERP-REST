@@ -1,0 +1,11 @@
+.perfil-nomina .card {
+    border-radius: 1rem;
+}
+
+.perfil-nomina .progress-bar {
+    font-size: 0.95rem;
+}
+
+.perfil-nomina img.rounded-circle {
+    box-shadow: 0 2px 8px rgba(21, 102, 156, 0.15);
+}

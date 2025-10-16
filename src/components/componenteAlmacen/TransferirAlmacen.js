@@ -78,11 +78,7 @@ export function TransferirAlmacen() {
     isError,
   } = useInfiniteQuery({
     queryKey: ["almacen"],
-<<<<<<< HEAD
     queryFn: ({ pageParam = 1 }) => GetAlmacen(pageParam),
-=======
-    queryFn: GetAlmacen,
->>>>>>> f272555182cdf657ff95d99c13fb70dafc6ec7c9
     getNextPageParam: (lastPage) => {
       return lastPage.meta.current_page < lastPage.meta.last_page
         ? lastPage.meta.current_page + 1

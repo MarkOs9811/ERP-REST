@@ -1,0 +1,11 @@
+.girar{
+    animation: girar 1s linear infinite;
+}
+@keyframes girar {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}

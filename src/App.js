@@ -82,6 +82,7 @@ import { SoporteContacto } from "./components/componenteConfiguracion/SoporteCon
 import { CocinaDespacho } from "./pages/modulosVender/CocinaDespacho";
 import LayoutPOS from "./LayoutPOS";
 import { ErrorVista } from "./pages/ErrorVista";
+import { Nomina } from "./pages/moduloPlanilla/Nomina";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 function App() {
@@ -277,6 +278,7 @@ function App() {
                                       </PrivateRoute>
                                     }
                                   />
+
                                   <Route
                                     path="planilla/ListaTrabajador/:idCargo?"
                                     element={
@@ -300,6 +302,19 @@ function App() {
                                         ]}
                                       >
                                         <IngresoPlanilla />
+                                      </PrivateRoute>
+                                    }
+                                  />
+                                  <Route
+                                    path="nomina"
+                                    element={
+                                      <PrivateRoute
+                                        allowedRoles={[
+                                          "RR.HH",
+                                          "administrador",
+                                        ]}
+                                      >
+                                        <Nomina />
                                       </PrivateRoute>
                                     }
                                   />

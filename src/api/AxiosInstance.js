@@ -3,12 +3,7 @@ import axiosRetry from "axios-retry";
 
 const axiosInstance = axios.create({
   // baseURL: "https://vv1g8thv-8000.brs.devtunnels.ms/api",
-<<<<<<< HEAD
-  // baseURL: "http://erp-api.test/api",
-  baseURL: "http://127.0.0.1:8000/api",
-=======
   baseURL: "http://erp-api.test/api",
->>>>>>> f272555182cdf657ff95d99c13fb70dafc6ec7c9
   Authorization: `Bearer ${localStorage.getItem("token")}`,
   withCredentials: true,
 });

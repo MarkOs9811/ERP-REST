@@ -1,8 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
-import { GetCargos } from "../../service/GetCargos";
-import { capitalizeFirstLetter } from "../../hooks/FirstLetterUp";
-
-import { useNavigate } from "react-router-dom";
 import { ContenedorPrincipal } from "../../components/componentesReutilizables/ContenedorPrincipal";
 import { IdCard, UserCheck2, Users } from "lucide-react";
 import { Usuarios } from "../Usuarios";
