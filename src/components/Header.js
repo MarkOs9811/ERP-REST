@@ -45,10 +45,8 @@ export function Header() {
     <header className="navbar  header-contenido p-0 m-0 border-bottom">
       <nav className="container-fluid d-flex align-items-center justify-content-center p-0 m-0">
         {/* Botón de compresión de sidebar */}
-        <div className="p-0 ">
-          <p className="mx-4 h5 fw-bold p-0 text-dark my-2">Fire Wok</p>
-        </div>
-        <div className="d-flex align-items-center gap-2">
+
+        <div className="d-flex align-items-center gap-2 mx-3">
           <span className="small text-muted">
             {capitalizeFirstLetter(cargo?.empleado?.cargo?.nombre)}
           </span>

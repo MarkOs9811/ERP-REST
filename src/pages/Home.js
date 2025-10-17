@@ -36,7 +36,7 @@ export function Home() {
   // Datos de ejemplo ampliados
 
   return (
-    <ContenedorPrincipal>
+    <ContenedorPrincipal classList={"container"}>
       <CabeceraHome ventasList={ventasList} />
 
       <div className="row">

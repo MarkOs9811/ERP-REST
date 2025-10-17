@@ -155,7 +155,9 @@ export function Ventas() {
               </div>
             </div>
             <div className="col-md-4 ">
-              <PlatoMasVendido />
+              <div className="card p-3 shadow-sm h-100 w-100 m-0">
+                <PlatoMasVendido />
+              </div>
             </div>
           </div>
         </div>

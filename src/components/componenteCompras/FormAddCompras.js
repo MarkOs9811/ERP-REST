@@ -1,8 +1,8 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { GetPorveedores } from "../../service/GetPorveedores";
 import axiosInstance from "../../api/AxiosInstance";
 import ToastAlert from "../componenteToast/ToastAlert";
+import { GetProveedores } from "../../service/GetProveedores";
 
 export function FormAddCompras() {
   const queryClient = useQueryClient();
@@ -12,7 +12,7 @@ export function FormAddCompras() {
     error: proveedoresError,
   } = useQuery({
     queryKey: ["proveedores"],
-    queryFn: GetPorveedores,
+    queryFn: GetProveedores,
     retry: false,
     refeftchOnWindowFocus: false,
   });

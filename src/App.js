@@ -124,7 +124,6 @@ function App() {
                         <div className="card-header p-0 rounded-0 m-0 shrink-0 ">
                           <Header />
                           <Navegacion />
-                          <SubMenu />
                         </div>
 
                         {/* Cuerpo flexible con scroll interno si es necesario */}

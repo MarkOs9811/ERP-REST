@@ -1,9 +1,11 @@
 import axios from "axios";
 import axiosRetry from "axios-retry";
+import ToastAlert from "../components/componenteToast/ToastAlert";
 
 const axiosInstance = axios.create({
   // baseURL: "https://vv1g8thv-8000.brs.devtunnels.ms/api",
-  baseURL: "http://erp-api.test/api",
+  // baseURL: "http://erp-api.test/api",
+  baseURL: "http://127.0.0.1:8000/api",
   Authorization: `Bearer ${localStorage.getItem("token")}`,
   withCredentials: true,
 });
@@ -43,13 +45,19 @@ axiosInstance.interceptors.response.use(
   (error) => {
     // Manejo de error 429: demasiadas solicitudes
     if (error.response && error.response.status === 429) {
-      alert("Demasiadas solicitudes, por favor intenta más tarde.");
+      ToastAlert(
+        "error",
+        "Demasiadas solicitudes. Por favor, inténtalo de nuevo más tarde."
+      );
       return Promise.reject(error);
     }
 
     // Manejo de error 401: sesión expirada
     if (error.response && error.response.status === 401) {
-      alert("Sesión expirada. Por favor, inicia sesión nuevamente.");
+      ToastAlert(
+        "error",
+        "Sesión expirada. Por favor, inicia sesión nuevamente."
+      );
       window.location.href = "/"; // Redirigir al login si es necesario
     }
 

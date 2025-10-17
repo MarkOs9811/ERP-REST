@@ -19,40 +19,43 @@ import {
   ShoppingCart,
   TrendingUp,
   Truck,
-  User,
   Users,
+  ChevronDown,
+  ChevronRight,
 } from "lucide-react";
 import { useAuth } from "../AuthContext";
 import { capitalizeFirstLetter } from "../hooks/FirstLetterUp";
+import { useState } from "react";
 
 export function SideBar() {
   const location = useLocation();
   const navigate = useNavigate();
   const BASE_URL = process.env.REACT_APP_BASE_URL;
   const miEmpresa = JSON.parse(localStorage.getItem("empresa")) || {};
-
   const fotoEmpresa = miEmpresa.logo
     ? `${BASE_URL}/storage/${miEmpresa.logo}`
     : null;
 
   const roles = JSON.parse(localStorage.getItem("roles")) || [];
   const dispatch = useDispatch();
+  const { logout } = useAuth();
 
-  // Mapeo dinámico de iconos usando react-ionicons
+  // Estado para abrir/cerrar acordeones
+  const [openAccordion, setOpenAccordion] = useState(null);
   const icons = {
     inicio: Home,
     usuarios: Users,
-    ventas: ShoppingBag, // En lugar de StorefrontOutline
+    ventas: ShoppingBag,
     incidenciasempleado: Home,
     incidencias: Megaphone,
-    almacen: Archive, // En lugar de FileTrayStackedOutline
+    almacen: Archive,
     vender: ShoppingCart,
-    proveedores: Truck, // En lugar de CubeOutline (para logística)
+    proveedores: Truck,
     compras: Calendar,
-    platos: Hamburger, // Para FastFoodOutline
-    "rr-hh": Users, // En lugar de ManOutline
+    platos: Hamburger,
+    "rr-hh": Users,
     finanzas: TrendingUp,
-    "areas-y-cargos": Building2, // En lugar de BusinessOutline
+    "areas-y-cargos": Building2,
     configuracion: Settings,
   };
 
@@ -70,17 +73,58 @@ export function SideBar() {
     "configuracion",
   ];
 
-  // Obtener el icono correspondiente al rol
+  const subMenus = {
+    ventas: [
+      "Mis Ventas",
+      "Inventario",
+      "Cajas",
+      "Solicitud",
+      "Reportes",
+      "Ajustes Ventas",
+    ],
+    "rr-hh": [
+      "Planilla",
+      "Nomina",
+      "Ingreso a Planilla",
+      "Asistencia",
+      "Horas Extras",
+      "Adelanto de Sueldo",
+      "Vacaciones",
+      "Reportes",
+      "Ajustes",
+    ],
+    finanzas: [
+      "Informes Financieros",
+      "Presupuestos",
+      "Libro Diario",
+      "Libro Mayor",
+      "Cuentas por Cobrar",
+      "Cuentas por Pagar",
+      "Firmar Solicitud",
+      "Reportes Financieros",
+      "Ajustes",
+    ],
+    almacen: [
+      "Almacen",
+      "Registro",
+      "Transferencia",
+      "Solicitud",
+      "Movimientos",
+      "Kardex",
+      "Reportes",
+      "Ajustes",
+    ],
+  };
+
   const getIconForRole = (roleName) => {
     const roleKey = roleName
       .toLowerCase()
       .replace(/\s+/g, "-")
       .replace(/\./g, "-")
       .trim();
-    return icons[roleKey] || Home; // Icono por defecto: Home
+    return icons[roleKey] || Home;
   };
-  const { logout } = useAuth();
-  // Cerrar sesión
+
   const cerrarSession = async () => {
     try {
       await axiosInstance.post(
@@ -97,12 +141,10 @@ export function SideBar() {
     }
   };
 
-  // Formatear el nombre del rol para la URL
   const formatRoleToUrl = (roleName) => {
     return roleName.toLowerCase().replace(/\s+/g, "-").replace(/\./g, "-");
   };
 
-  // Ordenar roles según el orden personalizado
   const orderedRoles = roles.sort((a, b) => {
     const indexA = customOrder.indexOf(a.nombre.toLowerCase());
     const indexB = customOrder.indexOf(b.nombre.toLowerCase());
@@ -111,21 +153,23 @@ export function SideBar() {
     );
   });
 
-  // Manejar la selección de un módulo
   const handleModuloSeleccionado = (nombreOpcion, event) => {
-    // 👈 actualiza la posición
     dispatch(subMenuClick(nombreOpcion));
     dispatch(setSidebarCompressed(true));
   };
 
+  const handleAccordionToggle = (roleName) => {
+    setOpenAccordion(openAccordion === roleName ? null : roleName);
+  };
+
   return (
-    <div className={`sidebar compressed `}>
-      <div className="sidebar-header  d-flex">
+    <div className={`sidebar compressed`}>
+      <div className="sidebar-header d-flex">
         {fotoEmpresa && (
           <img
             src={fotoEmpresa}
             alt="logo empresa"
-            className="img-fluid m-auto"
+            className="img-fluid"
             style={{
               maxWidth: "35px",
               borderRadius: "50%",
@@ -134,12 +178,14 @@ export function SideBar() {
             }}
           />
         )}
+        <div className="p-0 m-0">
+          <p className="h5 fw-bold p-0 my-2 text-white">Fire Wok</p>
+        </div>
       </div>
 
       <div className="sidebar-menu my-2">
         <ul className="menu-list h-100">
-          {/* Ícono de Inicio */}
-
+          {/* Inicio */}
           <Link
             to={"/"}
             className="link-opcion text-decoration-none"
@@ -147,15 +193,15 @@ export function SideBar() {
             onClick={(e) => handleModuloSeleccionado("accesos rapido", e)}
           >
             <li
-              className={`menu-item  p-0 py-2  h-100 ${
+              className={`menu-item p-2 my-2 h-100 ${
                 location.pathname === `/` ? "active" : ""
               }`}
             >
-              <div className="d-flex flex-column align-items-center m-auto">
-                <Home className="icon-lucide" />
+              <div className="d-flex gap-2 align-items-center m-auto">
+                <Home className="icon-lucide" size={20} />
                 <small
                   className="small text-white"
-                  style={{ fontSize: "10px" }}
+                  style={{ fontSize: "13px" }}
                 >
                   Inicio
                 </small>
@@ -165,33 +211,93 @@ export function SideBar() {
 
           {/* Módulos dinámicos */}
           {orderedRoles.map((role) => {
-            if (role.nombre.toLowerCase() === "vender") return null;
-            if (role.nombre.toLowerCase() === "incidencias") return null;
-            if (role.nombre.toLowerCase() === "usuarios") return null;
+            const roleName = role.nombre.toLowerCase();
+            if (["vender", "incidencias", "usuarios"].includes(roleName))
+              return null;
+
             const roleUrl = formatRoleToUrl(role.nombre);
             const isActive = location.pathname.includes(`/${roleUrl}`);
             const IconComponent = getIconForRole(role.nombre);
+            const hasSubmenu = subMenus[roleName];
 
+            if (hasSubmenu) {
+              return (
+                <div key={role.id}>
+                  <li
+                    className={`menu-item p-2 mx-1 h-100 ${
+                      isActive ? "active" : ""
+                    }`}
+                    onClick={() => handleAccordionToggle(roleName)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <div className="d-flex gap-2 align-items-center justify-content-between">
+                      <div className="d-flex gap-2 align-items-center">
+                        <IconComponent className="icon-lucide" size={20} />
+                        <small
+                          className="small text-white"
+                          style={{ fontSize: "13px" }}
+                        >
+                          {capitalizeFirstLetter(role.nombre)}
+                        </small>
+                      </div>
+                      {openAccordion === roleName ? (
+                        <ChevronDown size={18} color="#fff" />
+                      ) : (
+                        <ChevronRight size={18} color="#fff" />
+                      )}
+                    </div>
+                  </li>
+
+                  <div
+                    className={`submenu ${
+                      openAccordion === roleName ? "submenu-open" : ""
+                    }`}
+                  >
+                    {hasSubmenu.map((sub, index) => {
+                      const subUrl = `${roleUrl}/${formatRoleToUrl(sub)}`;
+                      return (
+                        <Link
+                          key={index}
+                          to={`/${subUrl}`}
+                          className="link-opcion text-decoration-none "
+                          onClick={(e) => handleModuloSeleccionado(subUrl, e)}
+                        >
+                          <li
+                            className={`menu-item-sub p-1 px-4 my-1 ${
+                              location.pathname.includes(`/${subUrl}`)
+                                ? "active-sub"
+                                : ""
+                            }`}
+                          >
+                            <small style={{ fontSize: "12px" }}>{sub}</small>
+                          </li>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            }
+
+            // Roles sin submenú
             return (
               <Link
                 key={role.id}
                 to={`/${roleUrl}`}
                 className="link-opcion text-decoration-none"
-                data-bs-toggle="tooltip"
-                data-bs-placement="right"
                 title={role.nombre}
-                onClick={(e) => handleModuloSeleccionado(roleUrl, e)} // al entrar
+                onClick={(e) => handleModuloSeleccionado(roleUrl, e)}
               >
                 <li
-                  className={`menu-item p-0 py-2 my-2 h-100 ${
+                  className={`menu-item p-2 mx-1 my-2 h-100 ${
                     isActive ? "active" : ""
                   }`}
                 >
-                  <div className="d-flex flex-column m-auto align-items-center">
-                    <IconComponent className="icon-lucide" />
+                  <div className="d-flex gap-2 align-items-center m-auto">
+                    <IconComponent className="icon-lucide" size={20} />
                     <small
                       className="small text-white"
-                      style={{ fontSize: "10px" }}
+                      style={{ fontSize: "13px" }}
                     >
                       {capitalizeFirstLetter(role.nombre)}
                     </small>
@@ -201,7 +307,7 @@ export function SideBar() {
             );
           })}
 
-          {/* Configuración y Salir */}
+          {/* Configuración y salir */}
           <div className="menu-footer d-flex flex-column mt-auto">
             <RippleWrapper className="rounded-md">
               <Link
@@ -210,15 +316,15 @@ export function SideBar() {
                 onClick={(e) => handleModuloSeleccionado("", e)}
               >
                 <li
-                  className={`menu-item  p-0 py-2 h-100 ${
+                  className={`menu-item p-2 py-2 h-100 ${
                     location.pathname.includes("/configuracion") ? "active" : ""
                   }`}
                 >
-                  <div className="d-flex flex-column align-items-center m-auto">
-                    <Settings2 className="icon-lucide" />
+                  <div className="d-flex gap-2 align-items-center m-auto">
+                    <Settings2 className="icon-lucide" size={20} />
                     <small
                       className="small text-white"
-                      style={{ fontSize: "10px" }}
+                      style={{ fontSize: "13px" }}
                     >
                       Ajustes
                     </small>
@@ -232,12 +338,12 @@ export function SideBar() {
               className="logout-btn link-opcion text-decoration-none"
               title="Cerrar sesión"
             >
-              <li className={`menu-item  p-0 py-2 h-100 `}>
-                <div className="d-flex flex-column align-items-center m-auto">
-                  <LogOutIcon className="icon-lucide " />
+              <li className="menu-item p-2 py-2 h-100">
+                <div className="d-flex gap-2 align-items-center m-auto">
+                  <LogOutIcon className="icon-lucide" size={20} />
                   <small
                     className="small text-white"
-                    style={{ fontSize: "10px" }}
+                    style={{ fontSize: "13px" }}
                   >
                     Salir
                   </small>

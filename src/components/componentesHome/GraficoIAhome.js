@@ -160,7 +160,9 @@ export function GraficoIAhome() {
     <div className="row mb-3 g-3">
       {/* Platos más pedidos */}
       <div className="col-md-4">
-        <PlatoMasVendido />
+        <div className="card p-3 shadow-sm h-100">
+          <PlatoMasVendido />
+        </div>
       </div>
       {/* Gráfico de Ventas */}
       <div className="col-md-8">

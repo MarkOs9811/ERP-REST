@@ -13,7 +13,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faUser, faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
-import RippleWrapper from "../components/componentesReutilizables/RippleWrapper";
 import { ArrowBigRight } from "lucide-react";
 import { useAuth } from "../AuthContext";
 import { abrirCaja } from "../redux/cajaSlice";
@@ -42,14 +41,14 @@ export const Login = () => {
     setLoading(true);
 
     try {
-      // const response = await axios.post("http://127.0.0.1:8000/api/login", {
-      //   email: data.email,
-      //   password: data.password,
-      // });
-      const response = await axios.post("http://erp-api.test/api/login", {
+      const response = await axios.post("http://127.0.0.1:8000/api/login", {
         email: data.email,
         password: data.password,
       });
+      // const response = await axios.post("http://erp-api.test/api/login", {
+      //   email: data.email,
+      //   password: data.password,
+      // });
 
       if (response.data.token) {
         // ✅ ahora usas el login del AuthContext

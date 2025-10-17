@@ -7,6 +7,8 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { useEffect, useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { GetAlmacen } from "../../service/serviceAlmacen/GetAlmacen";
 import ModalAlertQuestion from "../componenteToast/ModalAlertQuestion";
 import { toast } from "react-toastify";
 import ModalAlertActivar from "../componenteToast/ModalAlertActivar";
@@ -17,13 +19,20 @@ import { Cargando } from "../componentesReutilizables/Cargando";
 import { TablasGenerales } from "../componentesReutilizables/TablasGenerales";
 import { Redo } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import ModalRight from "../componentesReutilizables/ModalRight";
+import { FormularioEditarAlmacen } from "./FormularioEditarAlmacen";
 
 export function AlmacenList({ search, updateList }) {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
   const [almacen, setAlmacen] = useState([]);
   const [filterAlmacen, setFilteredAlmacen] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const [dataAlmance, setDataAlmance] = useState([]);
+  const [modalEditarAlmacen, setModalEditarAlmacen] = useState(false);
 
   const [showConfirm, setShowConfirm] = useState(false);
   const [showConfirmTrue, setShowConfirmTrue] = useState(false);
@@ -51,59 +60,70 @@ export function AlmacenList({ search, updateList }) {
     },
   ];
 
-  const fetchAlmacen = async () => {
-    setLoading(true);
-    try {
-      const response = await axiosInstance.get("/almacen");
-      if (response.data.success) {
-        setAlmacen(response.data.data);
-        setFilteredAlmacen(response.data.data);
-      } else {
-        setError("No se pudo obtener los usuarios");
-      }
-    } catch (err) {
-      setError("Hubo un error al cargar los datos");
-    } finally {
-      setLoading(false);
-    }
-  };
+  // REPLACE manual fetch with react-query
+  const {
+    data: almacenData = [],
+    isLoading: isLoadingAlmacen,
+    isError: isErrorAlmacen,
+    refetch: refetchAlmacen,
+  } = useQuery({
+    queryKey: ["almacen"],
+    queryFn: GetAlmacen,
+    refetchOnWindowFocus: false,
+    retry: 1,
+  });
 
+  // sync react-query data into local state (used for filtering)
   useEffect(() => {
-    fetchAlmacen();
-  }, [updateList]);
+    // normalizar almacenData a un array seguro
+    const list = Array.isArray(almacenData)
+      ? almacenData
+      : almacenData?.data ?? [];
+    setAlmacen(list);
+    setFilteredAlmacen(list);
+  }, [almacenData]);
 
   // FUNCION PARA FILTRAR BUSQEUDA DE DATOS EN ALMACEN
   useEffect(() => {
+    // seguridad: asegurarnos que almacen sea array
+    if (!Array.isArray(almacen)) {
+      setFilteredAlmacen([]);
+      return;
+    }
+
+    const q = String(search || "")
+      .trim()
+      .toLowerCase();
+    if (!q) {
+      setFilteredAlmacen(almacen);
+      return;
+    }
+
     const result = almacen.filter((producto) => {
       const { nombre, marca, precioUnit, categoria, unidad, proveedor } =
         producto;
 
-      // Convierte el texto de búsqueda a minúsculas para comparación insensible a mayúsculas
-      const searchLower = search.toLowerCase();
-
-      // Filtra los productos basándose en los campos relevantes
       return (
-        (marca && marca.toLowerCase().includes(searchLower)) ||
-        (nombre && nombre.toLowerCase().includes(searchLower)) ||
-        (precioUnit &&
-          String(precioUnit).toLowerCase().includes(searchLower)) ||
-        (categoria?.nombre &&
-          categoria.nombre.toLowerCase().includes(searchLower)) ||
-        (unidad?.nombre && unidad.nombre.toLowerCase().includes(searchLower)) ||
-        (proveedor?.nombre &&
-          proveedor.nombre.toLowerCase().includes(searchLower))
+        (marca && marca.toLowerCase().includes(q)) ||
+        (nombre && nombre.toLowerCase().includes(q)) ||
+        (precioUnit && String(precioUnit).toLowerCase().includes(q)) ||
+        (categoria?.nombre && categoria.nombre.toLowerCase().includes(q)) ||
+        (unidad?.nombre && unidad.nombre.toLowerCase().includes(q)) ||
+        (proveedor?.nombre && proveedor.nombre.toLowerCase().includes(q))
       );
     });
 
     setFilteredAlmacen(result);
   }, [search, almacen]);
 
-  if (loading) return <Cargando />;
-  if (error) return <p>{error}</p>;
+  if (isLoadingAlmacen) return <Cargando />;
+  if (isErrorAlmacen) return <p>Error al cargar datos de almacén</p>;
 
   // PARA ACTUALIZAR CUANDO SE HAGA CUALQUIER MOVIMIENTO
   const handleAlmacenUpdated = () => {
-    fetchAlmacen();
+    // invalidar o refetch para actualizar la lista
+    queryClient.invalidateQueries({ queryKey: ["almacen"] });
+    // o refetchAlmacen(); // equivalente
   };
   // para llamar al modal para confirmar
   const handleEliminarProducto = (id, nombre) => {
@@ -139,16 +159,14 @@ export function AlmacenList({ search, updateList }) {
       );
       if (response.data.success) {
         toast.success("Activo desactivado correctamente");
-        fetchAlmacen();
+        queryClient.invalidateQueries({ queryKey: ["almacen"] });
         return true;
       } else {
         toast.error("Ocurrió un error al desactivar");
-        fetchAlmacen();
         return false;
       }
     } catch (error) {
       toast.error("Error en la conexión");
-      fetchAlmacen();
       return false;
     }
   };
@@ -158,16 +176,14 @@ export function AlmacenList({ search, updateList }) {
       const response = await axiosInstance.post(`/almacen/activar/${idActivo}`);
       if (response.data.success) {
         toast.success("Producto activado correctamente");
-        fetchAlmacen();
+        queryClient.invalidateQueries({ queryKey: ["almacen"] });
         return true;
       } else {
         toast.error("Ocurrió un error al activar");
-        fetchAlmacen();
         return false;
       }
     } catch (error) {
       toast.error("Error en la conexión");
-      fetchAlmacen();
       return false;
     }
   };
@@ -182,6 +198,11 @@ export function AlmacenList({ search, updateList }) {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setProductoEdit(null);
+  };
+
+  const guardarCambios = () => {
+    // Lógica para guardar los cambios realizados en el formulario
+    console.log("Guardando cambios para el producto:", dataAlmance);
   };
 
   // ARMANDO ALS COLUMNAS
@@ -209,7 +230,13 @@ export function AlmacenList({ search, updateList }) {
                 >
                   <FontAwesomeIcon icon={faPlus} />
                 </button>
-                <button className=" btn-editar me-2">
+                <button
+                  className=" btn-editar me-2"
+                  onClick={() => {
+                    setDataAlmance(row);
+                    setModalEditarAlmacen(true);
+                  }}
+                >
                   <FontAwesomeIcon icon={faEdit} />
                 </button>
                 <button
@@ -336,6 +363,18 @@ export function AlmacenList({ search, updateList }) {
         handleActivar={handleActivarProductoSi}
         handleCloseModal={handleCloseModalQuestionActivar}
       />
+
+      <ModalRight
+        isOpen={modalEditarAlmacen}
+        onClose={() => setModalEditarAlmacen(false)}
+        title={"Editar Producto de Almacén"}
+        width="50%"
+        hideFooter
+      >
+        {({ handleClose }) => (
+          <FormularioEditarAlmacen data={dataAlmance} onCancel={handleClose} />
+        )}
+      </ModalRight>
     </div>
   );
 }

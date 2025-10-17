@@ -1,40 +1,16 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { UsuariosList } from "../components/componenteUsuario/UsuarioList";
 import { UsuarioForm } from "../components/componenteUsuario/UsuarioForm";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faUserCheck,
-  faUsers,
-  faWarehouse,
-} from "@fortawesome/free-solid-svg-icons";
+
 import { Modal } from "react-bootstrap";
-import axiosInstance from "../api/AxiosInstance";
 import { ContenedorPrincipal } from "../components/componentesReutilizables/ContenedorPrincipal";
-import { FileChartColumnIncreasing, Plus, PlusIcon } from "lucide-react";
+import { FileChartColumnIncreasing, PlusIcon } from "lucide-react";
 import { GetReporteExcel } from "../service/accionesReutilizables/GetReporteExcel";
 
 export function Usuarios() {
   const [showModal, setShowModal] = useState(false);
   const [updateList, setUpdateList] = useState(false);
   const [search, setSearch] = useState("");
-
-  const [estadisticas, setEstadisticas] = useState({
-    totalUsuarios: 0,
-    usuariosActivos: 0,
-    usuariosAlmacen: 0,
-  });
-  useEffect(() => {
-    const obtenerEstadisticas = async () => {
-      try {
-        const { data } = await axiosInstance.get("/usuarios/estadisticas");
-        setEstadisticas(data);
-      } catch (error) {
-        console.error("Error al obtener las estadísticas:", error);
-      }
-    };
-
-    obtenerEstadisticas();
-  }, []);
 
   // Función para abrir el modal
   const handleOpenModal = () => setShowModal(true);
