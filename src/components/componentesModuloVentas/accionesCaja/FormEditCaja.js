@@ -25,7 +25,7 @@ export function FormEditCaja({ onSubmit, register, errors, data, setValue }) {
   }, [data, sedes, setValue]);
 
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={onSubmit} className="p-3">
       <div className="mb-3">
         <label className="form-label small text-muted">Nombre de la caja</label>
         <input

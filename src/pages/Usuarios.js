@@ -21,7 +21,7 @@ export function Usuarios() {
   };
 
   return (
-    <ContenedorPrincipal>
+    <div>
       <div className="row g-3">
         <div className="col-md-12 ">
           <div className="card border-0 shadow-sm">
@@ -81,6 +81,6 @@ export function Usuarios() {
           <UsuarioForm handleCloseModal={handleCloseModal} />
         </Modal.Body>
       </Modal>
-    </ContenedorPrincipal>
+    </div>
   );
 }

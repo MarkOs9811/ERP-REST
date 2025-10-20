@@ -3,7 +3,6 @@
   border-radius: 8px;
  
 }
-
 .contenedor-platos {
   display: flex !important;
   flex-wrap: wrap;
@@ -127,14 +126,28 @@
 }
  
 /* PARA LOS PLATOS SELECCIONADOS Y AGREGADOS A LA PREVENTA */
-
-.tabla-scroll {
-  position: relative;
-  max-height: 400px!important;
-  overflow-y: auto!important;
-  flex: 1;
+/* hace que el card de la izquierda tenga una estructura flexible */
+/* 1️⃣ Asegura que la columna llene toda la altura de la fila */
+/* Hace que el card sea flexible en altura */
+.col-md-3>.card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
+/* El cuerpo del card ocupa el espacio restante entre header y footer */
+.card-body {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* El footer se mantiene visible al final */
+.card-footer-column {
+  flex-shrink: 0;
+  color: #fff;
+  padding: 1rem;
+}
+/* =========================== */
 .plato-row {
   position: relative;
   /* Necesario para posicionar el botón */

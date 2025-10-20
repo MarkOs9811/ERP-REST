@@ -192,7 +192,7 @@ export function ListaTrabajador() {
   };
 
   return (
-    <ContenedorPrincipal>
+    <div>
       <div className="card shadow-sm h-100 m-0 p-0">
         <div className="card-header border-bottom d-flex justify-content-between align-items-center">
           <div className="m-2">
@@ -228,6 +228,6 @@ export function ListaTrabajador() {
           <TablasGenerales columnas={columns} datos={listaTrabajador} />
         </div>
       </div>
-    </ContenedorPrincipal>
+    </div>
   );
 }

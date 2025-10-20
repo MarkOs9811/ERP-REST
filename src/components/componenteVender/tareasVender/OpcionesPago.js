@@ -58,7 +58,7 @@ export function OpcionesPago(props) {
   if (isError) return <p>Error: {error.message}</p>;
 
   return (
-    <div className="card p-3 hadow-sm flex-grow-1 h-100 d-flex flex-column ">
+    <div className="card shadow-sm flex-grow-1 h-100 d-flex flex-column h-100">
       <div className="card-header">
         <h5>Detalles del Pago</h5>
       </div>

@@ -1,5 +1,5 @@
 .modal-right-overlay {
-    position: fixed;
+    position: fixed!important;
     top: 0;
     left: 0;
     right: 0;
@@ -7,7 +7,6 @@
     z-index: 1050;
     display: flex;
     justify-content: flex-end;
-    /* Removemos la transición de opacidad */
 }
 
 /* Eliminamos estas clases ya que no queremos el desvanecimiento */
@@ -18,20 +17,19 @@
 /* IMAGEN COMPROBANTE MINIATURA */
 .comprobante-thumbnail{
     cursor: pointer;
-background: rgb(134, 31, 179);
-   
+    background: rgb(134, 31, 179);
     color: white;
     border: none;
     border-radius: 5px;
 }
 
 .modal-right-backdrop {
-    position: absolute;
+    position: absolute!important;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(138, 138, 138, 0);
     /* Removemos la transición de opacidad del backdrop */
 }
 
@@ -43,10 +41,23 @@ background: rgb(134, 31, 179);
 .modal-right-container {
     position: relative;
     height: 100vh;
-    background-color: white;
-    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    /* Fondo translúcido con degradado suave */
+    background: linear-gradient(-150deg,
+            rgba(255, 255, 255, 0.75) 0%,
+            rgba(236, 236, 236, 0.65) 25%,
+            rgba(241, 255, 253, 0.6) 80%,
+            rgba(255, 192, 192, 0.295) 100%);
+
+    box-shadow: -10px 0px 40px 0px rgba(156, 156, 156, 0.199);
     overflow-y: auto;
     z-index: 1051;
+    overflow-x: visible!important;
+    /* Difuminado del fondo */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    /* Transición suave si se muestra/oculta */
+    transition: all 0.3s ease;
 }
 
 .slide-in {
@@ -55,6 +66,39 @@ background: rgb(134, 31, 179);
 
 .slide-out {
     animation: slideOut 0.3s ease-in forwards;
+}
+
+
+/* BOTON PARA CERRAR MODAL */
+.btn-close-auto {
+    position: absolute;
+    width: 45px;
+    height: 45px;
+    top: 15px;
+    left: -25px;
+    /* Se muestra fuera del borde del modal */
+    z-index: 2000;
+    background-color: #fff;
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* Efecto hover */
+.btn-close-auto:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+
+/* Efecto al presionar */
+.btn-close-auto:active {
+    transform: scale(0.95);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
 }
 
 @keyframes slideIn {
@@ -121,16 +165,47 @@ background: rgb(134, 31, 179);
 }
 
 /* ========== TEMA OSCURO PARA MODAL RIGHT ESTILO MODERNO CON ROJO CORPORATIVO ========== */
-body.dark-theme .modal-right-container {
-    background: linear-gradient(120deg, #202122 80%, #212b36 100%) !important;
-    color: #cfd8dc !important;
-    box-shadow: -2px 0 24px rgba(0,0,0,0.45) !important;
-    border-left: 1.5px solid #313a46 !important;
-}
+
+/* Opcional: estilo del header y botones en modo oscuro */
 body.dark-theme .modal-right-header {
-    border-bottom: 1.5px solid #313a46 !important;
-    background: #202122 !important;
-    color: #ee5252 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+body.dark-theme .modal-right-container {
+    position: relative;
+    height: 100vh;
+
+    /* 🎨 Fondo más oscuro con degradado sutil */
+    background: linear-gradient(-150deg,
+            rgba(26, 33, 39, 0.726) 0%,
+            rgba(29, 35, 44, 0.699) 25%,
+            rgba(25, 25, 25, 0.747) 80%,
+            rgba(34, 28, 28, 0.63) 100%) !important;
+
+    box-shadow: -10px 0px 40px 0px rgba(0, 0, 0, 0.4);
+    overflow-y: auto;
+    overflow-x: visible !important;
+    z-index: 1051;
+
+    /* 🔆 Difuminado del fondo */
+    backdrop-filter: blur(6px) !important;
+    -webkit-backdrop-filter: blur(5px) !important;
+
+    /* 💨 Transición suave */
+    transition: all 0.3s ease;
+    color: #eaeaea;
+    /* texto más claro en modo oscuro */
+}
+
+body.dark-theme .btn-close-auto {
+    background-color: #2a2a2a42;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    border:1px solid #313a46!important;
+}
+
+body.dark-theme .btn-close-auto:hover {
+    background-color: #3a3a3a;
+    transform: scale(1.1);
 }
 body.dark-theme .modal-right-title {
     color: #ee5252 !important;
@@ -146,13 +221,10 @@ body.dark-theme .modal-right-close-btn:hover {
     background: #ee5252 !important;
     border-radius: 50%;
 }
-body.dark-theme .modal-right-body {
-    background: #202122 !important;
-    color: #cfd8dc !important;
-}
+
 body.dark-theme .modal-right-footer {
     border-top: 1.5px solid #313a46 !important;
-    background: #202122 !important;
+    background-color: transparent!important;
 }
 body.dark-theme .comprobante-thumbnail {
     background: linear-gradient(90deg, #ee5252 60%, #ff7675 100%) !important;
@@ -161,6 +233,6 @@ body.dark-theme .comprobante-thumbnail {
     box-shadow: 0 2px 8px rgba(238,82,82,0.10);
 }
 body.dark-theme .modal-right-backdrop {
-    background-color: rgba(21,26,32,0.85) !important;
+    background-color: rgba(21, 26, 32, 0) !important;
 }
 /* ========== FIN TEMA OSCURO MODAL RIGHT ESTILO MODERNO ========== */

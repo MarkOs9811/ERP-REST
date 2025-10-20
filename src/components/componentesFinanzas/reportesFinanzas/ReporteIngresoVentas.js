@@ -13,8 +13,6 @@ import {
 import { BotonMotionGeneral } from "../../componentesReutilizables/BotonMotionGeneral";
 import { useNavigate } from "react-router-dom";
 import { useRef, useState } from "react";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
 import { useGenerarReporte } from "../../../hooks/GenerarPdfReporte";
 
 export function ReporteIngresoVentas() {

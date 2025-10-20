@@ -8,7 +8,7 @@ export function RealizarPago({
   error,
 }) {
   return (
-    <div className="card h-100  p-3 shadow-sm">
+    <div className="card h-100  shadow-sm">
       <div className="card-header">
         <h5>Resumen</h5>
       </div>
@@ -39,7 +39,7 @@ export function RealizarPago({
           <label>Cambio S/.</label>
         </div>
       </div>
-      <div className="card-footer mt-4 p-0 border-0">
+      <div className="card-footer mt-4 p-3 border-0">
         <BotonAnimado
           onClick={handleCrearJson}
           loading={loading}

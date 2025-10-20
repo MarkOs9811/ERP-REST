@@ -7,6 +7,7 @@ import { GetRecomendaciones } from "../../service/serviceIA/GetRecomendaciones";
 import { useState } from "react";
 import { PlatoMasVendido } from "./PlatosMasVendidos";
 import { ChartColumnBig, WandSparkles } from "lucide-react";
+import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
 
 export function GraficoIAhome() {
   const [recomendaciones, setRecomendaciones] = useState(null);
@@ -166,24 +167,26 @@ export function GraficoIAhome() {
       </div>
       {/* Gráfico de Ventas */}
       <div className="col-md-8">
-        <div className="card shadow-sm chart-container h-100">
-          <div className="card-header m-3">
-            <p className="mb-0 text-dark h5">
-              Ventas Históricas y Predicciones (Últimos 7 días)
-            </p>
-          </div>
-          <div className="card-body">
-            <div className="mt-4" style={{ height: "300px" }}>
-              {isLoadingVentas || isLoadingVentasIA ? (
-                <p className="text-muted">Cargando datos...</p>
-              ) : isErrorVentas || isErrorVentasIA ? (
-                <p className="text-danger">Error al cargar los datos.</p>
-              ) : (
-                <Line data={data} options={options} />
-              )}
+        <CondicionCarga isLoading={isLoadingVentasIA} isError={isErrorVentasIA}>
+          <div className="card shadow-sm chart-container h-100">
+            <div className="card-header m-3">
+              <p className="mb-0 text-dark h5">
+                Ventas Históricas y Predicciones (Últimos 7 días)
+              </p>
+            </div>
+            <div className="card-body">
+              <div className="mt-4" style={{ height: "300px" }}>
+                {isLoadingVentas || isLoadingVentasIA ? (
+                  <p className="text-muted">Cargando datos...</p>
+                ) : isErrorVentas || isErrorVentasIA ? (
+                  <p className="text-danger">Error al cargar los datos.</p>
+                ) : (
+                  <Line data={data} options={options} />
+                )}
+              </div>
             </div>
           </div>
-        </div>
+        </CondicionCarga>
       </div>
       {/* Recomendaciones de IA */}
       <div className="col-md-12">

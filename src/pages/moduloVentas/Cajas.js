@@ -12,6 +12,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Plus } from "lucide-react";
 import { RegistrosCajasList } from "../../components/componentesModuloVentas/RegistrosCajasList";
 import { GetCajas } from "../../service/accionesVentas/GetCajas";
+import { CondicionCarga } from "../../components/componentesReutilizables/CondicionCarga";
 
 export function Cajas() {
   const [search, setSearch] = useState("");
@@ -56,9 +57,9 @@ export function Cajas() {
 
   console.log("Cajas data:", cajas);
   return (
-    <ContenedorPrincipal>
-      <div className="row g-3">
-        <div className="col-lg-12 col-sm-12">
+    <div className="row g-3">
+      <div className="col-lg-12 col-sm-12">
+        <CondicionCarga isLoading={isLoading} isError={isError}>
           <div className="card shadow-sm overflow-hidden">
             <div className="card-header">
               <div className="container-fluid">
@@ -81,12 +82,15 @@ export function Cajas() {
                 </div>
               </div>
             </div>
+
             <div className="card-body p-4 mb-3">
               <CajasList />
             </div>
           </div>
-        </div>
-        <div className="col-lg-12 col-sm-12">
+        </CondicionCarga>
+      </div>
+      <div className="col-lg-12 col-sm-12">
+        <CondicionCarga isLoading={isLoading} isError={isError}>
           <div className="card shadow-sm overflow-hidden">
             <div className="card-header">
               <div className="container-fluid">
@@ -133,7 +137,7 @@ export function Cajas() {
               <RegistrosCajasList search={search} />
             </div>
           </div>
-        </div>
+        </CondicionCarga>
       </div>
       <ModalRight
         isOpen={modalAddCaja}
@@ -151,6 +155,6 @@ export function Cajas() {
           />
         </div>
       </ModalRight>
-    </ContenedorPrincipal>
+    </div>
   );
 }

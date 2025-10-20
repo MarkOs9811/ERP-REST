@@ -36,8 +36,12 @@ export function Home() {
   // Datos de ejemplo ampliados
 
   return (
-    <ContenedorPrincipal classList={"container"}>
-      <CabeceraHome ventasList={ventasList} />
+    <div>
+      <CabeceraHome
+        ventasList={ventasList}
+        load={loadingVentas}
+        errorLoad={errorVentas}
+      />
 
       <div className="row">
         <div className="col-md-9">
@@ -51,6 +55,6 @@ export function Home() {
 
       {/* Asistente de IA Flotante */}
       <AsistenteIaHome />
-    </ContenedorPrincipal>
+    </div>
   );
 }

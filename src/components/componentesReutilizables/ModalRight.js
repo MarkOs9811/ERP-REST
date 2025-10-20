@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import "../../css/EstiloModalRight.css";
 import { capitalizeFirstLetter } from "../../hooks/FirstLetterUp";
+import { X } from "lucide-react";
 
 const ModalRight = ({
   isOpen,
@@ -12,6 +13,7 @@ const ModalRight = ({
   onSubmit,
   cancelText = "Cancelar",
   onCancel,
+  icono = null,
   width = "500px",
   hideFooter = false,
 }) => {
@@ -38,28 +40,30 @@ const ModalRight = ({
   return (
     <div className="modal-right-overlay m-0 p-0">
       <div className="modal-right-backdrop" onClick={handleClose} />
-
       <div
-        className={`modal-right-container p-0 m-0 d-flex flex-column h-100 ${
+        className={`modal-right-container p-0 m-0 d-flex flex-column h-100 overflow-visible ${
           isClosing ? "slide-out" : "slide-in"
         }`}
         style={{ width }}
       >
+        <button
+          type="button"
+          className="btn-close-auto fw-bold border rounded-pill p-1 position-absolute shadow-sm "
+          aria-label="Close"
+          onClick={handleClose}
+          title="Cerrar Modal"
+        >
+          <X />
+        </button>
         {/* Header */}
-        <div className="modal-right-header p-1 flex-shrink-0">
-          <div className="modal-right-header-content d-flex align-items-center p-3">
-            <button
-              type="button"
-              className="btn-close btn-close-auto"
-              aria-label="Close"
-              onClick={handleClose}
-              title="Cerrar Modal"
-            ></button>
-            <h3 className="modal-right-title ms-3">
+        <div className="modal-right-header-content d-flex align-items-center justify-content-between p-3 w-100">
+          <div className="ms-3 d-flex flex-column">
+            <h3 className="modal-right-title">
               {capitalizeFirstLetter(title)}
             </h3>
             <p className="text-muted-auto">{subtitulo}</p>
           </div>
+          <span className="ms-auto me-3">{icono}</span>
         </div>
 
         <div

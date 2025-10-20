@@ -200,11 +200,6 @@ export function AlmacenList({ search, updateList }) {
     setProductoEdit(null);
   };
 
-  const guardarCambios = () => {
-    // Lógica para guardar los cambios realizados en el formulario
-    console.log("Guardando cambios para el producto:", dataAlmance);
-  };
-
   // ARMANDO ALS COLUMNAS
   const columns = [
     {

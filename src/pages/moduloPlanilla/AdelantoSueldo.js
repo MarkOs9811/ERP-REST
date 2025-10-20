@@ -287,7 +287,7 @@ export function AdelantoSueldo() {
   if (onError) return <div>Error: {onError.message}</div>;
 
   return (
-    <ContenedorPrincipal>
+    <div>
       <div className="card">
         <div className="card-header d-flex justify-content-between align-items-center p-3">
           <h3 className=" mb-0">Adelanto Sueldo</h3>
@@ -353,6 +353,6 @@ export function AdelantoSueldo() {
           />
         </div>
       </ModalRight>
-    </ContenedorPrincipal>
+    </div>
   );
 }

@@ -17,7 +17,6 @@ import { clearPedido } from "../../redux/pedidoSlice";
 import { DetallePedido } from "./tareasVender/DetallePedido";
 import { RealizarPago } from "./tareasVender/RealizarPago";
 import { clearPedidoWeb } from "../../redux/pedidoWebSlice";
-import { ContenedorPrincipal } from "../componentesReutilizables/ContenedorPrincipal";
 import { useQuery } from "@tanstack/react-query";
 
 export function DetallesPago() {
@@ -188,7 +187,7 @@ export function DetallesPago() {
         navigate("/vender/pedidosWeb");
         dispatch(clearPedidoWeb());
       } else {
-        navigate("/vender/ventasMesas");
+        navigate("/vender/mesas");
         dispatch(clearPedido());
       }
     } else {
@@ -321,9 +320,6 @@ export function DetallesPago() {
       return;
     }
 
-    // Mostrar en consola el JSON generado para depuración
-    console.log("Datos enviados:", data);
-
     await execute(data);
   };
 
@@ -331,10 +327,10 @@ export function DetallesPago() {
   if (isLoading) return <p>Cargando preventas...</p>;
   if (isError) return <p>Error: {error.message}</p>;
   return (
-    <ContenedorPrincipal>
-      <div className="row g-3 h-100">
+    <div className="card h-100 bg-transparent ">
+      <div className="row h-100 g-3">
         {/* Columna DetallePedido */}
-        <div className="col-lg-3 col-md-4 col-sm-6 col-12 d-flex flex-column">
+        <div className="col-lg-3 col-md-4 col-sm-6 col-12 d-flex flex-column h-100">
           <DetallePedido
             idMesa={idMesa}
             mesa={mesa}
@@ -389,6 +385,6 @@ export function DetallesPago() {
           />
         </div>
       </div>
-    </ContenedorPrincipal>
+    </div>
   );
 }

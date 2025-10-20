@@ -5,10 +5,10 @@ import { ListaDocumentosFirmados } from "../../components/componentesFinanzas/Li
 
 export function FirmasSolicitud() {
   return (
-    <ContenedorPrincipal>
+    <div>
       <div className="row g-3">
         <div className="col-md-12">
-          <div className="card shadow-sm">
+          <div className="card shadow-sm py-2">
             <div className="card-header p-3 d-flex align-items-center">
               <Mail color={"#ea4f4f"} height="45px" width="45px" />
               <div>
@@ -31,16 +31,16 @@ export function FirmasSolicitud() {
           </div>
         </div>
         <div className="col-md-6">
-          <div className="card shadow-sm">
+          <div className="card shadow-sm py-2">
             <FormularioFirmarDoc />
           </div>
         </div>
         <div className="col-md-6">
-          <div className="card p-0">
+          <div className="card shadow-sm py-2">
             <ListaDocumentosFirmados />
           </div>
         </div>
       </div>
-    </ContenedorPrincipal>
+    </div>
   );
 }

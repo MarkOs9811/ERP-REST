@@ -59,8 +59,8 @@ export function AjustesAlmacen() {
   };
 
   return (
-    <ContenedorPrincipal>
-      <div className="card shadow-sm ">
+    <div>
+      <div className="card shadow-sm py-2 ">
         <div className="card-header border-bottom">
           <h4>Configuración de Almacén</h4>
         </div>
@@ -81,6 +81,6 @@ export function AjustesAlmacen() {
           </div>
         </div>
       </div>
-    </ContenedorPrincipal>
+    </div>
   );
 }

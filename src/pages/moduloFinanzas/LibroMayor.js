@@ -32,11 +32,11 @@ export function LibroMayor() {
   const balance = data.balance || 0;
 
   return (
-    <ContenedorPrincipal>
+    <div>
       <div className="row g-3">
         {/* Header */}
         <div className="col-md-12">
-          <div className="card shadow-sm">
+          <div className="card shadow-sm py-2">
             <div className="card-header p-3 d-flex align-items-center">
               <BookText color={"#ea4f4f"} height="45px" width="45px" />
               <p className="h4 card-title ms-2 mb-0">Libro Mayor</p>
@@ -60,7 +60,7 @@ export function LibroMayor() {
 
         {/* Cuentas contables */}
         <div className="col-md-12">
-          <div className="card shadow-sm border-0 p-2">
+          <div className="card shadow-sm py-2 border-0 p-2">
             <div className="d-flex justify-content-between align-items-center p-3">
               <h5 className="mb-0">Cuentas Contables</h5>
               <div className="d-flex" role="group">
@@ -98,6 +98,6 @@ export function LibroMayor() {
           </div>
         </div>
       </div>
-    </ContenedorPrincipal>
+    </div>
   );
 }

@@ -129,7 +129,7 @@ export function Configuracion() {
     userRol === "administrador" ? opcionesAdmin : opcionesUsuario;
 
   return (
-    <ContenedorPrincipal>
+    <div>
       <div className="row g-3">
         <div className="col-md-12">
           <div className="row g-2">
@@ -157,6 +157,6 @@ export function Configuracion() {
           </div>
         </div>
       </div>
-    </ContenedorPrincipal>
+    </div>
   );
 }

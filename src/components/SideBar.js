@@ -82,8 +82,8 @@ export function SideBar() {
       "Reportes",
       "Ajustes Ventas",
     ],
-    "rr-hh": [
-      "Planilla",
+    rrhh: [
+      "Usuarios",
       "Nomina",
       "Ingreso a Planilla",
       "Asistencia",
@@ -105,7 +105,7 @@ export function SideBar() {
       "Ajustes",
     ],
     almacen: [
-      "Almacen",
+      "Almacenes",
       "Registro",
       "Transferencia",
       "Solicitud",
@@ -163,7 +163,7 @@ export function SideBar() {
   };
 
   return (
-    <div className={`sidebar compressed`}>
+    <div className={`sidebar compressed justify-content-between m-auto`}>
       <div className="sidebar-header d-flex">
         {fotoEmpresa && (
           <img
@@ -183,7 +183,7 @@ export function SideBar() {
         </div>
       </div>
 
-      <div className="sidebar-menu my-2">
+      <div className="sidebar-menu my-2 mx-3">
         <ul className="menu-list h-100">
           {/* Inicio */}
           <Link
@@ -199,10 +199,7 @@ export function SideBar() {
             >
               <div className="d-flex gap-2 align-items-center m-auto">
                 <Home className="icon-lucide" size={20} />
-                <small
-                  className="small text-white"
-                  style={{ fontSize: "13px" }}
-                >
+                <small className="small " style={{ fontSize: "14px" }}>
                   Inicio
                 </small>
               </div>
@@ -233,10 +230,7 @@ export function SideBar() {
                     <div className="d-flex gap-2 align-items-center justify-content-between">
                       <div className="d-flex gap-2 align-items-center">
                         <IconComponent className="icon-lucide" size={20} />
-                        <small
-                          className="small text-white"
-                          style={{ fontSize: "13px" }}
-                        >
+                        <small className="small " style={{ fontSize: "14px" }}>
                           {capitalizeFirstLetter(role.nombre)}
                         </small>
                       </div>
@@ -249,12 +243,15 @@ export function SideBar() {
                   </li>
 
                   <div
-                    className={`submenu ${
+                    className={`submenu px-2 mx-2 shadow-none ${
                       openAccordion === roleName ? "submenu-open" : ""
                     }`}
                   >
                     {hasSubmenu.map((sub, index) => {
-                      const subUrl = `${roleUrl}/${formatRoleToUrl(sub)}`;
+                      const subUrl =
+                        formatRoleToUrl(sub) === roleUrl
+                          ? roleUrl
+                          : `${roleUrl}/${formatRoleToUrl(sub)}`;
                       return (
                         <Link
                           key={index}
@@ -263,7 +260,7 @@ export function SideBar() {
                           onClick={(e) => handleModuloSeleccionado(subUrl, e)}
                         >
                           <li
-                            className={`menu-item-sub p-1 px-4 my-1 ${
+                            className={`menu-item-sub px-4 py-1 my-1 ${
                               location.pathname.includes(`/${subUrl}`)
                                 ? "active-sub"
                                 : ""
@@ -295,10 +292,7 @@ export function SideBar() {
                 >
                   <div className="d-flex gap-2 align-items-center m-auto">
                     <IconComponent className="icon-lucide" size={20} />
-                    <small
-                      className="small text-white"
-                      style={{ fontSize: "13px" }}
-                    >
+                    <small className="small " style={{ fontSize: "14px" }}>
                       {capitalizeFirstLetter(role.nombre)}
                     </small>
                   </div>
@@ -306,52 +300,36 @@ export function SideBar() {
               </Link>
             );
           })}
-
-          {/* Configuración y salir */}
-          <div className="menu-footer d-flex flex-column mt-auto">
-            <RippleWrapper className="rounded-md">
-              <Link
-                to={"/configuracion"}
-                className="link-opcion text-decoration-none"
-                onClick={(e) => handleModuloSeleccionado("", e)}
-              >
-                <li
-                  className={`menu-item p-2 py-2 h-100 ${
-                    location.pathname.includes("/configuracion") ? "active" : ""
-                  }`}
-                >
-                  <div className="d-flex gap-2 align-items-center m-auto">
-                    <Settings2 className="icon-lucide" size={20} />
-                    <small
-                      className="small text-white"
-                      style={{ fontSize: "13px" }}
-                    >
-                      Ajustes
-                    </small>
-                  </div>
-                </li>
-              </Link>
-            </RippleWrapper>
-
-            <Link
-              onClick={cerrarSession}
-              className="logout-btn link-opcion text-decoration-none"
-              title="Cerrar sesión"
-            >
-              <li className="menu-item p-2 py-2 h-100">
-                <div className="d-flex gap-2 align-items-center m-auto">
-                  <LogOutIcon className="icon-lucide" size={20} />
-                  <small
-                    className="small text-white"
-                    style={{ fontSize: "13px" }}
-                  >
-                    Salir
-                  </small>
-                </div>
-              </li>
-            </Link>
-          </div>
         </ul>
+      </div>
+      <div
+        className="menu-footer d-flex flex-column align-items-center w-100"
+        style={{ margin: "15px 0" }}
+      >
+        <Link
+          to="/configuracion"
+          className="text-decoration-none w-90"
+          style={{ width: "85%" }} // deja un margen lateral bonito
+          onClick={(e) => handleModuloSeleccionado("", e)}
+        >
+          <button
+            className={`menu-item btn border-0 w-100 d-flex align-items-center justify-content-start ${
+              location.pathname.includes("/configuracion") ? "active" : ""
+            }`}
+            style={{
+              padding: "15px 10px",
+              borderRadius: "8px",
+            }}
+          >
+            <Settings2 className="icon-lucide me-2" size={20} />
+            <small
+              className="text-white"
+              style={{ fontSize: "14px", textAlign: "left" }}
+            >
+              Ajustes
+            </small>
+          </button>
+        </Link>
       </div>
     </div>
   );

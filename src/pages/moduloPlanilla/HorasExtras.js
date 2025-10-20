@@ -269,7 +269,7 @@ export function HorasExtras() {
   ];
 
   return (
-    <ContenedorPrincipal>
+    <div>
       <div className="card shadow-sm">
         <div className="card-header d-flex justify-content-between align-items-center p-3">
           <h3 className=" mb-0">Horas Extras</h3>
@@ -325,6 +325,6 @@ export function HorasExtras() {
           />
         </div>
       </ModalRight>
-    </ContenedorPrincipal>
+    </div>
   );
 }

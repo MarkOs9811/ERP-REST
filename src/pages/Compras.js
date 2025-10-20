@@ -16,6 +16,7 @@ import { useForm } from "react-hook-form";
 import { FormAddCompras } from "../components/componenteCompras/FormAddCompras";
 import { useQuery } from "@tanstack/react-query";
 import { GetCompras } from "../service/GetCompras";
+import { CondicionCarga } from "../components/componentesReutilizables/CondicionCarga";
 export function Compras() {
   const [modalAddCompra, setModalAddCompra] = useState(false);
   const [search, setSearch] = useState("");
@@ -26,7 +27,7 @@ export function Compras() {
     formState: { errors },
   } = useForm();
 
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["compras"],
     queryFn: GetCompras,
     refetchOnWindowFocus: false,
@@ -63,97 +64,104 @@ export function Compras() {
     ["", 0]
   )[0];
 
-  if (isLoading) return <p>Cargando compras...</p>;
-  if (error) return <p>Error al obtener las compras</p>;
-
   // Extraer compras de la data
   return (
-    <ContenedorPrincipal>
+    <div>
       <div className="row g-3">
-        <div className="col-md-3 col-sm-12">
-          <div className="card shadow-sm p-3 d-flex flex-row align-items-center">
-            <ShoppingCart color="#f4a261" width="63px" height="63px" />
-            <div className="ms-auto text-end">
-              <h5 className="fw-light ">Compras</h5>
-              <h3 className="fw-bold mb-0">{totalCompras}</h3>
-            </div>
-          </div>
-        </div>
-
-        <div className="col-md-3 col-sm-12">
-          <div className="card shadow-sm p-3 d-flex flex-row align-items-center">
-            <CalendarDays color="#2a9d8f" width="63px" height="63px" />
-            <div className="ms-auto text-end">
-              <h5 className="fw-light ">Compras del Mes</h5>
-              <h3 className="fw-bold mb-0">{comprasDelMes}</h3>
-            </div>
-          </div>
-        </div>
-
-        <div className="col-md-3 col-sm-12">
-          <div className="card shadow-sm p-3 d-flex flex-row align-items-center">
-            <BanknoteArrowUp color="#e76f51" width="63px" height="63px" />
-            <div className="ms-auto text-end">
-              <h5 className="fw-light ">Egresos del Mes</h5>
-              <h3 className="fw-bold mb-0">S/. {totalMontoComprasDelMes}</h3>
-            </div>
-          </div>
-        </div>
-
-        <div className="col-md-3 col-sm-12">
-          <div className="card shadow-sm p-3 d-flex flex-row align-items-center">
-            <Trophy color="#f4a261" width="63px" height="63px" />
-            <div className="ms-auto text-end">
-              <h5 className="fw-light ">Proveedor TOP</h5>
-              <h3 className="fw-bold mb-0">{proveedorTop}</h3>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-12">
-          <div className="card p-0 shadow-sm h-100">
-            <div className="card-header d-flex justify-content-between">
-              <h3 className="texto-principal">Compras</h3>
-              <div className="d-flex">
-                {/* Input de texto */}
-                <input
-                  type="text"
-                  placeholder="Buscar..."
-                  className="form-control"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                />
-
-                {/* Input de fecha */}
-                <input
-                  type="date"
-                  className="form-control mx-3"
-                  {...register("fecha", { required: false })}
-                  onChange={(e) => {
-                    // cuando seleccionas una fecha, se refleja en el input de texto
-                    setSearch(e.target.value);
-                  }}
-                />
-                <button
-                  className="btn mx-3 btn-outline-dark"
-                  onClick={() => setModalAddCompra(true)}
-                  title="Agregar Compra"
-                >
-                  <PlusIcon className="text-auto" />
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-dark"
-                  onClick={() => GetReporteExcel("/reporteCompras")}
-                  title="Descargar Reporte de proveedores"
-                >
-                  <FileChartColumnIncreasing className="text-auto" />
-                </button>
+        <div className="col-md-3 col-sm-12 h-100">
+          <CondicionCarga isLoading={isLoading} isError={isError}>
+            <div className="card shadow-sm p-3 d-flex flex-row align-items-center">
+              <ShoppingCart color="#f4a261" width="63px" height="63px" />
+              <div className="ms-auto text-end">
+                <h5 className="fw-light ">Compras</h5>
+                <h3 className="fw-bold mb-0">{totalCompras}</h3>
               </div>
             </div>
-            <div className="card-body p-0">
-              <ListaCompras search={search} data={compras} />
+          </CondicionCarga>
+        </div>
+
+        <div className="col-md-3 col-sm-12">
+          <CondicionCarga isLoading={isLoading} isError={isError}>
+            <div className="card shadow-sm p-3 d-flex flex-row align-items-center">
+              <CalendarDays color="#2a9d8f" width="63px" height="63px" />
+              <div className="ms-auto text-end">
+                <h5 className="fw-light ">Compras del Mes</h5>
+                <h3 className="fw-bold mb-0">{comprasDelMes}</h3>
+              </div>
             </div>
-          </div>
+          </CondicionCarga>
+        </div>
+
+        <div className="col-md-3 col-sm-12">
+          <CondicionCarga isLoading={isLoading} isError={isError}>
+            <div className="card shadow-sm p-3 d-flex flex-row align-items-center">
+              <BanknoteArrowUp color="#e76f51" width="63px" height="63px" />
+              <div className="ms-auto text-end">
+                <h5 className="fw-light ">Egresos del Mes</h5>
+                <h3 className="fw-bold mb-0">S/. {totalMontoComprasDelMes}</h3>
+              </div>
+            </div>
+          </CondicionCarga>
+        </div>
+
+        <div className="col-md-3 col-sm-12">
+          <CondicionCarga isLoading={isLoading} isError={isError}>
+            <div className="card shadow-sm p-3 d-flex flex-row align-items-center">
+              <Trophy color="#f4a261" width="63px" height="63px" />
+              <div className="ms-auto text-end">
+                <h5 className="fw-light ">Proveedor TOP</h5>
+                <h3 className="fw-bold mb-0">{proveedorTop}</h3>
+              </div>
+            </div>
+          </CondicionCarga>
+        </div>
+        <div className="col-md-12 h-100">
+          <CondicionCarga isLoading={isLoading} isError={isError}>
+            <div className="card p-0 shadow-sm py-2 h-100">
+              <div className="card-header d-flex justify-content-between">
+                <h3 className="texto-principal">Compras</h3>
+                <div className="d-flex">
+                  {/* Input de texto */}
+                  <input
+                    type="text"
+                    placeholder="Buscar..."
+                    className="form-control"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                  />
+
+                  {/* Input de fecha */}
+                  <input
+                    type="date"
+                    className="form-control mx-3"
+                    {...register("fecha", { required: false })}
+                    onChange={(e) => {
+                      // cuando seleccionas una fecha, se refleja en el input de texto
+                      setSearch(e.target.value);
+                    }}
+                  />
+                  <button
+                    className="btn mx-3 btn-outline-dark"
+                    onClick={() => setModalAddCompra(true)}
+                    title="Agregar Compra"
+                  >
+                    <PlusIcon className="text-auto" />
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-dark"
+                    onClick={() => GetReporteExcel("/reporteCompras")}
+                    title="Descargar Reporte de proveedores"
+                  >
+                    <FileChartColumnIncreasing className="text-auto" />
+                  </button>
+                </div>
+              </div>
+              <div className="card-body p-0">
+                <ListaCompras search={search} data={compras} />
+              </div>
+            </div>
+          </CondicionCarga>
         </div>
 
         <ModalRight
@@ -168,6 +176,6 @@ export function Compras() {
           </div>
         </ModalRight>
       </div>
-    </ContenedorPrincipal>
+    </div>
   );
 }

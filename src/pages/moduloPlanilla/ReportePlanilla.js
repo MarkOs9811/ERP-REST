@@ -55,7 +55,7 @@ export function ReportePlanilla() {
   if (isLoading) return <p>Cargando estado...</p>;
   if (isError) return <p>Error: {error.message}</p>;
   return (
-    <ContenedorPrincipal>
+    <div>
       <div className="card shadow-sm border-0  p-3">
         <div className="row g-3 mb-4">
           <div className="col-md-12">
@@ -110,6 +110,6 @@ export function ReportePlanilla() {
           tipoGenerado={tipoGenerado}
         />
       )}
-    </ContenedorPrincipal>
+    </div>
   );
 }

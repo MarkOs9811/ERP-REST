@@ -127,10 +127,10 @@ export function CuentasPorPagar() {
   ];
 
   return (
-    <ContenedorPrincipal>
+    <div>
       <div className="row g-3">
         <div className="col-md-12">
-          <div className="card shadow-sm">
+          <div className="card shadow-sm py-2">
             <div className="card-header p-3 d-flex align-items-center">
               <Coins color={"#ea4f4f"} height="45px" width="45px" />
               <p className="h4 card-title ms-2 mb-0">Cuentas por Pagar</p>
@@ -160,6 +160,6 @@ export function CuentasPorPagar() {
           />
         </ModalRight>
       </div>
-    </ContenedorPrincipal>
+    </div>
   );
 }

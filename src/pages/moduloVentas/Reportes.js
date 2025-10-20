@@ -53,41 +53,39 @@ export function Reportes() {
   if (isLoading) return <p>Cargando estado...</p>;
   if (isError) return <p>Error: {error.message}</p>;
   return (
-    <ContenedorPrincipal>
-      <div className="card shadow-sm border-0  p-3">
-        <div className="row g-3 mb-4">
-          <div className="col-md-12">
-            <h3 className="mb-4">Reportes</h3>{" "}
-          </div>
-          <FormularioReporte
-            titulo="Reporte de Ventas"
-            onSubmit={handleReporte1}
-            isLoading={loadingTipo === "ventas"}
-            tipo="ventas"
-            estadoIntegracionGoogle={estadoGoogleConfig}
-          />
-          <FormularioReporte
-            titulo="Reporte de Cajas"
-            onSubmit={handleReporte1}
-            isLoading={loadingTipo === "cajas"}
-            tipo={"cajas"}
-            estadoIntegracionGoogle={estadoGoogleConfig}
-          />
-          <FormularioReporte
-            titulo="Reporte de Inventario"
-            onSubmit={handleReporte1}
-            isLoading={loadingTipo === "inventario"}
-            tipo={"inventario"}
-            estadoIntegracionGoogle={estadoGoogleConfig}
-          />
-          <FormularioReporte
-            titulo="Reporte de Compras"
-            onSubmit={handleReporte1}
-            isLoading={loadingTipo === "compras"}
-            tipo="compras"
-            estadoIntegracionGoogle={estadoGoogleConfig}
-          />
+    <div className="card shadow-sm border-0  p-3">
+      <div className="row g-3 mb-4">
+        <div className="col-md-12">
+          <h3 className="mb-4">Reportes</h3>{" "}
         </div>
+        <FormularioReporte
+          titulo="Reporte de Ventas"
+          onSubmit={handleReporte1}
+          isLoading={loadingTipo === "ventas"}
+          tipo="ventas"
+          estadoIntegracionGoogle={estadoGoogleConfig}
+        />
+        <FormularioReporte
+          titulo="Reporte de Cajas"
+          onSubmit={handleReporte1}
+          isLoading={loadingTipo === "cajas"}
+          tipo={"cajas"}
+          estadoIntegracionGoogle={estadoGoogleConfig}
+        />
+        <FormularioReporte
+          titulo="Reporte de Inventario"
+          onSubmit={handleReporte1}
+          isLoading={loadingTipo === "inventario"}
+          tipo={"inventario"}
+          estadoIntegracionGoogle={estadoGoogleConfig}
+        />
+        <FormularioReporte
+          titulo="Reporte de Compras"
+          onSubmit={handleReporte1}
+          isLoading={loadingTipo === "compras"}
+          tipo="compras"
+          estadoIntegracionGoogle={estadoGoogleConfig}
+        />
       </div>
       {/* Modal para mostrar la hoja de cálculo */}
       <ModalReportes
@@ -99,6 +97,6 @@ export function Reportes() {
         data={fechas}
         tamaño="modal-xl"
       />
-    </ContenedorPrincipal>
+    </div>
   );
 }

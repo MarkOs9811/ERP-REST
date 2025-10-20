@@ -17,6 +17,7 @@ import {
 import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteExcel";
 import GraficoMetodoPago from "../../graficosChar/GraficoMetodoPago";
 import { PlatoMasVendido } from "../../components/componentesHome/PlatosMasVendidos";
+import { CondicionCarga } from "../../components/componentesReutilizables/CondicionCarga";
 
 export function Ventas() {
   const [search, setSearch] = useState("");
@@ -25,14 +26,12 @@ export function Ventas() {
   const {
     data: ventasData,
     isLoading,
-    error,
+    isError,
   } = useQuery({
     queryKey: ["ventas"],
     queryFn: getVentas,
   });
 
-  if (isLoading) return <p>Cargando ventas...</p>;
-  if (error) return <p>Error al obtener ventas: {error.message}</p>;
   if (!ventasData || !Array.isArray(ventasData))
     return <p>Error: No se encontraron ventas.</p>;
 
@@ -52,7 +51,6 @@ export function Ventas() {
     })
     .reduce((sum, venta) => sum + parseFloat(venta.total || 0), 0)
     .toFixed(2);
-  console.log("Total Ventas", totalVentas);
 
   const totalVentasMesPasado = ventas
     .filter((venta) => {
@@ -97,14 +95,14 @@ export function Ventas() {
   };
 
   return (
-    <ContenedorPrincipal>
-      <div className="row g-3">
-        {/* Encabezado: Ventas de Hoy y Gráfico por Hora */}
-        <div className="col-12 col-lg-7 h-100 ">
-          <div className="row g-3 ">
-            <div className="col-12">
-              <div className="card shadow-sm h-100">
-                <div className="card-header d-flex p-4">
+    <div className="row g-3 ">
+      {/* Encabezado: Ventas de Hoy y Gráfico por Hora */}
+      <div className="col-12 col-lg-7 h-100 ">
+        <div className="row g-3 ">
+          <div className="col-12">
+            <CondicionCarga isLoading={isLoading} isError={isError}>
+              <div className="card shadow-sm py-2 h-100">
+                <div className="card-header d-flex p-4 bg-transparent">
                   <div>
                     <h1 className="text-primary">¡Buen día!</h1>
                     <p className="fw-normal text-secondary">
@@ -142,33 +140,41 @@ export function Ventas() {
                   </div>
                 </div>
               </div>
-            </div>
-            {/* Gráfico de ventas por hora */}
-            <div className="col-md-4 ">
+            </CondicionCarga>
+          </div>
+          {/* Gráfico de ventas por hora */}
+          <div className="col-md-4 ">
+            <CondicionCarga isLoading={isLoading} isError={isError}>
               <div className="card p-3 shadow-sm h-100 w-100 m-0">
                 <GraficoLineaDayVentas />
               </div>
-            </div>
-            <div className="col-md-4 ">
+            </CondicionCarga>
+          </div>
+          <div className="col-md-4 ">
+            <CondicionCarga isLoading={isLoading} isError={isError}>
               <div className="card p-3 shadow-sm h-100 w-100 m-0">
                 <GraficoMetodoPago />
               </div>
-            </div>
-            <div className="col-md-4 ">
+            </CondicionCarga>
+          </div>
+          <div className="col-md-4 ">
+            <CondicionCarga isLoading={isLoading} isError={isError}>
               <div className="card p-3 shadow-sm h-100 w-100 m-0">
                 <PlatoMasVendido />
               </div>
-            </div>
+            </CondicionCarga>
           </div>
         </div>
+      </div>
 
-        {/* Resumen mensual y gráfico mensual */}
-        <div className="col-12 col-lg-5 h-100">
-          <div className="row g-3">
-            {/* Tarjetas resumen tipo dashboard */}
-            <div className="col-12">
-              <div className="row g-3">
-                <div className="col-4">
+      {/* Resumen mensual y gráfico mensual */}
+      <div className="col-12 col-lg-5 h-100">
+        <div className="row g-3">
+          {/* Tarjetas resumen tipo dashboard */}
+          <div className="col-12">
+            <div className="row g-3">
+              <div className="col-4">
+                <CondicionCarga isLoading={isLoading} isError={isError}>
                   <div
                     className="card shadow-sm border-0 p-3 d-flex flex-column justify-content-between"
                     style={{ background: "#f1faf6", minHeight: 120 }}
@@ -193,8 +199,10 @@ export function Ventas() {
                       </h3>
                     </div>
                   </div>
-                </div>
-                <div className="col-4">
+                </CondicionCarga>
+              </div>
+              <div className="col-4">
+                <CondicionCarga isLoading={isLoading} isError={isError}>
                   <div
                     className="card shadow-sm border-0 p-3 d-flex flex-column justify-content-between"
                     style={{ background: "#fff6f6", minHeight: 120 }}
@@ -218,8 +226,10 @@ export function Ventas() {
                       </h3>
                     </div>
                   </div>
-                </div>
-                <div className="col-4">
+                </CondicionCarga>
+              </div>
+              <div className="col-4">
+                <CondicionCarga isLoading={isLoading} isError={isError}>
                   <div
                     className="card shadow-sm border-0 p-3 d-flex flex-column justify-content-between"
                     style={{
@@ -265,27 +275,33 @@ export function Ventas() {
                       </h3>
                     </div>
                   </div>
-                </div>
-              </div>
-            </div>
-            {/* Gráfico mensual */}
-            <div className="col-12">
-              <div className="card p-3 shadow-sm h-100">
-                <GraficoBarVentas />
-              </div>
-            </div>
-            {/* Gráfico adicional de ejemplo */}
-            <div className="col-12">
-              <div className="card p-3 shadow-sm h-100">
-                <GraficoLineaEjemplo />
+                </CondicionCarga>
               </div>
             </div>
           </div>
+          {/* Gráfico mensual */}
+          <div className="col-12">
+            <CondicionCarga isLoading={isLoading} isError={isError}>
+              <div className="card p-3 shadow-sm h-100">
+                <GraficoBarVentas />
+              </div>
+            </CondicionCarga>
+          </div>
+          {/* Gráfico adicional de ejemplo */}
+          <div className="col-12">
+            <CondicionCarga isLoading={isLoading} isError={isError}>
+              <div className="card p-3 shadow-sm h-100">
+                <GraficoLineaEjemplo />
+              </div>
+            </CondicionCarga>
+          </div>
         </div>
+      </div>
 
-        {/* Lista de ventas */}
-        <div className="col-12">
-          <div className="card shadow-sm">
+      {/* Lista de ventas */}
+      <div className="col-12">
+        <CondicionCarga isLoading={isLoading} isError={isError}>
+          <div className="card shadow-sm py-2">
             <div className="card-header d-flex flex-column flex-md-row justify-content-between gap-2">
               <h3>Ventas</h3>
               <div className="d-flex flex-column flex-md-row gap-2 ">
@@ -326,8 +342,8 @@ export function Ventas() {
               <ListVentas search={search} />
             </div>
           </div>
-        </div>
+        </CondicionCarga>
       </div>
-    </ContenedorPrincipal>
+    </div>
   );
 }

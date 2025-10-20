@@ -23,11 +23,11 @@ export function MesasList() {
 
   const handleMesaAddPlato = (id) => {
     dispatch(setIdPreventaMesa(id));
-    navigate(`/vender/ventasMesas/platos`);
+    navigate(`/vender/mesas/platos`);
   };
   const handleShowPedido = (id) => {
     dispatch(setIdPreventaMesa(id));
-    navigate(`/vender/ventasMesas/preVenta`);
+    navigate(`/vender/mesas/preVenta`);
   };
 
   if (loading) return <p>Cargando mesas...</p>;
@@ -35,7 +35,7 @@ export function MesasList() {
   // si no es array, inicialízalo vacío
   const listaMesas = Array.isArray(mesas) ? mesas : [];
   return (
-    <div className="card flex-grow-1 d-flex flex-column shadow-sm m-0">
+    <div className="card shadow-sm m-0 h-100">
       <div className="card-header d-flex justify-content-between align-items-center">
         <h3 className="m-0 size-auto">Mesas</h3>
         <div className="d-flex align-middle">
@@ -69,7 +69,7 @@ export function MesasList() {
         </div>
       </div>
 
-      <div className="mesas-container card-body overflow-y-auto overflow-x-hidden">
+      <div className="mesas-container card-body overflow-auto ">
         {listaMesas.map((mesa) => (
           <button
             key={mesa.id}

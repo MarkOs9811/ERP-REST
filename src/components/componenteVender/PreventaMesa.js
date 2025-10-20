@@ -13,7 +13,6 @@ import { TransferirToMesa } from "./tareasVender/TransferirToMesa";
 import { setIdPreventaMesa } from "../../redux/mesaSlice";
 import { setEstado } from "../../redux/tipoVentaSlice";
 import { CategoriaPlatos } from "./tareasVender/CategoriaPlatos";
-import { ContenedorPrincipal } from "../componentesReutilizables/ContenedorPrincipal";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { GetPlatosVender } from "../../service/accionesVender/GetPlatosVender";
 import {
@@ -35,7 +34,7 @@ export function PreventaMesa() {
 
   const caja = useSelector((state) => state.caja.caja);
 
-  const [mesa, setMesa] = useState(null);
+  // const [mesa, setMesa] = useState(null);
   // extrayendo datos desde store de redux
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
@@ -49,17 +48,12 @@ export function PreventaMesa() {
     isLoading,
     isError,
     error,
-    refetch,
   } = useQuery({
     queryKey: ["preventaMesa", idMesa, caja?.id],
     queryFn: () => getPreventaMesa(idMesa, caja.id), // ✅ aquí ejecutas con params
     enabled: !!idMesa && !!caja?.id, // ✅ se ejecuta solo si existen params
-    onSuccess: (data) => {
-      const numeroMesa = data.preventas?.[0]?.mesa?.numero;
-      if (numeroMesa) setMesa(numeroMesa);
-    },
   });
-
+  const mesa = preventas?.[0]?.mesa?.numero;
   // Obtener productos desde la API
   const {
     data: productos = [],
@@ -143,7 +137,7 @@ export function PreventaMesa() {
         Object.keys(mesas).forEach((mesaId) => {
           dispatch(clearPedido(mesaId));
         });
-        navigate(`/vender/ventasMesas`);
+        navigate(`/vender/mesas`);
       } else {
         ToastAlert("error", response.data.message);
       }
@@ -171,7 +165,7 @@ export function PreventaMesa() {
     setIdMesaEliminar(null);
   };
   const handleVolverMesas = () => {
-    navigate(`/vender/ventasMesas`);
+    navigate(`/vender/mesas`);
   };
 
   const handleEliminarPreventeMesa = async (idMesa) => {
@@ -183,7 +177,7 @@ export function PreventaMesa() {
       if (response.data.success) {
         ToastAlert("success", response.data.message);
         setModalQuestion(false); // Cerrar el modal
-        navigate(`/vender/ventasMesas`);
+        navigate(`/vender/mesas`);
       } else {
         ToastAlert("error", response.data.message);
       }
@@ -206,15 +200,15 @@ export function PreventaMesa() {
   const handleRealizarPago = () => {
     dispatch(setIdPreventaMesa(idMesa));
     dispatch(setEstado("mesa"));
-    navigate("/vender/ventasMesas/detallesPago");
+    navigate("/vender/mesas/detallesPago");
   };
 
   if (isLoading) return <p>Cargando preventas...</p>;
   if (isError) return <p>Error: {error.message}</p>;
   return (
-    <ContenedorPrincipal>
-      <div className="row g-3 w-100 h-100">
-        <div className="col-md-3">
+    <div className="card h-100 bg-transparent">
+      <div className="row g-3 h-100">
+        <div className="col-md-3 h-100 ">
           <div className="card shadow-sm flex-grow-1 h-100 d-flex flex-column p-2">
             <div className="card-header d-flex align-items-center justify-content-center">
               <button
@@ -229,13 +223,13 @@ export function PreventaMesa() {
                 Mesa {mesa}
               </h6>
             </div>
-            <div className="card-body overflow-auto">
+            <div className="card-body p-0">
               {preventas?.length > 0 ||
               (pedido.mesas[idMesa] &&
                 pedido.mesas[idMesa].items.length > 0) ? (
                 <>
-                  <div className="tabla-scroll rounded p-3">
-                    <table className=" table-borderless table-sm w-100">
+                  <div className="tabla-scroll p-0">
+                    <table className="table-borderless table-sm w-100">
                       <tbody>
                         {datosCombinados.map((item, index) => (
                           <tr key={`${item.id}-${index}`} className="plato-row">
@@ -276,152 +270,126 @@ export function PreventaMesa() {
                       </tbody>
                     </table>
                   </div>
-                  {/* Total */}
-                  <div className="border-top pt-3">
-                    <div className="d-flex justify-content-between align-items-center">
-                      <span className="h5">Total</span>
-                      <span className="h5 fw-bold text-success">
-                        S/.{" "}
-                        {datosCombinados
-                          .reduce(
-                            (acc, item) =>
-                              acc +
-                              item.cantidad *
-                                (item.plato?.precio || item.precio),
-                            0
-                          )
-                          .toFixed(2)}
-                      </span>
-                    </div>
-                    <small className="text-muted d-block text-end">
-                      IGV: S/.{" "}
-                      {(
-                        datosCombinados.reduce(
-                          (acc, item) =>
-                            acc +
-                            item.cantidad * (item.plato?.precio || item.precio),
-                          0
-                        ) * 0.18
-                      ).toFixed(2)}
-                    </small>
-                  </div>
-                  {/* Puntos de lealtad */}
-                  <div className="mt-3">
-                    <div className="d-flex justify-content-between">
-                      {/* Total de Pedidos */}
-                      <div className="bg-light rounded p-2 text-center flex-fill mr-2">
-                        <small>Total de Platos</small>
-                        <h6 className="text-success mb-0">
-                          {datosCombinados.length}
-                        </h6>
-                      </div>
-                      {/* Cantidad Total de Productos */}
-                      <div className="bg-light rounded p-2 text-center flex-fill ml-2">
-                        <small>Cantidad x Plato</small>
-                        <h6 className="text-dark mb-0">
-                          {datosCombinados.reduce(
-                            (acc, item) => acc + item.cantidad,
-                            0
-                          )}
-                        </h6>
-                      </div>
-                    </div>
-                  </div>
-                  {/* Botón de Realizar Pedido */}
-                  <div className="mt-4">
-                    <div className="row g-2">
-                      {/* Realizar Pago */}
-                      <div className="col-12 col-lg-12">
-                        <button
-                          className="btn-realizarPedido w-100 h-100 p-3"
-                          onClick={() => handleRealizarPago()}
-                        >
-                          <BanknoteArrowDown
-                            className="text-auto"
-                            height="24px"
-                            width="24px"
-                          />{" "}
-                          Realizar Pago
-                        </button>
-                      </div>
-
-                      {/* Botones restantes */}
-                      <div className="col-12 col-lg-12">
-                        <div className="row g-2">
-                          {/* Actualizar Pedido */}
-                          <div className="col-12">
-                            <button
-                              className="btn btn-warning w-100 p-3"
-                              onClick={handleAddPlatoPreventaMesas}
-                            >
-                              <CheckCheck
-                                className="text-auto"
-                                height="20px"
-                                width="20px"
-                              />{" "}
-                              Actualizar Pedido
-                            </button>
-                          </div>
-
-                          {/* Más Opciones */}
-                          <div className="col-12">
-                            <div className="row g-2">
-                              <div className="col-12">
-                                <button
-                                  className="btn btn-outline-dark w-100 d-flex align-items-center justify-content-center p-3"
-                                  onClick={() => handleTranferirToMesa()}
-                                >
-                                  <Repeat
-                                    className="text-auto"
-                                    height="20px"
-                                    width="20px"
-                                  />
-                                  <span className="ms-2 align-middle">
-                                    Mover a Otra Mesa
-                                  </span>
-                                </button>
-                              </div>
-                              <div className="col-lg-6 col-sm-4 col-lg-4">
-                                <button className="btn btn-outline-dark w-100 d-flex align-items-center justify-content-center p-3">
-                                  <FileText
-                                    className="text-auto"
-                                    height="15px"
-                                    width="15px"
-                                  />
-                                  <small className="ms-0 align-middle">
-                                    Nota
-                                  </small>
-                                </button>
-                              </div>
-                              <div className="col-lg-6 col-sm-4 col-lg-4">
-                                <button
-                                  className="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center p-3"
-                                  onClick={() =>
-                                    handleCancelarPedidosQuestion()
-                                  }
-                                >
-                                  <BanIcon
-                                    className="text-auto"
-                                    height="15px"
-                                    width="15px"
-                                  />
-                                  <small className="ms-0 align-middle">
-                                    Cancelar
-                                  </small>
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
                 </>
               ) : (
                 <p className="text-center text-muted">
                   No hay productos en esta mesa.
                 </p>
               )}
+            </div>
+            <div className="card-footer card-footer-column">
+              {/* Total */}
+
+              <div className="d-flex justify-content-between align-items-center">
+                <span className="h5">Total</span>
+                <span className="h5 fw-bold text-success">
+                  S/.{" "}
+                  {datosCombinados
+                    .reduce(
+                      (acc, item) =>
+                        acc +
+                        item.cantidad * (item.plato?.precio || item.precio),
+                      0
+                    )
+                    .toFixed(2)}
+                </span>
+              </div>
+              <small className="text-muted d-block text-end">
+                IGV: S/.{" "}
+                {(
+                  datosCombinados.reduce(
+                    (acc, item) =>
+                      acc + item.cantidad * (item.plato?.precio || item.precio),
+                    0
+                  ) * 0.18
+                ).toFixed(2)}
+              </small>
+            </div>
+
+            {/* Botón de Realizar Pedido */}
+            <div className="p-2">
+              <div className="row g-2">
+                {/* Realizar Pago */}
+                <div className="col-12 col-lg-12">
+                  <button
+                    className="btn-realizarPedido w-100 h-100 p-3"
+                    onClick={() => handleRealizarPago()}
+                  >
+                    <BanknoteArrowDown
+                      className="text-auto"
+                      height="24px"
+                      width="24px"
+                    />{" "}
+                    Realizar Pago
+                  </button>
+                </div>
+
+                {/* Botones restantes */}
+                <div className="col-12 col-lg-12">
+                  <div className="row g-2">
+                    {/* Actualizar Pedido */}
+                    <div className="col-12">
+                      <button
+                        className="btn btn-warning w-100 p-3"
+                        onClick={handleAddPlatoPreventaMesas}
+                      >
+                        <CheckCheck
+                          className="text-auto"
+                          height="20px"
+                          width="20px"
+                        />{" "}
+                        Actualizar Pedido
+                      </button>
+                    </div>
+
+                    {/* Más Opciones */}
+                    <div className="col-12">
+                      <div className="row g-2">
+                        <div className="col-12">
+                          <button
+                            className="btn btn-outline-dark w-100 d-flex align-items-center justify-content-center p-3"
+                            onClick={() => handleTranferirToMesa()}
+                          >
+                            <Repeat
+                              className="text-auto"
+                              height="20px"
+                              width="20px"
+                            />
+                            <span className="ms-2 align-middle">
+                              Mover a Otra Mesa
+                            </span>
+                          </button>
+                        </div>
+                        <div className="col-lg-6 col-sm-4 col-lg-4">
+                          <button className="btn btn-outline-dark w-100 d-flex align-items-center justify-content-center p-3">
+                            <FileText
+                              className="text-auto"
+                              height="15px"
+                              width="15px"
+                            />
+                            <small className="ms-0 align-middle">Nota</small>
+                          </button>
+                        </div>
+                        <div className="col-lg-6 col-sm-4 col-lg-4">
+                          <button
+                            className="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center p-3"
+                            onClick={() => handleCancelarPedidosQuestion()}
+                          >
+                            <BanIcon
+                              className="text-auto"
+                              height="15px"
+                              width="15px"
+                            />
+                            <small className="ms-0 align-middle">
+                              Cancelar
+                            </small>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -438,34 +406,32 @@ export function PreventaMesa() {
               </div>
             </div>
             <div
-              className="card-body overflow-auto p-0"
-              style={{ height: "calc(100vh - 280px)" }}
+              className="ccard-body overflow-auto p-0 justify-content-start  contenedor-platos"
+              style={{ height: "calc(100vh - 195px)" }}
             >
-              <div className="justify-content-start contenedor-platos pb-5">
-                {productos
-                  .filter(
-                    (producto) =>
-                      categoriaFiltroPlatos === "todo" ||
-                      producto.categoria.nombre === categoriaFiltroPlatos
-                  )
-                  .map((producto) => {
-                    const mesaId = idMesa; // Mesa actual desde useParams
-                    const isSelected = pedido.mesas[mesaId]?.items.some(
-                      (item) => item.id === producto.id
-                    );
-                    return (
-                      <CardPlatos
-                        key={producto.id}
-                        item={producto}
-                        isSelected={isSelected} // Determina si el plato está seleccionado
-                        handleAdd={handleAddPlatoPreventa}
-                        handleRemove={handleRemovePlatoPreventa}
-                        BASE_URL={BASE_URL}
-                        capitalizeFirstLetter={capitalizeFirstLetter}
-                      />
-                    );
-                  })}
-              </div>
+              {productos
+                .filter(
+                  (producto) =>
+                    categoriaFiltroPlatos === "todo" ||
+                    producto.categoria.nombre === categoriaFiltroPlatos
+                )
+                .map((producto) => {
+                  const mesaId = idMesa; // Mesa actual desde useParams
+                  const isSelected = pedido.mesas[mesaId]?.items.some(
+                    (item) => item.id === producto.id
+                  );
+                  return (
+                    <CardPlatos
+                      key={producto.id}
+                      item={producto}
+                      isSelected={isSelected} // Determina si el plato está seleccionado
+                      handleAdd={handleAddPlatoPreventa}
+                      handleRemove={handleRemovePlatoPreventa}
+                      BASE_URL={BASE_URL}
+                      capitalizeFirstLetter={capitalizeFirstLetter}
+                    />
+                  );
+                })}
             </div>
           </div>
         </div>
@@ -485,6 +451,6 @@ export function PreventaMesa() {
           handleCloseModal={handleCloseTransferir}
         />
       </div>
-    </ContenedorPrincipal>
+    </div>
   );
 }

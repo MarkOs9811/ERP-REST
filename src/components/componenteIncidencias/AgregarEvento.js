@@ -62,10 +62,13 @@ export function AgregarEvento() {
   };
 
   return (
-    <div className="card p-4">
-      <form onSubmit={handleSubmit(onSubmit)} className="event-form">
+    <div className=" p-4 bg-transparent">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="event-form bg-transparent"
+      >
         {/* Sección de detalles principales */}
-        <div className="event-section mb-4 p-3 bg-light ">
+        <div className="event-section mb-4 p-3 bg-transparent ">
           <h6 className="section-title mb-3">
             <i className="bi bi-card-text me-2"></i>
             Detalles del evento
@@ -111,7 +114,7 @@ export function AgregarEvento() {
         </div>
 
         {/* Sección de fecha/hora */}
-        <div className="event-section mb-4 p-3 bg-light ">
+        <div className="event-section mb-4 p-3 bg-trasnparent">
           <h6 className="section-title mb-3">
             <i className="bi bi-clock me-2"></i>
             Fecha y hora
@@ -165,7 +168,7 @@ export function AgregarEvento() {
         </div>
 
         {/* Sección de invitados */}
-        <div className="event-section mb-4 p-3 bg-light ">
+        <div className="event-section mb-4 p-3 bg-trasnparent">
           <h6 className="section-title mb-3">
             <i className="bi bi-people me-2"></i>
             Invitados

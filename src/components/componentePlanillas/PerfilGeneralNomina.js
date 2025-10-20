@@ -14,7 +14,6 @@ import {
   Pen,
   Coins,
   Loader2,
-  FileText,
 } from "lucide-react";
 import "../../css/EstilosPerfilEmpleado.css";
 import { useQuery } from "@tanstack/react-query";
@@ -46,7 +45,7 @@ export function PerfilGeneralNomina({ idEmpleado }) {
     setLoading(false);
   };
   return (
-    <div className="perfil-nomina p-3 bg-light" ref={reporteRef}>
+    <div className="perfil-nomina p-3 " ref={reporteRef}>
       <div className="row g-3">
         <div className="col-md-12">
           {isLoading ? (

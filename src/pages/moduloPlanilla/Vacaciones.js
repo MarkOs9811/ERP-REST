@@ -276,7 +276,7 @@ export function Vacaciones() {
     },
   ];
   return (
-    <ContenedorPrincipal>
+    <div>
       <div className="card shadow-sm">
         <div className="card-header d-flex justify-content-between align-items-center p-3">
           <h3 className=" mb-0">Vacaciones</h3>
@@ -484,6 +484,6 @@ export function Vacaciones() {
           </form>
         </div>
       </ModalRight>
-    </ContenedorPrincipal>
+    </div>
   );
 }

@@ -11,7 +11,7 @@ import axiosInstance from "../../api/AxiosInstance";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../AuthContext";
 
-export function PerfilPanel({ show, onClose, user, fotoPerfil }) {
+export function PerfilPanel({ user, fotoPerfil }) {
   const navigate = useNavigate();
   const { logout } = useAuth();
   const cerrarSession = async () => {
@@ -33,27 +33,7 @@ export function PerfilPanel({ show, onClose, user, fotoPerfil }) {
   };
 
   return (
-    <div
-      className={`offcanvas-end-custom ${show ? "show" : ""}`}
-      tabIndex="-1"
-      style={{
-        position: "fixed",
-        top: 0,
-        right: 0,
-        width: 340,
-        height: "100vh",
-        background: "#fff",
-        color: "#222",
-        boxShadow: "0 0 24px rgba(0,0,0,0.12)",
-        zIndex: 2000,
-        transition: "transform 0.3s",
-        transform: show ? "translateX(0)" : "translateX(100%)",
-        overflowY: "auto",
-      }}
-    >
-      <div className="d-flex justify-content-end p-3">
-        <button className="btn-close text-dark" onClick={onClose}></button>
-      </div>
+    <div>
       <div className="d-flex flex-column align-items-center">
         <img
           src={fotoPerfil}

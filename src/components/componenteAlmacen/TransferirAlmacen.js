@@ -1,4 +1,4 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useIntersectionObserver } from "@uidotdev/usehooks";
 import { GetAlmacen } from "../../service/serviceAlmacen/GetAlmacen";
 import { Cargando } from "../componentesReutilizables/Cargando";
@@ -29,8 +29,7 @@ export function TransferirAlmacen() {
   const dispatch = useDispatch();
   const seleccionados = useSelector((state) => state.productoTransferir.items);
 
-  //   PARA ANIMAR EL SELECCIONADO
-
+  // Animación del ripple
   const [ripple, setRipple] = useState({
     x: 0,
     y: 0,
@@ -48,94 +47,67 @@ export function TransferirAlmacen() {
       y: e.clientY - rect.top,
       size: Math.max(rect.width, rect.height),
       show: true,
-      id: item.id,
+      id: item?.id,
     });
 
+    // Agregar al store Redux
     dispatch(
       addItem({
-        id: item.id,
-        nombre: item.nombre,
-        marca: item.marca,
-        descripcion: item.descripcion,
-        presentacion: item.presentacion,
-        precioUnit: item.precioUnit,
-        stock: item.cantidad,
+        id: item?.id,
+        nombre: item?.nombre,
+        marca: item?.marca,
+        descripcion: item?.descripcion,
+        presentacion: item?.presentacion,
+        precioUnit: item?.precioUnit,
+        stock: item?.cantidad,
       })
     );
 
-    // Resetea el ripple después de la animación
+    // Desactiva el efecto ripple después de 600 ms
     setTimeout(() => setRipple((prev) => ({ ...prev, show: false })), 600);
   };
   // ===================
 
-  // OBTENER ALMACEN
   const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
+    data: dataAlmacen = [],
     isLoading,
     isError,
-  } = useInfiniteQuery({
+  } = useQuery({
     queryKey: ["almacen"],
-    queryFn: ({ pageParam = 1 }) => GetAlmacen(pageParam),
-    getNextPageParam: (lastPage) => {
-      return lastPage.meta.current_page < lastPage.meta.last_page
-        ? lastPage.meta.current_page + 1
-        : undefined;
-    },
-    initialPageParam: 1,
+    queryFn: GetAlmacen, // sin paréntesis ❗ (React Query la ejecuta)
+    retry: 1,
   });
 
-  // Observador para el infinite scroll
-  const [loadMoreRef, entry] = useIntersectionObserver({
-    threshold: 0,
-    root: null,
-    rootMargin: "50px",
-  });
-
-  // 3. Carga automática al intersectar
-  useEffect(() => {
-    if (entry?.isIntersecting && hasNextPage && !isFetchingNextPage) {
-      fetchNextPage();
-    }
-  }, [entry, hasNextPage]);
-
-  // 4. Aplanar datos
-  // Obtiene todos los items de todas las páginas
-  const dataAlmacen = useMemo(
-    () => data?.pages.flatMap((page) => page.data) || [],
-    [data]
-  );
-  // 5. Filtra los datos cuando cambia el término de búsqueda
+  // ===================
+  // FILTRAR LOS DATOS
+  // ===================
   useEffect(() => {
     if (searchTerm.trim() === "") {
-      setFilteredData(dataAlmacen);
+      setFilteredData(Array.isArray(dataAlmacen) ? dataAlmacen : []);
     } else {
       const term = searchTerm.toLowerCase();
-      setFilteredData(
-        dataAlmacen.filter((item) =>
+      const filtrados = (Array.isArray(dataAlmacen) ? dataAlmacen : []).filter(
+        (item) =>
           ["nombre", "descripcion", "marca"].some((key) =>
             item[key]?.toLowerCase().includes(term)
           )
-        )
       );
+      setFilteredData(filtrados);
     }
-  }, [searchTerm, dataAlmacen?.length]);
+  }, [searchTerm, dataAlmacen]);
+
   return (
     <div className="row g-3 ">
       <div className="col-lg-4 col-md-4 col-sm-12">
-        <div className="card border h-100  bg-light">
+        <div className="card border h-100  bg-light ">
           <div className="card-header  bg-light d-flex align-content-between align-align-items-center border-bottom ">
             <p className="card-title">Almacen</p>
-            <div
-              className="ms-auto position-relative"
-              style={{ width: "300px" }}
-            >
-              <Search cssClasses="position-absolute  top-50 translate-middle-y text-muted ms-2" />
+            <div className="ms-auto position-relative d-flex">
+              <Search className="position-absolute   my-2 text-muted ms-2" />
               <input
                 className="form-control rounded-pill ps-5 "
                 type="search"
+                inputmode="search"
                 placeholder="Buscar..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -160,16 +132,16 @@ export function TransferirAlmacen() {
               <ul className="list-group border-none">
                 {filteredData?.map((item, index) => (
                   <li
-                    key={item.id}
+                    key={item?.id}
                     className={`list-item-transfer list-group-item d-flex justify-content-between align-items-center  border-0 border-bottom ${
-                      seleccionados.some((sel) => sel.id === item.id)
+                      seleccionados.some((sel) => sel.id === item?.id)
                         ? "item-selected"
                         : ""
                     }`}
                     onClick={(e) => handleClick(e, item)}
                   >
                     {/* Efecto Ripple (solo para este ítem) */}
-                    {ripple.show && ripple.id === item.id && (
+                    {ripple.show && ripple.id === item?.id && (
                       <span
                         className="ripple-effect"
                         style={{
@@ -182,7 +154,7 @@ export function TransferirAlmacen() {
                     )}
 
                     <div className="d-flex align-items-center gap-2 ">
-                      {seleccionados.some((sel) => sel.id === item.id) ? (
+                      {seleccionados.some((sel) => sel.id === item?.id) ? (
                         <CheckCheck
                           color="#28a745"
                           width="22px"
@@ -198,33 +170,24 @@ export function TransferirAlmacen() {
                         />
                       )}
                       <div className="d-flex flex-column">
-                        <span>{item.nombre}</span>
+                        <span>{item?.nombre}</span>
 
                         <small className=" badge-info text-auto">
-                          {item.marca} / {item.descripcion} /{" "}
-                          {item.presentacion}
+                          {item?.marca} / {item?.descripcion} /{" "}
+                          {item?.presentacion}
                         </small>
                       </div>
                     </div>
                     <div>
                       <span className="badge bg-light text-muted">
-                        Stock {item.cantidad}
+                        Stock {item?.cantidad}
                       </span>
                       <span className="badge badge-ok">
-                        S/. {item.precioUnit}
+                        S/. {item?.precioUnit}
                       </span>
                     </div>
                   </li>
                 ))}
-                {/* Código existente del observer */}
-                <div ref={loadMoreRef} className="p-2 text-center">
-                  {isFetchingNextPage && <Cargando size="sm" />}
-                  {!hasNextPage && (
-                    <div className="alert py-1 my-1">
-                      Total registros: {data?.pages[0]?.meta?.total || 0}
-                    </div>
-                  )}
-                </div>
               </ul>
             )}
           </div>
@@ -257,7 +220,7 @@ export function TransferirAlmacen() {
               <ul className="list-group">
                 {seleccionados.map((item) => (
                   <li
-                    key={item.id}
+                    key={item?.id}
                     className="list-group-item d-flex justify-content-between align-items-center bg-success bg-opacity-10 position-relative group-hoverable"
                   >
                     <div className="d-flex align-items-center gap-2">
@@ -266,7 +229,9 @@ export function TransferirAlmacen() {
                         className="btn btn-sm btn-delete opacity-0"
                         onClick={(e) => {
                           e.stopPropagation();
-                          dispatch(removeProductoSeleccionado({ id: item.id }));
+                          dispatch(
+                            removeProductoSeleccionado({ id: item?.id })
+                          );
                         }}
                       >
                         <Trash2 className="text-auto" />
@@ -275,11 +240,11 @@ export function TransferirAlmacen() {
 
                       <div className="d-flex flex-column">
                         <span className="fw-bold text-secondary">
-                          {item.nombre}
+                          {item?.nombre}
                         </span>
                         <small className="text-muted">
-                          {item.marca} / {item.descripcion} /{" "}
-                          {item.presentacion}
+                          {item?.marca} / {item?.descripcion} /{" "}
+                          {item?.presentacion}
                         </small>
                       </div>
                     </div>
@@ -290,15 +255,15 @@ export function TransferirAlmacen() {
                           className="btn btn-outline-dark btn-sm"
                           onClick={(e) => {
                             e.stopPropagation();
-                            dispatch(removeItem({ id: item.id }));
+                            dispatch(removeItem({ id: item?.id }));
                           }}
-                          disabled={item.cantidad <= 1}
+                          disabled={item?.cantidad <= 1}
                         >
                           <Minus className="text-auto" />
                         </button>
 
                         <span className="px-2 fw-bold text-secondary">
-                          {item.cantidad}
+                          {item?.cantidad}
                         </span>
 
                         <button
@@ -306,7 +271,7 @@ export function TransferirAlmacen() {
                           onClick={(e) => {
                             e.stopPropagation();
                             dispatch(
-                              addItem({ id: item.id, nombre: item.nombre })
+                              addItem({ id: item?.id, nombre: item?.nombre })
                             );
                           }}
                         >
@@ -316,10 +281,10 @@ export function TransferirAlmacen() {
 
                       <div className="d-flex flex-column text-end">
                         <span className="badge badge-info text-dark">
-                          Stock: {item.stock ?? "--"}
+                          Stock: {item?.stock ?? "--"}
                         </span>
                         <span className="badge badge-ok mt-1">
-                          S/. {(item.precioUnit * item.cantidad).toFixed(2)}
+                          S/. {(item?.precioUnit * item?.cantidad).toFixed(2)}
                         </span>
                       </div>
                     </div>

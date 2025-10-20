@@ -13,8 +13,7 @@ import ModalRight from "../components/componentesReutilizables/ModalRight";
 import { ModalFooter } from "../components/componenteVender/cuerpoModalRight/ModalFooter";
 import { ModalCabecera } from "../components/componenteVender/cuerpoModalRight/ModalCabecera";
 import { ModalCuerpo } from "../components/componenteVender/cuerpoModalRight/ModalCuerpo";
-import { ContenedorPrincipal } from "../components/componentesReutilizables/ContenedorPrincipal";
-import { Check, CheckCheck, CookingPot, Hourglass } from "lucide-react";
+import { CheckCheck, CookingPot, Hourglass } from "lucide-react";
 
 export function PedidosWeb() {
   const queryClient = useQueryClient();
@@ -164,7 +163,7 @@ export function PedidosWeb() {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <div className="row g-3 ">
+      <div className="row g-3 h-100">
         {[
           {
             key: "pendientes",
@@ -194,16 +193,15 @@ export function PedidosWeb() {
             ),
           },
         ].map(({ key, title, border, icon }) => (
-          <div key={key} className="col-md-4 d-flex flex-column ">
+          <div key={key} className="col-md-4 h-100">
             <div
-              className="shadow-sm flex-grow-1 h-100 d-flex flex-column rounded "
+              className="card flex-grow-1 h-100 d-flex shadow-sm"
               style={{
                 borderTop: `10px solid ${border}`,
-
                 borderRadius: "0.5rem",
               }}
             >
-              <div className="d-flex card-header bg-transparent border-bottom p-1 ">
+              <div className="d-flex card-header bg-transparent  border-bottom p-2">
                 <h3 className="text-dark">{title}</h3>
                 <div className="text-end ms-auto">{icon}</div>
               </div>
@@ -212,8 +210,7 @@ export function PedidosWeb() {
                   <div
                     ref={provided.innerRef}
                     {...provided.droppableProps}
-                    className="card-body overflow-auto p-3 shadow cardbody-pedidosWeb"
-                    style={{ height: "calc(100vh - 215px)" }}
+                    className="card-body overflow-auto p-3"
                   >
                     {isLoading && <Cargando />}
                     {isError && (
@@ -252,6 +249,7 @@ export function PedidosWeb() {
           </div>
         ))}
       </div>
+
       <ModalRight
         isOpen={isModalOpen}
         onClose={() => {

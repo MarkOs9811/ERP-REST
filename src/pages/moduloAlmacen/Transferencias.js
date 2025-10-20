@@ -3,8 +3,8 @@ import { ContenedorPrincipal } from "../../components/componentesReutilizables/C
 
 export function Transferencias() {
   return (
-    <ContenedorPrincipal>
-      <div className="card   shadow-sm">
+    <div>
+      <div className="card  shadow-sm  py-2">
         <div className="card-header d-flex justify-content-between align-items-center border-bottom">
           <h4 className="text-center">Transferencias de activos y productos</h4>
         </div>
@@ -12,6 +12,6 @@ export function Transferencias() {
           <TransferirAlmacen />
         </div>
       </div>
-    </ContenedorPrincipal>
+    </div>
   );
 }

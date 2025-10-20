@@ -38,7 +38,7 @@ export function Nomina() {
     }
   };
   return (
-    <ContenedorPrincipal>
+    <div>
       <div className="card shadow-sm p-0">
         <div className="card-header border-bottom d-flex justify-content-between align-items-center">
           <div className="m-2">
@@ -95,6 +95,6 @@ export function Nomina() {
           </p>
         </div>
       </ModalGeneral>
-    </ContenedorPrincipal>
+    </div>
   );
 }

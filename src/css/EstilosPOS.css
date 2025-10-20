@@ -1,0 +1,11 @@
+.contenedor-scroll{
+    height: calc(100vh - 65px)!important;
+    background-color: rgb(233, 233, 233);
+}
+/* 📱 Para tablets y celulares */
+@media (max-width: 991px) {
+    .contenedor-scroll {
+        height: calc(100vh - 120px);
+    }
+}
+

@@ -8,7 +8,35 @@
 .notificaciones-panel-list {
     background: #fff !important;
 }
+.ico-header {
+    background-color: #fff;
+    transition: transform 0.3s ease;
+    display: inline-flex;
+    /* centra mejor íconos */
+    align-items: center;
+    justify-content: center;
+    /* opcional, para íconos redondeados */
+   
+    cursor: pointer;
+}
+.ico-header:hover {
+    transform: scale(1.1);
+    background-color: #f0f0f0;
+   
+}
 
+/* MODODARK */
+/* para iconos */
+body.dark-theme .ico-header{
+    background-color:transparent;
+    color: white;
+}
+
+body.dark-theme .ico-header:hover {
+    transform: scale(1.1);
+    background-color: #343e4d;
+
+}
 /* para el panel de pefil */
 body.dark-theme .offcanvas-end-custom {
     background: #23272f !important;
@@ -25,7 +53,7 @@ body.dark-theme .offcanvas-end-custom .btn {
 
 /* para el panel de notificaciones */
 body.dark-theme .offcanvas-end-custom-notify {
-    background: #23272f !important;
+    background: #23272f2a !important;
     color: #f1f1f1 !important;
 }
 
@@ -73,4 +101,4 @@ body.dark-theme .offcanvas-end-custom-notify .bg-notify-unread {
 }
 
 body.dark-theme .notificaciones-panel-list {
-    background: #23272f; }
+    background: #23272f44!important; }

@@ -34,7 +34,7 @@ export function CalendarioEventos() {
   }));
 
   return (
-    <div className="card shadow-sm">
+    <div className="card shadow-sm py-2">
       <div className="card-header d-flex">
         <h4>Calendario de eventos</h4>
         <div className="ms-auto">
@@ -59,7 +59,7 @@ export function CalendarioEventos() {
         submitText="Crear Evento"
         hideFooter={true}
       >
-        <div className="moda-body">
+        <div className="moda-body bg-transparent">
           <AgregarEvento />
         </div>
       </ModalRight>

@@ -37,104 +37,94 @@ export function Inventario() {
       };
 
   return (
-    <ContenedorPrincipal>
-      <div className="row g-3">
-        <div className="col-lg-12">
-          <div className="row g-3">
-            <MetricCard
-              loading={isLoading}
-              error={isError}
-              icon={<Store color={"#ea8d1c"} width={"80px"} height={"80px"} />}
-              title="Productos"
-              value={metrics.productosConteo}
-              errorMessage="Error al cargar datos"
-            />
+    <div className="row g-3 ">
+      <div className="col-lg-12">
+        <div className="row g-3">
+          <MetricCard
+            loading={isLoading}
+            error={isError}
+            icon={<Store color={"#ea8d1c"} width={"80px"} height={"80px"} />}
+            title="Productos"
+            value={metrics.productosConteo}
+            errorMessage="Error al cargar datos"
+          />
 
-            <MetricCard
-              loading={isLoading}
-              error={isError}
-              icon={
-                <StickyNote color={"#1c9fea"} height="80px" width={"80px"} />
-              }
-              title="Stock Total"
-              value={metrics.stockTotal}
-              errorMessage="Error al cargar el stock"
-            />
+          <MetricCard
+            loading={isLoading}
+            error={isError}
+            icon={<StickyNote color={"#1c9fea"} height="80px" width={"80px"} />}
+            title="Stock Total"
+            value={metrics.stockTotal}
+            errorMessage="Error al cargar el stock"
+          />
 
-            <MetricCard
-              loading={isLoading}
-              error={isError}
-              icon={
-                <StickyNote color={"#1eca74"} width={"80px"} height={"80px"} />
-              }
-              title="Valor Total"
-              value={`S/.${metrics.valorTotal}`}
-              errorMessage="Error al cargar datos"
-            />
+          <MetricCard
+            loading={isLoading}
+            error={isError}
+            icon={
+              <StickyNote color={"#1eca74"} width={"80px"} height={"80px"} />
+            }
+            title="Valor Total"
+            value={`S/.${metrics.valorTotal}`}
+            errorMessage="Error al cargar datos"
+          />
 
-            <MetricCard
-              loading={isLoading}
-              error={isError}
-              icon={
-                <TriangleAlert
-                  color={"#ca1e1e"}
-                  width={"80px"}
-                  height={"80px"}
-                />
-              }
-              title="Por Vencer"
-              value={metrics.porVencer}
-              errorMessage="Error al cargar datos"
-              isDanger
-            />
-          </div>
+          <MetricCard
+            loading={isLoading}
+            error={isError}
+            icon={
+              <TriangleAlert color={"#ca1e1e"} width={"80px"} height={"80px"} />
+            }
+            title="Por Vencer"
+            value={metrics.porVencer}
+            errorMessage="Error al cargar datos"
+            isDanger
+          />
         </div>
+      </div>
 
-        <div className="col-lg-12">
-          <div className="card shadow-sm">
-            <div className="card-header p-0 border-bottom d-flex justify-content-between align-items-center fw-none fw-0">
-              <div className="m-3">
-                <h3 className="card-title mb-0 titulo-card-especial">
-                  Mi Inventario
-                </h3>
-                <small className="text-secondary fw-0">
-                  Aqui se muestran los productos que estan puestos en ventas
-                </small>
-              </div>
-              <div className="d-flex align-items-center justify-content-end">
-                <div className="d-flex">
-                  <input
-                    type="text"
-                    placeholder="Buscar..."
-                    className="form-control"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                  />
-                </div>
-                <button
-                  className="btn mx-2 btn-outline-dark"
-                  onClick={() =>
-                    navigate("/ventas/solicitud/realizarSolicitud")
-                  }
-                >
-                  <Plus className="text-auto" />
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-dark"
-                  onClick={() => GetReporteExcel("/reporteInventarioTodo")}
-                >
-                  <FileChartColumnIncreasing className="text-auto" />
-                </button>
-              </div>
+      <div className="col-lg-12">
+        <div className="card shadow-sm py-2">
+          <div className="card-header p-0 border-bottom d-flex justify-content-between align-items-center fw-none fw-0">
+            <div className="m-3">
+              <h3 className="card-title mb-0 titulo-card-especial">
+                Mi Inventario
+              </h3>
+              <small className="text-secondary fw-0">
+                Aqui se muestran los productos que estan puestos en ventas
+              </small>
             </div>
-            <div className="card-body p-0">
-              <InventarioList search={search} />
+            <div className="d-flex align-items-center justify-content-end">
+              <div className="d-flex">
+                <input
+                  type="text"
+                  placeholder="Buscar..."
+                  className="form-control"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </div>
+              <button
+                className="btn mx-2 btn-outline-dark"
+                onClick={() => navigate("/ventas/solicitud/realizarSolicitud")}
+              >
+                <Plus className="text-auto" />
+              </button>
+              <button
+                type="button"
+                className="btn btn-dark"
+                onClick={() => GetReporteExcel("/reporteInventarioTodo")}
+              >
+                <FileChartColumnIncreasing className="text-auto" />
+              </button>
             </div>
+          </div>
+          <div className="card-body p-0">
+            <InventarioList search={search} />
           </div>
         </div>
       </div>
-    </ContenedorPrincipal>
+    </div>
   );
 }
 

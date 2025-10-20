@@ -10,6 +10,7 @@ import { CombosList } from "../components/componentePlatos/CombosList";
 import { useQueryClient } from "@tanstack/react-query";
 import { GetReporteExcel } from "../service/accionesReutilizables/GetReporteExcel";
 import { FileChartColumnIncreasing } from "lucide-react";
+import { CondicionCarga } from "../components/componentesReutilizables/CondicionCarga";
 
 export function MenuPlato() {
   const [search, setSearch] = useState("");
@@ -27,9 +28,9 @@ export function MenuPlato() {
   };
 
   return (
-    <ContenedorPrincipal>
-      <div className="row g-3 w-100">
-        <div className="col-md-12 col-lg-12">
+    <div className="row g-3 ">
+      <div className="col-md-12 col-lg-12">
+        <CondicionCarga isLoading={upDateList} isError={null}>
           <div className="card shadow-sm h-100">
             <div className="card-header border-bottom d-flex justify-content-between align-items-center mb-2">
               <h5 className="mb-0">Menú</h5>
@@ -63,15 +64,18 @@ export function MenuPlato() {
               <PlatoList search={search} upDateList={upDateList} />
             </div>
           </div>
-        </div>
-        <div className="col-sm-12 col-lg-8">
-          <CombosList />
-        </div>
-        <div className="col-sm-12 col-lg-4">
-          <CategoriaList />
-        </div>
+        </CondicionCarga>
       </div>
-
+      <div className="col-sm-12 col-lg-8">
+        <CondicionCarga isLoading={upDateList} isError={null}>
+          <CombosList />
+        </CondicionCarga>
+      </div>
+      <div className="col-sm-12 col-lg-4">
+        <CondicionCarga isLoading={upDateList} isError={null}>
+          <CategoriaList />
+        </CondicionCarga>
+      </div>
       {/* Modal para agregar PLATOS */}
       <Modal show={showModal} onHide={handleCloseModal} centered>
         <Modal.Header closeButton>
@@ -81,6 +85,6 @@ export function MenuPlato() {
           <PlatoAdd handleCloseModal={handleCloseModal} />
         </Modal.Body>
       </Modal>
-    </ContenedorPrincipal>
+    </div>
   );
 }

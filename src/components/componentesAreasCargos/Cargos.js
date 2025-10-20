@@ -89,7 +89,7 @@ export function Cargos() {
           title="Agregar un cargo"
           onClick={() => setModalAddCargo(true)}
         >
-          <Plus color={"auto"} />
+          <Plus className="text-auto" />
         </button>
       </div>
       <div className="card-body p-4">

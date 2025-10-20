@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import RippleWrapper from "./components/componentesReutilizables/RippleWrapper";
 import {
-  ChevronLeft,
+  ChevronRight,
   HandPlatter,
   Inbox,
   LockKeyhole,
@@ -10,6 +10,7 @@ import {
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faKitchenSet } from "@fortawesome/free-solid-svg-icons";
+import "./css/EstilosPOS.css";
 
 export default function LayoutPOS({ children }) {
   const navigate = useNavigate();
@@ -17,13 +18,9 @@ export default function LayoutPOS({ children }) {
   const caja = useSelector((state) => state.caja.caja);
   const cargo = JSON.parse(localStorage.getItem("user") || "{}") || {};
   return (
-    <div className="w-full h-screen flex flex-col bg-gray-100">
+    <div className="card w-full h-screen p-0 m-0">
       {/* Barra de botones POS */}
-      <div className="p-2 shadow d-flex gap-2 bg-white">
-        <button className="btn btn-outline-dark" onClick={() => navigate("/")}>
-          <ChevronLeft className="color-auto" />
-          Salir
-        </button>
+      <div className="card-header p-2  m-0 rounded-0 d-flex gap-2 ">
         <div className="d-flex gap-2 flex-wrap justify-content-between flex-grow-1">
           {/* Mesas */}
           {["atencion al cliente", "administrador"].includes(
@@ -33,9 +30,9 @@ export default function LayoutPOS({ children }) {
               <button
                 type="button"
                 className={`boton-venta ${
-                  location.pathname === "/vender/ventasMesas" ? "activo" : ""
+                  location.pathname === "/vender/mesas" ? "activo" : ""
                 }`}
-                onClick={() => navigate("/vender/ventasMesas")}
+                onClick={() => navigate("/vender/mesas")}
               >
                 <HandPlatter
                   className="text-auto me-1"
@@ -106,38 +103,34 @@ export default function LayoutPOS({ children }) {
           )}
 
           {/* Botón Cerrar Caja */}
-          <div className="ms-auto float-right d-flex">
+          <div className="ms-auto float-right d-flex gap-2">
             {["atencion al cliente", "administrador"].includes(
               cargo?.empleado?.cargo?.nombre
             ) &&
               caja?.estado === "abierto" && (
                 <button
                   type="button"
-                  className={
-                    "btn btn-outline-danger d-flex align-items-center gap-1"
-                  }
+                  className="btn btn-outline-danger d-flex align-items-center justify-content-center"
                   onClick={() => navigate("/vender/cerrarCaja")}
-                  style={{ height: 44 }}
                 >
-                  <LockKeyhole
-                    className="text-auto"
-                    height="22px"
-                    width="22px"
-                  />
+                  <LockKeyhole className="text-auto" />
                   Cerrar Caja
                 </button>
               )}
+            <button
+              type="button"
+              className="btn btn-outline-dark d-flex align-items-center justify-content-center "
+              onClick={() => navigate("/")}
+            >
+              Salir
+              <ChevronRight className="text-auto" />
+            </button>
           </div>
         </div>
       </div>
 
       {/* Contenido dinámico */}
-      <div
-        className="flex-1 overflow-auto p-3 vh-100"
-        style={{ background: "#F2F2F2" }}
-      >
-        {children}
-      </div>
+      <div className="contenedor-scroll p-3">{children}</div>
     </div>
   );
 }

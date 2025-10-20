@@ -37,7 +37,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 15px;
+    padding: 9px;
     gap: 10px;
     transition: height 0.3s ease;
 }
@@ -87,6 +87,8 @@
     margin-top: 3px;
     text-align: center;
     padding: 0px;
+    color: #dadada !important;
+    
 }
 
 .menu-item:hover {
@@ -97,10 +99,12 @@
 }
 
 .menu-item.active {
-    background: linear-gradient(135deg, #cf4b4b, #df6969);
+    background: linear-gradient(135deg, #492a2a7c, #5c363681);
     border-radius: 8px;
     font-weight: bold;
-    box-shadow: 1px 2px 5px 1px rgba(182, 35, 35, 0.4);
+    color: rgb(252, 183, 162)!important;
+    text-shadow: 1px 1px 2px rgb(44, 20, 20);
+    
 }
 .menu-footer {
     position: absolute;
@@ -112,12 +116,17 @@
 .submenu {
     list-style: none;
     padding-left: 10px;
-    background-color: #151e27 !important;
+    background-color: #1b222b73 !important;
     margin: 0;
     overflow: hidden;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     max-height: 0;
     opacity: 0;
+    border: none;
+    border-top-left-radius: 0px!important;
+    border-top-right-radius: 0px!important;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 
 .submenu-open {
@@ -138,4 +147,19 @@
 .active-sub {
     background-color: rgba(255, 255, 255, 0.2);
     font-weight: bold;
+}
+
+body.dark-theme .submenu {
+   
+    background-color: #1b222b1c !important;
+    box-shadow: none!important;
+}
+
+body.dark-theme .menu-item.active {
+    background: linear-gradient(135deg, #492a2a7c, #5c363681)!important;
+    border-radius: 8px;
+    font-weight: bold;
+    color: rgb(252, 183, 162) !important;
+    text-shadow: 1px 1px 2px rgb(44, 20, 20);
+
 }

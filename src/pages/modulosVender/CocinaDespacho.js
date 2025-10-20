@@ -8,7 +8,7 @@ import BotonAnimado from "../../components/componentesReutilizables/BotonAnimado
 import Pusher from "pusher-js";
 import "../../css/EstilosCocina.css";
 import Masonry from "react-masonry-css";
-import { Printer, PrinterIcon } from "lucide-react";
+import { PrinterIcon } from "lucide-react";
 
 const estados = {
   0: { texto: "En proceso", clase: "badge bg-warning text-dark" },
@@ -49,7 +49,7 @@ function TarjetaPedido({ pedido }) {
 
   return (
     <div
-      className="mb-3 shadow-sm"
+      className="mb-3 shadow-sm p-0"
       style={{
         borderTop: `4px solid ${borderTopColor}`,
         borderBottom: "1px solid #c4c4c4",
@@ -59,7 +59,7 @@ function TarjetaPedido({ pedido }) {
         borderBottomRightRadius: "10px",
       }}
     >
-      <div className="card-header d-flex justify-content-between align-items-center bg-light">
+      <div className="card-header d-flex justify-content-between align-items-center bg-light m-0">
         <span style={{ fontWeight: "bold" }}># {pedido.id}</span>
         <span style={{ fontWeight: "bold" }}>{titulo}</span>
         <span
@@ -70,7 +70,7 @@ function TarjetaPedido({ pedido }) {
         </span>
       </div>
 
-      <div className="card-body p-0">
+      <div className="p-0">
         <ul className="list-group list-group-flush mb-2">
           {platos.map((plato, idx) => (
             <li
@@ -100,7 +100,7 @@ function TarjetaPedido({ pedido }) {
           <PrinterIcon className="text-auto" />
         </button>
         <BotonAnimado className="btn-realizarPedido h6 p-1 ms-auto">
-          Marcar Listo
+          Listo
         </BotonAnimado>
       </div>
     </div>
@@ -146,35 +146,33 @@ export function CocinaDespacho() {
   }, [queryClient]);
 
   return (
-    <ContenedorPrincipal>
-      <div className="row g-3">
-        {/* MESAS */}
-        <div className="col-lg-12 col-sm-12">
-          <div className="card shadow-sm">
-            <div className="card-header  text-center p-3 border-bottom">
-              <p className="h5 "> Por Servir </p>
-            </div>
-            <div
-              className="card-body "
-              style={{ maxHeight: "100vh", overflowY: "auto" }}
-            >
-              {pedidos.length === 0 ? (
-                <p className="text-muted text-center">No hay pedidos.</p>
-              ) : (
-                <Masonry
-                  breakpointCols={breakpointColumnsObj}
-                  className="my-masonry-grid"
-                  columnClassName="my-masonry-grid_column"
-                >
-                  {pedidos.map((pedido, i) => (
-                    <TarjetaPedido key={i} pedido={pedido} />
-                  ))}
-                </Masonry>
-              )}
-            </div>
+    <div className="row g-3 h-100">
+      {/* MESAS */}
+      <div className="col-lg-12 col-sm-12 h-100">
+        <div className="card shadow-sm h-100">
+          <div className="card-header  text-center p-3 border-bottom">
+            <p className="h5 "> Por Servir </p>
+          </div>
+          <div
+            className="card-body overflow-auto p-4 justify-content-start  contenedor-platos "
+            style={{ height: "calc(100vh - 200px)" }}
+          >
+            {pedidos.length === 0 ? (
+              <p className="text-muted text-center">No hay pedidos.</p>
+            ) : (
+              <Masonry
+                breakpointCols={breakpointColumnsObj}
+                className="my-masonry-grid"
+                columnClassName="my-masonry-grid_column"
+              >
+                {pedidos.map((pedido, i) => (
+                  <TarjetaPedido key={i} pedido={pedido} />
+                ))}
+              </Masonry>
+            )}
           </div>
         </div>
       </div>
-    </ContenedorPrincipal>
+    </div>
   );
 }

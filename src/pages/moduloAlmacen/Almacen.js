@@ -17,10 +17,10 @@ export function Almacen() {
     navigate("/almacen/registro");
   };
   return (
-    <ContenedorPrincipal>
-      <div className="card shadow-sm my-0 flex-grow-1 h-100 d-flex flex-column p-0 m-0 rounded">
+    <div>
+      <div className="card  h-100 d-flex  shadow-sm py-2  ">
         <div className="card-header border-bottom d-flex justify-content-between align-items-center">
-          <div className="m-2">
+          <div className="">
             <h4 className="card-title mb-0 titulo-card-especial">Almacen</h4>
           </div>
 
@@ -57,6 +57,6 @@ export function Almacen() {
           <AlmacenList search={search} updateList={updateList} />
         </div>
       </div>
-    </ContenedorPrincipal>
+    </div>
   );
 }

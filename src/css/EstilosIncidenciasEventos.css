@@ -135,12 +135,12 @@
 
 /* ========== TEMA OSCURO INCIDENCIAS EVENTOS ESTILO MODERNO CON ROJO CORPORATIVO ========== */
 body.dark-theme .event-form {
-    background: #23272b !important;
+    background: transparent !important;
     color: #cfd8dc !important;
 }
 body.dark-theme .event-header {
     border-bottom: 1px solid #313a46 !important;
-    background: #23272b !important;
+    background: transparent !important;
     color: #ee5252 !important;
 }
 body.dark-theme .section-title {

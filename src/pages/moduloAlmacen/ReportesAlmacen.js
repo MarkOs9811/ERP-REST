@@ -56,7 +56,7 @@ export function ReportesAlmacen() {
   if (isError) return <p>Error: {error.message}</p>;
 
   return (
-    <ContenedorPrincipal>
+    <div>
       <div className="card shadow-sm p-3">
         <h3 className="mb-4">Reportes</h3>
         <div className="row g-3 mb-4">
@@ -108,6 +108,6 @@ export function ReportesAlmacen() {
         data={fechas}
         tamaño="modal-xl"
       />
-    </ContenedorPrincipal>
+    </div>
   );
 }

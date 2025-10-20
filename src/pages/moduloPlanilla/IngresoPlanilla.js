@@ -160,7 +160,7 @@ export function IngresoPlanilla() {
     }
   };
   return (
-    <ContenedorPrincipal>
+    <div>
       <div class="col-md-12">
         <div class="card shadow-sm border-0 p-3">
           <h4>Datos del empleado</h4>
@@ -633,6 +633,6 @@ export function IngresoPlanilla() {
           </div>
         </div>
       </div>
-    </ContenedorPrincipal>
+    </div>
   );
 }

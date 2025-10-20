@@ -1,7 +1,7 @@
-.card {
-   
-    border: 1px solid grey;
-    
+  .nav-navegacion{
+    background-color: rgba(248, 248, 248, 0.2)!important;
+    backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
   }
   
   .breadcrumb {

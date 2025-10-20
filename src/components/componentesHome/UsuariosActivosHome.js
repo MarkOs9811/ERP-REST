@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom"; // Importa useNavigate
 
 import { capitalizeFirstLetter } from "../../hooks/FirstLetterUp";
 import { UserRound } from "lucide-react";
+import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
 
 export function UsuariosActivosHome() {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -23,91 +24,93 @@ export function UsuariosActivosHome() {
   const listaAsistenciaHoy = usuariosActivos?.listaAsistenciaHoy || [];
 
   return (
-    <div className="card shadow-sm h-100 p-0">
-      <div className="card-header dashboard-header d-flex justify-content-between align-items-center p-3">
-        <p className="text-dark mb-3 d-flex align-items-center h5">
-          Usuarios Activos
-        </p>
-        <h3 className="text-dark badge rounded-pill mx-2 p-2">
-          {listaAsistenciaHoy.length}
-        </h3>
-        <UserRound
-          color={"var(--accent-blue)"}
-          height="40px"
-          width="40px"
-          className="me-2"
-        />
-      </div>
-      <div className="card-body p-4">
-        {isLoadingUsuarios ? (
-          <p className="text-muted">Cargando usuarios...</p>
-        ) : isErrorUsuarios ? (
-          <p className="text-danger">Error al cargar los usuarios.</p>
-        ) : listaAsistenciaHoy.length > 0 ? (
-          <>
-            <ul className="mt-3">
-              {listaAsistenciaHoy.slice(0, 4).map((usuario) => (
-                <li
-                  key={usuario.id}
-                  className="list-group-item d-flex align-items-center"
-                  style={{
-                    textAlign: "left", // Asegura que el contenido esté alineado a la izquierda
-                    padding: "10px",
-                    border: "none",
-                  }}
-                >
-                  <img
-                    src={`${BASE_URL}/storage/${usuario.empleado?.empleado?.usuario?.fotoPerfil}`}
-                    alt="Foto de perfil"
+    <CondicionCarga isLoading={isLoadingUsuarios} isError={isErrorUsuarios}>
+      <div className="card shadow-sm h-100 p-0">
+        <div className="card-header dashboard-header d-flex justify-content-between align-items-center p-3">
+          <p className="text-dark mb-3 d-flex align-items-center h5">
+            Usuarios Activos
+          </p>
+          <h3 className="text-dark badge rounded-pill mx-2 p-2">
+            {listaAsistenciaHoy.length}
+          </h3>
+          <UserRound
+            color={"var(--accent-blue)"}
+            height="40px"
+            width="40px"
+            className="me-2"
+          />
+        </div>
+        <div className="card-body p-4">
+          {isLoadingUsuarios ? (
+            <p className="text-muted">Cargando usuarios...</p>
+          ) : isErrorUsuarios ? (
+            <p className="text-danger">Error al cargar los usuarios.</p>
+          ) : listaAsistenciaHoy.length > 0 ? (
+            <>
+              <ul className="mt-3">
+                {listaAsistenciaHoy.slice(0, 4).map((usuario) => (
+                  <li
+                    key={usuario.id}
+                    className="list-group-item d-flex align-items-center"
                     style={{
-                      width: "50px",
-                      height: "50px",
-                      borderRadius: "50%",
-                      border: "2px solid silver",
-                      marginRight: "15px", // Espacio entre la imagen y el texto
+                      textAlign: "left", // Asegura que el contenido esté alineado a la izquierda
+                      padding: "10px",
+                      border: "none",
                     }}
-                  />
-                  <div style={{ flex: 1 }}>
-                    <p
+                  >
+                    <img
+                      src={`${BASE_URL}/storage/${usuario.empleado?.empleado?.usuario?.fotoPerfil}`}
+                      alt="Foto de perfil"
                       style={{
-                        margin: 0,
-                        fontWeight: "bold",
-                        color: "#333",
+                        width: "50px",
+                        height: "50px",
+                        borderRadius: "50%",
+                        border: "2px solid silver",
+                        marginRight: "15px", // Espacio entre la imagen y el texto
                       }}
-                    >
-                      {capitalizeFirstLetter(
-                        usuario?.empleado?.nombre.toLowerCase()
-                      )}{" "}
-                      {capitalizeFirstLetter(
-                        usuario?.empleado?.apellidos.toLowerCase()
-                      )}
-                    </p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-            {listaAsistenciaHoy.length > 4 && (
-              <div className="d-flex align-items-center mt-2">
-                <p className="text-muted mb-0">
-                  +{listaAsistenciaHoy.length - 4} más...
-                </p>
-                <button
-                  className="btn btn-link text-primary ms-2 p-0"
-                  onClick={() => navigate("/rr.hh/asistencia")}
-                  style={{
-                    textDecoration: "none",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Ver todos
-                </button>
-              </div>
-            )}
-          </>
-        ) : (
-          <p className="text-muted">No hay usuarios activos hoy.</p>
-        )}
+                    />
+                    <div style={{ flex: 1 }}>
+                      <p
+                        style={{
+                          margin: 0,
+                          fontWeight: "bold",
+                          color: "#333",
+                        }}
+                      >
+                        {capitalizeFirstLetter(
+                          usuario?.empleado?.nombre.toLowerCase()
+                        )}{" "}
+                        {capitalizeFirstLetter(
+                          usuario?.empleado?.apellidos.toLowerCase()
+                        )}
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+              {listaAsistenciaHoy.length > 4 && (
+                <div className="d-flex align-items-center mt-2">
+                  <p className="text-muted mb-0">
+                    +{listaAsistenciaHoy.length - 4} más...
+                  </p>
+                  <button
+                    className="btn btn-link text-primary ms-2 p-0"
+                    onClick={() => navigate("/rr.hh/asistencia")}
+                    style={{
+                      textDecoration: "none",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Ver todos
+                  </button>
+                </div>
+              )}
+            </>
+          ) : (
+            <p className="text-muted">No hay usuarios activos hoy.</p>
+          )}
+        </div>
       </div>
-    </div>
+    </CondicionCarga>
   );
 }

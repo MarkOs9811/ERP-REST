@@ -2,11 +2,10 @@ import { AjustesBonificaciones } from "../../components/componentePlanillas/comp
 import { AjustesDeducciones } from "../../components/componentePlanillas/componentesAjustesPlanilla/AjustesDeducciones";
 import { AjustesGenerales } from "../../components/componentePlanillas/componentesAjustesPlanilla/AjustesGenerales";
 import { AjustesHorario } from "../../components/componentePlanillas/componentesAjustesPlanilla/AjustesHorario";
-import { ContenedorPrincipal } from "../../components/componentesReutilizables/ContenedorPrincipal";
 
 export function AjustesPlanilla() {
   return (
-    <ContenedorPrincipal>
+    <div>
       <div className="row g-2">
         <div className="col-md-6 col-sm-12">
           <AjustesGenerales />
@@ -25,6 +24,6 @@ export function AjustesPlanilla() {
           </div>
         </div>
       </div>
-    </ContenedorPrincipal>
+    </div>
   );
 }

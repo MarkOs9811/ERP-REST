@@ -2,8 +2,6 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import "../css/NavegacionEstilos.css";
 
 import { useDispatch } from "react-redux";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { toggleSidebar } from "../redux/sideBarSlice";
 import { Megaphone, StoreIcon } from "lucide-react";
 
@@ -33,13 +31,14 @@ export function Navegacion() {
     dispatch(toggleSidebar());
   };
   return (
-    <div
-      className="d-flex border-none rounded-0 shadow-sm position-relative navegacion"
-      style={{ height: "50px" }}
-    >
+    <div className="nav-navegacion">
       <nav
         aria-label="breadcrumb"
-        className="d-flex justify-content-between align-items-center  w-100"
+        className="d-flex justify-content-between align-items-center  w-100 "
+        style={{
+          height: "50px",
+          boxShadow: "0px 3px 10px 1px rgba(0,0,0,0.2)!important",
+        }}
       >
         {/* Contenedor flexible para alinear el botón y la navegación */}
         <div className="d-flex align-items-center">

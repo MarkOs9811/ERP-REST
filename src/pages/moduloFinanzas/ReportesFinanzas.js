@@ -70,7 +70,7 @@ export function ReportesFinanzas() {
   ];
 
   return (
-    <ContenedorPrincipal>
+    <div>
       <div className="row gap-3">
         <div className="col-md-12">
           <div className="card shadow-sm">
@@ -138,6 +138,6 @@ export function ReportesFinanzas() {
           {reporteModal === "reporteGeneral" ? <ReporteGeneralFinanzas /> : ""}
         </ModalRight>
       </div>
-    </ContenedorPrincipal>
+    </div>
   );
 }

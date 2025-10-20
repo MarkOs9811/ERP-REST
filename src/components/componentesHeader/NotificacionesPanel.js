@@ -1,4 +1,4 @@
-import { Settings2 } from "lucide-react";
+import { Settings2, Settings2Icon } from "lucide-react";
 import React, { useState } from "react";
 
 const notificacionesEjemplo = [
@@ -60,34 +60,7 @@ export function NotificacionesPanel({ show, onClose }) {
   ];
 
   return (
-    <div
-      className={`offcanvas-end-custom-notify ${show ? "show" : ""}`}
-      tabIndex="-1"
-      style={{
-        position: "fixed",
-        top: 0,
-        right: 0,
-        width: 370,
-        height: "100vh",
-        boxShadow: "0 0 24px rgba(0,0,0,0.12)",
-        zIndex: 2100,
-        transition: "transform 0.3s",
-        transform: show ? "translateX(0)" : "translateX(100%)",
-        overflowY: "auto",
-      }}
-    >
-      <div className="d-flex align-items-center justify-content-between p-3 border-bottom">
-        <h5 className="mb-0 fw-bold">Notificaciones</h5>
-        <div className="d-flex align-items-center gap-2">
-          <Settings2
-            height="20px"
-            width="20px"
-            color={"auto"}
-            style={{ cursor: "pointer" }}
-          />
-          <button className="btn-close" onClick={onClose}></button>
-        </div>
-      </div>
+    <div>
       <div className="d-flex gap-2 px-3 py-2">
         {tabs.map((t) => (
           <button

@@ -93,7 +93,7 @@ const Categorias = ({ categorias, onToggle }) => {
         title="Agregar Categoria"
         hideFooter={true}
       >
-        <div className="card d-flex h-100">
+        <div className="card d-flex h-100 bg-transparent">
           <form
             className="card-body row g-3"
             onSubmit={handleSubmit(handleSubmitMetodo)}

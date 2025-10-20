@@ -39,26 +39,24 @@ export default function AjustesVentas() {
   };
 
   return (
-    <ContenedorPrincipal>
-      <div className="row">
-        <div className="col-lg-12">
-          <div className="card p-3 shadow-sm">
-            <div className="card-header">
-              <h3>Ajustes de venta</h3>
-            </div>
-            <div className="card-body">
-              {isLoading && <p>Cargando métodos de pago...</p>}
-              {isError && <p>Error al cargar métodos de pago.</p>}
-              {!isLoading && !isError && (
-                <MetodoPago
-                  metodos={metodosPago}
-                  onToggle={handleCambiarEstado}
-                />
-              )}
-            </div>
+    <div className="row">
+      <div className="col-lg-12">
+        <div className="card p-3 shadow-sm">
+          <div className="card-header">
+            <h3>Ajustes de venta</h3>
+          </div>
+          <div className="card-body">
+            {isLoading && <p>Cargando métodos de pago...</p>}
+            {isError && <p>Error al cargar métodos de pago.</p>}
+            {!isLoading && !isError && (
+              <MetodoPago
+                metodos={metodosPago}
+                onToggle={handleCambiarEstado}
+              />
+            )}
           </div>
         </div>
       </div>
-    </ContenedorPrincipal>
+    </div>
   );
 }

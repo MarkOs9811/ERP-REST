@@ -5,7 +5,7 @@ import { ContenedorPrincipal } from "../../components/componentesReutilizables/C
 
 export function AreasCargo() {
   return (
-    <ContenedorPrincipal>
+    <div>
       <div className="row g-3 ">
         <div className="col-md-12">
           <Sedes />
@@ -17,6 +17,6 @@ export function AreasCargo() {
           <Cargos />
         </div>
       </div>
-    </ContenedorPrincipal>
+    </div>
   );
 }

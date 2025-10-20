@@ -7,6 +7,7 @@ import { PerfilPanel } from "./componentesHeader/PerfilPanel";
 import { NotificacionesPanel } from "./componentesHeader/NotificacionesPanel";
 import { capitalizeFirstLetter } from "../hooks/FirstLetterUp";
 import { Bell, Moon, Sun } from "lucide-react";
+import ModalRight from "./componentesReutilizables/ModalRight";
 export function Header() {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
   const fotoPerfilLocal = JSON.parse(localStorage.getItem("user"));
@@ -74,7 +75,7 @@ export function Header() {
             )}
 
           <button
-            className="btn btn-auto rounded-pill d-flex align-items-center justify-content-center"
+            className="ico-header border-0 rounded-pill d-flex align-items-center justify-content-center"
             title="Cambiar tema"
             style={{ width: 44, height: 44, padding: 0 }}
             onClick={toggleTheme}
@@ -97,7 +98,7 @@ export function Header() {
           </button>
           {/* Botón de Notificaciones */}
           <button
-            className="btn btn-auto rounded-pill d-flex align-items-center justify-content-center position-relative"
+            className="ico-header border-0 rounded-pill d-flex align-items-center justify-content-center position-relative"
             style={{ width: 44, height: 44, padding: 0 }}
             onClick={() => setShowNotificaciones(true)}
           >
@@ -129,7 +130,7 @@ export function Header() {
             )}
           </button>
           <button
-            className="btn btn-auto rounded-pill d-flex align-items-center justify-content-center"
+            className="ico-header border-0 rounded-pill d-flex align-items-center justify-content-center"
             style={{ width: 44, height: 44, padding: 0 }}
             onClick={() => setShowPerfilPanel(true)}
           >
@@ -148,16 +149,25 @@ export function Header() {
             )}
           </button>
 
-          <NotificacionesPanel
-            show={showNotificaciones}
+          <ModalRight
+            isOpen={showNotificaciones}
             onClose={() => setShowNotificaciones(false)}
-          />
-          <PerfilPanel
-            show={showPerfilPanel}
+            width={"350px"}
+            hideFooter={true}
+            title={"Notificaciones"}
+            icono={<Bell className="text-auto" />}
+          >
+            <NotificacionesPanel />
+          </ModalRight>
+
+          <ModalRight
+            isOpen={showPerfilPanel}
             onClose={() => setShowPerfilPanel(false)}
-            user={user}
-            fotoPerfil={fotoPerfil}
-          />
+            width={"350px"}
+            hideFooter={true}
+          >
+            <PerfilPanel user={user} fotoPerfil={fotoPerfil} />
+          </ModalRight>
         </div>
       </nav>
     </header>

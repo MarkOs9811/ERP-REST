@@ -19,8 +19,8 @@ export function Solicitudes() {
   };
 
   return (
-    <ContenedorPrincipal>
-      <div className="card shadow-sm">
+    <div>
+      <div className="card shadow-sm py-2">
         <div className="card-header border-bottom d-flex justify-content-between align-items-center">
           <div className="m-2">
             <h4 className="card-title mb-0 titulo-card-especial">
@@ -50,6 +50,6 @@ export function Solicitudes() {
           <SolicitudesLista search={search} updateList={updateList} />
         </div>
       </div>
-    </ContenedorPrincipal>
+    </div>
   );
 }

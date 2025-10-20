@@ -46,13 +46,11 @@ button {
   font-family: "Poppins", serif;
 }
 
-/* ========== CONTENEDORES Y LAYOUT ========== */
-.main-container {
-  display: flex;
-}
+
 
 .contenido {
   background: rgb(242, 243, 247)!important;
+  /* background-image: url('../public/images/background2.jpg'); */
   position: relative;
   overflow: hidden;
 }
@@ -75,9 +73,7 @@ button {
   color: #ffffff;
   transition: transform 0.3s ease;
 }
-.icon-lucide {
-  color: white;
-}
+
 
 .submenu {
   background: #ffffff !important;
@@ -145,11 +141,10 @@ button {
 }
 
 .navbar {
+  
   background-color: transparent;
   color: #ecf0f1;
-  display: flex;
   align-items: center;
-  justify-content: space-between;
   z-index: 1001;
   height: 59px;
 }
@@ -171,6 +166,13 @@ button {
 }
 
 /* ========== CARDS Y ESTADÍSTICAS ========== */
+.card {
+  border: none !important;
+  overflow: visible !important;
+  background-color: rgb(255, 255, 255) !important;
+  border-radius: 13px !important;
+ 
+}
 .card-platos {
   transition: all ease-out 0.2s;
 }
@@ -179,16 +181,10 @@ button {
   transform: scale(1.1, 1.1);
 }
 
-.card {
 
-  border: none !important;
-  overflow: visible !important;
-  background-color:rgb(255, 255, 255)!important;
-  border-radius: 13px!important;
-}
 
 .card-header {
-  background-color: rgba(255, 255, 255, 0) !important;
+ margin: 10px;
   border: none !important;
  
 }

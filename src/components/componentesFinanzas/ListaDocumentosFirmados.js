@@ -6,6 +6,7 @@ import ModalAlertQuestion from "../componenteToast/ModalAlertQuestion";
 import { Trash2 } from "lucide-react";
 import axiosInstance from "../../api/AxiosInstance";
 import ToastAlert from "../componenteToast/ToastAlert";
+import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
 
 export function ListaDocumentosFirmados() {
   const API_BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -101,24 +102,16 @@ export function ListaDocumentosFirmados() {
     },
   ];
 
-  // 🔹 Si está cargando o hay error
-  if (isLoading)
-    return <div className="text-center p-4">Cargando documentos...</div>;
-  if (isError)
-    return (
-      <div className="text-center text-red-500 p-4">
-        Error al cargar los documentos firmados.
-      </div>
-    );
-
   // 🔹 Renderizamos la tabla usando el componente genérico
   return (
-    <div className="card shadow-sm rounded ">
+    <div className="">
       <div className="card-header p-3">
         <h6 className="mb-3 font-bold text-lg">Documentos Firmados</h6>
       </div>
       <div className="card-body p-0">
-        <TablasGenerales columnas={columnas} datos={dataDocFirmados} />
+        <CondicionCarga isLoading={isLoading} isError={isError}>
+          <TablasGenerales columnas={columnas} datos={dataDocFirmados} />
+        </CondicionCarga>
       </div>
       <ModalAlertQuestion
         show={handleEliminar}

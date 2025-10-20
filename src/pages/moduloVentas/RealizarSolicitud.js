@@ -85,7 +85,7 @@ export function RealizarSolicitud() {
   };
 
   return (
-    <ContenedorPrincipal>
+    <div>
       <form
         onSubmit={handleSubmit(onSubmit)}
         id="form-solicitud"
@@ -441,6 +441,6 @@ export function RealizarSolicitud() {
           </div>
         </div>
       </form>
-    </ContenedorPrincipal>
+    </div>
   );
 }

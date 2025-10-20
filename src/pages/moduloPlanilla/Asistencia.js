@@ -171,7 +171,7 @@ export function Asistencia() {
     },
   ];
   return (
-    <ContenedorPrincipal>
+    <div>
       <div className="row g-3">
         {/* Card 1: Total de empleados */}
         <div className="col-md-3 col-sm-6 ">
@@ -339,6 +339,6 @@ export function Asistencia() {
           </div>
         </div>
       </div>
-    </ContenedorPrincipal>
+    </div>
   );
 }

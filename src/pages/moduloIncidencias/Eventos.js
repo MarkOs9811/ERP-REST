@@ -5,8 +5,8 @@ import "../../css/EstilosIncidenciasEventos.css";
 
 export function Eventos() {
   return (
-    <ContenedorPrincipal>
+    <div>
       <CalendarioEventos />
-    </ContenedorPrincipal>
+    </div>
   );
 }

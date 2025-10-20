@@ -9,32 +9,38 @@ import { ProveedorEdit } from "./ProveedorEdit";
 import ModalAlertQuestion from "../componenteToast/ModalAlertQuestion";
 import ModalAlertActivar from "../componenteToast/ModalAlertActivar";
 import { TablasGenerales } from "../componentesReutilizables/TablasGenerales";
+import { GetProveedores } from "../../service/GetProveedores";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
 
 export function ProveedorList({ search, updateList }) {
-  const [proveedores, setProveedores] = useState([]);
   const [filterProveedores, setFilterProveedores] = useState([]);
 
-  // Función para obtener proveedores
-  const getProveedores = async () => {
-    try {
-      const response = await axiosInstance.get("/proveedores/getProveedores");
-      if (response.data.success) {
-        setProveedores(response.data.data);
-        setFilterProveedores(response.data.data);
-      } else {
-        console.log(response.data.message);
-      }
-    } catch (error) {
-      console.log("error de conexión");
-    }
-  };
+  const queryClient = useQueryClient();
 
-  // Filtrar registros según búsqueda
+  // 🟩 1. Llamar al servicio con React Query
+  const {
+    data: proveedores = [],
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ["proveedores", updateList], // se vuelve a ejecutar cuando cambia updateList
+    queryFn: GetProveedores,
+    staleTime: 1000 * 60 * 5, // cache 5 min
+    retry: 1,
+  });
+
+  // 🟦 2. Filtrar registros según búsqueda
   useEffect(() => {
-    const result = proveedores.filter((proveedore) => {
+    if (!proveedores) return;
+
+    const searchLower = search?.toLowerCase() || "";
+    const result = proveedores.filter((proveedor) => {
       const { nombre, numero_documento, telefono, direccion, email } =
-        proveedore;
-      const searchLower = search?.toLowerCase();
+        proveedor;
+
       return (
         (nombre && nombre.toLowerCase().includes(searchLower)) ||
         (numero_documento &&
@@ -44,13 +50,9 @@ export function ProveedorList({ search, updateList }) {
         (email && email.toLowerCase().includes(searchLower))
       );
     });
+
     setFilterProveedores(result);
   }, [search, proveedores]);
-
-  // Llamar función para obtener proveedores al montar el componente
-  useEffect(() => {
-    getProveedores();
-  }, [updateList]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [dataProvee, setDataProvee] = useState(false);
@@ -65,7 +67,7 @@ export function ProveedorList({ search, updateList }) {
     setIsModalOpen(false);
   };
   const handleProveedorUpdated = () => {
-    getProveedores();
+    queryClient.invalidateQueries(["proveedores"]);
   };
 
   // FUNCIONES PARA ELIMINAR Y ACTIVAR
@@ -111,16 +113,16 @@ export function ProveedorList({ search, updateList }) {
 
       if (response.data.success) {
         ToastAlert("success", response.data.message);
-        getProveedores();
+        queryClient.invalidateQueries(["proveedores"]);
         return true;
       } else {
         ToastAlert("error", response.data.message);
-        getProveedores();
+        queryClient.invalidateQueries(["proveedores"]);
         return false; // Error al cambiar el estado
       }
     } catch (error) {
       ToastAlert("error", "error de conexion");
-      getProveedores();
+      queryClient.invalidateQueries(["proveedores"]);
       return false; // Error en la conexión
     }
   };
@@ -134,16 +136,16 @@ export function ProveedorList({ search, updateList }) {
 
       if (response.data.success) {
         ToastAlert("success", response.data.message);
-        getProveedores();
+        queryClient.invalidateQueries(["proveedores"]);
         return true;
       } else {
         ToastAlert("error", response.data.message);
-        getProveedores();
+        queryClient.invalidateQueries(["proveedores"]);
         return false; // Error al cambiar el estado
       }
     } catch (error) {
       ToastAlert("error", "error de conexion");
-      getProveedores();
+      queryClient.invalidateQueries(["proveedores"]);
       return false; // Error en la conexión
     }
   };
@@ -225,7 +227,9 @@ export function ProveedorList({ search, updateList }) {
 
   return (
     <div>
-      <TablasGenerales datos={filterProveedores} columnas={columns} />
+      <CondicionCarga isLoading={isLoading} isError={isError}>
+        <TablasGenerales datos={filterProveedores} columnas={columns} />
+      </CondicionCarga>
 
       {/* // modal para editar un proveedor */}
       <Modal
