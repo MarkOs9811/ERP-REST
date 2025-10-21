@@ -30,6 +30,8 @@ export function PerfilPanel({ user, fotoPerfil }) {
       setNombreSedeActual(usuario?.sede?.nombre || "No seleccionada");
     }
   }, []);
+  const rol = JSON.parse(localStorage.getItem("user"));
+  const rolUsuario = rol?.empleado?.cargo?.nombre;
 
   // 🔹 Obtener lista de sedes
   const {
@@ -47,27 +49,30 @@ export function PerfilPanel({ user, fotoPerfil }) {
   const handleChangeSede = async (idSede) => {
     setSelectedSede(idSede);
     try {
-      const response = await axiosInstance.post("/usuario/cambiar-sede", {
+      const { data } = await axiosInstance.post("/usuario/cambiar-sede", {
         idSede,
       });
-      if (response.data.success) {
-        setNombreSedeActual(response.data.nombreSede);
+
+      if (data.success) {
+        setNombreSedeActual(data.nombreSede);
 
         // 🔸 Actualizar también el localStorage con la nueva sede
         const usuario = JSON.parse(localStorage.getItem("user"));
         const updatedUser = {
           ...usuario,
           idSede,
-          sede: { ...usuario.sede, nombre: response.data.nombreSede },
+          sede: { ...usuario.sede, nombre: data.nombreSede },
         };
         localStorage.setItem("user", JSON.stringify(updatedUser));
 
         ToastAlert("success", "Sede cambiada correctamente");
       } else {
-        ToastAlert("error", response.data.message);
+        ToastAlert("error", data.message);
       }
     } catch (error) {
-      ToastAlert("error", "Error al cambiar de sede");
+      const message =
+        error.response?.data?.message || "Error inesperado al cambiar de sede";
+      ToastAlert("error", message);
     }
   };
 
@@ -176,66 +181,73 @@ export function PerfilPanel({ user, fotoPerfil }) {
       </ul>
 
       {/* 🔸 Selector de sede */}
-      <div className="p-4">
-        <div
-          className="rounded-3 p-3 mb-3 shadow-sm border"
-          style={{
-            background: "linear-gradient(145deg, #ffffff, #f3f4f6)",
-            color: "#252525ff",
-          }}
-        >
-          <div className="d-flex align-items-center mb-2">
-            <i className="fa-solid fa-building fa-lg me-2 text-primary"></i>
-            <h6 className="mb-0 fw-semibold">Cambiar de Sede</h6>
-          </div>
+      {rolUsuario == "administrador" ? (
+        <div className="p-4">
+          <div
+            className="rounded-3 p-3 mb-3 shadow-sm border"
+            style={{
+              background: "linear-gradient(145deg, #ffffff, #f3f4f6)",
+              color: "#252525ff",
+            }}
+          >
+            <div className="d-flex align-items-center mb-2">
+              <i className="fa-solid fa-building fa-lg me-2 text-primary"></i>
+              <h6 className="mb-0 fw-semibold">Cambiar de Sede</h6>
+            </div>
 
-          {isLoading ? (
-            <div className="text-center py-3">
-              <div className="spinner-border text-primary" role="status">
-                <span className="visually-hidden">Cargando...</span>
+            {isLoading ? (
+              <div className="text-center py-3">
+                <div className="spinner-border text-primary" role="status">
+                  <span className="visually-hidden">Cargando...</span>
+                </div>
               </div>
-            </div>
-          ) : isError ? (
-            <div className="alert alert-danger py-2 mb-0">
-              Error al cargar las sedes
-            </div>
-          ) : (
-            <div className="form-floating mt-2">
-              <select
-                id="selectSede"
-                className="form-select border-0 shadow-sm"
-                style={{
-                  backgroundColor: "rgba(255,255,255,0.9)",
-                  color: "#333",
-                  borderRadius: "10px",
-                }}
-                value={selectedSede}
-                onChange={(e) => handleChangeSede(e.target.value)}
-              >
-                <option value="">Selecciona una sede</option>
-                {sedeData.map((sede) => (
-                  <option key={sede.id} value={sede.id}>
-                    {sede.nombre}
-                  </option>
-                ))}
-              </select>
-              <label htmlFor="selectSede">
-                <i className="fa-solid fa-map-marker-alt me-2 text-primary"></i>
-                Sede
-              </label>
-            </div>
-          )}
+            ) : isError ? (
+              <div className="alert alert-danger py-2 mb-0">
+                Error al cargar las sedes
+              </div>
+            ) : (
+              <div className="form-floating mt-2">
+                <select
+                  id="selectSede"
+                  className="form-select border-0 shadow-sm"
+                  style={{
+                    backgroundColor: "rgba(255,255,255,0.9)",
+                    color: "#333",
+                    borderRadius: "10px",
+                  }}
+                  value={selectedSede}
+                  onChange={(e) => handleChangeSede(e.target.value)}
+                >
+                  <option value="">Selecciona una sede</option>
+                  {sedeData.map((sede) => (
+                    <option key={sede.id} value={sede.id}>
+                      {sede.nombre}
+                    </option>
+                  ))}
+                </select>
+                <label htmlFor="selectSede">
+                  <i className="fa-solid fa-map-marker-alt me-2 text-primary"></i>
+                  Sede
+                </label>
+              </div>
+            )}
 
-          <div className="text-end mt-2">
-            <small className="text-muted opacity-75">
-              Sede actual:{" "}
-              <strong className="text-dark">
-                {nombreSedeActual || "No seleccionada"}
-              </strong>
-            </small>
+            <div className="text-end mt-2">
+              <small className="text-muted opacity-75">
+                Sede actual:{" "}
+                <strong className="text-dark">
+                  {nombreSedeActual || "No seleccionada"}
+                </strong>
+              </small>
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <>
+          <div>no somos nada</div>
+        </>
+      )}
+
       <div className="p-4 d-flex bottom-0">
         {/* 🔸 Botón de cerrar sesión */}
         <button

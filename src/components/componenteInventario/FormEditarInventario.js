@@ -110,6 +110,8 @@ export function FormEditarInventario({ data, onCancel }) {
 
       if (response.data.success) {
         ToastAlert("success", "Producto actualizado correctamente");
+
+        onCancel(false);
         queryClient.invalidateQueries(["inventario"]);
       } else {
         ToastAlert("error", response.data.message || "Error al actualizar");

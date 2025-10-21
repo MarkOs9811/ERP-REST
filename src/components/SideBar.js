@@ -42,6 +42,7 @@ export function SideBar() {
 
   // Estado para abrir/cerrar acordeones
   const [openAccordion, setOpenAccordion] = useState(null);
+
   const icons = {
     inicio: Home,
     usuarios: Users,

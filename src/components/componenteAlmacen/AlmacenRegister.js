@@ -3,6 +3,8 @@ import { useForm } from "react-hook-form";
 import axiosInstance from "../../api/AxiosInstance";
 import ToastAlert from "../componenteToast/ToastAlert";
 import { Save } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { GetProveedores } from "../../service/GetProveedores";
 
 export function AlmacenRegister() {
   const {
@@ -41,28 +43,21 @@ export function AlmacenRegister() {
     }
   };
 
-  // Función para obtener los proveedores
-  const fetchProveedores = async () => {
-    try {
-      const response = await axiosInstance.get("/proveedores/getProveedores"); // Endpoint para proveedores
-
-      if (response.data.success) {
-        const proveArray = response.data.proveedor;
-        const proveedorActivo = proveArray.filter(
-          (item) => item.estado === "1"
-        );
-        setProveedores(proveedorActivo);
-      }
-    } catch (error) {
-      console.error("Error al obtener proveedores:", error);
-    }
-  };
+  const {
+    data: dataProveedores = [],
+    isLoading: loadingProveedor,
+    isError: errorPorveedor,
+  } = useQuery({
+    queryKey: ["proveedores"],
+    queryFn: GetProveedores,
+    retry: 1,
+    refetchOnWindowFocus: false,
+  });
 
   // Ejecutar las consultas al montar el componente
   useEffect(() => {
     fetchCategorias();
     fetchUnidades();
-    fetchProveedores();
   }, []);
 
   // Función para manejar el envío del formulario
@@ -304,11 +299,13 @@ export function AlmacenRegister() {
                 })}
               >
                 <option value="">Seleccione un proveedor</option>
-                {proveedores.map((proveedor) => (
-                  <option key={proveedor.id} value={proveedor.id}>
-                    {proveedor.nombre}
-                  </option>
-                ))}
+                {dataProveedores
+                  .filter((proveedor) => proveedor.estado == 1)
+                  .map((proveedor) => (
+                    <option key={proveedor.id} value={proveedor.id}>
+                      {proveedor.nombre}
+                    </option>
+                  ))}
               </select>
               <label htmlFor="proveedor">Proveedor</label>
               {errors.proveedor && (

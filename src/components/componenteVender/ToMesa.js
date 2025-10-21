@@ -117,7 +117,7 @@ export function ToMesa() {
   };
 
   return (
-    <div className="card  h-100 bg-danger">
+    <div className="card  h-100 bg-transparent">
       <div className="row h-100">
         <div className="col-md-3 h-100">
           <div className="card shadow-sm d-flex flex-column h-100 p-2">
@@ -201,68 +201,66 @@ export function ToMesa() {
               )}
             </div>
             <div className="card-footer">
-              <div className="card">
-                {/* Total */}
-                <div className="d-flex justify-content-between align-items-center">
-                  <span className="h5">Total</span>
-                  <span className="h5 fw-bold text-success">
-                    S/.{" "}
-                    {(
-                      pedido.mesas?.[id]?.items?.reduce(
-                        (acc, item) => acc + item.cantidad * item.precio,
-                        0
-                      ) || 0
-                    ).toFixed(2)}
-                  </span>
-                </div>
-
-                <small className="text-muted d-block text-end">
-                  IGV: S/.{" "}
+              {/* Total */}
+              <div className="d-flex justify-content-between align-items-center">
+                <span className="h5">Total</span>
+                <span className="h5 fw-bold text-success">
+                  S/.{" "}
                   {(
-                    (pedido.mesas?.[id]?.items?.reduce(
+                    pedido.mesas?.[id]?.items?.reduce(
                       (acc, item) => acc + item.cantidad * item.precio,
                       0
-                    ) || 0) * 0.18
+                    ) || 0
                   ).toFixed(2)}
-                </small>
+                </span>
+              </div>
 
-                {/* Indicador*/}
-                <div className="my-5">
-                  <div className="d-flex justify-content-between">
-                    {/* Total de Platos */}
-                    <div className="bg-light rounded p-2 text-center flex-fill mr-2">
-                      <small>Total de Platos</small>
-                      <h6 className="text-success mb-0">
-                        {pedido.mesas?.[id]?.items?.length || 0}
-                      </h6>
-                    </div>
+              <small className="text-muted d-block text-end">
+                IGV: S/.{" "}
+                {(
+                  (pedido.mesas?.[id]?.items?.reduce(
+                    (acc, item) => acc + item.cantidad * item.precio,
+                    0
+                  ) || 0) * 0.18
+                ).toFixed(2)}
+              </small>
 
-                    {/* Cantidad Total de Productos */}
-                    <div className="bg-light rounded p-2 text-center flex-fill ml-2">
-                      <small>Cantidad x Plato</small>
-                      <h6 className="text-dark mb-0">
-                        {pedido.mesas?.[id]?.items?.reduce(
-                          (acc, item) => acc + item.cantidad,
-                          0
-                        ) || 0}
-                      </h6>
-                    </div>
+              {/* Indicador*/}
+              <div className="my-5">
+                <div className="d-flex justify-content-between">
+                  {/* Total de Platos */}
+                  <div className="bg-light rounded p-2 text-center flex-fill mr-2">
+                    <small>Total de Platos</small>
+                    <h6 className="text-success mb-0">
+                      {pedido.mesas?.[id]?.items?.length || 0}
+                    </h6>
+                  </div>
+
+                  {/* Cantidad Total de Productos */}
+                  <div className="bg-light rounded p-2 text-center flex-fill ml-2">
+                    <small>Cantidad x Plato</small>
+                    <h6 className="text-dark mb-0">
+                      {pedido.mesas?.[id]?.items?.reduce(
+                        (acc, item) => acc + item.cantidad,
+                        0
+                      ) || 0}
+                    </h6>
                   </div>
                 </div>
-
-                {/* Botón de Realizar Pedido */}
-                <button
-                  className="btn-realizarPedido btn-block w-100 p-3"
-                  onClick={() => handleAddPlatoPreventaMesas()}
-                >
-                  <CheckCheckIcon
-                    className="text-auto"
-                    height="30px"
-                    width="30px"
-                  />{" "}
-                  Realizar Pedido
-                </button>
               </div>
+
+              {/* Botón de Realizar Pedido */}
+              <button
+                className="btn-realizarPedido btn-block w-100 p-3"
+                onClick={() => handleAddPlatoPreventaMesas()}
+              >
+                <CheckCheckIcon
+                  className="text-auto"
+                  height="30px"
+                  width="30px"
+                />{" "}
+                Realizar Pedido
+              </button>
             </div>
           </div>
         </div>

@@ -55,7 +55,7 @@ export function AbrirCaja() {
 
         dispatch(abrirCaja(cajaData));
         setTimeout(() => {
-          window.location.href = "/vender/ventasMesas";
+          window.location.href = "/vender/mesas";
         }, 100);
       } else {
         ToastAlert("error", response.data.message);
