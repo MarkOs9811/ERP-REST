@@ -52,9 +52,6 @@ export function Home() {
           <InformacionRapidaHome />
         </div>
       </div>
-
-      {/* Asistente de IA Flotante */}
-      <AsistenteIaHome />
     </div>
   );
 }

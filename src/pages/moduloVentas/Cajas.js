@@ -27,19 +27,52 @@ export function Cajas() {
   const onSubmit = async (data) => {
     try {
       const response = await axiosInstance.post("/cajas", data);
+
       if (response.data.success) {
         setModalAddCaja(false);
         ToastAlert("success", "Caja creada correctamente");
         queryClient.invalidateQueries({ queryKey: ["cajas"] });
       } else {
-        ToastAlert("error", response.data.message);
+        // Si llega con success: false desde backend (pero sin status 422)
+        const msg =
+          response.data.message || "Ocurrió un error al crear la caja";
+        ToastAlert("error", msg);
       }
     } catch (error) {
+      // Si el backend devuelve error de validación (422)
       if (error.response && error.response.status === 422) {
-        const msg = error.response.data.message || "Error de validación";
+        const data = error.response.data;
+
+        // Si Laravel devuelve errores múltiples (array en `errors`)
+        if (data.errors) {
+          const mensajes = Object.values(data.errors).flat().join("\n");
+          ToastAlert("error", mensajes);
+        }
+        // Si Laravel devuelve solo un `message`
+        else if (data.message) {
+          ToastAlert("error", data.message);
+        }
+        // Fallback
+        else {
+          ToastAlert("error", "Error de validación desconocido");
+        }
+      }
+
+      // Errores internos (500, 404, etc.)
+      else if (error.response) {
+        const msg =
+          error.response.data?.message || "Error interno del servidor";
         ToastAlert("error", msg);
-      } else {
-        ToastAlert("error", "Error al guardar la caja");
+      }
+
+      // Si no hay respuesta (error de red, timeout, etc.)
+      else if (error.request) {
+        ToastAlert("error", "No hay conexión con el servidor");
+      }
+
+      // Errores imprevistos del frontend
+      else {
+        ToastAlert("error", `Error inesperado: ${error.message}`);
       }
     }
   };

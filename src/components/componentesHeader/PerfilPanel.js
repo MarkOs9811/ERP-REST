@@ -10,10 +10,68 @@ import {
 import axiosInstance from "../../api/AxiosInstance";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../AuthContext";
+import { useQuery } from "@tanstack/react-query";
+import { GetSedes } from "../../service/accionesAreasCargos/GetSedes";
+import { useEffect, useState } from "react";
+import ToastAlert from "../componenteToast/ToastAlert";
 
 export function PerfilPanel({ user, fotoPerfil }) {
   const navigate = useNavigate();
   const { logout } = useAuth();
+
+  const [selectedSede, setSelectedSede] = useState("");
+  const [nombreSedeActual, setNombreSedeActual] = useState("No seleccionada");
+
+  // 🔹 Cargar usuario desde localStorage
+  useEffect(() => {
+    const usuario = JSON.parse(localStorage.getItem("user"));
+    if (usuario?.idSede) {
+      setSelectedSede(usuario.idSede);
+      setNombreSedeActual(usuario?.sede?.nombre || "No seleccionada");
+    }
+  }, []);
+
+  // 🔹 Obtener lista de sedes
+  const {
+    data: sedeData = [],
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["sedes"],
+    queryFn: GetSedes,
+    retry: 1,
+    refetchOnWindowFocus: false,
+  });
+
+  // 🔹 Cambiar sede del usuario
+  const handleChangeSede = async (idSede) => {
+    setSelectedSede(idSede);
+    try {
+      const response = await axiosInstance.post("/usuario/cambiar-sede", {
+        idSede,
+      });
+      if (response.data.success) {
+        setNombreSedeActual(response.data.nombreSede);
+
+        // 🔸 Actualizar también el localStorage con la nueva sede
+        const usuario = JSON.parse(localStorage.getItem("user"));
+        const updatedUser = {
+          ...usuario,
+          idSede,
+          sede: { ...usuario.sede, nombre: response.data.nombreSede },
+        };
+        localStorage.setItem("user", JSON.stringify(updatedUser));
+
+        ToastAlert("success", "Sede cambiada correctamente");
+      } else {
+        ToastAlert("error", response.data.message);
+      }
+    } catch (error) {
+      ToastAlert("error", "Error al cambiar de sede");
+    }
+  };
+
+  // 🔹 Cerrar sesión
   const cerrarSession = async () => {
     try {
       await axiosInstance.post(
@@ -34,6 +92,7 @@ export function PerfilPanel({ user, fotoPerfil }) {
 
   return (
     <div>
+      {/* 🔸 Perfil */}
       <div className="d-flex flex-column align-items-center">
         <img
           src={fotoPerfil}
@@ -49,10 +108,13 @@ export function PerfilPanel({ user, fotoPerfil }) {
         <h5 className="mt-3 mb-0">{user?.name || "Usuario"}</h5>
         <small className="text-muted">{user?.email}</small>
         <span className="badge bg-dark mt-2">
-          {user?.empleado?.cargo?.nombre}
+          {user?.empleado?.cargo?.nombre || "Sin cargo"}
         </span>
       </div>
+
       <hr />
+
+      {/* 🔸 Menú */}
       <ul className="list-unstyled px-4">
         <li className="mb-3">
           <button
@@ -112,24 +174,76 @@ export function PerfilPanel({ user, fotoPerfil }) {
           </button>
         </li>
       </ul>
+
+      {/* 🔸 Selector de sede */}
       <div className="p-4">
         <div
-          className="rounded-3 p-3 mb-3"
-          style={{ background: "linear-gradient(90deg,#f7b42c,#fc575e)" }}
+          className="rounded-3 p-3 mb-3 shadow-sm border"
+          style={{
+            background: "linear-gradient(145deg, #ffffff, #f3f4f6)",
+            color: "#252525ff",
+          }}
         >
-          <div className="text-white fw-bold mb-2">35% OFF</div>
-          <div className="text-white small">¡Potencia tu productividad!</div>
+          <div className="d-flex align-items-center mb-2">
+            <i className="fa-solid fa-building fa-lg me-2 text-primary"></i>
+            <h6 className="mb-0 fw-semibold">Cambiar de Sede</h6>
+          </div>
+
+          {isLoading ? (
+            <div className="text-center py-3">
+              <div className="spinner-border text-primary" role="status">
+                <span className="visually-hidden">Cargando...</span>
+              </div>
+            </div>
+          ) : isError ? (
+            <div className="alert alert-danger py-2 mb-0">
+              Error al cargar las sedes
+            </div>
+          ) : (
+            <div className="form-floating mt-2">
+              <select
+                id="selectSede"
+                className="form-select border-0 shadow-sm"
+                style={{
+                  backgroundColor: "rgba(255,255,255,0.9)",
+                  color: "#333",
+                  borderRadius: "10px",
+                }}
+                value={selectedSede}
+                onChange={(e) => handleChangeSede(e.target.value)}
+              >
+                <option value="">Selecciona una sede</option>
+                {sedeData.map((sede) => (
+                  <option key={sede.id} value={sede.id}>
+                    {sede.nombre}
+                  </option>
+                ))}
+              </select>
+              <label htmlFor="selectSede">
+                <i className="fa-solid fa-map-marker-alt me-2 text-primary"></i>
+                Sede
+              </label>
+            </div>
+          )}
+
+          <div className="text-end mt-2">
+            <small className="text-muted opacity-75">
+              Sede actual:{" "}
+              <strong className="text-dark">
+                {nombreSedeActual || "No seleccionada"}
+              </strong>
+            </small>
+          </div>
         </div>
+      </div>
+      <div className="p-4 d-flex bottom-0">
+        {/* 🔸 Botón de cerrar sesión */}
         <button
-          className="btn btn-danger w-100 d-flex align-items-center justify-content-center"
+          className="btn btn-danger w-100 d-flex align-items-center justify-content-center mb-0 shadow-sm"
           onClick={cerrarSession}
+          style={{ borderRadius: "10px" }}
         >
-          <LogOut
-            className="text-auto me-1"
-            height="20px"
-            width="20px"
-            color="#fff"
-          />
+          <LogOut className="me-2" height="20px" width="20px" color="#fff" />
           Cerrar sesión
         </button>
       </div>
