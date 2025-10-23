@@ -33,6 +33,12 @@ const GraficoBarVentas = () => {
     queryKey: ["ventas"],
     queryFn: getVentas,
   });
+  const totalVentas = Number(
+    listVentas.reduce(
+      (acc, venta) => acc + Number(venta.totalVenta || venta.total || 0),
+      0
+    )
+  );
 
   // Procesar datos para gráfico de barras
   const chartData = useMemo(() => {
@@ -116,6 +122,14 @@ const GraficoBarVentas = () => {
             Ventas totales agrupadas por mes en el año actual.
           </p>
         </h6>
+        <div className="ms-auto d-flex justify-content-center align-items-center border rounded">
+          <div className="d-flex flex-column text-center badge bg-light p-3 align-items-center justify-content-center ">
+            <small className="text-dark">Total ventas</small>
+            <p className="mb-0 fw-bold text-dark">
+              S/. {totalVentas.toFixed(2)}
+            </p>
+          </div>
+        </div>
       </div>
       <Bar data={chartData} options={options} />
     </div>

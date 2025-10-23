@@ -279,7 +279,7 @@ export function Ventas() {
               </div>
             </div>
           </div>
-          {/* Gráfico mensual */}
+          {/* Gráfico mensual de todas las ventas */}
           <div className="col-12">
             <CondicionCarga isLoading={isLoading} isError={isError}>
               <div className="card p-3 shadow-sm h-100">
@@ -287,7 +287,7 @@ export function Ventas() {
               </div>
             </CondicionCarga>
           </div>
-          {/* Gráfico adicional de ejemplo */}
+          {/* Gráfico ventas solo del ultimo mes*/}
           <div className="col-12">
             <CondicionCarga isLoading={isLoading} isError={isError}>
               <div className="card p-3 shadow-sm h-100">

@@ -74,21 +74,19 @@ export function PlatoMasVendido() {
     .slice(0, 3); // Tomar los 3 primeros
   return (
     <CondicionCarga isLoading={isLoadingVentas} isError={isErrorVentas}>
-      <div className="h-100 p-2">
-        <div className="card-header d-flex justify-content-between align-items-center p-3">
-          <div className="mb-3 d-flex gap-2 align-middle justify-content-center">
-            <span className="alert border-0 alert-danger text-danger p-2 mb-0">
-              <Crown size={25} />
-            </span>
-            <h6 className="mb-1 d-flex flex-column gap-1">
-              <span className="fw-bold">Plato mas vendido</span>
-              <p className="text-muted small mb-0">Del ultimo mes</p>
-            </h6>
-          </div>
+      <div className="h-100 p-0">
+        <div className="card-header mb-3 d-flex gap-2 align-middle justify-content-left">
+          <span className="alert border-0 alert-danger text-danger p-2 mb-0">
+            <Crown size={25} />
+          </span>
+          <h6 className="mb-1 d-flex flex-column gap-1">
+            <span className="fw-bold">Plato mas vendido</span>
+            <p className="text-muted small mb-0">Del ultimo mes</p>
+          </h6>
         </div>
-        <div className="card-body bg-auto">
-          <div className="d-flex justify-content-between align-items-center">
-            <ul className="w-100 m-auto p-0 mx-3">
+        <div className="card-body bg-auto ">
+          <div className="d-flex justify-content-between align-items-center ">
+            <ul className="w-100 m-auto p-0 ">
               {topPlatos.map(([plato, { cantidad, foto }], index) => (
                 <li
                   key={index}

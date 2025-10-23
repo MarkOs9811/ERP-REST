@@ -3,11 +3,13 @@ import { useForm } from "react-hook-form";
 
 import { GetConfi } from "../../service/accionesConfiguracion/GetConfi";
 import { useQuery } from "@tanstack/react-query";
-import { FileText } from "lucide-react";
+import { File, FileText, Pen, Trash } from "lucide-react";
 import ModalRight from "../componentesReutilizables/ModalRight";
 import { SunatFormIntegracion } from "./confiIntegraciones/SunatFormIntegracion";
 import axiosInstance from "../../api/AxiosInstance";
 import ToastAlert from "../componenteToast/ToastAlert";
+import { TablasGenerales } from "../componentesReutilizables/TablasGenerales";
+import { GetConfiSerie } from "../../service/accionesConfiguracion/GetConfigSerie";
 
 export function ServicioSunat() {
   const [modalRightSunat, setModalRightSunat] = useState(false);
@@ -21,7 +23,16 @@ export function ServicioSunat() {
     refetchOnWindowFocus: false,
     retry: 1,
   });
-
+  const {
+    data: confiSerieCorrelativo = [],
+    isLoading: serieLoading,
+    isError: errorLoading,
+  } = useQuery({
+    queryKey: ["configuracionSerie"],
+    queryFn: GetConfiSerie,
+    refetchOnWindowFocus: false,
+    retry: 1,
+  });
   const sunatConfig = configuracion.find(
     (item) => item.nombre?.toLowerCase() === "sunat"
   );
@@ -56,6 +67,140 @@ export function ServicioSunat() {
       ToastAlert("error", "Error al actualizar el estado de la integración");
     }
   };
+
+  const handleEdit = () => {};
+  const handleToggleEstado = () => {};
+  const columasSerieCorr = [
+    {
+      name: "ID",
+      selector: (row) => row.id,
+      sortable: true,
+      width: "60px", // Más angosto, no es tan importante
+    },
+    {
+      name: "Tipo Documento",
+      selector: (row) => row.tipo_documento_sunat,
+      sortable: true,
+      wrap: true,
+      // 'cell' nos permite renderizar JSX personalizado
+      cell: (row) => {
+        const mapTipos = {
+          "01": "Factura",
+          "03": "Boleta",
+          "07": "Nota de Crédito",
+          "08": "Nota de Débito",
+        };
+        // Devuelve el texto amigable o el código si no se encuentra
+        return mapTipos[row.tipo_documento_sunat] || row.tipo_documento_sunat;
+      },
+    },
+    {
+      name: "Serie",
+      selector: (row) => row.serie,
+      sortable: true,
+      center: true,
+    },
+    {
+      name: "Correlativo Actual",
+      selector: (row) => row.correlativo_actual,
+      sortable: true,
+      center: true,
+      // (Este es el NÚMERO contador, ej: 182.
+      // ¡No el texto '00000182'!)
+    },
+    {
+      name: "Por Defecto",
+      selector: (row) => row.is_default,
+      sortable: true,
+      center: true,
+      cell: (row) =>
+        // Aquí puedes usar un componente <Badge> o <Chip> de tu librería UI
+        row.is_default == 1 ? (
+          <span
+            style={{
+              color: "white",
+              backgroundColor: "green",
+              padding: "3px 8px",
+              borderRadius: "12px",
+              fontSize: "12px",
+            }}
+          >
+            Sí
+          </span>
+        ) : (
+          <span
+            style={{
+              color: "white",
+              backgroundColor: "gray",
+              padding: "3px 8px",
+              borderRadius: "12px",
+              fontSize: "12px",
+            }}
+          >
+            No
+          </span>
+        ),
+    },
+    {
+      name: "Estado",
+      selector: (row) => row.estado,
+      sortable: true,
+      center: true,
+      cell: (row) =>
+        // (Asumo que 1 es 'Activo' y 0 es 'Inactivo')
+        row.estado == 1 ? (
+          <span style={{ color: "blue", fontWeight: "bold" }}>Activo</span>
+        ) : (
+          <span style={{ color: "red", fontWeight: "bold" }}>Inactivo</span>
+        ),
+    },
+    {
+      name: "Acciones",
+      center: true,
+      // Esta celda no tiene 'selector' porque es calculada
+      cell: (row) => (
+        <div className="g-2">
+          {/* --- BOTÓN EDITAR --- */}
+          {/* Siempre se puede editar (para cambiar 'is_default') */}
+          <button
+            onClick={() => handleEdit(row)}
+            title="Editar"
+            className="btn-editar"
+          >
+            <Pen size={15} /> Editar
+          </button>
+
+          {/* --- BOTÓN ACTIVAR/DESACTIVAR --- */}
+          {row.estado == 1 ? (
+            // Si está ACTIVO, mostramos botón "Desactivar"
+            <button
+              onClick={() => handleToggleEstado(row)}
+              // ¡LA REGLA DE ORO! No se puede desactivar la serie 'default'
+              disabled={row.is_default == 1}
+              title={
+                row.is_default == 1
+                  ? "No puedes desactivar una serie por defecto"
+                  : "Desactivar Serie"
+              }
+              className="btn-eliminar"
+            >
+              <Trash size={15} /> Desactivar
+            </button>
+          ) : (
+            // Si está INACTIVO, mostramos botón "Activar"
+            <button
+              onClick={() => handleToggleEstado(row)}
+              title="Activar Serie"
+              className="btn-guardar"
+            >
+              Activar
+            </button>
+          )}
+        </div>
+      ),
+    },
+  ];
+
   if (isLoading) {
     return (
       <div className="w-100 p-3 text-center">
@@ -75,7 +220,7 @@ export function ServicioSunat() {
   }
 
   return (
-    <div className="container w-100 p-3 d-flex gap-4 align-items-stretch flex-wrap">
+    <div className="container w-100 p-3 d-flex gap-4 align-items-stretch flex-wrap flex-column">
       {/* Card de información SUNAT */}
       <div
         className="card p-4 shadow-sm flex-grow-1"
@@ -144,7 +289,20 @@ export function ServicioSunat() {
           </button>
         </div>
       </div>
-
+      <div className="card shadow-sm">
+        <div className="card-header">
+          <File size={30} className="text-danger" />
+          <span className="Fw-semibold h5">
+            Información de Serie y correlativo
+          </span>
+        </div>
+        <div className="card-body">
+          <TablasGenerales
+            columnas={columasSerieCorr}
+            datos={confiSerieCorrelativo}
+          />
+        </div>
+      </div>
       <ModalRight
         isOpen={modalRightSunat}
         onClose={() => setModalRightSunat(false)}

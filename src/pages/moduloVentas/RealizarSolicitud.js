@@ -106,7 +106,7 @@ export function RealizarSolicitud() {
             </button>
           </div>
         </div>
-        <div className="card-body">
+        <div className="card-body container">
           {/* Información del Solicitante */}
           <div className="card mb-3 border shadow-sm ">
             <div className="card-header border-0 ">

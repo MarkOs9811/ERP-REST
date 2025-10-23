@@ -55,7 +55,7 @@ export function CabeceraHome({ ventasList, load, error }) {
   };
   return (
     <div className="row mb-3 g-3">
-      <div className="col-md-6 col-sm-12">
+      <div className="col-md-12 col-sm-12">
         {/* Header Bienvenida */}
         <CondicionCarga isLoading={load} isError={error}>
           <div
@@ -106,58 +106,6 @@ export function CabeceraHome({ ventasList, load, error }) {
                   Panel de control - {new Date().toLocaleDateString()} | Última
                   actualización: {new Date().toLocaleTimeString()}
                 </small>
-              </div>
-            </div>
-          </div>
-        </CondicionCarga>
-      </div>
-
-      <div className="col-md-2 col-sm-12">
-        <CondicionCarga isLoading={load} isError={error}>
-          <div className="card shadow-sm h-100 card-pedidos-web">
-            <div className="card-header-web position-relative"></div>
-            <div className="card-body text-auto position-relative">
-              <div className="ico-bagde resumen-mes-pedidos-web">
-                <LayoutPanelTop color={"white"} />
-              </div>
-              <div className="contenido-card-cabecera text-center mt-3">
-                <p className="h2 fw-bold">{totalVentasWeb}</p>
-                <p className="h6">Pedidos Web</p>
-                <small>Este Mes</small>
-              </div>
-            </div>
-          </div>
-        </CondicionCarga>
-      </div>
-      <div className="col-md-2 col-sm-12">
-        <CondicionCarga isLoading={load} isError={error}>
-          <div className="card shadow-sm h-100 card-pedido-llevar">
-            <div className="card-header-llevar position-relative"></div>
-            <div className="card-body text-auto position-relative">
-              <div className="ico-bagde resumen-mes-pedidos-llevar">
-                <FontAwesomeIcon icon={faTruckFast} />
-              </div>
-              <div className="contenido-card-cabecera text-center mt-3">
-                <p className="h2 fw-bold">{totalPedidosLlevar}</p>
-                <p className="h6">Pedidos Llevar</p>
-                <small>Este Mes</small>
-              </div>
-            </div>
-          </div>
-        </CondicionCarga>
-      </div>
-      <div className="col-md-2 col-sm-12">
-        <CondicionCarga isLoading={load} isError={error}>
-          <div className="card shadow-sm h-100 card-pedido-mesa">
-            <div className="card-header-mesa position-relative"></div>
-            <div className="card-body text-auto position-relative">
-              <div className="ico-bagde resumen-mes-pedidos-mesa">
-                <FontAwesomeIcon icon={faBurger} />
-              </div>
-              <div className="contenido-card-cabecera text-center mt-3">
-                <p className="h2 fw-bold">{totalPedidosMesa}</p>
-                <p className="h6">Pedidos Mesa</p>
-                <small>Este Mes</small>
               </div>
             </div>
           </div>

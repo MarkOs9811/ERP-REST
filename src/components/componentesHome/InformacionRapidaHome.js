@@ -4,8 +4,7 @@ import { getVentas } from "../../service/ObtenerVentasDetalle";
 import { GetMesas } from "../../service/GetMesas";
 import { GetAlmacen } from "../../service/serviceAlmacen/GetAlmacen";
 import { getPedidosPendientes } from "../../service/GetPedidosPendientes";
-import { UsuariosActivosHome } from "./UsuariosActivosHome";
-import { CircleAlert, Clock1, Clock9 } from "lucide-react";
+import { CircleAlert, Clock9, Store, Table } from "lucide-react";
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
 
 export function InformacionRapidaHome({}) {
@@ -82,67 +81,23 @@ export function InformacionRapidaHome({}) {
   const pedidosPendientes = pedidosWeb.length;
 
   return (
-    <div className="row mb-3 g-3">
-      <div className="col-md-12">
-        <div className="row  h-100">
-          <div className="col-md-12 mb-3">
-            <CondicionCarga
-              isLoading={isLoadingPedidosWeb}
-              isError={isErrorPedidos}
-            >
-              <div className="card h-100 shadow-sm card-pedidos-pendientes">
-                <div className="card-body d-flex align-items-center ">
-                  <div className="badge-ico badge-ico-pedidos-pendientes me-3">
-                    <Clock9 className="text-auto" />
-                  </div>
-                  <div>
-                    <p className="h6" style={{ color: "white" }}>
-                      Pedidos Pendientes
-                    </p>
-                    <p className="mb-0 text-white fw-semibold">
-                      {pedidosPendientes} Pedidos en estado pendiente
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </CondicionCarga>
-          </div>
-          <div className="col-md-12">
-            <CondicionCarga
-              isLoading={isLoadingAlmacen}
-              isError={isErrorAlmacen}
-            >
-              <div className="card h-100 shadow-sm card-alerta-almacen">
-                <div className="card-body d-flex align-items-center">
-                  <div className="badge-ico badge-ico-almacen me-3">
-                    <CircleAlert className="text-auto" />
-                  </div>
-                  <div>
-                    <p className="h6" style={{ color: "white" }}>
-                      Alertas Almacen
-                    </p>
-                    <p className="mb-0 text-white fw-semibold">
-                      {productosBajoStock} productos en bajo stock
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </CondicionCarga>
-          </div>
-        </div>
-      </div>
+    <div className="row  g-3">
       {/* Ventas Hoy */}
-      <div className="col-md-6">
+      <div className="col-md-3">
         <CondicionCarga isLoading={isLoadingVentas} isError={isErrorVentas}>
           <div className="card h-100 shadow-sm">
-            <div className="card-body d-flex justify-content-center align-items-center">
+            <div className="card-body d-flex justify-content-left align-items-center">
               <div className="text-center">
-                <p className="fw-semibold mb-3" style={{ fontSize: "1.1rem" }}>
+                <p className=" mb-3" style={{ fontSize: "1.1rem" }}>
                   Ventas Hoy
                 </p>
                 <p className="mb-0 text-dark h2 fw-bold">
                   S/ {ventasHoyFormatted}
                 </p>
+              </div>
+
+              <div className="ms-auto">
+                <Store size={60} />
               </div>
             </div>
           </div>
@@ -150,12 +105,12 @@ export function InformacionRapidaHome({}) {
       </div>
 
       {/* Mesas Ocupadas */}
-      <div className="col-md-6">
+      <div className="col-md-3">
         <CondicionCarga isLoading={isLoadingMesas} isError={isErrorMesas}>
           <div className="card h-100 shadow-sm">
-            <div className="card-body d-flex justify-content-center align-items-center">
-              <div className="text-center">
-                <p className="fw-semibold mb-2" style={{ fontSize: "1.1rem" }}>
+            <div className="card-body d-flex justify-content-left align-items-center">
+              <div className="text-left">
+                <p className=" mb-2" style={{ fontSize: "1.1rem" }}>
                   Mesas Ocupadas
                 </p>
                 <p
@@ -178,16 +133,52 @@ export function InformacionRapidaHome({}) {
                   ></div>
                 </div>
               </div>
+              <div className="ms-auto">
+                <Table size={60} />
+              </div>
             </div>
           </div>
         </CondicionCarga>
       </div>
-
-      <div className="col-md-12">
-        <UsuariosActivosHome />
+      <div className="col-md-3">
+        <CondicionCarga
+          isLoading={isLoadingPedidosWeb}
+          isError={isErrorPedidos}
+        >
+          <div className="card h-100 shadow-sm ">
+            <div className="card-body d-flex align-items-center ">
+              <div>
+                <p className="h6">Pedidos Pendientes</p>
+                <p className="mb-0  fw-semibold">
+                  {pedidosPendientes} Pedidos en estado pendiente
+                </p>
+              </div>
+              <div className="badge-ico badge-ico-pedidos-pendientes ms-auto">
+                <Clock9 className="text-auto" size={40} />
+              </div>
+            </div>
+          </div>
+        </CondicionCarga>
       </div>
-
-      {/* Pedidos Pendientes */}
+      <div className="col-md-3">
+        <CondicionCarga isLoading={isLoadingAlmacen} isError={isErrorAlmacen}>
+          <div className="card h-100 shadow-sm card-alerta-almacen">
+            <div className="card-body d-flex align-items-center">
+              <div>
+                <p className="h6" style={{ color: "white" }}>
+                  Alertas Almacen
+                </p>
+                <p className="mb-0 text-white fw-semibold">
+                  {productosBajoStock} productos en bajo stock
+                </p>
+              </div>
+              <div className="badge-ico badge-ico-almacen ms-auto">
+                <CircleAlert className="text-auto" size={40} />
+              </div>
+            </div>
+          </div>
+        </CondicionCarga>
+      </div>
     </div>
   );
 }

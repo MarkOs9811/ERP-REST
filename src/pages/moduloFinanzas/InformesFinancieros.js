@@ -7,7 +7,13 @@ import { GraficoCuentasPorCobrar } from "../../graficosChar/GraficoCuentasPorCob
 import { GraficoPagoEmpleados } from "../../graficosChar/GraficoPagoEmpleados";
 import GraficoVentasContado from "../../graficosChar/GraficoVentasContado";
 import GraficoEgresosMensuales from "../../graficosChar/GraficoEgresosMensuales";
-import { TrendingDown, TrendingUp } from "lucide-react";
+import {
+  ChartColumnBig,
+  ChartColumnBigIcon,
+  TrendingDown,
+  TrendingUp,
+} from "lucide-react";
+import { CardIngresoEgresos } from "../../components/componentesFinanzas/CardIngresoEgresos";
 
 export function InformesFinancieros() {
   const {
@@ -50,11 +56,17 @@ export function InformesFinancieros() {
         <div className="col-md-8">
           <div className="row g-3">
             <div className="col-md-12">
-              <div className="card shadow-sm py-2">
-                <div className="card-header p-3">
-                  <p className="h4 card-title">Ingresos y Egresos</p>
+              <div className="card shadow-sm ">
+                <div className="card-header d-flex gap-2 align-middle justify-content-left">
+                  <span className="alert border-0 alert-danger text-danger p-2 mb-0">
+                    <ChartColumnBigIcon size={25} />
+                  </span>
+                  <h6 className="mb-1 d-flex flex-column gap-1">
+                    <span className="fw-bold">Ingresos y Egresos</span>
+                    <p className="text-muted small mb-0">Este año</p>
+                  </h6>
                 </div>
-                <div className="card-body p-5">
+                <div className="card-body px-4">
                   <GraficoIngresosEgresos />
                 </div>
               </div>
@@ -81,63 +93,15 @@ export function InformesFinancieros() {
         </div>
         <div className="col-md-4 ">
           <div className="row g-3 ">
-            <div className="col-md-12 ">
-              <div className="card shadow-sm py-2 h-100">
-                <div
-                  className="p-3 w-100 text-white"
-                  style={{ backgroundColor: "#1871a4" }}
-                >
-                  <p className="h4 card-title">
-                    <TrendingUp
-                      color={"auto"}
-                      height="40px"
-                      width="40px"
-                      className="me-2"
-                    />
-                    Total Ingresos
-                  </p>
-                </div>
-                <div
-                  className="card-body p-5"
-                  style={{ backgroundColor: "#def0ff" }}
-                >
-                  <p className="h1 text-center" style={{ color: "#245278" }}>
-                    {sumaIngresos.toFixed(2)}
-                  </p>
-                </div>
-              </div>
-            </div>
             <div className="col-md-12">
-              <div className="card shadow-sm py-2 ">
-                <div
-                  className="p-3 w-100 text-white"
-                  style={{ backgroundColor: "#f55858" }}
-                >
-                  <p className="h4 card-title">
-                    <TrendingDown
-                      color={"auto"}
-                      height="40px"
-                      width="40px"
-                      className="me-2"
-                    />
-                    Total Egresos
-                  </p>
-                </div>
-                <div
-                  className="card-body p-5"
-                  style={{ backgroundColor: "#ffdede" }}
-                >
-                  <p className="h1 text-center" style={{ color: "#782424" }}>
-                    {sumaEgresos.toFixed(2)}
-                  </p>
-                </div>
-              </div>
+              <CardIngresoEgresos
+                sumaIngresos={sumaIngresos}
+                sumaEgresos={sumaEgresos}
+              />
             </div>
+
             <div className="col-md-12 ">
               <div className="card shadow-sm py-2 ">
-                <div className="card-header p-3">
-                  <p className="h4 card-title">Cuentas por cobrar</p>
-                </div>
                 <div className="card-body p-3 justify-content-center">
                   <GraficoCuentasPorCobrar />
                   <div

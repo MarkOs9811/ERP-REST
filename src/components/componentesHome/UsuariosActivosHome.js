@@ -26,19 +26,14 @@ export function UsuariosActivosHome() {
   return (
     <CondicionCarga isLoading={isLoadingUsuarios} isError={isErrorUsuarios}>
       <div className="card shadow-sm h-100 p-0">
-        <div className="card-header dashboard-header d-flex justify-content-between align-items-center p-3">
-          <p className="text-dark mb-3 d-flex align-items-center h5">
-            Usuarios Activos
-          </p>
-          <h3 className="text-dark badge rounded-pill mx-2 p-2">
-            {listaAsistenciaHoy.length}
-          </h3>
-          <UserRound
-            color={"var(--accent-blue)"}
-            height="40px"
-            width="40px"
-            className="me-2"
-          />
+        <div className="card-header  mb-3 d-flex gap-2 align-middle justify-content-left">
+          <span className="alert border-0 alert-danger text-danger p-2 mb-0">
+            <UserRound size={25} />
+          </span>
+          <h6 className="mb-1 d-flex flex-column gap-1">
+            <span className="fw-bold">Usuarios activos</span>
+            <p className="text-muted small mb-0">{listaAsistenciaHoy.length}</p>
+          </h6>
         </div>
         <div className="card-body p-4">
           {isLoadingUsuarios ? (
