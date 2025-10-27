@@ -2,17 +2,36 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 import { GetConfi } from "../../service/accionesConfiguracion/GetConfi";
-import { useQuery } from "@tanstack/react-query";
-import { File, FileText, Pen, Trash } from "lucide-react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { File, FileText, Pen, PlusIcon, PowerIcon, Trash } from "lucide-react";
 import ModalRight from "../componentesReutilizables/ModalRight";
 import { SunatFormIntegracion } from "./confiIntegraciones/SunatFormIntegracion";
 import axiosInstance from "../../api/AxiosInstance";
 import ToastAlert from "../componenteToast/ToastAlert";
 import { TablasGenerales } from "../componentesReutilizables/TablasGenerales";
 import { GetConfiSerie } from "../../service/accionesConfiguracion/GetConfigSerie";
+import { AddSerieForm } from "./confiIntegraciones/AddSerieForm";
+import ModalAlertActivar from "../componenteToast/ModalAlertActivar";
+import ModalGeneral from "../componenteToast/ModalGeneral";
+import { EditFormSerie } from "./confiIntegraciones/EditFormSerie";
 
 export function ServicioSunat() {
   const [modalRightSunat, setModalRightSunat] = useState(false);
+  const [modalAddSerieCorr, setModalAddSerieCorr] = useState(false);
+  const [modalQuestionActivar, setModalQuestionActivar] = useState(false);
+  const [dataSerie, setDataSerie] = useState([]);
+
+  // ACTIVAR  Y DESACTIVAR LA SERIE
+  const [modalCambiarEstado, setQuestionEstado] = useState(false);
+  const [modalDesactivar, setQuestionDesactivar] = useState(false);
+  const [dataActivar, setDataActivar] = useState([]);
+
+  // ACTIVAR MODAL Y ENVIAR DATA PARA EDITAR SERIE
+  const [modalEditarSerie, setModalEditarSerie] = useState(false);
+  const [dataEditSerie, setDataEditSerie] = useState([]);
+
+  const queryClient = useQueryClient();
+
   const {
     data: configuracion = [],
     isLoading,
@@ -68,8 +87,102 @@ export function ServicioSunat() {
     }
   };
 
-  const handleEdit = () => {};
-  const handleToggleEstado = () => {};
+  const handleSetDefault = async (id) => {
+    try {
+      const response = await axiosInstance.put(
+        `/configuraciones/serieCorrelativoDefault/${id}`
+      );
+      if (response.data.success) {
+        ToastAlert("success", "Se estableció por defecto");
+        queryClient.invalidateQueries(["configuracionSerie"]);
+        setModalQuestionActivar(false);
+      }
+    } catch (error) {
+      if (error.response) {
+        const { status, data } = error.response;
+
+        if (status === 422 && data.errors) {
+          const mensajes = Object.values(data.errors).flat();
+          mensajes.forEach((msg) => ToastAlert("error", msg));
+          return;
+        }
+        const mensaje =
+          data.message ||
+          data.error ||
+          "Ocurrió un error inesperado en el servidor.";
+        ToastAlert("error", mensaje);
+      } else if (error.request) {
+        ToastAlert("error", "No se pudo conectar con el servidor.");
+      } else {
+        ToastAlert("error", "Error en la solicitud.");
+      }
+    }
+  };
+
+  const handleActivarSerie = async (id) => {
+    try {
+      const response = await axiosInstance.put(
+        `/configuraciones/serieCorrelativoActivar/${id}`
+      );
+      if (response.data.success) {
+        ToastAlert("success", "Se activó la serie");
+        queryClient.invalidateQueries(["configuracionSerie"]);
+        setQuestionEstado(false);
+      }
+    } catch (error) {
+      if (error.response) {
+        const { status, data } = error.response;
+
+        if (status === 422 && data.errors) {
+          const mensajes = Object.values(data.errors).flat();
+          mensajes.forEach((msg) => ToastAlert("error", msg));
+          return;
+        }
+        const mensaje =
+          data.message ||
+          data.error ||
+          "Ocurrió un error inesperado en el servidor.";
+        ToastAlert("error", mensaje);
+      } else if (error.request) {
+        ToastAlert("error", "No se pudo conectar con el servidor.");
+      } else {
+        ToastAlert("error", "Error en la solicitud.");
+      }
+    }
+  };
+
+  const handleDesactivarSerie = async (id) => {
+    try {
+      const response = await axiosInstance.put(
+        `/configuraciones/serieCorrelativoDesactivar/${id}`
+      );
+      if (response.data.success) {
+        ToastAlert("success", "Se desactivó la serie");
+        queryClient.invalidateQueries(["configuracionSerie"]);
+        setModalQuestionActivar(false);
+      }
+    } catch (error) {
+      if (error.response) {
+        const { status, data } = error.response;
+
+        if (status === 422 && data.errors) {
+          const mensajes = Object.values(data.errors).flat();
+          mensajes.forEach((msg) => ToastAlert("error", msg));
+          return;
+        }
+        const mensaje =
+          data.message ||
+          data.error ||
+          "Ocurrió un error inesperado en el servidor.";
+        ToastAlert("error", mensaje);
+      } else if (error.request) {
+        ToastAlert("error", "No se pudo conectar con el servidor.");
+      } else {
+        ToastAlert("error", "Error en la solicitud.");
+      }
+    }
+  };
+
   const columasSerieCorr = [
     {
       name: "ID",
@@ -111,34 +224,38 @@ export function ServicioSunat() {
     {
       name: "Por Defecto",
       selector: (row) => row.is_default,
-      sortable: true,
       center: true,
+      sortable: true,
       cell: (row) =>
-        // Aquí puedes usar un componente <Badge> o <Chip> de tu librería UI
         row.is_default == 1 ? (
           <span
             style={{
               color: "white",
-              backgroundColor: "green",
+              backgroundColor: "#39aa48ff",
               padding: "3px 8px",
               borderRadius: "12px",
               fontSize: "12px",
             }}
           >
-            Sí
+            ✔ Por defecto
           </span>
         ) : (
-          <span
+          <button
+            onClick={() => {
+              setModalQuestionActivar(row.id);
+              setDataSerie(row);
+            }}
+            className="badge btn btn-dark border shadow-sm"
             style={{
               color: "white",
-              backgroundColor: "gray",
-              padding: "3px 8px",
               borderRadius: "12px",
+              padding: "4px 10px",
+              cursor: "pointer",
               fontSize: "12px",
             }}
           >
-            No
-          </span>
+            Establecer
+          </button>
         ),
     },
     {
@@ -149,7 +266,7 @@ export function ServicioSunat() {
       cell: (row) =>
         // (Asumo que 1 es 'Activo' y 0 es 'Inactivo')
         row.estado == 1 ? (
-          <span style={{ color: "blue", fontWeight: "bold" }}>Activo</span>
+          <span style={{ color: "green", fontWeight: "bold" }}>Activo</span>
         ) : (
           <span style={{ color: "red", fontWeight: "bold" }}>Inactivo</span>
         ),
@@ -157,25 +274,32 @@ export function ServicioSunat() {
     {
       name: "Acciones",
       center: true,
-      // Esta celda no tiene 'selector' porque es calculada
       cell: (row) => (
-        <div className="g-2">
-          {/* --- BOTÓN EDITAR --- */}
-          {/* Siempre se puede editar (para cambiar 'is_default') */}
+        <div className="d-flex gap-2 m-2">
           <button
-            onClick={() => handleEdit(row)}
-            title="Editar"
+            type="button"
             className="btn-editar"
+            disabled={row.usado == 1}
+            title={
+              row.usado == 1
+                ? "No puedes editar porque ya existe una venta"
+                : "Editar serie y corelativo"
+            }
+            onClick={() => {
+              setModalEditarSerie(true);
+              setDataEditSerie(row);
+            }}
           >
-            <Pen size={15} /> Editar
+            <Pen size={15} />
           </button>
 
-          {/* --- BOTÓN ACTIVAR/DESACTIVAR --- */}
           {row.estado == 1 ? (
-            // Si está ACTIVO, mostramos botón "Desactivar"
             <button
-              onClick={() => handleToggleEstado(row)}
-              // ¡LA REGLA DE ORO! No se puede desactivar la serie 'default'
+              type="button"
+              onClick={() => {
+                setQuestionDesactivar(row);
+                setDataActivar(row);
+              }}
               disabled={row.is_default == 1}
               title={
                 row.is_default == 1
@@ -184,16 +308,18 @@ export function ServicioSunat() {
               }
               className="btn-eliminar"
             >
-              <Trash size={15} /> Desactivar
+              <Trash size={15} />
             </button>
           ) : (
-            // Si está INACTIVO, mostramos botón "Activar"
             <button
-              onClick={() => handleToggleEstado(row)}
+              onClick={() => {
+                setQuestionEstado(true);
+                setDataActivar(row);
+              }}
               title="Activar Serie"
-              className="btn-guardar"
+              className="btn-activar btn-sm w-auto"
             >
-              Activar
+              <PowerIcon size={"auto"} />
             </button>
           )}
         </div>
@@ -289,20 +415,30 @@ export function ServicioSunat() {
           </button>
         </div>
       </div>
-      <div className="card shadow-sm">
-        <div className="card-header">
-          <File size={30} className="text-danger" />
-          <span className="Fw-semibold h5">
+      <div className="card shadow-sm py-2">
+        <div className="card-header align-items-center d-flex justify-content-left">
+          <File size={30} className="text-danger me-2" />
+          <span className="fw-semibold h5">
             Información de Serie y correlativo
           </span>
+          <div className="ms-auto">
+            <button
+              type="button"
+              className="btn btn-outline-dark"
+              onClick={() => setModalAddSerieCorr(true)}
+            >
+              <PlusIcon />
+            </button>
+          </div>
         </div>
-        <div className="card-body">
+        <div className="card-body p-0">
           <TablasGenerales
             columnas={columasSerieCorr}
             datos={confiSerieCorrelativo}
           />
         </div>
       </div>
+      {/* MODAL PARA ACTUALIZAR LA CONFIGURACION DE INTEGRACION DE SUNAT */}
       <ModalRight
         isOpen={modalRightSunat}
         onClose={() => setModalRightSunat(false)}
@@ -311,6 +447,88 @@ export function ServicioSunat() {
       >
         <SunatFormIntegracion data={sunatConfig} />
       </ModalRight>
+
+      {/* MODAL PARA AGREGAR UNA NUEVA SERIE */}
+      <ModalRight
+        isOpen={modalAddSerieCorr}
+        onClose={() => setModalAddSerieCorr(false)}
+        title={"Agrega una nueva serie"}
+        subtitulo=" Registre la serie y el
+            correlativo inicial para cada tipo de documento emitido."
+        hideFooter={true}
+      >
+        <AddSerieForm data={sunatConfig} cerrarModal={setModalAddSerieCorr} />
+      </ModalRight>
+
+      {/* MODAL PARA ACTUIALIZAR O EDITAR UNA SERIE */}
+      <ModalRight
+        isOpen={modalEditarSerie}
+        onClose={() => setModalEditarSerie(false)}
+        title={"Editar Registro serie "}
+        subtitulo=" Actualice los datos"
+        hideFooter={true}
+      >
+        {({ handleClose }) => (
+          <EditFormSerie
+            dataEdit={dataEditSerie}
+            /* Le pasamos la función 'handleClose' del modal */
+            cerrarModal={handleClose}
+          />
+        )}
+      </ModalRight>
+
+      {/* MODAL PARA PONER POR DEFECTO UNASERIE */}
+      <ModalGeneral
+        show={modalQuestionActivar}
+        handleCloseModal={() => setModalQuestionActivar(false)}
+        nombre={dataSerie.serie}
+        idProceso={dataSerie.id}
+        handleAccion={handleSetDefault}
+      >
+        <div className="rounded my-3 p-3">
+          <h3 className="fw-bold mb-2">
+            ¿Desea establecer esta serie como predeterminada?
+          </h3>
+          <small className="text-muted">
+            Esta serie se utilizará por defecto para emitir documentos del mismo
+            tipo. Las demás series de este tipo se desactivarán automáticamente.
+          </small>
+        </div>
+      </ModalGeneral>
+
+      {/* MODAL PARA ACTIVAR UNA SERIE */}
+      <ModalGeneral
+        show={modalCambiarEstado}
+        handleCloseModal={() => setQuestionEstado(false)}
+        nombre={dataActivar.serie}
+        idProceso={dataActivar.id}
+        handleAccion={handleActivarSerie}
+      >
+        <div className="rounded my-3 p-3">
+          <h3 className="fw-bold mb-2">¿Desea activar esta serie?</h3>
+          <small className="text-muted">
+            Al activarla, la serie podrá ser utilizada en la emisión de
+            documentos, pero no será la predeterminada a menos que usted la
+            configure como tal.
+          </small>
+        </div>
+      </ModalGeneral>
+
+      {/* MODAL PARA DESACTIVAR UNA SERIE */}
+      <ModalGeneral
+        show={modalDesactivar}
+        handleCloseModal={() => setQuestionDesactivar(false)}
+        nombre={dataActivar.serie}
+        idProceso={dataActivar.id}
+        handleAccion={handleDesactivarSerie}
+      >
+        <div className="rounded my-3 p-3">
+          <h3 className="fw-bold mb-2">¿Desea desactivar esta serie?</h3>
+          <small className="text-muted">
+            Al desactivar, la serie no podrá ser puesta por defecto.
+          </small>
+        </div>
+      </ModalGeneral>
     </div>
   );
 }

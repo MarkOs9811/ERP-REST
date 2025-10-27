@@ -18,6 +18,7 @@ import { useAuth } from "../AuthContext";
 import { abrirCaja } from "../redux/cajaSlice";
 import { useDispatch } from "react-redux";
 import { motion } from "framer-motion";
+import { Cargando } from "../components/componentesReutilizables/Cargando";
 
 export const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -41,14 +42,14 @@ export const Login = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/login", {
-        email: data.email,
-        password: data.password,
-      });
-      // const response = await axios.post("http://erp-api.test/api/login", {
+      // const response = await axios.post("http://127.0.0.1:8000/api/login", {
       //   email: data.email,
       //   password: data.password,
       // });
+      const response = await axios.post("http://erp-api.test/api/login", {
+        email: data.email,
+        password: data.password,
+      });
 
       if (response.data.token) {
         // ✅ ahora usas el login del AuthContext
@@ -195,7 +196,13 @@ export const Login = () => {
                 className="login-form button-normal-login"
                 disabled={loading}
               >
-                {loading ? "Iniciando sesión..." : "Ingresar"}
+                {loading ? (
+                  <div>
+                    <Cargando textColor={"white"} />
+                  </div>
+                ) : (
+                  "Ingresar"
+                )}
               </button>
             </div>
             <p className="ms-auto text-center">ó</p>

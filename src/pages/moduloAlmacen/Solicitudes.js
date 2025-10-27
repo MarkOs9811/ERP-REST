@@ -3,20 +3,13 @@ import { SolicitudesLista } from "../../components/componenteAlmacen/Solicitudes
 
 import { ContenedorPrincipal } from "../../components/componentesReutilizables/ContenedorPrincipal";
 import { Plus } from "lucide-react";
+import ModalRight from "../../components/componentesReutilizables/ModalRight";
+import { FormAddSolicitudExterna } from "../../components/componenteAlmacen/componenteSolicitud/FormAddSolicitudExterna";
 
 export function Solicitudes() {
-  const [showModal, setShowModal] = useState(false);
+  const [showModalAdd, setShowModalAdd] = useState(false);
   const [updateList, setUpdateList] = useState(false);
   const [search, setSearch] = useState("");
-
-  // Función para abrir el modal
-  const handleOpenModal = () => setShowModal(true);
-
-  // Función para cerrar el modal
-  const handleCloseModal = () => {
-    setShowModal(false);
-    setUpdateList((prev) => !prev);
-  };
 
   return (
     <div>
@@ -38,7 +31,7 @@ export function Solicitudes() {
               />
               <button
                 className="btn ms-2 btn-outline-dark"
-                onClick={handleOpenModal}
+                onClick={setShowModalAdd}
                 title="Realiza una solicitud"
               >
                 <Plus className="color-auto" />
@@ -50,6 +43,17 @@ export function Solicitudes() {
           <SolicitudesLista search={search} updateList={updateList} />
         </div>
       </div>
+
+      <ModalRight
+        isOpen={showModalAdd}
+        onClose={() => setShowModalAdd(false)}
+        hideFooter={true}
+        title={"Agrega una nueva solicitud"}
+        subtitulo={"Genera una nueva solicitud a un proveedor"}
+        width="40%"
+      >
+        {({ handleClose }) => <FormAddSolicitudExterna onClose={handleClose} />}
+      </ModalRight>
     </div>
   );
 }

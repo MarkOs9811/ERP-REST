@@ -6,7 +6,7 @@ import RippleWrapper from "./componentesReutilizables/RippleWrapper";
 import { PerfilPanel } from "./componentesHeader/PerfilPanel";
 import { NotificacionesPanel } from "./componentesHeader/NotificacionesPanel";
 import { capitalizeFirstLetter } from "../hooks/FirstLetterUp";
-import { Bell, Moon, Sun } from "lucide-react";
+import { Bell, Moon, Sun, SunMediumIcon } from "lucide-react";
 import ModalRight from "./componentesReutilizables/ModalRight";
 export function Header() {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -88,7 +88,7 @@ export function Header() {
                 style={{ verticalAlign: "middle" }}
               />
             ) : (
-              <Sun
+              <SunMediumIcon
                 className="text-auto"
                 height="22px"
                 width="22px"

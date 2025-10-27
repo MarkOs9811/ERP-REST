@@ -117,7 +117,7 @@ export function Navegacion() {
           <div className="d-flex me-3 gap-2 align-items-center">
             <button
               className="btn btn-outline-dark d-flex align-items-center gap-1"
-              onClick={() => navigate("/vender/ventasMesas")}
+              onClick={() => navigate("/vender/mesas")}
             >
               <StoreIcon /> POS
             </button>

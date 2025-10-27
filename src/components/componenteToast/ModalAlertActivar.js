@@ -1,4 +1,3 @@
-
 import "react-toastify/dist/ReactToastify.css";
 import "../../css/ModalAlertActivar.css"; // Importar CSS correctamente
 import { useQueryClient } from "@tanstack/react-query";

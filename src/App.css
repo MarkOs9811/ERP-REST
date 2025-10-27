@@ -26,6 +26,7 @@ h4 {
   color: #1d2b2b !important;
 }
 
+/* ======================== */
 .texto-principal{
   color: #d14141 !important;
   font-weight: 500;
@@ -306,6 +307,37 @@ button {
 }
 
 /* ========== BOTONES ========== */
+button:disabled {
+  opacity: 0.6;
+  /* Hace el botón más transparente/atenuado, dándole el aspecto "oscuro" */
+  cursor: not-allowed;
+  /* Cambia el cursor para indicar que no es clickeable */
+}
+
+.btn-activar{
+  min-width: 35px;
+    width: auto;
+    height: 35px;
+    line-height: 15px;
+    background-color: #d8ffe2;
+    color: #07683f;
+    border: 1px solid #135523;
+    border-radius: 0.375rem;
+    padding: 0.5rem;
+    transition: background-color 0.3s ease;
+}
+.btn-activar:hover {
+  min-width: 35px;
+  width: auto;
+  height: 35px;
+  line-height: 15px;
+  background-color: #28833e;
+  color: #ffffff;
+  border: 1px solid #135523;
+  border-radius: 0.375rem;
+  padding: 0.5rem;
+  transition: background-color 0.3s ease;
+}
 .btn-principal{
   min-width: 35px;
   width: auto;
@@ -427,6 +459,7 @@ button {
 }
 
 /* ========== BOTÓN PRINCIPAL DE VENTA ========== */
+
 .boton-venta {
   background-color: #f0f0f0;
   border: none;

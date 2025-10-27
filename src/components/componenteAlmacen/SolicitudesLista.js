@@ -167,17 +167,15 @@ export function SolicitudesLista({ search, updateList }) {
     {
       name: "Usuario Origen",
       selector: (row) => (
-        <span
-          className="badge"
-          style={{
-            background: "#c6dcee",
-            color: "#638099",
-            fontWeight: "bold",
-            fontSize: "14px",
-          }}
-        >
-          {capitalizeFirstLetter(row.nombre_solicitante)}
-        </span>
+        <>
+          <span className="badge bg-light text-muted text-left">
+            {capitalizeFirstLetter(row.nombre_solicitante)}
+            <br />
+          </span>
+          <span className="small">
+            {capitalizeFirstLetter(row.usuario?.email)}
+          </span>
+        </>
       ),
       sortable: true,
       wrap: true,
@@ -187,6 +185,22 @@ export function SolicitudesLista({ search, updateList }) {
       selector: (row) => row.area?.nombre || "Sin área",
       sortable: true,
       wrap: true,
+    },
+    {
+      name: "Fecha",
+      selector: (row) => row.created_at,
+      sortable: true,
+      wrap: true,
+      format: (row) => {
+        if (!row.created_at) {
+          return "";
+        }
+        const date = new Date(row.created_at);
+        if (isNaN(date.getTime())) {
+          return "Fecha Inválida";
+        }
+        return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+      },
     },
   ];
 

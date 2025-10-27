@@ -3,18 +3,14 @@ import axiosInstance from "../api/AxiosInstance";
 import { useDispatch } from "react-redux";
 import { subMenuClick } from "../redux/subMenuSlice";
 import "../css/EstilosSideBar.css";
-import RippleWrapper from "./componentesReutilizables/RippleWrapper";
 import { setSidebarCompressed } from "../redux/sideBarSlice";
 import {
-  Archive,
   Building2,
   Calendar,
   Hamburger,
   Home,
-  LogOutIcon,
   Megaphone,
   Settings,
-  Settings2,
   ShoppingBag,
   ShoppingCart,
   TrendingUp,
@@ -22,6 +18,8 @@ import {
   Users,
   ChevronDown,
   ChevronRight,
+  Warehouse,
+  UsersRound,
 } from "lucide-react";
 import { useAuth } from "../AuthContext";
 import { capitalizeFirstLetter } from "../hooks/FirstLetterUp";
@@ -49,12 +47,12 @@ export function SideBar() {
     ventas: ShoppingBag,
     incidenciasempleado: Home,
     incidencias: Megaphone,
-    almacen: Archive,
+    almacen: Warehouse,
     vender: ShoppingCart,
     proveedores: Truck,
     compras: Calendar,
     platos: Hamburger,
-    "rr-hh": Users,
+    rrhh: UsersRound,
     finanzas: TrendingUp,
     "areas-y-cargos": Building2,
     configuracion: Settings,
@@ -322,7 +320,7 @@ export function SideBar() {
               borderRadius: "8px",
             }}
           >
-            <Settings2 className="icon-lucide me-2" size={20} />
+            <Settings className="icon-lucide me-2" size={20} />
             <small
               className="text-white"
               style={{ fontSize: "14px", textAlign: "left" }}

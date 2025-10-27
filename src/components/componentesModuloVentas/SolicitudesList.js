@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { GetMisSolicitudes } from "../../service/GetMisSolicitudes";
 import { useEstadoAsyn } from "../../hooks/EstadoAsync";
 import { Cargando } from "../componentesReutilizables/Cargando";
@@ -14,64 +14,53 @@ import axiosInstance from "../../api/AxiosInstance";
 import ToastAlert from "../componenteToast/ToastAlert";
 import ModalRight from "../componentesReutilizables/ModalRight";
 import { FormEditarSolicitud } from "./FormEditarSolicitud";
+import { useQuery } from "@tanstack/react-query";
 
 export function SolicitudesList({ search }) {
-  const [misSolicitudes, setMisSolicitudes] = useState([]);
-  const [filterSolicitudes, setFilterSolicitudes] = useState([]);
-  const [hasError, setHasError] = useState(false);
-
   const [alertEliminar, setAlertEliminar] = useState(false);
   const [dataSolicitud, setDatoSolicitud] = useState([]);
   const [modalEditarSoli, setModalEditarSoli] = useState(false);
+  const {
+    data: misSolicitudes = [],
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["misSolicitudes"],
+    queryFn: GetMisSolicitudes,
+  });
 
-  useEffect(() => {
-    const resultado = misSolicitudes.filter((items) => {
-      const { usuario, producto, categoria } = items;
-      const searchLower = search?.toLowerCase();
+  const filterSolicitudes = useMemo(() => {
+    if (!misSolicitudes) return [];
+
+    const searchLower = search?.toLowerCase() || "";
+
+    if (!searchLower) {
+      return misSolicitudes;
+    }
+
+    return misSolicitudes.filter((items) => {
+      const { usuario, categoria, nombre_producto } = items;
 
       const usuarioNombreCompleto = `${
         usuario?.empleado?.persona?.nombre || ""
       } ${usuario?.empleado?.persona?.apellidos || ""}`.toLowerCase();
 
-      const productoName = producto?.nombreCaja?.toLowerCase() || "";
-      const cat = categoria?.nombre?.toLowerCase() || "";
+      const productoName = (nombre_producto || "").toLowerCase();
+      const cat = (categoria?.nombre || "").toLowerCase();
+
       return (
         usuarioNombreCompleto.includes(searchLower) ||
         productoName.includes(searchLower) ||
         cat.includes(searchLower)
       );
     });
-
-    setFilterSolicitudes(resultado);
   }, [search, misSolicitudes]);
-
-  const fetchMisSolicitudes = useCallback(async () => {
-    try {
-      const result = await GetMisSolicitudes();
-      if (result.success) {
-        setFilterSolicitudes(result.data);
-        setMisSolicitudes(result.data);
-      } else {
-        setHasError(true);
-      }
-    } catch (error) {
-      console.error("Error en fetchCajas:", error);
-      setHasError(true);
-    }
-  }, []);
-  const { loading, error, execute } = useEstadoAsyn(fetchMisSolicitudes);
-
-  useEffect(() => {
-    if (!hasError) {
-      execute();
-    }
-  }, []);
 
   const hanldeEliminarSoli = async (id) => {
     try {
       const response = await axiosInstance.delete(`/solicitudes/${id}`);
       if (response.data.success) {
-        await execute();
         ToastAlert("success", "Solicitud eliminada con exito");
         return true;
       } else {
@@ -85,7 +74,7 @@ export function SolicitudesList({ search }) {
     }
   };
 
-  if (loading) {
+  if (isLoading) {
     return <Cargando />;
   }
   if (error) {
@@ -102,6 +91,7 @@ export function SolicitudesList({ search }) {
       name: "ID",
       selector: (row) => row.id,
       sortable: true,
+      width: "60px",
     },
     {
       name: "Acciones",
@@ -204,6 +194,22 @@ export function SolicitudesList({ search }) {
       selector: (row) => row.area.nombre,
       sortable: true,
       wrap: true,
+    },
+    {
+      name: "Fecha",
+      selector: (row) => row.created_at,
+      sortable: true,
+      wrap: true,
+      format: (row) => {
+        if (!row.created_at) {
+          return "";
+        }
+        const date = new Date(row.created_at);
+        if (isNaN(date.getTime())) {
+          return "Fecha Inválida";
+        }
+        return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+      },
     },
   ];
   return (

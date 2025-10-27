@@ -34,7 +34,7 @@ export function IngresoPlanilla() {
     queryFn: GetCargos, // tu función que hace la petición
   });
 
-  const { data: areasList } = useQuery({
+  const { data: areasList = [] } = useQuery({
     queryKey: ["areas"],
     queryFn: GetAreas,
   });
@@ -469,11 +469,12 @@ export function IngresoPlanilla() {
                         {...register("area", { required: true })}
                       >
                         <option value="">Seleccione...</option>
-                        {areasList?.data.map((a) => (
-                          <option key={a.id} value={a.id}>
-                            {a.nombre}
-                          </option>
-                        ))}
+                        {Array.isArray(areasList?.data) &&
+                          areasList?.data.map((a) => (
+                            <option key={a.id} value={a.id}>
+                              {a.nombre}
+                            </option>
+                          ))}
                       </select>
                       <label>Area</label>
                     </div>
