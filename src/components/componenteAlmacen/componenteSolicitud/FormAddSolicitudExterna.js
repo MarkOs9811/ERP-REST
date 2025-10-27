@@ -49,7 +49,7 @@ export function FormAddSolicitudExterna({ onClose }) {
       const pdfUrl = response?.data?.pdf_url;
       if (pdfUrl) window.open(pdfUrl, "_blank");
 
-      ToastAlert("success", "Solicitud creada correctamente 🎉");
+      ToastAlert("success", "Solicitud creada correctamente");
       reset();
       onClose();
     } catch (error) {

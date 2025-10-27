@@ -1,5 +1,6 @@
 import { Cargando } from "./Cargando";
 import "../../css/EstilosIconoCargando.css";
+import { AlertTriangle } from "lucide-react";
 export function CondicionCarga({ isLoading, isError, children }) {
   if (isLoading) {
     return (
@@ -12,7 +13,8 @@ export function CondicionCarga({ isLoading, isError, children }) {
   if (isError) {
     return (
       <div className="alert alert-danger text-center m-2" role="alert">
-        ⚠️ Error: {"Ha ocurrido un problema inesperado."}
+        <AlertTriangle className="text-auto mx-2" />
+        Error: {"Ha ocurrido un problema inesperado."}
       </div>
     );
   }

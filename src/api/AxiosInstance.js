@@ -2,12 +2,20 @@ import axios from "axios";
 import axiosRetry from "axios-retry";
 import ToastAlert from "../components/componenteToast/ToastAlert";
 
+// const axiosInstance = axios.create({
+
+//   baseURL: "http://127.0.0.1:8000/api",
+//   Authorization: `Bearer ${localStorage.getItem("token")}`,
+//   withCredentials: true,
+// });
 const axiosInstance = axios.create({
   // baseURL: "https://vv1g8thv-8000.brs.devtunnels.ms/api",
-  baseURL: "http://erp-api.test/api",
-  // baseURL: "http://127.0.0.1:8000/api",
-  Authorization: `Bearer ${localStorage.getItem("token")}`,
+  // baseURL: "http://erp-api.test/api",
+  baseURL: "http://127.0.0.1:8000/api",
   withCredentials: true,
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+  },
 });
 
 // Configuración de axios-retry para manejar reintentos automáticos
