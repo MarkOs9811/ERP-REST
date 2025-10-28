@@ -75,17 +75,17 @@ export function AjustesHorario() {
         <div className="d-flex justify-content-center">
           {/* Botón Editar */}
           <button className=" btn-editar btn-sm" title="Editar">
-            <Pencil className="text-auto" />
+            <Pencil className="text-auto" size={"auto"} />
           </button>
 
           {/* Botón Eliminar o Activar */}
           {row.estado === 1 ? (
             <button className="btn-eliminar btn-sm ms-2" title="Eliminar">
-              <Trash2 className="text-auto" />
+              <Trash2 className="text-auto" size={"auto"} />
             </button>
           ) : (
             <button className="btn btn-success btn-sm ms-2" title="Activar">
-              <CheckCheck color={"autof"} />
+              <CheckCheck color={"autof"} size={"auto"} />
             </button>
           )}
         </div>
@@ -95,8 +95,8 @@ export function AjustesHorario() {
     },
   ];
   return (
-    <div className="card shadow-sm h-100">
-      <div className="card-header d-flex justify-content-between align-items-center p-3 border-bottom">
+    <div className="card shadow-sm h-100 py-2">
+      <div className="card-header d-flex justify-content-between align-items-center p-2 border-bottom">
         <h4 className=" mb-0">
           <Timer className="text-auto" /> Horarios
         </h4>
