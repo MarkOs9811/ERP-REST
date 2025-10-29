@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { NominaUsuarios } from "../../components/componentePlanillas/NominaUsuarios";
-import { ContenedorPrincipal } from "../../components/componentesReutilizables/ContenedorPrincipal";
 import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteExcel";
 import {
   BanknoteArrowUp,
@@ -11,9 +10,13 @@ import { BotonMotionGeneral } from "../../components/componentesReutilizables/Bo
 import ModalGeneral from "../../components/componenteToast/ModalGeneral";
 import axiosInstance from "../../api/AxiosInstance";
 import ToastAlert from "../../components/componenteToast/ToastAlert";
+import ModalRight from "../../components/componentesReutilizables/ModalRight";
+import { ValidarNomina } from "../../components/componentePlanillas/componentesAjustesPlanilla/ValidarNomina";
 
 export function Nomina() {
   const [modalQuestionPagar, setModalQuestionPagar] = useState(false);
+  const [ModalValidarNomina, setModalValidarNomina] = useState(false);
+
   const [updateList, setUpdateList] = useState(false);
   const [search, setSearch] = useState("");
 
@@ -67,8 +70,8 @@ export function Nomina() {
               </button>
 
               <BotonMotionGeneral
-                text="Generar pagos"
-                onClick={() => setModalQuestionPagar(true)}
+                text="Validar Nomina"
+                onClick={() => setModalValidarNomina(true)}
                 icon={<BanknoteArrowUp className="text-auto" />}
               />
             </div>
@@ -78,6 +81,17 @@ export function Nomina() {
           <NominaUsuarios search={search} updateList={updateList} />
         </div>
       </div>
+
+      <ModalRight
+        isOpen={ModalValidarNomina}
+        onClose={() => setModalValidarNomina(false)}
+        title={"Validar Nomina"}
+        subtitulo="Valida los caos para realizar el pago"
+        hideFooter={true}
+        width="60%"
+      >
+        {({ handleClose }) => <ValidarNomina onClose={handleClose} />}
+      </ModalRight>
       <ModalGeneral
         show={modalQuestionPagar}
         handleCloseModal={() => setModalQuestionPagar(false)}

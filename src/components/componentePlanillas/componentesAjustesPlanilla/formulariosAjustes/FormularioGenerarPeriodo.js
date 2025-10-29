@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
 import { Eye, Save, AlertTriangle, CalendarCheck } from "lucide-react";
+import axiosInstance from "../../../../api/AxiosInstance";
+import ToastAlert from "../../../componenteToast/ToastAlert";
+import { useQueryClient } from "@tanstack/react-query";
 
 const formatearFecha = (fecha) => {
   const anio = fecha.getFullYear();
@@ -28,6 +31,8 @@ const getMesNombre = (mesIndex) => {
 
 export function FormularioGenerarPeriodo({ onClose, ultimoCorteReal = null }) {
   const anioActual = new Date().getFullYear();
+  const [loading, setLoading] = useState(false);
+  const queryClient = useQueryClient();
 
   const [anio, setAnio] = useState(anioActual);
   const [frecuencia, setFrecuencia] = useState("mensual");
@@ -38,26 +43,16 @@ export function FormularioGenerarPeriodo({ onClose, ultimoCorteReal = null }) {
   const [periodosPreview, setPeriodosPreview] = useState([]);
   const [error, setError] = useState("");
 
-  // --- LÓGICA DE AUTOCOMPLETADO ---
-  // Se ejecuta cuando el componente carga o la prop cambia
   useEffect(() => {
     if (ultimoCorteReal) {
-      // Caso 2: DB con datos. Calculamos el día siguiente.
-      // Usamos T12:00:00Z para evitar problemas de zona horaria
       const ultimoCorteDate = new Date(ultimoCorteReal + "T12:00:00Z");
       ultimoCorteDate.setDate(ultimoCorteDate.getDate() + 1);
       setFechaInicio(formatearFecha(ultimoCorteDate));
     } else {
-      // Caso 1: DB vacía. Dejamos el campo en blanco.
-      // El 'required' en el input obligará al usuario a llenarlo.
       setFechaInicio("");
     }
-  }, [ultimoCorteReal]); // Se recalcula si la prop cambia
+  }, [ultimoCorteReal]);
 
-  /**
-   * Lógica principal (REHECHA)
-   * Se basa solo en los 3 inputs del formulario.
-   */
   const handleGenerarPreview = (e) => {
     e.preventDefault();
     setError("");
@@ -150,14 +145,58 @@ export function FormularioGenerarPeriodo({ onClose, ultimoCorteReal = null }) {
   /**
    * Simula el guardado de los periodos generados.
    */
-  const handleGuardarPeriodos = () => {
-    console.log("Guardando en BD:", periodosPreview);
-    // TODO: Llamar a la mutación de React Query para enviar
-    // periodosPreview al backend (INSERT masivo).
+  // Tu función (ahora con manejo de errores robusto)
 
-    alert("¡Periodos generados y guardados exitosamente!");
-    setPeriodosPreview([]); // Limpiar la preview
-    if (onClose) onClose(); // Cierra el modal después de guardar
+  const handleGuardarPeriodos = async () => {
+    // Opcional: Poner un estado de 'cargando' aquí
+    setLoading(true);
+
+    try {
+      const response = await axiosInstance.post("/periodoNomina", {
+        periodosPreview, // Esto envía un objeto: { periodosPreview: [...] }
+      });
+
+      // Éxito (Código 200 o 201)
+      if (response.data.success) {
+        ToastAlert(
+          "success",
+          response.data.message || "Se registró correctamente"
+        );
+        queryClient.invalidateQueries(["listaPeriodosNomina"]);
+        setLoading(false);
+        onClose(); // Cierra el modal
+      }
+    } catch (error) {
+      if (error.response) {
+        const data = error.response.data;
+
+        if (error.response.status === 422 && data.errors) {
+          try {
+            const errores = data.errors;
+            const primerErrorKey = Object.keys(errores)[0];
+            const mensajeError = errores[primerErrorKey][0];
+
+            ToastAlert("error", `Error de validación: ${mensajeError}`);
+          } catch (e) {
+            ToastAlert("error", "Error de validación. Revise los datos.");
+          }
+        } else if (data.message) {
+          ToastAlert("error", `Error: ${data.message}`);
+        } else {
+          // Error genérico si el formato no es el esperado
+          ToastAlert("error", "Ocurrió un error inesperado en el servidor.");
+        }
+      } else if (error.request) {
+        // La petición se hizo pero no hubo respuesta (ej. sin internet)
+        ToastAlert("error", "No se pudo conectar con el servidor.");
+      } else {
+        // Error al configurar la petición
+        ToastAlert("error", "Error al preparar la solicitud.");
+      }
+    } finally {
+      // Opcional: Quitar el estado de 'cargando'
+      setLoading(false);
+    }
   };
 
   const opcionesAnio = [anioActual, anioActual + 1, anioActual + 2];
@@ -299,9 +338,18 @@ export function FormularioGenerarPeriodo({ onClose, ultimoCorteReal = null }) {
                 type="button"
                 className="btn-guardar"
                 onClick={handleGuardarPeriodos}
+                disabled={loading}
               >
-                <Save size={18} className="me-2" />
-                Confirmar y Guardar
+                {loading ? (
+                  <div>
+                    <span className="load">Cargando...</span>
+                  </div>
+                ) : (
+                  <>
+                    <Save size={18} className="me-2" />
+                    Confirmar y Guardar
+                  </>
+                )}
               </button>
               <button
                 type="button"
