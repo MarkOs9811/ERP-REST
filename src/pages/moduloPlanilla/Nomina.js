@@ -5,6 +5,7 @@ import {
   BanknoteArrowUp,
   FileChartColumnIncreasing,
   MessageCircleQuestionMark,
+  UserRoundCheck,
 } from "lucide-react";
 import { BotonMotionGeneral } from "../../components/componentesReutilizables/BotonMotionGeneral";
 import ModalGeneral from "../../components/componenteToast/ModalGeneral";
@@ -72,7 +73,8 @@ export function Nomina() {
               <BotonMotionGeneral
                 text="Validar Nomina"
                 onClick={() => setModalValidarNomina(true)}
-                icon={<BanknoteArrowUp className="text-auto" />}
+                classDefault="btn d-flex align-items-center text-center rounded-3 border-0 shadow-sm text-dark text-nowrap"
+                icon={<UserRoundCheck className="text-auto" />}
               />
             </div>
           </div>

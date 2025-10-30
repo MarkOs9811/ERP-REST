@@ -3,7 +3,7 @@ import "../css/NavegacionEstilos.css";
 
 import { useDispatch } from "react-redux";
 import { toggleSidebar } from "../redux/sideBarSlice";
-import { Megaphone, StoreIcon } from "lucide-react";
+import { Megaphone, StoreIcon, UserRoundCheck } from "lucide-react";
 
 export function Navegacion() {
   const location = useLocation(); // Obtiene la ubicación actual
@@ -103,6 +103,14 @@ export function Navegacion() {
           </div>
         </div>
         <div className="d-flex align-items-center ">
+          <div className="d-flex me-3 gap-2 align-items-center">
+            <button
+              className="btn btn-outline-dark d-flex align-items-center gap-1"
+              onClick={() => navigate("/marcarAsistencia")}
+            >
+              <UserRoundCheck /> Asistencia
+            </button>
+          </div>
           {rolesLocalStorage.some((rol) => rol.nombre === "incidencias") && (
             <div className="d-flex me-3 gap-2 align-items-center">
               <button

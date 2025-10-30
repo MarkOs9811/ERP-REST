@@ -113,11 +113,11 @@ export function TakeAsistencia() {
 
   return (
     <div
-      className="d-flex justify-content-center align-items-center vh-100"
+      className="d-flex justify-content-center align-items-center h-100 "
       style={{ backgroundColor: "#f0f2f5" }}
     >
       <div
-        className="card shadow-lg border-0 p-4 rounded-4"
+        className="card shadow-lg border-0 p-4 rounded-4 justify-content-center"
         style={{ width: "100%", maxWidth: "500px" }}
       >
         <div className="card-header bg-white border-0 text-center mb-3">

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   Spinner,
@@ -6,82 +6,75 @@ import {
   Button,
   Tabs,
   Tab,
-  Table,
+  // Table, // Ya no la usamos, usamos TablasGenerales
   Form,
-} from "react-bootstrap"; // Asumo que usas react-bootstrap
+} from "react-bootstrap";
 import {
   PlayCircle,
   CheckCircle,
-  AlertTriangle,
   Clock,
   DollarSign,
   Briefcase,
   CalendarCheck,
   XCircle,
+  Check, // Icono para "Aprobar"
+  MinusCircle, // Icono para "Rechazar" o "Excluir"
 } from "lucide-react";
+import axiosInstance from "../../../api/AxiosInstance";
+import ToastAlert from "../../componenteToast/ToastAlert";
+import { TablasGenerales } from "../../componentesReutilizables/TablasGenerales";
 
-// --- Helpers de API (Asegúrate de que estas rutas sean correctas) ---
-import axiosInstance from "../../../api/AxiosInstance"; // Tu instancia de Axios
-import ToastAlert from "../../componenteToast/ToastAlert"; // Tu componente de alertas
+// --- IMPORTAMOS TU COMPONENTE DE TABLA ---
+// (Ajusta la ruta si es diferente)
 
-// 1. Llama al controlador para obtener los datos del periodo a resolver
+// --- API Helpers ---
 const fetchDatosParaResolver = async () => {
-  const response = await axiosInstance.get("/validaNomina"); // Tu endpoint
-  // Retorna el objeto { periodo, asistencias, adelantos, horasExtra, vacaciones }
+  const response = await axiosInstance.get("/validaNomina");
   return response.data.data;
 };
 
-// 2. Llama a la API para cambiar el estado de 1 (Abierto) a 2 (En Validación)
 const iniciarValidacionApi = async (idPeriodo) => {
-  // Debes crear esta ruta en tu backend (POST o PUT)
   const { data } = await axiosInstance.post(
     `/periodoNomina/iniciarValidacion/${idPeriodo}`
   );
   return data;
 };
 
-// 3. Llama a la API final para pagar y cambiar el estado de 2 a 3 (Cerrado)
 const generarPagosApi = async (idPeriodo) => {
-  // Debes crear esta ruta en tu backend (POST)
   const { data } = await axiosInstance.post(
     `/periodoNomina/generarPagos/${idPeriodo}`
   );
   return data;
 };
-// --- Fin Helpers de API ---
+// --- Fin API Helpers ---
 
 export function ValidarNomina({ onClose }) {
   const queryClient = useQueryClient();
-
-  // Flag para habilitar el botón final de pago
-  const [incidenciasResueltas, setIncidenciasResueltas] = useState(false);
+  const [confirmadoResuelto, setConfirmadoResuelto] = useState(false);
 
   // --- Data Fetching ---
   const {
     data: datosNomina,
     isLoading,
     isError,
-    error, // Captura el objeto de error
+    error,
   } = useQuery({
     queryKey: ["datosParaResolverNomina"],
     queryFn: fetchDatosParaResolver,
     refetchOnWindowFocus: false,
-    staleTime: 5 * 60 * 1000, // Datos frescos por 5 mins
-    enabled: !!onClose, // Solo se activa si el modal está "montado" (tiene onClose)
+    staleTime: 5 * 60 * 1000,
+    enabled: !!onClose,
   });
 
-  console.log("data-nomina", datosNomina);
-
-  // --- Mutación para "Iniciar Validación" (cambiar estado 1 -> 2) ---
-  const { mutate: iniciarValidacion, isLoading: iniciando } = useMutation({
+  // --- Mutaciones ---
+  const { mutate: iniciarValidacion, isPending: iniciando } = useMutation({
     mutationFn: iniciarValidacionApi,
     onSuccess: (data) => {
       ToastAlert(
         "success",
         data.message || "Periodo bloqueado. Listo para validar."
       );
-      // Invalida la query para que useQuery vuelva a fetchear y actualice el estado del periodo
-      queryClient.invalidateQueries(["datosParaResolverNomina"]);
+      queryClient.invalidateQueries({ queryKey: ["datosParaResolverNomina"] });
     },
     onError: (error) => {
       ToastAlert(
@@ -91,17 +84,16 @@ export function ValidarNomina({ onClose }) {
     },
   });
 
-  // --- Mutación para "Generar Pagos" (cambiar estado 2 -> 3) ---
-  const { mutate: generarPagos, isLoading: pagando } = useMutation({
+  const { mutate: generarPagos, isPending: pagando } = useMutation({
     mutationFn: generarPagosApi,
     onSuccess: (data) => {
       ToastAlert(
         "success",
         data.message || "Nómina generada y periodo cerrado."
       );
-      queryClient.invalidateQueries(["listaPeriodosNomina"]); // Refresca la tabla principal (Configuración)
-      queryClient.invalidateQueries(["nomina"]); // Refresca la tabla de nómina (si la tienes en otra query)
-      onClose(); // Cierra este modal
+      queryClient.invalidateQueries({ queryKey: ["listaPeriodosNomina"] });
+      queryClient.invalidateQueries({ queryKey: ["nomina"] });
+      onClose();
     },
     onError: (error) => {
       ToastAlert(
@@ -111,7 +103,7 @@ export function ValidarNomina({ onClose }) {
     },
   });
 
-  // --- Handlers de Botones ---
+  // --- Handlers ---
   const handleIniciarValidacion = () => {
     if (datosNomina?.periodo?.id) {
       iniciarValidacion(datosNomina.periodo.id);
@@ -119,7 +111,6 @@ export function ValidarNomina({ onClose }) {
   };
 
   const handleGenerarPagos = () => {
-    // Podrías añadir un modal de confirmación aquí
     if (datosNomina?.periodo?.id) {
       generarPagos(datosNomina.periodo.id);
     }
@@ -135,8 +126,8 @@ export function ValidarNomina({ onClose }) {
         </div>
       );
     }
+
     if (isError) {
-      // Muestra el mensaje de error específico si viene de la API, o uno genérico
       const errorMessage =
         error.response?.data?.message ||
         error.message ||
@@ -144,13 +135,16 @@ export function ValidarNomina({ onClose }) {
       return (
         <Alert variant="danger" className="m-3">
           <strong>Error:</strong> {errorMessage}
+          <p className="mb-0 small">
+            {error.response?.status == 404
+              ? "Asegúrese de que exista un periodo en estado 'Abierto' para validar."
+              : "Verifique su conexión o contacte a soporte."}
+          </p>
         </Alert>
       );
     }
 
-    // Si la data está lista y es válida
     if (datosNomina && datosNomina.periodo) {
-      // Usamos '|| []' para evitar errores si alguna lista viene nula
       const {
         periodo,
         asistencias = [],
@@ -159,15 +153,175 @@ export function ValidarNomina({ onClose }) {
         vacaciones = [],
       } = datosNomina;
 
-      const estaAbierto = periodo.estado === 1;
-      const estaEnValidacion = periodo.estado === 2;
+      const estaAbierto = periodo.estado == 1;
+      const estaEnValidacion = periodo.estado == 2;
+      const estaSoloEnVistaPrevia = estaAbierto;
+
+      // --- 💡 DEFINICIÓN DE COLUMNAS PARA LAS TABLAS 💡 ---
+
+      // Columnas para ASISTENCIAS
+      const columnasAsistencias = [
+        {
+          name: "Empleado",
+          // Usamos la relación 'empleado' (que es una Persona)
+          selector: (row) =>
+            row.empleado
+              ? `${row.empleado.nombre} ${row.empleado.apellidos}`
+              : "N/A",
+          sortable: true,
+          grow: 2,
+        },
+        { name: "Fecha", selector: (row) => row.fechaEntrada, sortable: true },
+        { name: "Entrada", selector: (row) => row.horaEntrada },
+        { name: "Salida", selector: (row) => row.horaSalida },
+        { name: "Horas", selector: (row) => row.horasTrabajadas },
+        {
+          name: "Estado",
+          selector: (row) => row.estadoAsistencia,
+          sortable: true,
+        },
+        {
+          name: "Acciones",
+          cell: (row) => (
+            <Button
+              variant="outline-primary"
+              size="sm"
+              disabled={estaSoloEnVistaPrevia}
+              title="Resolver Incidencia"
+            >
+              Resolver
+            </Button>
+          ),
+          ignoreRowClick: true,
+          allowOverflow: true,
+          button: true,
+        },
+      ];
+
+      // Estilos para ASISTENCIAS (resalta las que no son puntuales)
+      const asistenciaCondicional = [
+        {
+          when: (row) => row.estadoAsistencia !== "Puntual", // Cambia 'Puntual' por tu estado "bueno"
+          style: {
+            backgroundColor: "var(--bs-warning-bg-subtle)", // Amarillo suave de Bootstrap
+          },
+        },
+      ];
+
+      // Columnas para ADELANTOS
+      const columnasAdelantos = [
+        {
+          name: "Empleado",
+          // Usamos la relación anidada 'usuario.empleado.persona'
+          selector: (row) =>
+            row.usuario?.empleado?.persona
+              ? `${row.usuario.empleado.persona.nombre} ${row.usuario.empleado.persona.apellidos}`
+              : "N/A",
+          sortable: true,
+          grow: 2,
+        },
+        { name: "Fecha", selector: (row) => row.fecha, sortable: true },
+        {
+          name: "Monto",
+          selector: (row) => parseFloat(row.monto), // Asegurarse que sea número para ordenar
+          cell: (row) => `S/ ${parseFloat(row.monto).toFixed(2)}`,
+          sortable: true,
+        },
+        { name: "Descripción", selector: (row) => row.descripcion, grow: 2 },
+        {
+          name: "Acciones",
+          cell: (row) => (
+            <Button
+              variant="outline-danger"
+              size="sm"
+              disabled={estaSoloEnVistaPrevia}
+              title="Excluir Adelanto"
+            >
+              <MinusCircle size={16} />
+            </Button>
+          ),
+          ignoreRowClick: true,
+          allowOverflow: true,
+          button: true,
+        },
+      ];
+
+      // Columnas para HORAS EXTRA
+      const columnasHorasExtra = [
+        {
+          name: "Empleado",
+          selector: (row) =>
+            row.usuario?.empleado?.persona
+              ? `${row.usuario.empleado.persona.nombre} ${row.usuario.empleado.persona.apellidos}`
+              : "N/A",
+          sortable: true,
+          grow: 2,
+        },
+        { name: "Fecha", selector: (row) => row.fecha, sortable: true },
+        {
+          name: "Horas",
+          selector: (row) => row.horas_trabajadas,
+          sortable: true,
+        },
+        { name: "Estado", selector: (row) => row.estado, sortable: true },
+        {
+          name: "Acciones",
+          cell: (row) => (
+            <div className="d-flex gap-1">
+              <Button
+                variant="outline-success"
+                size="sm"
+                disabled={estaSoloEnVistaPrevia}
+                title="Aprobar"
+              >
+                <Check size={16} />
+              </Button>
+              <Button
+                variant="outline-danger"
+                size="sm"
+                disabled={estaSoloEnVistaPrevia}
+                title="Rechazar"
+              >
+                <XCircle size={16} />
+              </Button>
+            </div>
+          ),
+          ignoreRowClick: true,
+          allowOverflow: true,
+          button: true,
+        },
+      ];
+
+      // Columnas para VACACIONES
+      const columnasVacaciones = [
+        {
+          name: "Empleado",
+          selector: (row) =>
+            row.usuario?.empleado?.persona
+              ? `${row.usuario.empleado.persona.nombre} ${row.usuario.empleado.persona.apellidos}`
+              : "N/A",
+          sortable: true,
+          grow: 2,
+        },
+        {
+          name: "Fecha Inicio",
+          selector: (row) => row.fecha_inicio,
+          sortable: true,
+        },
+        { name: "Fecha Fin", selector: (row) => row.fecha_fin, sortable: true },
+        { name: "Días", selector: (row) => row.dias_totales, sortable: true },
+        { name: "Estado", selector: (row) => row.estado, sortable: true },
+      ];
+
+      // --- FIN DEFINICIÓN DE COLUMNAS ---
 
       return (
         <>
           {/* 1. SECCIÓN SUPERIOR DE BOTONES */}
-          <div className="p-3 bg-light border-bottom d-flex justify-content-between align-items-center flex-wrap gap-2">
-            {" "}
-            {/* flex-wrap para móviles */}
+          <div
+            className="p-3 border-bottom d-flex justify-content-between align-items-center flex-wrap gap-2"
+            style={{ backgroundColor: "#f8f9fa" }}
+          >
             <div>
               <h5 className="mb-0">
                 Periodo a Resolver: <strong>{periodo.nombrePeriodo}</strong>
@@ -177,10 +331,9 @@ export function ValidarNomina({ onClose }) {
               </span>
             </div>
             <div className="d-flex gap-2">
-              {/* Botón 1: Solo si está Abierto */}
               {estaAbierto && (
                 <Button
-                  variant="primary"
+                  variant="dark"
                   onClick={handleIniciarValidacion}
                   disabled={iniciando}
                 >
@@ -188,15 +341,14 @@ export function ValidarNomina({ onClose }) {
                   {iniciando ? "Iniciando..." : "Comenzar Validación"}
                 </Button>
               )}
-              {/* Botón 2: Solo si está En Validación */}
               {estaEnValidacion && (
                 <Button
                   variant="success"
                   onClick={handleGenerarPagos}
-                  disabled={!incidenciasResueltas || pagando}
+                  disabled={!confirmadoResuelto || pagando}
                   title={
-                    !incidenciasResueltas
-                      ? "Confirme que las incidencias están resueltas"
+                    !confirmadoResuelto
+                      ? "Debe confirmar que todas las incidencias están resueltas"
                       : "Generar pago final y cerrar periodo"
                   }
                 >
@@ -226,27 +378,44 @@ export function ValidarNomina({ onClose }) {
               >
                 <div className="py-2">
                   <p className="text-muted small">
-                    Revise las asistencias. Use los controles (que añadirá aquí)
-                    para marcar faltas, aprobar manualmente, etc.
+                    {estaSoloEnVistaPrevia
+                      ? "Revise las incidencias de asistencia. Para editarlas, debe 'Comenzar Validación'."
+                      : "Use los controles para marcar faltas, aprobar manualmente, etc."}
                   </p>
 
-                  {/* Switch de Confirmación */}
-                  <Form.Check
-                    type="switch"
-                    id="confirmar-resolucion-asistencias"
-                    label="Confirmo que todas las incidencias de asistencia han sido resueltas."
-                    checked={incidenciasResueltas}
-                    onChange={(e) => setIncidenciasResueltas(e.target.checked)}
-                    disabled={!estaEnValidacion} // Solo se puede marcar si está en validación
-                    className="mb-3 fw-bold"
-                  />
-
-                  {/* AQUÍ DEBES RENDERIZAR TU TABLA/LISTA DE ASISTENCIAS CON CHECKBOXES */}
-                  <Alert variant="info" size="sm">
-                    Pendiente: Implementar la tabla de asistencias con
-                    checkboxes/botones para resolver. Debe mostrar los{" "}
-                    {asistencias.length} registros.
+                  {/* --- Nota Importante sobre tu petición de "Grid de Checks" --- */}
+                  <Alert variant="light" className="small">
+                    <strong>Nota:</strong> Esta tabla muestra los{" "}
+                    {asistencias.length} registros de asistencia (fichajes)
+                    encontrados. El próximo paso será implementar una vista de
+                    "Incidencias" que muestre solo los días con Faltas o
+                    Tardanzas para resolver.
                   </Alert>
+
+                  {estaEnValidacion && (
+                    <Form.Check
+                      type="switch"
+                      id="confirmar-resolucion-asistencias"
+                      label="Confirmo que todas las incidencias de asistencia han sido resueltas."
+                      checked={confirmadoResuelto}
+                      onChange={(e) => setConfirmadoResuelto(e.target.checked)}
+                      className="mb-3 fw-bold p-3 border rounded"
+                      style={{ backgroundColor: "#e8f3ff" }}
+                    />
+                  )}
+
+                  {asistencias.length > 0 ? (
+                    <TablasGenerales
+                      columnas={columnasAsistencias}
+                      datos={asistencias}
+                      conditionalRowStyles={asistenciaCondicional}
+                    />
+                  ) : (
+                    <Alert variant="secondary" size="sm">
+                      No se encontraron registros de asistencia para este
+                      periodo.
+                    </Alert>
+                  )}
                 </div>
               </Tab>
 
@@ -262,33 +431,10 @@ export function ValidarNomina({ onClose }) {
               >
                 <div className="py-2">
                   {adelantos.length > 0 ? (
-                    <>
-                      <p className="text-muted small">
-                        Adelantos que se descontarán en este periodo:
-                      </p>
-                      <Table striped bordered hover size="sm" responsive>
-                        <thead>
-                          <tr>
-                            <th>ID</th>
-                            <th>Usuario</th>
-                            <th>Monto</th>
-                            <th>Fecha</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {adelantos.map((a) => (
-                            <tr key={a.id}>
-                              <td>{a.id}</td>
-                              <td>
-                                {a.usuario?.nombres} {a.usuario?.apellidos}
-                              </td>
-                              <td>S/ {a.monto}</td>
-                              <td>{a.fecha}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </Table>
-                    </>
+                    <TablasGenerales
+                      columnas={columnasAdelantos}
+                      datos={adelantos}
+                    />
                   ) : (
                     <Alert variant="secondary" size="sm">
                       No hay adelantos registrados para este periodo.
@@ -308,10 +454,16 @@ export function ValidarNomina({ onClose }) {
                 }
               >
                 <div className="py-2">
-                  {/* AQUÍ RENDERIZAS LA TABLA DE HORAS EXTRA */}
-                  <Alert variant="info" size="sm">
-                    Pendiente: Mostrar tabla de {horasExtra.length} horas extra.
-                  </Alert>
+                  {horasExtra.length > 0 ? (
+                    <TablasGenerales
+                      columnas={columnasHorasExtra}
+                      datos={horasExtra}
+                    />
+                  ) : (
+                    <Alert variant="secondary" size="sm">
+                      No hay horas extra registradas para este periodo.
+                    </Alert>
+                  )}
                 </div>
               </Tab>
 
@@ -326,11 +478,16 @@ export function ValidarNomina({ onClose }) {
                 }
               >
                 <div className="py-2">
-                  {/* AQUÍ RENDERIZAS LA TABLA DE VACACIONES */}
-                  <Alert variant="info" size="sm">
-                    Pendiente: Mostrar tabla de {vacaciones.length} registros de
-                    vacaciones.
-                  </Alert>
+                  {vacaciones.length > 0 ? (
+                    <TablasGenerales
+                      columnas={columnasVacaciones}
+                      datos={vacaciones}
+                    />
+                  ) : (
+                    <Alert variant="secondary" size="sm">
+                      No hay vacaciones registradas para este periodo.
+                    </Alert>
+                  )}
                 </div>
               </Tab>
             </Tabs>
@@ -342,14 +499,13 @@ export function ValidarNomina({ onClose }) {
     // Fallback si no hay datos o periodo
     return (
       <Alert variant="warning" className="m-3">
-        No hay datos de nómina para mostrar.
+        No se encontró ningún periodo de nómina activo para validar.
       </Alert>
     );
   };
 
   return (
     <>
-      {/* Cuerpo del Modal */}
       <div
         className="modal-body p-0"
         style={{ minHeight: "400px", maxHeight: "80vh", overflowY: "auto" }}
@@ -359,15 +515,13 @@ export function ValidarNomina({ onClose }) {
 
       {/* Footer del Modal */}
       <div className="modal-footer">
-        <Button
-          variant="outline-secondary"
+        <button
+          className="btn-cerrar-modal"
           onClick={onClose}
           disabled={iniciando || pagando}
         >
-          <XCircle size={18} className="me-1" />
           Cancelar
-        </Button>
-        {/* El botón de Pagar ya está en la sección superior, no se repite aquí */}
+        </button>
       </div>
     </>
   );

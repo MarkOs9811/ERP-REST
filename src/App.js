@@ -149,6 +149,10 @@ function App() {
                               <ContenedorPrincipal>
                                 <ToastContainer />
                                 <Routes>
+                                  <Route
+                                    path="/marcarAsistencia"
+                                    element={<TakeAsistencia />}
+                                  />
                                   <Route path="/" element={<Home />} />
                                   <Route
                                     path="/usuarios"
