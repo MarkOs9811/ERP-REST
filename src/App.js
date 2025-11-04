@@ -111,7 +111,6 @@ function App() {
             <Route path="/google" element={<GoogleRedirectHandler />} />
             <Route path="/login" element={<Login />} />
             <Route path="/tomarAsistencia" element={<TakeAsistencia />} />
-
             <Route
               path="/*"
               element={

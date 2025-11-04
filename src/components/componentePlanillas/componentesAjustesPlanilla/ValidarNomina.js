@@ -33,13 +33,6 @@ const fetchDatosParaResolver = async () => {
   return response.data.data;
 };
 
-const iniciarValidacionApi = async (idPeriodo) => {
-  const { data } = await axiosInstance.post(
-    `/periodoNomina/iniciarValidacion/${idPeriodo}`
-  );
-  return data;
-};
-
 const generarPagosApi = async (idPeriodo) => {
   const { data } = await axiosInstance.post(
     `/periodoNomina/generarPagos/${idPeriodo}`
@@ -51,7 +44,7 @@ const generarPagosApi = async (idPeriodo) => {
 export function ValidarNomina({ onClose }) {
   const queryClient = useQueryClient();
   const [confirmadoResuelto, setConfirmadoResuelto] = useState(false);
-
+  const [iniciando, setIniciando] = useState(false);
   // --- Data Fetching ---
   const {
     data: datosNomina,
@@ -67,22 +60,13 @@ export function ValidarNomina({ onClose }) {
   });
 
   // --- Mutaciones ---
-  const { mutate: iniciarValidacion, isPending: iniciando } = useMutation({
-    mutationFn: iniciarValidacionApi,
-    onSuccess: (data) => {
-      ToastAlert(
-        "success",
-        data.message || "Periodo bloqueado. Listo para validar."
+  const iniciarValidacion = async (idPeriodo) => {
+    try {
+      const response = await axiosInstance.put(
+        `/periodoNomina/iniciarValidacion/${idPeriodo}`
       );
-      queryClient.invalidateQueries({ queryKey: ["datosParaResolverNomina"] });
-    },
-    onError: (error) => {
-      ToastAlert(
-        "error",
-        error.response?.data?.message || "Error al iniciar validación"
-      );
-    },
-  });
+    } catch (Error) {}
+  };
 
   const { mutate: generarPagos, isPending: pagando } = useMutation({
     mutationFn: generarPagosApi,
