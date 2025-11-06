@@ -1,41 +1,56 @@
 import { motion } from "framer-motion";
+import "../../css/EstiloBotonMotion.css";
 
-/**
- * Botón animado reutilizable con Framer Motion.
- *
- * Props:
- * - text: texto del botón
- * - icon: componente de ícono (por ejemplo, <FileText size={18} />)
- * - color1 y color2: colores del gradiente de fondo
- * - onClick: función al hacer clic
- */
 export function BotonMotionGeneral({
   text = "Botón",
   icon = null,
-  color1 = "#ebebebff",
-  color2 = "#e2e2e2ff",
   onClick = () => {},
-  classDefault = "btn d-flex align-items-center gap-1 px-3 py-2 w-auto rounded-3 border-0 shadow-sm ms-auto text-dark",
+  loading = false,
+  loadingText = "Cargando...", // Prop opcional para el texto de carga
+  classDefault = "d-flex align-items-center gap-1 px-3 py-2 w-auto rounded-3 border shadow-sm ms-auto",
 }) {
-  return (
-    <motion.button
-      whileHover={{
+  // Deshabilitamos las animaciones interactivas si está cargando
+  const whileHover = loading
+    ? {}
+    : {
         scale: 1.05,
         boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.15)",
-      }}
-      whileTap={{ scale: 0.95 }}
+      };
+
+  const whileTap = loading ? {} : { scale: 0.95 };
+
+  return (
+    <motion.button
+      whileHover={whileHover}
+      whileTap={whileTap}
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
       onClick={onClick}
-      className={classDefault}
-      style={{
-        background: `linear-gradient(135deg, ${color1}, ${color2})`,
-        fontWeight: "500",
-      }}
+      // Añadimos una clase de opacidad si está cargando
+      className={`${classDefault} btn-motion-theme ${
+        loading ? "opacity-75" : ""
+      }`}
+      // Deshabilitamos el botón
+      disabled={loading}
     >
-      {icon && <span className="me-2">{icon}</span>}
-      {text}
+      {loading ? (
+        // --- ESTADO DE CARGA ---
+        <>
+          <span
+            className="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+          ></span>
+          <span className="ms-2">{loadingText}</span>
+        </>
+      ) : (
+        // --- ESTADO NORMAL ---
+        <>
+          {icon && <span className="me-2">{icon}</span>}
+          {text}
+        </>
+      )}
     </motion.button>
   );
 }

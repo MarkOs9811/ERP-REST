@@ -1,0 +1,31 @@
+/* =============================== */
+/* === Botón Motion Adaptable === */
+/* =============================== */
+
+/* --- 1. MODO CLARO (Default) --- */
+/* Esta clase define los colores base del botón */
+.btn-motion-theme {
+    /* Tus colores originales 'color1' y 'color2' */
+    background: linear-gradient(135deg, #ebebebff, #e2e2e2ff);
+
+    /* Tu 'text-dark' original */
+    color: #212529;
+
+    font-weight: 500;
+
+    /* Un color de borde para modo claro */
+    border-color: #ced4da;
+}
+
+/* --- 2. MODO NOCHE (Dark) --- */
+/* Sobrescribimos la clase cuando 'body' tenga 'dark-theme' */
+body.dark-theme .btn-motion-theme {
+    /* Un degradado oscuro */
+    background: linear-gradient(135deg, #2b2f36, #1d232c)!important;
+
+    /* Texto claro */
+    color: #f1f1f1;
+
+    /* Borde oscuro */
+    border-color: #4a5568;
+}

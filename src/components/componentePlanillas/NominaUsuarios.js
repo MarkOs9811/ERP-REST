@@ -1,29 +1,14 @@
-import { useQuery } from "@tanstack/react-query";
-import { GetNomina } from "../../service/accionesPlanilla/GetNomina";
-import { useEffect, useState, useMemo } from "react"; // 1. Importar useMemo
+import { useState, useMemo } from "react"; // 1. Importar useMemo
 import { Eye } from "lucide-react";
 import { TablasGenerales } from "../componentesReutilizables/TablasGenerales";
 import { Cargando } from "../componentesReutilizables/Cargando";
 import ModalRight from "../componentesReutilizables/ModalRight";
 import { PerfilGeneralNomina } from "./PerfilGeneralNomina";
 
-export function NominaUsuarios({ search = "", updateList }) {
+export function NominaUsuarios({ search = "", updateList, usuariosData }) {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
   const [modalPerfilEmpleado, setModalPerfilEmpleado] = useState(false);
   const [idEmpleado, setIdEmpleado] = useState(null);
-
-  const {
-    data: usuariosData = [],
-    isLoading,
-    isError,
-    // refetch, // (No lo estás usando, pero está bien)
-  } = useQuery({
-    queryKey: ["nomina", updateList],
-    queryFn: GetNomina,
-    retry: 1,
-    refetchOnWindowFocus: false,
-    staleTime: 5 * 60 * 1000, // 2. (Recomendado) Añade 5 min de staleTime
-  });
 
   // 3. ELIMINAMOS EL useEffect y useState PARA EL FILTRADO
   // const [filteredUsuarios, setFilteredUsuarios] = useState([]);
@@ -165,14 +150,8 @@ export function NominaUsuarios({ search = "", updateList }) {
 
   return (
     <div>
-      {isLoading ? (
-        <Cargando />
-      ) : (
-        <>
-          {/* 6. AHORA 'filteredUsuarios' es de useMemo y 'columns' está corregido */}
-          <TablasGenerales columnas={columns} datos={filteredUsuarios} />
-        </>
-      )}
+      {/* 6. AHORA 'filteredUsuarios' es de useMemo y 'columns' está corregido */}
+      <TablasGenerales columnas={columns} datos={filteredUsuarios} />
 
       <ModalRight
         isOpen={modalPerfilEmpleado}

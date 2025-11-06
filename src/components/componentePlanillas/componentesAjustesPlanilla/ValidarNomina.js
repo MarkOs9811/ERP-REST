@@ -15,7 +15,6 @@ import {
 import axiosInstance from "../../../api/AxiosInstance";
 import ToastAlert from "../../componenteToast/ToastAlert";
 import { TablasGenerales } from "../../componentesReutilizables/TablasGenerales";
-import ModalGeneral from "../../componenteToast/ModalGeneral";
 
 // --- API Helpers (Sin cambios) ---
 const fetchDatosParaResolver = async () => {
@@ -32,9 +31,7 @@ const generarPagosApi = async (idPeriodo) => {
 
 export function ValidarNomina({ onClose }) {
   const queryClient = useQueryClient();
-  const [dataPeriodo, setDataPeriodo] = useState(false);
 
-  const [modalQuestionValidar, setModalQuestiónValidar] = useState(false);
   const [confirmadoResuelto, setConfirmadoResuelto] = useState(false);
   const [iniciando, setIniciando] = useState(false);
   const [activeTab, setActiveTab] = useState("asistencias"); // 💡 Estado para las pestañas
@@ -92,30 +89,6 @@ export function ValidarNomina({ onClose }) {
   const handleIniciarValidacion = () => {
     if (datosNomina?.periodo?.id) {
       iniciarValidacion(datosNomina.periodo.id);
-    }
-  };
-
-  const handleValidarIncidencias = async (idPeriodo) => {
-    try {
-      setIniciando(true);
-      const response = await axiosInstance.put(
-        `/periodoNomina/validarIncidencias/${idPeriodo}`
-      );
-      ToastAlert(
-        "success",
-        response.data.message ||
-          "Validación iniciada. Ahora puede resolver incidencias."
-      );
-
-      queryClient.invalidateQueries({ queryKey: ["datosParaResolverNomina"] });
-    } catch (error) {
-      const errorMessage =
-        error.response?.data?.message ||
-        error.message ||
-        "Error desconocido al iniciar la validación";
-      ToastAlert("error", errorMessage);
-    } finally {
-      setIniciando(false);
     }
   };
 
@@ -238,22 +211,6 @@ export function ValidarNomina({ onClose }) {
       selector: (row) => row.estadoAsistencia,
       sortable: true,
     },
-    {
-      name: "Acciones",
-      cell: (row) => (
-        <button
-          type="button"
-          className="btn btn-outline-primary btn-sm"
-          disabled={estaSoloEnVistaPrevia}
-          title="Resolver Incidencia"
-        >
-          Resolver
-        </button>
-      ),
-      ignoreRowClick: true,
-      allowOverflow: true,
-      button: true,
-    },
   ];
 
   const asistenciaCondicional = [
@@ -312,39 +269,32 @@ export function ValidarNomina({ onClose }) {
       sortable: true,
       grow: 2,
     },
+    {
+      name: "Documento",
+      selector: (row) =>
+        row.usuario?.empleado?.persona
+          ? `${row.usuario.empleado.persona.documento_identidad}`
+          : "N/A",
+      sortable: true,
+      grow: 2,
+    },
     { name: "Fecha", selector: (row) => row.fecha, sortable: true },
     {
       name: "Horas",
       selector: (row) => row.horas_trabajadas,
       sortable: true,
     },
-    { name: "Estado", selector: (row) => row.estado, sortable: true },
     {
-      name: "Acciones",
-      cell: (row) => (
-        <div className="d-flex gap-1">
-          <button
-            type="button"
-            className="btn btn-outline-success btn-sm"
-            disabled={estaSoloEnVistaPrevia}
-            title="Aprobar"
-          >
-            <Check size={16} />
-          </button>
-
-          <button
-            type="button"
-            className="btn btn-outline-danger btn-sm"
-            disabled={estaSoloEnVistaPrevia}
-            title="Rechazar"
-          >
-            <XCircle size={16} />
-          </button>
-        </div>
-      ),
-      ignoreRowClick: true,
-      allowOverflow: true,
-      button: true,
+      name: "Estado",
+      sortable: true,
+      cell: (row) =>
+        row.estado == 1 ? (
+          <div className="badge bg-success">Realizado</div>
+        ) : (
+          <>
+            <div className="badge bg-warning">Pendiente</div>
+          </>
+        ),
     },
   ];
 
@@ -614,28 +564,6 @@ export function ValidarNomina({ onClose }) {
           Cancelar
         </button>
       </div>
-      <ModalGeneral
-        show={modalQuestionValidar}
-        handleCloseModal={() => {
-          setModalQuestiónValidar(false);
-          setConfirmadoResuelto(false);
-        }}
-        handleAccion={handleValidarIncidencias}
-        idProceso={dataPeriodo}
-      >
-        <div className="card p-3">
-          <div className="card-header">
-            <h5>Confirmar Validación</h5>
-          </div>
-          <div className="card-body">
-            <h6>
-              Se validarán todas las asistencias, horas extras, adelanto de
-              sueldo, y vacaciones
-            </h6>
-            <small>Está opción permitirá que se realicen los pagos</small>
-          </div>
-        </div>
-      </ModalGeneral>
     </>
   );
 }

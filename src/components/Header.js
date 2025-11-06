@@ -155,7 +155,7 @@ export function Header() {
             width={"350px"}
             hideFooter={true}
             title={"Notificaciones"}
-            icono={<Bell className="text-auto" />}
+            icono={<Bell className="text-muted" />}
           >
             <NotificacionesPanel />
           </ModalRight>

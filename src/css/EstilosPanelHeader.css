@@ -1,43 +1,44 @@
+.notificaciones-panel-list {
+    background: rgba(241, 241, 241, 0.822)!important;
+}
+.notificacion-item{
+    background-color: transparent!important;
+}
+
 /* Panel de notificaciones - tema claro */
 .offcanvas-end-custom-notify {
     background: #fff !important;
     color: #222 !important;
+    /* Color de texto base (modo claro) */
 }
 
-/* Fondo de la lista de notificaciones en tema claro */
-.notificaciones-panel-list {
-    background: #fff !important;
-}
+
+
+/* --- Tus estilos de íconos y perfil (sin cambios) --- */
 .ico-header {
     background-color: #fff;
     transition: transform 0.3s ease;
     display: inline-flex;
-    /* centra mejor íconos */
     align-items: center;
     justify-content: center;
-    /* opcional, para íconos redondeados */
-   
     cursor: pointer;
 }
+
 .ico-header:hover {
     transform: scale(1.1);
     background-color: #f0f0f0;
-   
 }
 
-/* MODODARK */
-/* para iconos */
-body.dark-theme .ico-header{
-    background-color:transparent;
+body.dark-theme .ico-header {
+    background-color: transparent;
     color: white;
 }
 
 body.dark-theme .ico-header:hover {
     transform: scale(1.1);
     background-color: #343e4d;
-
 }
-/* para el panel de pefil */
+
 body.dark-theme .offcanvas-end-custom {
     background: #23272f !important;
     color: #f1f1f1 !important;
@@ -51,48 +52,47 @@ body.dark-theme .offcanvas-end-custom .btn {
     color: #f1f1f1;
 }
 
-/* para el panel de notificaciones */
+/* --- Tus estilos del panel de notificaciones (MODO NOCHE) --- */
 body.dark-theme .offcanvas-end-custom-notify {
     background: #23272f2a !important;
     color: #f1f1f1 !important;
+    /* Color de texto base (modo noche) */
 }
 
-body.dark-theme .offcanvas-end-custom-notify .border-bottom {
-    border-bottom: 1px solid #444 !important;
-}
 
-body.dark-theme .offcanvas-end-custom-notify .btn,
-body.dark-theme .offcanvas-end-custom-notify .btn-link,
-body.dark-theme .offcanvas-end-custom-notify .btn-sm {
+
+body.dark-theme  .btn,
+body.dark-theme  .btn-link,
+body.dark-theme  .btn-sm {
     color: #f1f1f1 !important;
     background: transparent;
 }
 
-body.dark-theme .offcanvas-end-custom-notify .btn-light {
+body.dark-theme  .btn-light {
     background: #2c313a !important;
     color: #fff !important;
     border-color: #444 !important;
 }
 
-body.dark-theme .offcanvas-end-custom-notify .bg-light {
+body.dark-theme  .bg-light {
     background: #2c313a !important;
     color: #f1f1f1 !important;
 }
 
-body.dark-theme .offcanvas-end-custom-notify .text-muted {
+body.dark-theme  .text-muted {
     color: #b0b0b0 !important;
 }
 
-body.dark-theme .offcanvas-end-custom-notify .badge.bg-info {
+body.dark-theme  .badge.bg-info {
     background: #3a8fd7 !important;
     color: #fff !important;
 }
 
-body.dark-theme .offcanvas-end-custom-notify .btn-close {
+body.dark-theme  .btn-close {
     filter: invert(1);
 }
 
-body.dark-theme .offcanvas-end-custom-notify .bg-notify-unread {
+body.dark-theme  .bg-notify-unread {
     background: #23272f !important;
 }
 
@@ -101,4 +101,33 @@ body.dark-theme .offcanvas-end-custom-notify .bg-notify-unread {
 }
 
 body.dark-theme .notificaciones-panel-list {
-    background: #23272f44!important; }
+    background: #23272f44 !important;
+}
+
+
+/* ================================================= */
+/* --- 🎨 NUEVAS CLASES (LA SOLUCIÓN DEFINITIVA) --- */
+/* ================================================= */
+
+/* --- MODO CLARO --- */
+/* Título de la notificación (negro) */
+ .notif-titulo {
+    color: #212529!important;
+}
+
+/* Mensaje de la notificación (gris) */
+.notif-mensaje {
+    color: #6c757d;
+}
+
+/* --- MODO NOCHE --- */
+/* Título de la notificación (blanco) */
+body.dark-theme .notif-titulo {
+    color: #f1f1f1!important;
+}
+
+/* Mensaje de la notificación (gris claro) */
+body.dark-theme .notif-mensaje {
+    color: #b0b0b0;
+    /* Tu color 'text-muted' para modo noche */
+}

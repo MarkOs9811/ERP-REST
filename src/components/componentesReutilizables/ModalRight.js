@@ -63,7 +63,7 @@ const ModalRight = ({
             </h3>
             <p className="text-muted">{subtitulo}</p>
           </div>
-          <span className="ms-auto me-3">{icono}</span>
+          <span className="ms-auto me-3 ">{icono}</span>
         </div>
 
         <div

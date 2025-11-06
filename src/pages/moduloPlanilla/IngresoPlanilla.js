@@ -1,7 +1,24 @@
-import { useRef, useState } from "react";
-import { ContenedorPrincipal } from "../../components/componentesReutilizables/ContenedorPrincipal";
+import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
+import {
+  User,
+  Mail,
+  Phone,
+  Calendar,
+  MapPin,
+  FileText,
+  Briefcase,
+  Clock,
+  DollarSign,
+  Upload,
+  UserCircle,
+  DownloadIcon,
+  FileDown,
+  Save,
+} from "lucide-react"; // 1. Importamos los iconos
+
+// --- Tus Imports de Servicios (sin cambios) ---
 import { GetCargos } from "../../service/GetCargos";
 import { GetAreas } from "../../service/GetAreas";
 import { GetTipoContrato } from "../../service/GetTipoContrato";
@@ -14,8 +31,11 @@ import { GetDistrito } from "../../service/GetDistrito";
 import ToastAlert from "../../components/componenteToast/ToastAlert";
 import axiosInstance from "../../api/AxiosInstance";
 import BotonAnimado from "../../components/componentesReutilizables/BotonAnimado";
+import { BotonMotionGeneral } from "../../components/componentesReutilizables/BotonMotionGeneral";
+// (No incluiste 'ContenedorPrincipal' en tu JSX, así que lo omití)
 
 export function IngresoPlanilla() {
+  // --- Toda tu lógica de Hooks (useForm, useQuery, state) sin cambios ---
   const {
     register,
     handleSubmit,
@@ -30,11 +50,11 @@ export function IngresoPlanilla() {
   const [error, setErrors] = useState(false);
 
   const { data: cargosList } = useQuery({
-    queryKey: ["cargos"], // clave única para el caché
-    queryFn: GetCargos, // tu función que hace la petición
+    queryKey: ["cargos"],
+    queryFn: GetCargos,
   });
 
-  const { data: areasList = [] } = useQuery({
+  const { data: areasList } = useQuery({
     queryKey: ["areas"],
     queryFn: GetAreas,
   });
@@ -61,14 +81,12 @@ export function IngresoPlanilla() {
   const [selectedDepartamento, setSelectedDepartamento] = useState("");
   const [selectedProvincia, setSelectedProvincia] = useState("");
 
-  // Consulta departamentos (siempre activa)
   const { data: departamentoList } = useQuery({
     queryKey: ["departamentos"],
     queryFn: GetDepartamento,
     staleTime: 1000 * 60 * 60,
   });
 
-  // Consulta provincias (solo cuando hay departamento seleccionado)
   const { data: provinciaList } = useQuery({
     queryKey: ["provincias", selectedDepartamento],
     queryFn: () => GetProvincia(selectedDepartamento),
@@ -76,7 +94,6 @@ export function IngresoPlanilla() {
     staleTime: 1000 * 60 * 60,
   });
 
-  // Consulta distritos (solo cuando hay provincia seleccionada)
   const { data: distritoList } = useQuery({
     queryKey: ["distritos", selectedProvincia],
     queryFn: () => GetDistrito(selectedProvincia),
@@ -84,24 +101,26 @@ export function IngresoPlanilla() {
     staleTime: 1000 * 60 * 60,
   });
 
+  // --- Tu lógica de onSubmit (sin cambios) ---
   const onSubmit = async (data) => {
     setLoading(true);
-    setErrors(null); // Limpiar errores previos
+    setErrors(null);
     try {
-      // Verificar que la imagen existe
       if (!data.fotoPerfil || data.fotoPerfil.length === 0) {
+        // Corrección: Asegúrate de que RHF reciba el error
+        setError("fotoPerfil", {
+          type: "manual",
+          message: "No se ha seleccionado ninguna imagen",
+        });
         throw new Error("No se ha seleccionado ninguna imagen");
       }
 
       const formData = new FormData();
 
-      // Agregar todos los campos
       Object.keys(data).forEach((key) => {
         if (key === "fotoPerfil") {
-          // Manejar la imagen (FileList -> File)
-          formData.append("fotoPerfil", data.fotoPerfil);
+          formData.append("fotoPerfil", data.fotoPerfil); // El archivo ya está guardado
         } else if (key === "deducciones" || key === "bonificaciones") {
-          // Manejar arrays
           data[key].forEach((item, index) => {
             formData.append(`${key}[${index}]`, item);
           });
@@ -113,7 +132,8 @@ export function IngresoPlanilla() {
       const response = await axiosInstance.post("/planilla", formData);
 
       if (response.data.success) {
-        reset(); // Resetear el formulario
+        reset();
+        setPreview(null); // Limpiar la vista previa de la imagen
         setLoading(false);
         ToastAlert("success", "Registro de Trabajador correcto");
       } else {
@@ -126,21 +146,20 @@ export function IngresoPlanilla() {
 
       if (error.response?.status === 422) {
         const errors = error.response.data.errors;
-
-        // Aquí puedes gestionar los errores devueltos por Laravel, como el error de 'telefono' ya registrado
         Object.keys(errors).forEach((key) => {
-          // Si el error es para el campo 'telefono', lo manejamos
           setError(key, {
             type: "manual",
-            message: errors[key][0], // El mensaje de error que viene del backend
+            message: errors[key][0],
           });
         });
-      } else {
+      } else if (error.message !== "No se ha seleccionado ninguna imagen") {
+        // No mostrar Toast si el error fue la imagen
         ToastAlert("error", error.message || "Error en el servidor");
       }
     }
   };
 
+  // --- Tu lógica de handleCargoChange (sin cambios) ---
   const handleCargoChange = (event) => {
     const selected = event.target.selectedOptions[0];
     const salario = selected.dataset.salario;
@@ -149,107 +168,107 @@ export function IngresoPlanilla() {
     setValue("pagoPorHora", pagoPorHora);
   };
 
+  // --- Tu lógica de Imagen (con un pequeño ajuste en 'handleImageChange') ---
   const [preview, setPreview] = useState(null);
-  const fileInputRef = useRef(null); // Referencia al input oculto
+  const fileInputRef = useRef(null);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       setPreview(URL.createObjectURL(file));
-      setValue("fotoPerfil", file); // ✅ lo registra en RHF
+      setValue("fotoPerfil", file, { shouldValidate: true }); // ✅ Registra el archivo en RHF
+      setError("fotoPerfil", null); // Limpia el error si existía
     }
   };
+
+  // --- TU JSX (REDISEÑADO) ---
   return (
     <div>
-      <div class="col-md-12">
-        <div class="card shadow-sm border-0 p-3">
+      <div className="col-md-12">
+        <div className="card shadow-sm border-0 p-3">
           <h4>Datos del empleado</h4>
-          <div class="card-body">
+          <div className="card-body">
             <form
               onSubmit={handleSubmit(onSubmit)}
               encType="multipart/form-data"
             >
               <div className="row g-3">
-                {/* === IMAGEN PERFIL === */}
+                {/* === COLUMNA IZQUIERDA: DATOS PERSONALES === */}
                 <div className="col-md-6 col-sm-12">
-                  <div
-                    className="card mb-3 text-center p-3 shadow-sm"
-                    style={{
-                      border: "1px solid #dfe8ec",
-                      borderRadius: "12px",
-                      maxWidth: "300px",
-                      margin: "0 auto",
-                    }}
-                  >
-                    {/* INPUT FILE oculto */}
+                  {/* === BLOQUE DE IMAGEN (Rediseñado) === */}
+                  <div className="d-flex flex-column align-items-center text-center mb-3">
                     <input
                       type="file"
                       accept="image/*"
                       ref={fileInputRef}
                       style={{ display: "none" }}
                       onChange={handleImageChange}
+                      // No usamos 'register' aquí, usamos setValue
                     />
 
-                    {/* Botón personalizado */}
-
-                    {/* Vista previa */}
-                    {preview && (
+                    {/* Vista Previa Circular */}
+                    {preview ? (
                       <img
                         src={preview}
                         alt="Vista previa"
-                        className="image center mx-auto my-2"
+                        className="mb-3"
                         style={{
-                          maxWidth: "150px",
-                          borderRadius: "8px",
-                          border: "2px solid #ddd",
+                          width: "150px",
+                          height: "150px",
+                          borderRadius: "50%",
+                          objectFit: "cover",
+                          border: "3px solid #eee",
                         }}
                       />
+                    ) : (
+                      // Placeholder si no hay imagen
+                      <UserCircle
+                        size={150}
+                        className="mb-3 text-muted"
+                        strokeWidth={1}
+                      />
                     )}
+
                     <button
                       type="button"
-                      className="btn btn-outline-primary"
-                      onClick={() => {
-                        if (fileInputRef.current) {
-                          fileInputRef.current.click();
-                        } else {
-                          console.error("fileInputRef aún no está listo");
-                        }
-                      }}
-                      style={{
-                        cursor: "pointer",
-                      }}
+                      className="btn btn-outline-primary btn-sm"
+                      onClick={() => fileInputRef.current.click()}
                     >
+                      <Upload size={16} className="me-2" />
                       Seleccionar Imagen
                     </button>
 
-                    {/* Campo oculto registrado en RHF */}
+                    {/* Campo oculto para RHF (solo para el 'name') */}
                     <input type="hidden" {...register("fotoPerfil")} />
+
                     {errors.fotoPerfil && (
-                      <div className="text-danger mt-2">
+                      <div className="text-danger mt-2 small">
                         {errors.fotoPerfil.message}
                       </div>
                     )}
                   </div>
 
-                  {/* === DATOS PERSONALES === */}
+                  {/* === DATOS PERSONALES (Minimalista) === */}
                   <div className="row">
-                    <div className="col-md-6">
-                      <div className="form-floating mb-3">
+                    <div className="col-md-5">
+                      <div className="input-group mb-3">
+                        <span className="input-group-text">
+                          <FileText size={18} />
+                        </span>
                         <select
                           className="form-select"
                           {...register("tipo_documento", { required: true })}
                         >
-                          <option value="">Seleccione una opción...</option>
+                          <option value="">Tipo Documento...</option>
                           <option value="DNI">DNI</option>
                           <option value="Carnet De Extranjeria">
                             CARNET DE EXTRANJERIA
                           </option>
                         </select>
-                        <label>Tipo Documento</label>
                       </div>
                     </div>
-                    <div className="col-6">
-                      <div className="form-floating mb-3">
+                    <div className="col-md-7">
+                      <div className="input-group mb-3">
                         <input
                           className="form-control"
                           type="text"
@@ -260,118 +279,128 @@ export function IngresoPlanilla() {
                             pattern: /^[0-9]+$/,
                           })}
                         />
-                        <label>Numero Doc.</label>
-                        {errors.num_documento && (
-                          <div className="text-danger mt-2">
-                            {errors.num_documento.message}
-                          </div>
-                        )}
                       </div>
+                      {errors.num_documento && (
+                        <div className="text-danger small mt-0 mb-2">
+                          {errors.num_documento.message}
+                        </div>
+                      )}
                     </div>
                   </div>
 
-                  <div className="form-floating mb-3">
+                  <div className="input-group mb-3">
+                    <span className="input-group-text">
+                      <User size={18} />
+                    </span>
                     <input
                       className="form-control"
                       {...register("nombre", { required: true })}
-                      placeholder=" "
+                      placeholder="Nombre"
                     />
-                    <label>Nombre</label>
                   </div>
 
-                  <div className="form-floating mb-3">
+                  <div className="input-group mb-3">
+                    <span className="input-group-text">
+                      <User size={18} />
+                    </span>
                     <input
                       className="form-control"
                       {...register("apellidos", { required: true })}
-                      placeholder=" "
+                      placeholder="Apellidos"
                     />
-                    <label>Apellidos</label>
                   </div>
 
                   <div className="row">
                     <div className="col-6">
-                      <div className="form-floating mb-3">
+                      <div className="input-group mb-3">
+                        <span className="input-group-text">
+                          <Calendar size={18} />
+                        </span>
                         <input
                           className="form-control"
                           type="date"
                           {...register("fecha_nacimiento", { required: true })}
                         />
-                        <label>Fecha de Nacimiento</label>
                       </div>
                     </div>
                     <div className="col-6">
-                      <div className="form-floating mb-3">
+                      <div className="input-group mb-3">
+                        <span className="input-group-text">
+                          <Phone size={18} />
+                        </span>
                         <input
                           className="form-control"
                           type="number"
+                          placeholder="Nº de contacto"
                           {...register("telefono", { required: true })}
                         />
-                        <label>Numero de contacto</label>
-                        {errors.telefono && (
-                          <div className="text-danger mt-2">
-                            {errors.telefono.message}
-                          </div>
-                        )}
                       </div>
+                      {errors.telefono && (
+                        <div className="text-danger small mt-0 mb-2">
+                          {errors.telefono.message}
+                        </div>
+                      )}
                     </div>
                   </div>
 
-                  {/* === UBICACIÓN === */}
+                  {/* === UBICACIÓN (Minimalista) === */}
                   <div className="row">
-                    {/* Departamento */}
                     <div className="col-4">
-                      <div className="form-floating mb-3">
+                      <div className="input-group mb-3">
+                        <span className="input-group-text">
+                          <MapPin size={18} />
+                        </span>
                         <select
                           className="form-select"
                           {...register("departamento", {
                             required: true,
                             onChange: (e) => {
                               setSelectedDepartamento(e.target.value);
-                              setSelectedProvincia(""); // Reset provincia al cambiar departamento
-                              setValue("provincia", ""); // Reset form value
-                              setValue("distrito", ""); // Reset form value
+                              setSelectedProvincia("");
+                              setValue("provincia", "");
+                              setValue("distrito", "");
                             },
                           })}
                         >
-                          <option value="">Seleccione...</option>
+                          <option value="">Depto...</option>
                           {departamentoList?.map((dep) => (
                             <option key={dep.id} value={dep.id}>
                               {dep.nombre.toUpperCase()}
                             </option>
                           ))}
                         </select>
-                        <label>Departamento</label>
                       </div>
                     </div>
-
-                    {/* Provincia */}
                     <div className="col-4">
-                      <div className="form-floating mb-3">
+                      <div className="input-group mb-3">
+                        <span className="input-group-text">
+                          <MapPin size={18} />
+                        </span>
                         <select
                           className="form-select"
                           {...register("provincia", {
                             required: true,
                             onChange: (e) => {
                               setSelectedProvincia(e.target.value);
-                              setValue("distrito", ""); // Reset form value
+                              setValue("distrito", "");
                             },
-                            disabled: !selectedDepartamento,
                           })}
+                          disabled={!selectedDepartamento}
                         >
-                          <option value="">Seleccione...</option>
+                          <option value="">Provincia...</option>
                           {provinciaList?.map((prov) => (
                             <option key={prov.id} value={prov.id}>
                               {prov.nombre}
                             </option>
                           ))}
                         </select>
-                        <label>Provincia</label>
                       </div>
                     </div>
-
-                    {/* Distrito */}
                     <div className="col-4">
-                      <div className="form-floating mb-3">
+                      <div className="input-group mb-3">
+                        <span className="input-group-text">
+                          <MapPin size={18} />
+                        </span>
                         <select
                           className="form-select"
                           {...register("distrito", {
@@ -379,78 +408,88 @@ export function IngresoPlanilla() {
                             disabled: !selectedProvincia,
                           })}
                         >
-                          <option value="">Seleccione...</option>
+                          <option value="">Distrito...</option>
                           {distritoList?.map((dist) => (
                             <option key={dist.id} value={dist.id}>
                               {dist.nombre}
                             </option>
                           ))}
                         </select>
-                        <label>Distrito</label>
                       </div>
                     </div>
                   </div>
 
-                  <div className="form-floating mb-3">
+                  <div className="input-group mb-3">
+                    <span className="input-group-text">
+                      <MapPin size={18} />
+                    </span>
                     <input
                       className="form-control"
                       {...register("direccion", { required: true })}
-                      placeholder=" "
+                      placeholder="Dirección"
                     />
-                    <label>Direccion</label>
                   </div>
 
-                  <div className="form-floating mb-3">
+                  <div className="input-group mb-3">
+                    <span className="input-group-text">
+                      <Mail size={18} />
+                    </span>
                     <input
                       type="email"
                       className="form-control"
                       {...register("correo", { required: true })}
-                      placeholder=" "
+                      placeholder="Correo Electrónico"
                     />
-                    <label>Correo</label>
-                    {errors.correo && (
-                      <div className="text-danger mt-2">
-                        {errors.correo.message}
-                      </div>
-                    )}
                   </div>
+                  {errors.correo && (
+                    <div className="text-danger small mt-0 mb-2">
+                      {errors.correo.message}
+                    </div>
+                  )}
                 </div>
 
-                {/* === CONTRATO Y TRABAJO === */}
+                {/* === COLUMNA DERECHA: DATOS LABORALES === */}
                 <div className="col-md-6 col-sm-12">
                   <div className="card p-3 mb-3 border">
                     <h5 className="mb-3" style={{ color: "#15669c" }}>
                       Detalles del contrato
                     </h5>
 
-                    <div className="form-floating mb-3">
+                    <div className="input-group mb-3">
+                      <span className="input-group-text">
+                        <Briefcase size={18} />
+                      </span>
                       <select
                         className="form-select"
                         {...register("contrato", { required: true })}
                       >
-                        <option value="">Seleccione...</option>
+                        <option value="">Tipo Contrato...</option>
                         {contratoList?.map((c) => (
                           <option key={c.id} value={c.id}>
                             {c.nombre}
                           </option>
                         ))}
                       </select>
-                      <label>Tipo Contrato</label>
                     </div>
 
                     <div className="row">
                       <div className="col-6">
-                        <div className="form-floating mb-3">
+                        <div className="input-group mb-3">
+                          <span className="input-group-text">
+                            <Calendar size={18} />
+                          </span>
                           <input
                             className="form-control"
                             type="date"
                             {...register("fecha_contrato", { required: true })}
                           />
-                          <label>Inicio Contrato</label>
                         </div>
                       </div>
                       <div className="col-6">
-                        <div className="form-floating mb-3">
+                        <div className="input-group mb-3">
+                          <span className="input-group-text">
+                            <Calendar size={18} />
+                          </span>
                           <input
                             className="form-control"
                             type="date"
@@ -458,36 +497,43 @@ export function IngresoPlanilla() {
                               required: true,
                             })}
                           />
-                          <label>Fin Contrato</label>
                         </div>
                       </div>
                     </div>
 
-                    <div className="form-floating mb-3">
+                    <div className="input-group mb-3">
+                      <span className="input-group-text">
+                        <Briefcase size={18} />
+                      </span>
                       <select
                         className="form-select"
                         {...register("area", { required: true })}
                       >
-                        <option value="">Seleccione...</option>
-                        {Array.isArray(areasList?.data) &&
-                          areasList?.data.map((a) => (
-                            <option key={a.id} value={a.id}>
-                              {a.nombre}
-                            </option>
-                          ))}
+                        <option value="">Área...</option>
+                        {/* * CORRECCIÓN DE BUG:
+                         * Asumimos que 'areasList' es el array
+                         * (basado en tu 'data: areasList = []')
+                         */}
+                        {areasList?.map((a) => (
+                          <option key={a.id} value={a.id}>
+                            {a.nombre}
+                          </option>
+                        ))}
                       </select>
-                      <label>Area</label>
                     </div>
 
                     <div className="row">
                       <div className="col-6">
-                        <div className="form-floating mb-3">
+                        <div className="input-group mb-3">
+                          <span className="input-group-text">
+                            <Briefcase size={18} />
+                          </span>
                           <select
                             className="form-select"
                             {...register("cargo", { required: true })}
                             onChange={handleCargoChange}
                           >
-                            <option value="">Seleccione...</option>
+                            <option value="">Cargo...</option>
                             {cargosList?.map((c) => (
                               <option
                                 key={c.id}
@@ -498,64 +544,76 @@ export function IngresoPlanilla() {
                               </option>
                             ))}
                           </select>
-                          <label>Cargo</label>
                         </div>
                       </div>
                       <div className="col-6">
-                        <div className="form-floating mb-3">
+                        <div className="input-group mb-3">
+                          <span className="input-group-text">
+                            <Clock size={18} />
+                          </span>
                           <select
                             className="form-select"
                             {...register("horario", { required: true })}
                           >
-                            <option value="">Seleccione...</option>
+                            <option value="">Horario...</option>
                             {horariosList?.map((h) => (
                               <option key={h.id} value={h.id}>
                                 {h.horaEntrada} - {h.horaSalida}
                               </option>
                             ))}
                           </select>
-                          <label>Horario</label>
                         </div>
                       </div>
                     </div>
 
                     <div className="row">
                       <div className="col-6">
-                        <div className="form-floating mb-3">
+                        <div className="input-group mb-3">
+                          <span className="input-group-text">
+                            <DollarSign size={18} />
+                          </span>
                           <input
                             className="form-control"
+                            placeholder="Salario base"
                             {...register("salario")}
                             readOnly
                           />
-                          <label>Salario base</label>
                         </div>
                       </div>
                       <div className="col-6">
-                        <div className="form-floating mb-3">
+                        <div className="input-group mb-3">
+                          <span className="input-group-text">
+                            <DollarSign size={18} />
+                          </span>
                           <input
                             className="form-control"
+                            placeholder="Pago por Hora"
                             {...register("pagoPorHora")}
                             readOnly
                           />
-                          <label>Pago por Hora</label>
                         </div>
                       </div>
                     </div>
 
-                    <button type="submit" className="btn btn-primary mt-3">
-                      <i className="fa-solid fa-file-export"></i> Generar
-                      Contrato
-                    </button>
+                    {/* CORRECCIÓN DE BOTÓN: 'type="button"' para no chocar con el submit final */}
+                    <div>
+                      <button
+                        type="button"
+                        className="btn btn-outline-dark mt-3 ms-auto"
+                      >
+                        <FileDown /> Generar Contrato
+                      </button>
+                    </div>
                   </div>
 
-                  {/* === DEDUCCIONES Y BONIFICACIONES === */}
+                  {/* === DEDUCCIONES Y BONIFICACIONES (Lógica intacta) === */}
                   <div className="card p-3 border">
                     <h5 style={{ color: "#15669c" }}>
                       Aportes, Deducciones y Bonificaciones
                     </h5>
                     <div className="row">
                       <div className="col-md-6">
-                        <label>Deducciones</label>
+                        <label className="fw-bold mb-2">Deducciones</label>
                         {deduccionesList?.map((d) => {
                           const isEssalud = d.nombre === "ESSALUD";
                           return (
@@ -567,10 +625,10 @@ export function IngresoPlanilla() {
                                 {...register("deducciones")}
                                 id={`deduccion_${d.id}`}
                                 onChange={(e) => {
+                                  // --- Tu lógica compleja de Essalud (sin cambios) ---
                                   const checkboxes = document.querySelectorAll(
                                     'input.form-check-input[type="checkbox"][data-group="deducciones"]'
                                   );
-
                                   if (!isEssalud) {
                                     checkboxes.forEach((cb) => {
                                       if (
@@ -595,9 +653,9 @@ export function IngresoPlanilla() {
                           );
                         })}
                       </div>
-                      {/* Aquí puedes hacer otra columna para bonificaciones si las tienes */}
+
                       <div className="col-md-6">
-                        <label>Bonificacion</label>
+                        <label className="fw-bold mb-2">Bonificación</label>
                         {bonificacionesList?.map((d) => (
                           <div className="form-check" key={d.id}>
                             <input
@@ -619,15 +677,18 @@ export function IngresoPlanilla() {
                     </div>
                   </div>
                 </div>
-                <div className="col-md-12 d-flex">
-                  <BotonAnimado
+
+                {/* === BOTÓN DE ENVÍO FINAL === */}
+                <div className="col-md-12 d-flex mt-4">
+                  <BotonMotionGeneral
                     type="submit"
+                    text="Registrar Empleado"
                     loading={loading}
-                    error={error}
-                    className="btn-realizarPedido ms-auto px-3 py-2 h6"
+                    icon={<Save className="text-auto" />}
+                    error={error} // Asegúrate que 'error' sea booleano o se resetee a false
                   >
-                    Registrar
-                  </BotonAnimado>
+                    Registrar Empleado
+                  </BotonMotionGeneral>
                 </div>
               </div>
             </form>

@@ -1,72 +1,154 @@
-import { Settings2, Settings2Icon } from "lucide-react";
-import React, { useState } from "react";
+import { Bell, AlertTriangle, Inbox } from "lucide-react";
+import React, { useState, useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
+import "../../css/EstilosPanelHeader.css";
+// Asegúrate de que esta ruta sea correcta
+import { GetNotificaciones } from "../../service/accionesGenerales/GetNotificaciones";
 
-const notificacionesEjemplo = [
-  {
-    id: 1,
-    user: "Deja Brady",
-    avatar: "https://randomuser.me/api/portraits/women/44.jpg",
-    mensaje: "sent you a friend request",
-    tiempo: "a few seconds",
-    tipo: "Communication",
-    acciones: ["Accept", "Decline"],
-    unread: true,
-  },
-  {
-    id: 2,
-    user: "Jayvon Hull",
-    avatar: "https://randomuser.me/api/portraits/men/32.jpg",
-    mensaje: "mentioned you in Minimal UI",
-    tiempo: "a day",
-    tipo: "Project UI",
-    acciones: ["Reply"],
-    contenido:
-      "@Jaydon Frankie feedback by asking questions or just leave a note of appreciation.",
-    unread: true,
-  },
-  {
-    id: 3,
-    user: "Lainey Davidson",
-    avatar: "https://randomuser.me/api/portraits/women/65.jpg",
-    mensaje: "added file to File manager",
-    tiempo: "2 days",
-    tipo: "File manager",
-    archivo: {
-      nombre: "design-suriname-2015.mp3",
-      peso: "2.3 MB",
-    },
-    acciones: ["Download"],
-    unread: true,
-  },
-  {
-    id: 4,
-    user: "Angelique Morse",
-    avatar: "https://randomuser.me/api/portraits/women/12.jpg",
-    mensaje: "added new tags to File manager",
-    tiempo: "3 days",
-    tipo: "File manager",
-    tags: ["Design", "Dashboard", "Design system"],
-    unread: false,
-  },
-];
+const getIcon = (tipo, prioridad) => {
+  if (tipo === "alerta" || prioridad === "alta") {
+    return <AlertTriangle size={24} className="text-danger" />;
+  }
+  return <Bell size={24} className="text-primary" />;
+};
 
+const getPriorityBadge = (prioridad) => {
+  switch (prioridad) {
+    case "alta":
+      return <span className="badge bg-danger text-white">Alta</span>;
+    case "media":
+      return <span className="badge bg-warning text-dark">Media</span>;
+    default:
+      return <span className="badge bg-secondary text-white">Baja</span>;
+  }
+};
+
+const getTypeBadge = (tipo) => {
+  if (tipo === "alerta") {
+    return <span className="badge bg-warning text-dark">{tipo}</span>;
+  }
+  return <span className="badge bg-info text-white">{tipo}</span>;
+};
+
+/**
+ * Componente de un solo ítem de notificación (Diseño Corregido)
+ */
+const NotificacionItem = ({ n }) => {
+  return (
+    <div
+      key={n.id}
+      className={`notificacion-item d-flex align-items-center p-3 gap-3 ${
+        n.estado == 0 ? "bg-notify-unread" : ""
+      }`}
+    >
+      <div className="m-3">{getIcon(n.tipo, n.prioridad)}</div>
+
+      <div className="flex-grow-1">
+        <div className="fw-bold notif-titulo">{n.titulo}</div>
+        <div className="small notif-mensaje mt-1">{n.mensaje}</div>
+        <div className="small mt-2 d-flex gap-2">
+          {getPriorityBadge(n.prioridad)}
+          {getTypeBadge(n.tipo)}
+        </div>
+      </div>
+
+      {n.estado == 0 && (
+        <span className="ms-auto">
+          <span className="text-danger" style={{ fontSize: 18 }}>
+            ●
+          </span>
+        </span>
+      )}
+    </div>
+  );
+};
+
+/**
+ * Panel principal de Notificaciones
+ */
 export function NotificacionesPanel({ show, onClose }) {
   const [tab, setTab] = useState("all");
 
+  const {
+    data: todasNotificaciones = [],
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["notificaciones"],
+    queryFn: GetNotificaciones,
+    staleTime: 1000 * 60 * 5,
+  });
+
+  const unreadCount = useMemo(
+    () => todasNotificaciones.filter((n) => n.estado == 0).length,
+    [todasNotificaciones]
+  );
+  const allCount = todasNotificaciones.length;
+
   const tabs = [
-    { key: "all", label: "All", count: 22 },
-    { key: "unread", label: "Unread", count: 12 },
-    { key: "archived", label: "Archived", count: 10 },
+    { key: "all", label: "Todas", count: allCount },
+    { key: "unread", label: "No Leídas", count: unreadCount },
   ];
+
+  const notificacionesFiltradas = useMemo(() => {
+    if (tab === "unread") {
+      return todasNotificaciones.filter((n) => n.estado == 0);
+    }
+    return todasNotificaciones;
+  }, [tab, todasNotificaciones]);
+
+  const renderContenido = () => {
+    if (isLoading) {
+      return (
+        <div
+          className="d-flex justify-content-center align-items-center"
+          style={{ minHeight: 200 }}
+        >
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Cargando...</span>
+          </div>
+        </div>
+      );
+    }
+
+    if (isError) {
+      return (
+        <div className="text-center p-4 text-danger">
+          <AlertTriangle className="mb-2" />
+          <p>No se pudieron cargar las notificaciones.</p>
+          <small className="text-muted">{error?.message}</small>
+        </div>
+      );
+    }
+
+    if (notificacionesFiltradas.length === 0) {
+      return (
+        <div className="text-center p-4 text-muted">
+          <Inbox className="mb-2" />
+          <p>
+            {tab === "unread"
+              ? "No tienes notificaciones no leídas."
+              : "No hay notificaciones."}
+          </p>
+        </div>
+      );
+    }
+
+    return notificacionesFiltradas.map((n) => (
+      <NotificacionItem key={n.id} n={n} />
+    ));
+  };
 
   return (
     <div>
-      <div className="d-flex gap-2 px-3 py-2">
+      <div className="d-flex gap-2 px-3 py-2 border-bottom">
         {tabs.map((t) => (
           <button
+            type="button"
             key={t.key}
             className={`btn btn-sm rounded-pill fw-bold ${
-              tab === t.key ? "btn-light border" : "btn-link"
+              tab === t.key ? "btn-light border" : "text-body-secondary"
             }`}
             style={{ minWidth: 70 }}
             onClick={() => setTab(t.key)}
@@ -75,86 +157,13 @@ export function NotificacionesPanel({ show, onClose }) {
           </button>
         ))}
       </div>
-      <div className="notificaciones-panel-list">
-        {notificacionesEjemplo.map((n) => (
-          <div
-            key={n.id}
-            className={`px-3 py-3 border-bottom d-flex gap-3 align-items-start ${
-              n.unread ? "bg-notify-unread" : ""
-            }`}
-          >
-            <img
-              src={n.avatar}
-              alt={n.user}
-              style={{
-                width: 44,
-                height: 44,
-                borderRadius: "50%",
-                objectFit: "cover",
-              }}
-            />
-            <div className="flex-grow-1">
-              <div className="fw-bold">
-                {n.user} <span className="fw-normal">{n.mensaje}</span>
-              </div>
-              <div className="small text-muted">
-                {n.tiempo} · {n.tipo}
-              </div>
-              {n.contenido && (
-                <div className="bg-light rounded-2 p-2 my-2 small">
-                  {n.contenido}
-                </div>
-              )}
-              {n.archivo && (
-                <div className="bg-light rounded-2 p-2 my-2 d-flex align-items-center justify-content-between">
-                  <span>
-                    <span className="me-2">{n.archivo.nombre}</span>
-                    <span className="text-muted small">{n.archivo.peso}</span>
-                  </span>
-                  <button className="btn btn-sm btn-outline-primary">
-                    Download
-                  </button>
-                </div>
-              )}
-              {n.tags && (
-                <div className="mt-2">
-                  {n.tags.map((tag, i) => (
-                    <span key={i} className="badge bg-info text-dark me-1">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              )}
-              {n.acciones && (
-                <div className="mt-2 d-flex gap-2">
-                  {n.acciones.map((accion, i) => (
-                    <button
-                      key={i}
-                      className={`btn btn-sm ${
-                        accion === "Accept" || accion === "Reply"
-                          ? "btn-dark"
-                          : "btn-outline-secondary"
-                      }`}
-                    >
-                      {accion}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-            {n.unread && (
-              <span
-                className="ms-2 mt-1"
-                style={{ color: "#00b8d9", fontSize: 18 }}
-              >
-                ●
-              </span>
-            )}
-          </div>
-        ))}
-      </div>
-      <div className="text-center py-3">
-        <button className="btn btn-link fw-bold text-primary">View all</button>
+
+      <div className="notificaciones-panel-list">{renderContenido()}</div>
+
+      <div className="text-center py-2 border-top">
+        <button className="btn btn-link fw-bold text-primary">
+          Marcar todas como leídas
+        </button>
       </div>
     </div>
   );
