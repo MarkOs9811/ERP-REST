@@ -6,10 +6,10 @@
 /* Esta clase define los colores base del botón */
 .btn-motion-theme {
     /* Tus colores originales 'color1' y 'color2' */
-    background: linear-gradient(135deg, #ebebebff, #e2e2e2ff);
+    background: linear-gradient(135deg, rgb(40, 42, 46), rgb(39, 42, 48));
 
     /* Tu 'text-dark' original */
-    color: #212529;
+    color: #dadada;
 
     font-weight: 500;
 

@@ -14,10 +14,16 @@ import { FormularioAddHorasExtras } from "../../components/componentePlanillas/c
 import axiosInstance from "../../api/AxiosInstance";
 import ToastAlert from "../../components/componenteToast/ToastAlert";
 import { Eye, EyeIcon, FileText, Pencil, Plus, Trash2 } from "lucide-react";
+import { FormularioEditHorasExtras } from "../../components/componentePlanillas/componentesHorasExtras/FormularioEditHorasExtras";
+import ModalAlertQuestion from "../../components/componenteToast/ModalAlertQuestion";
 
 export function HorasExtras() {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [modalditHoraExtras, setModalEditHoraExtras] = useState(false);
+  const [dataEditHorasExtras, setDataEditHorasExtras] = useState(false);
+  const [modalEliminarHoraExtra, setModalEliminarHoraExtra] = useState(false);
 
   const queryClient = useQueryClient();
 
@@ -138,6 +144,17 @@ export function HorasExtras() {
     refetchOnWindowFocus: false,
   });
 
+  const handleEliminar = async (id) => {
+    // try {
+    //   const response = await axiosInstance.delete("/horasExtras", id);
+    //   if (response.data.success) {
+    //     ToastAlert("success", "Se eliminó correctamente");
+    //   }
+    // } catch (error) {
+    //   ToastAlert("error", error);
+    // }
+  };
+
   if (isLoading) {
     return <Cargando />; // Mostrar el componente Cargando mientras se cargan los datos
   }
@@ -152,14 +169,12 @@ export function HorasExtras() {
     );
   }
 
-  const eliminarHoraExtra = async (id) => {};
-  const getEditHorasExtras = async (id) => {};
-
   const columnas = [
     {
       name: "ID",
       selector: (row) => row.id,
       sortable: true,
+      width: "100px",
     },
     {
       name: "Empleado",
@@ -167,7 +182,7 @@ export function HorasExtras() {
         `${row.usuario?.empleado.persona.nombre} ${row.usuario?.empleado.persona.apellidos}`,
       sortable: true,
       cell: (row) => (
-        <div>
+        <div className="p-2">
           <div>
             {row.usuario?.empleado.persona.nombre}{" "}
             {row.usuario?.empleado.persona.apellidos}
@@ -210,10 +225,10 @@ export function HorasExtras() {
       cell: (row) => (
         <span
           className={`badge ${
-            row.estado === 1 ? "bg-success" : "bg-warning text-dark"
+            row.estado == 1 ? "bg-success" : "bg-warning text-dark"
           }`}
         >
-          {row.estado === 1 ? (
+          {row.estado == 1 ? (
             <>
               <i className="fas fa-check-circle"></i> Trabajado
             </>
@@ -229,38 +244,36 @@ export function HorasExtras() {
       name: "Acciones",
       cell: (row) => (
         <div>
-          {row.estado === 1 ? (
+          {row.estado == 1 ? (
             <>
-              <button
-                className="btn btn-outline-dark btn-sm"
-                title="Ver detalles"
-              >
-                <EyeIcon className="text-auto" />
-              </button>
-              <button
-                className="btn btn-outline-danger btn-sm"
-                title="Eliminar registro"
-                onClick={() => eliminarHoraExtra(row.id)}
-              >
-                <Trash2 className="text-auto" />
+              <button className="btn-ver btn-sm" title="Ver detalles">
+                <EyeIcon className="text-auto" size={"auto"} />
               </button>
             </>
           ) : (
             <>
-              <button
-                className="btn btn-outline-dark btn-sm"
-                title="Editar Hora extra"
-                onClick={() => getEditHorasExtras(row.id)}
-              >
-                <Pencil className="text-auto" />
-              </button>
-              <button
-                className="btn btn-outline-danger btn-sm"
-                title="Eliminar registro"
-                onClick={() => eliminarHoraExtra(row.id)}
-              >
-                <Trash2 className="text-auto" />
-              </button>
+              <div className="d-flex gap-2">
+                <button
+                  className="btn-editar"
+                  title="Editar Hora extra"
+                  onClick={() => {
+                    setDataEditHorasExtras(row);
+                    setModalEditHoraExtras(true);
+                  }}
+                >
+                  <Pencil className="text-auto" size={"auto"} />
+                </button>
+                <button
+                  className="btn-eliminar"
+                  title="Eliminar registro"
+                  onClick={() => {
+                    setDataEditHorasExtras(row);
+                    setModalEliminarHoraExtra(true);
+                  }}
+                >
+                  <Trash2 className="text-auto" size={"auto"} />
+                </button>
+              </div>
             </>
           )}
         </div>
@@ -270,7 +283,7 @@ export function HorasExtras() {
 
   return (
     <div>
-      <div className="card shadow-sm">
+      <div className="card shadow-sm py-2">
         <div className="card-header d-flex justify-content-between align-items-center p-3">
           <h3 className=" mb-0">Horas Extras</h3>
           <div className="d-flex ms-auto mx-2">
@@ -325,6 +338,35 @@ export function HorasExtras() {
           />
         </div>
       </ModalRight>
+      <ModalRight
+        isOpen={modalditHoraExtras}
+        onClose={() => {
+          setModalEditHoraExtras(false);
+        }}
+        hideFooter={true}
+        title={"Editar horas extras"}
+      >
+        {({ handleClose }) => (
+          <FormularioEditHorasExtras
+            dataHoraExtras={dataEditHorasExtras}
+            onClose={handleClose}
+          />
+        )}
+      </ModalRight>
+
+      <ModalAlertQuestion
+        show={modalEliminarHoraExtra}
+        idEliminar={dataEditHorasExtras.id}
+        nombre={
+          "Para " +
+          dataEditHorasExtras.usuario?.empleado?.persona?.nombre +
+          " " +
+          dataEditHorasExtras.usuario?.empleado?.persona?.apellidos
+        }
+        handleEliminar={handleEliminar()}
+        handleCloseModal={() => setModalEliminarHoraExtra(false)}
+        tipo={"horas extras"}
+      />
     </div>
   );
 }

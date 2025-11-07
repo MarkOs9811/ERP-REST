@@ -143,7 +143,7 @@ export function FormularioAddHorasExtras({
         </div>
       </div>
 
-      <button type="submit" className="btn btn-primary p-3">
+      <button type="submit" className="btn-guardar p-3">
         Registrar
       </button>
     </form>

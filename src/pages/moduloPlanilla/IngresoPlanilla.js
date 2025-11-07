@@ -32,6 +32,7 @@ import ToastAlert from "../../components/componenteToast/ToastAlert";
 import axiosInstance from "../../api/AxiosInstance";
 import BotonAnimado from "../../components/componentesReutilizables/BotonAnimado";
 import { BotonMotionGeneral } from "../../components/componentesReutilizables/BotonMotionGeneral";
+import { CondicionCarga } from "../../components/componentesReutilizables/CondicionCarga";
 // (No incluiste 'ContenedorPrincipal' en tu JSX, así que lo omití)
 
 export function IngresoPlanilla() {
@@ -68,12 +69,20 @@ export function IngresoPlanilla() {
     queryFn: GetHorarios,
   });
 
-  const { data: deduccionesList } = useQuery({
+  const {
+    data: deduccionesList,
+    isLoading: loadingDeducciones,
+    isError: errorDeducciones,
+  } = useQuery({
     queryKey: ["deducciones"],
     queryFn: GetDeducciones,
   });
 
-  const { data: bonificacionesList } = useQuery({
+  const {
+    data: bonificacionesList,
+    isLoading: loadingDBonificaciones,
+    isError: errorBonificaciones,
+  } = useQuery({
     queryKey: ["bonificacion"],
     queryFn: GetBonificacion,
   });
@@ -195,7 +204,7 @@ export function IngresoPlanilla() {
               <div className="row g-3">
                 {/* === COLUMNA IZQUIERDA: DATOS PERSONALES === */}
                 <div className="col-md-6 col-sm-12">
-                  {/* === BLOQUE DE IMAGEN (Rediseñado) === */}
+                  {/* === BLOQUE DE IMAGEN (Sin cambios, ya estaba bien) === */}
                   <div className="d-flex flex-column align-items-center text-center mb-3">
                     <input
                       type="file"
@@ -203,10 +212,7 @@ export function IngresoPlanilla() {
                       ref={fileInputRef}
                       style={{ display: "none" }}
                       onChange={handleImageChange}
-                      // No usamos 'register' aquí, usamos setValue
                     />
-
-                    {/* Vista Previa Circular */}
                     {preview ? (
                       <img
                         src={preview}
@@ -221,14 +227,12 @@ export function IngresoPlanilla() {
                         }}
                       />
                     ) : (
-                      // Placeholder si no hay imagen
                       <UserCircle
                         size={150}
                         className="mb-3 text-muted"
                         strokeWidth={1}
                       />
                     )}
-
                     <button
                       type="button"
                       className="btn btn-outline-primary btn-sm"
@@ -237,10 +241,7 @@ export function IngresoPlanilla() {
                       <Upload size={16} className="me-2" />
                       Seleccionar Imagen
                     </button>
-
-                    {/* Campo oculto para RHF (solo para el 'name') */}
                     <input type="hidden" {...register("fotoPerfil")} />
-
                     {errors.fotoPerfil && (
                       <div className="text-danger mt-2 small">
                         {errors.fotoPerfil.message}
@@ -248,204 +249,274 @@ export function IngresoPlanilla() {
                     )}
                   </div>
 
-                  {/* === DATOS PERSONALES (Minimalista) === */}
+                  {/* === DATOS PERSONALES (Nuevo Diseño) === */}
                   <div className="row">
-                    <div className="col-md-5">
-                      <div className="input-group mb-3">
-                        <span className="input-group-text">
-                          <FileText size={18} />
-                        </span>
-                        <select
-                          className="form-select"
-                          {...register("tipo_documento", { required: true })}
-                        >
-                          <option value="">Tipo Documento...</option>
-                          <option value="DNI">DNI</option>
-                          <option value="Carnet De Extranjeria">
-                            CARNET DE EXTRANJERIA
-                          </option>
-                        </select>
-                      </div>
+                    <div className="col-md-5 mb-3">
+                      <label className="form-label small fw-semi-bold text-muted">
+                        <FileText size={16} className="me-1" /> Tipo Documento
+                      </label>
+                      <select
+                        className={`form-select ${
+                          errors.tipo_documento ? "is-invalid" : ""
+                        }`}
+                        {...register("tipo_documento", {
+                          required: "Este campo es obligatorio",
+                        })}
+                      >
+                        <option value="">Seleccione...</option>
+                        <option value="DNI">DNI</option>
+                        <option value="Carnet De Extranjeria">
+                          CARNET DE EXTRANJERIA
+                        </option>
+                      </select>
+                      {errors.tipo_documento && (
+                        <div className="invalid-feedback">
+                          {errors.tipo_documento.message}
+                        </div>
+                      )}
                     </div>
-                    <div className="col-md-7">
-                      <div className="input-group mb-3">
-                        <input
-                          className="form-control"
-                          type="text"
-                          maxLength="8"
-                          placeholder="Número de Documento"
-                          {...register("num_documento", {
-                            required: true,
-                            pattern: /^[0-9]+$/,
-                          })}
-                        />
-                      </div>
+
+                    <div className="col-md-7 mb-3">
+                      <label className="form-label small fw-semi-bold text-muted">
+                        Número de Documento
+                      </label>
+                      <input
+                        className={`form-control ${
+                          errors.num_documento ? "is-invalid" : ""
+                        }`}
+                        type="text"
+                        maxLength="8"
+                        placeholder="Número de Documento"
+                        {...register("num_documento", {
+                          required: "El N° de documento es obligatorio",
+                          pattern: {
+                            value: /^[0-9]+$/,
+                            message: "Solo se admiten números",
+                          },
+                        })}
+                      />
                       {errors.num_documento && (
-                        <div className="text-danger small mt-0 mb-2">
+                        <div className="invalid-feedback">
                           {errors.num_documento.message}
                         </div>
                       )}
                     </div>
                   </div>
 
-                  <div className="input-group mb-3">
-                    <span className="input-group-text">
-                      <User size={18} />
-                    </span>
+                  <div className="mb-3">
+                    <label className="form-label small fw-semi-bold text-muted">
+                      <User size={16} className="me-1" /> Nombre
+                    </label>
                     <input
-                      className="form-control"
-                      {...register("nombre", { required: true })}
-                      placeholder="Nombre"
+                      className={`form-control ${
+                        errors.nombre ? "is-invalid" : ""
+                      }`}
+                      {...register("nombre", {
+                        required: "El nombre es obligatorio",
+                      })}
+                      placeholder="Nombre del empleado"
                     />
+                    {errors.nombre && (
+                      <div className="invalid-feedback">
+                        {errors.nombre.message}
+                      </div>
+                    )}
                   </div>
 
-                  <div className="input-group mb-3">
-                    <span className="input-group-text">
-                      <User size={18} />
-                    </span>
+                  <div className="mb-3">
+                    <label className="form-label small fw-semi-bold text-muted">
+                      <User size={16} className="me-1" /> Apellidos
+                    </label>
                     <input
-                      className="form-control"
-                      {...register("apellidos", { required: true })}
-                      placeholder="Apellidos"
+                      className={`form-control ${
+                        errors.apellidos ? "is-invalid" : ""
+                      }`}
+                      {...register("apellidos", {
+                        required: "El apellido es obligatorio",
+                      })}
+                      placeholder="Apellidos del empleado"
                     />
+                    {errors.apellidos && (
+                      <div className="invalid-feedback">
+                        {errors.apellidos.message}
+                      </div>
+                    )}
                   </div>
 
                   <div className="row">
-                    <div className="col-6">
-                      <div className="input-group mb-3">
-                        <span className="input-group-text">
-                          <Calendar size={18} />
-                        </span>
-                        <input
-                          className="form-control"
-                          type="date"
-                          {...register("fecha_nacimiento", { required: true })}
-                        />
-                      </div>
+                    <div className="col-6 mb-3">
+                      <label className="form-label small fw-semi-bold text-muted">
+                        <Calendar size={16} className="me-1" /> Fecha de
+                        Nacimiento
+                      </label>
+                      <input
+                        className={`form-control ${
+                          errors.fecha_nacimiento ? "is-invalid" : ""
+                        }`}
+                        type="date"
+                        {...register("fecha_nacimiento", {
+                          required: "La fecha es obligatoria",
+                        })}
+                      />
+                      {errors.fecha_nacimiento && (
+                        <div className="invalid-feedback">
+                          {errors.fecha_nacimiento.message}
+                        </div>
+                      )}
                     </div>
-                    <div className="col-6">
-                      <div className="input-group mb-3">
-                        <span className="input-group-text">
-                          <Phone size={18} />
-                        </span>
-                        <input
-                          className="form-control"
-                          type="number"
-                          placeholder="Nº de contacto"
-                          {...register("telefono", { required: true })}
-                        />
-                      </div>
+                    <div className="col-6 mb-3">
+                      <label className="form-label small fw-semi-bold text-muted">
+                        <Phone size={16} className="me-1" /> Nº de contacto
+                      </label>
+                      <input
+                        className={`form-control ${
+                          errors.telefono ? "is-invalid" : ""
+                        }`}
+                        type="number"
+                        placeholder="Nº de contacto"
+                        {...register("telefono", {
+                          required: "El teléfono es obligatorio",
+                        })}
+                      />
                       {errors.telefono && (
-                        <div className="text-danger small mt-0 mb-2">
+                        <div className="invalid-feedback">
                           {errors.telefono.message}
                         </div>
                       )}
                     </div>
                   </div>
 
-                  {/* === UBICACIÓN (Minimalista) === */}
+                  {/* === UBICACIÓN (Nuevo Diseño) === */}
                   <div className="row">
-                    <div className="col-4">
-                      <div className="input-group mb-3">
-                        <span className="input-group-text">
-                          <MapPin size={18} />
-                        </span>
-                        <select
-                          className="form-select"
-                          {...register("departamento", {
-                            required: true,
-                            onChange: (e) => {
-                              setSelectedDepartamento(e.target.value);
-                              setSelectedProvincia("");
-                              setValue("provincia", "");
-                              setValue("distrito", "");
-                            },
-                          })}
-                        >
-                          <option value="">Depto...</option>
-                          {departamentoList?.map((dep) => (
-                            <option key={dep.id} value={dep.id}>
-                              {dep.nombre.toUpperCase()}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
+                    <div className="col-4 mb-3">
+                      <label className="form-label small fw-semi-bold text-muted">
+                        <MapPin size={16} className="me-1" /> Depto.
+                      </label>
+                      <select
+                        className={`form-select ${
+                          errors.departamento ? "is-invalid" : ""
+                        }`}
+                        {...register("departamento", {
+                          required: "Requerido",
+                          onChange: (e) => {
+                            setSelectedDepartamento(e.target.value);
+                            setSelectedProvincia("");
+                            setValue("provincia", "");
+                            setValue("distrito", "");
+                          },
+                        })}
+                      >
+                        <option value="">Seleccione...</option>
+                        {departamentoList?.map((dep) => (
+                          <option key={dep.id} value={dep.id}>
+                            {dep.nombre.toUpperCase()}
+                          </option>
+                        ))}
+                      </select>
+                      {errors.departamento && (
+                        <div className="invalid-feedback">
+                          {errors.departamento.message}
+                        </div>
+                      )}
                     </div>
-                    <div className="col-4">
-                      <div className="input-group mb-3">
-                        <span className="input-group-text">
-                          <MapPin size={18} />
-                        </span>
-                        <select
-                          className="form-select"
-                          {...register("provincia", {
-                            required: true,
-                            onChange: (e) => {
-                              setSelectedProvincia(e.target.value);
-                              setValue("distrito", "");
-                            },
-                          })}
-                          disabled={!selectedDepartamento}
-                        >
-                          <option value="">Provincia...</option>
-                          {provinciaList?.map((prov) => (
-                            <option key={prov.id} value={prov.id}>
-                              {prov.nombre}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
+                    <div className="col-4 mb-3">
+                      <label className="form-label small fw-semi-bold text-muted">
+                        <MapPin size={16} className="me-1" /> Provincia
+                      </label>
+                      <select
+                        className={`form-select ${
+                          errors.provincia ? "is-invalid" : ""
+                        }`}
+                        {...register("provincia", {
+                          required: "Requerido",
+                          onChange: (e) => {
+                            setSelectedProvincia(e.target.value);
+                            setValue("distrito", "");
+                          },
+                        })}
+                        disabled={!selectedDepartamento}
+                      >
+                        <option value="">Seleccione...</option>
+                        {provinciaList?.map((prov) => (
+                          <option key={prov.id} value={prov.id}>
+                            {prov.nombre}
+                          </option>
+                        ))}
+                      </select>
+                      {errors.provincia && (
+                        <div className="invalid-feedback">
+                          {errors.provincia.message}
+                        </div>
+                      )}
                     </div>
-                    <div className="col-4">
-                      <div className="input-group mb-3">
-                        <span className="input-group-text">
-                          <MapPin size={18} />
-                        </span>
-                        <select
-                          className="form-select"
-                          {...register("distrito", {
-                            required: true,
-                            disabled: !selectedProvincia,
-                          })}
-                        >
-                          <option value="">Distrito...</option>
-                          {distritoList?.map((dist) => (
-                            <option key={dist.id} value={dist.id}>
-                              {dist.nombre}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
+                    <div className="col-4 mb-3">
+                      <label className="form-label small fw-semi-bold text-muted">
+                        <MapPin size={16} className="me-1" /> Distrito
+                      </label>
+                      <select
+                        className={`form-select ${
+                          errors.distrito ? "is-invalid" : ""
+                        }`}
+                        {...register("distrito", {
+                          required: "Requerido",
+                          disabled: !selectedProvincia,
+                        })}
+                      >
+                        <option value="">Seleccione...</option>
+                        {distritoList?.map((dist) => (
+                          <option key={dist.id} value={dist.id}>
+                            {dist.nombre}
+                          </option>
+                        ))}
+                      </select>
+                      {errors.distrito && (
+                        <div className="invalid-feedback">
+                          {errors.distrito.message}
+                        </div>
+                      )}
                     </div>
                   </div>
 
-                  <div className="input-group mb-3">
-                    <span className="input-group-text">
-                      <MapPin size={18} />
-                    </span>
+                  <div className="mb-3">
+                    <label className="form-label small fw-semi-bold text-muted">
+                      <MapPin size={16} className="me-1" /> Dirección
+                    </label>
                     <input
-                      className="form-control"
-                      {...register("direccion", { required: true })}
+                      className={`form-control ${
+                        errors.direccion ? "is-invalid" : ""
+                      }`}
+                      {...register("direccion", {
+                        required: "La dirección es obligatoria",
+                      })}
                       placeholder="Dirección"
                     />
+                    {errors.direccion && (
+                      <div className="invalid-feedback">
+                        {errors.direccion.message}
+                      </div>
+                    )}
                   </div>
 
-                  <div className="input-group mb-3">
-                    <span className="input-group-text">
-                      <Mail size={18} />
-                    </span>
+                  <div className="mb-3">
+                    <label className="form-label small fw-semi-bold text-muted">
+                      <Mail size={16} className="me-1" /> Correo Electrónico
+                    </label>
                     <input
                       type="email"
-                      className="form-control"
-                      {...register("correo", { required: true })}
+                      className={`form-control ${
+                        errors.correo ? "is-invalid" : ""
+                      }`}
+                      {...register("correo", {
+                        required: "El correo es obligatorio",
+                      })}
                       placeholder="Correo Electrónico"
                     />
+                    {errors.correo && (
+                      <div className="invalid-feedback">
+                        {errors.correo.message}
+                      </div>
+                    )}
                   </div>
-                  {errors.correo && (
-                    <div className="text-danger small mt-0 mb-2">
-                      {errors.correo.message}
-                    </div>
-                  )}
                 </div>
 
                 {/* === COLUMNA DERECHA: DATOS LABORALES === */}
@@ -455,225 +526,263 @@ export function IngresoPlanilla() {
                       Detalles del contrato
                     </h5>
 
-                    <div className="input-group mb-3">
-                      <span className="input-group-text">
-                        <Briefcase size={18} />
-                      </span>
+                    <div className="mb-3">
+                      <label className="form-label small fw-semi-bold text-muted">
+                        <Briefcase size={16} className="me-1" /> Tipo Contrato
+                      </label>
                       <select
-                        className="form-select"
-                        {...register("contrato", { required: true })}
+                        className={`form-select ${
+                          errors.contrato ? "is-invalid" : ""
+                        }`}
+                        {...register("contrato", { required: "Requerido" })}
                       >
-                        <option value="">Tipo Contrato...</option>
+                        <option value="">Seleccione...</option>
                         {contratoList?.map((c) => (
                           <option key={c.id} value={c.id}>
                             {c.nombre}
                           </option>
                         ))}
                       </select>
+                      {errors.contrato && (
+                        <div className="invalid-feedback">
+                          {errors.contrato.message}
+                        </div>
+                      )}
                     </div>
 
                     <div className="row">
-                      <div className="col-6">
-                        <div className="input-group mb-3">
-                          <span className="input-group-text">
-                            <Calendar size={18} />
-                          </span>
-                          <input
-                            className="form-control"
-                            type="date"
-                            {...register("fecha_contrato", { required: true })}
-                          />
-                        </div>
+                      <div className="col-6 mb-3">
+                        <label className="form-label small fw-semi-bold text-muted">
+                          <Calendar size={16} className="me-1" /> Inicio
+                          Contrato
+                        </label>
+                        <input
+                          className={`form-control ${
+                            errors.fecha_contrato ? "is-invalid" : ""
+                          }`}
+                          type="date"
+                          {...register("fecha_contrato", {
+                            required: "Requerido",
+                          })}
+                        />
+                        {errors.fecha_contrato && (
+                          <div className="invalid-feedback">
+                            {errors.fecha_contrato.message}
+                          </div>
+                        )}
                       </div>
-                      <div className="col-6">
-                        <div className="input-group mb-3">
-                          <span className="input-group-text">
-                            <Calendar size={18} />
-                          </span>
-                          <input
-                            className="form-control"
-                            type="date"
-                            {...register("fecha_fin_contrato", {
-                              required: true,
-                            })}
-                          />
-                        </div>
+                      <div className="col-6 mb-3">
+                        <label className="form-label small fw-semi-bold text-muted">
+                          <Calendar size={16} className="me-1" /> Fin Contrato
+                        </label>
+                        <input
+                          className={`form-control ${
+                            errors.fecha_fin_contrato ? "is-invalid" : ""
+                          }`}
+                          type="date"
+                          {...register("fecha_fin_contrato", {
+                            required: "Requerido",
+                          })}
+                        />
+                        {errors.fecha_fin_contrato && (
+                          <div className="invalid-feedback">
+                            {errors.fecha_fin_contrato.message}
+                          </div>
+                        )}
                       </div>
                     </div>
 
-                    <div className="input-group mb-3">
-                      <span className="input-group-text">
-                        <Briefcase size={18} />
-                      </span>
+                    <div className="mb-3">
+                      <label className="form-label small fw-semi-bold text-muted">
+                        <Briefcase size={16} className="me-1" /> Área
+                      </label>
                       <select
-                        className="form-select"
-                        {...register("area", { required: true })}
+                        className={`form-select ${
+                          errors.area ? "is-invalid" : ""
+                        }`}
+                        {...register("area", { required: "Requerido" })}
                       >
-                        <option value="">Área...</option>
-                        {/* * CORRECCIÓN DE BUG:
-                         * Asumimos que 'areasList' es el array
-                         * (basado en tu 'data: areasList = []')
-                         */}
+                        <option value="">Seleccione...</option>
                         {areasList?.map((a) => (
                           <option key={a.id} value={a.id}>
                             {a.nombre}
                           </option>
                         ))}
                       </select>
+                      {errors.area && (
+                        <div className="invalid-feedback">
+                          {errors.area.message}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="row">
+                      <div className="col-6 mb-3">
+                        <label className="form-label small fw-semi-bold text-muted">
+                          <Briefcase size={16} className="me-1" /> Cargo
+                        </label>
+                        <select
+                          className={`form-select ${
+                            errors.cargo ? "is-invalid" : ""
+                          }`}
+                          {...register("cargo", { required: "Requerido" })}
+                          onChange={handleCargoChange}
+                        >
+                          <option value="">Seleccione...</option>
+                          {cargosList?.map((c) => (
+                            <option
+                              key={c.id}
+                              value={c.id}
+                              data-salario={c.salario}
+                            >
+                              {c.nombre}
+                            </option>
+                          ))}
+                        </select>
+                        {errors.cargo && (
+                          <div className="invalid-feedback">
+                            {errors.cargo.message}
+                          </div>
+                        )}
+                      </div>
+                      <div className="col-6 mb-3">
+                        <label className="form-label small fw-semi-bold text-muted">
+                          <Clock size={16} className="me-1" /> Horario
+                        </label>
+                        <select
+                          className={`form-select ${
+                            errors.horario ? "is-invalid" : ""
+                          }`}
+                          {...register("horario", { required: "Requerido" })}
+                        >
+                          <option value="">Seleccione...</option>
+                          {horariosList?.map((h) => (
+                            <option key={h.id} value={h.id}>
+                              {h.horaEntrada} - {h.horaSalida}
+                            </option>
+                          ))}
+                        </select>
+                        {errors.horario && (
+                          <div className="invalid-feedback">
+                            {errors.horario.message}
+                          </div>
+                        )}
+                      </div>
                     </div>
 
                     <div className="row">
                       <div className="col-6">
-                        <div className="input-group mb-3">
-                          <span className="input-group-text">
-                            <Briefcase size={18} />
-                          </span>
-                          <select
-                            className="form-select"
-                            {...register("cargo", { required: true })}
-                            onChange={handleCargoChange}
-                          >
-                            <option value="">Cargo...</option>
-                            {cargosList?.map((c) => (
-                              <option
-                                key={c.id}
-                                value={c.id}
-                                data-salario={c.salario}
-                              >
-                                {c.nombre}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
+                        <label className="form-label small fw-semi-bold text-muted">
+                          <DollarSign size={16} className="me-1" /> Salario base
+                        </label>
+                        <input
+                          className="form-control"
+                          placeholder="Salario base"
+                          {...register("salario")}
+                          readOnly
+                        />
                       </div>
                       <div className="col-6">
-                        <div className="input-group mb-3">
-                          <span className="input-group-text">
-                            <Clock size={18} />
-                          </span>
-                          <select
-                            className="form-select"
-                            {...register("horario", { required: true })}
-                          >
-                            <option value="">Horario...</option>
-                            {horariosList?.map((h) => (
-                              <option key={h.id} value={h.id}>
-                                {h.horaEntrada} - {h.horaSalida}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
+                        <label className="form-label small fw-semi-bold text-muted">
+                          <DollarSign size={16} className="me-1" /> Pago por
+                          Hora
+                        </label>
+                        <input
+                          className="form-control"
+                          placeholder="Pago por Hora"
+                          {...register("pagoPorHora")}
+                          readOnly
+                        />
                       </div>
                     </div>
 
-                    <div className="row">
-                      <div className="col-6">
-                        <div className="input-group mb-3">
-                          <span className="input-group-text">
-                            <DollarSign size={18} />
-                          </span>
-                          <input
-                            className="form-control"
-                            placeholder="Salario base"
-                            {...register("salario")}
-                            readOnly
-                          />
-                        </div>
-                      </div>
-                      <div className="col-6">
-                        <div className="input-group mb-3">
-                          <span className="input-group-text">
-                            <DollarSign size={18} />
-                          </span>
-                          <input
-                            className="form-control"
-                            placeholder="Pago por Hora"
-                            {...register("pagoPorHora")}
-                            readOnly
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* CORRECCIÓN DE BOTÓN: 'type="button"' para no chocar con el submit final */}
                     <div>
                       <button
                         type="button"
                         className="btn btn-outline-dark mt-3 ms-auto"
                       >
-                        <FileDown /> Generar Contrato
+                        <FileDown size={18} className="me-2" /> Generar Contrato
                       </button>
                     </div>
                   </div>
 
-                  {/* === DEDUCCIONES Y BONIFICACIONES (Lógica intacta) === */}
+                  {/* === DEDUCCIONES Y BONIFICACIONES (Sin cambios de diseño) === */}
                   <div className="card p-3 border">
                     <h5 style={{ color: "#15669c" }}>
                       Aportes, Deducciones y Bonificaciones
                     </h5>
                     <div className="row">
-                      <div className="col-md-6">
-                        <label className="fw-bold mb-2">Deducciones</label>
-                        {deduccionesList?.map((d) => {
-                          const isEssalud = d.nombre === "ESSALUD";
-                          return (
+                      <CondicionCarga
+                        isLoading={loadingDeducciones}
+                        isError={errorDeducciones}
+                      >
+                        <div className="col-md-6">
+                          <label className="fw-bold mb-2">Deducciones</label>
+                          {deduccionesList?.map((d) => {
+                            const isEssalud = d.nombre === "ESSALUD";
+                            return (
+                              <div className="form-check" key={d.id}>
+                                <input
+                                  className="form-check-input"
+                                  type="checkbox"
+                                  value={d.id}
+                                  {...register("deducciones")}
+                                  id={`deduccion_${d.id}`}
+                                  onChange={(e) => {
+                                    const checkboxes =
+                                      document.querySelectorAll(
+                                        'input.form-check-input[type="checkbox"][data-group="deducciones"]'
+                                      );
+                                    if (!isEssalud) {
+                                      checkboxes.forEach((cb) => {
+                                        if (
+                                          cb !== e.target &&
+                                          cb.dataset.nombre !== "ESSALUD"
+                                        ) {
+                                          cb.checked = false;
+                                        }
+                                      });
+                                    }
+                                  }}
+                                  data-group="deducciones"
+                                  data-nombre={d.nombre}
+                                />
+                                <label
+                                  className="form-check-label"
+                                  htmlFor={`deduccion_${d.id}`}
+                                >
+                                  {d.nombre}
+                                </label>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </CondicionCarga>
+                      <CondicionCarga
+                        isLoading={loadingDBonificaciones}
+                        isError={errorBonificaciones}
+                      >
+                        <div className="col-md-6">
+                          <label className="fw-bold mb-2">Bonificación</label>
+                          {bonificacionesList?.map((d) => (
                             <div className="form-check" key={d.id}>
                               <input
                                 className="form-check-input"
                                 type="checkbox"
                                 value={d.id}
-                                {...register("deducciones")}
-                                id={`deduccion_${d.id}`}
-                                onChange={(e) => {
-                                  // --- Tu lógica compleja de Essalud (sin cambios) ---
-                                  const checkboxes = document.querySelectorAll(
-                                    'input.form-check-input[type="checkbox"][data-group="deducciones"]'
-                                  );
-                                  if (!isEssalud) {
-                                    checkboxes.forEach((cb) => {
-                                      if (
-                                        cb !== e.target &&
-                                        cb.dataset.nombre !== "ESSALUD"
-                                      ) {
-                                        cb.checked = false;
-                                      }
-                                    });
-                                  }
-                                }}
-                                data-group="deducciones"
-                                data-nombre={d.nombre}
+                                {...register("bonificaciones")}
+                                id={`bonificaciones${d.id}`}
                               />
                               <label
                                 className="form-check-label"
-                                htmlFor={`deduccion_${d.id}`}
+                                htmlFor={`bonificaciones${d.id}`}
                               >
                                 {d.nombre}
                               </label>
                             </div>
-                          );
-                        })}
-                      </div>
-
-                      <div className="col-md-6">
-                        <label className="fw-bold mb-2">Bonificación</label>
-                        {bonificacionesList?.map((d) => (
-                          <div className="form-check" key={d.id}>
-                            <input
-                              className="form-check-input"
-                              type="checkbox"
-                              value={d.id}
-                              {...register("bonificaciones")}
-                              id={`bonificaciones${d.id}`}
-                            />
-                            <label
-                              className="form-check-label"
-                              htmlFor={`bonificaciones${d.id}`}
-                            >
-                              {d.nombre}
-                            </label>
-                          </div>
-                        ))}
-                      </div>
+                          ))}
+                        </div>
+                      </CondicionCarga>
                     </div>
                   </div>
                 </div>
@@ -681,14 +790,13 @@ export function IngresoPlanilla() {
                 {/* === BOTÓN DE ENVÍO FINAL === */}
                 <div className="col-md-12 d-flex mt-4">
                   <BotonMotionGeneral
-                    type="submit"
+                    type="submit" // ¡Importante! Debe ser type="submit"
                     text="Registrar Empleado"
                     loading={loading}
-                    icon={<Save className="text-auto" />}
-                    error={error} // Asegúrate que 'error' sea booleano o se resetee a false
-                  >
-                    Registrar Empleado
-                  </BotonMotionGeneral>
+                    icon={<Save size={18} />}
+                    // Tu componente BotonAnimado se llama ahora BotonMotionGeneral
+                    // 'error' no es un prop estándar de BotonMotionGeneral
+                  />
                 </div>
               </div>
             </form>
