@@ -2,7 +2,7 @@ import { Controller } from "react-hook-form";
 import { capitalizeFirstLetter } from "../../../hooks/FirstLetterUp";
 
 export function FormularioVacaciones({
-  onSubmit,
+  onSubmitVaca,
   handleUsuarioSelect,
   removeUsuario,
   empleadosSeleccionados,
@@ -12,9 +12,11 @@ export function FormularioVacaciones({
   isLoadingUsuarios,
   BASE_URL,
   calcularDiasTotales, // Función para calcular los días totales
+  onClose,
 }) {
+  console.log("ERRORES DEL FORMULARIO:", errors);
   return (
-    <form id="agregarVacacionesForm" onSubmit={onSubmit}>
+    <form id="agregarVacacionesForm" onSubmit={onSubmitVaca}>
       <small className="text-info">Selecciona un empleado</small>
       <div className="form-floating mb-3">
         <select
@@ -194,10 +196,14 @@ export function FormularioVacaciones({
           )}
         </div>
       </div>
-
-      <button type="submit" className="btn btn-primary p-3">
-        Registrar vacaciones
-      </button>
+      <div className="d-flex gap-2 p-3 border-top">
+        <button type="button" className="btn-cerrar-modal" onClick={onClose}>
+          Cancelar
+        </button>
+        <button type="submit" className="btn-guardar">
+          Registrar vacaciones
+        </button>
+      </div>
     </form>
   );
 }

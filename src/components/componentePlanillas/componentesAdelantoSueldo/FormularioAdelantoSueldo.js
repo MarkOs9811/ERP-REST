@@ -12,6 +12,7 @@ export function FormularioAdelantoSueldo({
   usuarios,
   isLoadingUsuarios,
   BASE_URL,
+  onClose,
 }) {
   return (
     <form id="agregarAdelantoSueldoForm" onSubmit={onSubmit}>
@@ -195,10 +196,14 @@ export function FormularioAdelantoSueldo({
           </label>
         </div>
       </div>
-
-      <button type="submit" className="btn btn-primary p-3">
-        Registrar
-      </button>
+      <div className="d-flex  border-top p-3 gap-2">
+        <button type="button" className="btn-cerrar-modal" onClick={onClose}>
+          Cancelar
+        </button>
+        <button type="submit" className="btn-guardar ">
+          Registrar
+        </button>
+      </div>
     </form>
   );
 }

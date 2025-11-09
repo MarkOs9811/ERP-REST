@@ -339,19 +339,22 @@ export function AdelantoSueldo() {
         submitText="Guardar"
         hideFooter={true}
       >
-        <div className="modal-body p-3">
-          <FormularioAdelantoSueldo
-            onSubmit={handleSubmit(onSubmit)}
-            handleUsuarioSelect={handleUsuarioSelect}
-            removeUsuario={removeUsuario}
-            empleadosSeleccionados={empleadosSeleccionados}
-            control={control}
-            errors={errors}
-            usuarios={usuarios}
-            isLoadingUsuarios={isLoadingUsuarios}
-            BASE_URL={BASE_URL}
-          />
-        </div>
+        {({ handleClose }) => (
+          <div className="modal-body p-3">
+            <FormularioAdelantoSueldo
+              onSubmit={handleSubmit(onSubmit)}
+              handleUsuarioSelect={handleUsuarioSelect}
+              removeUsuario={removeUsuario}
+              empleadosSeleccionados={empleadosSeleccionados}
+              control={control}
+              errors={errors}
+              usuarios={usuarios}
+              isLoadingUsuarios={isLoadingUsuarios}
+              BASE_URL={BASE_URL}
+              onClose={handleClose}
+            />
+          </div>
+        )}
       </ModalRight>
     </div>
   );

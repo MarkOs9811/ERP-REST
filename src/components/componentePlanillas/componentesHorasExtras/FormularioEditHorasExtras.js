@@ -29,18 +29,19 @@ export function FormularioEditHorasExtras({ onClose, dataHoraExtras }) {
     }
   }, [dataHoraExtras, reset]);
 
-  const miOnSubmit = async (formData) => {
+  const onSubmitEditar = async (formData) => {
     setLoading(true);
     setError(false);
     try {
       const response = await axiosInstance.put(
-        `/horas-extras/${dataHoraExtras.id}`,
+        `/horasExtras/${dataHoraExtras.id}`,
         formData
       );
-
-      ToastAlert("success", "Horas extras actualizadas correctamente");
-      queryClient.invalidateQueries(["horasExtras"]);
-      onClose();
+      if (response.data.success) {
+        ToastAlert("success", "Horas extras actualizadas correctamente");
+        queryClient.invalidateQueries(["horasExtras"]);
+        onClose();
+      }
     } catch (err) {
       setError(true);
       ToastAlert(
@@ -53,7 +54,7 @@ export function FormularioEditHorasExtras({ onClose, dataHoraExtras }) {
   };
 
   return (
-    <form className="form p-4" onSubmit={handleSubmit(miOnSubmit)}>
+    <form className="form p-4" onSubmit={handleSubmit(onSubmitEditar)}>
       <div className="card p-3 mb-3 border bg-light">
         <label className="small fw-bold mb-1 d-flex align-items-center gap-1">
           <User size={16} /> Empleado
@@ -113,6 +114,7 @@ export function FormularioEditHorasExtras({ onClose, dataHoraExtras }) {
         <input
           type="number"
           step="0.01"
+          readOnly="true"
           className={`form-control ${errors.pagoTotal ? "is-invalid" : ""}`}
           placeholder="Pago total"
           {...register("pagoTotal", {

@@ -5,17 +5,21 @@ import { GetVacaciones } from "../../service/GetVacaciones";
 import { Cargando } from "../../components/componentesReutilizables/Cargando";
 import { capitalizeFirstLetter } from "../../hooks/FirstLetterUp";
 import ModalRight from "../../components/componentesReutilizables/ModalRight";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FormularioVacaciones } from "../../components/componentePlanillas/componenteVacaciones/FormularioVacaciones";
 import { GetUsuarios } from "../../service/GetUsuarios";
 import axiosInstance from "../../api/AxiosInstance";
 import ToastAlert from "../../components/componenteToast/ToastAlert";
 import { FileText, Pencil, Plus, ShoppingBag, Trash2 } from "lucide-react";
+import { FormularioVenderDias } from "../../components/componentePlanillas/componenteVacaciones/FormularioVenderDias";
+import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteExcel";
 
 export function Vacaciones() {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
   const queryClient = useQueryClient();
+  const [filtro, setFiltro] = useState("");
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalVender, setModalVender] = useState(false);
   const [vacacionesId, setVacacionesId] = useState([]); // Estado para almacenar el ID de las vacaciones seleccionadas
@@ -31,62 +35,108 @@ export function Vacaciones() {
   });
 
   const {
-    control,
-    handleSubmit,
-    setValue,
-    watch,
-    reset,
-    formState: { errors },
-    register,
+    control: controlAgregar, // Renombrado
+    handleSubmit: handleSubmitAgregar, // Renombrado
+    setValue: setValueAgregar,
+    watch: watchAgregar,
+    reset: resetAgregar,
+    formState: { errors: errorsAgregar }, // Renombrado
   } = useForm({
     defaultValues: {
-      empleados: [], // Inicializa empleados como un array vacío
+      empleados: [],
       fechaInicio: "",
       fechaFin: "",
       diasTotales: "",
       observaciones: "",
-      diasVender: "",
+      // ¡Ya no hay 'diasVender' aquí!
     },
   });
+
+  // --- useForm para VENDER VACACIONES ---
+  const {
+    handleSubmit: handleSubmitVender, // Renombrado
+    register: registerVender, // Renombrado
+    reset: resetVender, // Renombrado
+    formState: { errors: errorsVender }, // Renombrado
+  } = useForm({
+    defaultValues: {
+      diasVender: "",
+      // ¡Solo los campos de este formulario!
+    },
+  });
+
+  const datosFiltradosVacaciones = useMemo(() => {
+    if (!vacacionesList) {
+      return [];
+    }
+    const termino = filtro.toLowerCase();
+    if (termino === "") {
+      return vacacionesList;
+    }
+
+    return vacacionesList.filter((datoVac) => {
+      const nombre = (
+        datoVac?.usuario?.empleado?.persona?.nombre || ""
+      ).toLowerCase();
+      const apellidos = (
+        datoVac?.usuario?.empleado?.persona?.apellidos || ""
+      ).toLowerCase();
+
+      const documento = (
+        datoVac?.usuario?.empelado?.persona?.documento_identidad || ""
+      ).toLowerCase();
+
+      const fechaInicio = (datoVac.fecha_inicio || "").toLowerCase();
+      const fechaFin = (datoVac.fecha_fin || "").toLowerCase();
+      return (
+        nombre.includes(termino) ||
+        apellidos.includes(termino) ||
+        documento.includes(termino) ||
+        fechaInicio.includes(termino) ||
+        fechaFin.includes(termino)
+      );
+    });
+  }, [vacacionesList, filtro]);
+
   const { data: usuarios, isLoading: isLoadingUsuarios } = useQuery({
     queryFn: GetUsuarios,
     queryKey: ["usuarios"],
     refetchOnWindowFocus: false,
   });
 
-  const empleadosSeleccionados = watch("empleados");
+  const empleadosSeleccionados = watchAgregar("empleados");
   const handleUsuarioSelect = (event) => {
     const usuarioId = parseInt(event.target.value);
     const usuario = usuarios.find((u) => u.id === usuarioId);
 
     // Verificar si el usuario ya está en la lista
     if (!empleadosSeleccionados.some((u) => u.id === usuarioId)) {
-      setValue("empleados", [...empleadosSeleccionados, usuario]); // Agregar el usuario al array
+      setValueAgregar("empleados", [...empleadosSeleccionados, usuario]); // Agregar el usuario al array
     }
   };
   const removeUsuario = (usuarioId) => {
     console.log("Antes de eliminar:", empleadosSeleccionados);
-    setValue(
+    setValueAgregar(
       "empleados",
       empleadosSeleccionados.filter((usuario) => usuario.id !== usuarioId)
     );
   };
 
   const calcularDiasTotales = () => {
-    const fechaInicio = new Date(watch("fechaInicio"));
-    const fechaFin = new Date(watch("fechaFin"));
+    const fechaInicio = new Date(watchAgregar("fechaInicio"));
+    const fechaFin = new Date(watchAgregar("fechaFin"));
 
     if (fechaInicio && fechaFin && fechaFin >= fechaInicio) {
       const diferencia = Math.ceil(
         (fechaFin - fechaInicio) / (1000 * 60 * 60 * 24)
       );
-      setValue("diasTotales", diferencia + 1); // Incluye el día de inicio
+      setValueAgregar("diasTotales", diferencia + 1); // Incluye el día de inicio
     } else {
-      setValue("diasTotales", 0);
+      setValueAgregar("diasTotales", 0);
     }
   };
 
-  const onSubmit = async (data) => {
+  const onSubmitStoreVacaciones = async (data) => {
     try {
       const payload = {
         empleados: data.empleados.map((empleado) => empleado.id), // Solo enviar los IDs de los empleados
@@ -102,29 +152,40 @@ export function Vacaciones() {
       if (response.data.success) {
         ToastAlert("success", response.data.message);
         queryClient.invalidateQueries(["vacaciones"]); // Refrescar los datos
-        reset(); // Reiniciar el formulario
+        resetAgregar(); // Reiniciar el formulario
         setIsModalOpen(false); // Cerrar el modal
+      }
+    } catch (error) {
+      ToastAlert(
+        "error",
+        error.response?.data?.message || // Mensaje de la API (ej. "Errores de validación")
+          error.message || // Mensaje de red (ej. "Network Error")
+          "Ocurrió un error inesperado" // Mensaje por defecto
+      );
+    }
+  };
+
+  const onSubmitVenderDias = async (data) => {
+    try {
+      const payload = {
+        id: vacacionesId.id, // ID de las vacaciones seleccionadas
+        diasVender: data.diasVender, // Días a vender
+      };
+      const response = await axiosInstance.post(
+        "/vacaciones/venderDias",
+        payload
+      );
+
+      if (response.data.success) {
+        ToastAlert("success", response.data.message);
+        queryClient.invalidateQueries(["vacaciones"]); // Refrescar los datos
+        setModalVender(false); // Cerrar el modal
+        resetVender();
       } else {
         ToastAlert("error", response.data.message);
       }
     } catch (error) {
-      if (error.response && error.response.status === 422) {
-        const validationErrors = error.response.data.errors;
-        if (validationErrors) {
-          Object.values(validationErrors).forEach((messages) => {
-            messages.forEach((message) => {
-              ToastAlert("error", message);
-            });
-          });
-        } else {
-          ToastAlert(
-            "error",
-            error.response.data.message || "Error de validación."
-          );
-        }
-      } else {
-        ToastAlert("error", `Error en la solicitud: ${error.message}`);
-      }
+      ToastAlert("error", `Error en la solicitud: ${error.message}`);
     }
   };
 
@@ -145,11 +206,18 @@ export function Vacaciones() {
   };
 
   const columnas = [
-    { name: "ID", selector: (row) => row.id, sortable: true, grow: 0 },
+    {
+      name: "ID",
+      selector: (row) => row.id,
+      width: "80px", // Un poco más angosto, 100px es mucho para un ID
+      sortable: true,
+      grow: 0, // No debe crecer
+      center: true,
+    },
     {
       name: "Empleado",
       cell: (row) => (
-        <div className="d-flex flex-column align-items-start text-left">
+        <div className="d-flex flex-column align-items-start text-left py-2">
           <div>
             {capitalizeFirstLetter(
               row.usuario?.empleado?.persona?.nombre.toLowerCase()
@@ -168,34 +236,51 @@ export function Vacaciones() {
         </div>
       ),
       sortable: true,
+      grow: 1, // ¡La clave! Esta columna crecerá el doble que las demás (si hubiera otra)
+      minWidth: "150px", // Un ancho mínimo para que no se aplaste
     },
     {
       name: "Fecha Inicio",
       selector: (row) => row.fecha_inicio,
       sortable: true,
+      width: "120px", // Ancho fijo, ideal para fechas
+      grow: 0,
+      center: true,
     },
     {
       name: "Fecha Fin",
       selector: (row) => row.fecha_fin,
       sortable: true,
+      width: "120px", // Ancho fijo, ideal para fechas
+      grow: 0,
+      center: true,
     },
     {
       name: "Dias total",
       cell: (row) => (
         <span className="text-primary fw-bold">{row.dias_totales}</span>
       ),
+      width: "120px", // Ancho suficiente para el TÍTULO
+      grow: 0,
+      center: true, // Centramos el número
     },
     {
       name: "Dias consumidos",
       cell: (row) => (
         <span className="text-primary fw-bold">{row.dias_utilizados}</span>
       ),
+      width: "150px", // Ancho suficiente para el TÍTULO
+      grow: 0,
+      center: true,
     },
     {
       name: "Dias vendidos",
       cell: (row) => (
         <span className="text-primary fw-bold">{row.dias_vendidos}</span>
       ),
+      width: "130px", // Ancho suficiente para el TÍTULO
+      grow: 0,
+      center: true,
     },
     {
       name: "Estado",
@@ -209,15 +294,20 @@ export function Vacaciones() {
         </span>
       ),
       sortable: true,
+      width: "130px", // Ancho fijo para el badge
+      grow: 0,
+      center: true,
     },
     {
       name: "Progreso",
+      width: "150px", // Más de 100px para que la barra se aprecie
+      grow: 0,
       cell: (row) => {
-        const totalDias = row.dias_totales; // Total de días disponibles
+        const totalDias = row.dias_totales;
         const progreso =
           totalDias > 0
             ? ((row.dias_vendidos + row.dias_utilizados) / totalDias) * 100
-            : 100; // Si no hay días totales, el progreso es 100%
+            : 100;
 
         return (
           <div className="w-100">
@@ -237,42 +327,44 @@ export function Vacaciones() {
     },
     {
       name: "Acciones",
+      width: "150px", // Ancho fijo para que quepan los 3 botones
+      grow: 0,
+      center: true,
       cell: (row) => (
         <div className="d-flex gap-2">
           {/* Botón Editar */}
           <button
-            className="btn btn-warning btn-sm"
+            className="btn-editar btn-sm"
             title="Editar vacaciones"
-            disabled={row.estado === 1}
+            disabled={row.estado == 1}
           >
-            <Pencil color={"#fff"} />
+            <Pencil className="text-auto" size={"auto"} />
           </button>
 
           {/* Botón Eliminar */}
           <button
-            className="btn btn-danger btn-sm"
+            className="btn-eliminar btn-sm"
             title="Eliminar"
             disabled={row.estado === 1}
             onClick={() => eliminarVacaciones(row.id)}
           >
-            <Trash2 color={"#fff"} />
+            <Trash2 className="text-auto" size={"auto"} />
           </button>
 
           {/* Botón Vender Días */}
           <button
-            className="btn btn-info btn-sm"
+            className="btn-principal btn-sm"
             title="Vender Días"
-            disabled={row.estado === 1}
+            disabled={row.estado == 1}
             onClick={() => {
               setModalVender(true);
               setVacacionesId(row);
             }}
           >
-            <ShoppingBag color={"#fff"} />
+            <ShoppingBag cclassName="text-auto" size={"auto"} />
           </button>
         </div>
       ),
-      grow: 0,
     },
   ];
   return (
@@ -285,11 +377,13 @@ export function Vacaciones() {
               type="text"
               placeholder="Buscar..."
               className="form-control"
+              onChange={(e) => setFiltro(e.target.value)}
             />
           </div>
           <button
             className="btn btn-sm btn-outline-dark btn-sm"
             title="Reporte"
+            onClick={() => GetReporteExcel("/reporteVacaciones")}
           >
             <FileText className="me-1 text-auto" />
             Reporte
@@ -306,7 +400,10 @@ export function Vacaciones() {
           </button>
         </div>
         <div className="card-body p-0">
-          <TablasGenerales columnas={columnas} datos={vacacionesList} />
+          <TablasGenerales
+            columnas={columnas}
+            datos={datosFiltradosVacaciones}
+          />
         </div>
       </div>
 
@@ -319,20 +416,23 @@ export function Vacaciones() {
         submitText="Guardar"
         hideFooter={true}
       >
-        <div className="modal-body p-3">
-          <FormularioVacaciones
-            onSubmit={handleSubmit(onSubmit)}
-            handleUsuarioSelect={handleUsuarioSelect}
-            removeUsuario={removeUsuario}
-            calcularDiasTotales={calcularDiasTotales}
-            empleadosSeleccionados={empleadosSeleccionados}
-            control={control}
-            errors={errors}
-            usuarios={usuarios}
-            isLoadingUsuarios={isLoadingUsuarios}
-            BASE_URL={BASE_URL}
-          />
-        </div>
+        {({ handleClose }) => (
+          <div className="modal-body p-3">
+            <FormularioVacaciones
+              onSubmitVaca={handleSubmitAgregar(onSubmitStoreVacaciones)}
+              handleUsuarioSelect={handleUsuarioSelect}
+              removeUsuario={removeUsuario}
+              calcularDiasTotales={calcularDiasTotales}
+              empleadosSeleccionados={empleadosSeleccionados}
+              control={controlAgregar}
+              errors={errorsAgregar}
+              usuarios={usuarios}
+              isLoadingUsuarios={isLoadingUsuarios}
+              BASE_URL={BASE_URL}
+              onClose={handleClose}
+            />
+          </div>
+        )}
       </ModalRight>
       <ModalRight
         isOpen={modalVender}
@@ -344,144 +444,13 @@ export function Vacaciones() {
         hideFooter={true}
       >
         <div className="modal-body p-3">
-          <form
-            onSubmit={handleSubmit(async (data) => {
-              try {
-                const payload = {
-                  id: vacacionesId.id, // ID de las vacaciones seleccionadas
-                  diasVender: data.diasVender, // Días a vender
-                };
-                console.log(payload);
-                const response = await axiosInstance.post(
-                  "/vacaciones/venderDias",
-                  payload
-                );
-
-                if (response.data.success) {
-                  ToastAlert("success", response.data.message);
-                  queryClient.invalidateQueries(["vacaciones"]); // Refrescar los datos
-                  setModalVender(false); // Cerrar el modal
-                  reset();
-                } else {
-                  ToastAlert("error", response.data.message);
-                }
-              } catch (error) {
-                ToastAlert("error", `Error en la solicitud: ${error.message}`);
-              }
-            })}
-          >
-            {/* Mostrar la imagen del usuario */}
-            <div className="card d-flex flex-row align-items-center p-3 border mb-3">
-              {/* Imagen del usuario */}
-              <div className="me-3">
-                {vacacionesId.usuario?.fotoPerfil ? (
-                  <img
-                    src={`${BASE_URL}/storage/${vacacionesId.usuario.fotoPerfil}`}
-                    alt="Foto de perfil"
-                    className="rounded-circle"
-                    style={{
-                      width: "80px",
-                      height: "80px",
-                      objectFit: "cover",
-                      border: "4px solid rgb(194, 194, 194)",
-                      boxShadow: "0 0 5px rgba(13, 15, 17, 0.5)",
-                    }}
-                  />
-                ) : (
-                  <div
-                    className="rounded-circle bg-secondary d-flex align-items-center justify-content-center"
-                    style={{ width: "80px", height: "80px" }}
-                  >
-                    <p className="text-white mb-0">Sin Foto</p>
-                  </div>
-                )}
-              </div>
-
-              {/* Nombre y apellidos */}
-              <div className="text-center flex-grow-1">
-                <h5 className="mb-1">
-                  {vacacionesId.usuario?.empleado?.persona?.nombre
-                    ? capitalizeFirstLetter(
-                        vacacionesId.usuario.empleado.persona.nombre.toLowerCase()
-                      )
-                    : "Nombre no disponible"}
-                </h5>
-                <h6 className="text-muted">
-                  {vacacionesId.usuario?.empleado?.persona?.apellidos
-                    ? capitalizeFirstLetter(
-                        vacacionesId.usuario.empleado.persona.apellidos.toLowerCase()
-                      )
-                    : "Apellidos no disponibles"}
-                </h6>
-                <small className="text-primary fw-bold">
-                  {vacacionesId.usuario?.empleado?.cargo?.nombre
-                    ? capitalizeFirstLetter(
-                        vacacionesId.usuario.empleado.cargo.nombre.toLowerCase()
-                      )
-                    : "Cargo no disponible"}
-                </small>
-              </div>
-            </div>
-            <div className="card border p-3 mb-3">
-              <div className="flex-grow-1">
-                <h6 className="text-muted">
-                  <span> Dias Totales </span>
-                  {vacacionesId.dias_totales ? (
-                    <p className="fw-bold">{vacacionesId.dias_totales}</p>
-                  ) : (
-                    "Dias totales no disponibles"
-                  )}
-                </h6>
-                <h6 className="text-muted">
-                  <span> Dias Utilizados </span>
-                  {vacacionesId.dias_utilizados ? (
-                    <p className="fw-bold">{vacacionesId.dias_utilizados}</p>
-                  ) : (
-                    "Dias totales no disponibles"
-                  )}
-                </h6>
-                <h6 className="text-muted">
-                  <span> Dias Disponibles a vender </span>
-
-                  <p className="fw-bold">
-                    {vacacionesId.dias_totales - vacacionesId.dias_utilizados}
-                  </p>
-
-                  {vacacionesId.dias_totales - vacacionesId.dias_utilizados < 0
-                    ? "Dias totales no disponibles"
-                    : ""}
-                </h6>
-              </div>
-            </div>
-
-            {/* Input para los días a vender */}
-            <div className="form-floating mb-3">
-              <input
-                type="number"
-                className="form-control"
-                id="diasVender"
-                placeholder="Días a vender"
-                {...register("diasVender", {
-                  required: "Debe ingresar los días a vender",
-                  min: { value: 1, message: "Debe vender al menos 1 día" },
-                })}
-              />
-              <label htmlFor="diasVender">Días a vender</label>
-              {errors.diasVender && (
-                <div className="invalid-feedback">
-                  {errors.diasVender.message}
-                </div>
-              )}
-              <small className="text-muted">
-                Los dias a vender no deben superar los dias Totales
-              </small>
-            </div>
-
-            {/* Botón para confirmar */}
-            <button type="submit" className="btn btn-primary p-3 w-100">
-              Confirmar Venta
-            </button>
-          </form>
+          <FormularioVenderDias
+            handleSubmit={handleSubmitVender}
+            vacacionesId={vacacionesId}
+            errors={errorsVender}
+            register={registerVender}
+            onSubmitVender={onSubmitVenderDias}
+          />
         </div>
       </ModalRight>
     </div>

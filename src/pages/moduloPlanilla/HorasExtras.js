@@ -6,7 +6,7 @@ import { Cargando } from "../../components/componentesReutilizables/Cargando";
 
 import { TablasGenerales } from "../../components/componentesReutilizables/TablasGenerales";
 import ModalRight from "../../components/componentesReutilizables/ModalRight";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import { useForm } from "react-hook-form";
 
@@ -16,9 +16,12 @@ import ToastAlert from "../../components/componenteToast/ToastAlert";
 import { Eye, EyeIcon, FileText, Pencil, Plus, Trash2 } from "lucide-react";
 import { FormularioEditHorasExtras } from "../../components/componentePlanillas/componentesHorasExtras/FormularioEditHorasExtras";
 import ModalAlertQuestion from "../../components/componenteToast/ModalAlertQuestion";
+import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteExcel";
 
 export function HorasExtras() {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
+  const [loading, setLoading] = useState(false);
+  const [filtro, setFiltro] = useState(""); // Valor inmediato del input
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [modalditHoraExtras, setModalEditHoraExtras] = useState(false);
@@ -134,25 +137,66 @@ export function HorasExtras() {
   };
 
   const {
-    data: horasExtras,
+    data: horasExtras = [],
     isLoading,
     isError,
     error,
   } = useQuery({
     queryFn: GetHorasExtras,
     queryKey: ["horasExtras"],
+    retry: 1,
     refetchOnWindowFocus: false,
   });
+  const datosFiltrados = useMemo(() => {
+    if (!horasExtras) {
+      return [];
+    }
+    const termino = filtro.toLowerCase();
+    if (termino === "") {
+      return horasExtras;
+    }
+    return horasExtras.filter((dato) => {
+      const nombre = (
+        dato.usuario?.empleado?.persona?.nombre || ""
+      ).toLowerCase();
+      const apellidos = (
+        dato.usuario?.empleado?.persona?.apellidos || ""
+      ).toLowerCase();
+
+      const doc_indetidad = (
+        dato.usuario?.empleado?.persona?.documento_identidad || ""
+      ).toString();
+
+      const fecha = (dato.fecha || "").toLowerCase();
+
+      return (
+        nombre.includes(termino) ||
+        apellidos.includes(termino) ||
+        doc_indetidad.includes(termino) ||
+        fecha.includes(termino)
+      );
+    });
+  }, [horasExtras, filtro]); // Dependencias: recalcula si esto cambia
 
   const handleEliminar = async (id) => {
-    // try {
-    //   const response = await axiosInstance.delete("/horasExtras", id);
-    //   if (response.data.success) {
-    //     ToastAlert("success", "Se eliminó correctamente");
-    //   }
-    // } catch (error) {
-    //   ToastAlert("error", error);
-    // }
+    setLoading(true);
+    try {
+      const response = await axiosInstance.delete(`/horasExtras/${id}`);
+
+      if (response.data.success) {
+        ToastAlert("success", "Se eliminó correctamente");
+        queryClient.invalidateQueries(["horasExtras"]);
+      }
+      // Ya no necesitas setLoading(false) aquí
+    } catch (error) {
+      ToastAlert(
+        "error",
+        error.response?.data?.message || error.message || "Error al eliminar"
+      );
+      // Ya no necesitas setLoading(false) aquí
+    } finally {
+      setLoading(false); // 2. Desactiva el loading al final, pase lo que pase
+    }
   };
 
   if (isLoading) {
@@ -266,12 +310,17 @@ export function HorasExtras() {
                 <button
                   className="btn-eliminar"
                   title="Eliminar registro"
+                  disabled={loading}
                   onClick={() => {
                     setDataEditHorasExtras(row);
                     setModalEliminarHoraExtra(true);
                   }}
                 >
-                  <Trash2 className="text-auto" size={"auto"} />
+                  {loading ? (
+                    <span className="loading text-dark"></span>
+                  ) : (
+                    <Trash2 className="text-auto" size={"auto"} />
+                  )}
                 </button>
               </div>
             </>
@@ -291,11 +340,13 @@ export function HorasExtras() {
               type="text"
               placeholder="Buscar..."
               className="form-control"
+              onChange={(e) => setFiltro(e.target.value)} // Actualiza el state 'filtro'
             />
           </div>
           <button
             className="btn btn-sm btn-outline-dark btn-sm"
             title="Reporte"
+            onClick={() => GetReporteExcel("/reporteHorasExtras")}
           >
             <FileText className="me-1 text-auto" />
             Reporte
@@ -312,7 +363,7 @@ export function HorasExtras() {
           </button>
         </div>
         <div className="card-body p-0">
-          <TablasGenerales columnas={columnas} datos={horasExtras} />
+          <TablasGenerales columnas={columnas} datos={datosFiltrados} />
         </div>
       </div>
       <ModalRight
@@ -363,7 +414,7 @@ export function HorasExtras() {
           " " +
           dataEditHorasExtras.usuario?.empleado?.persona?.apellidos
         }
-        handleEliminar={handleEliminar()}
+        handleEliminar={handleEliminar}
         handleCloseModal={() => setModalEliminarHoraExtra(false)}
         tipo={"horas extras"}
       />
