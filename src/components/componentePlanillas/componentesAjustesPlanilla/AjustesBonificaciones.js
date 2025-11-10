@@ -11,7 +11,10 @@ import {
 } from "lucide-react";
 import { useMemo, useState } from "react";
 import ModalRight from "../../componentesReutilizables/ModalRight";
-import { FormularioAddBonificaciones } from "./formulariosAjustes/FormularioAddBonificaciones";
+import {
+  FormularioAddBonificaciones,
+  FormularioBonificacion,
+} from "./formulariosAjustes/FormularioBonificacion";
 import ModalAlertQuestion from "../../componenteToast/ModalAlertQuestion";
 import axiosInstance from "../../../api/AxiosInstance";
 import ToastAlert from "../../componenteToast/ToastAlert";
@@ -26,6 +29,8 @@ export function AjustesBonificaciones() {
   const [loadingActivar, setLoadingActivar] = useState(false);
 
   const [modalAddBoni, setModalAddBoni] = useState(false);
+  const [modalEditBoni, setModalEditBoni] = useState(false);
+
   const [dataBonificaciones, setDataBonificacion] = useState([]);
   const [modalQuestionDesactivar, setModalQuestionDesactivar] = useState(false);
   const [modalQuestionActivar, setModalQuestionActivar] = useState(false);
@@ -146,13 +151,22 @@ export function AjustesBonificaciones() {
     },
     {
       name: "Acciones",
+      grow: 0,
       cell: (row) => (
         <div className="d-flex justify-content-center">
           {/* Botón Eliminar o Activar */}
           {row.estado == 1 ? (
             <>
               {/* Botón Editar */}
-              <button className=" btn-editar btn-sm" title="Editar">
+              <button
+                className=" btn-editar btn-sm"
+                title="Editar"
+                onClick={() => {
+                  setModalAddBoni(true);
+                  setModalEditBoni(true);
+                  setDataBonificacion(row);
+                }}
+              >
                 <Pencil className="text-auto" size={"auto"} />
               </button>
               <button
@@ -210,7 +224,11 @@ export function AjustesBonificaciones() {
         <button
           className="btn btn-sm btn-outline-dark mx-2"
           title="Agregar"
-          onClick={() => setModalAddBoni(true)}
+          onClick={() => {
+            setModalAddBoni(true);
+            setModalEditBoni(false);
+            setDataBonificacion([]);
+          }}
         >
           <Plus className=" text-auto" />
         </button>
@@ -222,11 +240,15 @@ export function AjustesBonificaciones() {
       <ModalRight
         isOpen={modalAddBoni}
         onClose={() => setModalAddBoni(false)}
-        title="Agregar concepto de bonificación"
+        title={modalEditBoni ? "Editar Bonificación" : "Agregar Bonificación"}
         hideFooter={true}
       >
         {({ handleClose }) => (
-          <FormularioAddBonificaciones onClose={handleClose} />
+          <FormularioBonificacion
+            onClose={handleClose}
+            dataBoni={modalEditBoni}
+            datosToEditar={dataBonificaciones}
+          />
         )}
       </ModalRight>
 

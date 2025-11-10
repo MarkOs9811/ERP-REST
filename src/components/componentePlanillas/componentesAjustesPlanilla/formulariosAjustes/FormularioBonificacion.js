@@ -4,28 +4,52 @@ import axiosInstance from "../../../../api/AxiosInstance";
 import ToastAlert from "../../../componenteToast/ToastAlert";
 import { useQueryClient } from "@tanstack/react-query";
 
-export function FormularioAddBonificaciones({ onClose }) {
+export function FormularioBonificacion({
+  onClose,
+  dataBoni,
+  datosToEditar = null,
+}) {
   const [loadingSave, setLoadingSave] = useState(false);
   const queryClient = useQueryClient();
+
+  // Esto sigue siendo correcto: dataBoni activa el modo edición
+  const isEditMode = Boolean(dataBoni);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    mode: "onChange", // Validación en tiempo real
+    mode: "onChange",
+    // <-- ¡CAMBIO AQUÍ! Usamos 'datosToEditar' para los valores
     defaultValues: {
-      nombre: "",
-      descripcion: "",
-      monto: 0,
+      nombre: datosToEditar?.nombre || "",
+      descripcion: datosToEditar?.descripcion || "",
+      monto: datosToEditar?.monto || 0,
     },
   });
 
   const onSubmit = async (data) => {
     setLoadingSave(true);
     try {
-      const response = await axiosInstance.post("/bonificaciones", data);
+      let response;
+      const toastMessage = isEditMode
+        ? "Se actualizó correctamente"
+        : "Se registró correctamente";
+
+      if (isEditMode) {
+        // <-- ¡CAMBIO AQUÍ! Usamos el ID de 'datosToEditar'
+        // ¡Asegúrate de que 'datosToEditar.id_bonificacion' sea el ID correcto!
+        response = await axiosInstance.put(
+          `/bonificaciones/editar/${datosToEditar.id}`, // <-- ¡Verifica este ID!
+          data
+        );
+      } else {
+        response = await axiosInstance.post("/bonificaciones", data);
+      }
+
       if (response.data.success) {
-        ToastAlert("success", "Se registro correctamente");
+        ToastAlert("success", toastMessage);
         queryClient.invalidateQueries(["bonificaciones"]);
         setLoadingSave(false);
         onClose();
@@ -33,8 +57,6 @@ export function FormularioAddBonificaciones({ onClose }) {
     } catch (error) {
       setLoadingSave(false);
       const errorMessage = error.response?.data?.message || error.message;
-
-      // Mostramos el error que venga, sea cual sea
       ToastAlert("error", errorMessage);
     }
   };
@@ -110,12 +132,22 @@ export function FormularioAddBonificaciones({ onClose }) {
           Cancelar
         </button>
         <button
-          type="Submit"
+          type="submit"
           className="btn-guardar"
-          title="Guardar bonificación"
+          title={
+            isEditMode ? "Actualizar bonificación" : "Guardar bonificación"
+          }
           disabled={loadingSave}
         >
-          {loadingSave ? <span className="load"></span> : <span>Guardar</span>}
+          {loadingSave ? (
+            <span
+              className="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+            ></span>
+          ) : (
+            <span>{isEditMode ? "Actualizar" : "Guardar"}</span>
+          )}
         </button>
       </div>
     </form>
