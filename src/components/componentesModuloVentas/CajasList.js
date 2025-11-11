@@ -37,7 +37,6 @@ export function CajasList({ search }) {
     refetchOnWindowFocus: false,
   });
 
-  console.log("CajasList data:", cajas);
   if (isLoading) {
     return <Cargando />;
   }

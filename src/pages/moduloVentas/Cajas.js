@@ -88,7 +88,6 @@ export function Cajas() {
     refetchOnWindowFocus: false,
   });
 
-  console.log("Cajas data:", cajas);
   return (
     <div className="row g-3">
       <div className="col-lg-12 col-sm-12">

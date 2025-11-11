@@ -18,7 +18,6 @@ export function ProveedorList({ search, updateList }) {
 
   const queryClient = useQueryClient();
 
-  // 🟩 1. Llamar al servicio con React Query
   const {
     data: proveedores = [],
     isLoading,

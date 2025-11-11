@@ -7,6 +7,7 @@ import { ContenedorPrincipal } from "../components/componentesReutilizables/Cont
 import { FileChartColumnIncreasing, Plus, PlusIcon } from "lucide-react";
 import { GetReporteExcel } from "../service/accionesReutilizables/GetReporteExcel";
 import { CondicionCarga } from "../components/componentesReutilizables/CondicionCarga";
+import ModalRight from "../components/componentesReutilizables/ModalRight";
 
 export function Proveedores() {
   const [search, setSearch] = useState("");
@@ -15,7 +16,6 @@ export function Proveedores() {
 
   const handleCloseModal = () => {
     setShowModal(false);
-    setUpdateList((prev) => !prev);
   };
 
   const handleAddProveedor = () => setShowModal(true);
@@ -68,21 +68,14 @@ export function Proveedores() {
       </div>
 
       {/* Modal para agregar usuario*/}
-      <Modal
-        show={showModal}
-        onHide={handleCloseModal}
-        centered
-        size="lg"
-        className="modal-sin-borde"
+      <ModalRight
+        isOpen={showModal}
+        onClose={handleCloseModal}
+        hideFooter={true}
+        title={"Agregar nuevo proveedor"}
       >
-        <Modal.Header closeButton>
-          <Modal.Title>Registrar Proveedor</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {/* Pasa handleCloseModal como prop a UsuarioForm */}
-          <ProveedorAdd handleCloseModal={handleCloseModal} />
-        </Modal.Body>
-      </Modal>
+        {({ handleClose }) => <ProveedorAdd handleCloseModal={handleClose} />}
+      </ModalRight>
     </div>
   );
 }

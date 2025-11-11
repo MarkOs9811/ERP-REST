@@ -83,6 +83,7 @@ import { ErrorVista } from "./pages/ErrorVista";
 import { Nomina } from "./pages/moduloPlanilla/Nomina";
 import { ContenedorPrincipal } from "./components/componentesReutilizables/ContenedorPrincipal";
 import { MesasList } from "./components/componenteVender/MesasList";
+import { Mesas } from "./pages/moduloVentas/Mesas";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 function App() {
@@ -515,6 +516,19 @@ function App() {
                                           ]}
                                         >
                                           <RealizarSolicitud />
+                                        </PrivateRoute>
+                                      }
+                                    />
+                                    <Route
+                                      path="mesas"
+                                      element={
+                                        <PrivateRoute
+                                          allowedRoles={[
+                                            "ventas",
+                                            "administrador",
+                                          ]}
+                                        >
+                                          <Mesas />
                                         </PrivateRoute>
                                       }
                                     />

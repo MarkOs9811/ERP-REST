@@ -63,7 +63,7 @@ export function ProveedorAdd({ handleCloseModal }) {
   };
 
   return (
-    <div>
+    <div className="p-4">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="row">
           {/* Tipo de Documento */}

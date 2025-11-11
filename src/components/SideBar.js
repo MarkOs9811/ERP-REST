@@ -79,6 +79,7 @@ export function SideBar() {
       "Cajas",
       "Solicitud",
       "Reportes",
+      "Mesas",
       "Ajustes Ventas",
     ],
     rrhh: [
