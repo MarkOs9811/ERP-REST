@@ -1,9 +1,14 @@
 import { useForm } from "react-hook-form";
-import { CheckCircle, XCircle } from "lucide-react";
+import { CheckCircle, PenIcon, XCircle } from "lucide-react";
 import axiosInstance from "../../../api/AxiosInstance";
 import ToastAlert from "../../componenteToast/ToastAlert";
 import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+import { motion } from "framer-motion";
+import { faGoogle } from "@fortawesome/free-brands-svg-icons";
+import BotonAnimado from "../../componentesReutilizables/BotonAnimado";
+import { BotonMotionGeneral } from "../../componentesReutilizables/BotonMotionGeneral";
 export function GoogleFormIntegracion({ dataIntegracion }) {
   const googleConfig =
     dataIntegracion?.nombre === "Google Service" ? dataIntegracion : null;
@@ -162,31 +167,57 @@ export function GoogleFormIntegracion({ dataIntegracion }) {
         )}
       </div>
 
-      {/* Botones */}
-      <div className="d-flex justify-content-end gap-2">
-        {!isEditing ? (
-          <button
-            type="button"
-            className="btn-editar"
-            onClick={() => setIsEditing(true)}
-          >
-            Editar
-          </button>
-        ) : (
-          <>
-            <button
-              type="button"
-              className="btn-cancelar"
-              onClick={() => setIsEditing(false)}
-              disabled={loading}
-            >
-              Cancelar
-            </button>
-            <button type="submit" className="btn-guardar" disabled={loading}>
-              {loading ? "Guardando..." : "Guardar"}
-            </button>
-          </>
+      <div className="d-flex justify-content-between align-items-center mt-4 pt-3 border-top gap-3">
+        {/* --- GRUPO IZQUIERDA: Botón de Conexión --- */}
+        {/* Solo se muestra si NO estamos editando */}
+        {!isEditing && (
+          <BotonMotionGeneral
+            type="button" // <-- ¡Asegúrate que tu componente BotonMotionGeneral pase este 'type'!
+            id="google-connect-btn"
+            onClick={() => {
+              window.location.href =
+                "https://e34f664f69a0.ngrok-free.app/api/auth/google/redirect";
+            }}
+            icon={<FontAwesomeIcon icon={faGoogle} />}
+            text="Conectar Servicio"
+          />
         )}
+
+        {/* --- GRUPO DERECHA: Botones de Edición/Guardado --- */}
+        {/* Este div siempre está a la derecha */}
+        <div className="d-flex justify-content-end gap-2">
+          {!isEditing ? (
+            // --- MODO "VISTA" (isEditing = false) ---
+            <>
+              <BotonMotionGeneral
+                type="button" // <-- ¡Asegúrate que tu componente BotonMotionGeneral pase este 'type'!
+                onClick={() => setIsEditing(true)}
+                icon={<PenIcon />}
+                text="Editar"
+              />
+            </>
+          ) : (
+            // --- MODO "EDICIÓN" (isEditing = true) ---
+            <>
+              <button
+                type="button" // <-- También importante para el botón de cancelar
+                className="btn-cerrar-modal"
+                onClick={() => setIsEditing(false)}
+                disabled={loading}
+              >
+                Cancelar
+              </button>
+
+              <button
+                type="submit" // <-- Este SÍ es de tipo submit
+                className="btn-guardar"
+                disabled={loading}
+              >
+                {loading ? "Guardando..." : "Guardar"}
+              </button>
+            </>
+          )}
+        </div>
       </div>
     </form>
   );

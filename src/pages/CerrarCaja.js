@@ -72,15 +72,8 @@ export function CerrarCaja() {
   });
 
   useEffect(() => {
-    if (
-      cajaData?.totalVenta !== undefined &&
-      cajaData?.montoInicial !== undefined
-    ) {
-      // Convierte a número y haz la operación, luego formatea
-      const montoVendido = (
-        Number(cajaData.totalVenta) - Number(cajaData.montoInicial)
-      ).toFixed(2);
-
+    if (cajaData?.totalVenta !== undefined) {
+      const montoVendido = Number(cajaData.totalVenta).toFixed(2);
       setValue("montoVendido", montoVendido, {
         shouldValidate: true,
         shouldDirty: true,
@@ -201,7 +194,7 @@ export function CerrarCaja() {
                   >
                     <div className="card-body d-flex align-items-center justify-content-between p-3">
                       <div className="bg-white bg-opacity-50 rounded-circle p-2">
-                        <BanknoteArrowDown
+                        <BanknoteArrowDown // Icono de "Total Dinero"
                           height="40px"
                           width="40px"
                           color="#C44569"
@@ -210,16 +203,17 @@ export function CerrarCaja() {
                       </div>
                       <div className="w-100 text-end">
                         <p className="mb-1 fw-semibold text-dark opacity-90">
-                          Total de Ventas
+                          Total en Caja
                         </p>
                         <p className="card-text text-end fw-bold h5 mb-0 text-dark">
-                          S/.{Number(cajaData?.totalVenta || 0).toFixed(2)}
+                          S/.{sumaTotal} {/* Usamos la variable sumaTotal */}
                         </p>
                       </div>
                     </div>
                   </div>
                 </div>
 
+                {/* --- TARJETA 2 (Monto Inicial) --- */}
                 <div className="col-md-4">
                   <div
                     className="card border-0 shadow-sm"
@@ -230,7 +224,7 @@ export function CerrarCaja() {
                   >
                     <div className="card-body d-flex align-items-center justify-content-between p-3">
                       <div className="bg-white bg-opacity-50 rounded-circle p-2">
-                        <WalletMinimal
+                        <WalletMinimal // Icono de "Dinero Inicial"
                           height="40px"
                           width="40px"
                           color="#4A69BD"
@@ -249,6 +243,7 @@ export function CerrarCaja() {
                   </div>
                 </div>
 
+                {/* --- ¡CORRECCIÓN #4: TARJETA 3 (Monto Vendido)! --- */}
                 <div className="col-md-4">
                   <div
                     className="card border-0 shadow-sm"
@@ -259,7 +254,7 @@ export function CerrarCaja() {
                   >
                     <div className="card-body d-flex align-items-center justify-content-between p-3">
                       <div className="bg-white bg-opacity-50 rounded-circle p-2">
-                        <TrendingUp
+                        <TrendingUp // Icono de "Ventas/Ganancias"
                           height="40px"
                           width="40px"
                           color="#38A169"
@@ -268,14 +263,12 @@ export function CerrarCaja() {
                       </div>
                       <div className="w-100 text-end">
                         <p className="mb-1 fw-semibold text-dark opacity-90">
-                          Ganancias
+                          Monto Vendido (Día)
                         </p>
                         <p className="card-text text-end fw-bold h5 mb-0 text-dark">
                           S/.
-                          {Number(
-                            (cajaData?.totalVenta || 0) -
-                              (cajaData?.montoInicial || 0)
-                          ).toFixed(2)}
+                          {/* Mostramos solo el totalVenta (34.00) */}
+                          {Number(cajaData?.totalVenta || 0).toFixed(2)}
                         </p>
                       </div>
                     </div>
@@ -315,7 +308,7 @@ export function CerrarCaja() {
 
                 <div className="card-body">
                   {/* Información de Apertura */}
-                  <div className="bg-white rounded-3 p-3 mb-4 shadow-sm">
+                  <div className="bg-white rounded-3 p-3 mb-4 border">
                     <div className="d-flex flex-column align-items-left mb-3">
                       <div className="d-flex">
                         <User className="text-muted me-2" size={18} />
@@ -360,11 +353,11 @@ export function CerrarCaja() {
                   </div>
 
                   {/* Montos */}
-                  <div className="bg-white rounded-3 p-3 shadow-sm">
+                  <div className="bg-white rounded-3 p-3 border">
                     <div className="form-floating mb-3">
                       <input
                         type="text"
-                        className="form-control border-0 bg-light fs-5 fw-bold text-success"
+                        className="form-control border bg-light fs-5 fw-bold text-success"
                         style={{ height: "60px" }}
                         readOnly
                         {...register("montoVendido", {
@@ -378,7 +371,7 @@ export function CerrarCaja() {
                     <div className="form-floating">
                       <input
                         type="text"
-                        className="form-control border-0 bg-light fs-5 fw-bold text-primary"
+                        className="form-control border bg-light fs-5 fw-bold text-primary"
                         style={{ height: "60px" }}
                         defaultValue="0"
                         {...register("montoDejar", {

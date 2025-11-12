@@ -127,8 +127,8 @@ export function CombosList() {
     <div className="card shadow-sm h-100">
       <div className="card-header border-bottom d-flex justify-content-between align-items-center mb-2">
         <h5 className="mb-0">Combos</h5>
-        <div className="d-flex align-items-center">
-          <div className="d-flex">
+        <div className="d-flex align-items-center gap-2">
+          <div className="d-flex flex-wrap">
             <input
               type="text"
               placeholder="Buscar..."
@@ -139,15 +139,17 @@ export function CombosList() {
                 setVisibleCount(6); // Reset si se hace nueva búsqueda
               }}
             />
+          </div>
+          <div className="d-flex align-items-center ">
             <button
-              className="btn btn-agregar-plato btn-sm rounded-pill mx-3"
+              className=" btn btn-outline-dark btn-sm rounded-pill "
               onClick={() => {
                 setIsModalOpen(true);
                 refetchSunat();
               }}
             >
-              Nuevo Combo
               <FontAwesomeIcon icon={faPlus} color={"auto"} />
+              Nuevo Combo
             </button>
           </div>
         </div>
@@ -155,7 +157,7 @@ export function CombosList() {
 
       <div
         className="card-body"
-        style={{ overflowY: "auto", minHeight: "450px", maxHeight: "450px" }}
+        style={{ overflowY: "auto", minHeight: "450px" }}
         ref={cardBodyRef}
       >
         {isLoading ? (

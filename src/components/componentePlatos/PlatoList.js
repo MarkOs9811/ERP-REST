@@ -16,6 +16,8 @@ import { Cargando } from "../componentesReutilizables/Cargando";
 import ToastAlert from "../componenteToast/ToastAlert";
 import ModalAlertActivar from "../componenteToast/ModalAlertActivar";
 import { TablasGenerales } from "../componentesReutilizables/TablasGenerales";
+import { Pen, Pencil, Trash } from "lucide-react";
+import ModalRight from "../componentesReutilizables/ModalRight";
 
 export function PlatoList({ search }) {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -110,7 +112,9 @@ export function PlatoList({ search }) {
   const columns = [
     {
       name: "Foto",
-      selector: (row) => (
+      cell: (
+        row // 'cell' es mejor para JSX que 'selector'
+      ) => (
         <img
           src={
             row.foto
@@ -119,7 +123,6 @@ export function PlatoList({ search }) {
           }
           alt="Foto del Plato"
           onError={(e) => {
-            // Solo reemplaza la imagen si aún no es la imagen por defecto
             if (!e.target.src.includes("img-default.jpg")) {
               e.target.src = "/images/img-default.jpg";
             }
@@ -128,71 +131,96 @@ export function PlatoList({ search }) {
             width: "50px",
             height: "50px",
             objectFit: "cover",
-            borderRadius: "5px",
+            borderRadius: "50%", // <-- CAMBIO: Círculo en lugar de cuadrado
           }}
         />
       ),
-      sortable: false, // No tiene sentido ordenar por imagen
-      wrap: false,
-      grow: 0,
+      grow: 0, // No necesita crecer
+      width: "80px", // Ancho fijo
     },
     {
-      name: "Nombre",
-      selector: (row) => row.nombre,
+      name: "Plato",
+      selector: (row) => row.nombre, // El selector se mantiene para ordenar por nombre
       sortable: true,
       wrap: true,
+      grow: 3, // Damos más espacio a esta columna
+      cell: (row) => (
+        <div>
+          <strong style={{ color: "#212529" }}>{row.nombre}</strong>
+          <p
+            className="text-muted mb-0"
+            style={{ fontSize: "0.85em", whiteSpace: "normal" }}
+          >
+            {/* Acortamos la descripción si es muy larga */}
+            {row.descripcion.length > 80
+              ? row.descripcion.substring(0, 80) + "..."
+              : row.descripcion}
+          </p>
+        </div>
+      ),
     },
     {
-      name: "Categoria",
+      name: "Categoría", // <-- CAMBIO: Tilde
       selector: (row) => row.categoria.nombre,
       sortable: true,
       wrap: true,
     },
     {
-      name: "Descripcion",
-      selector: (row) => row.descripcion,
+      name: "Precio",
+      selector: (row) => row.precio, // <-- CAMBIO: Ordenar por número
       sortable: true,
       wrap: true,
+      cell: (row) => (
+        // Formateamos el precio y lo ponemos en negrita
+        <strong>S/. {Number(row.precio).toFixed(2)}</strong>
+      ),
     },
     {
-      name: "Precio",
-      selector: (row) => "S/." + row.precio,
+      name: "Estado", // <-- CAMBIO: Nueva columna de Estado
+      selector: (row) => row.estado,
       sortable: true,
-      wrap: true,
+      width: "120px",
+      center: true,
+      cell: (row) =>
+        row.estado == 1 ? (
+          <span className="badge bg-success ">Activo</span>
+        ) : (
+          <span className="badge bg-danger">Inactivo</span>
+        ),
     },
     {
       name: "Acciones",
+      center: true,
+      grow: 2, // Damos espacio suficiente
       cell: (row) => {
         const { estado } = row;
         return (
-          <div className="d-flex justify-content-around">
+          // <-- CAMBIO: Usamos gap-2 para un espaciado limpio
+          <div className="d-flex gap-2">
             {estado === 1 ? (
               <>
                 <button
-                  className=" btn-editar me-2"
+                  className="btn-editar btn-sm" // <-- btn-sm para tamaño consistente
                   data-bs-toggle="tooltip"
-                  data-bs-placement="top"
                   title="Editar Plato"
                   onClick={() => handleOpenEditar(row)}
                 >
-                  <FontAwesomeIcon icon={faPenToSquare} />
+                  <Pencil size={"auto"} />
                 </button>
 
                 <button
-                  className="btn-eliminar"
+                  className="btn-eliminar btn-sm" // <-- btn-sm
                   data-bs-toggle="tooltip"
-                  data-bs-placement="top"
                   title="Eliminar Plato"
                   onClick={() => handleEliminarQuestion(row)}
                 >
-                  <FontAwesomeIcon icon={faTrashCan} />
+                  <Trash size={"auto"} />
                 </button>
               </>
             ) : (
               <button
-                className="btn btn-outline-success"
+                className="btn btn-outline-success btn-sm" // <-- btn-sm
                 data-bs-toggle="tooltip"
-                data-bs-placement="top"
                 title="Activar Plato"
                 onClick={() => {
                   setModalActivar(true);
@@ -228,23 +256,16 @@ export function PlatoList({ search }) {
       )}
 
       {/* // modal para editar un PLATO */}
-      <Modal
-        show={showModalEditar}
-        onHide={handleCloseEditarCat}
-        centered
-        className="modal-sin-borde"
+      <ModalRight
+        isOpen={showModalEditar}
+        onClose={handleCloseEditarCat}
+        hideFooter={true}
+        title={"Actualizar plato"}
       >
-        <Modal.Header closeButton>
-          <Modal.Title>Actualizar Plato</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {/* Pasa handleCloseModal como prop a CATEGORIA */}
-          <PlatoEditar
-            handleCloseModal={handleCloseEditarCat}
-            dataPlato={dataPlato}
-          />
-        </Modal.Body>
-      </Modal>
+        {({ handleClose }) => (
+          <PlatoEditar handleCloseModal={handleClose} dataPlato={dataPlato} />
+        )}
+      </ModalRight>
 
       {/* MODAL PARA ELIMINAR USUARIO */}
       <ModalAlertQuestion

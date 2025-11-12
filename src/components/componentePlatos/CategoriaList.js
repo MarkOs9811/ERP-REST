@@ -20,6 +20,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Cargando } from "../componentesReutilizables/Cargando";
 import ModalRight from "../componentesReutilizables/ModalRight";
 import { useForm } from "react-hook-form";
+import { Check, Pencil, Trash2Icon } from "lucide-react";
 
 export function CategoriaList() {
   const [categoria, setCategoria] = useState([]);
@@ -183,12 +184,15 @@ export function CategoriaList() {
     <div className="card p-0 shadow-sm h-100">
       <div className="card-header d-flex justify-content-between align-items-center mb-2">
         <h5 className="mb-0">Categorías</h5>
-        <button
-          className="btn btn-agregar-categoria btn-sm rounded-pill px-2 text-white"
-          onClick={() => setModalAddCategoria(true)}
-        >
-          Nuevo <FontAwesomeIcon icon={faPlus} />
-        </button>
+        <div className="d-flex">
+          <button
+            className="btn btn-outline-dark btn-sm rounded-pill px-2 "
+            onClick={() => setModalAddCategoria(true)}
+          >
+            <FontAwesomeIcon icon={faPlus} />
+            Nuevo
+          </button>
+        </div>
       </div>
 
       {/* Buscador */}
@@ -248,10 +252,10 @@ export function CategoriaList() {
               <div className="ms-auto">
                 <button
                   type="button"
-                  className="btn text-secondary btn-sm me-2"
+                  className="btn-editar btn-sm me-2"
                   onClick={() => handleOpenEditarCat(categoria)}
                 >
-                  <FontAwesomeIcon icon={faPenToSquare} />
+                  <Pencil size={"auto"} />
                 </button>
 
                 {categoria.estado === 1 ? (
@@ -259,24 +263,24 @@ export function CategoriaList() {
                     data-bs-toggle="tooltip"
                     data-bs-placement="right"
                     title="Eliminar Categoria"
-                    className="btn text-danger btn-sm"
+                    className="btn-eliminar btn-sm"
                     onClick={() =>
                       handleEliminarCat(categoria.id, categoria.nombre)
                     }
                   >
-                    <FontAwesomeIcon icon={faTrashCan} />
+                    <Trash2Icon size={"auto"} />
                   </button>
                 ) : (
                   <button
                     data-bs-toggle="tooltip"
                     data-bs-placement="top"
                     title="Activar Categoria"
-                    className="btn text-success btn-sm"
+                    className="btn-activar btn-sm"
                     onClick={() =>
                       handleActivar(categoria.id, categoria.nombre)
                     }
                   >
-                    <FontAwesomeIcon icon={faCheckCircle} />
+                    <Check size={"auto"} />
                   </button>
                 )}
               </div>
@@ -293,7 +297,7 @@ export function CategoriaList() {
         title={"Nueva Categoría"}
       >
         <form
-          className="card gap-3 border-0 h-100"
+          className="card gap-3 border-0 h-100 bg-transparent p-3"
           onSubmit={handleSubmit(handleRegisterCategoria)}
         >
           <div className="modal-body mb-3">
@@ -331,18 +335,20 @@ export function CategoriaList() {
       </ModalRight>
 
       {/* // modal para editar un CATEGORIA */}
-      <Modal show={isModalOpen} onHide={handleCloseEditarCat} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>Actualizar Categoria</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
+      <ModalRight
+        title={"Editar categoria"}
+        isOpen={isModalOpen}
+        onClose={handleCloseEditarCat}
+        hideFooter={true}
+      >
+        {({ handleClose }) => (
           <CategoriaEditar
-            handleCloseModal={handleCloseEditarCat}
+            handleCloseModal={handleClose}
             dataCategoria={dataCat}
             onCategoriaUpdate={handleCategoriaActualizar}
           />
-        </Modal.Body>
-      </Modal>
+        )}
+      </ModalRight>
 
       {/* Modal pregunta de eliminar */}
       <ModalAlertQuestion

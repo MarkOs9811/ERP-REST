@@ -1,197 +1,281 @@
-/* Contenedor izquierdo con imagen de fondo */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* --- ESTILOS PARA EL NUEVO LOGIN "FIRE WOK" --- */
+
+/* --- Variables de Color (¡Ajusta --brand-color a tu rojo!) --- */
+:root {
+  --brand-color: #d9534f;
+  /* Un rojo "fuego" */
+  --brand-color-dark: #c9302c;
+  --dark-bg: #1f1f1f;
+  --light-bg: #f8f9fa;
+  --text-dark: #212529;
+  --text-light: #f1f1f1;
+  --text-muted: #6c757d;
+  --border-color: #dee2e6;
+  --error-color: #dc3545;
 }
 
-.login-left {
+/* --- Contenedor Principal --- */
+.login-container-wrapper {
+  width: 100%;
+  height: 100vh;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--light-bg);
+  overflow: hidden;
+}
+
+.login-container-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  /* 50/50 split */
+  width: 100%;
+  max-width: 1400px;
+  height: 90vh;
+  max-height: 800px;
+  margin: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+/* --- 1. Panel Izquierdo (Branding con tu imagen) --- */
+.login-left-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem;
+  text-align: center;
+  color: var(--text-light);
+
+  /* --- ¡TU IMAGEN DE FONDO! --- */
+  /* Asegúrate que la ruta '/images/fondoLogin2.jpg' sea correcta desde la carpeta 'public' */
   background: url('/public/images/fondoLogin2.jpg') no-repeat center center;
   background-size: cover;
+  background-position: left;
   position: relative;
-  height: 100vh;
+  z-index: 1;
+  /* Para que el contenido esté sobre el overlay */
+}
+
+/* --- Overlay oscuro SOBRE la imagen de fondo --- */
+.login-left-panel::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  /* Overlay negro al 50% */
+  z-index: -1;
+  /* Se pone detrás del contenido (logo, texto) */
+}
+
+.login-logo {
+  width: 250px;
+  height: auto;
+  margin-bottom: 1.5rem;
+  animation: float-in 1s ease-out;
+}
+
+.login-brand-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #fff!important;
+  animation: fade-in 1s ease-out 0.2s backwards;
+}
+
+.login-brand-subtitle {
+  font-size: 1.1rem;
+  color: var(--text-light);
+  opacity: 0.9;
+  animation: fade-in 1s ease-out 0.4s backwards;
+}
+
+/* --- 2. Panel Derecho (Formulario) --- */
+.login-right-panel {
   display: flex;
-  justify-content: center;
   align-items: center;
-  color: white;
-  text-align: center;
-}
-
-
-
-.overlay p {
-  font-size: 48px;
-  font-weight: bold;
-  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
-  color: #fff;
-}
-
-/* Contenedor del login */
-.login-container {
-  display: flex;
-  height: 100vh;
-}
-
-.login-right {
-  display: flex;
   justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  width: 100%;
-  padding: 20px;
-  background-color: #f4f6f9;
+  background: #ffffff;
+  padding: 3rem;
 }
 
 .login-form {
   width: 100%;
-  max-width: 400px; /* Limita el ancho del formulario */
+  max-width: 400px;
 }
 
-.login-form h2 {
-  margin-bottom: 20px;
+.login-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  text-align: center;
+  margin-bottom: 2.5rem;
 }
 
-.login-form .form-floating {
-  margin-bottom: 15px;
+/* --- 3. Inputs Personalizados --- */
+.input-group-custom {
+  position: relative;
+  margin-bottom: 1.5rem;
 }
 
-.login-form .form-floating label {
-  display: block;
-  margin-bottom: 5px;
+.input-icon {
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  transition: color 0.2s ease;
 }
 
-.login-form .form-floating input {
+.form-control-custom {
+  height: 55px;
   width: 100%;
-  padding: 8px;
-  border: 1px solid #ddd;
+  background: var(--light-bg);
+  border: 2px solid var(--border-color);
   border-radius: 10px;
+  padding: 0 20px 0 50px;
+  /* Espacio para el icono */
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-dark);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.button-normal-login {
-  width: 40%;
-  padding: 10px;
-  background: #208cff;
-  border: none;
-  color: white;
-  border-radius: 20px;
-  cursor: pointer;
-  margin: auto;
-  text-align: center;
-  position: relative; /* Necesario para el pseudo-elemento */
-  overflow: hidden; /* Oculta el brillo que sobresalga del botón */
-  transition: all 0.2s ease-out;
-}
-
-.login-form .button-normal-login::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%; /* Empieza fuera del botón */
-  width: 100%;
-  height: 100%;
-  background: rgba(34, 146, 238, 0.4); /* Color del brillo */
-  transform: skewX(-45deg); /* Esquina diagonal para el efecto */
-  transition: all 0.4s ease-out;
-}
-
-.login-form .button-normal-login:hover::before {
-  left: 100%; /* Mueve el brillo hacia la derecha */
-}
-
-.login-form button:active::before {
-  left: -100%; /* Vuelve de derecha a izquierda al hacer clic */
-}
-
-.login-form button:hover {
-  background: #1862b1;
-  font-weight: bold;
-}
-
-
-.error {
-  color: red;
-  font-size: 14px;
-  margin-bottom: 10px;
-  text-align: center;
-}
-
-.card-asistencia {
-  position: absolute;
-  bottom: 0px;
-  /* Ajusta la distancia desde la parte inferior */
-  right: 20px;
-  /* Ajusta la distancia desde la derecha */
-  width: 400px;
-  /* Mantén el ancho de la card */
-  background: none;
-}
-
-.btn-asistencia {
-  display: block;
-  color: #fff;
-  bottom: 0px;
-  cursor: pointer;
-  font-size: 16px;
+.form-control-custom::placeholder {
+  color: var(--text-muted);
   font-weight: 400;
-  height: 60px;
-  line-height: 30px;
-  margin: 0 auto 2em;
-  max-width: 300px;
-  width: 300px;
-  text-align: center;
-  position: relative;
-  text-decoration: none;
-  text-transform: uppercase;
-  vertical-align: middle;
-  overflow: hidden;
-  background-color: #bd1717;
-  border-radius: 40px;
-  transition: all 0.3s ease;
-  box-shadow: 10px 5px 10px 5px rgba(0, 0, 0, 0.2);
 }
 
-.btn-asistencia span {
-  position: relative;
-  z-index: 1;
+.form-control-custom:focus {
+  outline: none;
+  border-color: var(--brand-color);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(217, 83, 79, 0.2);
 }
 
-.btn-asistencia::before {
-  content: '';
+.form-control-custom:focus+.input-icon {
+  color: var(--brand-color);
+}
+
+/* Estado de error del input */
+.form-control-custom.is-invalid {
+  border-color: var(--error-color);
+  background-color: #fff8f8;
+}
+
+.form-control-custom.is-invalid:focus {
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2);
+}
+
+.form-control-custom.is-invalid+.input-icon {
+  color: var(--error-color);
+}
+
+.invalid-feedback-custom {
+  display: flex;
+  align-items: center;
+  color: var(--error-color);
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-top: 8px;
+}
+
+/* Icono de ver/ocultar contraseña */
+.password-toggle-icon {
   position: absolute;
-  top: 0;
-  left: -100%;
-  width: 200%;
-  height: 100%;
-  background: linear-gradient(120deg, rgba(255, 255, 255, 0) 0%, rgba(245, 0, 0, 0.4) 50%, rgba(255, 255, 255, 0) 100%);
-  transform: skewX(-25deg);
-  transition: all 0.7s ease;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 1.1rem;
 }
 
-.btn-asistencia:hover::before {
-  left: 100%;
-  transition: all 0.7s ease;
+/* --- 4. Botón de Ingresar --- */
+.btn-login-submit {
+  width: 100%;
+  height: 55px;
+  padding: 0 1.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--brand-color);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.btn-asistencia:hover {
-  background-color: #940000;
-  color: white;
-  transform: scale(1.05);
-  font-weight: bolder;
-  box-shadow: 0px 5px 10px 5px rgba(0, 0, 0, 0.2);
+.btn-login-submit:hover:not(:disabled) {
+  background: var(--brand-color-dark);
+  box-shadow: 0 4px 15px rgba(217, 83, 79, 0.3);
 }
 
- .btn-google {
-   padding: 10px 20px;
-   background-color: #ffffff;
-   color: rgb(46, 46, 46);
-   border: 1px solid grey;
-   border-radius: 4px;
-   font-size: 16px;
-   cursor: pointer;
-   display: flex;
-   align-items: center;
- }
+.btn-login-submit:disabled {
+  background-color: var(--text-muted);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
 
- .btn-google:hover {
-   background-color: #c5c5c5!important;
- }
+/* --- 5. Animaciones y Responsividad --- */
+@keyframes float-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* Dispositivos Móviles */
+@media (max-width: 992px) {
+  .login-container-grid {
+    grid-template-columns: 1fr;
+    /* Una sola columna */
+    height: 100vh;
+    max-height: none;
+    margin: 0;
+    border-radius: 0;
+  }
+
+  .login-left-panel {
+    display: none;
+    /* Ocultamos el panel de marca en móviles */
+  }
+
+  .login-right-panel {
+    padding: 2rem;
+  }
+
+  .login-form {
+    max-width: 100%;
+  }
+
+  .login-title {
+    margin-bottom: 2rem;
+  }
+}

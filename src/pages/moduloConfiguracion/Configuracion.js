@@ -125,8 +125,7 @@ export function Configuracion() {
     },
   ];
 
-  const opciones =
-    userRol === "administrador" ? opcionesAdmin : opcionesUsuario;
+  const opciones = userRol == "administrador" ? opcionesAdmin : opcionesUsuario;
 
   return (
     <div>

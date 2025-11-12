@@ -110,7 +110,7 @@ export default function LayoutPOS({ children }) {
               caja?.estado === "abierto" && (
                 <button
                   type="button"
-                  className="btn btn-outline-warning text-dark d-flex align-items-center justify-content-center"
+                  className="btn btn-outline-dark d-flex align-items-center justify-content-center"
                   onClick={() => navigate("/vender/cerrarCaja")}
                 >
                   <LockKeyhole className="text-auto" />

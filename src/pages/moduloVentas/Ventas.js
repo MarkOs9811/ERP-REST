@@ -67,13 +67,6 @@ export function Ventas() {
     parseFloat(totalVentas) - parseFloat(totalVentasMesPasado)
   ).toFixed(2);
 
-  const situacion =
-    totalVentas > totalVentasMesPasado
-      ? "Mejor que el mes pasado :)"
-      : totalVentas < totalVentasMesPasado
-      ? "Menos que el mes pasado :("
-      : "Igual que el mes pasado :|";
-
   const hoy = new Date();
   const totalVentasHoy = ventas
     .filter((venta) => {
@@ -123,7 +116,7 @@ export function Ventas() {
                       S/.{totalVentasHoy}
                     </p>
                     <small className="text-secondary fw-normal">
-                      {situacion}
+                      Ventas Hoy.
                     </small>
                   </div>
                 </div>

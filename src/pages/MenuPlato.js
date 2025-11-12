@@ -34,8 +34,8 @@ export function MenuPlato() {
           <div className="card shadow-sm h-100">
             <div className="card-header border-bottom d-flex justify-content-between align-items-center mb-2">
               <h5 className="mb-0">Menú</h5>
-              <div className="d-flex align-items-center">
-                <div className="d-flex">
+              <div className="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                <div className="flex-grow-1 me-2">
                   <input
                     type="text"
                     placeholder="Buscar..."
@@ -43,19 +43,23 @@ export function MenuPlato() {
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                   />
+                </div>
+                <div className="d-flex align-items-center gap-2">
                   <button
-                    className="btn btn-agregar-plato btn-sm rounded-pill p-0 mx-3"
+                    className="btn btn-outline-dark rounded-pill"
                     onClick={handleAddPlato}
                   >
-                    Nuevo Plato <FontAwesomeIcon icon={faPlus} />
+                    <FontAwesomeIcon icon={faPlus} className="me-2" />
+                    Nuevo Plato
                   </button>
+
                   <button
                     type="button"
                     className="btn btn-dark"
                     onClick={() => GetReporteExcel("/reportePlatosTodos")}
                     title="Descargar Reporte de Platos"
                   >
-                    <FileChartColumnIncreasing className="text-auto" />
+                    <FileChartColumnIncreasing />
                   </button>
                 </div>
               </div>

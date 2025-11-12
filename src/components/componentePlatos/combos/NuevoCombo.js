@@ -321,8 +321,11 @@ export function NuevoCombo({ onClose, onSuccess, estadoOpenAi }) {
       </div>
 
       {/* Botón de envío */}
-      <div className="text-end">
-        <button type="submit" className="btn btn-success">
+      <div className="text-end d-flex gap-3">
+        <button type="submit" className="btn-cerrar-modal">
+          Cerrar
+        </button>
+        <button type="submit" className="btn-guardar">
           Crear Combo
         </button>
       </div>

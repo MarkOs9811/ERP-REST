@@ -58,7 +58,6 @@ import { HorasExtras } from "./pages/moduloPlanilla/HorasExtras";
 import { AdelantoSueldo } from "./pages/moduloPlanilla/AdelantoSueldo";
 import { Vacaciones } from "./pages/moduloPlanilla/Vacaciones";
 import { AjustesPlanilla } from "./pages/moduloPlanilla/AjustesPlanilla";
-import { GoogleRedirectHandler } from "./pages/GoogleRedirectHandler";
 import { Eventos } from "./pages/moduloIncidencias/Eventos";
 import { ReportePlanilla } from "./pages/moduloPlanilla/ReportePlanilla";
 import { InformesFinancieros } from "./pages/moduloFinanzas/InformesFinancieros";
@@ -109,7 +108,6 @@ function App() {
         <Router>
           <Routes>
             <Route path="/errorVista" element={<ErrorVista />} />
-            <Route path="/google" element={<GoogleRedirectHandler />} />
             <Route path="/login" element={<Login />} />
             <Route path="/tomarAsistencia" element={<TakeAsistencia />} />
             <Route

@@ -62,12 +62,12 @@ export function InformacionRapidaHome({}) {
   const ventasHoyFormatted = ventasHoy.toFixed(2); // Formatear a 2 decimales
 
   // Calcular mesas ocupadas
-  console.log(mesas);
+  console.log("mesas  ocupadas", mesas);
   // Verificar si mesas es un objeto que contiene un array
-  const mesasArray = Array.isArray(mesas.mesas) ? mesas.mesas : [];
+  const mesasArray = Array.isArray(mesas.data) ? mesas.data : [];
 
   // Calcular mesas ocupadas
-  const mesasOcupadas = mesasArray.filter((mesa) => mesa.estado === 0).length;
+  const mesasOcupadas = mesasArray.filter((mesa) => mesa.estado == 0).length;
 
   // Calcular total de mesas
   const totalMesas = mesasArray.length;

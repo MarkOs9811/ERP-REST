@@ -1,0 +1,189 @@
+/* --- ESTILOS PARA FULLCALENDAR (Look Google Calendar) --- */
+
+/* 1. Arreglar títulos de días (quitar subrayado y cambiar color) */
+.fc-day-header-google a,
+.fc-col-header-cell-cushion {
+    text-decoration: none !important;
+    color: #5f6368 !important;
+}
+
+.fc-col-header-cell-cushion:hover {
+    color: #1967d2 !important;
+}
+
+/* 2. Estilo de los botones del header (Mes, Semana, Día) */
+.fc .fc-button {
+    background: #ffffff !important;
+    color: #3c4043 !important;
+    border: 1px solid #dadce0 !important;
+    box-shadow: none !important;
+    text-transform: capitalize !important;
+    padding: 6px 16px !important;
+}
+
+.fc .fc-button:hover {
+    background: #f8f9fa !important;
+}
+
+.fc .fc-button-primary:disabled {
+    background: #f8f9fa !important;
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active {
+    background: #e8f0fe !important;
+    color: #1967d2 !important;
+    border-color: #e8f0fe !important;
+}
+
+/* 3. Estilo de los Eventos (Compacto y Moderno) */
+.fc-event {
+    border: none !important;
+    border-radius: 4px !important;
+    background-color: #e8f0fe !important;
+    /* Fondo azul claro (OK) */
+    /* --- ¡CAMBIO AQUÍ! --- */
+    /* Quitamos el color de aquí, no es lo suficientemente específico */
+    /* color: #1967d2 !important; */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    padding: 0;
+}
+
+/* --- ¡CAMBIO AQUÍ! --- */
+/* Aplicamos el color al icono específicamente */
+.fc-event-content-custom .lucide {
+    color: #1967d2 !important;
+}
+
+/* 4. Clases personalizadas para el contenido del evento (JSX) */
+.fc-event-content-custom {
+    display: flex;
+    align-items: flex-start;
+    padding: 4px 6px;
+    overflow: hidden;
+    height: 100%;
+    /* --- ¡CAMBIO AQUÍ! --- */
+    /* Ponemos el color base aquí para que lo hereden los hijos */
+    color: #1c3c6b !important;
+    /* Azul marino oscuro súper legible */
+}
+
+.fc-event-details {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- ¡CAMBIO AQUÍ! --- */
+/* Nos aseguramos de que el título tome el color */
+.fc-event-title-custom {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 500;
+    font-size: 0.85em;
+    line-height: 1.3;
+    color: #1c3c6b !important;
+    /* Repetimos por si acaso */
+}
+
+/* --- ¡CAMBIO AQUÍ! --- */
+/* Damos estilo específico a la hora */
+.fc-event-time-custom {
+    font-size: 0.8em;
+    color: #1a73e8 !important;
+    /* Azul más brillante para la hora */
+    opacity: 1 !important;
+    /* Quitamos la opacidad */
+}
+
+/* --- ESTILOS PARA EL POPOVER (TIPPY) --- */
+/* (Esta parte está bien, la dejamos igual) */
+
+/* 5. Tema de Tippy (Caja principal) */
+.tippy-box[data-theme~="google-calendar"] {
+    background-color: #fff;
+    color: #202124;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        "Helvetica Neue", Arial, sans-serif;
+    border: 1px solid #dadce0;
+}
+
+.tippy-arrow[data-theme~="google-calendar"] {
+    color: #fff;
+}
+
+.tippy-content[data-theme~="google-calendar"] {
+    padding: 0 !important;
+}
+
+/* 6. Contenido personalizado del Popover (JSX) */
+.google-calendar-tooltip {
+    padding: 16px;
+    max-width: 320px;
+}
+
+.google-calendar-tooltip .tooltip-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.google-calendar-tooltip .tooltip-title-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.google-calendar-tooltip .tooltip-title {
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin: 0;
+    color: #202124;
+}
+
+.google-calendar-tooltip .tooltip-time {
+    font-size: 0.9em;
+    color: #5f6368;
+}
+
+.google-calendar-tooltip .tooltip-description {
+    font-size: 0.95em;
+    color: #3c4043;
+    margin-bottom: 12px;
+    white-space: pre-wrap;
+}
+
+.google-calendar-tooltip .tooltip-section {
+    display: flex;
+    align-items: flex-start;
+    font-size: 0.9em;
+    color: #3c4043;
+    margin-bottom: 8px;
+}
+
+.google-calendar-tooltip .tooltip-section .lucide {
+    color: #5f6368 !important;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.google-calendar-tooltip .tooltip-attendees {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.google-calendar-tooltip .tooltip-link {
+    display: inline-block;
+    margin-top: 12px;
+    font-size: 0.9em;
+    color: #1a73e8;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.google-calendar-tooltip .tooltip-link:hover {
+    text-decoration: underline;
+}
