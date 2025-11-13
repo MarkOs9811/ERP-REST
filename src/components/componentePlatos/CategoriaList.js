@@ -1,19 +1,12 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faMagnifyingGlass,
-  faPenToSquare,
-  faPlus,
-  faTrashCan,
-} from "@fortawesome/free-solid-svg-icons";
+import { faMagnifyingGlass, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import axiosInstance from "../../api/AxiosInstance";
 import "../../css/estilosComponentePlatos/estilosCategoria.css";
 import ToastAlert from "../../components/componenteToast/ToastAlert";
 import ModalAlertQuestion from "../componenteToast/ModalAlertQuestion";
 import ModalAlertActivar from "../componenteToast/ModalAlertActivar";
-import { faCheckCircle } from "@fortawesome/free-regular-svg-icons";
 import { CategoriaEditar } from "./CategoriaEditar";
-import { Modal } from "react-bootstrap";
 import { useTooltips } from "../../hooks/UseToolTips";
 import { GetCategoriaPlatos } from "../../service/accionesPlatos/GetCategoriaPlatos";
 import { useQuery } from "@tanstack/react-query";

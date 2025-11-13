@@ -118,7 +118,7 @@ export function Navegacion() {
                 onClick={() => navigate("/incidencias")}
               >
                 <Megaphone className="text-auto" />
-                Incidencias
+                Eventos
               </button>
             </div>
           )}

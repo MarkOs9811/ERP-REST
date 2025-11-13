@@ -6,10 +6,14 @@ import RippleWrapper from "./componentesReutilizables/RippleWrapper";
 import { PerfilPanel } from "./componentesHeader/PerfilPanel";
 import { NotificacionesPanel } from "./componentesHeader/NotificacionesPanel";
 import { capitalizeFirstLetter } from "../hooks/FirstLetterUp";
-import { Bell, Moon, Sun, SunMediumIcon } from "lucide-react";
+import { Bell, Moon, SunMediumIcon } from "lucide-react";
 import ModalRight from "./componentesReutilizables/ModalRight";
 export function Header() {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
+  const empresa = JSON.parse(localStorage.getItem("empresa")) || {};
+  const fotoEmpresa = empresa.logo
+    ? `${BASE_URL}/storage/${empresa.logo}`
+    : null;
   const fotoPerfilLocal = JSON.parse(localStorage.getItem("user"));
   const user = JSON.parse(localStorage.getItem("user"));
   const cajaDetalles = JSON.parse(localStorage.getItem("caja"));
@@ -45,12 +49,35 @@ export function Header() {
   return (
     <header className="navbar  header-contenido p-0 m-0 border-bottom">
       <nav className="container-fluid d-flex align-items-center justify-content-center p-0 m-0">
-        {/* Botón de compresión de sidebar */}
+        <div className="d-flex align-items-center justify-content-center gap-2 mx-3 ">
+          <div className="logo-empresa d-flex align-items-center ">
+            {cargo?.empleado?.cargo?.nombre === "atencion al cliente" ? (
+              <img
+                src={fotoEmpresa}
+                alt="logo empresa"
+                className="img-fluid"
+                style={{
+                  maxWidth: "40px",
+                  borderRadius: "50%",
+                  height: "40px",
+                  objectFit: "cover",
+                }}
+              />
+            ) : (
+              ""
+            )}
+          </div>
+          <div className="d-flex flex-column">
+            <h6 className="text-muted fw-bold mb-0">
+              {cargo?.empleado?.cargo?.nombre === "atencion al cliente"
+                ? capitalizeFirstLetter(empresa?.nombre)
+                : ""}
+            </h6>
 
-        <div className="d-flex align-items-center gap-2 mx-3">
-          <span className="small text-muted">
-            {capitalizeFirstLetter(cargo?.empleado?.cargo?.nombre)}
-          </span>
+            <span className="small text-muted mb-0">
+              {capitalizeFirstLetter(cargo?.empleado?.cargo?.nombre)}
+            </span>
+          </div>
         </div>
 
         {/* Icono de usuario */}
