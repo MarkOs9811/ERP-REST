@@ -89,7 +89,7 @@ export function Nomina() {
                 <BotonMotionGeneral
                   text="Validar Nomina"
                   onClick={() => setModalValidarNomina(true)}
-                  classDefault="btn d-flex align-items-center text-center rounded-3 border-0 shadow-sm text-dark text-nowrap"
+                  classDefault="btn d-flex align-items-center text-center rounded-3 border-0 shadow-sm text-white text-nowrap"
                   icon={<UserRoundCheck className="text-auto" />}
                 />
               </div>

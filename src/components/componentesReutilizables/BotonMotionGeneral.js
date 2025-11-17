@@ -13,8 +13,8 @@ export function BotonMotionGeneral({
   const whileHover = loading
     ? {}
     : {
-        scale: 1.05,
-        boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.15)",
+        y: -3, // Mueve el botón 5px hacia arriba
+        boxShadow: "0px 6px 15px rgba(0, 0, 0, 0.2)", // Sombra más pronunciada para el efecto
       };
 
   const whileTap = loading ? {} : { scale: 0.95 };

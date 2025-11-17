@@ -11,7 +11,8 @@ import axiosInstance from "../../api/AxiosInstance";
 
 import ToastAlert from "../componenteToast/ToastAlert";
 import { EditCargo } from "./componentesCargo/EditCargo";
-import { Plus } from "lucide-react";
+import { LayoutGrid, Plus } from "lucide-react";
+import { BotonMotionGeneral } from "../componentesReutilizables/BotonMotionGeneral";
 
 export function Cargos() {
   const [modalAddCargo, setModalAddCargo] = useState(false);
@@ -82,15 +83,21 @@ export function Cargos() {
   return (
     <div className="card shadow-sm p-3">
       <div className="card-header  d-flex align-items-center justify-content-between">
-        <p className="h4  align-middle mb-0">Cargos</p>
-        <button
-          type="button"
-          className="btn ms-auto border"
-          title="Agregar un cargo"
+        <div className="d-flex gap-2 align-items-center">
+          <div className="p-2 alert alert-primary rounded-lg mb-0">
+            <LayoutGrid className="text-primary" size={20} />
+          </div>
+          <div className="d-flex flex-column">
+            <h4 className="fw-bold m-0">Cargos</h4>
+            <small className="text-muted">Gestiona los cargos y roles</small>
+          </div>
+        </div>
+
+        <BotonMotionGeneral
+          text="Agregar Cargo"
+          icon={<Plus size={18} />}
           onClick={() => setModalAddCargo(true)}
-        >
-          <Plus className="text-auto" />
-        </button>
+        />
       </div>
       <div className="card-body p-4">
         {isLoading && <Cargando />}

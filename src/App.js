@@ -36,7 +36,11 @@ import { ErrorVista } from "./pages/ErrorVista";
 
 import { MesasList } from "./components/componenteVender/MesasList";
 import { MainLayout } from "./LayOut/MainLayout";
+import { ContenedorPrincipal } from "./components/componentesReutilizables/ContenedorPrincipal";
+import { LoginAdmin } from "./pageAdmin/LoginAdmin";
 
+import { LayOutAdmin } from "./LayOut/LayOutAdmin";
+import { AuthProviderAdmin } from "./AuthContextAdmin";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 function App() {
@@ -54,51 +58,67 @@ function App() {
   return (
     // AuthProvider envuelve todo
     <AuthProvider>
-      <CajaProvider>
-        <Router>
-          <Routes>
-            {/* --- RUTAS PÚBLICAS (Sin cambios) --- */}
-            <Route path="/errorVista" element={<ErrorVista />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/tomarAsistencia" element={<TakeAsistencia />} />
+      <AuthProviderAdmin>
+        <CajaProvider>
+          <Router>
+            <Routes>
+              {/* --- RUTAS PÚBLICAS (Sin cambios) --- */}
+              <Route path="/errorVista" element={<ErrorVista />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/tomarAsistencia" element={<TakeAsistencia />} />
 
-            {/* --- RUTAS POS (Sin cambios) --- */}
-            <Route
-              path="/vender/*"
-              element={
-                <CajaProtectedRoute>
-                  <ToastContainer />
-                  <LayoutPOS>
-                    <Routes>
-                      <Route path="mesas" element={<MesasList />} />
-                      <Route path="ventasLlevar" element={<ToLlevar />} />
-                      <Route path="mesas/platos" element={<ToMesa />} />
-                      <Route path="pedidosWeb" element={<PedidosWeb />} />
-                      <Route path="mesas/preVenta" element={<PreventaMesa />} />
-                      <Route
-                        path="mesas/detallesPago/:idPedidoWeb?"
-                        element={<DetallesPago />}
-                      />
-                      <Route path="cerrarCaja" element={<CerrarCaja />} />
-                      <Route path="cocina" element={<CocinaDespacho />} />
-                    </Routes>
-                  </LayoutPOS>
-                </CajaProtectedRoute>
-              }
-            />
+              {/* --- RUTAS POS (Sin cambios) --- */}
+              <Route
+                path="/vender/*"
+                element={
+                  <CajaProtectedRoute>
+                    <ToastContainer />
+                    <LayoutPOS>
+                      <Routes>
+                        <Route path="mesas" element={<MesasList />} />
+                        <Route path="ventasLlevar" element={<ToLlevar />} />
+                        <Route path="mesas/platos" element={<ToMesa />} />
+                        <Route path="pedidosWeb" element={<PedidosWeb />} />
+                        <Route
+                          path="mesas/preVenta"
+                          element={<PreventaMesa />}
+                        />
+                        <Route
+                          path="mesas/detallesPago/:idPedidoWeb?"
+                          element={<DetallesPago />}
+                        />
+                        <Route path="cerrarCaja" element={<CerrarCaja />} />
+                        <Route path="cocina" element={<CocinaDespacho />} />
+                      </Routes>
+                    </LayoutPOS>
+                  </CajaProtectedRoute>
+                }
+              />
+              {/* RUTAS PARA ADMIN MASTER */}
+              <Route
+                path="/masterAdmin"
+                element={
+                  <ContenedorPrincipal>
+                    <LoginAdmin />
+                  </ContenedorPrincipal>
+                }
+              />
+              <Route path="/masterAdmin/*" element={<LayOutAdmin />} />
 
-            <Route
-              path="/*"
-              element={
-                <PrivateRoute>
-                  <MainLayout />
-                </PrivateRoute>
-              }
-            />
-            {/* ====================== */}
-          </Routes>
-        </Router>
-      </CajaProvider>
+              {/* ================================================ */}
+              <Route
+                path="/*"
+                element={
+                  <PrivateRoute>
+                    <MainLayout />
+                  </PrivateRoute>
+                }
+              />
+              {/* ====================== */}
+            </Routes>
+          </Router>
+        </CajaProvider>
+      </AuthProviderAdmin>
     </AuthProvider>
   );
 }

@@ -9,7 +9,8 @@ import { AddArea } from "./componentesAreas/AddAreas";
 import { useForm } from "react-hook-form";
 import ToastAlert from "../componenteToast/ToastAlert";
 import axiosInstance from "../../api/AxiosInstance";
-import { Plus, PlusIcon } from "lucide-react";
+import { LayoutGrid, Plus, PlusIcon } from "lucide-react";
+import { BotonMotionGeneral } from "../componentesReutilizables/BotonMotionGeneral";
 
 export function Areas() {
   const [modalAddAreas, setModalAddArea] = useState();
@@ -59,15 +60,21 @@ export function Areas() {
   return (
     <div className="card shadow-sm p-3">
       <div className="card-header  d-flex align-items-center justify-content-between">
-        <p className="h4  align-middle mb-0">Areas</p>
-        <button
-          type="button"
-          className="btn btn-outline-dark"
-          title="Agregar un cargo"
+        <div className="d-flex gap-2 align-items-center">
+          <div className="p-2 alert alert-primary rounded-lg mb-0">
+            <LayoutGrid className="text-primary" size={20} />
+          </div>
+          <div className="d-flex flex-column">
+            <h4 className="fw-bold m-0">Áreas</h4>
+            <small className="text-muted">Gestiona los departamentos</small>
+          </div>
+        </div>
+
+        <BotonMotionGeneral
+          text="Agregar Área"
+          icon={<Plus size={18} />}
           onClick={() => setModalAddArea(true)}
-        >
-          <PlusIcon className="text-auto" />
-        </button>
+        />
       </div>
       <div className="card-body">
         {isloading && <Cargando />}

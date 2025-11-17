@@ -67,7 +67,6 @@ export const MainLayout = () => {
 
   return (
     <div className="main-container p-0 m-0 h-screen flex">
-      {/* --- RENDERIZADO CONDICIONAL --- */}
       {showFullLayout && <SideBar />}
 
       <div
@@ -87,7 +86,6 @@ export const MainLayout = () => {
                   transition: "width 0.3s ease, margin 0.3s ease",
                 }}
               >
-                {/* --- RENDERIZADO CONDICIONAL --- */}
                 <div
                   className="d-flex flex-column position-fixed "
                   style={{
@@ -105,9 +103,10 @@ export const MainLayout = () => {
                   )}
                   {!showHeader && <Navegacion />}
                 </div>
-
-                {/* Esta es tu estructura de rutas original */}
-                <ContenedorPrincipal>
+                <div
+                  className="px-3 overflow-y-auto overflow-x-hidden"
+                  style={{ marginTop: "120px" }}
+                >
                   <ToastContainer />
                   <Routes>
                     <Route
@@ -633,7 +632,7 @@ export const MainLayout = () => {
                     </Route>
                     <Route path="/abrirCaja" element={<AbrirCaja />} />
                   </Routes>
-                </ContenedorPrincipal>
+                </div>
               </div>
             </div>
           </div>
