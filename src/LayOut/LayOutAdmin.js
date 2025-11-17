@@ -16,11 +16,11 @@ import { AdminHeader } from "../pageAdmin/AdminHeader";
 
 export const LayOutAdmin = () => {
   return (
-    <div className="row vh-100">
-      <div className="col-md-2 h-100 p-0">
+    <div className="d-flex vh-100">
+      <div className="contenedorSideBar h-100 p-0">
         <AdminSidebar />
       </div>
-      <div className="col-md-10 h-100 d-flex flex-column p-0">
+      <div className=" w-100 h-100 d-flex flex-column p-0">
         <AdminHeader />
         <ContenedorPrincipal>
           <ToastContainer />

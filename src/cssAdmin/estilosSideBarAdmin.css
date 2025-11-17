@@ -1,0 +1,80 @@
+.admin-sidebar {
+    position: relative;
+    height: 100vh;
+    overflow-x: hidden !important;
+}
+
+
+.sidebar-header-admin{
+    height: 60px;
+}
+
+
+.admin-sidebar-nav ul{
+    list-style: none;
+    padding: 10px;
+    margin: 0;
+}
+.admin-sidebar-nav ul li{
+    width: 100%;
+    transition: background 0.28s ease, transform 0.18s ease, color 0.18s ease;
+    will-change: transform, background;
+    border-radius: 10px;
+    margin-bottom: 5px;
+}
+.admin-sidebar-nav ul li a{
+    display: block;
+    padding: 10px 20px;
+    color: #18211a;
+    text-decoration: none;
+   border-radius: 10px;
+    transition: background 0.28s cubic-bezier(.2,.9,.3,1), transform 0.18s ease, color 0.18s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.icon{
+    color: #18211a;
+    transition: color 0.18s ease, transform 0.18s ease;
+    margin-right: 5px;
+}
+/* Hover: ligero desplazamiento, fondo degradado suave y sombra */
+.admin-sidebar-nav ul li a:hover{
+    transform: translateX(6px);
+    background: linear-gradient(90deg, rgba(37,85,107,0.12), rgba(23,111,184,0.06));
+    color: #021826;
+}
+.admin-sidebar-nav ul li a:hover .icon{
+    transform: translateX(4px);
+    color: #021826;
+}
+
+/* Active: degradado raíz del color, acento izquierdo animado y sombra */
+.admin-sidebar-nav ul li a.active,
+.admin-sidebar-nav ul li a.active:focus {
+    background: linear-gradient(90deg, #057db4, #176fb8);
+    color: #ffffff;
+    position: relative;
+}
+
+/* barra de acento a la izquierda */
+.admin-sidebar-nav ul li a.active::before{
+    content: "";
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 56%;
+    width: 4px;
+    border-radius: 4px;
+    background:  rgb(255, 255, 255);
+}
+
+/* icon dentro del active */
+.admin-sidebar-nav ul li a.active .icon{
+    color: #ffffff;
+    transform: translateX(2px);
+}
+
+/* para el usuario logeado, footer */
+

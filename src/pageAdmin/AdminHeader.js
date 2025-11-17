@@ -1,7 +1,7 @@
 // components/admin/AdminHeader.js
 import React, { useState } from "react";
 import { Search, Bell, User, LogOut } from "lucide-react";
-import "../cssAdmin/estilosGeneralesAdmin.css";
+import "../cssAdmin/estilosCuerpoAdmin.css";
 import { useAuth } from "../AuthContextAdmin";
 
 export const AdminHeader = () => {
@@ -20,25 +20,29 @@ export const AdminHeader = () => {
   };
 
   return (
-    <header className="w-100 admin-header d-flex p-3 border-bottom align-items-center justify-content-between">
-      <div className="admin-header-search">
-        <Search size={18} className="search-icon" />
+    <header className="admin-header d-flex border-bottom align-items-center justify-content-between">
+      <div
+        className=" border rounded-pill d-flex align-items-center p-2 mx-3 search-bar "
+        style={{ width: "350px" }}
+      >
+        <Search size={18} className="search-icon mx-3" />
         <input
           type="text"
           placeholder="Buscar empresas, usuarios, módulos..."
           value={searchTerm}
           onChange={handleSearchChange}
+          className="border-0 w-100"
         />
       </div>
-      <div className="admin-header-actions">
-        <button title="Notificaciones">
+      <div className="d-flex ms-auto me-3 gap-2">
+        <button title="Notificaciones" className="btn btn-light">
           <Bell size={20} />
         </button>
         {/* Aquí puedes tener un menú desplegable de usuario */}
-        <button title="Perfil de usuario">
+        <button title="Perfil de usuario" className="btn btn-light">
           <User size={20} />
         </button>
-        <button onClick={handleLogout} className="logout-btn">
+        <button onClick={handleLogout} className="btn btn-danger">
           <LogOut size={18} style={{ marginRight: "8px" }} />{" "}
           {/* Ícono al lado del texto */}
           Cerrar Sesión
