@@ -20,7 +20,7 @@ export const LayOutAdmin = () => {
       <div className="contenedorSideBar h-100 p-0">
         <AdminSidebar />
       </div>
-      <div className=" w-100 h-100 d-flex flex-column p-0">
+      <div className=" w-100 h-100 d-flex flex-column p-0 bg-light">
         <AdminHeader />
         <ContenedorPrincipal>
           <ToastContainer />

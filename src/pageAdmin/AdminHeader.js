@@ -20,7 +20,7 @@ export const AdminHeader = () => {
   };
 
   return (
-    <header className="admin-header d-flex border-bottom align-items-center justify-content-between">
+    <header className="admin-header bg-white d-flex border-bottom align-items-center justify-content-between">
       <div
         className=" border rounded-pill d-flex align-items-center p-2 mx-3 search-bar "
         style={{ width: "350px" }}

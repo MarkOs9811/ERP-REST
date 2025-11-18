@@ -49,12 +49,18 @@
     color: #021826;
 }
 
-/* Active: degradado raíz del color, acento izquierdo animado y sombra */
+/* active: aplica también al icono */
 .admin-sidebar-nav ul li a.active,
 .admin-sidebar-nav ul li a.active:focus {
-    background: linear-gradient(90deg, #057db4, #176fb8);
-    color: #ffffff;
-    position: relative;
+    background: linear-gradient(90deg, #daf3ff, #c6e6ff);
+    color: #17355c;
+    font-weight: bold;
+}
+
+.admin-sidebar-nav ul li a.active .icon{
+    color: #17355c!important;
+    transform: translateX(2px);
+    transition: color 0.18s ease, transform 0.18s ease;
 }
 
 /* barra de acento a la izquierda */
@@ -67,7 +73,7 @@
     height: 56%;
     width: 4px;
     border-radius: 4px;
-    background:  rgb(255, 255, 255);
+    background:  rgb(47, 79, 126);
 }
 
 /* icon dentro del active */

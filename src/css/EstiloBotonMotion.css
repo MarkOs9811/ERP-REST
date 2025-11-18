@@ -10,7 +10,7 @@
 
     /* Tu 'text-dark' original */
     color: #dadada;
-
+    text-align: center!important;
     font-weight: 500;
 
     /* Un color de borde para modo claro */
@@ -22,7 +22,7 @@
 body.dark-theme .btn-motion-theme {
     /* Un degradado oscuro */
     background: linear-gradient(135deg, #2b2f36, #1d232c)!important;
-
+text-align: center !important;
     /* Texto claro */
     color: #f1f1f1;
 

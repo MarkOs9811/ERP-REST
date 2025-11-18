@@ -7,7 +7,7 @@ export function BotonMotionGeneral({
   onClick = () => {},
   loading = false,
   loadingText = "Cargando...", // Prop opcional para el texto de carga
-  classDefault = "d-flex align-items-center gap-1 px-3 py-2 w-auto rounded-3 border shadow-sm ms-auto",
+  classDefault = " text-center align-items-center gap-1 p-2 w-100 rounded-3 border shadow-sm ms-auto",
 }) {
   // Deshabilitamos las animaciones interactivas si está cargando
   const whileHover = loading
