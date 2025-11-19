@@ -70,16 +70,22 @@ export function EmpresasAdmin() {
     { name: "Número", selector: (row) => row.numero, sortable: true },
     {
       name: "Usuario Administrador",
+
+      // IMPORTANTE: 'selector' es necesario para que el ordenamiento (sortable) funcione.
+      // Si es null/vacío, devolvemos "" para que se ordene correctamente.
+      selector: (row) => row.userAdmin || "",
+
       cell: (row) =>
-        row.userAdmin === "" ? (
-          <>
-            <button className="btn-principal">
-              <Plus />
-              Asignar Usuario
-            </button>
-          </>
+        !row.userAdmin ? (
+          <button
+            className="btn-principal"
+            onClick={() => console.log("Click en asignar", row)}
+          >
+            <Plus />
+            Asignar Usuario
+          </button>
         ) : (
-          `${row.userAdmin}`
+          <span className="fw-medium">{row.userAdmin}</span>
         ),
 
       sortable: true,
@@ -124,7 +130,7 @@ export function EmpresasAdmin() {
             </div>
           </>
         ) : (
-          <button className="btn-activar">
+          <button className="btn-activar m-2">
             <Check />
           </button>
         ),

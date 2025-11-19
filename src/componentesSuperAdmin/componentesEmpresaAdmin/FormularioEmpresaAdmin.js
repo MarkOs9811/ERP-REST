@@ -93,17 +93,15 @@ export function FormularioEmpresaAdmin({
 
         if (isEditMode) {
           const resp = await axiosInstance.put(
-            `/empresas/${dataEmpresa.id}`,
-            formData,
-            {
-              headers: { "Content-Type": "multipart/form-data" },
-            }
+            `/superadmin/empresas${dataEmpresa.id}`,
+            formData
           );
           if (onSaved) onSaved(resp.data);
         } else {
-          const resp = await axiosInstance.post("/empresas", formData, {
-            headers: { "Content-Type": "multipart/form-data" },
-          });
+          const resp = await axiosInstance.post(
+            "/superadmin/empresas",
+            formData
+          );
           if (onSaved) onSaved(resp.data);
         }
       } else {
@@ -119,12 +117,15 @@ export function FormularioEmpresaAdmin({
 
         if (isEditMode) {
           const resp = await axiosInstance.put(
-            `/empresas/${dataEmpresa.id}`,
+            `/superadmin/empresas/${dataEmpresa.id}`,
             payload
           );
           if (onSaved) onSaved(resp.data);
         } else {
-          const resp = await axiosInstance.post("/empresas", payload);
+          const resp = await axiosInstance.post(
+            "/superadmin/empresas",
+            payload
+          );
           if (onSaved) onSaved(resp.data);
         }
       }

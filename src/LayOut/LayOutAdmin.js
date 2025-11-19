@@ -22,17 +22,19 @@ export const LayOutAdmin = () => {
       </div>
       <div className=" w-100 h-100 d-flex flex-column p-0 bg-light">
         <AdminHeader />
-        <ContenedorPrincipal>
-          <ToastContainer />
-          <Routes>
-            {/* Rutas relativas al "/masterAdmin/panel" */}
-            <Route index element={<HomeAdmin />} />
-            <Route path="home" element={<HomeAdmin />} />
-            <Route path="empresas" element={<EmpresasAdmin />} />
+        <div className="py-4">
+          <ContenedorPrincipal>
+            <ToastContainer />
+            <Routes>
+              {/* Rutas relativas al "/masterAdmin/panel" */}
+              <Route index element={<HomeAdmin />} />
+              <Route path="home" element={<HomeAdmin />} />
+              <Route path="empresas" element={<EmpresasAdmin />} />
 
-            <Route path="*" element={<Navigate to="" replace />} />
-          </Routes>
-        </ContenedorPrincipal>
+              <Route path="*" element={<Navigate to="" replace />} />
+            </Routes>
+          </ContenedorPrincipal>
+        </div>
       </div>
     </div>
   );
