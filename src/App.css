@@ -369,8 +369,8 @@ button:disabled {
 }
 
 .btn-activar:active {
-  background-color: #1e6831;
-  color: #ffffff;
+  background-color: #2c2c2c!important;
+  color: #ffffff!important;
   transform: scale(0.98);
   box-shadow: none;
 }
@@ -398,7 +398,7 @@ button:disabled {
 }
 
 .btn-principal:active {
-  background-color: #1a2027;
+  background-color: #1a2027!important;
   transform: scale(0.98);
   box-shadow: none;
 }
@@ -422,12 +422,14 @@ button:disabled {
 .btn-editar:hover {
   background-color: #e9ecef;
   color: #202020;
+  transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .btn-editar:active {
-  background-color: #d1d5db;
-  color: #111111;
-  transform: scale(0.98);
+  background-color: #1a2027 !important;
+    transform: scale(0.98);
+    box-shadow: none;
 }
 
 /* --- Botón Eliminar (Rojo) --- */
@@ -454,9 +456,9 @@ button:disabled {
 }
 
 .btn-eliminar:active {
-  background-color: #c82333;
+  background-color: #c82333!important;
   border-color: #c82333;
-  color: white;
+  color: white!important;
   transform: scale(0.98);
   box-shadow: none;
 }

@@ -86,7 +86,7 @@ export function Header() {
           {fotoPerfilLocal && (
             <RippleWrapper>
               <span type="button" className="badge bg-secondary">
-                {capitalizeFirstLetter(fotoPerfilLocal.sede.nombre)}
+                {capitalizeFirstLetter(fotoPerfilLocal?.sede?.nombre)}
               </span>
             </RippleWrapper>
           )}

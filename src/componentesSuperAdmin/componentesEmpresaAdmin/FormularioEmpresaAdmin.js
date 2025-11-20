@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useQueryClient } from "@tanstack/react-query";
 import axiosInstance from "../../api/AxiosInstance";
+import ToastAlert from "../../components/componenteToast/ToastAlert";
 
-export function FormularioEmpresaAdmin({
-  dataEmpresa = null,
-  onClose,
-  onSaved,
-}) {
+export function FormularioEmpresaAdmin({ dataEmpresa = null, onClose }) {
   const isEditMode = Boolean(dataEmpresa);
   const BASE_URL = process.env.REACT_APP_BASE_URL;
 
   const [previewUrl, setPreviewUrl] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
+
+  const queryClient = useQueryClient();
 
   const {
     register,
@@ -39,7 +39,6 @@ export function FormularioEmpresaAdmin({
         telefono: dataEmpresa.numero ?? dataEmpresa.telefono ?? "",
         email: dataEmpresa.correo ?? dataEmpresa.email ?? "",
         pagina: dataEmpresa.pagina ?? "",
-        logo: dataEmpresa.logo ?? dataEmpresa.logo ?? "",
       });
 
       const existingLogo = dataEmpresa.logo ?? dataEmpresa.logo ?? "";
@@ -61,80 +60,82 @@ export function FormularioEmpresaAdmin({
 
   const handleFileChange = (e) => {
     const file = e.target.files?.[0];
-    if (!file) {
+
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setPreviewUrl(url);
+      setSelectedFile(file);
+    } else {
+      // Si el usuario cancela, volvemos a la imagen original o vacío
       setSelectedFile(null);
       setPreviewUrl(
-        dataEmpresa
-          ? dataEmpresa.logo
-            ? `${BASE_URL}/storage/${dataEmpresa.logo}`
-            : ""
-          : ""
+        dataEmpresa?.logo ? `${BASE_URL}/storage/${dataEmpresa.logo}` : ""
       );
-      return;
     }
-    // preview
-    const url = URL.createObjectURL(file);
-    setPreviewUrl(url);
-    setSelectedFile(file);
   };
 
   const onSubmit = async (values) => {
     try {
-      // If there is a selected file, send multipart/form-data
+      const url = isEditMode
+        ? `/superadmin/empresas/${dataEmpresa.id}`
+        : "/superadmin/empresas";
+
+      const formData = new FormData();
+
+      // 1. Agregar archivo solo si existe uno NUEVO seleccionado
       if (selectedFile) {
-        const formData = new FormData();
         formData.append("logo", selectedFile);
-        formData.append("nombre", values.nombre);
-        formData.append("direccion", values.direccion);
-        formData.append("ruc", values.ruc);
-        formData.append("telefono", values.telefono);
-        formData.append("email", values.email);
-        if (values.pagina) formData.append("pagina", values.pagina);
-
-        if (isEditMode) {
-          const resp = await axiosInstance.put(
-            `/superadmin/empresas${dataEmpresa.id}`,
-            formData
-          );
-          if (onSaved) onSaved(resp.data);
-        } else {
-          const resp = await axiosInstance.post(
-            "/superadmin/empresas",
-            formData
-          );
-          if (onSaved) onSaved(resp.data);
-        }
-      } else {
-        // No file selected: send JSON
-        const payload = {
-          nombre: values.nombre,
-          direccion: values.direccion,
-          ruc: values.ruc,
-          telefono: values.telefono,
-          email: values.email,
-          pagina: values.pagina,
-        };
-
-        if (isEditMode) {
-          const resp = await axiosInstance.put(
-            `/superadmin/empresas/${dataEmpresa.id}`,
-            payload
-          );
-          if (onSaved) onSaved(resp.data);
-        } else {
-          const resp = await axiosInstance.post(
-            "/superadmin/empresas",
-            payload
-          );
-          if (onSaved) onSaved(resp.data);
-        }
       }
+
+      // 2. Agregar campos de texto
+      formData.append("nombre", values.nombre);
+      formData.append("direccion", values.direccion || "");
+      formData.append("ruc", values.ruc || "");
+      formData.append("telefono", values.telefono || "");
+      formData.append("email", values.email || "");
+
+      // 3. Truco para Laravel PUT con archivos
+      if (isEditMode) {
+        formData.append("_method", "PUT");
+      }
+
+      // 4. Enviar siempre como POST (Laravel maneja el _method internamente)
+      // IMPORTANTE: No agregamos cabeceras manuales aquí, dejamos que Axios detecte el FormData
+      const resp = await axiosInstance.post(url, formData);
+
+      queryClient.invalidateQueries({ queryKey: ["empresasAdmin"] });
+
+      const successMsg =
+        resp?.data?.message ??
+        (isEditMode ? "Empresa actualizada" : "Empresa creada");
+
+      ToastAlert("success", successMsg);
 
       if (onClose) onClose();
     } catch (err) {
       console.error("Error al guardar empresa:", err);
-      // aquí puedes mostrar mensajes de error concretos con tu ToastAlert
-      throw err;
+
+      if (err.response?.status === 422) {
+        const errorsResponse = err.response.data.errors || {};
+        const messages = Array.isArray(errorsResponse)
+          ? errorsResponse
+          : Object.values(errorsResponse).flat();
+
+        if (messages.length) {
+          messages.forEach((m) => ToastAlert("error", m));
+        } else {
+          ToastAlert(
+            "error",
+            err.response.data.message || "Error de validación"
+          );
+        }
+        return;
+      }
+
+      ToastAlert(
+        "error",
+        err.response?.data?.message || "Error al guardar la empresa"
+      );
     }
   };
 
@@ -142,15 +143,17 @@ export function FormularioEmpresaAdmin({
     <div className="p-3">
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <div className="mb-3 d-flex flex-column gap-3 align-items-start">
+          {/* Preview de la imagen */}
           <div className="card m-auto bg-white p-2 border rounded-pill overflow-hidden">
             <div
-              className="rounded-pill"
+              className="rounded-pill position-relative"
               style={{
                 width: 92,
                 height: 92,
-                borderRadius: 8,
-                overflow: "hidden",
                 background: "#f3f4f6",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
               {previewUrl ? (
@@ -161,30 +164,34 @@ export function FormularioEmpresaAdmin({
                   className="rounded-pill"
                 />
               ) : (
-                <div className="d-flex align-items-center justify-content-center w-100 h-100 text-muted">
-                  No imagen
-                </div>
+                <span className="small text-muted">Sin img</span>
               )}
             </div>
           </div>
 
-          <div className="flex-grow-1">
+          <div className="flex-grow-1 w-100">
             <label className="form-label small d-block">Logo / Foto</label>
             <input
               type="file"
               accept="image/*"
               className={`form-control ${errors.logo ? "is-invalid" : ""}`}
-              onChange={handleFileChange}
+              // --- CORRECCIÓN IMPORTANTE AQUÍ ---
+              // Usamos el onChange dentro de la configuración de register para no perderlo
               {...register("logo", {
-                validate: (fileList) => {
-                  // fileList comes from input; but we use selectedFile state — keep validation minimal
+                onChange: (e) => handleFileChange(e), // Conectamos nuestro handler aquí
+                validate: () => {
                   if (!selectedFile) return true;
-                  const allowed = ["image/jpeg", "image/png", "image/webp"];
+                  const allowed = [
+                    "image/jpeg",
+                    "image/png",
+                    "image/webp",
+                    "image/svg+xml",
+                  ];
                   if (!allowed.includes(selectedFile.type))
                     return "Formato no soportado (jpg, png, webp)";
-                  const maxSize = 2 * 1024 * 1024; // 2MB
+                  const maxSize = 4 * 1024 * 1024; // 4MB (coincide con tu back)
                   if (selectedFile.size > maxSize)
-                    return "Imagen demasiado grande (máx 2MB)";
+                    return "Imagen demasiado grande (máx 4MB)";
                   return true;
                 },
               })}
@@ -193,11 +200,12 @@ export function FormularioEmpresaAdmin({
               <div className="invalid-feedback">{errors.logo.message}</div>
             )}
             <small className="text-muted">
-              Formatos: jpg, png, webp. Máx 2MB.
+              Formatos: jpg, png, webp. Máx 4MB.
             </small>
           </div>
         </div>
 
+        {/* Resto de campos (Sin cambios mayores) */}
         <div className="mb-3">
           <label className="form-label small">Nombre de la Empresa*</label>
           <input
@@ -222,7 +230,6 @@ export function FormularioEmpresaAdmin({
             {...register("direccion", {
               required: "La dirección es obligatoria",
               minLength: { value: 5, message: "Mínimo 5 caracteres" },
-              maxLength: { value: 200, message: "Máximo 200 caracteres" },
             })}
           />
           {errors.direccion && (
@@ -290,17 +297,13 @@ export function FormularioEmpresaAdmin({
         <div className="d-flex justify-content-end gap-2">
           <button
             type="button"
-            className="btn btn-secondary"
+            className="btn-cerrar-modal"
             onClick={onClose}
             disabled={isSubmitting}
           >
             Cancelar
           </button>
-          <button
-            type="submit"
-            className="btn btn-primary"
-            disabled={isSubmitting}
-          >
+          <button type="submit" className="btn-guardar" disabled={isSubmitting}>
             {isEditMode ? "Actualizar Empresa" : "Crear Empresa"}
           </button>
         </div>
