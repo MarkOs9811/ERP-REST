@@ -58,13 +58,27 @@ import { AjustesAlmacen } from "../pages/moduloAlmacen/AjustesAlmancen";
 import { ReportesAlmacen } from "../pages/moduloAlmacen/ReportesAlmacen";
 import { Usuarios } from "../pages/Usuarios";
 import { LayOutAtencion } from "./LayOutAtencion";
+import { useState } from "react";
+import ModalGenerales from "../components/componentesReutilizables/ModalGenerales";
+import { StepSede } from "../components/componentesFirstSteps/StepSede";
+import { StepBienvenida } from "../components/componentesFirstSteps/StepBienvenida";
+import { StepAreaCargo } from "../components/componentesFirstSteps/StepAreaCargo";
 
 export const MainLayout = () => {
   const user = JSON.parse(localStorage.getItem("user"));
+  const empresa = JSON.parse(localStorage.getItem("empresa")) || {};
+
   const cargoUsuario = user?.empleado?.cargo?.nombre; // ej: "atencion al cliente"
   const showFullLayout = cargoUsuario != "atencion al cliente";
   const showHeader = cargoUsuario != "atencion al cliente";
 
+  const [step, setStep] = useState((empresa?.setup_steps || 0) < 5);
+  const [showWelcome, setShowWelcome] = useState(empresa?.setup_steps == 0);
+  // 1. Definimos constantes para el cálculo
+  const currentStep = Number(empresa.setup_steps) || 0;
+  const totalSteps = 5;
+  const rawPercentage = ((currentStep + 1) / totalSteps) * 100;
+  const progressPercentage = Math.min(100, rawPercentage);
   return (
     <div className="main-container p-0 m-0 h-screen flex">
       {showFullLayout && <SideBar />}
@@ -649,6 +663,72 @@ export const MainLayout = () => {
           </div>
         </div>
       </div>
+      <ModalGenerales
+        show={step}
+        handleCloseModal={() => setStep(false)}
+        showButtons={false} // Los botones los pondrás tú en cada div
+        width="900px"
+      >
+        <div
+          className="w-100 bg-light position-relative"
+          style={{
+            height: "8px",
+            borderTopLeftRadius: "calc(0.3rem - 1px)", // Ajuste fino para bordes redondeados del modal
+            borderTopRightRadius: "calc(0.3rem - 1px)",
+            overflow: "hidden",
+          }}
+        >
+          <div
+            className="h-100 bg-primary transition-all"
+            style={{
+              width: `${progressPercentage}%`,
+              transition: "width 0.5s ease-in-out",
+              background:
+                "linear-gradient(90deg, #d31919ff 0%, #ff5f5fff 100%)", // Un gradiente bonito
+            }}
+          ></div>
+        </div>
+        {/* PASO 1: SEDES */}
+        {empresa.setup_steps == 0 && (
+          <>
+            {showWelcome ? (
+              <StepBienvenida onStart={() => setShowWelcome(false)} />
+            ) : (
+              <StepSede />
+            )}
+          </>
+        )}
+
+        {/* PASO 2: ÁREAS Y CARGOS */}
+        {empresa.setup_steps == 1 && <StepAreaCargo />}
+
+        {/* PASO 3: CAJAS */}
+        {empresa.setup_steps == 2 && (
+          <div>
+            <h3>💰 Paso 3: Crea tu Caja de Ventas</h3>
+            <p>Necesitas un punto de venta para facturar...</p>
+            {/* Aquí cargarás tu componente <CreateCaja /> */}
+          </div>
+        )}
+
+        {/* PASO 4: PRODUCTOS */}
+        {empresa.setup_steps == 3 && (
+          <div>
+            <h3>🍔 Paso 4: Tu Menú Inicial</h3>
+            <p>Registra al menos una categoría y un plato...</p>
+            {/* Aquí cargarás tu componente <CreateProducto /> */}
+          </div>
+        )}
+
+        {/* PASO 5: USUARIOS (OPCIONAL) */}
+        {empresa.setup_steps == 4 && (
+          <div>
+            <h3>👥 Paso 5: Tu Equipo de Trabajo</h3>
+            <p>Crea usuarios adicionales si los necesitas...</p>
+            {/* Aquí cargarás tu componente <CreateUsuario /> */}
+          </div>
+        )}
+      </ModalGenerales>
     </div>
   );
 };
