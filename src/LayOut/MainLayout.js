@@ -63,6 +63,9 @@ import ModalGenerales from "../components/componentesReutilizables/ModalGenerale
 import { StepSede } from "../components/componentesFirstSteps/StepSede";
 import { StepBienvenida } from "../components/componentesFirstSteps/StepBienvenida";
 import { StepAreaCargo } from "../components/componentesFirstSteps/StepAreaCargo";
+import { StepCaja } from "../components/componentesFirstSteps/StepCaja";
+import { StepPlatosProductos } from "../components/componentesFirstSteps/StepPlatosPorductos";
+import { StepUsuario } from "../components/componentesFirstSteps/StepUsuario";
 
 export const MainLayout = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -666,7 +669,7 @@ export const MainLayout = () => {
       <ModalGenerales
         show={step}
         handleCloseModal={() => setStep(false)}
-        showButtons={false} // Los botones los pondrás tú en cada div
+        showButtons={false}
         width="900px"
       >
         <div
@@ -703,30 +706,15 @@ export const MainLayout = () => {
         {empresa.setup_steps == 1 && <StepAreaCargo />}
 
         {/* PASO 3: CAJAS */}
-        {empresa.setup_steps == 2 && (
-          <div>
-            <h3>💰 Paso 3: Crea tu Caja de Ventas</h3>
-            <p>Necesitas un punto de venta para facturar...</p>
-            {/* Aquí cargarás tu componente <CreateCaja /> */}
-          </div>
-        )}
+        {empresa.setup_steps == 2 && <StepCaja />}
 
         {/* PASO 4: PRODUCTOS */}
-        {empresa.setup_steps == 3 && (
-          <div>
-            <h3>🍔 Paso 4: Tu Menú Inicial</h3>
-            <p>Registra al menos una categoría y un plato...</p>
-            {/* Aquí cargarás tu componente <CreateProducto /> */}
-          </div>
-        )}
+        {empresa.setup_steps == 3 && <StepPlatosProductos />}
 
         {/* PASO 5: USUARIOS (OPCIONAL) */}
+
         {empresa.setup_steps == 4 && (
-          <div>
-            <h3>👥 Paso 5: Tu Equipo de Trabajo</h3>
-            <p>Crea usuarios adicionales si los necesitas...</p>
-            {/* Aquí cargarás tu componente <CreateUsuario /> */}
-          </div>
+          <StepUsuario onFinish={() => setStep(false)} />
         )}
       </ModalGenerales>
     </div>
