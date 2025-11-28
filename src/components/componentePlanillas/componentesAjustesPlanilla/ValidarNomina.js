@@ -12,9 +12,9 @@ import {
   Check,
   MinusCircle,
 } from "lucide-react";
-import axiosInstance from "../../../api/AxiosInstance";
 import ToastAlert from "../../componenteToast/ToastAlert";
 import { TablasGenerales } from "../../componentesReutilizables/TablasGenerales";
+import axiosInstance from "../../../api/AxiosInstance";
 
 // --- API Helpers (Sin cambios) ---
 const fetchDatosParaResolver = async () => {
@@ -23,10 +23,11 @@ const fetchDatosParaResolver = async () => {
 };
 
 const generarPagosApi = async (idPeriodo) => {
-  const { data } = await axiosInstance.post(
-    `/periodoNomina/generarPagos/${idPeriodo}`
+  const resp = await axiosInstance.post(
+    `/periodoNomina/realizarPago/${idPeriodo}`
   );
-  return data;
+
+  return resp.data;
 };
 
 export function ValidarNomina({ onClose }) {
@@ -60,7 +61,12 @@ export function ValidarNomina({ onClose }) {
         "Validación iniciada. Ahora puede resolver incidencias."
       );
     } catch (error) {
-      ToastAlert("error", "Error al iniciar la validación.");
+      // AQUÍ ESTÁ EL CAMBIO CLAVE:
+      // Intentamos leer el mensaje del backend. Si no existe, usamos uno genérico.
+      const mensajeBackend =
+        error.response?.data?.message || "Error al iniciar la validación.";
+
+      ToastAlert("warning", mensajeBackend);
     } finally {
       setIniciando(false);
     }

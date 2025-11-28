@@ -36,7 +36,7 @@ export function PerfilGeneralNomina({ idEmpleado }) {
     refetchOnWindowFocus: false,
     retry: 1,
   });
-
+  console.log("Usuarios Nomina:", perfil);
   const generarReporte = useGenerarReporte("PerfilEmpleado.pdf");
   const [loading, setLoading] = useState(false);
   const handleGenerar = async () => {
@@ -44,6 +44,7 @@ export function PerfilGeneralNomina({ idEmpleado }) {
     await generarReporte(reporteRef); // espera a que termine el proceso
     setLoading(false);
   };
+
   return (
     <div className="perfil-nomina p-3 " ref={reporteRef}>
       <div className="row g-3">
@@ -433,23 +434,16 @@ export function PerfilGeneralNomina({ idEmpleado }) {
                     </tr>
                   </thead>
                   <tbody>
-                    {perfil.pagos && perfil.pagos.length > 0 ? (
-                      perfil.pagos.map((pago, idx) => (
+                    {perfil?.usuario?.empleado?.pagos &&
+                    perfil?.usuario?.empleado?.pagos.length > 0 ? (
+                      perfil?.usuario?.empleado?.pagos.map((pago, idx) => (
                         <tr key={idx}>
                           <td>{pago.fecha_pago || pago.created_at || "N/A"}</td>
                           <td>
                             S/ {parseFloat(pago.salario_neto ?? 0).toFixed(2)}
                           </td>
                           <td>
-                            <span
-                              className={`badge ${
-                                pago.estado === 1
-                                  ? "bg-success"
-                                  : "bg-secondary"
-                              }`}
-                            >
-                              {pago.estado === 1 ? "Pagado" : "Pendiente"}
-                            </span>
+                            <span className=" badge bg-success ">Pagado</span>
                           </td>
                         </tr>
                       ))
@@ -500,9 +494,9 @@ export function PerfilGeneralNomina({ idEmpleado }) {
                   className="list-group-item d-flex justify-content-between align-items-center bg-transparent border-0"
                   style={{ color: "#fff" }}
                 >
-                  <span>Salario Bruto:</span>
+                  <span>Salario Base:</span>
                   <span className="fw-bold">
-                    S/ {parseFloat(perfil?.salario_bruto ?? 0).toFixed(2)}
+                    S/ {parseFloat(perfil?.sueldoBase ?? 0).toFixed(2)}
                   </span>
                 </li>
                 <li
@@ -511,8 +505,7 @@ export function PerfilGeneralNomina({ idEmpleado }) {
                 >
                   <span>Total Bonificaciones:</span>
                   <span className="fw-bold" style={{ color: "#b6ffb6" }}>
-                    S/{" "}
-                    {parseFloat(perfil?.total_bonificaciones ?? 0).toFixed(2)}
+                    S/ {parseFloat(perfil?.totalBonificaciones ?? 0).toFixed(2)}
                   </span>
                 </li>
                 <li
@@ -521,7 +514,7 @@ export function PerfilGeneralNomina({ idEmpleado }) {
                 >
                   <span>Total Deducciones:</span>
                   <span className="fw-bold" style={{ color: "#ffd6d6" }}>
-                    S/ {parseFloat(perfil?.total_deducciones ?? 0).toFixed(2)}
+                    S/ {parseFloat(perfil?.totalDeducciones ?? 0).toFixed(2)}
                   </span>
                 </li>
                 <li
@@ -530,7 +523,7 @@ export function PerfilGeneralNomina({ idEmpleado }) {
                 >
                   <span>Salario Neto:</span>
                   <span className="fw-bold" style={{ color: "#ffe066" }}>
-                    S/ {parseFloat(perfil?.salario_neto ?? 0).toFixed(2)}
+                    S/ {parseFloat(perfil?.sueldoNeto ?? 0).toFixed(2)}
                   </span>
                 </li>
               </ul>

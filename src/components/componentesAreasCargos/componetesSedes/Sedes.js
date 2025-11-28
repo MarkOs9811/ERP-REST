@@ -44,7 +44,7 @@ export function Sedes() {
 
   const miSedeActual = JSON.parse(localStorage.getItem("user")) || null;
 
-  const miSede = miSedeActual ? miSedeActual.sede.nombre : null;
+  const miSede = miSedeActual ? miSedeActual.sede?.nombre : null;
   const queryClient = useQueryClient(); // <-- agregado
   const [showModal, setShowModal] = useState(false);
   const [sedeActual, setSedeActual] = useState(null);
@@ -125,7 +125,7 @@ export function Sedes() {
         <div className="card-body">
           <div className="row g-4">
             {sedes.map((sede, i) => (
-              <div className="col-md-6 col-lg-4" key={sede.codigo || i}>
+              <div className="col-md-6 col-lg-4" key={sede?.codigo || i}>
                 <SedeCard
                   sede={sede}
                   index={i}
@@ -194,7 +194,7 @@ function SedeCard({
   setShowModalActivar, // <-- recibir handler activar
   miSede,
 }) {
-  const isMiSede = miSede == sede.nombre;
+  const isMiSede = miSede == sede?.nombre;
 
   return (
     <div
@@ -225,26 +225,26 @@ function SedeCard({
           <h5 className="card-title d-flex align-items-center gap-2 mb-3">
             <Building2 className="text-danger" height="20px" width="20px" />
             <span className="fw-bold">
-              {capitalizeFirstLetter(sede.nombre)}
+              {capitalizeFirstLetter(sede?.nombre)}
             </span>
           </h5>
           <div className="d-flex flex-column gap-2 mb-3">
             <span className="card-text d-flex align-items-start gap-2">
               <MapPin className="text-muted mt-1" height="16px" width="16px" />
-              <span>{sede.direccion}</span>
+              <span>{sede?.direccion}</span>
             </span>
             <span className="card-text d-flex align-items-center gap-2">
               <Phone className="text-muted" height="16px" width="16px" />
-              {sede.telefono}
+              {sede?.telefono}
             </span>
           </div>
           <p className="card-text mb-3 text-muted small">
-            Código: <strong>{sede.codigo}</strong>
+            Código: <strong>{sede?.codigo}</strong>
           </p>
         </div>
         <div className="d-flex justify-content-between align-items-center mt-auto pt-3 border-top">
-          <SedeStatusBadge estado={sede.estado} />
-          {sede.estado == 0 && (
+          <SedeStatusBadge estado={sede?.estado} />
+          {sede?.estado == 0 && (
             <button
               className="btn btn-outline-success btn-sm"
               onClick={() => {
@@ -291,7 +291,7 @@ function SedeActionsMenu({
         className="dropdown-menu dropdown-menu-end"
         aria-labelledby={`dropdownMenuButton-${index}`}
       >
-        {sede.estado == 0 && (
+        {sede?.estado == 0 && (
           <li>
             <button
               className="dropdown-item"
@@ -319,7 +319,7 @@ function SedeActionsMenu({
             Editar
           </button>
         </li>
-        {sede.estado == 1 && (
+        {sede?.estado == 1 && (
           <li>
             <button
               className="dropdown-item"
