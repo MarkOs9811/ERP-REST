@@ -122,6 +122,10 @@ export function EditCargo({
       {/* Roles */}
       <div className="mb-3 p-3 border rounded">
         <label className="form-label">Selecciona los Roles</label>
+        <div className="alert alert-dark d-flex flex-column">
+          <small>Recuerde que no todos los modulos estan disponibles.</small>
+          <small>Están sujetos al plan de su empresa.</small>
+        </div>
         {roles.map((role) => (
           <div className="form-check" key={role.id}>
             <input

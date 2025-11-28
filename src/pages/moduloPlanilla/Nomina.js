@@ -28,7 +28,7 @@ export function Nomina() {
     data: usuariosData = [],
     isLoading,
     isError,
-    // refetch, // (No lo estás usando, pero está bien)
+    error,
   } = useQuery({
     queryKey: ["nomina", updateList],
     queryFn: GetNomina,
@@ -96,11 +96,30 @@ export function Nomina() {
             </div>
           </div>
           <div className="card-body p-0">
-            <NominaUsuarios
-              search={search}
-              updateList={updateList}
-              usuariosData={usuariosData}
-            />
+            {isError ? (
+              <div className="alert alert-danger m-3" role="alert">
+                <h4 className="alert-heading">¡Atención!</h4>
+                <p>
+                  {/* AQUÍ ACCEDES AL MENSAJE DE TU BACKEND */}
+                  {error?.response?.data?.message ||
+                    "Ocurrió un error inesperado al cargar la nómina."}
+                </p>
+                <hr />
+                <p className="mb-0 small">
+                  {/* Opcional: Mostrar detalles técnicos si existen */}
+                  {error?.response?.data?.data
+                    ? JSON.stringify(error.response.data.data)
+                    : ""}
+                </p>
+              </div>
+            ) : (
+              /* 4. SI NO HAY ERROR, MUESTRAS LA TABLA */
+              <NominaUsuarios
+                search={search}
+                updateList={updateList}
+                usuariosData={usuariosData}
+              />
+            )}
           </div>
         </div>
       </CondicionCarga>

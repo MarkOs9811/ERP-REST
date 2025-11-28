@@ -179,7 +179,7 @@ export function SideBar() {
           />
         )}
         <div className="p-0 m-0">
-          <p className="h5 fw-bold p-0 my-2 text-white">Fire Wok</p>
+          <p className="h5 fw-bold p-0 my-2 text-white">{miEmpresa.nombre}</p>
         </div>
       </div>
 
