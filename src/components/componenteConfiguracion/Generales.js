@@ -1,29 +1,66 @@
-import {
-  BellRing,
-  Lock,
-  Moon,
-  Sun,
-  ShieldCheck,
-  Clock,
-  Settings,
-  Key,
-} from "lucide-react";
-import { useState } from "react";
-
-const temas = [
-  { nombre: "Claro", valor: "light", icon: <Sun size={18} /> },
-  { nombre: "Oscuro", valor: "dark", icon: <Moon size={18} /> },
-];
+import { Settings, Sun, Save } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { GetConfi } from "../../service/accionesConfiguracion/GetConfi";
+import { PutData } from "../../service/CRUD/PutData";
 
 export function Generales() {
-  const [tema, setTema] = useState("light");
-  const [idioma, setIdioma] = useState("es");
-  const [zonaHoraria, setZonaHoraria] = useState("GMT-5");
-  const [notificaciones, setNotificaciones] = useState(true);
-  const [privacidad, setPrivacidad] = useState(false);
-  const [accesibilidad, setAccesibilidad] = useState(false);
-  const [autoLogout, setAutoLogout] = useState(15);
-  const [paginaInicio, setPaginaInicio] = useState("dashboard");
+  const [loading, setLoading] = useState(false);
+
+  // 1. Obtener configuración
+  const { data: configuracion = [] } = useQuery({
+    queryKey: ["configuraciones"],
+    queryFn: GetConfi,
+    refetchOnWindowFocus: false,
+    retry: 1,
+  });
+
+  // 2. Configurar formulario
+  const { register, handleSubmit, setValue, watch } = useForm({
+    defaultValues: {
+      color: "#ee5252", // Color por defecto
+    },
+  });
+
+  // 3. Lógica de observación y carga inicial
+  const colorSeleccionado = watch("color");
+  const itemEstilo = useMemo(() => {
+    return (
+      configuracion.find((item) => item.tipo?.toLowerCase() === "estilos") || {}
+    );
+  }, [configuracion]);
+
+  useEffect(() => {
+    if (itemEstilo.clave) {
+      setValue("color", itemEstilo.clave);
+    }
+  }, [itemEstilo, setValue]);
+
+  const onSubmit = async (data) => {
+    setLoading(true);
+
+    // Quitamos el '#' para enviarlo por URL
+    const colorSinHash = data.color.replace("#", "");
+
+    const success = await PutData("estiloGeneral", colorSinHash);
+
+    if (success) {
+      // Actualizamos visualmente la variable CSS global
+      document.documentElement.style.setProperty("--color-brand", data.color);
+
+      const estilosArray =
+        JSON.parse(localStorage.getItem("estiloEmpresa")) || [];
+
+      if (estilosArray.length > 0) {
+        estilosArray[0].clave = data.color;
+      }
+
+      localStorage.setItem("estiloEmpresa", JSON.stringify(estilosArray));
+    }
+
+    setLoading(false);
+  };
 
   return (
     <div className="container py-4">
@@ -34,204 +71,67 @@ export function Generales() {
         <Settings size={22} /> Configuración General
       </h3>
 
-      {/* Grid de Cards */}
       <div className="row g-4">
-        {/* Apariencia */}
+        {/* Card de Configuración de Color */}
         <div className="col-md-6">
-          <div
-            className="card shadow-sm border-0 h-100 p-3"
-            style={{ borderRadius: 12 }}
-          >
-            <div className="mb-3 d-flex gap-2 align-middle">
-              <span className="alert border-0 alert-warning  fw-bold p-3 mb-0">
-                <Sun size={22} />
-              </span>
-              <h6 className=" mb-1 d-flex flex-column gap-1">
-                <span className="fw-bold">Tema</span>
-                <p className="text-muted small mb-0">
-                  Elige entre tema claro u oscuro
-                </p>
-              </h6>
-            </div>
-            <div className="d-flex gap-2 mt-3">
-              {temas.map((t) => (
-                <button
-                  key={t.valor}
-                  className="flex-fill d-flex align-items-center gap-2 fw-semibold"
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div
+              className="card shadow-sm border-0 h-100 p-3"
+              style={{ borderRadius: 12 }}
+            >
+              <div className="mb-3 d-flex gap-2 align-middle">
+                <span
+                  className="alert border-0 fw-bold p-3 mb-0"
                   style={{
-                    border: "1px solid #e5e7eb",
-                    borderRadius: 8,
-                    padding: "0.7rem 1rem",
-                    background: tema === t.valor ? "#fbbf24" : "#f9fafb",
-                    color: tema === t.valor ? "#fff" : "#374151",
-                    justifyContent: "center",
-                    boxShadow:
-                      tema === t.valor ? "0 2px 6px rgba(0,0,0,0.1)" : "none",
-                    transition: "all 0.2s ease-in-out",
+                    backgroundColor: `${colorSeleccionado}20`, // Transparencia al 20%
+                    color: colorSeleccionado,
+                    transition: "all 0.3s ease",
                   }}
-                  onClick={() => setTema(t.valor)}
                 >
-                  {t.icon} {t.nombre}
+                  <Sun size={22} />
+                </span>
+                <div className="d-flex flex-column gap-1">
+                  <span className="fw-bold">Tema y Color</span>
+                  <p className="text-muted small mb-0">
+                    Elige el color principal de tu marca
+                  </p>
+                </div>
+              </div>
+
+              <div className="d-flex gap-3 mt-3 align-items-center mb-4">
+                {/* Input Color */}
+                <input
+                  type="color"
+                  className="form-control form-control-color border-0 shadow-sm"
+                  id="colorInput"
+                  title="Elige tu color"
+                  {...register("color", { required: true })}
+                />
+
+                <div className="form-control bg-light text-muted">
+                  {colorSeleccionado?.toUpperCase()}
+                </div>
+              </div>
+
+              {/* Botón Guardar */}
+              <div className="d-flex justify-content-end">
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="btn text-white d-flex align-items-center gap-2"
+                  style={{ backgroundColor: colorSeleccionado || "#ee5252" }}
+                >
+                  {loading ? (
+                    "Guardando..."
+                  ) : (
+                    <>
+                      <Save size={18} /> Guardar Color
+                    </>
+                  )}
                 </button>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Notificaciones */}
-        <div className="col-md-6">
-          <div
-            className="card shadow-sm border-0 h-100 p-3"
-            style={{ borderRadius: 12 }}
-          >
-            <div className="mb-3 d-flex gap-2 align-middle">
-              <span className="alert border-0 alert-primary text-primary p-3 mb-0">
-                <BellRing size={22} />
-              </span>
-              <h6 className=" mb-1 d-flex flex-column gap-1">
-                <span className="fw-bold">Notificaciones</span>
-                <p className="text-muted small mb-0">
-                  Recibe alertas importantes del sistema
-                </p>
-              </h6>
-            </div>
-            <div className="form-check form-switch ms-1">
-              <input
-                type="checkbox"
-                className="form-check-input"
-                checked={notificaciones}
-                onChange={() => setNotificaciones((n) => !n)}
-              />
-              <label className="form-check-label">
-                {notificaciones ? "Activadas" : "Desactivadas"}
-              </label>
-            </div>
-          </div>
-        </div>
-
-        {/* Seguridad */}
-        <div className="col-md-6">
-          <div
-            className="card shadow-sm border-0 h-100 p-3"
-            style={{ borderRadius: 12 }}
-          >
-            <div className="mb-3 d-flex gap-2 align-middle">
-              <span className="alert border-0 alert-danger text-danger p-23mb-0">
-                <Lock size={22} />
-              </span>
-              <h6 className=" mb-1 d-flex flex-column gap-1">
-                <span className="fw-bold">Seguridad</span>
-                <p className="text-muted small mb-0">
-                  Protege tu cuenta y datos
-                </p>
-              </h6>
-            </div>
-            <button className="btn border btn-sm d-flex align-items-start p-3 w-100">
-              <Key className="me-2" />
-              <div className="text-start d-flex flex-column">
-                <span className="fw-semibold">Cambiar contraseña</span>
-                <small className="text-muted">
-                  Actualiza tu contraseña de acceso
-                </small>
-              </div>
-            </button>
-          </div>
-        </div>
-
-        {/* Privacidad */}
-        <div className="col-md-6">
-          <div
-            className="card shadow-sm border-0 h-100 p-3"
-            style={{ borderRadius: 12 }}
-          >
-            <div className="mb-3 d-flex gap-2 align-middle">
-              <span className="alert border-0 alert-success text-success p-3 mb-0">
-                <ShieldCheck size={22} />
-              </span>
-              <h6 className=" mb-1 d-flex flex-column gap-1">
-                <span className="fw-bold">Accesibilidad</span>
-                <p className="text-muted small mb-0">
-                  Controla tus datos y la visualización
-                </p>
-              </h6>
-            </div>
-            <div className="form-check form-switch mb-3 ms-1">
-              <input
-                type="checkbox"
-                className="form-check-input"
-                checked={privacidad}
-                onChange={() => setPrivacidad((p) => !p)}
-              />
-              <label className="form-check-label">
-                {privacidad
-                  ? "Compartir datos con integraciones"
-                  : "No compartir datos"}
-              </label>
-            </div>
-            <div className="form-check form-switch ms-1">
-              <input
-                type="checkbox"
-                className="form-check-input"
-                checked={accesibilidad}
-                onChange={() => setAccesibilidad((a) => !a)}
-              />
-              <label className="form-check-label">
-                {accesibilidad
-                  ? "Modo alto contraste activado"
-                  : "Modo estándar"}
-              </label>
-            </div>
-          </div>
-        </div>
-
-        {/* Sesión */}
-        <div className="col-12">
-          <div
-            className="card shadow-sm border-0 h-100 p-3"
-            style={{ borderRadius: 12 }}
-          >
-            <div className="mb-3 d-flex gap-2 align-middle">
-              <span className="alert border-0 alert-secondary 3-2 mb-0">
-                <Clock size={22} />
-              </span>
-              <h6 className=" mb-1 d-flex flex-column gap-1">
-                <span className="fw-bold">Sesión</span>
-                <p className="text-muted small mb-0">
-                  Configura opciones de inicio y cierre automático
-                </p>
-              </h6>
-            </div>
-            <div className="row g-3">
-              <div className="col-md-6">
-                <label className="fw-semibold">
-                  Cierre automático por inactividad
-                </label>
-                <select
-                  className="form-select mt-1"
-                  value={autoLogout}
-                  onChange={(e) => setAutoLogout(Number(e.target.value))}
-                >
-                  <option value={5}>5 min</option>
-                  <option value={15}>15 min</option>
-                  <option value={30}>30 min</option>
-                  <option value={60}>60 min</option>
-                </select>
-              </div>
-              <div className="col-md-6">
-                <label className="fw-semibold">Página de inicio</label>
-                <select
-                  className="form-select mt-1"
-                  value={paginaInicio}
-                  onChange={(e) => setPaginaInicio(e.target.value)}
-                >
-                  <option value="dashboard">Dashboard</option>
-                  <option value="ventas">Ventas</option>
-                  <option value="compras">Compras</option>
-                  <option value="almacen">Almacén</option>
-                </select>
               </div>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </div>

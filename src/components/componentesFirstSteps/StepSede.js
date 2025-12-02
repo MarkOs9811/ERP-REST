@@ -1,9 +1,29 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 // 1. Importamos los iconos necesarios de Lucide
 import { MapPin, Building2, Store, Users, ArrowRight } from "lucide-react";
+import { PutData } from "../../service/CRUD/PutData";
 
-export function StepSede() {
+export function StepSede({ onFinish }) {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
+  const cambiarEstado = async (estado) => {
+    setLoading(true); // Bloqueamos el botón para que no den doble click
+    navigate("/areas-y-cargos");
+    const success = await PutData("empresasSteps", estado);
+
+    if (success) {
+      const empresa = JSON.parse(localStorage.getItem("empresa")) || {};
+      empresa.setup_steps = estado;
+      localStorage.setItem("empresa", JSON.stringify(empresa));
+
+      // 2. Cerramos el modal
+      if (onFinish) onFinish();
+    }
+
+    setLoading(false);
+  };
   return (
     <div className="card text-center p-3">
       <div className="card-header">
@@ -55,8 +75,9 @@ export function StepSede() {
         </div>
 
         {/* 4. Botón de Acción Principal */}
-        <Link
-          to="/areas-y-cargos" // <--- CORREGIDO: Lógica apunta a crear sedes
+        <button
+          type="button"
+          onClick={() => cambiarEstado(4)}
           className="btn-guardar btn-lg px-5 shadow py-2 rounded-pill d-inline-flex align-items-center gap-2 w-auto"
           style={{ transition: "transform 0.2s", textDecoration: "none" }}
           onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
@@ -64,7 +85,7 @@ export function StepSede() {
         >
           Ir a Crear Sede
           <ArrowRight size={20} />
-        </Link>
+        </button>
 
         <div className="mt-3 text-muted small">
           <small>Paso 1 de 5 para completar la configuración</small>

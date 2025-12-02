@@ -1,4 +1,7 @@
-
+:root {
+    --color-brand: #d33c3c;
+    /* Tu color rojo original por defecto */
+}
 /* ========== SIDEBAR ========== */
 .sidebar {
     position: fixed;
@@ -32,7 +35,7 @@
 }
 
 .sidebar-header {
-    background-color: #d33c3c;
+    background-color: var(--color-brand);
     color: #2a2f30;
     display: flex;
     align-items: center;

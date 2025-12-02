@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 // Importamos iconos de Lucide relacionados con comida y productos
 import {
@@ -8,15 +8,27 @@ import {
   ArrowRight,
   PackageSearch,
 } from "lucide-react";
+import { PutData } from "../../service/CRUD/PutData";
 
-export function StepPlatosProductos() {
+export function StepPlatosProductos({ onFinish }) {
   const navigate = useNavigate();
-
-  const handleGoToProductos = () => {
-    // Ajusta la ruta a donde gestionas tus platos/productos
+  const [loading, setLoading] = useState(false);
+  const cambiarEstado = async (estado) => {
+    setLoading(true); // Bloqueamos el botón para que no den doble click
     navigate("/platos");
-  };
+    const success = await PutData("empresasSteps", estado);
 
+    if (success) {
+      const empresa = JSON.parse(localStorage.getItem("empresa")) || {};
+      empresa.setup_steps = estado;
+      localStorage.setItem("empresa", JSON.stringify(empresa));
+
+      // 2. Cerramos el modal
+      if (onFinish) onFinish();
+    }
+
+    setLoading(false);
+  };
   return (
     <div className="card p-0 text-center border-0 shadow-sm animate-fade-in overflow-hidden">
       {/* 1. CARD HEADER: Tema Naranja (Comida/Creatividad) */}
@@ -94,13 +106,13 @@ export function StepPlatosProductos() {
           {/* Botón Principal (Estilo Naranja Vibrante) */}
           <button
             type="button"
+            onClick={() => cambiarEstado(4)}
             className="btn-guardar w-auto text-white btn-lg px-5 py-3 rounded-pill shadow d-inline-flex align-items-center gap-2"
             style={{
               background: "linear-gradient(90deg, #fd7e14, #dc3545)", // Gradiente Naranja a Rojo
               border: "none",
               transition: "transform 0.2s",
             }}
-            onClick={handleGoToProductos}
             onMouseOver={(e) =>
               (e.currentTarget.style.transform = "scale(1.05)")
             }

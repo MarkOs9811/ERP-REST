@@ -13,7 +13,6 @@ import {
   DollarSign,
   Upload,
   UserCircle,
-  DownloadIcon,
   FileDown,
   Save,
 } from "lucide-react"; // 1. Importamos los iconos
@@ -30,7 +29,6 @@ import { GetProvincia } from "../../service/GetProvincia";
 import { GetDistrito } from "../../service/GetDistrito";
 import ToastAlert from "../../components/componenteToast/ToastAlert";
 import axiosInstance from "../../api/AxiosInstance";
-import BotonAnimado from "../../components/componentesReutilizables/BotonAnimado";
 import { BotonMotionGeneral } from "../../components/componentesReutilizables/BotonMotionGeneral";
 import { CondicionCarga } from "../../components/componentesReutilizables/CondicionCarga";
 // (No incluiste 'ContenedorPrincipal' en tu JSX, así que lo omití)
@@ -55,7 +53,7 @@ export function IngresoPlanilla() {
     queryFn: GetCargos,
   });
 
-  const { data: areasList } = useQuery({
+  const { data: areasList = [] } = useQuery({
     queryKey: ["areas"],
     queryFn: GetAreas,
   });
@@ -195,7 +193,9 @@ export function IngresoPlanilla() {
     <div>
       <div className="col-md-12">
         <div className="card shadow-sm border-0 p-3">
-          <h4>Datos del empleado</h4>
+          <div className="card-header p-3">
+            <h4>Datos del empleado</h4>
+          </div>
           <div className="card-body">
             <form
               onSubmit={handleSubmit(onSubmit)}
@@ -204,318 +204,318 @@ export function IngresoPlanilla() {
               <div className="row g-3">
                 {/* === COLUMNA IZQUIERDA: DATOS PERSONALES === */}
                 <div className="col-md-6 col-sm-12">
-                  {/* === BLOQUE DE IMAGEN (Sin cambios, ya estaba bien) === */}
-                  <div className="d-flex flex-column align-items-center text-center mb-3">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      ref={fileInputRef}
-                      style={{ display: "none" }}
-                      onChange={handleImageChange}
-                    />
-                    {preview ? (
-                      <img
-                        src={preview}
-                        alt="Vista previa"
-                        className="mb-3"
-                        style={{
-                          width: "150px",
-                          height: "150px",
-                          borderRadius: "50%",
-                          objectFit: "cover",
-                          border: "3px solid #eee",
-                        }}
+                  <div className="card border p-3">
+                    <div className="d-flex flex-column align-items-center text-center mb-3">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        ref={fileInputRef}
+                        style={{ display: "none" }}
+                        onChange={handleImageChange}
                       />
-                    ) : (
-                      <UserCircle
-                        size={150}
-                        className="mb-3 text-muted"
-                        strokeWidth={1}
-                      />
-                    )}
-                    <button
-                      type="button"
-                      className="btn btn-outline-primary btn-sm"
-                      onClick={() => fileInputRef.current.click()}
-                    >
-                      <Upload size={16} className="me-2" />
-                      Seleccionar Imagen
-                    </button>
-                    <input type="hidden" {...register("fotoPerfil")} />
-                    {errors.fotoPerfil && (
-                      <div className="text-danger mt-2 small">
-                        {errors.fotoPerfil.message}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* === DATOS PERSONALES (Nuevo Diseño) === */}
-                  <div className="row">
-                    <div className="col-md-5 mb-3">
-                      <label className="form-label small fw-semi-bold text-muted">
-                        <FileText size={16} className="me-1" /> Tipo Documento
-                      </label>
-                      <select
-                        className={`form-select ${
-                          errors.tipo_documento ? "is-invalid" : ""
-                        }`}
-                        {...register("tipo_documento", {
-                          required: "Este campo es obligatorio",
-                        })}
+                      {preview ? (
+                        <img
+                          src={preview}
+                          alt="Vista previa"
+                          className="mb-3"
+                          style={{
+                            width: "150px",
+                            height: "150px",
+                            borderRadius: "50%",
+                            objectFit: "cover",
+                            border: "3px solid #eee",
+                          }}
+                        />
+                      ) : (
+                        <UserCircle
+                          size={150}
+                          className="mb-3 text-muted"
+                          strokeWidth={1}
+                        />
+                      )}
+                      <button
+                        type="button"
+                        className="btn btn-outline-primary btn-sm"
+                        onClick={() => fileInputRef.current.click()}
                       >
-                        <option value="">Seleccione...</option>
-                        <option value="DNI">DNI</option>
-                        <option value="Carnet De Extranjeria">
-                          CARNET DE EXTRANJERIA
-                        </option>
-                      </select>
-                      {errors.tipo_documento && (
-                        <div className="invalid-feedback">
-                          {errors.tipo_documento.message}
+                        <Upload size={16} className="me-2" />
+                        Seleccionar Imagen
+                      </button>
+                      <input type="hidden" {...register("fotoPerfil")} />
+                      {errors.fotoPerfil && (
+                        <div className="text-danger mt-2 small">
+                          {errors.fotoPerfil.message}
                         </div>
                       )}
                     </div>
+                    {/* === DATOS PERSONALES (Nuevo Diseño) === */}
+                    <div className="row">
+                      <div className="col-md-5 mb-3">
+                        <label className="form-label small fw-semi-bold text-muted">
+                          <FileText size={16} className="me-1" /> Tipo Documento
+                        </label>
+                        <select
+                          className={`form-select ${
+                            errors.tipo_documento ? "is-invalid" : ""
+                          }`}
+                          {...register("tipo_documento", {
+                            required: "Este campo es obligatorio",
+                          })}
+                        >
+                          <option value="">Seleccione...</option>
+                          <option value="DNI">DNI</option>
+                          <option value="Carnet De Extranjeria">
+                            CARNET DE EXTRANJERIA
+                          </option>
+                        </select>
+                        {errors.tipo_documento && (
+                          <div className="invalid-feedback">
+                            {errors.tipo_documento.message}
+                          </div>
+                        )}
+                      </div>
 
-                    <div className="col-md-7 mb-3">
+                      <div className="col-md-7 mb-3">
+                        <label className="form-label small fw-semi-bold text-muted">
+                          Número de Documento
+                        </label>
+                        <input
+                          className={`form-control ${
+                            errors.num_documento ? "is-invalid" : ""
+                          }`}
+                          type="text"
+                          maxLength="8"
+                          placeholder="Número de Documento"
+                          {...register("num_documento", {
+                            required: "El N° de documento es obligatorio",
+                            pattern: {
+                              value: /^[0-9]+$/,
+                              message: "Solo se admiten números",
+                            },
+                          })}
+                        />
+                        {errors.num_documento && (
+                          <div className="invalid-feedback">
+                            {errors.num_documento.message}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="mb-3">
                       <label className="form-label small fw-semi-bold text-muted">
-                        Número de Documento
+                        <User size={16} className="me-1" /> Nombre
                       </label>
                       <input
                         className={`form-control ${
-                          errors.num_documento ? "is-invalid" : ""
+                          errors.nombre ? "is-invalid" : ""
                         }`}
-                        type="text"
-                        maxLength="8"
-                        placeholder="Número de Documento"
-                        {...register("num_documento", {
-                          required: "El N° de documento es obligatorio",
-                          pattern: {
-                            value: /^[0-9]+$/,
-                            message: "Solo se admiten números",
-                          },
+                        {...register("nombre", {
+                          required: "El nombre es obligatorio",
                         })}
+                        placeholder="Nombre del empleado"
                       />
-                      {errors.num_documento && (
+                      {errors.nombre && (
                         <div className="invalid-feedback">
-                          {errors.num_documento.message}
+                          {errors.nombre.message}
                         </div>
                       )}
                     </div>
-                  </div>
 
-                  <div className="mb-3">
-                    <label className="form-label small fw-semi-bold text-muted">
-                      <User size={16} className="me-1" /> Nombre
-                    </label>
-                    <input
-                      className={`form-control ${
-                        errors.nombre ? "is-invalid" : ""
-                      }`}
-                      {...register("nombre", {
-                        required: "El nombre es obligatorio",
-                      })}
-                      placeholder="Nombre del empleado"
-                    />
-                    {errors.nombre && (
-                      <div className="invalid-feedback">
-                        {errors.nombre.message}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="mb-3">
-                    <label className="form-label small fw-semi-bold text-muted">
-                      <User size={16} className="me-1" /> Apellidos
-                    </label>
-                    <input
-                      className={`form-control ${
-                        errors.apellidos ? "is-invalid" : ""
-                      }`}
-                      {...register("apellidos", {
-                        required: "El apellido es obligatorio",
-                      })}
-                      placeholder="Apellidos del empleado"
-                    />
-                    {errors.apellidos && (
-                      <div className="invalid-feedback">
-                        {errors.apellidos.message}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="row">
-                    <div className="col-6 mb-3">
+                    <div className="mb-3">
                       <label className="form-label small fw-semi-bold text-muted">
-                        <Calendar size={16} className="me-1" /> Fecha de
-                        Nacimiento
+                        <User size={16} className="me-1" /> Apellidos
                       </label>
                       <input
                         className={`form-control ${
-                          errors.fecha_nacimiento ? "is-invalid" : ""
+                          errors.apellidos ? "is-invalid" : ""
                         }`}
-                        type="date"
-                        {...register("fecha_nacimiento", {
-                          required: "La fecha es obligatoria",
+                        {...register("apellidos", {
+                          required: "El apellido es obligatorio",
                         })}
+                        placeholder="Apellidos del empleado"
                       />
-                      {errors.fecha_nacimiento && (
+                      {errors.apellidos && (
                         <div className="invalid-feedback">
-                          {errors.fecha_nacimiento.message}
+                          {errors.apellidos.message}
                         </div>
                       )}
                     </div>
-                    <div className="col-6 mb-3">
+
+                    <div className="row">
+                      <div className="col-6 mb-3">
+                        <label className="form-label small fw-semi-bold text-muted">
+                          <Calendar size={16} className="me-1" /> Fecha de
+                          Nacimiento
+                        </label>
+                        <input
+                          className={`form-control ${
+                            errors.fecha_nacimiento ? "is-invalid" : ""
+                          }`}
+                          type="date"
+                          {...register("fecha_nacimiento", {
+                            required: "La fecha es obligatoria",
+                          })}
+                        />
+                        {errors.fecha_nacimiento && (
+                          <div className="invalid-feedback">
+                            {errors.fecha_nacimiento.message}
+                          </div>
+                        )}
+                      </div>
+                      <div className="col-6 mb-3">
+                        <label className="form-label small fw-semi-bold text-muted">
+                          <Phone size={16} className="me-1" /> Nº de contacto
+                        </label>
+                        <input
+                          className={`form-control ${
+                            errors.telefono ? "is-invalid" : ""
+                          }`}
+                          type="number"
+                          placeholder="Nº de contacto"
+                          {...register("telefono", {
+                            required: "El teléfono es obligatorio",
+                          })}
+                        />
+                        {errors.telefono && (
+                          <div className="invalid-feedback">
+                            {errors.telefono.message}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* === UBICACIÓN (Nuevo Diseño) === */}
+                    <div className="row">
+                      <div className="col-4 mb-3">
+                        <label className="form-label small fw-semi-bold text-muted">
+                          <MapPin size={16} className="me-1" /> Depto.
+                        </label>
+                        <select
+                          className={`form-select ${
+                            errors.departamento ? "is-invalid" : ""
+                          }`}
+                          {...register("departamento", {
+                            required: "Requerido",
+                            onChange: (e) => {
+                              setSelectedDepartamento(e.target.value);
+                              setSelectedProvincia("");
+                              setValue("provincia", "");
+                              setValue("distrito", "");
+                            },
+                          })}
+                        >
+                          <option value="">Seleccione...</option>
+                          {departamentoList?.map((dep) => (
+                            <option key={dep.id} value={dep.id}>
+                              {dep.nombre.toUpperCase()}
+                            </option>
+                          ))}
+                        </select>
+                        {errors.departamento && (
+                          <div className="invalid-feedback">
+                            {errors.departamento.message}
+                          </div>
+                        )}
+                      </div>
+                      <div className="col-4 mb-3">
+                        <label className="form-label small fw-semi-bold text-muted">
+                          <MapPin size={16} className="me-1" /> Provincia
+                        </label>
+                        <select
+                          className={`form-select ${
+                            errors.provincia ? "is-invalid" : ""
+                          }`}
+                          {...register("provincia", {
+                            required: "Requerido",
+                            onChange: (e) => {
+                              setSelectedProvincia(e.target.value);
+                              setValue("distrito", "");
+                            },
+                          })}
+                          disabled={!selectedDepartamento}
+                        >
+                          <option value="">Seleccione...</option>
+                          {provinciaList?.map((prov) => (
+                            <option key={prov.id} value={prov.id}>
+                              {prov.nombre}
+                            </option>
+                          ))}
+                        </select>
+                        {errors.provincia && (
+                          <div className="invalid-feedback">
+                            {errors.provincia.message}
+                          </div>
+                        )}
+                      </div>
+                      <div className="col-4 mb-3">
+                        <label className="form-label small fw-semi-bold text-muted">
+                          <MapPin size={16} className="me-1" /> Distrito
+                        </label>
+                        <select
+                          className={`form-select ${
+                            errors.distrito ? "is-invalid" : ""
+                          }`}
+                          {...register("distrito", {
+                            required: "Requerido",
+                            disabled: !selectedProvincia,
+                          })}
+                        >
+                          <option value="">Seleccione...</option>
+                          {distritoList?.map((dist) => (
+                            <option key={dist.id} value={dist.id}>
+                              {dist.nombre}
+                            </option>
+                          ))}
+                        </select>
+                        {errors.distrito && (
+                          <div className="invalid-feedback">
+                            {errors.distrito.message}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="mb-3">
                       <label className="form-label small fw-semi-bold text-muted">
-                        <Phone size={16} className="me-1" /> Nº de contacto
+                        <MapPin size={16} className="me-1" /> Dirección
                       </label>
                       <input
                         className={`form-control ${
-                          errors.telefono ? "is-invalid" : ""
+                          errors.direccion ? "is-invalid" : ""
                         }`}
-                        type="number"
-                        placeholder="Nº de contacto"
-                        {...register("telefono", {
-                          required: "El teléfono es obligatorio",
+                        {...register("direccion", {
+                          required: "La dirección es obligatoria",
                         })}
+                        placeholder="Dirección"
                       />
-                      {errors.telefono && (
+                      {errors.direccion && (
                         <div className="invalid-feedback">
-                          {errors.telefono.message}
+                          {errors.direccion.message}
                         </div>
                       )}
                     </div>
-                  </div>
 
-                  {/* === UBICACIÓN (Nuevo Diseño) === */}
-                  <div className="row">
-                    <div className="col-4 mb-3">
+                    <div className="mb-3">
                       <label className="form-label small fw-semi-bold text-muted">
-                        <MapPin size={16} className="me-1" /> Depto.
+                        <Mail size={16} className="me-1" /> Correo Electrónico
                       </label>
-                      <select
-                        className={`form-select ${
-                          errors.departamento ? "is-invalid" : ""
+                      <input
+                        type="email"
+                        className={`form-control ${
+                          errors.correo ? "is-invalid" : ""
                         }`}
-                        {...register("departamento", {
-                          required: "Requerido",
-                          onChange: (e) => {
-                            setSelectedDepartamento(e.target.value);
-                            setSelectedProvincia("");
-                            setValue("provincia", "");
-                            setValue("distrito", "");
-                          },
+                        {...register("correo", {
+                          required: "El correo es obligatorio",
                         })}
-                      >
-                        <option value="">Seleccione...</option>
-                        {departamentoList?.map((dep) => (
-                          <option key={dep.id} value={dep.id}>
-                            {dep.nombre.toUpperCase()}
-                          </option>
-                        ))}
-                      </select>
-                      {errors.departamento && (
+                        placeholder="Correo Electrónico"
+                      />
+                      {errors.correo && (
                         <div className="invalid-feedback">
-                          {errors.departamento.message}
+                          {errors.correo.message}
                         </div>
                       )}
                     </div>
-                    <div className="col-4 mb-3">
-                      <label className="form-label small fw-semi-bold text-muted">
-                        <MapPin size={16} className="me-1" /> Provincia
-                      </label>
-                      <select
-                        className={`form-select ${
-                          errors.provincia ? "is-invalid" : ""
-                        }`}
-                        {...register("provincia", {
-                          required: "Requerido",
-                          onChange: (e) => {
-                            setSelectedProvincia(e.target.value);
-                            setValue("distrito", "");
-                          },
-                        })}
-                        disabled={!selectedDepartamento}
-                      >
-                        <option value="">Seleccione...</option>
-                        {provinciaList?.map((prov) => (
-                          <option key={prov.id} value={prov.id}>
-                            {prov.nombre}
-                          </option>
-                        ))}
-                      </select>
-                      {errors.provincia && (
-                        <div className="invalid-feedback">
-                          {errors.provincia.message}
-                        </div>
-                      )}
-                    </div>
-                    <div className="col-4 mb-3">
-                      <label className="form-label small fw-semi-bold text-muted">
-                        <MapPin size={16} className="me-1" /> Distrito
-                      </label>
-                      <select
-                        className={`form-select ${
-                          errors.distrito ? "is-invalid" : ""
-                        }`}
-                        {...register("distrito", {
-                          required: "Requerido",
-                          disabled: !selectedProvincia,
-                        })}
-                      >
-                        <option value="">Seleccione...</option>
-                        {distritoList?.map((dist) => (
-                          <option key={dist.id} value={dist.id}>
-                            {dist.nombre}
-                          </option>
-                        ))}
-                      </select>
-                      {errors.distrito && (
-                        <div className="invalid-feedback">
-                          {errors.distrito.message}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="mb-3">
-                    <label className="form-label small fw-semi-bold text-muted">
-                      <MapPin size={16} className="me-1" /> Dirección
-                    </label>
-                    <input
-                      className={`form-control ${
-                        errors.direccion ? "is-invalid" : ""
-                      }`}
-                      {...register("direccion", {
-                        required: "La dirección es obligatoria",
-                      })}
-                      placeholder="Dirección"
-                    />
-                    {errors.direccion && (
-                      <div className="invalid-feedback">
-                        {errors.direccion.message}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="mb-3">
-                    <label className="form-label small fw-semi-bold text-muted">
-                      <Mail size={16} className="me-1" /> Correo Electrónico
-                    </label>
-                    <input
-                      type="email"
-                      className={`form-control ${
-                        errors.correo ? "is-invalid" : ""
-                      }`}
-                      {...register("correo", {
-                        required: "El correo es obligatorio",
-                      })}
-                      placeholder="Correo Electrónico"
-                    />
-                    {errors.correo && (
-                      <div className="invalid-feedback">
-                        {errors.correo.message}
-                      </div>
-                    )}
                   </div>
                 </div>
 
@@ -794,6 +794,7 @@ export function IngresoPlanilla() {
                     text="Registrar Empleado"
                     loading={loading}
                     icon={<Save size={18} />}
+                    classDefault=" text-center align-items-center gap-1 p-2 w-auto rounded-3 border shadow-sm ms-auto"
                     // Tu componente BotonAnimado se llama ahora BotonMotionGeneral
                     // 'error' no es un prop estándar de BotonMotionGeneral
                   />

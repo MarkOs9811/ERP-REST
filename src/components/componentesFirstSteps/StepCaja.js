@@ -8,14 +8,28 @@ import {
   ArrowRight,
   Store,
 } from "lucide-react";
+import { PutData } from "../../service/CRUD/PutData";
 
-export function StepCaja() {
+export function StepCaja({ onFinish }) {
   const navigate = useNavigate();
 
-  const handleGoToCajas = () => {
+  const [loading, setLoading] = useState(false);
+  const cambiarEstado = async (estado) => {
+    setLoading(true); // Bloqueamos el botón para que no den doble click
     navigate("/ventas/cajas");
-  };
+    const success = await PutData("empresasSteps", estado);
 
+    if (success) {
+      const empresa = JSON.parse(localStorage.getItem("empresa")) || {};
+      empresa.setup_steps = estado;
+      localStorage.setItem("empresa", JSON.stringify(empresa));
+
+      // 2. Cerramos el modal
+      if (onFinish) onFinish();
+    }
+
+    setLoading(false);
+  };
   return (
     <div className="card p-0 text-center border-0 shadow-sm animate-fade-in overflow-hidden">
       {/* 1. CARD HEADER: Tema Dorado (Dinero) */}
@@ -93,13 +107,13 @@ export function StepCaja() {
           {/* Botón Principal (Estilo Dorado/Ámbar) */}
           <button
             type="button"
+            onClick={() => cambiarEstado(3)}
             className="btn-guardar w-auto text-white btn-lg px-5 py-3 rounded-pill shadow d-inline-flex align-items-center gap-2"
             style={{
               background: "linear-gradient(90deg, #f59e0b, #d97706)", // Gradiente Ámbar
               border: "none",
               transition: "transform 0.2s",
             }}
-            onClick={handleGoToCajas}
             onMouseOver={(e) =>
               (e.currentTarget.style.transform = "scale(1.05)")
             }

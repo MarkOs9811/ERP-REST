@@ -39,14 +39,14 @@ export const Login = () => {
     setLoading(true);
 
     try {
-      // const response = await axios.post("http://127.0.0.1:8000/api/login", {
-      //   email: data.email,
-      //   password: data.password,
-      // });
-      const response = await axios.post("http://erp-api.test/api/login", {
+      const response = await axios.post("http://127.0.0.1:8000/api/login", {
         email: data.email,
         password: data.password,
       });
+      // const response = await axios.post("http://erp-api.test/api/login", {
+      //   email: data.email,
+      //   password: data.password,
+      // });
 
       if (response.data.token) {
         login(response.data.token, response.data.user);
@@ -64,6 +64,10 @@ export const Login = () => {
           JSON.stringify(response.data?.user?.fotoPerfil)
         );
         localStorage.setItem("empresa", JSON.stringify(response.data?.empresa));
+        localStorage.setItem(
+          "estiloEmpresa",
+          JSON.stringify(response.data?.estiloEmpresa)
+        );
 
         ToastAlert("success", "Inicio de sesión exitoso");
         setTimeout(() => {

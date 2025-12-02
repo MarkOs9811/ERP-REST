@@ -23,7 +23,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "../AuthContext";
 import { capitalizeFirstLetter } from "../hooks/FirstLetterUp";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export function SideBar() {
   const location = useLocation();
@@ -161,7 +161,29 @@ export function SideBar() {
   const handleAccordionToggle = (roleName) => {
     setOpenAccordion(openAccordion === roleName ? null : roleName);
   };
+  useEffect(() => {
+    const storageData = localStorage.getItem("estiloEmpresa");
 
+    if (storageData) {
+      const parsedData = JSON.parse(storageData);
+
+      if (Array.isArray(parsedData) && parsedData.length > 0) {
+        const estiloObj = parsedData[0];
+
+        if (estiloObj.clave) {
+          document.documentElement.style.setProperty(
+            "--color-brand",
+            estiloObj.clave
+          );
+        }
+      } else if (parsedData.clave) {
+        document.documentElement.style.setProperty(
+          "--color-brand",
+          parsedData.clave
+        );
+      }
+    }
+  }, []);
   return (
     <div className={`sidebar compressed justify-content-between m-auto`}>
       <div className="sidebar-header d-flex">

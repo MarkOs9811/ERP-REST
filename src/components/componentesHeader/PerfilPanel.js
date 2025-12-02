@@ -219,11 +219,13 @@ export function PerfilPanel({ user, fotoPerfil }) {
                   onChange={(e) => handleChangeSede(e.target.value)}
                 >
                   <option value="">Selecciona una sede</option>
-                  {sedeData.map((sede) => (
-                    <option key={sede.id} value={sede.id}>
-                      {sede.nombre}
-                    </option>
-                  ))}
+                  {sedeData
+                    .filter((sede) => sede.estado == 1)
+                    .map((sede) => (
+                      <option key={sede.id} value={sede.id}>
+                        {sede.nombre}
+                      </option>
+                    ))}
                 </select>
                 <label htmlFor="selectSede">
                   <i className="fa-solid fa-map-marker-alt me-2 text-primary"></i>

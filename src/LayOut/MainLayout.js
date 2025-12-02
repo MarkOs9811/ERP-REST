@@ -697,19 +697,25 @@ export const MainLayout = () => {
             {showWelcome ? (
               <StepBienvenida onStart={() => setShowWelcome(false)} />
             ) : (
-              <StepSede />
+              <StepSede onFinish={() => setStep(false)} />
             )}
           </>
         )}
 
         {/* PASO 2: ÁREAS Y CARGOS */}
-        {empresa.setup_steps == 1 && <StepAreaCargo />}
+        {empresa.setup_steps == 1 && (
+          <StepAreaCargo onFinish={() => setStep(false)} />
+        )}
 
         {/* PASO 3: CAJAS */}
-        {empresa.setup_steps == 2 && <StepCaja />}
+        {empresa.setup_steps == 2 && (
+          <StepCaja onFinish={() => setStep(false)} />
+        )}
 
         {/* PASO 4: PRODUCTOS */}
-        {empresa.setup_steps == 3 && <StepPlatosProductos />}
+        {empresa.setup_steps == 3 && (
+          <StepPlatosProductos onFinish={() => setStep(false)} />
+        )}
 
         {/* PASO 5: USUARIOS (OPCIONAL) */}
 

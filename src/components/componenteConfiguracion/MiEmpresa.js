@@ -24,7 +24,7 @@ export function MiEmpresa() {
     retry: 1,
     refetchOnWindowFocus: false,
   });
-  console.log(configEmpresa);
+
   const configuracionEmpresa = configEmpresa.filter(
     (item) => item.tipo?.toLowerCase() === "empresa"
   );
@@ -33,9 +33,11 @@ export function MiEmpresa() {
     const fetchDatosEmpresa = async () => {
       try {
         const response = await axiosInstance.get("/configuracion/getMiEmpresa");
+        console.log("BASE_URL:", BASE_URL);
+        console.log("Dato crudo backend:", response.data.logo);
         if (response.data) {
           setDatosEmpresa(response.data);
-          setLogoActual(`${BASE_URL}/${response.data.logo}`);
+          setLogoActual(`${BASE_URL}${response.data.logo}`);
           reset({
             nombre: response.data.nombre,
             ruc: response.data.ruc,

@@ -12,20 +12,33 @@ import { PutData } from "../../service/CRUD/PutData";
 
 export function StepUsuario({ onFinish }) {
   const navigate = useNavigate();
-
-  const handleGoToUsuarios = () => {
-    navigate("/usuarios");
-  };
   const [loading, setLoading] = useState(false);
+
+  const cambiarEstado = async (estado) => {
+    setLoading(true); // Bloqueamos el botón para que no den doble click
+    navigate("/usuarios");
+    const success = await PutData("empresasSteps", estado);
+
+    if (success) {
+      const empresa = JSON.parse(localStorage.getItem("empresa")) || {};
+      empresa.setup_steps = estado;
+      localStorage.setItem("empresa", JSON.stringify(empresa));
+
+      // 2. Cerramos el modal
+      if (onFinish) onFinish();
+    }
+
+    setLoading(false);
+  };
 
   const handleSkip = async () => {
     setLoading(true); // Bloqueamos el botón para que no den doble click
-
+    navigate("/usuarios");
     const success = await PutData("superadmin/empresasSteps/complete-setup");
 
     if (success) {
       const empresa = JSON.parse(localStorage.getItem("empresa")) || {};
-      empresa.setup_steps = 5;
+      empresa.setup_steps = 1;
       localStorage.setItem("empresa", JSON.stringify(empresa));
 
       // 2. Cerramos el modal
@@ -129,7 +142,7 @@ export function StepUsuario({ onFinish }) {
               border: "none",
               transition: "transform 0.2s",
             }}
-            onClick={handleGoToUsuarios}
+            onClick={() => cambiarEstado(5)}
             onMouseOver={(e) =>
               (e.currentTarget.style.transform = "scale(1.05)")
             }

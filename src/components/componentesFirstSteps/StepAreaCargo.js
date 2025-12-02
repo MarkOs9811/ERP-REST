@@ -1,8 +1,27 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Briefcase, Network, Shield, ArrowRight, Users2 } from "lucide-react";
+import { PutData } from "../../service/CRUD/PutData";
 
-export function StepAreaCargo() {
+export function StepAreaCargo({ onFinish }) {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const cambiarEstado = async (estado) => {
+    setLoading(true); // Bloqueamos el botón para que no den doble click
+    navigate("/areas-y-cargos");
+    const success = await PutData("empresasSteps", estado);
+
+    if (success) {
+      const empresa = JSON.parse(localStorage.getItem("empresa")) || {};
+      empresa.setup_steps = estado;
+      localStorage.setItem("empresa", JSON.stringify(empresa));
+
+      // 2. Cerramos el modal
+      if (onFinish) onFinish();
+    }
+
+    setLoading(false);
+  };
   return (
     <div className="card text-center border-0 shadow-sm animate-fade-in overflow-hidden">
       {/* 1. CARD HEADER: Imagen e Identidad Visual */}
@@ -74,8 +93,9 @@ export function StepAreaCargo() {
 
         {/* Botón de Acción */}
         <div className="mb-2">
-          <Link
-            to="/areas-y-cargos"
+          <button
+            type="button"
+            onClick={() => cambiarEstado(2)}
             className="btn-guardar w-auto btn-lg px-5 py-3 rounded-pill shadow d-inline-flex align-items-center gap-2"
             style={{
               background: "linear-gradient(90deg, #198754, #20c997)",
@@ -90,7 +110,7 @@ export function StepAreaCargo() {
           >
             Crear Áreas y Cargos
             <ArrowRight size={20} />
-          </Link>
+          </button>
         </div>
 
         <div className="mt-3 text-muted small">
