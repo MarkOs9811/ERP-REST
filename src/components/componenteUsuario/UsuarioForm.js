@@ -1,29 +1,38 @@
 import { useEffect, useState } from "react";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faIdCard,
-  faUser,
-  faEnvelope,
-  faCoins,
-  faClock,
-  faBuilding,
-  faUnlockKeyhole,
-} from "@fortawesome/free-solid-svg-icons";
-import ToastAlert from "../componenteToast/ToastAlert";
-import axiosInstance from "../../api/AxiosInstance";
 import { useDropzone } from "react-dropzone";
 import { useForm } from "react-hook-form";
+import { useQueryClient } from "@tanstack/react-query";
+
+// ICONOS LUCIDE
+import {
+  User,
+  Mail,
+  Lock,
+  Building2,
+  Briefcase,
+  Banknote,
+  Clock,
+  IdCard,
+  ImagePlus,
+  Trash2,
+  CreditCard,
+} from "lucide-react";
+
+import ToastAlert from "../componenteToast/ToastAlert";
+import axiosInstance from "../../api/AxiosInstance";
+
+// TUS CUSTOM HOOKS
 import {
   handleInputChange,
   handleSelectChange,
 } from "../../hooks/InputHandlers";
-import { useQueryClient } from "@tanstack/react-query";
 
 export function UsuarioForm({ handleCloseModal }) {
   const [tipoDocumento, setTipoDocumento] = useState("DNI");
   const [numeroDocumento, setNumeroDocumento] = useState("");
   const queryClient = useQueryClient();
+
+  // Estado local para datos auxiliares
   const [formData, setFormData] = useState({
     cargo: "",
     salario: "",
@@ -32,9 +41,9 @@ export function UsuarioForm({ handleCloseModal }) {
   const [areas, setAreas] = useState([]);
   const [cargos, setCargos] = useState([]);
   const [horarios, setHorarios] = useState([]);
-  const [fotoPreview, setFotoPreview] = useState(null); // Previsualización de la imagen cargada
+  const [fotoPreview, setFotoPreview] = useState(null);
 
-  // TRAYENDO DATOS DE LA DB (CARGO, AREA, HORARIO)
+  // --- 1. FETCH DATA ---
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -47,14 +56,23 @@ export function UsuarioForm({ handleCloseModal }) {
         setCargos(cargosRes.data);
         setHorarios(horariosRes.data);
       } catch (error) {
-        ToastAlert("error", "error" + error);
+        ToastAlert("error", "Error cargando datos: " + error);
       }
     };
-
     fetchData();
   }, []);
 
-  // Manejar el cambio del cargo y consultar el salario
+  // --- 2. REACT HOOK FORM ---
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm();
+
+  // --- 3. LÓGICA DE NEGOCIO ---
+
+  // Cambio de cargo -> Fetch Salario
   const handleCargoChange = async (selectedCargoId) => {
     setFormData({ ...formData, cargo: selectedCargoId });
 
@@ -64,28 +82,25 @@ export function UsuarioForm({ handleCloseModal }) {
           `/getSalarioCargo/${selectedCargoId}`
         );
         const salario = response.data.salario;
-
-        // Actualizar el estado local y el valor en react-hook-form
         setFormData({ ...formData, cargo: selectedCargoId, salario });
-        setValue("salario", salario); // Actualiza el valor del campo 'salario' en el formulario
+        setValue("salario", salario);
       } catch (error) {
-        console.error("Error al obtener el salario:", error);
+        console.error("Error al obtener salario:", error);
       }
     } else {
       setFormData({ ...formData, salario: "" });
-      setValue("salario", ""); // Limpiar el valor de 'salario' en el formulario
+      setValue("salario", "");
     }
   };
 
-  // GUARDAR USUARIOS API
+  // Submit
   const onSubmit = async (data) => {
     const formDataToSend = new FormData();
-
     Object.keys(data).forEach((key) => {
       formDataToSend.append(key, data[key]);
     });
 
-    if (fotoPreview) {
+    if (formData.fotoPerfil) {
       formDataToSend.append("fotoPerfil", formData.fotoPerfil);
     }
 
@@ -94,395 +109,428 @@ export function UsuarioForm({ handleCloseModal }) {
         "/storeUsuario",
         formDataToSend
       );
-
       if (response.data.success) {
         ToastAlert("success", response.data.success);
         queryClient.invalidateQueries({ queryKey: ["usuarios"] });
-        setTimeout(() => handleCloseModal(), 500);
+        handleCloseModal(); // Cerrar modal al guardar
+      } else {
+        ToastAlert("error", response.data.message || "Error inesperado");
+      }
+    } catch (error) {
+      // Manejo de errores simplificado para el ejemplo
+      if (error.response?.data?.errors) {
+        ToastAlert("error", "Verifique los campos ingresados");
       } else {
         ToastAlert(
           "error",
-          response.data.message || "Ocurrió un error inesperado"
+          error.response?.data?.error || "Error al registrar"
         );
-      }
-    } catch (error) {
-      if (error.response?.status === 422 && error.response.data.errors) {
-        const errors = error.response.data.errors;
-        let errorMessages = "";
-        for (let field in errors) {
-          errorMessages += `${errors[field].join(", ")}\n`;
-        }
-        ToastAlert("error", errorMessages.trim());
-      } else if (error.response?.status === 409) {
-        ToastAlert("error", error.response.data.error);
-      } else {
-        ToastAlert("error", "Error al registrar el usuario");
       }
     }
   };
 
-  // PARA MSOTRAR LA PREVISUALIZACION DE LA IMAGEN
+  // Dropzone
   const { getRootProps, getInputProps } = useDropzone({
-    accept: "image/*",
+    accept: { "image/*": [] }, // Sintaxis moderna de dropzone
+    maxFiles: 1,
     onDrop: (acceptedFiles, fileRejections) => {
-      if (fileRejections.length > 0) {
-        ToastAlert("error", "Solo se permiten archivos de imagen.");
-        return;
-      }
-
+      if (fileRejections.length > 0)
+        return ToastAlert("error", "Solo imágenes.");
       const file = acceptedFiles[0];
       if (file) {
-        const objectUrl = URL.createObjectURL(file);
-        setFotoPreview(objectUrl);
-        setFormData({ ...formData, fotoPerfil: file }); // Guardar el archivo
+        setFotoPreview(URL.createObjectURL(file));
+        setFormData({ ...formData, fotoPerfil: file });
       }
     },
   });
 
-  // Usando HOOKS FORM PARA VALIDAR
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-    reset,
-  } = useForm();
+  const removePhoto = (e) => {
+    e.stopPropagation();
+    setFotoPreview(null);
+    setFormData({ ...formData, fotoPerfil: null });
+  };
 
+  // --- 4. RENDER ---
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      {/* Foto de perfil */}
+    <div className="card border-0 shadow-none bg-transparent p-3">
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="card-body p-2">
+          {/* SECCIÓN 1: FOTO DE PERFIL (Diseño Horizontal Compacto) */}
+          <div className="d-flex align-items-center gap-3 mb-4 p-3  rounded-3 border border-dashed">
+            <div
+              {...getRootProps()}
+              className="position-relative d-flex align-items-center justify-content-center bg-white rounded-circle shadow-sm"
+              style={{
+                width: "80px",
+                height: "80px",
+                cursor: "pointer",
+                overflow: "hidden",
+                border: errors.fotoPerfil
+                  ? "2px solid var(--bs-danger)"
+                  : "2px solid #e2e8f0",
+              }}
+            >
+              <input {...getInputProps()} id="fotoPerfil" />
+              {fotoPreview ? (
+                <img
+                  src={fotoPreview}
+                  alt="Preview"
+                  className="w-100 h-100 object-fit-cover"
+                />
+              ) : (
+                <ImagePlus size={28} className="text-muted opacity-50" />
+              )}
+            </div>
 
-      <div className="mb-3">
-        <label htmlFor="fotoPerfil" className="form-label">
-          Foto de Perfil
-        </label>
-        <div
-          {...getRootProps()}
-          className={`dropzone border rounded p-4 text-center justify-center ${
-            errors.fotoPerfil ? "is-invalid" : ""
-          }`} // Aplicando is-invalid si hay errores
-          style={{ cursor: "pointer" }}
-        >
-          <div className="text-center d-flex w-50 mx-auto p-0">
-            {fotoPreview && (
-              <img
-                src={fotoPreview}
-                alt="Foto Previsualizado"
-                className="img-fluid mb-3 mx-auto"
-                style={{
-                  maxWidth: "150px",
-                  borderRadius: "8px",
-                  border: "2px solid #ddd",
-                }}
-              />
-            )}
+            <div className="flex-grow-1">
+              <h6
+                className="m-0 fw-bold text-secondary"
+                style={{ fontSize: "0.9rem" }}
+              >
+                Foto de Perfil
+              </h6>
+              <p className="m-0 text-muted small lh-sm mb-2">
+                Haz clic en el círculo para subir una imagen.
+              </p>
+              {fotoPreview && (
+                <button
+                  type="button"
+                  onClick={removePhoto}
+                  className="btn btn-sm btn-outline-danger py-0 px-2"
+                  style={{ fontSize: "0.75rem" }}
+                >
+                  <Trash2 size={12} className="me-1" /> Quitar foto
+                </button>
+              )}
+              {errors.fotoPerfil && (
+                <div className="text-danger small mt-1">
+                  {errors.fotoPerfil.message}
+                </div>
+              )}
+            </div>
           </div>
-          <input
-            {...getInputProps()}
-            id="fotoPerfil"
-            name="fotoPerfil"
-            className="d-none"
-          />
-          <button type="button" className="btn btn-outline-primary mt-2">
-            Seleccionar archivo
+
+          {/* SECCIÓN 2: DOCUMENTOS */}
+          <h6 className="text-danger fw-bold text-uppercase small mb-3 border-bottom pb-2">
+            Información Personal
+          </h6>
+          <div className="row g-3 mb-3">
+            {/* Tipo Documento */}
+            <div className="col-md-4">
+              <label className="form-label small fw-semibold text-muted mb-1">
+                Tipo Doc.
+              </label>
+              <div className="input-group input-group-sm">
+                <span className="input-group-text bg-white border-end-0 text-muted">
+                  <IdCard size={16} />
+                </span>
+                <select
+                  className={`form-select border-start-0 ${
+                    errors.tipo_documento ? "is-invalid" : ""
+                  }`}
+                  {...register("tipo_documento", { required: "Requerido" })}
+                  onChange={handleSelectChange(
+                    setTipoDocumento,
+                    setValue,
+                    "tipo_documento",
+                    [{ name: "numero_documento", setter: setNumeroDocumento }]
+                  )}
+                >
+                  <option value="DNI">DNI</option>
+                  <option value="extranjeria">Carnet Ext.</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Número Documento */}
+            <div className="col-md-8">
+              <label className="form-label small fw-semibold text-muted mb-1">
+                Número Documento
+              </label>
+              <div className="input-group input-group-sm">
+                <span className="input-group-text bg-white border-end-0 text-muted">
+                  <CreditCard size={16} />
+                </span>
+                <input
+                  type="text"
+                  className={`form-control border-start-0 ${
+                    errors.numero_documento ? "is-invalid" : ""
+                  }`}
+                  placeholder="Ingrese número"
+                  value={numeroDocumento}
+                  {...register("numero_documento", {
+                    required: "Requerido",
+                    minLength: {
+                      value: tipoDocumento === "DNI" ? 8 : 10,
+                      message: "Longitud incorrecta",
+                    },
+                    maxLength: {
+                      value: tipoDocumento === "DNI" ? 8 : 10,
+                      message: "Longitud incorrecta",
+                    },
+                  })}
+                  onChange={handleInputChange(
+                    setNumeroDocumento,
+                    setValue,
+                    "numero_documento",
+                    /^\d*$/,
+                    tipoDocumento === "DNI" ? 8 : 10
+                  )}
+                />
+              </div>
+              {errors.numero_documento && (
+                <span className="text-danger small">
+                  {errors.numero_documento.message}
+                </span>
+              )}
+            </div>
+          </div>
+
+          {/* Nombres y Apellidos */}
+          <div className="row g-3 mb-3">
+            <div className="col-md-6">
+              <label className="form-label small fw-semibold text-muted mb-1">
+                Nombres
+              </label>
+              <div className="input-group input-group-sm">
+                <span className="input-group-text bg-white border-end-0 text-muted">
+                  <User size={16} />
+                </span>
+                <input
+                  type="text"
+                  className={`form-control border-start-0 ${
+                    errors.nombres ? "is-invalid" : ""
+                  }`}
+                  placeholder="Ej. Juan Carlos"
+                  {...register("nombres", { required: "Nombre requerido" })}
+                />
+              </div>
+              {errors.nombres && (
+                <span className="text-danger small">
+                  {errors.nombres.message}
+                </span>
+              )}
+            </div>
+            <div className="col-md-6">
+              <label className="form-label small fw-semibold text-muted mb-1">
+                Apellidos
+              </label>
+              <div className="input-group input-group-sm">
+                <span className="input-group-text bg-white border-end-0 text-muted">
+                  <User size={16} />
+                </span>
+                <input
+                  type="text"
+                  className={`form-control border-start-0 ${
+                    errors.apellidos ? "is-invalid" : ""
+                  }`}
+                  placeholder="Ej. Pérez López"
+                  {...register("apellidos", { required: "Apellido requerido" })}
+                />
+              </div>
+              {errors.apellidos && (
+                <span className="text-danger small">
+                  {errors.apellidos.message}
+                </span>
+              )}
+            </div>
+          </div>
+
+          {/* SECCIÓN 3: CUENTA Y ACCESO */}
+          <h6 className="text-danger fw-bold text-uppercase small mt-4 mb-3 border-bottom pb-2">
+            Cuenta y Acceso
+          </h6>
+          <div className="row g-3 mb-3">
+            <div className="col-md-7">
+              <label className="form-label small fw-semibold text-muted mb-1">
+                Correo Electrónico
+              </label>
+              <div className="input-group input-group-sm">
+                <span className="input-group-text bg-white border-end-0 text-muted">
+                  <Mail size={16} />
+                </span>
+                <input
+                  type="email"
+                  className={`form-control border-start-0 ${
+                    errors.correo ? "is-invalid" : ""
+                  }`}
+                  placeholder="usuario@empresa.com"
+                  {...register("correo", {
+                    required: "Correo requerido",
+                    pattern: {
+                      value: /^\S+@\S+$/i,
+                      message: "Correo inválido",
+                    },
+                  })}
+                />
+              </div>
+              {errors.correo && (
+                <span className="text-danger small">
+                  {errors.correo.message}
+                </span>
+              )}
+            </div>
+            <div className="col-md-5">
+              <label className="form-label small fw-semibold text-muted mb-1">
+                Método Auth
+              </label>
+              <div className="input-group input-group-sm">
+                <span className="input-group-text bg-white border-end-0 text-muted">
+                  <Lock size={16} />
+                </span>
+                <select
+                  className={`form-select border-start-0 ${
+                    errors.tipoAuth ? "is-invalid" : ""
+                  }`}
+                  {...register("tipoAuth", { required: "Requerido" })}
+                >
+                  <option value="">Seleccione...</option>
+                  <option value="manual">Manual</option>
+                  <option value="google Oauth2">Google</option>
+                </select>
+              </div>
+              {errors.tipoAuth && (
+                <span className="text-danger small">
+                  {errors.tipoAuth.message}
+                </span>
+              )}
+            </div>
+          </div>
+
+          {/* SECCIÓN 4: DATOS LABORALES */}
+          <h6 className="text-danger fw-bold text-uppercase small mt-4 mb-3 border-bottom pb-2">
+            Datos Laborales
+          </h6>
+          <div className="row g-3 mb-3">
+            {/* Área */}
+            <div className="col-md-6">
+              <label className="form-label small fw-semibold text-muted mb-1">
+                Área
+              </label>
+              <div className="input-group input-group-sm">
+                <span className="input-group-text bg-white border-end-0 text-muted">
+                  <Building2 size={16} />
+                </span>
+                <select
+                  className={`form-select border-start-0 ${
+                    errors.area ? "is-invalid" : ""
+                  }`}
+                  {...register("area", { required: "Requerido" })}
+                >
+                  <option value="">Seleccione...</option>
+                  {areas.map((a) => (
+                    <option key={a.id} value={a.id}>
+                      {a.nombre}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              {errors.area && (
+                <span className="text-danger small">{errors.area.message}</span>
+              )}
+            </div>
+
+            {/* Cargo */}
+            <div className="col-md-6">
+              <label className="form-label small fw-semibold text-muted mb-1">
+                Cargo
+              </label>
+              <div className="input-group input-group-sm">
+                <span className="input-group-text bg-white border-end-0 text-muted">
+                  <Briefcase size={16} />
+                </span>
+                <select
+                  className={`form-select border-start-0 ${
+                    errors.cargo ? "is-invalid" : ""
+                  }`}
+                  {...register("cargo", { required: "Requerido" })}
+                  onChange={(e) => {
+                    setValue("cargo", e.target.value);
+                    handleCargoChange(e.target.value);
+                  }}
+                >
+                  <option value="">Seleccione...</option>
+                  {cargos.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.nombre}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              {errors.cargo && (
+                <span className="text-danger small">
+                  {errors.cargo.message}
+                </span>
+              )}
+            </div>
+
+            {/* Salario */}
+            <div className="col-md-4">
+              <label className="form-label small fw-semibold text-muted mb-1">
+                Salario
+              </label>
+              <div className="input-group input-group-sm">
+                <span className="input-group-text bg-white border-end-0 text-muted">
+                  <Banknote size={16} />
+                </span>
+                <input
+                  type="number"
+                  readOnly
+                  className="form-control border-start-0 "
+                  {...register("salario", { required: "Requerido" })}
+                />
+              </div>
+            </div>
+
+            {/* Horario */}
+            <div className="col-md-8">
+              <label className="form-label small fw-semibold text-muted mb-1">
+                Horario
+              </label>
+              <div className="input-group input-group-sm">
+                <span className="input-group-text bg-white border-end-0 text-muted">
+                  <Clock size={16} />
+                </span>
+                <select
+                  className={`form-select border-start-0 ${
+                    errors.horario ? "is-invalid" : ""
+                  }`}
+                  {...register("horario", { required: "Requerido" })}
+                >
+                  <option value="">Seleccione Horario...</option>
+                  {horarios.map((h) => (
+                    <option key={h.id} value={h.id}>
+                      {h.horaEntrada} - {h.horaSalida}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              {errors.horario && (
+                <span className="text-danger small">
+                  {errors.horario.message}
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* FOOTER ACCIONES */}
+        <div className="card-footer border-0 d-flex justify-content-end bg-transparent gap-2 pt-2 pb-0">
+          <button
+            type="button"
+            className="btn-cerrar-modal btn-sm px-4 rounded-3"
+            onClick={handleCloseModal}
+          >
+            Cancelar
           </button>
-          {!fotoPreview && (
-            <p className="text-muted mt-3">
-              Haz clic o arrastra para cargar la foto de perfil
-            </p>
-          )}
-          {errors.fotoPerfil && (
-            <div className="invalid-feedback">{errors.fotoPerfil.message}</div> // Mensaje de error
-          )}
-        </div>
-      </div>
-
-      {/* Tipo de documento */}
-      <div className="mb-3">
-        <div className="form-floating">
-          <select
-            id="tipo_documento"
-            className="form-select"
-            {...register("tipo_documento", {
-              required: "Seleeciona un tipo de documento",
-            })}
-            onChange={handleSelectChange(
-              setTipoDocumento,
-              setValue,
-              "tipo_documento",
-              [{ name: "numero_documento", setter: setNumeroDocumento }]
-            )}
+          <button
+            type="submit"
+            className="btn-guardar btn-sm px-4 rounded-3 fw-bold"
           >
-            <option value="DNI">DNI</option>
-            <option value="extranjeria">Carnet de Extranjería</option>
-          </select>
-          <label htmlFor="tipo_documento">Tipo de Documento</label>
-          {errors.tipo_documento && (
-            <div className="invalid-feedback">
-              {errors.tipo_documento.message}
-            </div>
-          )}
+            Registrar Usuario
+          </button>
         </div>
-      </div>
-
-      {/* Número de documento */}
-      <div className="mb-3">
-        <div className="form-floating">
-          <input
-            type="text"
-            className={`form-control ${
-              errors.numeroDocumento ? "is-invalid" : ""
-            }`}
-            id="numero_documento"
-            value={numeroDocumento}
-            {...register("numero_documento", {
-              required: "Este campo es obligatorio",
-              minLength: {
-                value: tipoDocumento === "DNI" ? 8 : 10,
-                message: `Debe tener ${
-                  tipoDocumento === "DNI" ? "8" : "10"
-                } caracteres`,
-              },
-              maxLength: {
-                value: tipoDocumento === "DNI" ? 8 : 10,
-                message: `Debe tener ${
-                  tipoDocumento === "DNI" ? "8" : "10"
-                } caracteres`,
-              },
-            })}
-            onChange={handleInputChange(
-              setNumeroDocumento,
-              setValue,
-              "numero_documento",
-              /^\d*$/,
-              tipoDocumento === "DNI" ? 8 : 10
-            )}
-          />
-          <label htmlFor="numero_documento">
-            <FontAwesomeIcon icon={faIdCard} className="me-2" />
-            Número de Documento
-          </label>
-          {errors.numeroDocumento && (
-            <div className="invalided-feedback">
-              {errors.numeroDocumento.message}
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Nombres y Apellidos */}
-      <div className="mb-3 row">
-        <div className="col-md-6">
-          <div className="form-floating">
-            <input
-              type="text"
-              className={`form-control ${errors.nombres ? "is-invalid" : ""}`}
-              {...register("nombres", {
-                required: "Ingrese el nombre",
-              })}
-            />
-            <label htmlFor="nombres">
-              <FontAwesomeIcon icon={faUser} className="me-2" />
-              Nombres
-            </label>
-            {errors.nombres && (
-              <div className="invalid-feedback">{errors.nombres.message}</div>
-            )}
-          </div>
-        </div>
-        <div className="col-md-6">
-          <div className="form-floating">
-            <input
-              type="text"
-              className={`form-control ${errors.apellidos ? "is-invalid" : ""}`}
-              id="apellidos"
-              {...register("apellidos", {
-                required: "Ingrese sus apellidos",
-              })}
-            />
-            <label htmlFor="apellidos">
-              <FontAwesomeIcon icon={faUser} className="me-2" />
-              Apellidos
-            </label>
-            {errors.apellidos && (
-              <div className="invalid-feedback">{errors.apellidos.message}</div>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Correo electrónico */}
-      <div className="mb-3">
-        <div className="form-floating">
-          <input
-            type="email"
-            className={`form-control ${errors.correo ? "is-invalid" : ""}`}
-            id="correo_electronico"
-            {...register("correo", {
-              required: "El correo es obligatorio",
-              pattern: {
-                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                message: "Formato de correo inválido",
-              },
-            })}
-          />
-          <label htmlFor="correo_electronico">
-            <FontAwesomeIcon icon={faEnvelope} className="me-2" />
-            Correo Electrónico
-          </label>
-          {errors.correo && (
-            <div className="invalid-feedback">{errors.correo.message}</div>
-          )}
-        </div>
-      </div>
-      {/* Tipo de logeo*/}
-      <div className="mb-3">
-        <div className="form-floating">
-          <select
-            id="horario"
-            className={`form-select ${errors.tipoAuth ? "is-invalid" : ""}`} // Aplica is-invalid si hay errores
-            {...register("tipoAuth", {
-              required: "El tipoAuth es obligatorio",
-            })}
-          >
-            <option value="">Seleccione...</option>
-
-            <option value={"manual"}>Cuentas manuales</option>
-            <option value={"google Oauth2"}>Google Oauth2</option>
-          </select>
-          <label htmlFor="tipoAuth">
-            <FontAwesomeIcon icon={faUnlockKeyhole} className="me-2" />
-            Tipo de authenticación
-          </label>
-          {errors.tipoAuth && (
-            <div className="invalid-feedback">{errors.tipoAuth.message}</div> // Mensaje de error
-          )}
-        </div>
-      </div>
-
-      {/* Área */}
-      <div className="mb-3">
-        <div className="form-floating">
-          <select
-            id="area"
-            className={`form-control ${errors.area ? "is-invalid" : ""}`}
-            {...register("area", {
-              required: "Area requerido",
-            })}
-          >
-            <option value="">Seleccione Área</option>
-            {areas.map((area) => (
-              <option key={area.id} value={area.id}>
-                {area.nombre}
-              </option>
-            ))}
-          </select>
-          <label htmlFor="area">
-            <FontAwesomeIcon icon={faBuilding} className="me-2" />
-            Área
-          </label>
-          {errors.area && (
-            <div className="invalid-feedback">{errors.area.message}</div>
-          )}
-        </div>
-      </div>
-
-      {/* Cargo */}
-      <div className="mb-3">
-        <div className="form-floating">
-          <select
-            id="cargo"
-            className={`form-control ${errors.cargo ? "is-invalid" : ""}`}
-            {...register("cargo", {
-              required: "Seleccione un cargo",
-            })}
-            onChange={(e) => {
-              const selectedCargoId = e.target.value;
-              setValue("cargo", selectedCargoId); // Actualizar el estado del formulario con el cargo seleccionado
-              if (selectedCargoId) {
-                handleCargoChange(selectedCargoId); // Pasar el valor seleccionado directamente
-              } else {
-                setValue("salario", ""); // Limpiar el salario si no hay selección
-              }
-            }}
-          >
-            <option value="">Seleccione Cargo</option>
-            {cargos.map((cargo) => (
-              <option key={cargo.id} value={cargo.id}>
-                {cargo.nombre}
-              </option>
-            ))}
-          </select>
-          <label htmlFor="cargo">
-            <FontAwesomeIcon icon={faCoins} className="me-2" />
-            Cargo
-          </label>
-          {errors.cargo && (
-            <div className="invalid-feedback">{errors.cargo.message}</div>
-          )}
-        </div>
-      </div>
-
-      {/* Salario */}
-      <div className="mb-3">
-        <div className="form-floating">
-          <input
-            type="number"
-            className={`form-control ${errors.salario ? "is-invalid" : ""}`} // Aplica is-invalid si hay errores
-            id="salario"
-            {...register("salario", {
-              required: "El salario es obligatorio",
-              min: { value: 1, message: "El salario debe ser mayor a 0" },
-              max: {
-                value: 100000,
-                message: "El salario no puede superar los 100,000",
-              },
-            })}
-            readOnly // Cambia a readOnly si necesitas que el valor sea enviado
-          />
-          <label htmlFor="salario">
-            <FontAwesomeIcon icon={faCoins} className="me-2" />
-            Salario
-          </label>
-          {errors.salario && (
-            <div className="invalid-feedback">{errors.salario.message}</div> // Mensaje de error
-          )}
-        </div>
-      </div>
-
-      {/* Horario */}
-      <div className="mb-3">
-        <div className="form-floating">
-          <select
-            id="horario"
-            className={`form-select ${errors.horario ? "is-invalid" : ""}`} // Aplica is-invalid si hay errores
-            {...register("horario", {
-              required: "El horario es obligatorio",
-            })}
-          >
-            <option value="">Seleccione Horario</option>
-            {horarios.map((horario) => (
-              <option key={horario.id} value={horario.id}>
-                {horario.horaEntrada} - {horario.horaSalida}
-              </option>
-            ))}
-          </select>
-          <label htmlFor="horario">
-            <FontAwesomeIcon icon={faClock} className="me-2" />
-            Horario
-          </label>
-          {errors.horario && (
-            <div className="invalid-feedback">{errors.horario.message}</div> // Mensaje de error
-          )}
-        </div>
-      </div>
-
-      {/* Botón de Guardar */}
-      <div className="d-flex justify-content-center mt-4">
-        <button type="submit" className="btn btn-primary">
-          Registrar Usuario
-        </button>
-      </div>
-    </form>
+      </form>
+    </div>
   );
 }

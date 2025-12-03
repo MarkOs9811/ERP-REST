@@ -380,9 +380,9 @@ button:disabled {
   min-width: 35px;
   width: auto;
   height: 35px;
-  background-color: #1d2530;
-  color: #e2ecff;
-  border: none;
+  background-color: #f1f3f7;
+  color: #12161d;
+  border: 1px solid #626d80;
   border-radius: 0.375rem;
   padding: 0.5rem;
   display: inline-flex;
@@ -392,7 +392,7 @@ button:disabled {
 }
 
 .btn-principal:hover {
-  background-color: #2f363f;
+  background-color: #b0b5bd;
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }

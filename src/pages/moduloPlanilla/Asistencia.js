@@ -22,12 +22,19 @@ import {
   CalendarCheck,
   ChartColumnBig,
   CircleCheckBig,
+  Eye,
   FileText,
 } from "lucide-react";
+import { useState } from "react";
+import ModalRight from "../../components/componentesReutilizables/ModalRight";
+import { ListaAsistencia } from "../../components/componentePlanillas/componentesAsistencia/ListaAsistencias";
+import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteExcel";
 
 export function Asistencia() {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
   const rowColors = ["#1dae79", "#d34242", "#4c7d9a", "#ff9800"]; // Colores alternados
+  const [listAsistencias, setModalListAsistencias] = useState(false);
+
   const conditionalRowStyles = [
     {
       when: (row) => row,
@@ -256,7 +263,10 @@ export function Asistencia() {
                   className="form-control"
                 />
               </div>
-              <button className="btn btn-sm btn-outline-dark">
+              <button
+                className="btn btn-sm btn-outline-dark"
+                onClick={() => GetReporteExcel("/reporteAsistenciaHoy")}
+              >
                 <FileText className="me-1 text-auto" />
                 Reporte
               </button>
@@ -296,10 +306,6 @@ export function Asistencia() {
                 <ChartColumnBig className="me-2 color-auto" />
                 Gráfico de Asistencias
               </p>
-              <button className="btn btn-sm btn-outline-dark">
-                <FileText className="me-1 text-auto" />
-                Reporte
-              </button>
             </div>
             <div className="card-body h-100">
               <div style={{ height: "100%" }}>
@@ -317,16 +323,13 @@ export function Asistencia() {
                   <CalendarCheck className="me-2 color-auto" />
                   Asistencias Mensual
                 </p>
-                <div className="d-flex align-items-center">
-                  <div className="input-group me-3" style={{ width: "300px" }}>
-                    <span className="input-group-text">De</span>
-                    <input type="date" className="form-control" />
-                    <span className="input-group-text">a</span>
-                    <input type="date" className="form-control" />
-                  </div>
-                  <button className="btn btn-sm btn-outline-dark">
-                    <FileText className="me-1 text-auto" />
-                    Reporte
+                <div className="d-flex align-items-center gap-3">
+                  <button
+                    className="btn btn-sm btn-outline-dark"
+                    onClick={() => setModalListAsistencias(true)}
+                  >
+                    <Eye className="me-1 text-auto" />
+                    Ver Asistencias
                   </button>
                 </div>
               </div>
@@ -339,6 +342,16 @@ export function Asistencia() {
           </div>
         </div>
       </div>
+
+      <ModalRight
+        isOpen={listAsistencias}
+        onClose={() => setModalListAsistencias(false)}
+        title={"Lista de Asistencias"}
+        width="70%"
+        hideFooter={true}
+      >
+        {({ handleClose }) => <ListaAsistencia onClose={handleClose} />}
+      </ModalRight>
     </div>
   );
 }

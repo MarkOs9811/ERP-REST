@@ -2,23 +2,14 @@ import { useState } from "react";
 import { UsuariosList } from "../components/componenteUsuario/UsuarioList";
 import { UsuarioForm } from "../components/componenteUsuario/UsuarioForm";
 
-import { Modal } from "react-bootstrap";
-import { ContenedorPrincipal } from "../components/componentesReutilizables/ContenedorPrincipal";
 import { FileChartColumnIncreasing, PlusIcon } from "lucide-react";
 import { GetReporteExcel } from "../service/accionesReutilizables/GetReporteExcel";
+import ModalRight from "../components/componentesReutilizables/ModalRight";
 
 export function Usuarios() {
   const [showModal, setShowModal] = useState(false);
   const [updateList, setUpdateList] = useState(false);
   const [search, setSearch] = useState("");
-
-  // Función para abrir el modal
-  const handleOpenModal = () => setShowModal(true);
-
-  // Función para cerrar el modal
-  const handleCloseModal = () => {
-    setShowModal(false);
-  };
 
   return (
     <div>
@@ -43,7 +34,7 @@ export function Usuarios() {
                   />
                   <button
                     className="btn mx-2 btn-outline-dark"
-                    onClick={handleOpenModal}
+                    onClick={() => setShowModal(true)}
                   >
                     <PlusIcon className="color-auto" />
                   </button>
@@ -66,21 +57,14 @@ export function Usuarios() {
         </div>
       </div>
 
-      {/* Modal para agregar usuario*/}
-      <Modal
-        show={showModal}
-        onHide={handleCloseModal}
-        centered
-        className="modal-sin-borde"
+      <ModalRight
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        hideFooter={true}
+        title={"Agregar nuevo usuario"}
       >
-        <Modal.Header closeButton>
-          <Modal.Title>Registrar Usuario</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {/* Pasa handleCloseModal como prop a UsuarioForm */}
-          <UsuarioForm handleCloseModal={handleCloseModal} />
-        </Modal.Body>
-      </Modal>
+        {({ handleClose }) => <UsuarioForm handleCloseModal={handleClose} />}
+      </ModalRight>
     </div>
   );
 }

@@ -1,0 +1,309 @@
+/* =========================================
+   1. VARIABLES Y TEMAS
+   ========================================= */
+
+/* TEMA CLARO (Por defecto) */
+:root {
+    /* Colores Estructurales */
+    --bg-card: #ffffff;
+    --bg-input: #ffffff;
+    --bg-soft: #f8fafc;
+    /* Fondo suave (headers, hovers) */
+    --border-color: #e2e8f0;
+
+    /* Textos */
+    --text-main: #1e293b;
+    /* Slate 800 */
+    --text-muted: #64748b;
+    /* Slate 500 */
+    --text-inverse: #ffffff;
+
+    /* Color Primario (Indigo) */
+    --primary-color: #e54646;
+    --primary-gradient: linear-gradient(135deg, #e54646 0%, #f16363 100%);
+    --primary-shadow: rgba(79, 70, 229, 0.15);
+
+    /* Estados (Badges) - CLARO */
+    /* Success */
+    --success-bg: #dcfce7;
+    --success-text: #166534;
+    /* Warning */
+    --warning-bg: #ffedd5;
+    --warning-text: #9a3412;
+    /* Danger */
+    --danger-bg: #fee2e2;
+    --danger-text: #991b1b;
+    /* Default */
+    --default-bg: #f1f5f9;
+    --default-text: #475569;
+}
+
+/* TEMA OSCURO (Se activa con body.dark-theme) */
+body.dark-theme {
+    /* Colores Estructurales Oscuros (Slate Palette) */
+    --bg-card: #1e293b;
+    /* Slate 800 */
+    --bg-input: #0f172a;
+    /* Slate 900 */
+    --bg-soft: #334155;
+    /* Slate 700 (headers, hovers) */
+    --border-color: #475569;
+    /* Slate 600 */
+
+    /* Textos Oscuros */
+    --text-main: #f1f5f9;
+    /* Slate 100 */
+    --text-muted: #94a3b8;
+    /* Slate 400 */
+
+    /* Ajustamos la sombra del primario para que brille en oscuro */
+    --primary-shadow: rgba(99, 102, 241, 0.4);
+
+    /* Estados (Badges) - OSCURO (Más transparentes y brillantes) */
+    /* Success */
+    --success-bg: rgba(22, 163, 74, 0.2);
+    --success-text: #4ade80;
+    /* Green 400 */
+    /* Warning */
+    --warning-bg: rgba(234, 88, 12, 0.2);
+    --warning-text: #fb923c;
+    /* Orange 400 */
+    /* Danger */
+    --danger-bg: rgba(220, 38, 38, 0.2);
+    --danger-text: #f87171;
+    /* Red 400 */
+    /* Default */
+    --default-bg: #334155;
+    --default-text: #cbd5e1;
+}
+
+/* =========================================
+   2. COMPONENTES
+   ========================================= */
+
+.modern-card {
+    background: transparent;
+    /* Usa variable */
+    color: var(--text-main);
+    /* Usa variable */
+    
+    overflow: hidden;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.modern-header {
+    background: var(--primary-gradient);
+    color: var(--text-inverse);
+    padding: 1rem 1.5rem;
+}
+
+/* Inputs personalizados */
+.modern-input {
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-input);
+    /* Usa variable */
+    color: var(--text-main);
+    /* Usa variable */
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+}
+
+.modern-input::placeholder {
+    color: var(--text-muted);
+}
+
+.modern-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px var(--primary-shadow);
+    outline: none;
+}
+
+/* Fix para select en dark mode */
+.modern-input option {
+    background-color: var(--bg-card);
+    color: var(--text-main);
+}
+
+/* Botones */
+.btn-modern {
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-ghost {
+    background: transparent;
+    color: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-ghost:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.btn-outline {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+}
+
+.btn-outline:hover {
+    background: var(--bg-soft);
+    color: var(--text-main);
+    border-color: var(--text-muted);
+}
+
+.btn-excel {
+    background: #10b981;
+    color: white;
+}
+
+.btn-excel:hover {
+    background: #059669;
+    transform: translateY(-1px);
+}
+
+.btn-excel:disabled {
+    background: var(--bg-soft);
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-close-custom {
+    background: var(--bg-soft);
+    color: var(--text-muted);
+}
+
+.btn-close-custom:hover {
+    background: var(--border-color);
+    color: var(--text-main);
+}
+
+/* Badges / Pills */
+.badge-modern {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.025em;
+}
+
+.badge-modern-success {
+    background-color: var(--success-bg);
+    color: var(--success-text);
+}
+
+.badge-modern-warning {
+    background-color: var(--warning-bg);
+    color: var(--warning-text);
+}
+
+.badge-modern-danger {
+    background-color: var(--danger-bg);
+    color: var(--danger-text);
+}
+
+.badge-modern-default {
+    background-color: var(--default-bg);
+    color: var(--default-text);
+}
+
+/* Stats Cards */
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+}
+
+.stat-label {
+    color: var(--text-muted);
+}
+
+.stat-value {
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+/* Helpers de Utilidad */
+.input-group-text-custom {
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-color);
+    border-right: none;
+    color: var(--text-muted);
+}
+
+.card-body-custom {
+    background-color: var(--bg-soft);
+    /* Fondo gris claro en light, gris oscuro en dark */
+}
+
+.footer-custom {
+    background-color: var(--bg-card);
+    border-top: 1px solid var(--border-color);
+}
+
+/* Animaciones */
+.spin-anim {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* =========================================
+   3. OVERRIDES PARA REACT DATA TABLE
+   (Esto fuerza el estilo dark en la tabla de terceros)
+   ========================================= */
+body.dark-theme .rdt_Table,
+body.dark-theme .rdt_TableHead,
+body.dark-theme .rdt_TableBody,
+body.dark-theme .rdt_TableRow,
+body.dark-theme .rdt_Pagination {
+    background-color: var(--bg-card) !important;
+    color: var(--text-main) !important;
+    border-color: var(--border-color) !important;
+}
+
+body.dark-theme .rdt_TableHeadRow {
+    background-color: var(--bg-soft) !important;
+    color: var(--text-muted) !important;
+    border-bottom-color: var(--border-color) !important;
+}
+
+body.dark-theme .rdt_TableRow:hover {
+    background-color: var(--bg-soft) !important;
+}
+
+body.dark-theme .rdt_TableCell {
+    color: var(--text-main) !important;
+}

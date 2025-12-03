@@ -114,7 +114,14 @@ export const MainLayout = () => {
                   {showFullLayout && <Header />}
                   {/* Tu PrivateRoute original para Navegacion está perfecto */}
                   {showFullLayout && (
-                    <PrivateRoute allowedRoles={["ventas", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={[
+                        "ventas",
+                        "finanzas",
+                        "cocinero",
+                        "administrador",
+                      ]}
+                    >
                       <Navegacion />
                     </PrivateRoute>
                   )}
