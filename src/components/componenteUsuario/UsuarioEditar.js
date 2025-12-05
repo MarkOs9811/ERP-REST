@@ -1,7 +1,20 @@
 import { useState, useEffect } from "react";
+// Importamos los iconos de Lucide
+import {
+  User,
+  Mail,
+  MapPin,
+  Briefcase,
+  DollarSign,
+  Clock,
+  FileText,
+  CreditCard,
+  LayoutGrid,
+  Save,
+  X,
+  Building2, // Para Sede
+} from "lucide-react";
 
-import { faSave } from "@fortawesome/free-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ToastAlert from "../componenteToast/ToastAlert";
 import axiosInstance from "../../api/AxiosInstance";
 import { useQueryClient } from "@tanstack/react-query";
@@ -19,38 +32,32 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
     salario: "",
     horario: "",
   });
+
   const queryClient = useQueryClient();
 
+  // Estados para selectores
   const [cargos, setCargos] = useState([]);
   const [areas, setAreas] = useState([]);
   const [sedes, setSedes] = useState([]);
-
   const [horarios, setHorarios] = useState([]);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  // Este useEffect llena el formulario cuando llega el prop data
 
-  // Función para cargar los cargos, áreas y horarios
+  // Carga de datos auxiliares
   const cargasCargosAreasHorarios = async () => {
     try {
-      // Cargar los cargos
-      const cargosResponse = await axiosInstance.get("/cargos");
-      setCargos(cargosResponse.data);
+      const [cargosRes, areasRes, horariosRes, sedesRes] = await Promise.all([
+        axiosInstance.get("/cargos"),
+        axiosInstance.get("/areas"),
+        axiosInstance.get("/horarios"),
+        axiosInstance.get("/sedesAll"),
+      ]);
 
-      // Cargar las áreas
-
-      const areasResponse = await axiosInstance.get("/areas");
-
-      setAreas(areasResponse.data.data || []); // Extraer solo el array de "data"
-
-      // Cargar los horarios
-      const horariosResponse = await axiosInstance.get("/horarios");
-      setHorarios(horariosResponse.data);
-
-      // Cargar sedes
-      const sedesResponse = await axiosInstance.get("/sedesAll");
-
-      setSedes(sedesResponse.data.data || []); // Extraer solo el array de "data"
+      setCargos(cargosRes.data);
+      setAreas(areasRes.data.data || []);
+      setHorarios(horariosRes.data);
+      setSedes(sedesRes.data.data || []);
     } catch (err) {
       setError("Hubo un error al cargar los datos auxiliares.");
     }
@@ -104,6 +111,7 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
     try {
       const response = await axiosInstance.put(
@@ -113,253 +121,276 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
       if (response.data.success) {
         ToastAlert("success", "Usuario actualizado con éxito");
         queryClient.invalidateQueries({ queryKey: ["usuarios"] });
-        // Retrasar el cierre del modal y la actualización para dar tiempo al toast
         handleCloseModal();
         setTimeout(() => {
           onUsuarioUpdated();
-        }, 3000); // Coincide con el tiempo de duración del toast
+        }, 3000);
       } else {
-        ToastAlert(
-          "error",
-          "Error al actualizar el usuario. Por favor, intente nuevamente."
-        );
+        ToastAlert("error", "Error al actualizar. Intente nuevamente.");
       }
     } catch (error) {
-      if (error.response) {
-        if (error.response.status === 422) {
-          const errors = error.response.data.errors;
-          let errorMessage = "Hubo un error al guardar los cambios: ";
-          for (const field in errors) {
-            errorMessage += `${field}: ${errors[field].join(", ")}. `;
-          }
-          ToastAlert("error", errorMessage);
-        } else {
-          ToastAlert(
-            "error",
-            "Hubo un error al guardar los cambios. Por favor, intente nuevamente."
-          );
-        }
-      } else if (error.request) {
-        ToastAlert(
-          "error",
-          "No se pudo conectar con el servidor. Por favor, intente nuevamente más tarde."
-        );
-      } else {
-        ToastAlert(
-          "error",
-          "Hubo un problema con la solicitud. Por favor, intente nuevamente."
-        );
-      }
+      // Manejo básico de errores
+      const msg = error.response?.data?.message || "Error al guardar cambios";
+      ToastAlert("error", msg);
+    } finally {
+      setLoading(false);
     }
   };
 
+  // Estilos comunes para etiquetas y contenedores
+  const labelStyle = "form-label fw-bold small text-secondary mb-1";
+  const sectionTitleStyle =
+    "text-danger fw-bold small text-uppercase mb-3 mt-2 border-bottom pb-1";
+
   return (
-    <form onSubmit={handleSubmit}>
-      {loading ? (
-        <p>Cargando datos...</p>
-      ) : error ? (
-        <div className="alert alert-danger">{error}</div>
+    <form onSubmit={handleSubmit} className="p-3">
+      {loading && !formData.nombres ? (
+        <div className="text-center p-4">Cargando...</div>
       ) : (
         <>
-          {/* Tipo de documento */}
-          <div className="mb-3">
-            <div className="form-floating">
-              <select
-                id="tipo_documento"
-                className="form-select"
-                value={formData.tipo_documento}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    tipo_documento: e.target.value,
-                    numero_documento: "",
-                  })
-                }
-              >
-                <option value="DNI">DNI</option>
-                <option value="extranjeria">Carnet de Extranjería</option>
-              </select>
-              <label htmlFor="tipo_documento">Tipo de Documento</label>
+          {/* SECCIÓN 1: INFORMACIÓN PERSONAL */}
+          <h6 className={sectionTitleStyle}>Información Personal</h6>
+
+          <div className="row g-3 mb-3">
+            {/* Tipo Doc */}
+            <div className="col-md-5">
+              <label className={labelStyle}>Tipo Doc.</label>
+              <div className="input-group">
+                <span className="input-group-text bg-white text-muted">
+                  <FileText size={16} />
+                </span>
+                <select
+                  className="form-select"
+                  value={formData.tipo_documento}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      tipo_documento: e.target.value,
+                      numero_documento: "",
+                    })
+                  }
+                >
+                  <option value="DNI">DNI</option>
+                  <option value="extranjeria">C. Extranjería</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Num Documento */}
+            <div className="col-md-7">
+              <label className={labelStyle}>Número Documento</label>
+              <div className="input-group">
+                <span className="input-group-text bg-white text-muted">
+                  <CreditCard size={16} />
+                </span>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={formData.numero_documento}
+                  onChange={validacionesInput}
+                  placeholder="Ingrese número"
+                />
+              </div>
+            </div>
+
+            {/* Nombres */}
+            <div className="col-md-6">
+              <label className={labelStyle}>Nombres</label>
+              <div className="input-group">
+                <span className="input-group-text bg-white text-muted">
+                  <User size={16} />
+                </span>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={formData.nombres}
+                  onChange={(e) =>
+                    setFormData({ ...formData, nombres: e.target.value })
+                  }
+                  placeholder="Ej. Juan Carlos"
+                />
+              </div>
+            </div>
+
+            {/* Apellidos */}
+            <div className="col-md-6">
+              <label className={labelStyle}>Apellidos</label>
+              <div className="input-group">
+                <span className="input-group-text bg-white text-muted">
+                  <User size={16} />
+                </span>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={formData.apellidos}
+                  onChange={(e) =>
+                    setFormData({ ...formData, apellidos: e.target.value })
+                  }
+                  placeholder="Ej. Pérez López"
+                />
+              </div>
             </div>
           </div>
 
-          {/* Documento */}
-          <div className="mb-3">
-            <div className="form-floating">
-              <input
-                type="text"
-                id="numero_documento"
-                className="form-control"
-                value={formData.numero_documento}
-                onChange={validacionesInput}
-                placeholder="Número de documento"
-              />
-              <label htmlFor="numero_documento">Número de Documento</label>
+          {/* SECCIÓN 2: CUENTA Y ACCESO */}
+          <h6 className={sectionTitleStyle}>Cuenta y Acceso</h6>
+
+          <div className="row g-3 mb-3">
+            <div className="col-12">
+              <label className={labelStyle}>Correo Electrónico</label>
+              <div className="input-group">
+                <span className="input-group-text bg-white text-muted">
+                  <Mail size={16} />
+                </span>
+                <input
+                  type="email"
+                  className="form-control"
+                  value={formData.correo_electronico}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      correo_electronico: e.target.value,
+                    })
+                  }
+                  placeholder="usuario@empresa.com"
+                />
+              </div>
             </div>
           </div>
 
-          {/* Nombre */}
-          <div className="mb-3">
-            <div className="form-floating">
-              <input
-                type="text"
-                id="nombres"
-                className="form-control"
-                value={formData.nombres}
-                onChange={(e) =>
-                  setFormData({ ...formData, nombres: e.target.value })
-                }
-                placeholder="Nombres"
-              />
-              <label htmlFor="nombres">Nombres</label>
+          {/* SECCIÓN 3: DATOS LABORALES */}
+          <h6 className={sectionTitleStyle}>Datos Laborales</h6>
+
+          <div className="row g-3">
+            {/* Sede */}
+            <div className="col-md-6">
+              <label className={labelStyle}>Sede</label>
+              <div className="input-group">
+                <span className="input-group-text bg-white text-muted">
+                  <Building2 size={16} />
+                </span>
+                <select
+                  className="form-select"
+                  value={formData.sede}
+                  onChange={(e) =>
+                    setFormData({ ...formData, sede: parseInt(e.target.value) })
+                  }
+                >
+                  <option value="">Seleccione...</option>
+                  {sedes.map((s) => (
+                    <option key={s.id} value={s.id}>
+                      {s.nombre}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* Área */}
+            <div className="col-md-6">
+              <label className={labelStyle}>Área</label>
+              <div className="input-group">
+                <span className="input-group-text bg-white text-muted">
+                  <LayoutGrid size={16} />
+                </span>
+                <select
+                  className="form-select"
+                  value={formData.area}
+                  onChange={(e) =>
+                    setFormData({ ...formData, area: e.target.value })
+                  }
+                >
+                  <option value="">Seleccione...</option>
+                  {areas.map((a) => (
+                    <option key={a.id} value={a.id}>
+                      {a.nombre}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* Cargo */}
+            <div className="col-md-6">
+              <label className={labelStyle}>Cargo</label>
+              <div className="input-group">
+                <span className="input-group-text bg-white text-muted">
+                  <Briefcase size={16} />
+                </span>
+                <select
+                  className="form-select"
+                  value={formData.cargo}
+                  onChange={handleCargoChange}
+                >
+                  <option value="">Seleccione...</option>
+                  {cargos.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.nombre}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* Horario */}
+            <div className="col-md-6">
+              <label className={labelStyle}>Horario</label>
+              <div className="input-group">
+                <span className="input-group-text bg-white text-muted">
+                  <Clock size={16} />
+                </span>
+                <select
+                  className="form-select"
+                  value={formData.horario}
+                  onChange={(e) =>
+                    setFormData({ ...formData, horario: e.target.value })
+                  }
+                >
+                  <option value="">Seleccione...</option>
+                  {horarios.map((h) => (
+                    <option key={h.id} value={h.id}>
+                      {h.horaEntrada} - {h.horaSalida}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* Salario */}
+            <div className="col-md-6">
+              <label className={labelStyle}>Salario</label>
+              <div className="input-group">
+                <span className="input-group-text bg-white text-muted">
+                  <DollarSign size={16} />
+                </span>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={formData.salario}
+                  readOnly
+                  placeholder="0.00"
+                />
+              </div>
             </div>
           </div>
 
-          {/* Apellidos */}
-          <div className="mb-3">
-            <div className="form-floating">
-              <input
-                type="text"
-                id="apellidos"
-                className="form-control"
-                value={formData.apellidos}
-                onChange={(e) =>
-                  setFormData({ ...formData, apellidos: e.target.value })
-                }
-                placeholder="Apellidos"
-              />
-              <label htmlFor="apellidos">Apellidos</label>
-            </div>
-          </div>
+          {/* BOTONES DE ACCIÓN */}
+          <div className="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+            <button
+              type="button"
+              className="btn-cerrar-modal d-flex align-items-center gap-2"
+              onClick={handleCloseModal}
+            >
+              <X size={18} /> Cancelar
+            </button>
 
-          {/* Correo Electrónico */}
-          <div className="mb-3">
-            <div className="form-floating">
-              <input
-                type="email"
-                id="correo_electronico"
-                className="form-control"
-                value={formData.correo_electronico}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    correo_electronico: e.target.value,
-                  })
-                }
-                placeholder="Correo Electrónico"
-              />
-              <label htmlFor="correo_electronico">Correo Electrónico</label>
-            </div>
-          </div>
-          {/* Seede */}
-          <div className="mb-3">
-            <div className="form-floating">
-              <select
-                id="sede"
-                className="form-select"
-                value={formData.sede}
-                onChange={(e) =>
-                  setFormData({ ...formData, sede: parseInt(e.target.value) })
-                }
-              >
-                <option value="">Seleccione un sede</option>
-                {sedes.map((sede) => (
-                  <option key={sede.id} value={sede.id}>
-                    {sede.nombre}
-                  </option>
-                ))}
-              </select>
-              <label htmlFor="sede">Sede</label>
-            </div>
-          </div>
-          {/* Área */}
-          <div className="mb-3">
-            <div className="form-floating">
-              <select
-                id="area"
-                className="form-select"
-                value={formData.area}
-                onChange={(e) =>
-                  setFormData({ ...formData, area: e.target.value })
-                }
-              >
-                <option value="">Seleccione un área</option>
-                {areas.map((area) => (
-                  <option key={area.id} value={area.id}>
-                    {area.nombre}
-                  </option>
-                ))}
-              </select>
-              <label htmlFor="area">Área</label>
-            </div>
-          </div>
-
-          {/* Cargo */}
-          <div className="mb-3">
-            <div className="form-floating">
-              <select
-                id="cargo"
-                className="form-select"
-                value={formData.cargo}
-                onChange={handleCargoChange}
-              >
-                <option value="">Seleccione un cargo</option>
-                {cargos.map((cargo) => (
-                  <option key={cargo.id} value={cargo.id}>
-                    {cargo.nombre}
-                  </option>
-                ))}
-              </select>
-              <label htmlFor="cargo">Cargo</label>
-            </div>
-          </div>
-
-          {/* Salario */}
-          <div className="mb-3">
-            <div className="form-floating">
-              <input
-                type="text"
-                id="salario"
-                className="form-control"
-                value={formData.salario}
-                readOnly
-                placeholder="Salario"
-              />
-              <label htmlFor="salario">Salario</label>
-            </div>
-          </div>
-
-          {/* Horario */}
-          <div className="mb-3">
-            <div className="form-floating">
-              <select
-                id="horario"
-                className="form-select"
-                value={formData.horario}
-                onChange={(e) =>
-                  setFormData({ ...formData, horario: e.target.value })
-                }
-              >
-                <option value="">Seleccione un horario</option>
-                {horarios.map((horario) => (
-                  <option key={horario.id} value={horario.id}>
-                    {horario.horaEntrada} - {horario.horaSalida}
-                  </option>
-                ))}
-              </select>
-              <label htmlFor="horario">Horario</label>
-            </div>
-          </div>
-
-          {/* Botón para enviar el formulario */}
-          <div className="mb-3 d-flex">
             <button
               type="submit"
-              className="btn-guardar m-auto"
+              className="btn-guardar d-flex align-items-center gap-2"
               disabled={loading}
             >
-              <FontAwesomeIcon icon={faSave} className="me-2" />
-              {loading ? "Actualizando..." : "Actualizar Usuario"}
+              <Save size={18} />
+              {loading ? "Guardando..." : "Actualizar Usuario"}
             </button>
           </div>
         </>

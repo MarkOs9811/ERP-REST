@@ -5,7 +5,8 @@ import { useState } from "react";
 import ModalAlertQuestion from "../componenteToast/ModalAlertQuestion";
 
 import { addItem, clearPedido } from "../../redux/pedidoSlice";
-import "../../css/EstilosPlatos.css";
+
+import "../../css/EstilosPreventa.css";
 import { CardPlatos } from "./CardPlatos";
 import ToastAlert from "../componenteToast/ToastAlert";
 import { capitalizeFirstLetter } from "../../hooks/FirstLetterUp";
@@ -405,10 +406,7 @@ export function PreventaMesa() {
                 </div>
               </div>
             </div>
-            <div
-              className="ccard-body overflow-auto p-0 justify-content-start  contenedor-platos"
-              style={{ height: "calc(100vh - 195px)" }}
-            >
+            <div className="card-body overflow-auto justify-content-start contenedor-platos">
               {productos
                 .filter(
                   (producto) =>

@@ -1,5 +1,6 @@
 import { MinusIcon, PlusIcon } from "lucide-react";
 
+import "../../css/EstilosPlatosTodo.css";
 export const CardPlatos = ({
   item,
   isSelected,

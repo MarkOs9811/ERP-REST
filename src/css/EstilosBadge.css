@@ -1,0 +1,57 @@
+/* --- Badges Personalizados "Spectacular" --- */
+
+.badge-custom {
+    font-weight: 600;
+    font-size: 0.6rem;
+    padding: 0.5em 0.8em;
+    border-radius: 50rem;
+    /* Pill shape perfecta */
+    transition: all 0.2s ease-in-out;
+    border: 1px solid transparent;
+    /* Para dar profundidad */
+}
+
+/* Estado: Éxito (Pagado, Activo) - Verde Menta Profesional */
+.badge-soft-success {
+    background-color: #ecfdf5;
+    /* Fondo muy suave */
+    color: #059669;
+    /* Texto verde fuerte */
+    border-color: #68d19b;
+    /* Borde sutil */
+}
+
+/* Estado: Advertencia (Pendiente, Revisión) - Ámbar Cálido */
+.badge-soft-warning {
+    background-color: #fffbeb;
+    color: #d97706;
+    border-color: #c0a849;
+}
+
+/* Estado: Peligro (Inactivo, Error) - Rojo Rosado Moderno */
+.badge-soft-danger {
+    background-color: #fef2f2;
+    color: #dc2626;
+    border-color: #c23f3f;
+}
+
+/* Estado: Info (Procesando) - Azul Cielo */
+.badge-soft-info {
+    background-color: #eff6ff;
+    color: #2563eb;
+    border-color: #3772b9;
+}
+
+/* Estado: Neutral (Borrador) - Gris Elegante */
+.badge-soft-secondary {
+    background-color: #f3f4f6;
+    color: #4b5563;
+    border-color: #6f6f70;
+}
+
+/* Opcional: Efecto Hover sutil */
+.badge-custom:hover {
+    filter: brightness(0.97);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}

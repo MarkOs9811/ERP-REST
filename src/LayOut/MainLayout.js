@@ -52,11 +52,8 @@ import { HorasExtras } from "../pages/moduloPlanilla/HorasExtras";
 import { Asistencia } from "../pages/moduloPlanilla/Asistencia";
 import { Nomina } from "../pages/moduloPlanilla/Nomina";
 import { IngresoPlanilla } from "../pages/moduloPlanilla/IngresoPlanilla";
-import { ListaTrabajador } from "../pages/moduloPlanilla/ListaTrabajador";
-import { ListaTrabajadorCargo } from "../pages/moduloPlanilla/ListaTrabajadorCargo";
 import { AjustesAlmacen } from "../pages/moduloAlmacen/AjustesAlmancen";
 import { ReportesAlmacen } from "../pages/moduloAlmacen/ReportesAlmacen";
-import { Usuarios } from "../pages/Usuarios";
 import { LayOutAtencion } from "./LayOutAtencion";
 import { useState } from "react";
 import ModalGenerales from "../components/componentesReutilizables/ModalGenerales";
@@ -66,6 +63,7 @@ import { StepAreaCargo } from "../components/componentesFirstSteps/StepAreaCargo
 import { StepCaja } from "../components/componentesFirstSteps/StepCaja";
 import { StepPlatosProductos } from "../components/componentesFirstSteps/StepPlatosPorductos";
 import { StepUsuario } from "../components/componentesFirstSteps/StepUsuario";
+import { Usuarios } from "../pages/moduloPlanilla/Usuarios";
 
 export const MainLayout = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -253,7 +251,7 @@ export const MainLayout = () => {
                             <PrivateRoute
                               allowedRoles={["RRHH", "administrador"]}
                             >
-                              <ListaTrabajadorCargo />
+                              <Usuarios />
                             </PrivateRoute>
                           }
                         />
@@ -263,7 +261,7 @@ export const MainLayout = () => {
                             <PrivateRoute
                               allowedRoles={["RRHH", "administrador"]}
                             >
-                              <ListaTrabajadorCargo />
+                              <Usuarios />
                             </PrivateRoute>
                           }
                         />
@@ -273,21 +271,11 @@ export const MainLayout = () => {
                             <PrivateRoute
                               allowedRoles={["RRHH", "administrador"]}
                             >
-                              <ListaTrabajadorCargo />
+                              <Usuarios />
                             </PrivateRoute>
                           }
                         />
 
-                        <Route
-                          path="planilla/ListaTrabajador/:idCargo?"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["RRHH", "administrador"]}
-                            >
-                              <ListaTrabajador />
-                            </PrivateRoute>
-                          }
-                        />
                         <Route
                           path="ingreso-a-planilla"
                           element={

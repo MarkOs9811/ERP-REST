@@ -1,0 +1,247 @@
+[33mcommit b7ec54eea16e7f878ba8b17d817000a150194f83[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Marcos <marcosparitorres@gmail.com>
+Date:   Wed Dec 3 17:03:13 2025 -0500
+
+    Se agrego vista de asistencia y formularios dergistros
+
+[33mcommit 63a2e4e0f13464eb38e311f860911d9f5b60e5a5[m
+Author: Marcos <marcosparitorres@gmail.com>
+Date:   Tue Dec 2 17:33:33 2025 -0500
+
+    se mejoro el cambio de fotos y ajustes
+
+[33mcommit 3f1f457bfb484be5510c0614b85f3635bbc5e8b2[m
+Merge: 12954e2 b0f3902
+Author: Marcos <marcosparitorres@gmail.com>
+Date:   Fri Nov 28 17:32:32 2025 -0500
+
+    Merge branch 'master' of https://github.com/MarkOs9811/ERP-REST
+
+[33mcommit 12954e21689b7d94aa88cf9ab4cc4e95d3fba006[m
+Author: Marcos <marcosparitorres@gmail.com>
+Date:   Fri Nov 28 17:29:31 2025 -0500
+
+    Se corrigio la genraciond epagos asi como la muestra de pagos por empleados
+
+[33mcommit b0f390223484b8ef2f107db68ecf000cb4dfae1b[m
+Author: MARCOS <marcosparitorres@gmail.com>
+Date:   Tue Nov 25 09:50:00 2025 -0500
+
+    Se terminó con los bloques de setup de configuracion
+
+[33mcommit c88a11bdc331e4a8018c2a69ef50ab909853cb83[m
+Author: MARCOS <marcosparitorres@gmail.com>
+Date:   Sun Nov 23 18:04:07 2025 -0500
+
+    se corrigio algunas funcionalidades, y se creo los step apra el usuario admin nuevo
+
+[33mcommit 06f74cc0d6fe48af899357c1f4e0f18ed8f81d1b[m
+Author: Marcos <marcosparitorres@gmail.com>
+Date:   Thu Nov 20 17:54:16 2025 -0500
+
+    Mejorando la vista de emrpesas y de modulos agregados, queda pendienteverificar los roels que devuelve la constla de l login para que el admin inicie sesion
+
+[33mcommit 528a2692bcf691ffd6d55b7042239af4b8a4980b[m
+Author: Marcos <marcosparitorres@gmail.com>
+Date:   Wed Nov 19 16:36:21 2025 -0500
+
+    Se mejoró el formulario de agregar empresa en el superAdmin
+
+[33mcommit 500c399cd3212c6703a5e8491b8a10a9eceb2c04[m
+Author: Marcos <marcosparitorres@gmail.com>
+Date:   Tue Nov 18 17:06:50 2025 -0500
+
+    Se avanzo con la vista de empresas y su dashboard
+
+[33mcommit bfb5d5941de657f0cfcd98a20cb77357921b2fef[m
+Author: Marcos <marcosparitorres@gmail.com>
+Date:   Mon Nov 17 16:53:58 2025 -0500
+
+    actualizando estilos del super admin
+
+[33mcommit 6d6b0ef4203772aeec93b222c01ad5161eab3496[m
+Author: MARCOS <marcosparitorres@gmail.com>
+Date:   Sun Nov 16 21:33:10 2025 -0500
+
+    Creando interfaz de adminicacion superAdmin
+
+[33mcommit 14647e47d05342f7f935659384e8f7b62e8eaa6e[m
+Author: Marcos <marcosparitorres@gmail.com>
+Date:   Thu Nov 13 17:32:35 2025 -0500
+
+    arreglado la vista de atencion al cliente y crud en inicio para las sedes
+
+[33mcommit 22728c20739bb486294ed121a89c9bdb063f870d[m
+Author: Marcos <marcosparitorres@gmail.com>
+Date:   Wed Nov 12 17:54:40 2025 -0500
+
+    Se mejoró las ventas, platos, mesas y cerrar caja
+
+[33mcommit 6f351934402256a4a9f85c64d5d469149bae53f6[m
+Author: Marcos <marcosparitorres@gmail.com>
+Date:   Tue Nov 11 17:27:50 2025 -0500
+
+    CRUD para mesas
+
+[33mcommit b43700c698e6cfb9da772f2060908c780a0ccd81[m
+Author: Marcos <marcosparitorres@gmail.com>
+Date:   Mon Nov 10 17:51:24 2025 -0500
+
+    Vista de ajustes planialla terminado pre
+
+[33mcommit e102fd8657275f25491f85fd0be5aca041307b07[m
+Author: MARCOS <marcosparitorres@gmail.com>
+Date:   Sun Nov 9 17:04:54 2025 -0500
+
+    Mejoro horas extras, vacaciones, y ajsutes de planilla
+
+[33mcommit 98d5f77fd52512e4420c4fbc029c10603f9ca65b[m
+Author: Marcos <marcosparitorres@gmail.com>
+Date:   Fri Nov 7 17:51:58 2025 -0500
+
+    Modificaciones de horas extras - vista
+
+[33mcommit 22368e3a983856673f8ccff460e0761026fe22a4[m
+Author: Marcos <marcosparitorres@gmail.com>
+Date:   Thu Nov 6 17:56:44 2025 -0500
+
+    Se mejoro y se configuro todo respecto al pago y validacion de nomina
+
+[33mcommit 4d7cb4ff023ce2f232dd88ecbf3c604607a2d6cd[m
+Author: Marcos <marcosparitorres@gmail.com>
+Date:   Wed Nov 5 17:47:57 2025 -0500
+
+    mejorando la vista de nomina
+
+[33mcommit cc2025066ea0dfe5336c2ded3bb14c6e2de71e6b[m
+Author: marcos pari torres <marcosparitorres@gmail.com>
+Date:   Tue Nov 4 15:13:32 2025 -0500
+
+    Modificacion de resumen de nominda del periodo
+
+[33mcommit 4344afbea99c08809718fbef1a6e9d93eb493a13[m
+Author: Marcos <marcosparitorres@gmail.com>
+Date:   Thu Oct 30 17:39:11 2025 -0500
+
+    vista modal de validacion de nomina
+
+[33mcommit 3492ba04717724d0c7947f9951887e1189b347d9[m
+Author: Marcos <marcosparitorres@gmail.com>
+Date:   Wed Oct 29 17:48:22 2025 -0500
+
+    Se terminó los ajustes de periodo de nomina
+
+[33mcommit 842a1c0610985340423f666067e9705c0697e484[m
+Author: Marcos <marcosparitorres@gmail.com>
+Date:   Tue Oct 28 16:51:21 2025 -0500
+
+    Agregamos la tabla y registro de periodo de nomina
+
+[33mcommit 910a1e71d204b5edab931e648701441d9a442077[m
+Author: Marcos <marcosparitorres@gmail.com>
+Date:   Mon Oct 27 17:49:38 2025 -0500
+
+    Vista de ajustes d eplanilla
+
+[33mcommit cc293e47ff697e971b2d41038ffd845882049f40[m
+Author: MARCOS <marcosparitorres@gmail.com>
+Date:   Sun Oct 26 19:37:19 2025 -0500
+
+    Creamos, formulario de solicitud e impresion de alamcen, y terminamos con la edicion de las series y corelativos
+
+[33mcommit 15feb232079cb24158f4e6c45e1bd28add4839cf[m
+Author: Marcos <marcosparitorres@gmail.com>
+Date:   Thu Oct 23 18:02:46 2025 -0500
+
+    Crear y corregir la tbala correaltivo y serie
+
+[33mcommit 37d7ba3c7e6f9ab2630720536759be922e831dde[m
+Author: Marcos <marcosparitorres@gmail.com>
+Date:   Tue Oct 21 17:37:22 2025 -0500
+
+    Cambio de sede activado
+
+[33mcommit 27e6303e00a3a5a44024a51ee78a5922eb9df3a6[m
+Author: MARCOS <marcosparitorres@gmail.com>
+Date:   Mon Oct 20 22:04:56 2025 -0500
+
+    Cambiar de sede - prueba concjas
+
+[33mcommit 68780f64d7d415323e7a04c72756463bce4b7f43[m
+Author: MARCOS <marcosparitorres@gmail.com>
+Date:   Sun Oct 19 19:17:31 2025 -0500
+
+    Hemos llegado actualizacion POS grid
+
+[33mcommit ab23175f9aa84c847db7df0a84c17dbfd98e42f1[m
+Author: Marcos <marcosparitorres@gmail.com>
+Date:   Fri Oct 17 17:46:34 2025 -0500
+
+    SIDEBAR CAMBIADO
+
+[33mcommit 8c559b8462bd00a52f3a18d56b7d0bdcaca21ce8[m
+Author: MARCOS <marcosparitorres@gmail.com>
+Date:   Wed Oct 15 23:16:49 2025 -0500
+
+    Perfil del empleado
+
+[33mcommit efda90bd10a707eb6d31ae5e3c8088aeaa14f874[m
+Author: MARCOS <marcosparitorres@gmail.com>
+Date:   Wed Oct 15 10:29:09 2025 -0500
+
+    Modificando el cino d cargando
+
+[33mcommit 9db75bb2f7922055c58a03df1c8592561551e984[m
+Author: Marcos <marcosparitorres@gmail.com>
+Date:   Tue Oct 14 17:27:08 2025 -0500
+
+    Cambio login
+
+[33mcommit d044c3b4ea81cec2d30cf906bd60e362553a74a9[m
+Merge: b1d1ed9 f272555
+Author: Marcos <marcosparitorres@gmail.com>
+Date:   Tue Oct 14 16:54:54 2025 -0500
+
+    Nueva vinculacion cargandgo
+
+[33mcommit b1d1ed9c9c610a28e4c4445e12e506b8f0121d61[m
+Author: Marcos <marcosparitorres@gmail.com>
+Date:   Tue Oct 14 16:52:26 2025 -0500
+
+    cambiando el icono de cargando
+
+[33mcommit 0dfb4678e50d46621b5f7a40bcb7b84dcf759c96[m
+Author: Marcos <marcosparitorres@gmail.com>
+Date:   Tue Oct 14 12:02:29 2025 -0500
+
+    Inicialización del proyecto en nueva computadora
+
+[33mcommit f272555182cdf657ff95d99c13fb70dafc6ec7c9[m
+Author: MARCOS <marcosparitorres@gmail.com>
+Date:   Sun Oct 12 19:08:12 2025 -0500
+
+    Reporte de ventas e ingresos generales con PDF
+
+[33mcommit fb8c8d20df127ab553ff72b62a7a257be2b67cba[m
+Author: MARCOS <marcosparitorres@gmail.com>
+Date:   Sat Oct 11 17:10:40 2025 -0500
+
+    Hasta cambios de reporte de finanzas
+
+[33mcommit 1b40ce02e993cc71f744d25716acbcb8341a895d[m
+Author: MARCOS <marcosparitorres@gmail.com>
+Date:   Sun Aug 24 17:18:14 2025 -0500
+
+    Modulo ventas terminado al 99%
+
+[33mcommit 0ccfb199b1f150d6407df74c0e2f0831020a5a8c[m
+Author: MARCOS <marcosparitorres@gmail.com>
+Date:   Wed Aug 6 16:35:51 2025 -0500
+
+    ERP V3
+
+[33mcommit 249daf50619ccd3e6fa649a00a9530e1db4e8bb6[m
+Author: MARCOS <marcosparitorres@gmail.com>
+Date:   Fri Jul 25 11:31:15 2025 -0500
+
+    Initialize project using Create React App

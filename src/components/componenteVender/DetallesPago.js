@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getPreventaMesa } from "../../service/preventaService";
-import "../../css/EstilosPlatos.css";
+
+import "../../css/EstilosPreventa.css";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   handleInputChange,

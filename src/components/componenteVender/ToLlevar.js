@@ -1,5 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
-import "../../css/EstilosPlatos.css";
+
+import "../../css/EstilosPreventa.css";
 import { capitalizeFirstLetter } from "../../hooks/FirstLetterUp";
 import { CardPlatos } from "./CardPlatos";
 import { useDispatch, useSelector } from "react-redux";
@@ -201,10 +202,7 @@ export function ToLlevar() {
               </div>
             </div>
 
-            <div
-              className="card-body overflow-auto p-0 justify-content-start  contenedor-platos"
-              style={{ height: "calc(100vh - 195px)" }}
-            >
+            <div className="card-body overflow-auto justify-content-start contenedor-platos">
               {loadinPlatos && (
                 <div className="text-center p-5">
                   <p>

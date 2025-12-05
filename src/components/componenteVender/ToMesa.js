@@ -1,27 +1,24 @@
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../api/AxiosInstance";
-import "../../css/EstilosPlatos.css";
+import "../../css/EstilosPreventa.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { capitalizeFirstLetter } from "../../hooks/FirstLetterUp";
 import ToastAlert from "../componenteToast/ToastAlert";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  addItem,
-  clearPedido,
-  removeItem,
-  setMesaId,
-} from "../../redux/pedidoSlice";
+import { addItem, clearPedido, removeItem } from "../../redux/pedidoSlice";
 
 import { CardPlatos } from "./CardPlatos";
 import { CategoriaPlatos } from "./tareasVender/CategoriaPlatos";
-import { ContenedorPrincipal } from "../componentesReutilizables/ContenedorPrincipal";
 import { GetMesasVender } from "../../service/accionesVender/GetMesasVender";
 import { useQuery } from "@tanstack/react-query";
 import { setIdPreventaMesa } from "../../redux/mesaSlice";
 import { GetPlatosVender } from "../../service/accionesVender/GetPlatosVender";
 import { Cargando } from "../componentesReutilizables/Cargando";
-import { CheckCheck, CheckCheckIcon, Minus, MinusIcon } from "lucide-react";
+// AGREGADO: Importamos el icono Search
+import { MinusIcon, Search } from "lucide-react";
+import { useState } from "react";
+import BotonAnimado from "../componentesReutilizables/BotonAnimado";
 
 export function ToMesa() {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -29,6 +26,11 @@ export function ToMesa() {
   const categoriaFiltroPlatos = useSelector(
     (state) => state.categoriaFiltroPlatos.estado
   );
+
+  const [isLoadignPedido, setLoadingPedido] = useState(false);
+
+  // AGREGADO: Estado para el buscador
+  const [searchTerm, setSearchTerm] = useState("");
 
   // extrayendo datos desde store de redux
   const dispatch = useDispatch();
@@ -84,6 +86,8 @@ export function ToMesa() {
 
   // FUNCION PARA REALIZAR EL PEDIDO Y VOLVER A MESAS
   const handleAddPlatoPreventaMesas = async () => {
+    setLoadingPedido(true); // 1. Iniciamos carga
+
     try {
       const datosPreventa =
         mesas[id]?.items.map((item) => ({
@@ -93,26 +97,27 @@ export function ToMesa() {
           cantidad: item.cantidad,
           precio: item.precio,
         })) || [];
-      // Hacer la solicitud POST
+
       const response = await axiosInstance.post(
         "/vender/addPlatosPreVentaMesa",
-        {
-          pedidos: datosPreventa, // Enviar todos los pedidos
-        }
+        { pedidos: datosPreventa }
       );
 
-      // Manejo de la respuesta
       if (response.data.success) {
         ToastAlert("success", response.data.message + mesas.nom);
+
         Object.keys(mesas).forEach((mesaId) => {
           dispatch(clearPedido(mesaId));
         });
+
         navigate(`/vender/mesas`);
       } else {
         ToastAlert("error", response.data.message);
       }
     } catch (error) {
       ToastAlert("error", "Error de conexión: " + error.message);
+    } finally {
+      setLoadingPedido(false);
     }
   };
 
@@ -250,17 +255,13 @@ export function ToMesa() {
               </div>
 
               {/* Botón de Realizar Pedido */}
-              <button
+              <BotonAnimado
                 className="btn-realizarPedido btn-block w-100 p-3"
                 onClick={() => handleAddPlatoPreventaMesas()}
+                loading={isLoadignPedido}
               >
-                <CheckCheckIcon
-                  className="text-auto"
-                  height="30px"
-                  width="30px"
-                />{" "}
                 Realizar Pedido
-              </button>
+              </BotonAnimado>
             </div>
           </div>
         </div>
@@ -268,20 +269,31 @@ export function ToMesa() {
         {/* Columna de los productos */}
         <div className="col-md-9 ">
           <div className="card shadow-sm flex-grow-1 h-100">
-            <div className="card-header d-flex flex-wrap bg-white border-bottom ">
+            <div className="card-header d-flex flex-wrap bg-white  ">
               <div className="d-flex align-items-center gap-2 w-100">
                 <h4 className="mb-0 text-dark">Platos</h4>
 
                 {/* Opciones rápidas */}
-                <div className="d-flex flex-wrap gap-2 ms-auto">
+                <div className="d-flex flex-wrap gap-2 ms-auto align-items-center">
+                  {/* AGREGADO: Input Buscador */}
+                  <div className="input-group" style={{ width: "250px" }}>
+                    <span className="input-group-text bg-white border-end-0">
+                      <Search size={18} className="text-muted" />
+                    </span>
+                    <input
+                      type="text"
+                      className="form-control border-start-0 ps-0 shadow-none bg-white"
+                      placeholder="Buscar plato..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                  </div>
+
                   <CategoriaPlatos />
                 </div>
               </div>
             </div>
-            <div
-              className="card-body overflow-auto p-0 justify-content-start  contenedor-platos"
-              style={{ height: "calc(100vh - 260px)" }}
-            >
+            <div className="card-body overflow-auto justify-content-start contenedor-platos">
               {loadinPlatos && (
                 <div className="text-center p-5">
                   <p>
@@ -295,11 +307,18 @@ export function ToMesa() {
                 </div>
               )}
               {productos
-                .filter(
-                  (producto) =>
+                .filter((producto) => {
+                  // MODIFICADO: Filtro combinado (Categoria AND Buscador)
+                  const matchCategoria =
                     categoriaFiltroPlatos === "todo" ||
-                    producto.categoria.nombre === categoriaFiltroPlatos
-                )
+                    producto.categoria.nombre === categoriaFiltroPlatos;
+
+                  const matchSearch = producto.nombre
+                    .toLowerCase()
+                    .includes(searchTerm.toLowerCase());
+
+                  return matchCategoria && matchSearch;
+                })
                 .map((producto) => {
                   const mesaId = id; // Mesa actual desde useParams
                   const isSelected = pedido.mesas[mesaId]?.items.some(

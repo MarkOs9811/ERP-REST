@@ -1,51 +1,36 @@
-import React, { useEffect, useState } from "react";
 import "../../../css/estilosComponentesCategoriaPlatos/estilosCategoriaPlatos.css";
-import axiosInstance from "../../../api/AxiosInstance";
-import { useEstadoAsyn } from "../../../hooks/EstadoAsync";
 import { capitalizeFirstLetter } from "../../../hooks/FirstLetterUp";
 import { useDispatch, useSelector } from "react-redux";
 import { setEstadoCategoria } from "../../../redux/categoriaPlatosSlice";
+import { useQuery } from "@tanstack/react-query";
+import { GetCategoriasPlatosTrue } from "../../../service/accionesVender/GetCategoriasPlatosTrue";
 
 export function CategoriaPlatos() {
-  const [categorias, setCategorias] = useState([]); // Estado para las categorías
   const dispatch = useDispatch();
   const estadoCategoria = useSelector(
     (state) => state.categoriaFiltroPlatos.estado
   );
 
-  // Función para obtener las categorías
-  const fetchCategorias = async () => {
-    try {
-      const response = await axiosInstance.get(
-        "/gestionPlatos/getCategoriaTrue"
-      );
-      if (response.data?.success && Array.isArray(response.data?.data)) {
-        setCategorias(response.data.data); // Ajustar según la estructura real
-      } else {
-        throw new Error("Error en la estructura de los datos recibidos");
-      }
-    } catch (err) {
-      throw new Error("Error al cargar las categorías");
-    }
-  };
-
-  // Hook personalizado para manejar la carga
-  const { loading, error, execute } = useEstadoAsyn(fetchCategorias);
-
-  // Ejecutar la carga al montar el componente
-  useEffect(() => {
-    execute(); // Ejecuta la función directamente sin dependencia
-  }, []); // Se ejecuta solo una vez al montar
+  const {
+    data: categorias = [],
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["categoriasPlatos"],
+    queryFn: GetCategoriasPlatosTrue,
+    retry: 1,
+    refetchOnWindowFocus: false,
+  });
   const handleFiltrarCategoria = (nombreCategoria) => {
     dispatch(setEstadoCategoria(nombreCategoria));
   };
   return (
     <div className="g-2">
       {/* Mensaje de carga */}
-      {loading && <p>Cargando categorías...</p>}
+      {isLoading && <p>Cargando categorías...</p>}
 
       {/* Mensaje de error */}
-      {error && !loading && <p className="error-message">{error}</p>}
+      {isError && !isLoading && <p className="error-message">{isError}</p>}
 
       {/* Mostrar las categorías */}
 
@@ -70,7 +55,7 @@ export function CategoriaPlatos() {
       </button>
 
       {/* Mensaje cuando no hay categorías */}
-      {!loading && !error && categorias.length === 0 && (
+      {!isLoading && !isError && categorias.length === 0 && (
         <p>No se encontraron categorías disponibles.</p>
       )}
     </div>

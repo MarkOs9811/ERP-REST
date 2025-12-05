@@ -9,7 +9,6 @@ export const PrivateRoute = ({ children, allowedRoles }) => {
   let rolesUsuario = Array.isArray(user?.roles)
     ? user.roles.map((rol) => rol.nombre.toLowerCase()) // Convertimos a minúsculas por seguridad
     : [];
-
   // 2. CORRECCIÓN PRINCIPAL: Agregar el Cargo como si fuera un rol más
   if (user?.empleado?.cargo?.nombre) {
     rolesUsuario.push(user.empleado.cargo.nombre.toLowerCase());
@@ -21,7 +20,6 @@ export const PrivateRoute = ({ children, allowedRoles }) => {
   const tieneAcceso =
     !allowedRoles ||
     allowedRoles.some((rol) => rolesUsuario.includes(rol.toLowerCase()));
-
   // Debug (puedes borrarlo luego)
   // console.log("Roles Totales del Usuario:", rolesUsuario);
   // console.log("Roles Permitidos:", allowedRoles);

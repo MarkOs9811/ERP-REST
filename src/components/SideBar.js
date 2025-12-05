@@ -161,6 +161,8 @@ export function SideBar() {
   const handleAccordionToggle = (roleName) => {
     setOpenAccordion(openAccordion === roleName ? null : roleName);
   };
+
+  // para estilo del header
   useEffect(() => {
     const storageData = localStorage.getItem("estiloEmpresa");
 
@@ -240,6 +242,7 @@ export function SideBar() {
             const hasSubmenu = subMenus[roleName];
 
             if (hasSubmenu) {
+              console.log("submenu del sidebar", hasSubmenu);
               return (
                 <div key={role.id}>
                   <li

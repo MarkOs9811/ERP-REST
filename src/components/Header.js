@@ -8,6 +8,7 @@ import { NotificacionesPanel } from "./componentesHeader/NotificacionesPanel";
 import { capitalizeFirstLetter } from "../hooks/FirstLetterUp";
 import { Bell, Moon, SunMediumIcon } from "lucide-react";
 import ModalRight from "./componentesReutilizables/ModalRight";
+import { BadgeComponent } from "./componentesReutilizables/BadgeComponent";
 export function Header() {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
   const empresa = JSON.parse(localStorage.getItem("empresa")) || {};
@@ -85,9 +86,11 @@ export function Header() {
         <div className="navbar-right d-flex align-items-center ms-auto gap-2 p-0 px-4">
           {fotoPerfilLocal && (
             <RippleWrapper>
-              <span type="button" className="badge bg-secondary">
-                {capitalizeFirstLetter(fotoPerfilLocal?.sede?.nombre)}
-              </span>
+              <BadgeComponent
+                label={capitalizeFirstLetter(fotoPerfilLocal?.sede?.nombre)}
+                variant="danger"
+                className="cursos-pointer"
+              />
             </RippleWrapper>
           )}
           {["administrador", "atencion al cliente", "cocinero"].includes(

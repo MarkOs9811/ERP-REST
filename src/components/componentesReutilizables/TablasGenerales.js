@@ -22,6 +22,9 @@ export function TablasGenerales({ columnas, datos, conditionalRowStyles }) {
           selectAllRowsItem: true,
           selectAllRowsItemText: "Todos",
         }}
+        noDataComponent={
+          <div className="p-4 text-muted">No hay datos para este periodo</div>
+        }
       />
     </div>
   );

@@ -11,12 +11,28 @@ import axiosInstance from "../../api/AxiosInstance";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { GetUsuarios } from "../../service/GetUsuarios";
 import { TablasGenerales } from "../componentesReutilizables/TablasGenerales";
+import {
+  Ban,
+  CheckCircle2,
+  Eye,
+  Pencil,
+  ShieldCheck,
+  Trash2,
+} from "lucide-react";
+import ModalRight from "../componentesReutilizables/ModalRight";
+import { PerfilGeneralNomina } from "../componentePlanillas/PerfilGeneralNomina";
+import { BadgeComponent } from "../componentesReutilizables/BadgeComponent";
 
 // LOS PROPS SON PARAMETROS QUE SE ESTA RECIEBIENDO EN ESTA FUNCTION COMO "SEARCH" Y "UPDATELIST"
 export function UsuariosList({ search, updateList }) {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
 
   const [filteredUsuarios, setFilteredUsuarios] = useState([]);
+
+  // PARA VER DETALLES DEL EMPLEADO
+  const [modalPerfilEmpleado, setModalPerfilEmpleado] = useState(false);
+  const [idEmpleado, setIdEmpleado] = useState(null);
+  // =========================================
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [usuarioEdit, setUsuarioEdit] = useState([]);
@@ -148,148 +164,190 @@ export function UsuariosList({ search, updateList }) {
 
   const columns = [
     {
-      name: "ID",
+      name: "#",
       selector: (row) => row.id,
       sortable: true,
-      wrap: true,
+      width: "60px",
       center: true,
     },
     {
-      name: "Foto",
-      selector: (row) => row.fotoPerfil || "No disponible",
-      sortable: true,
-      wrap: true,
+      name: "Perfil",
+      selector: (row) => row.fotoPerfil,
       center: true,
+      width: "80px",
       cell: (row) => (
-        <div style={{ textAlign: "center" }}>
+        <div style={{ padding: "5px" }}>
           {row.fotoPerfil ? (
             <img
-              src={`${BASE_URL}/storage/${row.fotoPerfil}`} // Aquí colocas la URL completa a la imagen (puede ser en 'public')
-              alt="Foto de perfil"
-              style={{ width: "50px", height: "50px", borderRadius: "50%" }} // Ajusta el tamaño y el estilo
+              src={`${BASE_URL}/storage/${row.fotoPerfil}`}
+              alt="avatar"
+              style={{
+                width: "45px",
+                height: "45px",
+                borderRadius: "50%",
+                objectFit: "cover",
+                border: "2px solid #eee", // Un toque sutil
+              }}
             />
           ) : (
-            <span>No disponible</span> // Si no hay foto, muestra este texto
+            <div
+              style={{
+                width: "45px",
+                height: "45px",
+                borderRadius: "50%",
+                backgroundColor: "#e9ecef",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "10px",
+                color: "#6c757d",
+              }}
+            >
+              N/A
+            </div>
           )}
         </div>
       ),
     },
     {
-      name: "Usuario",
-      selector: (row) => row.email || "No disponible",
+      name: "Colaborador",
+      selector: (row) => row.empleado?.persona?.nombre,
       sortable: true,
       wrap: true,
-      center: true,
-    },
-    {
-      name: "Sede",
-      selector: (row) => row.sede?.nombre || "No disponible",
-      sortable: true,
-      wrap: true,
-      center: true,
-    },
-    {
-      name: "Nombre y Apellidos",
-      selector: (row) => (
-        <div>
-          <div className="nombreUsuarioTabla mt-2">
-            {row.empleado?.persona?.nombre || "N/A"}{" "}
-            {row.empleado?.persona?.apellidos || "N/A"}
+      grow: 2, // Le damos más espacio a esta columna importante
+      cell: (row) => (
+        <div className="d-flex flex-column justify-content-center py-2">
+          <div className="nombreUsuarioTabla fw-bold">
+            {row.empleado?.persona?.nombre || "Sin Nombre"}{" "}
+            {row.empleado?.persona?.apellidos || ""}
           </div>
-          {row.empleado?.persona?.correo && (
-            <small className="badge-user mb-2">
-              {row.empleado.persona.correo}
-            </small>
+          {/* Usamos el email aquí, así ahorramos una columna entera */}
+          {row.email && (
+            <small className="badge-user mt-1 text-muted">{row.email}</small>
           )}
         </div>
       ),
-      sortable: true,
     },
     {
-      name: "Fecha Nacimiento",
-      selector: (row) => (
-        <div>
-          <div className="mt-2">
-            {row.empleado?.persona?.fecha_nacimiento || "N/A"}
-          </div>
+      name: "Datos Laborales",
+      selector: (row) => row.empleado?.cargo?.nombre,
+      sortable: true,
+      wrap: true,
+      cell: (row) => (
+        <div className="d-flex flex-column">
+          <span className="fw-bold" style={{ fontSize: "0.9rem" }}>
+            {row.empleado?.cargo?.nombre
+              ? row.empleado.cargo.nombre.charAt(0).toUpperCase() +
+                row.empleado.cargo.nombre.slice(1).toLowerCase()
+              : "Sin Cargo"}
+          </span>
+          <small className="text-muted">
+            <i className="fas fa-map-marker-alt me-1"></i>
+            {row.sede?.nombre || "Sin Sede"}
+          </small>
         </div>
       ),
-      sortable: true,
     },
     {
-      name: "Telefono",
-      selector: (row) => row.empleado?.persona?.telefono || "No disponible",
-      sortable: true,
+      name: "Documento / Contacto",
+      selector: (row) => row.empleado?.persona?.documento_identidad,
       wrap: true,
+      cell: (row) => (
+        <div className="d-flex flex-column">
+          <span style={{ fontSize: "0.85rem", fontWeight: "500" }}>
+            DOC: {row.empleado?.persona?.documento_identidad || "---"}
+          </span>
+          <small className="text-muted">
+            Tel: {row.empleado?.persona?.telefono || "---"}
+          </small>
+        </div>
+      ),
     },
     {
-      name: "DOC. Identidad",
-      selector: (row) =>
-        row.empleado?.persona.documento_identidad || "Documento no disponible",
+      name: "Acceso y Estado",
+      selector: (row) => row.auth_type,
       sortable: true,
-      wrap: true,
-    },
-    {
-      name: "Cargo",
-      selector: (row) => {
-        const cargo = row.empleado?.cargo?.nombre || "Cargo no disponible";
-        return cargo === "Cargo no disponible"
-          ? cargo
-          : cargo.charAt(0).toUpperCase() + cargo.slice(1).toLowerCase();
-      },
-      sortable: true,
-      wrap: true,
-    },
-    {
-      name: "Tipo Auhtenticación",
-      selector: (row) => {
-        const cargo = row.auth_type || "Tipo authenticación no disponible";
-        return cargo === "Cargo no disponible"
-          ? cargo
-          : cargo.charAt(0).toUpperCase() + cargo.slice(1).toLowerCase();
-      },
-      sortable: true,
-      wrap: true,
-    },
-
-    {
-      name: "Acciones",
+      center: true,
       cell: (row) => {
-        const { estado } = row;
+        const authType = row.auth_type || "N/A";
+        // Lógica: 1 es Activo, cualquier otra cosa es Inactivo
+        const isActive = row.estado == 1;
 
         return (
-          <div className="d-flex justify-content-around">
-            {estado === 1 ? (
+          <div className="d-flex flex-column align-items-center justify-content-center">
+            {/* 1. Tipo de Autenticación (Texto pequeño arriba) */}
+            <div
+              className="d-flex align-items-center gap-1 mb-1 text-secondary"
+              style={{ fontSize: "0.75rem", fontWeight: "bold" }}
+            >
+              <ShieldCheck size={12} /> {/* Un toque visual extra opcional */}
+              {authType.toUpperCase()}
+            </div>
+
+            {/* 2. Tu Badge Component Moderno */}
+            <BadgeComponent
+              label={isActive ? "Activo" : "INACTIVO"}
+              // El componente detectará autom: ACTIVO->Verde, INACTIVO->Rojo
+
+              icon={isActive ? <CheckCircle2 /> : <Ban />}
+              // Pasamos iconos condicionales
+            />
+          </div>
+        );
+      },
+    },
+    {
+      name: "Acciones",
+      button: true, // Importante para que no se corte
+      minWidth: "150px",
+      cell: (row) => {
+        const { estado } = row;
+        return (
+          <div className="d-flex justify-content-center w-100 gap-2">
+            {estado == 1 ? (
               <>
                 <button
-                  className=" btn-editar me-2"
+                  className="btn-editar"
                   onClick={() => handleOpenModalEdit(row)}
+                  title="Editar"
                 >
-                  <FontAwesomeIcon icon={faEdit} />
+                  <Pencil size={16} />{" "}
+                  {/* Ajusté el tamaño para consistencia */}
+                </button>
+                <button
+                  className="btn-principal"
+                  onClick={() => {
+                    setModalPerfilEmpleado(true);
+                    setIdEmpleado(row.id);
+                  }}
+                  title="Ver Perfil Completo"
+                >
+                  <Eye size={16} />
                 </button>
                 <button
                   className="btn-eliminar"
                   onClick={() =>
                     handleDeleteClick(row.id, row.empleado?.persona?.nombre)
                   }
+                  title="Desactivar"
                 >
-                  <FontAwesomeIcon icon={faTrashCan} />
+                  <Trash2 size={16} />
                 </button>
               </>
             ) : (
               <button
-                className="btn btn-outline-success"
+                className="btn btn-outline-success btn-sm"
                 onClick={() =>
                   handleActivarClick(row.id, row.empleado?.persona?.nombre)
                 }
+                title="Reactivar usuario"
               >
-                <FontAwesomeIcon icon={faPowerOff} />
+                <FontAwesomeIcon icon={faPowerOff} /> Activar
               </button>
             )}
           </div>
         );
       },
-      ignoreRowClick: true,
     },
   ];
 
@@ -297,20 +355,21 @@ export function UsuariosList({ search, updateList }) {
     <div>
       <TablasGenerales datos={filteredUsuarios} columnas={columns} />
 
-      {/* // modal para editar un usuario */}
-      <Modal show={isModalOpen} onHide={handleCloseModal} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>Editar Usuario</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {/* Pasa handleCloseModal como prop a UsuarioForm */}
+      <ModalRight
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title={"Editar usuario"}
+        hideFooter={true}
+        icono={<Pencil />}
+      >
+        {({ handleClose }) => (
           <UsuarioEditar
-            handleCloseModal={handleCloseModal}
+            handleCloseModal={handleClose}
             data={usuarioEdit}
             onUsuarioUpdated={handleUsuarioUpdated}
           />
-        </Modal.Body>
-      </Modal>
+        )}
+      </ModalRight>
 
       {/* MODAL PARA ELIMINAR USUARIO */}
       <ModalAlertQuestion
@@ -328,6 +387,14 @@ export function UsuariosList({ search, updateList }) {
         handleActivar={handleActivarUser}
         handleCloseModal={handleCloseModalQuestionActivar}
       />
+      <ModalRight
+        isOpen={modalPerfilEmpleado}
+        onClose={() => setModalPerfilEmpleado(false)}
+        title="Perfil del empleado"
+        width="70%"
+      >
+        <PerfilGeneralNomina idEmpleado={idEmpleado} />
+      </ModalRight>
     </div>
   );
 }

@@ -10,6 +10,7 @@ import { Modal } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-regular-svg-icons";
 import { CheckCheck, CheckCheckIcon, Clock, Clock1 } from "lucide-react";
+import { BadgeComponent } from "../componentesReutilizables/BadgeComponent";
 
 export function SolicitudesLista({ search, updateList }) {
   const rowColors = ["#1dae79", "#d34242", "#4c7d9a", "#ff9800"];
@@ -114,7 +115,7 @@ export function SolicitudesLista({ search, updateList }) {
       grow: 0,
       cell: (row) => (
         <button
-          className="btn btn-primary"
+          className="btn-principal"
           title="Ver Solicitud"
           onClick={() => handleVerSolicitud(row)}
         >
@@ -129,12 +130,12 @@ export function SolicitudesLista({ search, updateList }) {
       center: false,
       wrap: true,
       cell: (row) => {
-        return row.estado === 1 ? (
-          <span className="badge bg-success m-2">
-            <small>
-              <CheckCheckIcon className="text-auto" /> Resuelta
-            </small>
-          </span>
+        return row.estado == 1 ? (
+          <BadgeComponent
+            label={"Resuelto"}
+            icon={<CheckCheckIcon className="text-auto" />}
+            variant={"success"}
+          />
         ) : (
           <span className="badge bg-warning m-2 text-dark">
             <small>

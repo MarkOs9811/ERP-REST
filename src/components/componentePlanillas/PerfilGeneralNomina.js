@@ -90,15 +90,31 @@ export function PerfilGeneralNomina({ idEmpleado }) {
                       {perfil?.usuario?.empleado?.cargo?.nombre} -{" "}
                       {perfil?.usuario?.empleado?.area?.nombre}
                     </small>
+                    <span className="d-flex align-items-center gap-2">
+                      <small className="text-muted">Fecha de ingreso:</small>
+                      <span className="fw-bold text-dark">
+                        {perfil?.usuario?.empleado?.fecha_contrato
+                          ? new Date(
+                              perfil.usuario.empleado.fecha_contrato.includes(
+                                "T"
+                              )
+                                ? perfil.usuario.empleado.fecha_contrato
+                                : perfil.usuario.empleado.fecha_contrato +
+                                  "T00:00:00"
+                            ).toLocaleDateString("es-ES", {
+                              day: "numeric",
+                              month: "long",
+                              year: "numeric",
+                            })
+                          : "Sin especificar"}
+                      </span>
+                    </span>
                   </div>
-                  <div className="col-md-12 d-flex">
+                  <div className="col-md-12 d-flex w-100">
                     <div className="ms-auto d-flex gap-3 mx-3">
                       <BotonMotionGeneral
                         text="Editar Perfil"
-                        icon={<Pen />}
-                        color1="#2b2b2bff"
-                        color2="#000000ff"
-                        classDefault="btn d-flex align-items-center gap-1 px-3 py-2 w-auto rounded-3 border-0 shadow-sm ms-auto text-white"
+                        icon={<Pen size={18} />}
                       />
                       <BotonMotionGeneral
                         text={loading ? "Generando..." : "Imprimir"}

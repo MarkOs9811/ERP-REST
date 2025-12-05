@@ -5,16 +5,12 @@
 /* --- 1. MODO CLARO (Default) --- */
 /* Esta clase define los colores base del botón */
 .btn-motion-theme {
-    /* Tus colores originales 'color1' y 'color2' */
-    background: linear-gradient(135deg, rgb(40, 42, 46), rgb(39, 42, 48));
-
-    /* Tu 'text-dark' original */
-    color: #dadada;
+    background: linear-gradient(135deg, rgb(233, 233, 233), rgb(243, 247, 255));
+    color: #292929;
     text-align: center!important;
     font-weight: 500;
-
-    /* Un color de borde para modo claro */
-    border-color: #ced4da;
+    border:1px solid #23282c;
+    border-color: #23282c;
 }
 
 /* --- 2. MODO NOCHE (Dark) --- */

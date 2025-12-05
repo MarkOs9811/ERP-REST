@@ -1,99 +1,11 @@
-/* EstilosPlatos.css */
-.card {
-  border-radius: 8px;
- 
-}
 .contenedor-platos {
   display: flex !important;
   flex-wrap: wrap;
+  padding: 10px!important;
   justify-content: center;
-  /* Centra las cards en la fila */
-  gap: 16px;
-  /* Espacio entre cards */
   max-height: 100vh;
   overflow-y: auto;
   margin-bottom: 20px !important;
-}
-
-.card-platillo {
-  flex: 1 1 150px;
-  /* base 150px, puede crecer pero limitado por max-width */
-  max-width: 220px;
-  /* Limita el ancho máximo de cada card */
-  min-width: 140px;
-  /* Opcional: ancho mínimo */
-  margin: 0 auto;
-  /* Centra la card si sobra espacio */
-  transition: all ease-out 0.2s;
-  box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.185);
-  transition: background 0.3s, box-shadow 0.3s;
-}
-
-.card-platillo:hover {
-  background-color:#e6e6e6 ;
-  z-index: 1000;
-  cursor: pointer;
-}
-
-.card-img-top {
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-}
-
-.platosTabla {
-  width: 100%;
-}
-
-.precioCard {
-  width: auto;
-  position: absolute;
-  right: 5%;
-  bottom: 27%;
-  background-color: #ffcbcb;
-  font-size: 13px;
-  color: #940404!important;
-  box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.nombre-plato {
-  text-align: left;
-  font-size: 13px;
-  font-weight: 550;
-}
-/* Estilos comunes para ambos botones */
-.btn-accionesPlatos {
-  border-radius: 12px;
-  padding: 8px;
-  font-weight: bolder;
-  transition: all ease-out 0.2s;
-  border: 1px solid;
-}
-
-.btn-disminuir {
-  border-color: rgb(204, 116, 116);
-}
-
-.btn-disminuir:hover {
-  background-color: rgb(214, 6, 6);
-  color: white;
-}
-
-.btn-disminuir:active {
-  background-color: rgb(167, 0, 0);
-  transform: scale(1.1);
-}
-
-.btn-añadir {
-  border-color: grey;
-}
-
-.btn-añadir:hover {
-  background-color: rgb(6, 214, 93);
-}
-
-.btn-añadir:active {
-  background-color: rgb(0, 167, 69);
-  transform: scale(1.1);
 }
 .btn-realizarPedido{
   background-color: rgb(6, 214, 93);
