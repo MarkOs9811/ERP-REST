@@ -84,7 +84,11 @@ export function InformacionRapidaHome({}) {
     <div className="row  g-3">
       {/* Ventas Hoy */}
       <div className="col-md-3">
-        <CondicionCarga isLoading={isLoadingVentas} isError={isErrorVentas}>
+        <CondicionCarga
+          isLoading={isLoadingVentas}
+          isError={isErrorVentas}
+          mode="single-card"
+        >
           <div className="card h-100 shadow-sm">
             <div className="card-body d-flex justify-content-left align-items-center">
               <div className="text-center">
@@ -106,7 +110,11 @@ export function InformacionRapidaHome({}) {
 
       {/* Mesas Ocupadas */}
       <div className="col-md-3">
-        <CondicionCarga isLoading={isLoadingMesas} isError={isErrorMesas}>
+        <CondicionCarga
+          isLoading={isLoadingMesas}
+          isError={isErrorMesas}
+          mode="single-card"
+        >
           <div className="card h-100 shadow-sm">
             <div className="card-body d-flex justify-content-left align-items-center">
               <div className="text-left">
@@ -144,6 +152,7 @@ export function InformacionRapidaHome({}) {
         <CondicionCarga
           isLoading={isLoadingPedidosWeb}
           isError={isErrorPedidos}
+          mode="single-card"
         >
           <div className="card h-100 shadow-sm ">
             <div className="card-body d-flex align-items-center ">
@@ -161,7 +170,11 @@ export function InformacionRapidaHome({}) {
         </CondicionCarga>
       </div>
       <div className="col-md-3">
-        <CondicionCarga isLoading={isLoadingAlmacen} isError={isErrorAlmacen}>
+        <CondicionCarga
+          isLoading={isLoadingAlmacen}
+          isError={isErrorAlmacen}
+          mode="single-card"
+        >
           <div className="card h-100 shadow-sm card-alerta-almacen">
             <div className="card-body d-flex align-items-center">
               <div>

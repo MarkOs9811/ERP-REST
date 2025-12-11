@@ -4,7 +4,6 @@ import { InventarioList } from "../../components/componenteInventario/Inventario
 import { GetInventario } from "../../service/GetInventario";
 import { Cargando } from "../../components/componentesReutilizables/Cargando";
 
-import { ContenedorPrincipal } from "../../components/componentesReutilizables/ContenedorPrincipal";
 import {
   FileChartColumnIncreasing,
   Plus,
@@ -14,6 +13,7 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteExcel";
+import { CondicionCarga } from "../../components/componentesReutilizables/CondicionCarga";
 
 export function Inventario() {
   const [search, setSearch] = useState("");
@@ -43,16 +43,17 @@ export function Inventario() {
           <MetricCard
             loading={isLoading}
             error={isError}
-            icon={<Store color={"#ea8d1c"} width={"80px"} height={"80px"} />}
+            icon={<Store color={"#000000ff"} width={"80px"} height={"80px"} />}
             title="Productos"
             value={metrics.productosConteo}
             errorMessage="Error al cargar datos"
           />
-
           <MetricCard
             loading={isLoading}
             error={isError}
-            icon={<StickyNote color={"#1c9fea"} height="80px" width={"80px"} />}
+            icon={
+              <StickyNote color={"#000000ff"} height="80px" width={"80px"} />
+            }
             title="Stock Total"
             value={metrics.stockTotal}
             errorMessage="Error al cargar el stock"
@@ -62,7 +63,7 @@ export function Inventario() {
             loading={isLoading}
             error={isError}
             icon={
-              <StickyNote color={"#1eca74"} width={"80px"} height={"80px"} />
+              <StickyNote color={"#000000ff"} width={"80px"} height={"80px"} />
             }
             title="Valor Total"
             value={`S/.${metrics.valorTotal}`}
@@ -140,25 +141,19 @@ function MetricCard({
 }) {
   return (
     <div className="col-sm-12 col-md-3 col-lg-3">
-      <div className="card shadow-sm p-3">
-        {loading ? (
-          <Cargando />
-        ) : error ? (
-          <p>{errorMessage}</p>
-        ) : (
-          <>
-            <div>
-              <span className="position-absolute opacity-50">{icon}</span>
-            </div>
-            <div className="text-end">
-              <h4 className={`mb-1 ${isDanger ? "text-danger" : "text-dark"}`}>
-                {title}
-              </h4>
-              <p className="h1 mb-0">{value}</p>
-            </div>
-          </>
-        )}
-      </div>
+      <CondicionCarga isLoading={loading} isError={error} mode="single-card">
+        <div className="card shadow-sm p-3">
+          <div>
+            <span className="position-absolute opacity-90">{icon}</span>
+          </div>
+          <div className="text-end">
+            <h4 className={`mb-1 ${isDanger ? "text-danger" : "text-dark"}`}>
+              {title}
+            </h4>
+            <p className="h1 mb-0">{value}</p>
+          </div>
+        </div>
+      </CondicionCarga>
     </div>
   );
 }

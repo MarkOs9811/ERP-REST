@@ -18,7 +18,7 @@ import { clearPedido } from "../../redux/pedidoSlice";
 import { DetallePedido } from "./tareasVender/DetallePedido";
 import { RealizarPago } from "./tareasVender/RealizarPago";
 import { clearPedidoWeb } from "../../redux/pedidoWebSlice";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 export function DetallesPago() {
   // VARIABELS EN REDUX SI ES QUE LO HAY
@@ -30,7 +30,7 @@ export function DetallesPago() {
   const pedidoWeb = useSelector((state) => state.pedidoWeb);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const queryClient = useQueryClient();
   // PARA VALIDAR EL TIPO DE DOCUMENTO
   const [tipoDocumento, setTipoDocumento] = useState("DNI");
   const [numeroDocumento, setNumeroDocumento] = useState("");
@@ -182,12 +182,15 @@ export function DetallesPago() {
     if (result.success) {
       ToastAlert("success", "Venta realizada con éxito");
       if (estadoTipoVenta == "llevar") {
+        queryClient.invalidateQueries(["mesas"]);
         navigate("/vender/ventasLlevar");
         dispatch(clearPedidoLlevar());
       } else if (estadoTipoVenta == "web") {
+        queryClient.invalidateQueries(["mesas"]);
         navigate("/vender/pedidosWeb");
         dispatch(clearPedidoWeb());
       } else {
+        queryClient.invalidateQueries(["mesas"]);
         navigate("/vender/mesas");
         dispatch(clearPedido());
       }

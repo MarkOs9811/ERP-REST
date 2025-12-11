@@ -6,51 +6,61 @@ export function BotonMotionGeneral({
   icon = null,
   onClick = () => {},
   loading = false,
-  loadingText = "Cargando...", // Prop opcional para el texto de carga
-  classDefault = " text-center align-items-center gap-1 p-2 w-100 rounded-3 border shadow-sm ms-auto",
+  loadingText = "Cargando...",
+  // Volvemos a un default que funcione bien en general, pero permitimos override
+  classDefault = "btn shadow-sm rounded-3 py-2 px-3",
+  fullWidth = false, // Prop para controlar si ocupa el 100%
 }) {
-  // Deshabilitamos las animaciones interactivas si está cargando
   const whileHover = loading
     ? {}
-    : {
-        y: -3, // Mueve el botón 5px hacia arriba
-        boxShadow: "0px 6px 15px rgba(0, 0, 0, 0.2)", // Sombra más pronunciada para el efecto
-      };
+    : { y: -2, boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.15)" };
 
-  const whileTap = loading ? {} : { scale: 0.95 };
+  const whileTap = loading ? {} : { scale: 0.97 };
 
   return (
-    <motion.button
-      whileHover={whileHover}
-      whileTap={whileTap}
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ type: "spring", stiffness: 300, damping: 20 }}
-      onClick={onClick}
-      // Añadimos una clase de opacidad si está cargando
-      className={`${classDefault} btn-motion-theme ${
-        loading ? "opacity-75" : ""
-      }`}
-      // Deshabilitamos el botón
-      disabled={loading}
-    >
-      {loading ? (
-        // --- ESTADO DE CARGA ---
-        <>
-          <span
-            className="spinner-border spinner-border-sm"
-            role="status"
-            aria-hidden="true"
-          ></span>
-          <span className="ms-2">{loadingText}</span>
-        </>
-      ) : (
-        // --- ESTADO NORMAL ---
-        <>
-          {icon && <span className="me-2">{icon}</span>}
-          {text}
-        </>
-      )}
-    </motion.button>
+    <div>
+      <motion.button
+        whileHover={whileHover}
+        whileTap={whileTap}
+        initial={{ opacity: 0, y: 5 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ type: "spring", stiffness: 400, damping: 25 }}
+        onClick={onClick}
+        disabled={loading}
+        // Combinamos clases:
+        // 1. classDefault (estilos bootstrap básicos)
+        // 2. btn-motion-theme (nuestros colores y lógica de texto)
+        // 3. w-100 (si fullWidth es true)
+        className={`${classDefault} btn-motion-theme ${
+          fullWidth ? "w-100" : ""
+        } ${loading ? "opacity-75" : ""}`}
+      >
+        {loading ? (
+          <>
+            <span
+              className="spinner-border spinner-border-sm flex-shrink-0"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            {/* Ocultamos texto de carga en espacios muy pequeños */}
+            <span className="ms-2 d-none d-sm-inline text-truncate">
+              {loadingText}
+            </span>
+          </>
+        ) : (
+          <>
+            {/* Icono: flex-shrink-0 evita que se aplaste */}
+            {icon && (
+              <span className="d-flex align-items-center flex-shrink-0">
+                {icon}
+              </span>
+            )}
+
+            {/* Texto: text-truncate asegura que ponga "..." si no cabe */}
+            <span className="text-truncate">{text}</span>
+          </>
+        )}
+      </motion.button>
+    </div>
   );
 }

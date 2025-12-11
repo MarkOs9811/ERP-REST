@@ -96,9 +96,7 @@ export function Cargos() {
         <BotonMotionGeneral
           text="Agregar Cargo"
           icon={<Plus size={18} />}
-          classDefault={
-            "text-center align-items-center gap-1 p-2 w-auto rounded-3 border shadow-sm ms-auto"
-          }
+          fullWidth={true}
           onClick={() => setModalAddCargo(true)}
         />
       </div>

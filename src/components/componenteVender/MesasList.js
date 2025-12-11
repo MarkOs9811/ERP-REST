@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { setIdPreventaMesa } from "../../redux/mesaSlice";
 import { useQuery } from "@tanstack/react-query";
 import { GetMesasVender } from "../../service/accionesVender/GetMesasVender";
+import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
 
 export function MesasList() {
   const navigate = useNavigate();
@@ -16,8 +17,6 @@ export function MesasList() {
   } = useQuery({
     queryKey: ["mesas"],
     queryFn: GetMesasVender,
-    refetchOnWindowFocus: false,
-    retry: 1,
   });
   console.log("Mesas recibidas:", mesas, Array.isArray(mesas));
 
@@ -30,8 +29,6 @@ export function MesasList() {
     navigate(`/vender/mesas/preVenta`);
   };
 
-  if (loading) return <p>Cargando mesas...</p>;
-  if (error) return <p>{error}</p>;
   // si no es array, inicialízalo vacío
   const listaMesas = Array.isArray(mesas) ? mesas : [];
   return (
@@ -68,26 +65,27 @@ export function MesasList() {
           </p>
         </div>
       </div>
-
-      <div className="mesas-container card-body overflow-auto ">
-        {listaMesas.map((mesa) => (
-          <button
-            key={mesa.id}
-            className={`mesa-card m-3 ${
-              mesa.estado === 1 ? "disponible" : "en-atencion"
-            }`}
-            onClick={() =>
-              mesa.estado === 1
-                ? handleMesaAddPlato(mesa.id)
-                : handleShowPedido(mesa.id)
-            }
-          >
-            <h6 className="mesa-numero">Mesa {mesa.numero}</h6>
-            <p>Piso: {mesa.piso}</p>
-            <p>Capacidad: {mesa.capacidad}</p>
-          </button>
-        ))}
-      </div>
+      <CondicionCarga isLoading={loading} isError={error} mode="cards">
+        <div className="mesas-container card-body overflow-auto ">
+          {listaMesas.map((mesa) => (
+            <button
+              key={mesa.id}
+              className={`mesa-card m-3 ${
+                mesa.estado === 1 ? "disponible" : "en-atencion"
+              }`}
+              onClick={() =>
+                mesa.estado === 1
+                  ? handleMesaAddPlato(mesa.id)
+                  : handleShowPedido(mesa.id)
+              }
+            >
+              <h6 className="mesa-numero">Mesa {mesa.numero}</h6>
+              <p>Piso: {mesa.piso}</p>
+              <p>Capacidad: {mesa.capacidad}</p>
+            </button>
+          ))}
+        </div>
+      </CondicionCarga>
     </div>
   );
 }

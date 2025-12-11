@@ -3,7 +3,12 @@ import "../css/NavegacionEstilos.css";
 
 import { useDispatch } from "react-redux";
 import { toggleSidebar } from "../redux/sideBarSlice";
-import { Megaphone, StoreIcon, UserRoundCheck } from "lucide-react";
+import {
+  CookingPotIcon,
+  Megaphone,
+  StoreIcon,
+  UserRoundCheck,
+} from "lucide-react";
 
 export function Navegacion() {
   const location = useLocation(); // Obtiene la ubicación actual
@@ -11,7 +16,9 @@ export function Navegacion() {
   const navigate = useNavigate();
 
   const rolesLocalStorage = JSON.parse(localStorage.getItem("roles")) || [];
-  console.log(rolesLocalStorage);
+  const userStr = localStorage.getItem("user");
+  const rol = userStr ? JSON.parse(userStr) : null;
+
   // Mapea las rutas a nombres amigables
   const routeNames = {
     "": "Inicio",
@@ -130,6 +137,17 @@ export function Navegacion() {
               <StoreIcon /> POS
             </button>
           </div>
+          {rol && rol.empleado?.cargo?.nombre === "cocinero" && (
+            <div className="d-flex me-3 gap-2 align-items-center">
+              <button
+                className="btn btn-outline-dark d-flex align-items-center gap-1"
+                onClick={() => navigate("/cocina")}
+              >
+                <CookingPotIcon className="text-auto" />
+                Cocina
+              </button>
+            </div>
+          )}
         </div>
       </nav>
     </div>

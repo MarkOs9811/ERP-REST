@@ -11,7 +11,7 @@ import { addItem, clearPedido, removeItem } from "../../redux/pedidoSlice";
 import { CardPlatos } from "./CardPlatos";
 import { CategoriaPlatos } from "./tareasVender/CategoriaPlatos";
 import { GetMesasVender } from "../../service/accionesVender/GetMesasVender";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { setIdPreventaMesa } from "../../redux/mesaSlice";
 import { GetPlatosVender } from "../../service/accionesVender/GetPlatosVender";
 import { Cargando } from "../componentesReutilizables/Cargando";
@@ -19,6 +19,8 @@ import { Cargando } from "../componentesReutilizables/Cargando";
 import { MinusIcon, Search } from "lucide-react";
 import { useState } from "react";
 import BotonAnimado from "../componentesReutilizables/BotonAnimado";
+import { BuscadorPlatos } from "./tareasVender/BuscadorPlatos";
+import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
 
 export function ToMesa() {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -40,6 +42,7 @@ export function ToMesa() {
 
   // ===========================================
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   // OBTENIENDO MESAS PARA CAMBIAR
   const {
@@ -62,8 +65,6 @@ export function ToMesa() {
   } = useQuery({
     queryKey: ["platos"],
     queryFn: GetPlatosVender,
-    retry: 1,
-    refetchOnWindowFocus: false,
   });
 
   // useEffect(() => {
@@ -104,12 +105,11 @@ export function ToMesa() {
       );
 
       if (response.data.success) {
-        ToastAlert("success", response.data.message + mesas.nom);
-
+        ToastAlert("success", response.data.message + " MESA " + id);
         Object.keys(mesas).forEach((mesaId) => {
           dispatch(clearPedido(mesaId));
         });
-
+        queryClient.invalidateQueries(["mesas"]);
         navigate(`/vender/mesas`);
       } else {
         ToastAlert("error", response.data.message);
@@ -122,7 +122,7 @@ export function ToMesa() {
   };
 
   return (
-    <div className="card  h-100 bg-transparent">
+    <div className="  h-100 bg-transparent">
       <div className="row h-100">
         <div className="col-md-3 h-100">
           <div className="card shadow-sm d-flex flex-column h-100 p-2">
@@ -267,7 +267,7 @@ export function ToMesa() {
         </div>
 
         {/* Columna de los productos */}
-        <div className="col-md-9 ">
+        <div className="col-md-9 h-100">
           <div className="card shadow-sm flex-grow-1 h-100">
             <div className="card-header d-flex flex-wrap bg-white  ">
               <div className="d-flex align-items-center gap-2 w-100">
@@ -276,67 +276,53 @@ export function ToMesa() {
                 {/* Opciones rápidas */}
                 <div className="d-flex flex-wrap gap-2 ms-auto align-items-center">
                   {/* AGREGADO: Input Buscador */}
-                  <div className="input-group" style={{ width: "250px" }}>
-                    <span className="input-group-text bg-white border-end-0">
-                      <Search size={18} className="text-muted" />
-                    </span>
-                    <input
-                      type="text"
-                      className="form-control border-start-0 ps-0 shadow-none bg-white"
-                      placeholder="Buscar plato..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                  </div>
+                  <BuscadorPlatos
+                    searchTerm={searchTerm}
+                    setSearchTerm={setSearchTerm}
+                  />
 
                   <CategoriaPlatos />
                 </div>
               </div>
             </div>
-            <div className="card-body overflow-auto justify-content-start contenedor-platos">
-              {loadinPlatos && (
-                <div className="text-center p-5">
-                  <p>
-                    <Cargando />{" "}
-                  </p>
-                </div>
-              )}
-              {errorPlatos && (
-                <div className="text-center p-5">
-                  <p>Error al cargar los platos: {errorPlatosMessage}</p>
-                </div>
-              )}
-              {productos
-                .filter((producto) => {
-                  // MODIFICADO: Filtro combinado (Categoria AND Buscador)
-                  const matchCategoria =
-                    categoriaFiltroPlatos === "todo" ||
-                    producto.categoria.nombre === categoriaFiltroPlatos;
+            <CondicionCarga
+              isLoading={loadinPlatos}
+              isError={errorPlatos}
+              mode="cards"
+            >
+              <div className="card-body overflow-auto justify-content-start contenedor-platos">
+                {productos
+                  .filter((producto) => {
+                    // MODIFICADO: Filtro combinado (Categoria AND Buscador)
+                    const matchCategoria =
+                      categoriaFiltroPlatos === "todo" ||
+                      producto.categoria.nombre === categoriaFiltroPlatos;
 
-                  const matchSearch = producto.nombre
-                    .toLowerCase()
-                    .includes(searchTerm.toLowerCase());
+                    const matchSearch = producto.nombre
+                      .toLowerCase()
+                      .includes(searchTerm.toLowerCase());
 
-                  return matchCategoria && matchSearch;
-                })
-                .map((producto) => {
-                  const mesaId = id; // Mesa actual desde useParams
-                  const isSelected = pedido.mesas[mesaId]?.items.some(
-                    (item) => item.id === producto.id
-                  );
-                  return (
-                    <CardPlatos
-                      key={producto.id}
-                      item={producto}
-                      isSelected={isSelected} // Determina si el plato está seleccionado
-                      handleAdd={handleAddPlatoPreventa}
-                      handleRemove={handleRemovePlatoPreventa}
-                      BASE_URL={BASE_URL}
-                      capitalizeFirstLetter={capitalizeFirstLetter}
-                    />
-                  );
-                })}
-            </div>
+                    return matchCategoria && matchSearch;
+                  })
+                  .map((producto) => {
+                    const mesaId = id; // Mesa actual desde useParams
+                    const isSelected = pedido.mesas[mesaId]?.items.some(
+                      (item) => item.id === producto.id
+                    );
+                    return (
+                      <CardPlatos
+                        key={producto.id}
+                        item={producto}
+                        isSelected={isSelected} // Determina si el plato está seleccionado
+                        handleAdd={handleAddPlatoPreventa}
+                        handleRemove={handleRemovePlatoPreventa}
+                        BASE_URL={BASE_URL}
+                        capitalizeFirstLetter={capitalizeFirstLetter}
+                      />
+                    );
+                  })}
+              </div>
+            </CondicionCarga>
           </div>
         </div>
       </div>

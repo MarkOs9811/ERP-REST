@@ -30,7 +30,7 @@
   background-size: 150px;
   background-repeat: no-repeat;
   background-position: right center;
-  opacity: 1;
+ 
   /* Opacidad de la imagen */
   z-index: 1;
   /* Asegura que la imagen esté detrás del contenido */
@@ -87,17 +87,17 @@ body.dark-theme .mesa-card {
 }
 
 body.dark-theme .mesa-card::after {
-  opacity: 0.18 !important;
+  opacity: 0.8!important;
   /* Mantiene la imagen de fondo pero más sutil en dark mode */
 }
 
 body.dark-theme .mesa-card.disponible::after {
-  background-color: #223a2e !important;
+  background-color: #6db993 !important;
   border-left: 2px solid #27ae60 !important;
 }
 
 body.dark-theme .mesa-card.en-atencion::after {
-  background-color: #3a2323 !important;
+  background-color: #da4343 !important;
   border-left: 2px solid #ee5252 !important;
 }
 

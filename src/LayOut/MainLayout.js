@@ -133,6 +133,16 @@ export const MainLayout = () => {
                     <ToastContainer />
                     <Routes>
                       <Route
+                        path="/cocina"
+                        element={
+                          <PrivateRoute
+                            allowedRoles={["cocinero", "administrador"]}
+                          >
+                            <CocinaDespacho />
+                          </PrivateRoute>
+                        }
+                      />
+                      <Route
                         path="/marcarAsistencia"
                         element={<TakeAsistencia />}
                       />

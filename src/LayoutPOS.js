@@ -1,7 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import RippleWrapper from "./components/componentesReutilizables/RippleWrapper";
 import {
-  ChevronRight,
   HandPlatter,
   Inbox,
   LockKeyhole,

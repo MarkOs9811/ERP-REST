@@ -9,3 +9,7 @@
     }
 }
 
+body.dark-theme .contenedor-scroll{
+    background-color: rgb(45, 52, 59);
+}
+

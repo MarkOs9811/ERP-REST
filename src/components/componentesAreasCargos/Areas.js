@@ -73,9 +73,7 @@ export function Areas() {
         <BotonMotionGeneral
           text="Agregar Área"
           icon={<Plus size={18} />}
-          classDefault={
-            "text-center align-items-center gap-1 p-2 w-auto rounded-3 border shadow-sm ms-auto"
-          }
+          fullWidth={true}
           onClick={() => setModalAddArea(true)}
         />
       </div>

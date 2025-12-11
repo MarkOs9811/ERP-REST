@@ -12,23 +12,19 @@ import {
 
 import { setEstado } from "../../redux/tipoVentaSlice";
 import { CategoriaPlatos } from "./tareasVender/CategoriaPlatos";
-import { ContenedorPrincipal } from "../componentesReutilizables/ContenedorPrincipal";
 import { useQuery } from "@tanstack/react-query";
 import { GetPlatosVender } from "../../service/accionesVender/GetPlatosVender";
 import { Cargando } from "../componentesReutilizables/Cargando";
-import {
-  CheckCheck,
-  CheckCheckIcon,
-  Minus,
-  MinusIcon,
-  Trash2,
-} from "lucide-react";
+import { CheckCheckIcon, MinusIcon, Trash2 } from "lucide-react";
+import { BuscadorPlatos } from "./tareasVender/BuscadorPlatos";
+import { useState } from "react";
+import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
 
 export function ToLlevar() {
   const { id } = useParams();
 
   const BASE_URL = process.env.REACT_APP_BASE_URL;
-
+  const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const pedido = useSelector((state) => state.pedidoLlevar);
@@ -67,10 +63,10 @@ export function ToLlevar() {
   };
 
   return (
-    <div className="card h-100  bg-transparent">
-      <div className="row g-3 h-100">
+    <div className=" h-100  bg-transparent">
+      <div className="row g-3 h-100 ">
         {/* Columna de la cuenta */}
-        <div className="col-md-3 h-100">
+        <div className="col-md-3 h-100 ">
           <div className="card shadow-sm flex-grow-1 h-100 d-flex flex-column p-2 ">
             <div className="card-header p-3 text-center border-bottom">
               <h4>Cuenta Para llevar</h4>
@@ -189,56 +185,60 @@ export function ToLlevar() {
         </div>
 
         {/* Columna de los productos */}
-        <div className="col-md-9  ">
-          <div className="card shadow-sm  flex-grow-1 h-100 ">
+        <div className="col-md-9 h-100">
+          <div className="card shadow-sm  flex-grow-1 h-100  p-0">
             <div className="card-header d-flex justify-content-between align-items-center bg-light text-dark p-3">
               <div className="d-flex align-items-center gap-3 w-100">
                 <h4 className="mb-0 text-dark ">Platos</h4>
 
                 {/* Opciones rápidas */}
                 <div className="d-flex flex-wrap gap-3 ms-auto p-0">
+                  {/* AGREGADO: Input Buscador */}
+                  <BuscadorPlatos
+                    searchTerm={searchTerm}
+                    setSearchTerm={setSearchTerm}
+                  />
                   <CategoriaPlatos />
                 </div>
               </div>
             </div>
+            <CondicionCarga
+              isLoading={loadinPlatos}
+              isError={errorPlatos}
+              mode="cards"
+            >
+              <div className="card-body overflow-auto justify-content-start contenedor-platos">
+                {productos
+                  .filter((producto) => {
+                    const matchCategoria =
+                      categoriaFiltroPlatos === "todo" ||
+                      producto.categoria.nombre === categoriaFiltroPlatos;
 
-            <div className="card-body overflow-auto justify-content-start contenedor-platos">
-              {loadinPlatos && (
-                <div className="text-center p-5">
-                  <p>
-                    <Cargando />{" "}
-                  </p>
-                </div>
-              )}
-              {errorPlatos && (
-                <div className="text-center p-5">
-                  <p>Error al cargar los platos: {errorPlatosMessage}</p>
-                </div>
-              )}
-              {productos
-                .filter(
-                  (producto) =>
-                    categoriaFiltroPlatos === "todo" ||
-                    producto.categoria.nombre === categoriaFiltroPlatos
-                )
-                .map((producto) => {
-                  const mesaId = id; // Mesa actual desde useParams
-                  const isSelected = pedido.items.some(
-                    (item) => item.id === producto.id
-                  );
-                  return (
-                    <CardPlatos
-                      key={producto.id}
-                      item={producto}
-                      isSelected={isSelected} // Determina si el plato está seleccionado
-                      handleAdd={handleAddPlatoPreventa}
-                      handleRemove={handleRemovePlatoPreventa}
-                      BASE_URL={BASE_URL}
-                      capitalizeFirstLetter={capitalizeFirstLetter}
-                    />
-                  );
-                })}
-            </div>
+                    const matchSearch = producto.nombre
+                      .toLowerCase()
+                      .includes(searchTerm.toLowerCase());
+
+                    return matchCategoria && matchSearch;
+                  })
+                  .map((producto) => {
+                    const mesaId = id; // Mesa actual desde useParams
+                    const isSelected = pedido.items.some(
+                      (item) => item.id === producto.id
+                    );
+                    return (
+                      <CardPlatos
+                        key={producto.id}
+                        item={producto}
+                        isSelected={isSelected} // Determina si el plato está seleccionado
+                        handleAdd={handleAddPlatoPreventa}
+                        handleRemove={handleRemovePlatoPreventa}
+                        BASE_URL={BASE_URL}
+                        capitalizeFirstLetter={capitalizeFirstLetter}
+                      />
+                    );
+                  })}
+              </div>
+            </CondicionCarga>
           </div>
         </div>
       </div>

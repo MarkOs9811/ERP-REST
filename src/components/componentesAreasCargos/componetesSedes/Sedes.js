@@ -113,16 +113,18 @@ export function Sedes() {
               </small>
             </div>
           </div>
+
           <BotonMotionGeneral
             text="Agregar Sede"
             icon={<Plus size={18} />}
-            classDefault={
-              "text-center align-items-center gap-1 p-2 w-auto rounded-3 border shadow-sm ms-auto"
-            }
+            fullWidth={true}
+            // 👇 AQUÍ AGREGAS TU FUNCIÓN
             onClick={() => {
               setSedeActual(null);
               setShowModal(true);
             }}
+            // Ajustamos padding para que quepa bien en el espacio pequeño
+            classDefault="btn shadow-sm rounded-3 py-2 px-2"
           />
         </div>
         <div className="card-body">

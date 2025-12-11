@@ -26,6 +26,8 @@ import {
   Repeat,
 } from "lucide-react";
 import { getPreventaMesa } from "../../service/preventaService";
+import { BuscadorPlatos } from "./tareasVender/BuscadorPlatos";
+import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
 export function PreventaMesa() {
   const idMesa = useSelector((state) => state.mesa.idPreventaMesa);
   const categoriaFiltroPlatos = useSelector(
@@ -34,6 +36,9 @@ export function PreventaMesa() {
   const navigate = useNavigate();
 
   const caja = useSelector((state) => state.caja.caja);
+
+  // PARA LE BUSCADOR
+  const [searchTerm, setSearchTerm] = useState("");
 
   // const [mesa, setMesa] = useState(null);
   // extrayendo datos desde store de redux
@@ -177,6 +182,7 @@ export function PreventaMesa() {
 
       if (response.data.success) {
         ToastAlert("success", response.data.message);
+        queryClient.invalidateQueries(["mesas"]);
         setModalQuestion(false); // Cerrar el modal
         navigate(`/vender/mesas`);
       } else {
@@ -207,7 +213,7 @@ export function PreventaMesa() {
   if (isLoading) return <p>Cargando preventas...</p>;
   if (isError) return <p>Error: {error.message}</p>;
   return (
-    <div className="card h-100 bg-transparent">
+    <div className=" h-100 bg-transparent">
       <div className="row g-3 h-100">
         <div className="col-md-3 h-100 ">
           <div className="card shadow-sm flex-grow-1 h-100 d-flex flex-column p-2">
@@ -394,7 +400,7 @@ export function PreventaMesa() {
             </div>
           </div>
         </div>
-        <div className="col-md-9 d-flex flex-column ">
+        <div className="col-md-9 h-100 ">
           <div className="card shadow-sm flex-grow-1 h-100 d-flex flex-column">
             <div className="card-header d-flex flex-wrap bg-white border-bottom">
               <div className="d-flex align-items-center gap-2 w-100">
@@ -402,35 +408,52 @@ export function PreventaMesa() {
 
                 {/* Opciones rápidas */}
                 <div className="d-flex flex-wrap gap-2 ms-auto">
+                  <BuscadorPlatos
+                    searchTerm={searchTerm}
+                    setSearchTerm={setSearchTerm}
+                  />
                   <CategoriaPlatos />
                 </div>
               </div>
             </div>
-            <div className="card-body overflow-auto justify-content-start contenedor-platos">
-              {productos
-                .filter(
-                  (producto) =>
-                    categoriaFiltroPlatos === "todo" ||
-                    producto.categoria.nombre === categoriaFiltroPlatos
-                )
-                .map((producto) => {
-                  const mesaId = idMesa; // Mesa actual desde useParams
-                  const isSelected = pedido.mesas[mesaId]?.items.some(
-                    (item) => item.id === producto.id
-                  );
-                  return (
-                    <CardPlatos
-                      key={producto.id}
-                      item={producto}
-                      isSelected={isSelected} // Determina si el plato está seleccionado
-                      handleAdd={handleAddPlatoPreventa}
-                      handleRemove={handleRemovePlatoPreventa}
-                      BASE_URL={BASE_URL}
-                      capitalizeFirstLetter={capitalizeFirstLetter}
-                    />
-                  );
-                })}
-            </div>
+            <CondicionCarga
+              isLoading={loadinPlatos}
+              isError={errorPlatos}
+              mode="cards"
+            >
+              <div className="card-body overflow-auto justify-content-start contenedor-platos">
+                {productos
+                  .filter((producto) => {
+                    // MODIFICADO: Filtro combinado (Categoria AND Buscador)
+                    const matchCategoria =
+                      categoriaFiltroPlatos === "todo" ||
+                      producto.categoria.nombre === categoriaFiltroPlatos;
+
+                    const matchSearch = producto.nombre
+                      .toLowerCase()
+                      .includes(searchTerm.toLowerCase());
+
+                    return matchCategoria && matchSearch;
+                  })
+                  .map((producto) => {
+                    const mesaId = idMesa; // Mesa actual desde useParams
+                    const isSelected = pedido.mesas[mesaId]?.items.some(
+                      (item) => item.id === producto.id
+                    );
+                    return (
+                      <CardPlatos
+                        key={producto.id}
+                        item={producto}
+                        isSelected={isSelected} // Determina si el plato está seleccionado
+                        handleAdd={handleAddPlatoPreventa}
+                        handleRemove={handleRemovePlatoPreventa}
+                        BASE_URL={BASE_URL}
+                        capitalizeFirstLetter={capitalizeFirstLetter}
+                      />
+                    );
+                  })}
+              </div>
+            </CondicionCarga>
           </div>
         </div>
 

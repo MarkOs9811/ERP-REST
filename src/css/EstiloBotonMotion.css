@@ -2,26 +2,65 @@
 /* === Botón Motion Adaptable === */
 /* =============================== */
 
-/* --- 1. MODO CLARO (Default) --- */
-/* Esta clase define los colores base del botón */
+/* CLASE BASE */
+.btn-motion-theme {
+    /* Flexbox para centrar contenido */
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    /* Espacio entre icono y texto */
+
+    /* Transiciones suaves */
+    transition: all 0.2s ease-in-out;
+
+    /* MANEJO DE TEXTO LARGO (La clave del arreglo) */
+    white-space: nowrap;
+    /* Evita que el texto salte de línea */
+    overflow: hidden;
+    /* Oculta lo que no cabe */
+    text-overflow: ellipsis;
+    /* Pone "..." si el texto es muy largo */
+    max-width: 100%;
+    /* Nunca exceder el ancho del padre */
+
+    /* Reset de bordes y fuentes */
+    font-weight: 500;
+    border: 1px solid transparent;
+}
+
+/* --- MODO CLARO (Default) --- */
 .btn-motion-theme {
     background: linear-gradient(135deg, rgb(233, 233, 233), rgb(243, 247, 255));
     color: #292929;
-    text-align: center!important;
-    font-weight: 500;
-    border:1px solid #23282c;
-    border-color: #23282c;
+    border-color: #c2c2c2;
 }
 
-/* --- 2. MODO NOCHE (Dark) --- */
-/* Sobrescribimos la clase cuando 'body' tenga 'dark-theme' */
-body.dark-theme .btn-motion-theme {
-    /* Un degradado oscuro */
-    background: linear-gradient(135deg, #2b2f36, #1d232c)!important;
-text-align: center !important;
-    /* Texto claro */
-    color: #f1f1f1;
+.btn-motion-theme:hover {
+    background: linear-gradient(135deg, rgb(245, 245, 245), #ffffff);
+    border-color: #a0a0a0;
+}
 
-    /* Borde oscuro */
+/* --- MODO NOCHE (Dark) --- */
+body.dark-theme .btn-motion-theme {
+    background: linear-gradient(135deg, #2b2f36, #1d232c) !important;
+    color: #f1f1f1;
     border-color: #4a5568;
+}
+
+body.dark-theme .btn-motion-theme:hover {
+    background: linear-gradient(135deg, #374151, #2d3748) !important;
+    border-color: #718096;
+    color: #ffffff;
+}
+
+/* --- RESPONSIVE OPTIMIZATION --- */
+/* En pantallas pequeñas, reducimos un poco el padding y la fuente para que quepa más */
+@media (max-width: 768px) {
+    .btn-motion-theme {
+        padding: 0.4rem 0.6rem !important;
+        /* Menos relleno */
+        font-size: 0.85rem;
+        /* Letra un poco más chica */
+    }
 }

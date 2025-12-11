@@ -1,49 +1,124 @@
-.girar {
-    color: rgb(148, 148, 148);
-    animation: girar 1s linear infinite;
-}
-
-/* 💫 Efecto de brillo de carga */
-.fondo-brillando {
-    position: relative;
+/* === SKELETON CARDS (Modo Tarjetas) === */
+.skeleton-card {
+    height: 180px;
+    background-color: #e2e8f0;
+    /* Gris base */
+    border-radius: 12px;
     overflow: hidden;
-    background: #e2e7ec;
-    border-radius: 15px!important;
-    min-height: 150px;
-    height: auto!important;
+    position: relative;
+    /* Necesario para el brillo absoluto */
 }
 
-.fondo-brillando::after {
-    content: "";
+/* Las barras grises que simulan texto/título */
+.skeleton-bar {
+    background-color: #cbd5e1;
+    /* Gris un poco más oscuro */
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.skeleton-title {
+    width: 60%;
+    height: 20px;
+}
+
+.skeleton-text {
+    width: 100%;
+    height: 15px;
+}
+
+.skeleton-text-short {
+    width: 80%;
+    height: 15px;
+}
+
+/* === EFECTO DE BRILLO (ANIMACIÓN) === */
+.shimmer-overlay {
     position: absolute;
     top: 0;
-    left: -150%;
-    width: 50%;
+    left: 0;
+    width: 100%;
     height: 100%;
     background: linear-gradient(90deg,
-            transparent,
-            rgba(255, 255, 255, 0.4),
-            transparent);
-    animation: brilloMover 1.5s infinite;
+            transparent 0%,
+            rgba(255, 255, 255, 0.5) 50%,
+            transparent 100%);
+    animation: shimmerMove 1.5s infinite;
     transform: skewX(-20deg);
+    /* Inclinar un poco el brillo */
 }
 
-@keyframes brilloMover {
+@keyframes shimmerMove {
     0% {
-        left: -150%;
+        transform: translateX(-150%) skewX(-20deg);
     }
 
     100% {
-        left: 150%;
+        transform: translateX(150%) skewX(-20deg);
     }
 }
 
-@keyframes girar {
-    from {
-        transform: rotate(0deg);
-    }
+/* === SPINNER MODERNO (Modo Default) === */
+.modern-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-left-color: #d8627e;
+    /* Tu color principal */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
 
+.letter-spacing-2 {
+    letter-spacing: 2px;
+    font-size: 0.75rem;
+}
+
+@keyframes spin {
     to {
         transform: rotate(360deg);
     }
+}
+/* =========================================
+   === MODO DARK (Soporte body.dark-theme) ===
+   ========================================= */
+
+/* 1. Fondo de la tarjeta skeleton en Dark Mode */
+body.dark-theme .skeleton-card {
+    /* Usamos un tono ligeramente más claro que tu fondo #212b36 para que destaque, 
+       o el mismo tono si quieres que se funda */
+    background-color: #2b3642;
+    border: 1px solid #374151;
+    /* Opcional: un borde sutil ayuda en dark mode */
+}
+
+/* 2. Las barras (huesos) en Dark Mode */
+body.dark-theme .skeleton-bar {
+    background-color: #455a64;
+    /* Un gris azulado más claro que la tarjeta */
+}
+
+/* 3. Ajuste del Brillo (Shimmer) para Dark Mode */
+/* IMPORTANTE: El brillo blanco normal es muy fuerte en dark mode. 
+   Aquí lo bajamos al 5% o 10% de opacidad */
+body.dark-theme .shimmer-overlay {
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.08) 50%,
+            /* Mucho más sutil que el 0.5 del modo claro */
+            transparent 100%);
+}
+
+/* 4. Spinner en Dark Mode */
+body.dark-theme .modern-spinner {
+    /* El borde inactivo debe ser claro (blanco con poca opacidad) en lugar de negro */
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    border-left-color: #d8627e;
+    /* Mantenemos tu color de marca */
+}
+
+/* 5. Texto de "Cargando..." en Dark Mode */
+body.dark-theme .text-muted {
+    color: #90a4ae !important;
+    /* Un gris claro legible */
 }
