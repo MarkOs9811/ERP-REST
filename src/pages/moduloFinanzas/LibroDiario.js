@@ -1,5 +1,5 @@
 import { ContenedorPrincipal } from "../../components/componentesReutilizables/ContenedorPrincipal";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getLibroDiario } from "../../service/serviceFinanzas/GetLibroDiario";
 import {
   ArchiveX,
@@ -9,8 +9,22 @@ import {
   ClipboardType,
   EllipsisVertical,
 } from "lucide-react";
+import { PostData } from "../../service/CRUD/PostData";
+import { useState } from "react";
+import ModalAlertQuestion from "../../components/componenteToast/ModalAlertQuestion";
+// Importa tu componente de modal personalizado
 
 export function LibroDiario() {
+  const queryClient = useQueryClient();
+
+  // Estados de carga para los botones
+  const [loadingCarga, setLoadingCarga] = useState(false);
+  const [loadingVentas, setLoadingVentas] = useState(false);
+
+  // Estados para controlar la visibilidad de los modales
+  const [modalCierreVentas, setModalCierreVentas] = useState(false);
+  const [modalCargaMayor, setModalCargaMayor] = useState(false);
+
   const {
     data = {},
     isLoading,
@@ -23,6 +37,45 @@ export function LibroDiario() {
     refetchOnWindowFocus: false,
   });
 
+  // --- LÓGICA 1: CARGA AL LIBRO MAYOR ---
+
+  // Función A: Ejecuta la acción (se pasa al Modal)
+  const ejecutarCargaMayor = async () => {
+    setLoadingCarga(true);
+    const payload = {
+      anio: new Date().getFullYear(),
+      idEmpresa: 2,
+    };
+
+    // Llamada al backend
+    // Corregí el typo "finazas" -> "finanzas" si aplica, revisa tu ruta
+    const exito = await PostData("finanzas/cargarLibroMayor", payload);
+
+    if (exito) {
+      queryClient.invalidateQueries(["libroMayor"]);
+    }
+    setLoadingCarga(false);
+    return exito; // Retornamos para que el modal sepa si cerrar
+  };
+
+  // --- LÓGICA 2: CIERRE DE VENTAS ANUAL ---
+
+  // Función B: Ejecuta la acción (se pasa al Modal)
+  const ejecutarCierreVentas = async () => {
+    setLoadingVentas(true);
+    const payload = {
+      anio: new Date().getFullYear(),
+    };
+
+    const exito = await PostData("finanzas/cierreVentasAnual", payload);
+
+    if (exito) {
+      queryClient.invalidateQueries(["libroDiario"]);
+    }
+    setLoadingVentas(false);
+    return exito;
+  };
+
   const asientos = data.asientos || [];
 
   return (
@@ -34,23 +87,50 @@ export function LibroDiario() {
               <BookText color={"#ea4f4f"} height="45px" width="45px" />
               <p className="h4 card-title ms-2 mb-0">Libro Diario</p>
               <div className="d-flex ms-auto">
-                <button className="btn btn-outline-primary ms-auto mx-2  d-flex align-items-center p-2">
-                  <ArchiveX color={"auto"} className={"mx-2"} />
+                {/* BOTÓN 1: CIERRE VENTAS */}
+                <button
+                  className="btn btn-outline-primary ms-auto mx-2 d-flex align-items-center p-2"
+                  onClick={() => setModalCierreVentas(true)} // Abre el modal
+                  disabled={loadingVentas}
+                >
+                  {loadingVentas ? (
+                    <span className="spinner-border spinner-border-sm me-2"></span>
+                  ) : (
+                    <ArchiveX className={"mx-2 text-auto"} />
+                  )}
                   Cierre Ventas
                 </button>
-                <button className="btn btn-outline-dark ms-auto mx-2 d-flex align-items-center p-2">
-                  <BookOpenCheck color={"auto"} className={"mx-2"} />
-                  Carga Libro Mayor
+
+                {/* BOTÓN 2: CARGA LIBRO MAYOR */}
+                <button
+                  className="btn btn-outline-dark ms-auto mx-2 d-flex align-items-center p-2"
+                  onClick={() => setModalCargaMayor(true)} // Abre el modal
+                  disabled={loadingCarga}
+                >
+                  {loadingCarga ? (
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
+                  ) : (
+                    <BookOpenCheck className={"mx-2 text-auto"} />
+                  )}
+                  {loadingCarga ? " Procesando..." : " Carga Libro Mayor"}
                 </button>
+
                 <button className="btn btn-outline-secondary ms-auto mx-2 d-flex align-items-center p-2">
-                  <ClipboardType color={"auto"} className={"mx-2"} />
+                  <ClipboardType className={"mx-2 text-auto"} />
                   Generar Reporte
                 </button>
               </div>
             </div>
           </div>
         </div>
+
+        {/* ... Resto del renderizado de la tabla de asientos (sin cambios) ... */}
         <div className="col-md-12">
+          {/* ... Código de la card de asientos ... */}
           <div className="card shadow-sm py-2">
             <div className="card-header p-3">
               <p className="h4 card-title mb-0">Asientos contables</p>
@@ -83,7 +163,7 @@ export function LibroDiario() {
                             data-bs-toggle="dropdown"
                             aria-expanded="false"
                           >
-                            <EllipsisVertical color={"auto"} />
+                            <EllipsisVertical className="text-auto" />
                           </button>
                           <ul className="dropdown-menu">
                             {asiento.estado == 0 ? (
@@ -116,7 +196,8 @@ export function LibroDiario() {
                           </div>
                           <div className="text-center mb-2">
                             <span className="badge p-2 fecha-registro bg-light text-dark">
-                              <CalendarDays color={"auto"} /> {asiento.fecha}
+                              <CalendarDays className="text-auto" />{" "}
+                              {asiento.fecha}
                             </span>
                           </div>
                           <div className="row">
@@ -205,6 +286,30 @@ export function LibroDiario() {
           </div>
         </div>
       </div>
+
+      {/* --- MODALES REUTILIZABLES --- */}
+
+      {/* 1. Modal para Cierre de Ventas */}
+      <ModalAlertQuestion
+        show={modalCierreVentas}
+        handleCloseModal={() => setModalCierreVentas(false)}
+        handleEliminar={ejecutarCierreVentas} // Pasamos la función de ejecución
+        idEliminar={null} // No necesitamos ID específico aquí
+        pregunta="¿Deseas procesar el"
+        tipo="Cierre de Ventas Anual"
+        nombre="Se generarán asientos contables automáticos"
+      />
+
+      {/* 2. Modal para Carga Libro Mayor */}
+      <ModalAlertQuestion
+        show={modalCargaMayor}
+        handleCloseModal={() => setModalCargaMayor(false)}
+        handleEliminar={ejecutarCargaMayor} // Pasamos la función de ejecución
+        idEliminar={null}
+        pregunta="¿Estás seguro de cargar el"
+        tipo="Libro Mayor"
+        nombre="Se actualizarán los registros contables del año"
+      />
     </div>
   );
 }

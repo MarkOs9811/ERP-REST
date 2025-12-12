@@ -1,12 +1,14 @@
+import { ChartNoAxesCombined, Lock } from "lucide-react";
+
 export function CardCuentaContable({ nombreCuenta, items }) {
   const cuenta = items[0]?.cuenta || {};
   const grupoCuenta = cuenta.grupoCuenta || {};
   const cuentaCerrada = cuenta.estado === 0;
 
   return (
-    <div className="col-md-4 p-3 rounded-0 border-0">
+    <div className="col-md-3  rounded border h-100">
       <div
-        className={`card card-cuentasContables p-3 position-relative ${
+        className={`card card-cuentasContables  position-relative ${
           cuentaCerrada ? "cuenta-cerrada" : ""
         }`}
       >
@@ -88,21 +90,21 @@ export function CardCuentaContable({ nombreCuenta, items }) {
             </div>
           </div>
         ) : (
-          <div className="row ">
+          <div className="row gap-2">
             <div className="col-md-12 text-center">
               <button
                 type="button"
-                className="btn btn-cerrarCuenta btn-sm"
+                className="btn-eliminar btn-sm m-2"
                 title="Cerrar Cuenta"
               >
-                <span className="material-symbols-outlined">lock</span>
+                <Lock size={"auto"} />
               </button>
               <button
                 type="button"
-                className="btn btn-reporteCuenta btn-sm"
+                className="btn-principal btn-sm m-2"
                 title="Reporte"
               >
-                <span className="material-symbols-outlined">analytics</span>
+                <ChartNoAxesCombined size={"auto"} />
               </button>
             </div>
           </div>

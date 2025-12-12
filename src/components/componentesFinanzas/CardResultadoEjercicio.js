@@ -1,38 +1,60 @@
+import {
+  AlertTriangle,
+  ArrowDown,
+  ArrowRightLeft,
+  ArrowUp,
+  Calendar,
+  History,
+  Info,
+  Meh,
+  Frown,
+  Scale,
+  Smile,
+  PiggyBank, // Reemplazo para "savings"
+  Wallet, // Reemplazo para "account_balance_wallet"
+} from "lucide-react";
+
 export function CardResultadoEjercicio({ registroEjercicio, resultado }) {
   if (!registroEjercicio) {
     return (
-      <div className="alert alert-warning text-center">
-        <i className="fas fa-exclamation-triangle me-2"></i>
+      <div className="alert alert-warning text-center d-flex justify-content-center align-items-center gap-2">
+        <AlertTriangle size={20} />
         No se encontró ningún registro de resultados del ejercicio.
       </div>
     );
   }
 
+  // Helper para decidir qué ícono de cara mostrar
+  const getResultIcon = (res) => {
+    if (res > 0) return <Smile className="me-2" />;
+    if (res < 0) return <Frown className="me-2" />;
+    return <Meh className="me-2" />;
+  };
+
   return (
-    <div className="card shadow-card p-2 border-0">
-      <div className="card-header">
-        <div className="d-flex justify-content-between align-items-center">
+    <div className="card p-2 border shadow-sm">
+      <div className="card-header bg-transparent border-bottom-0 pb-0">
+        <div className="d-flex justify-content-between align-items-center flex-wrap gap-2">
           <div>
-            <h5 className="mb-1">
-              <i className="fas fa-exchange-alt me-2"></i>
+            <h5 className="mb-1 d-flex align-items-center gap-2">
+              <ArrowRightLeft className="text-primary" size={20} />
               Resultado del Ejercicio - {registroEjercicio.temporada}
             </h5>
-            <small className="text-secondary">
-              <i className="fas fa-calendar-alt me-1"></i>
+            <small className="text-secondary d-flex align-items-center gap-1">
+              <Calendar size={14} />
               Desde: {registroEjercicio.fechaInicio} Hasta:{" "}
               {registroEjercicio.fechaFin}
             </small>
           </div>
-          <div>
+          <div className="d-flex gap-2">
             <button
-              className="btn btn-outline-dark p-2 mx-2"
+              className="btn btn-outline-dark p-2 d-flex align-items-center gap-2"
               title="Registros de balances"
             >
-              <i className="fa-solid fa-clock-rotate-left"></i> Balances
-              anteriores
+              <History size={16} /> Balances anteriores
             </button>
             <button
-              className="btn btn-primary p-2"
+              className="btn btn-primary p-2 d-flex align-items-center gap-2"
               style={{
                 fontSize: "1rem",
                 backgroundColor: "#0e8ee9",
@@ -40,72 +62,76 @@ export function CardResultadoEjercicio({ registroEjercicio, resultado }) {
               }}
               title="Realizar Balance"
             >
-              <i className="fa-solid fa-balance-scale"></i> Nuevo Balance
+              <Scale size={16} /> Nuevo Balance
             </button>
           </div>
         </div>
       </div>
+
       <div className="card-body">
-        <p className="card-text text-secondary">
-          <i className="fas fa-info-circle me-2"></i>
+        <p className="card-text text-secondary d-flex align-items-center gap-2">
+          <Info size={16} />
           Resultados del ejercicio para la temporada{" "}
           {registroEjercicio.temporada}.
         </p>
-        <p className="card-text text-secondary">
-          <i className="fas fa-calendar-alt me-2"></i>
-          Periodo: {registroEjercicio.fechaInicio} a{" "}
-          {registroEjercicio.fechaFin}
-        </p>
-        <div className="row g-3">
+
+        <div className="row g-3 mt-2">
           {/* Ingresos */}
-          <div className="col-md-6 position-relative">
-            <div className="card p-3">
-              <p className="card-text text-ingreso">
-                <i className="fas fa-arrow-up me-2"></i>
+          <div className="col-md-6">
+            <div className="card p-3 position-relative overflow-hidden h-100 border-success border-opacity-25 bg-success bg-opacity-10">
+              <p className="card-text text-success d-flex align-items-center gap-2 mb-1">
+                <ArrowUp size={20} />
                 <strong>Ingresos:</strong>
-                <h3 className="text-ingreso">
-                  S/.{Number(registroEjercicio.ingresos).toFixed(2)}
-                </h3>
               </p>
-              <span
-                className="material-icons position-absolute"
+              <h3 className="text-success fw-bold">
+                S/. {Number(registroEjercicio.ingresos).toFixed(2)}
+              </h3>
+
+              {/* ÍCONO LUCIDE DE FONDO (PiggyBank) */}
+              <PiggyBank
+                className="position-absolute"
+                size={80}
+                strokeWidth={1}
                 style={{
-                  fontSize: 60,
-                  color: "rgba(40, 95, 167, 0.2)",
-                  right: 10,
-                  bottom: 10,
+                  color: "currentColor", // Usa el color del texto (verde)
+                  opacity: 0.15, // Muy sutil
+                  right: -10,
+                  bottom: -10,
                 }}
-              >
-                savings
-              </span>
+              />
             </div>
           </div>
+
           {/* Gastos */}
-          <div className="col-md-6 position-relative">
-            <div className="card p-3">
-              <p className="card-text text-danger">
-                <i className="fas fa-arrow-down me-2"></i>
+          <div className="col-md-6">
+            <div className="card p-3 position-relative overflow-hidden h-100 border-danger border-opacity-25 bg-danger bg-opacity-10">
+              <p className="card-text text-danger d-flex align-items-center gap-2 mb-1">
+                <ArrowDown size={20} />
                 <strong>Gastos:</strong>
-                <h3 className="text-danger">
-                  S/.{Number(registroEjercicio.gastos).toFixed(2)}
-                </h3>
               </p>
-              <span
-                className="material-icons position-absolute"
+              <h3 className="text-danger fw-bold">
+                S/. {Number(registroEjercicio.gastos).toFixed(2)}
+              </h3>
+
+              {/* ÍCONO LUCIDE DE FONDO (Wallet) */}
+              <Wallet
+                className="position-absolute"
+                size={80}
+                strokeWidth={1}
                 style={{
-                  fontSize: 60,
-                  color: "rgba(220, 53, 69, 0.2)",
-                  right: 10,
-                  bottom: 10,
+                  color: "currentColor",
+                  opacity: 0.15,
+                  right: -10,
+                  bottom: -10,
                 }}
-              >
-                account_balance_wallet
-              </span>
+              />
             </div>
           </div>
         </div>
+
+        {/* Resultado Final */}
         <div
-          className={`alert text-center ${
+          className={`alert text-center mt-3 d-flex align-items-center justify-content-center ${
             resultado > 0
               ? "alert-primary"
               : resultado < 0
@@ -114,17 +140,17 @@ export function CardResultadoEjercicio({ registroEjercicio, resultado }) {
           }`}
           role="alert"
         >
-          <i
-            className={`fas me-2 ${
-              resultado > 0 ? "fa-smile" : resultado < 0 ? "fa-frown" : "fa-meh"
-            }`}
-          ></i>
-          <strong>Resultado:</strong> {Number(resultado).toFixed(2)}{" "}
-          {resultado > 0
-            ? "(Beneficio)"
-            : resultado < 0
-            ? "(Pérdida)"
-            : "(Equilibrio)"}
+          {getResultIcon(resultado)}
+          <span className="fs-5">
+            <strong>Resultado:</strong> S/. {Number(resultado).toFixed(2)}{" "}
+            <span className="fw-normal fst-italic ms-1">
+              {resultado > 0
+                ? "(Beneficio)"
+                : resultado < 0
+                ? "(Pérdida)"
+                : "(Equilibrio)"}
+            </span>
+          </span>
         </div>
       </div>
     </div>
