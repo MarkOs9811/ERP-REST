@@ -19,6 +19,9 @@
   transition: transform 0.2s;
   overflow: hidden;
 }
+.mesa-card:active {
+  transform: scale(0.97, 0.97)!important;
+}
 
 .mesa-card::after {
   content: "";
@@ -43,15 +46,24 @@
   background-color: #b8fad1;
   border-left:4px solid #0b884e;
 }
+.mesa-card.disponible:active::after {
+  background-image: url("../../public/images/img-disponible-mesa.svg");
+  background-color: #7fd4a0;
+  border-left: 4px solid #07160f;
+}
 
 .mesa-card.en-atencion::after {
   background-image: url("../../public/images/img-en-atencion.svg");
   background-color: #f7a0a0;
   border-left:4px solid #920404;
 }
-
+.mesa-card.en-atencion:active::after {
+  background-image: url("../../public/images/img-en-atencion.svg");
+  background-color: #d17474;
+  border-left: 4px solid #920404;
+}
 .mesa-card:hover {
-  transform: scale(1.05);
+  transform: scale(1.02);
   /* Efecto de zoom al pasar el mouse */
 }
 

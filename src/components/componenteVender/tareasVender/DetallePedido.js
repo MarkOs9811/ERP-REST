@@ -19,6 +19,7 @@ export function DetallePedido({
   const handleVolverPedidoWeb = () => {
     navigate(`/vender/pedidosWeb`);
   };
+  const subTotal = (totalPreventa - igv).toFixed(2);
   return (
     <div className="card shadow-sm h-100 ">
       <div className="card-header d-flex align-items-center justify-content-center">
@@ -86,10 +87,18 @@ export function DetallePedido({
         {/* Total */}
         <div className=" pt-3">
           <div className="d-flex justify-content-between align-items-center">
+            <span className="h6">Sub Total</span>
+            <span className="h6 fw-bold text-dark">S/. {subTotal}</span>
+          </div>
+          <div className="d-flex justify-content-between align-items-center">
+            <span className="h6">Igv</span>
+            <span className="h6 fw-bold text-secondary">S/. {igv}</span>
+          </div>
+
+          <div className="d-flex justify-content-between align-items-center">
             <span className="h5">Total</span>
             <span className="h5 fw-bold text-success">S/. {totalPreventa}</span>
           </div>
-          <small className="text-muted d-block text-end">IGV: S/. {igv}</small>
         </div>
         {/* Puntos de lealtad */}
         <div className="mt-3">

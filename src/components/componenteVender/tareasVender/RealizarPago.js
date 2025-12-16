@@ -7,6 +7,7 @@ export function RealizarPago({
   loading,
   error,
 }) {
+  const subTotal = (totalPreventa - igv).toFixed(2);
   return (
     <div className="card h-100  shadow-sm">
       <div className="card-header">
@@ -14,8 +15,8 @@ export function RealizarPago({
       </div>
       <div className="card p-3 border-pill shadow-none">
         <div className="d-flex justify-content-between">
-          <span>Total a Pagar</span>
-          <span className="fw-bold text-success">S/. {totalPreventa}</span>
+          <span>Sub Total</span>
+          <span className="fw-bold text-success">S/. {subTotal}</span>
         </div>
         <div className="d-flex justify-content-between">
           <span>IGV</span>

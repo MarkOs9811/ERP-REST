@@ -16,7 +16,7 @@ import { setIdPreventaMesa } from "../../redux/mesaSlice";
 import { GetPlatosVender } from "../../service/accionesVender/GetPlatosVender";
 import { Cargando } from "../componentesReutilizables/Cargando";
 // AGREGADO: Importamos el icono Search
-import { MinusIcon, Search } from "lucide-react";
+import { Minus, MinusIcon, Plus, Search, Trash2 } from "lucide-react";
 import { useState } from "react";
 import BotonAnimado from "../componentesReutilizables/BotonAnimado";
 import { BuscadorPlatos } from "./tareasVender/BuscadorPlatos";
@@ -161,43 +161,123 @@ export function ToMesa() {
               </div>
             </div>
 
-            <div className="card-body ">
+            <div className="card-body p-0">
               {/* Verificar si hay productos en la mesa actual */}
               {pedido.mesas[id] && pedido.mesas[id].items.length > 0 ? (
                 <>
-                  <table className=" table-borderless table-sm w-100">
-                    <tbody>
-                      {pedido.mesas[id].items.map((item) => (
-                        <tr key={item.id} className="plato-row px-3">
-                          <td className="d-flex justify-content-between align-items-center px-3">
-                            <div>
-                              <span className="d-block fw-bold">
-                                {item.nombre}
-                              </span>
-                              <small>
-                                {item.cantidad} x S/.{" "}
-                                {Number(item.precio).toFixed(2)}
-                              </small>
-                            </div>
-                          </td>
-                          <td className="text-right align-middle">
-                            <span>
+                  <div className="table-responsive">
+                    <table className="table table-borderless align-middle mb-0">
+                      {/* Encabezados sutiles para ordenar visualmente */}
+                      <thead className="text-muted small border-bottom">
+                        <tr>
+                          <th scope="col" className="ps-3 fw-normal">
+                            Descripción
+                          </th>
+                          <th scope="col" className="text-center fw-normal">
+                            Cant.
+                          </th>
+                          <th scope="col" className="text-end fw-normal">
+                            Total
+                          </th>
+                          <th scope="col"></th>
+                        </tr>
+                      </thead>
+
+                      <tbody>
+                        {pedido.mesas[id].items.map((item) => (
+                          <tr
+                            key={item.id}
+                            className="border-bottom hover-bg-light"
+                          >
+                            {/* 1. Descripción y Precio Unitario */}
+                            <td className="ps-3 py-3">
+                              <div className="d-flex flex-column">
+                                <span className="fw-bold text-dark fs-6">
+                                  {item.nombre}
+                                </span>
+                                <span className="text-muted small">
+                                  S/. {Number(item.precio).toFixed(2)} c/u
+                                </span>
+                              </div>
+                            </td>
+
+                            {/* 2. Control de Cantidad (Stepper) */}
+                            <td className="py-3">
+                              <div
+                                className="d-flex align-items-center justify-content-center bg-light rounded-pill px-2 py-1 mx-auto"
+                                style={{
+                                  width: "fit-content",
+                                  border: "1px solid #e0e0e0",
+                                }}
+                              >
+                                <button
+                                  type="button"
+                                  className="btn btn-sm btn-link text-decoration-none text-dark p-0 d-flex align-items-center justify-content-center"
+                                  style={{ width: "24px", height: "24px" }}
+                                  onClick={() =>
+                                    handleRemovePlatoPreventa(item.id)
+                                  }
+                                >
+                                  <Minus size={14} />
+                                </button>
+
+                                <span
+                                  className="fw-bold mx-2 text-center"
+                                  style={{
+                                    minWidth: "20px",
+                                    fontSize: "0.9rem",
+                                  }}
+                                >
+                                  {item.cantidad}
+                                </span>
+
+                                {/* He agregado el botón de sumar para consistencia con el diseño anterior.
+                  Si en esta vista no se puede sumar, puedes borrar este botón button */}
+                                <button
+                                  type="button"
+                                  className="btn btn-sm btn-link text-decoration-none text-dark p-0 d-flex align-items-center justify-content-center"
+                                  style={{ width: "24px", height: "24px" }}
+                                  onClick={() => handleAddPlatoPreventa(item)}
+                                >
+                                  <Plus size={14} />
+                                </button>
+                              </div>
+                            </td>
+
+                            {/* 3. Precio Total */}
+                            <td
+                              className="text-end py-3 fw-bold text-dark"
+                              style={{ minWidth: "80px" }}
+                            >
                               S/.{" "}
                               {Number(item.cantidad * item.precio).toFixed(2)}
-                            </span>
-                          </td>
-                          <td className="align-middle">
-                            <button
-                              className="btn-sm eliminar-btn"
-                              onClick={() => handleRemovePlatoPreventa(item.id)}
-                            >
-                              <MinusIcon className="text-auto" />
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                            </td>
+
+                            {/* 4. Botón Eliminar Fila */}
+                            <td className="text-end py-3 pe-3">
+                              <button
+                                type="button"
+                                className="btn btn-sm btn-outline-danger border-0 bg-transparent p-1"
+                                title="Eliminar del pedido"
+                                onClick={() =>
+                                  handleRemovePlatoPreventa(item.id, true)
+                                }
+                              >
+                                <Trash2 size={16} />
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+
+                    {/* Mensaje opcional si la mesa no tiene items */}
+                    {pedido.mesas[id].items.length === 0 && (
+                      <div className="text-center py-4 text-muted small">
+                        Mesa sin pedidos
+                      </div>
+                    )}
+                  </div>
                 </>
               ) : (
                 <p className="text-center text-muted">

@@ -41,7 +41,7 @@ export function EmpresasAdmin() {
     refetchOnWindowFocus: false,
   });
 
-  console.log("Empresas List:", empresasList);
+  console.log("Empresas List:", error);
 
   const empresasFiltradas = useMemo(() => {
     if (!empresasList) {

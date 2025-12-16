@@ -60,7 +60,7 @@ export function OpcionesPago(props) {
   return (
     <div className="card shadow-sm flex-grow-1 h-100 d-flex flex-column h-100">
       <div className="card-header">
-        <h5>Detalles del Pago</h5>
+        <h5>Método de pago</h5>
       </div>
       <div
         className="card-body overflow-auto"
@@ -68,7 +68,6 @@ export function OpcionesPago(props) {
       >
         {/* Métodos de pago */}
         <div className="mt-0">
-          <h6>Método de pago</h6>
           <div
             className="btn-group w-100"
             role="group"

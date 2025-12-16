@@ -24,7 +24,7 @@ export function Configuracion() {
   // Opciones para administrador
   const opcionesAdmin = [
     {
-      to: "/configuracion",
+      to: "/configuracion/general",
       icon: (
         <Settings
           height="24px"
@@ -33,7 +33,7 @@ export function Configuracion() {
         />
       ),
       label: "Generales",
-      path: "/configuracion",
+      path: "/configuracion/general",
     },
     {
       to: "/configuracion/MiPerfil",

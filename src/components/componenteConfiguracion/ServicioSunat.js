@@ -60,7 +60,7 @@ export function ServicioSunat() {
   if (Object.keys(switches).length === 0 && configuracion.length > 0) {
     const initial = {};
     configuracion.forEach((item) => {
-      initial[item.id] = item.estado == 1;
+      initial[item?.id] = item.estado == 1;
     });
     setSwitches(initial);
   }
@@ -186,7 +186,7 @@ export function ServicioSunat() {
   const columasSerieCorr = [
     {
       name: "ID",
-      selector: (row) => row.id,
+      selector: (row) => row?.id,
       sortable: true,
       width: "60px", // Más angosto, no es tan importante
     },
@@ -242,7 +242,7 @@ export function ServicioSunat() {
         ) : (
           <button
             onClick={() => {
-              setModalQuestionActivar(row.id);
+              setModalQuestionActivar(row?.id);
               setDataSerie(row);
             }}
             className="badge btn btn-dark border shadow-sm"
@@ -369,9 +369,9 @@ export function ServicioSunat() {
             <input
               className="form-check-input"
               type="checkbox"
-              id={`flexSwitchCheckDefault${sunatConfig.id}`}
-              checked={!!switches[sunatConfig.id]}
-              onChange={() => handleSwitch(sunatConfig.id)}
+              id={`flexSwitchCheckDefault${sunatConfig?.id}`}
+              checked={!!switches[sunatConfig?.id]}
+              onChange={() => handleSwitch(sunatConfig?.id)}
               style={{
                 accentColor: "#ee5252",
                 width: 40,
@@ -482,7 +482,7 @@ export function ServicioSunat() {
         show={modalQuestionActivar}
         handleCloseModal={() => setModalQuestionActivar(false)}
         nombre={dataSerie.serie}
-        idProceso={dataSerie.id}
+        idProceso={dataSerie?.id}
         handleAccion={handleSetDefault}
       >
         <div className="rounded my-3 p-3">
@@ -501,7 +501,7 @@ export function ServicioSunat() {
         show={modalCambiarEstado}
         handleCloseModal={() => setQuestionEstado(false)}
         nombre={dataActivar.serie}
-        idProceso={dataActivar.id}
+        idProceso={dataActivar?.id}
         handleAccion={handleActivarSerie}
       >
         <div className="rounded my-3 p-3">
@@ -519,7 +519,7 @@ export function ServicioSunat() {
         show={modalDesactivar}
         handleCloseModal={() => setQuestionDesactivar(false)}
         nombre={dataActivar.serie}
-        idProceso={dataActivar.id}
+        idProceso={dataActivar?.id}
         handleAccion={handleDesactivarSerie}
       >
         <div className="rounded my-3 p-3">

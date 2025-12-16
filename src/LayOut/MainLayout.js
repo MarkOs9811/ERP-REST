@@ -642,7 +642,14 @@ export const MainLayout = () => {
 
                       {/* Configuración */}
                       <Route path="/configuracion" element={<Configuracion />}>
-                        <Route index element={<Generales />} />
+                        <Route
+                          path="general"
+                          element={
+                            <PrivateRoute allowedRoles={["administrador"]}>
+                              <Generales />
+                            </PrivateRoute>
+                          }
+                        />
                         <Route path="MiPerfil" element={<MiPerfil />} />
                         <Route path="MiEmpresa" element={<MiEmpresa />} />
                         <Route
