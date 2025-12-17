@@ -77,7 +77,7 @@ export function StepSede({ onFinish }) {
         {/* 4. Botón de Acción Principal */}
         <button
           type="button"
-          onClick={() => cambiarEstado(4)}
+          onClick={() => cambiarEstado(1)}
           className="btn-guardar btn-lg px-5 shadow py-2 rounded-pill d-inline-flex align-items-center gap-2 w-auto"
           style={{ transition: "transform 0.2s", textDecoration: "none" }}
           onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.05)")}

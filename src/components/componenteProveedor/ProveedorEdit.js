@@ -91,7 +91,7 @@ export function ProveedorEdit({
   };
 
   return (
-    <div>
+    <div className="p-3">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="row">
           <div className="col-4">

@@ -498,6 +498,7 @@ button:disabled {
 .btn-guardar {
   min-width: 35px;
   width: 200px;
+  border-radius: 30px!important;
   height: 40px;
   background-color: #1d2530;
   color: #e2ecff;
@@ -533,7 +534,7 @@ button:disabled {
   background-color: #f1f3f5;
   color: #495057;
   border: 1px solid #ced4da;
-  border-radius: 0.8rem;
+  border-radius: 30px !important;
   padding: 0.5rem;
   display: inline-flex;
   align-items: center;

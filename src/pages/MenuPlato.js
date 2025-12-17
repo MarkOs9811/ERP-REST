@@ -5,27 +5,18 @@ import { PlatoAdd } from "../components/componentePlatos/PlatoAdd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Modal } from "react-bootstrap";
-import { ContenedorPrincipal } from "../components/componentesReutilizables/ContenedorPrincipal";
 import { CombosList } from "../components/componentePlatos/CombosList";
 import { useQueryClient } from "@tanstack/react-query";
 import { GetReporteExcel } from "../service/accionesReutilizables/GetReporteExcel";
 import { FileChartColumnIncreasing } from "lucide-react";
 import { CondicionCarga } from "../components/componentesReutilizables/CondicionCarga";
+import ModalRight from "../components/componentesReutilizables/ModalRight";
 
 export function MenuPlato() {
   const [search, setSearch] = useState("");
   const [upDateList, setUpDateList] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const queryClient = useQueryClient();
-  const handleAddPlato = () => {
-    setShowModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setShowModal(false);
-    setUpDateList((prev) => !prev);
-    queryClient.invalidateQueries({ queryKey: ["platos"] });
-  };
 
   return (
     <div className="row g-3 ">
@@ -46,8 +37,9 @@ export function MenuPlato() {
                 </div>
                 <div className="d-flex align-items-center gap-2">
                   <button
+                    type="button"
                     className="btn btn-outline-dark rounded-pill"
-                    onClick={handleAddPlato}
+                    onClick={() => setShowModal(true)}
                   >
                     <FontAwesomeIcon icon={faPlus} className="me-2" />
                     Nuevo Plato
@@ -80,15 +72,15 @@ export function MenuPlato() {
           <CategoriaList />
         </CondicionCarga>
       </div>
-      {/* Modal para agregar PLATOS */}
-      <Modal show={showModal} onHide={handleCloseModal} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>Registrar Plato</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <PlatoAdd handleCloseModal={handleCloseModal} />
-        </Modal.Body>
-      </Modal>
+
+      <ModalRight
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        title="Agregar Nuevo Plato"
+        hideFooter={true}
+      >
+        {({ handleClose }) => <PlatoAdd handleCloseModal={handleClose} />}
+      </ModalRight>
     </div>
   );
 }

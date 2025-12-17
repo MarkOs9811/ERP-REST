@@ -325,21 +325,20 @@ export function AlmacenList({ search, updateList }) {
   return (
     <div className="h-100">
       <TablasGenerales columnas={columns} datos={filterAlmacen} />
-
-      {/* // modal para agregar stock */}
-      <Modal show={isModalOpen} onHide={handleCloseModal} centered size="lg">
-        <Modal.Header closeButton>
-          <Modal.Title>Agrega Stock</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {/* Pasa el producto seleccionado como prop */}
+      <ModalRight
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        title={"Agregar Stock al Producto"}
+        hideFooter={true}
+      >
+        {({ hanldeClose }) => (
           <AlmacenStockAdd
-            handleCloseModal={handleCloseModal}
+            handleCloseModal={hanldeClose}
             producto={idProductoEdit}
             onAlmacenUpdate={handleAlmacenUpdated}
           />
-        </Modal.Body>
-      </Modal>
+        )}
+      </ModalRight>
 
       <ModalAlertQuestion
         show={showConfirm}

@@ -4,20 +4,25 @@ import ToastAlert from "../componenteToast/ToastAlert";
 import { useDropzone } from "react-dropzone";
 import { useForm } from "react-hook-form";
 import { validatePrecio, handlePrecioInput } from "../../hooks/InputHandlers";
+import {
+  Utensils,
+  AlignLeft,
+  DollarSign,
+  Tags,
+  Image as ImageIcon,
+  UploadCloud,
+} from "lucide-react";
 
 export function PlatoAdd({ handleCloseModal }) {
+  // Estado para la lógica de la imagen (separado de useForm)
   const [formData, setFormData] = useState({
-    nombre: "",
-    descripcion: "",
-    precio: "",
     foto: null,
   });
+
   const {
     register,
     handleSubmit,
-    setValue,
     formState: { errors },
-    reset,
   } = useForm();
 
   const [categorias, setCategorias] = useState([]);
@@ -32,10 +37,8 @@ export function PlatoAdd({ handleCloseModal }) {
         );
         if (response.data.success) {
           setCategorias(response.data.data);
-        } else {
-          console.log(response.data.message);
         }
-      } catch (errors) {
+      } catch (error) {
         console.log("error de conexion");
       }
     };
@@ -44,20 +47,17 @@ export function PlatoAdd({ handleCloseModal }) {
 
   // GUARDAR PLATO API
   const onSubmit = async (data) => {
-    // Crea un objeto FormData
     const formDataToSend = new FormData();
     formDataToSend.append("nombre", data.nombre);
     formDataToSend.append("descripcion", data.descripcion);
     formDataToSend.append("precio", data.precio);
     formDataToSend.append("categoria", data.categoria);
 
-    // Agrega la foto (si existe)
-    if (fotoPreview) {
-      formDataToSend.append("foto", formData.foto); // Asegúrate de que "foto" es el campo correcto
+    if (fotoPreview && formData.foto) {
+      formDataToSend.append("foto", formData.foto);
     }
 
     try {
-      // Envía la solicitud con axios
       const response = await axiosInstance.post(
         "/gestionPlatos/addPlatos",
         formDataToSend
@@ -70,9 +70,8 @@ export function PlatoAdd({ handleCloseModal }) {
         ToastAlert("error", response.data.message);
       }
     } catch (error) {
-      console.error("Error al enviar el formulario:", error);
-
-      if (error.response && error.response.data && error.response.data.errors) {
+      console.error("Error al enviar:", error);
+      if (error.response?.data?.errors) {
         const errors = error.response.data.errors;
         let errorMessages = "";
         for (let field in errors) {
@@ -85,141 +84,198 @@ export function PlatoAdd({ handleCloseModal }) {
     }
   };
 
-  // PARA MSOTRAR LA PREVISUALIZACION DE LA IMAGEN
-  const { getRootProps, getInputProps } = useDropzone({
-    accept: "image/*",
+  // DROPZONE CONFIG
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    accept: { "image/*": [] },
+    multiple: false,
     onDrop: (acceptedFiles) => {
       const file = acceptedFiles[0];
       if (file) {
         const objectUrl = URL.createObjectURL(file);
         setFotoPreview(objectUrl);
-        setFormData({ ...formData, foto: file }); // Guardar el archivo para enviarlo al servidor
+        setFormData({ ...formData, foto: file });
       }
     },
   });
+
   return (
-    <div>
+    <div className="p-4">
       <form onSubmit={handleSubmit(onSubmit)}>
-        {/* Foto de perfil */}
-        <div className="mb-3">
-          <label htmlFor="foto" className="form-label">
-            Imagen Plato
+        {/* --- Sección de Imagen Minimalista --- */}
+        <div className="mb-4">
+          <label className="form-label text-muted small fw-bold mb-2">
+            <ImageIcon size={14} className="me-1" /> Imagen del Plato
           </label>
+
           <div
             {...getRootProps()}
-            className="dropzone border rounded p-4 text-center justify-center"
-            style={{ cursor: "pointer" }}
+            className={`border rounded-3 d-flex align-items-center justify-content-center p-3 position-relative ${
+              isDragActive
+                ? "border-primary bg-light"
+                : "border-secondary border-opacity-25"
+            }`}
+            style={{
+              borderStyle: "dashed",
+              minHeight: "140px",
+              cursor: "pointer",
+              transition: "all 0.2s ease",
+            }}
           >
-            <div className="text-center d-flex w-50 mx-auto p-0">
-              {fotoPreview && (
+            <input {...getInputProps()} />
+
+            {fotoPreview ? (
+              <div className="text-center w-100">
                 <img
                   src={fotoPreview}
-                  alt="Foto Previsualizado"
-                  className="img-fluid mb-3 mx-auto"
-                  style={{
-                    maxWidth: "150px",
-                    borderRadius: "8px",
-                    border: "2px solid #ddd",
-                  }}
+                  alt="Preview"
+                  className="rounded shadow-sm"
+                  style={{ maxHeight: "120px", objectFit: "cover" }}
                 />
-              )}
-            </div>
-            <input
-              {...getInputProps()}
-              id="foto"
-              name="foto"
-              className="d-none"
-            />
-            <button type="button" className="btn btn-outline-primary mt-2">
-              Seleccionar archivo
-            </button>
-            {!fotoPreview && (
-              <p className="text-muted mt-3">
-                Haz clic o arrastra para cargar el foto
-              </p>
+                <div className="mt-2 text-primary small">
+                  Click para cambiar
+                </div>
+              </div>
+            ) : (
+              <div className="text-center text-muted">
+                <UploadCloud
+                  size={32}
+                  className="mb-2 text-secondary opacity-50"
+                />
+                <p className="small mb-0">Arrastra o haz click para subir</p>
+              </div>
             )}
           </div>
         </div>
-        <div className="row">
-          <div className="col-6">
-            <div className="form-floating mb-3">
+
+        {/* --- Grid de Campos --- */}
+        <div className="row g-3">
+          {/* Categoría */}
+          <div className="col-md-6">
+            <label className="form-label text-muted small fw-bold">
+              Categoría
+            </label>
+            <div className="input-group input-group-sm">
+              <span className="input-group-text bg-light border-end-0 text-muted">
+                <Tags size={16} />
+              </span>
               <select
-                className="form-select"
-                id="categoria"
+                className={`form-select border-start-0 shadow-none ${
+                  errors.categoria ? "is-invalid" : ""
+                }`}
                 {...register("categoria", {
-                  required: "Seleccione una categoria",
+                  required: "Seleccione una categoría",
                 })}
               >
                 <option value="">Seleccione...</option>
-                {categorias.map((categoria) => (
-                  <option value={categoria.id}>{categoria.nombre}</option>
+                {categorias.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.nombre}
+                  </option>
                 ))}
-                {errors.categoria && (
-                  <div className="invalid-feedback">
-                    {errors.categoria.message}
-                  </div>
-                )}
               </select>
-              <label htmlFor="categoria">Categoria</label>
             </div>
+            {errors.categoria && (
+              <div className="text-danger small mt-1">
+                {errors.categoria.message}
+              </div>
+            )}
           </div>
-          <div className="col-6">
-            <div className="form-floating mb-3">
+
+          {/* Nombre */}
+          <div className="col-md-6">
+            <label className="form-label text-muted small fw-bold">
+              Nombre del Plato
+            </label>
+            <div className="input-group input-group-sm">
+              <span className="input-group-text bg-light border-end-0 text-muted">
+                <Utensils size={16} />
+              </span>
               <input
                 type="text"
-                id="nombrePlato"
-                className={`form-control ${errors.nombre ? "is-invalid" : ""}`}
-                placeholder=" "
-                {...register("nombre", {
-                  required: "Campo obligatorio",
-                })}
+                className={`form-control border-start-0 shadow-none ${
+                  errors.nombre ? "is-invalid" : ""
+                }`}
+                placeholder="Ej. Lomo Saltado"
+                {...register("nombre", { required: "Campo obligatorio" })}
               />
-              <label to="nombrePlato">Nombre del plato</label>
-              {errors.nombre && (
-                <div className="invalid-feedback">{errors.nombre.message}</div>
-              )}
             </div>
+            {errors.nombre && (
+              <div className="text-danger small mt-1">
+                {errors.nombre.message}
+              </div>
+            )}
+          </div>
+
+          {/* Precio */}
+          <div className="col-md-12">
+            <label className="form-label text-muted small fw-bold">
+              Precio Unitario
+            </label>
+            <div className="input-group input-group-sm">
+              <span className="input-group-text bg-light border-end-0 text-muted">
+                S/
+              </span>
+              <input
+                type="text"
+                className={`form-control border-start-0 shadow-none ${
+                  errors.precio ? "is-invalid" : ""
+                }`}
+                placeholder="0.00"
+                {...register("precio", {
+                  required: "Requerido",
+                  validate: validatePrecio,
+                })}
+                onInput={handlePrecioInput}
+              />
+            </div>
+            {errors.precio && (
+              <div className="text-danger small mt-1">
+                {errors.precio.message}
+              </div>
+            )}
+          </div>
+
+          {/* Descripción */}
+          <div className="col-12">
+            <label className="form-label text-muted small fw-bold">
+              Descripción
+            </label>
+            <div className="input-group input-group-sm">
+              <span className="input-group-text bg-light border-end-0 text-muted">
+                <AlignLeft size={16} />
+              </span>
+              <input
+                type="text"
+                className={`form-control border-start-0 shadow-none ${
+                  errors.descripcion ? "is-invalid" : ""
+                }`}
+                placeholder="Breve descripción del plato..."
+                {...register("descripcion", { required: "Requerido" })}
+              />
+            </div>
+            {errors.descripcion && (
+              <div className="text-danger small mt-1">
+                {errors.descripcion.message}
+              </div>
+            )}
           </div>
         </div>
 
-        <div className="form-floating mb-3">
-          <input
-            type="text"
-            id="precio"
-            className={`form-control ${errors.precio ? "is-invalid" : ""}`}
-            placeholder=" "
-            {...register("precio", {
-              required: "Este campo es requerido",
-              validate: validatePrecio,
-            })}
-            onInput={handlePrecioInput}
-          />
-          <label to="precio">Precio S/.</label>
-          {errors.precio && (
-            <div className="invalid-feedback">{errors.precio.message}</div>
-          )}
-        </div>
-        <div className="form-floating mb-3">
-          <input
-            type="text"
-            id="descripcion"
-            className={`form-control ${errors.descripcion ? "is-invalid" : ""}`}
-            placeholder=" "
-            {...register("descripcion", {
-              required: "Este campo es requerido",
-            })}
-          />
-          <label to="descripcion">Descripcion</label>
-          {errors.descripcion && (
-            <div className="invalid-feedback">{errors.descripcion.message}</div>
-          )}
-        </div>
-
-        <div className="d-flex justify-content-center mt-4">
-          <button className="btn-cerrar-modal mx-3" onClick={handleCloseModal}>
-            Cerrar
+        {/* --- Footer de Botones --- */}
+        <div className="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+          <button
+            type="button"
+            className="btn-cerrar-modal px-4 rounded-pill"
+            onClick={handleCloseModal}
+          >
+            Cancelar
           </button>
-          <button className="btn-guardar">Guardar Plato</button>
+          <button
+            type="submit"
+            className="btn-guardar btn-dark px-4 rounded-pill"
+          >
+            Guardar Plato
+          </button>
         </div>
       </form>
     </div>

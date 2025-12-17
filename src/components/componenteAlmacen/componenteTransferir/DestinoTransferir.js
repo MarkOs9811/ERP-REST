@@ -137,8 +137,13 @@ export function DestinoTransferir() {
           </div>
         )}
       </div>
-
-      <BotonConfirmar onClick={handleConfirmar} loading={loading} />
+      <button
+        className="btn-realizarPedido w-100 display-7  p-3"
+        onClick={handleConfirmar}
+        disabled={loading}
+      >
+        Tranferir
+      </button>
     </div>
   );
 }

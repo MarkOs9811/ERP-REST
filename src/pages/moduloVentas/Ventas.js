@@ -32,10 +32,7 @@ export function Ventas() {
     queryFn: getVentas,
   });
 
-  if (!ventasData || !Array.isArray(ventasData))
-    return <p>Error: No se encontraron ventas.</p>;
-
-  const ventas = ventasData;
+  const ventas = Array.isArray(ventasData) ? ventasData : [];
   const now = new Date();
   const mesActual = now.getMonth() + 1;
   const anioActual = now.getFullYear();
@@ -167,7 +164,11 @@ export function Ventas() {
           <div className="col-12">
             <div className="row g-3">
               <div className="col-4">
-                <CondicionCarga isLoading={isLoading} isError={isError}>
+                <CondicionCarga
+                  isLoading={isLoading}
+                  isError={isError}
+                  mode="single-card"
+                >
                   <div
                     className="card shadow-sm border-0 p-3 d-flex flex-column justify-content-between"
                     style={{ background: "#f1faf6", minHeight: 120 }}
@@ -195,7 +196,11 @@ export function Ventas() {
                 </CondicionCarga>
               </div>
               <div className="col-4">
-                <CondicionCarga isLoading={isLoading} isError={isError}>
+                <CondicionCarga
+                  isLoading={isLoading}
+                  isError={isError}
+                  mode="single-card"
+                >
                   <div
                     className="card shadow-sm border-0 p-3 d-flex flex-column justify-content-between"
                     style={{ background: "#fff6f6", minHeight: 120 }}
@@ -222,7 +227,11 @@ export function Ventas() {
                 </CondicionCarga>
               </div>
               <div className="col-4">
-                <CondicionCarga isLoading={isLoading} isError={isError}>
+                <CondicionCarga
+                  isLoading={isLoading}
+                  isError={isError}
+                  mode="single-card"
+                >
                   <div
                     className="card shadow-sm border-0 p-3 d-flex flex-column justify-content-between"
                     style={{

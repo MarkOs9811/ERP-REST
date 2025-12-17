@@ -15,9 +15,7 @@ import {
 import {
   Check,
   CheckCheck,
-  CircleMinus,
   Minus,
-  Plus,
   PlusIcon,
   Search,
   Trash2,

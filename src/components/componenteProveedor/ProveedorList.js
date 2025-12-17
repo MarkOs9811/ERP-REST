@@ -12,6 +12,7 @@ import { TablasGenerales } from "../componentesReutilizables/TablasGenerales";
 import { GetProveedores } from "../../service/GetProveedores";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
+import ModalRight from "../componentesReutilizables/ModalRight";
 
 export function ProveedorList({ search, updateList }) {
   const [filterProveedores, setFilterProveedores] = useState([]);
@@ -231,25 +232,20 @@ export function ProveedorList({ search, updateList }) {
       </CondicionCarga>
 
       {/* // modal para editar un proveedor */}
-      <Modal
-        show={isModalOpen}
-        onHide={handleCloseEditarProve}
-        centered
-        size="lg"
-        className="modal-sin-borde"
+      <ModalRight
+        isOpen={isModalOpen}
+        onClose={handleCloseEditarProve}
+        hideFooter={true}
+        title={"Editar proveedor"}
       >
-        <Modal.Header closeButton>
-          <Modal.Title>Actualizar Proveedor</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {/* Pasa handleCloseModal como prop a CATEGORIA */}
+        {({ handleClose }) => (
           <ProveedorEdit
-            handleCloseModal={handleCloseEditarProve}
+            handleCloseModal={handleClose}
             dataProveedor={dataProvee}
             handleProveedorUpdated={handleProveedorUpdated}
           />
-        </Modal.Body>
-      </Modal>
+        )}
+      </ModalRight>
 
       {/* MODAL PARA ELIMINAR */}
       <ModalAlertQuestion

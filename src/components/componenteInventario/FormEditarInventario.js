@@ -42,8 +42,8 @@ export function FormEditarInventario({ data, onCancel }) {
         marca: data.marca || "",
         precio: data.precio != null ? String(data.precio) : "",
         stock: data.stock != null ? String(data.stock) : "",
-        idCategoria: data.categoria?.id || "",
-        idUnidad: data.unidad?.id || "",
+        idCategoria: data.categoria?.id ? String(data.categoria.id) : "",
+        idUnidad: data.unidad?.id ? String(data.unidad.id) : "",
         estado: data.estado != null ? Number(data.estado) : 1,
         foto: null,
       });
@@ -77,6 +77,7 @@ export function FormEditarInventario({ data, onCancel }) {
     retry: 1,
     refetchOnWindowFocus: false,
   });
+
   const {
     data: unidades = [],
     isLoading: loadingUnidades,
@@ -125,7 +126,10 @@ export function FormEditarInventario({ data, onCancel }) {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="p-4">
+    <form
+      onSubmit={handleSubmit(onSubmit, (errors) => console.log(errors))}
+      className="p-4"
+    >
       <div className="row g-3">
         <div className="image flex">
           <div className="image-preview m-auto">
@@ -162,8 +166,9 @@ export function FormEditarInventario({ data, onCancel }) {
             }`}
             {...register("marca", {})}
           />
+
           {errors.marca && (
-            <div className="invalid-feedback">errors.marca.message</div>
+            <div className="invalid-feedback">{errors.marca.message}</div> // ✅ Esto muestra el mensaje real
           )}
         </div>
 
@@ -313,7 +318,7 @@ export function FormEditarInventario({ data, onCancel }) {
           Cancelar
         </button>
         <button type="submit" className="btn-guardar">
-          Guardar
+          Actualizar
         </button>
       </div>
     </form>

@@ -191,7 +191,7 @@ export function CajasList({ search }) {
                       : "Cerrado"
                     : "Deshabilitado"}
                 </span>
-                <span className="ms-auto">{item.sedes.nombre}</span>
+                <span className="ms-auto">{item.sedes?.nombre}</span>
               </div>
             </div>
           </div>
