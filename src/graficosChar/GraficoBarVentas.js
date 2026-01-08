@@ -10,8 +10,8 @@ import {
   Legend,
 } from "chart.js";
 import { useQuery } from "@tanstack/react-query";
-import { getVentas } from "../service/ObtenerVentasDetalle";
-import { CalendarDays, Store } from "lucide-react";
+import { getVentas } from "../service/ObtenerVentasDetalle"; // Asegúrate que la ruta sea correcta
+import { Store } from "lucide-react";
 
 // Registrar módulos necesarios para ChartJS
 ChartJS.register(
@@ -24,7 +24,7 @@ ChartJS.register(
 );
 
 const GraficoBarVentas = () => {
-  // React Query para obtener ventas
+  // React Query para obtener todas las ventas
   const {
     data: listVentas = [],
     isLoading,
@@ -33,23 +33,42 @@ const GraficoBarVentas = () => {
     queryKey: ["ventas"],
     queryFn: getVentas,
   });
-  const totalVentas = Number(
-    listVentas.reduce(
-      (acc, venta) => acc + Number(venta.totalVenta || venta.total || 0),
-      0
-    )
-  );
 
-  // Procesar datos para gráfico de barras
+  // --- NUEVA LÓGICA DE FILTRADO ---
+
+  // 1. Obtener el año actual del sistema
+  const currentYear = new Date().getFullYear();
+
+  // 2. Crear una lista que SOLO tenga ventas de este año
+  const ventasEsteAnio = useMemo(() => {
+    if (!listVentas.length) return [];
+
+    return listVentas.filter((venta) => {
+      const fecha = new Date(venta.created_at);
+      return fecha.getFullYear() === currentYear; // Condición mágica
+    });
+  }, [listVentas, currentYear]);
+
+  // 3. Calcular el total (Usamos 'ventasEsteAnio' para que coincida con el gráfico)
+  const totalVentas = useMemo(() => {
+    return Number(
+      ventasEsteAnio.reduce(
+        (acc, venta) => acc + Number(venta.totalVenta || venta.total || 0),
+        0
+      )
+    );
+  }, [ventasEsteAnio]);
+
+  // 4. Procesar datos para gráfico de barras (Usando 'ventasEsteAnio')
   const chartData = useMemo(() => {
-    if (!listVentas.length) return { labels: [], datasets: [] };
-
+    // Inicializamos array de 12 posiciones en 0
     const monthlyTotals = new Array(12).fill(0);
 
-    listVentas.forEach((venta) => {
+    ventasEsteAnio.forEach((venta) => {
       const fecha = new Date(venta.created_at);
-      const mes = fecha.getMonth(); // 0 = Enero
-      const total = parseFloat(venta.total) || 0;
+      const mes = fecha.getMonth(); // 0 = Enero, 11 = Diciembre
+      const total = parseFloat(venta.total || venta.totalVenta) || 0;
+
       monthlyTotals[mes] += total;
     });
 
@@ -75,7 +94,7 @@ const GraficoBarVentas = () => {
       ],
       datasets: [
         {
-          label: "Ventas por Mes (S/.)",
+          label: `Ventas ${currentYear} (S/.)`, // Agregué el año al label para claridad
           data: roundedTotals,
           backgroundColor: "rgba(75, 126, 192, 0.6)",
           borderColor: "rgba(75, 112, 192, 1)",
@@ -83,17 +102,13 @@ const GraficoBarVentas = () => {
         },
       ],
     };
-  }, [listVentas]);
+  }, [ventasEsteAnio, currentYear]);
 
   const options = {
     responsive: true,
     plugins: {
-      legend: {
-        position: "top",
-      },
-      title: {
-        display: false,
-      },
+      legend: { position: "top" },
+      title: { display: false },
     },
     scales: {
       y: {
@@ -117,14 +132,14 @@ const GraficoBarVentas = () => {
           <Store size={25} className="text-auto" />
         </span>
         <h6 className="mb-1 d-flex flex-column gap-1">
-          <span className="fw-bold">Ventas por mes</span>
+          <span className="fw-bold">Ventas por mes ({currentYear})</span>
           <p className="text-muted small mb-0">
-            Ventas totales agrupadas por mes en el año actual.
+            Ventas totales agrupadas por mes del año actual.
           </p>
         </h6>
         <div className="ms-auto d-flex justify-content-center align-items-center border rounded">
           <div className="d-flex flex-column text-center badge bg-light p-3 align-items-center justify-content-center ">
-            <small className="text-dark">Total ventas</small>
+            <small className="text-dark">Total ventas {currentYear}</small>
             <p className="mb-0 fw-bold text-dark">
               S/. {totalVentas.toFixed(2)}
             </p>

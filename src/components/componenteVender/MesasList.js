@@ -5,6 +5,7 @@ import { setIdPreventaMesa } from "../../redux/mesaSlice";
 import { useQuery } from "@tanstack/react-query";
 import { GetMesasVender } from "../../service/accionesVender/GetMesasVender";
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
+import { Eye, Layers, PlusCircle, Users, UtensilsCrossed } from "lucide-react";
 
 export function MesasList() {
   const navigate = useNavigate();
@@ -66,23 +67,66 @@ export function MesasList() {
         </div>
       </div>
       <CondicionCarga isLoading={loading} isError={error} mode="cards">
-        <div className="mesas-container card-body overflow-auto ">
+        <div className="mesas-container card-body overflow-auto">
           {listaMesas.map((mesa) => (
-            <button
+            <div
               key={mesa.id}
-              className={`mesa-card m-3 ${
+              // Usamos DIV, no BUTTON, para el contenedor padre
+              // Mantenemos tus clases 'mesa-card' y 'm-3'
+              // Agregamos 'd-flex flex-column' para organizar el contenido verticalmente
+              className={`mesa-card m-3 d-flex flex-column justify-content-between ${
                 mesa.estado === 1 ? "disponible" : "en-atencion"
               }`}
-              onClick={() =>
-                mesa.estado === 1
-                  ? handleMesaAddPlato(mesa.id)
-                  : handleShowPedido(mesa.id)
-              }
+              // IMPORTANTE: Quitamos onClick del padre para evitar conflictos
             >
-              <h6 className="mesa-numero">Mesa {mesa.numero}</h6>
-              <p>Piso: {mesa.piso}</p>
-              <p>Capacidad: {mesa.capacidad}</p>
-            </button>
+              {/* --- GRUPO 1: TEXTO E INFORMACIÓN --- */}
+              {/* Este div ya se ve porque tus estilos CSS .mesa-numero y p tienen z-index: 2 */}
+              <div>
+                <h6 className="mesa-numero d-flex align-items-center justify-content-center gap-2">
+                  <UtensilsCrossed size={18} />
+                  Mesa {mesa.numero}
+                </h6>
+
+                {/* Contenedor de detalles */}
+                <div className="mt-2 px-2">
+                  <p className="d-flex align-items-center gap-2 mb-1">
+                    <Layers size={16} className="text-secondary" />
+                    <span>Piso: {mesa.piso}</span>
+                  </p>
+                  <p className="d-flex align-items-center gap-2 mb-0">
+                    <Users size={16} className="text-secondary" />
+                    <span>Capacidad: {mesa.capacidad}</span>
+                  </p>
+                </div>
+              </div>
+
+              {/* --- GRUPO 2: BOTONES DE ACCIÓN --- */}
+              {/* CORRECCIÓN: Agregamos zIndex: 2 y position: relative aquí */}
+              <div
+                className="mt-3 w-100"
+                style={{ position: "relative", zIndex: 2 }}
+              >
+                {mesa.estado === 1 ? (
+                  <button
+                    // Botón "Abrir" (Verde oscuro para resaltar sobre el fondo claro)
+                    className="btn btn-sm btn-light w-100 text-success fw-bold d-flex align-items-center justify-content-center gap-2 shadow-sm border"
+                    onClick={() => handleMesaAddPlato(mesa.id)}
+                  >
+                    <PlusCircle size={18} />
+                    ABRIR
+                  </button>
+                ) : (
+                  <button
+                    // Botón "Ver" (Rojo para resaltar)
+                    className="btn btn-sm btn-light w-100 text-danger fw-bold d-flex align-items-center justify-content-center gap-2 shadow-sm border"
+                    onClick={() => handleShowPedido(mesa.id)}
+                  >
+                    <Eye size={18} />
+                    VER PEDIDO
+                  </button>
+                )}
+              </div>
+            </div>
           ))}
         </div>
       </CondicionCarga>
