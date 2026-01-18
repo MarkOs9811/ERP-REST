@@ -2,7 +2,7 @@ import axiosInstance from "../api/AxiosInstance"; // Ajusta esta ruta según la 
 
 export const getPreventaMesa = async (idMesa, idCaja) => {
   const response = await axiosInstance.get(
-    `/vender/getPreventaMesa/${idMesa}/${idCaja}`
+    `/vender/getPreventaMesa/${idMesa}/${idCaja}`,
   );
   return response.data.data;
 };

@@ -54,12 +54,12 @@
 
 .mesa-card.en-atencion::after {
   background-image: url("../../public/images/img-en-atencion.svg");
-  background-color: #f7a0a0;
+  background-color: #ffc6c6;
   border-left:4px solid #920404;
 }
 .mesa-card.en-atencion:active::after {
   background-image: url("../../public/images/img-en-atencion.svg");
-  background-color: #d17474;
+  background-color: #faa3a3;
   border-left: 4px solid #920404;
 }
 .mesa-card:hover {

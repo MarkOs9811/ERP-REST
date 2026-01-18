@@ -10,8 +10,8 @@ import ToastAlert from "../components/componenteToast/ToastAlert";
 // });
 const axiosInstance = axios.create({
   // baseURL: "https://vv1g8thv-8000.brs.devtunnels.ms/api",
-  // baseURL: "http://erp-api.test/api",
-  baseURL: "http://127.0.0.1:8000/api",
+  baseURL: "http://erp-api.test/api",
+  // baseURL: "http://127.0.0.1:8000/api",
   withCredentials: true,
   headers: {
     Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -44,7 +44,7 @@ axiosInstance.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 // Interceptor de respuestas para manejar errores globalmente
@@ -55,7 +55,7 @@ axiosInstance.interceptors.response.use(
     if (error.response && error.response.status === 429) {
       ToastAlert(
         "error",
-        "Demasiadas solicitudes. Por favor, inténtalo de nuevo más tarde."
+        "Demasiadas solicitudes. Por favor, inténtalo de nuevo más tarde.",
       );
       return Promise.reject(error);
     }
@@ -64,13 +64,13 @@ axiosInstance.interceptors.response.use(
     if (error.response && error.response.status === 401) {
       ToastAlert(
         "error",
-        "Sesión expirada. Por favor, inicia sesión nuevamente."
+        "Sesión expirada. Por favor, inicia sesión nuevamente.",
       );
       window.location.href = "/"; // Redirigir al login si es necesario
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 export default axiosInstance;

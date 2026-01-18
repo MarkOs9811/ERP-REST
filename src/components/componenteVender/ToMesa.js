@@ -26,7 +26,7 @@ export function ToMesa() {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
   const id = useSelector((state) => state.mesa.idPreventaMesa);
   const categoriaFiltroPlatos = useSelector(
-    (state) => state.categoriaFiltroPlatos.estado
+    (state) => state.categoriaFiltroPlatos.estado,
   );
 
   const [isLoadignPedido, setLoadingPedido] = useState(false);
@@ -101,7 +101,7 @@ export function ToMesa() {
 
       const response = await axiosInstance.post(
         "/vender/addPlatosPreVentaMesa",
-        { pedidos: datosPreventa }
+        { pedidos: datosPreventa },
       );
 
       if (response.data.success) {
@@ -294,7 +294,7 @@ export function ToMesa() {
                   {(
                     pedido.mesas?.[id]?.items?.reduce(
                       (acc, item) => acc + item.cantidad * item.precio,
-                      0
+                      0,
                     ) || 0
                   ).toFixed(2)}
                 </span>
@@ -305,7 +305,7 @@ export function ToMesa() {
                 {(
                   (pedido.mesas?.[id]?.items?.reduce(
                     (acc, item) => acc + item.cantidad * item.precio,
-                    0
+                    0,
                   ) || 0) * 0.18
                 ).toFixed(2)}
               </small>
@@ -327,7 +327,7 @@ export function ToMesa() {
                     <h6 className="text-dark mb-0">
                       {pedido.mesas?.[id]?.items?.reduce(
                         (acc, item) => acc + item.cantidad,
-                        0
+                        0,
                       ) || 0}
                     </h6>
                   </div>
@@ -387,7 +387,7 @@ export function ToMesa() {
                   .map((producto) => {
                     const mesaId = id; // Mesa actual desde useParams
                     const isSelected = pedido.mesas[mesaId]?.items.some(
-                      (item) => item.id === producto.id
+                      (item) => item.id === producto.id,
                     );
                     return (
                       <CardPlatos

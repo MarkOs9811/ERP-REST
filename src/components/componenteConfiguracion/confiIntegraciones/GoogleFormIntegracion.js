@@ -4,11 +4,11 @@ import axiosInstance from "../../../api/AxiosInstance";
 import ToastAlert from "../../componenteToast/ToastAlert";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 import { motion } from "framer-motion";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import BotonAnimado from "../../componentesReutilizables/BotonAnimado";
 import { BotonMotionGeneral } from "../../componentesReutilizables/BotonMotionGeneral";
+
 export function GoogleFormIntegracion({ dataIntegracion }) {
   const googleConfig =
     dataIntegracion?.nombre === "Google Service" ? dataIntegracion : null;
@@ -28,6 +28,7 @@ export function GoogleFormIntegracion({ dataIntegracion }) {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm({
     defaultValues,
@@ -35,6 +36,9 @@ export function GoogleFormIntegracion({ dataIntegracion }) {
 
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  // Obtén el valor actual del redirectUrl del formulario
+  const redirectUrlValue = watch("redirectUrl");
 
   const onSubmit = async (data) => {
     try {
@@ -45,7 +49,7 @@ export function GoogleFormIntegracion({ dataIntegracion }) {
           clientId: data.clientId.trim(),
           idSecretaCliente: data.idSecretaCliente.trim(),
           redirectUrl: data.redirectUrl.trim(),
-        }
+        },
       );
       if (response.data.success) {
         ToastAlert("success", "Configuración guardada con éxito");
@@ -67,6 +71,35 @@ export function GoogleFormIntegracion({ dataIntegracion }) {
 
   const isConfigured =
     googleConfig?.valor1?.trim() !== "" && googleConfig?.valor2?.trim() !== "";
+
+  const handleGoogleConnect = () => {
+    // 1. Validaciones existentes
+    if (!redirectUrlValue || redirectUrlValue.trim() === "") {
+      ToastAlert(
+        "error",
+        "Por favor ingresa el Redirect URI antes de conectar",
+      );
+      return;
+    }
+
+    // 2. Limpieza de URL (Tu lógica actual)
+    let urlDestino = redirectUrlValue.trim();
+    if (urlDestino.includes("callback")) {
+      urlDestino = urlDestino.replace("callback", "redirect");
+    } else if (!urlDestino.includes("redirect")) {
+      urlDestino = `${urlDestino}/auth/google/redirect`;
+    }
+
+    const targetCompanyId = googleConfig?.idEmpresa;
+
+    if (targetCompanyId) {
+      urlDestino = `${urlDestino}?target_company=${targetCompanyId}`;
+    } else {
+      console.warn("No se encontró ID de empresa en dataIntegracion");
+    }
+
+    window.location.href = urlDestino;
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="p-3">
@@ -166,41 +199,39 @@ export function GoogleFormIntegracion({ dataIntegracion }) {
           <div className="invalid-feedback">{errors.redirectUrl.message}</div>
         )}
       </div>
+      <div>
+        <small className="text-muted">empresa: {googleConfig.idEmpresa} </small>
+      </div>
 
       <div className="d-flex justify-content-between align-items-center mt-4 pt-3 border-top gap-3">
         {/* --- GRUPO IZQUIERDA: Botón de Conexión --- */}
         {/* Solo se muestra si NO estamos editando */}
         {!isEditing && (
           <BotonMotionGeneral
-            type="button" // <-- ¡Asegúrate que tu componente BotonMotionGeneral pase este 'type'!
+            type="button"
             id="google-connect-btn"
-            onClick={() => {
-              window.location.href =
-                "https://e34f664f69a0.ngrok-free.app/api/auth/google/redirect";
-            }}
+            onClick={handleGoogleConnect}
             icon={<FontAwesomeIcon icon={faGoogle} />}
             text="Conectar Servicio"
+            disabled={!redirectUrlValue || redirectUrlValue.trim() === ""}
           />
         )}
 
         {/* --- GRUPO DERECHA: Botones de Edición/Guardado --- */}
-        {/* Este div siempre está a la derecha */}
         <div className="d-flex justify-content-end gap-2">
           {!isEditing ? (
-            // --- MODO "VISTA" (isEditing = false) ---
             <>
               <BotonMotionGeneral
-                type="button" // <-- ¡Asegúrate que tu componente BotonMotionGeneral pase este 'type'!
+                type="button"
                 onClick={() => setIsEditing(true)}
                 icon={<PenIcon />}
                 text="Editar"
               />
             </>
           ) : (
-            // --- MODO "EDICIÓN" (isEditing = true) ---
             <>
               <button
-                type="button" // <-- También importante para el botón de cancelar
+                type="button"
                 className="btn-cerrar-modal"
                 onClick={() => setIsEditing(false)}
                 disabled={loading}
@@ -208,11 +239,7 @@ export function GoogleFormIntegracion({ dataIntegracion }) {
                 Cancelar
               </button>
 
-              <button
-                type="submit" // <-- Este SÍ es de tipo submit
-                className="btn-guardar"
-                disabled={loading}
-              >
+              <button type="submit" className="btn-guardar" disabled={loading}>
                 {loading ? "Guardando..." : "Guardar"}
               </button>
             </>

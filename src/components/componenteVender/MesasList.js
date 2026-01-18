@@ -10,7 +10,6 @@ import { Eye, Layers, PlusCircle, Users, UtensilsCrossed } from "lucide-react";
 export function MesasList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const {
     data: mesas = [],
     isLoading: loading,
@@ -27,6 +26,7 @@ export function MesasList() {
   };
   const handleShowPedido = (id) => {
     dispatch(setIdPreventaMesa(id));
+
     navigate(`/vender/mesas/preVenta`);
   };
 
@@ -103,13 +103,13 @@ export function MesasList() {
               {/* --- GRUPO 2: BOTONES DE ACCIÓN --- */}
               {/* CORRECCIÓN: Agregamos zIndex: 2 y position: relative aquí */}
               <div
-                className="mt-3 w-100"
+                className="mt-3 w-auto"
                 style={{ position: "relative", zIndex: 2 }}
               >
                 {mesa.estado === 1 ? (
                   <button
                     // Botón "Abrir" (Verde oscuro para resaltar sobre el fondo claro)
-                    className="btn btn-sm btn-light w-100 text-success fw-bold d-flex align-items-center justify-content-center gap-2 shadow-sm border"
+                    className="btn-activar w-auto px-3 "
                     onClick={() => handleMesaAddPlato(mesa.id)}
                   >
                     <PlusCircle size={18} />
@@ -118,7 +118,7 @@ export function MesasList() {
                 ) : (
                   <button
                     // Botón "Ver" (Rojo para resaltar)
-                    className="btn btn-sm btn-light w-100 text-danger fw-bold d-flex align-items-center justify-content-center gap-2 shadow-sm border"
+                    className="btn-eliminar w-auto px-3"
                     onClick={() => handleShowPedido(mesa.id)}
                   >
                     <Eye size={18} />

@@ -105,21 +105,15 @@ export function TakeAsistencia() {
         });
       } else {
         toast.error(
-          error.response?.data?.message || "Error al registrar salida"
+          error.response?.data?.message || "Error al registrar salida",
         );
       }
     }
   };
 
   return (
-    <div
-      className="d-flex justify-content-center align-items-center h-100 "
-      style={{ backgroundColor: "#f0f2f5" }}
-    >
-      <div
-        className="card shadow-lg border-0 p-4 rounded-4 justify-content-center"
-        style={{ width: "100%", maxWidth: "500px" }}
-      >
+    <div className="d-flex justify-content-center align-items-center ">
+      <div className="card  border-0 p-4 rounded-4 justify-content-center h-100">
         <div className="card-header bg-white border-0 text-center mb-3">
           <h4 className="fw-bold text-primary mb-1">
             <i className="fas fa-user-clock me-2"></i> Registro de Asistencia

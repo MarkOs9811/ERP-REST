@@ -36,7 +36,7 @@ export function ToLlevar() {
   const dispatch = useDispatch();
   const pedido = useSelector((state) => state.pedidoLlevar);
   const categoriaFiltroPlatos = useSelector(
-    (state) => state.categoriaFiltroPlatos.estado
+    (state) => state.categoriaFiltroPlatos.estado,
   );
 
   // Obtener productos desde la API
@@ -72,7 +72,6 @@ export function ToLlevar() {
   return (
     <div className=" h-100  bg-transparent">
       <div className="row g-3 h-100 ">
-        {/* Columna de la cuenta */}
         <div className="col-md-3 h-100 ">
           <div className="card shadow-sm flex-grow-1 h-100 d-flex flex-column p-2 ">
             <div className="card-header p-3 text-center border-bottom">
@@ -206,7 +205,7 @@ export function ToLlevar() {
                     {pedido.items
                       .reduce(
                         (acc, item) => acc + item.cantidad * item.precio,
-                        0
+                        0,
                       )
                       .toFixed(2)}
                   </span>
@@ -216,7 +215,7 @@ export function ToLlevar() {
                   {(
                     pedido.items.reduce(
                       (acc, item) => acc + item.cantidad * item.precio,
-                      0
+                      0,
                     ) * 0.18
                   ).toFixed(2)}
                 </small>
@@ -236,7 +235,7 @@ export function ToLlevar() {
                     <h6 className="text-dark mb-0">
                       {pedido.items.reduce(
                         (acc, item) => acc + item.cantidad,
-                        0
+                        0,
                       )}
                     </h6>
                   </div>
@@ -306,7 +305,7 @@ export function ToLlevar() {
                   .map((producto) => {
                     const mesaId = id; // Mesa actual desde useParams
                     const isSelected = pedido.items.some(
-                      (item) => item.id === producto.id
+                      (item) => item.id === producto.id,
                     );
                     return (
                       <CardPlatos
