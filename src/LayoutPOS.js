@@ -1,11 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import RippleWrapper from "./components/componentesReutilizables/RippleWrapper";
-import {
-  HandPlatter,
-  Inbox,
-  LockKeyhole,
-  MessageCircleMore,
-} from "lucide-react";
+import { BikeIcon, HandPlatter, Inbox, LockKeyhole } from "lucide-react";
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faKitchenSet } from "@fortawesome/free-solid-svg-icons";
@@ -23,7 +18,7 @@ export default function LayoutPOS({ children }) {
         <div className="d-flex gap-2 flex-wrap justify-content-between flex-grow-1">
           {/* Mesas */}
           {["atencion al cliente", "administrador"].includes(
-            cargo?.empleado?.cargo?.nombre
+            cargo?.empleado?.cargo?.nombre,
           ) && (
             <RippleWrapper>
               <button
@@ -45,7 +40,7 @@ export default function LayoutPOS({ children }) {
 
           {/* WhatsApp */}
           {["atencion al cliente", "administrador"].includes(
-            cargo?.empleado?.cargo?.nombre
+            cargo?.empleado?.cargo?.nombre,
           ) && (
             <RippleWrapper>
               <button
@@ -55,19 +50,15 @@ export default function LayoutPOS({ children }) {
                 }`}
                 onClick={() => navigate("/vender/pedidosWeb")}
               >
-                <MessageCircleMore
-                  className="text-auto me-1"
-                  height="22px"
-                  width="22px"
-                />
-                WhatsApp
+                <BikeIcon />
+                Delivery
               </button>
             </RippleWrapper>
           )}
 
           {/* Llevar */}
           {["atencion al cliente", "administrador"].includes(
-            cargo?.empleado?.cargo?.nombre
+            cargo?.empleado?.cargo?.nombre,
           ) && (
             <RippleWrapper>
               <button
@@ -85,7 +76,7 @@ export default function LayoutPOS({ children }) {
 
           {/* Cocina */}
           {["cocinero", "administrador"].includes(
-            cargo?.empleado?.cargo?.nombre
+            cargo?.empleado?.cargo?.nombre,
           ) && (
             <RippleWrapper>
               <button
@@ -104,7 +95,7 @@ export default function LayoutPOS({ children }) {
           {/* Botón Cerrar Caja */}
           <div className="ms-auto float-right d-flex gap-2">
             {["atencion al cliente", "administrador"].includes(
-              cargo?.empleado?.cargo?.nombre
+              cargo?.empleado?.cargo?.nombre,
             ) &&
               caja?.estado === "abierto" && (
                 <button

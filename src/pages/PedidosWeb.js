@@ -153,7 +153,7 @@ export function PedidosWeb() {
         ...prev,
         [sourceColumn]: [...copiedSourceItems, movedItem],
         [destColumn]: copiedDestItems.filter(
-          (item) => item.id !== movedItem.id
+          (item) => item.id !== movedItem.id,
         ),
       }));
     }

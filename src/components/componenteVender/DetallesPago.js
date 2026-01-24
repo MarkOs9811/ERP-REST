@@ -67,12 +67,13 @@ export function DetallesPago() {
   });
 
   let preventas = [];
-  // AQUI EJECUTAMOS SI LA LISTA DE PREVENTA ES PARA MESA O PARA LLEVAR EL CUAL DETERMINARÁ
-  // LA LISTA QUE S EVA APAGAR SEA PARA MESA O SI ES PARA LLEVAR
+
   if (estadoTipoVenta === "llevar") {
     preventas = pedidoLlevar.items;
   } else if (estadoTipoVenta === "web") {
-    dispatch(clearPedidoWeb()); // 👀 esto podría dispararse varias veces
+    // ❌ dispatch(clearPedidoWeb());  <-- ¡BORRA ESTA LÍNEA!
+
+    // ✅ Solo leemos los datos que cargamos desde PedidoCard
     preventas = pedidoWeb.items;
   } else if (idMesa && caja?.id) {
     preventas = preventasMesa ?? [];
@@ -83,7 +84,7 @@ export function DetallesPago() {
   const totalPreventa = (preventas ?? [])
     .reduce(
       (acc, item) => acc + item.cantidad * (item.plato?.precio || item.precio),
-      0
+      0,
     )
     .toFixed(2);
 
@@ -206,7 +207,7 @@ export function DetallesPago() {
 
       ToastAlert(
         "error",
-        `Ocurrió un error al realizar la venta: ${errorMessage}`
+        `Ocurrió un error al realizar la venta: ${errorMessage}`,
       );
     }
   };
@@ -256,7 +257,7 @@ export function DetallesPago() {
         if (!numeroDocumento || !nombres || !apellidos) {
           ToastAlert(
             "warning",
-            "Por favor ingrese los campos de boleta (cliente requerido con tarjeta y crédito)"
+            "Por favor ingrese los campos de boleta (cliente requerido con tarjeta y crédito)",
           );
           return;
         }
@@ -319,7 +320,7 @@ export function DetallesPago() {
     if (!metodoPagoFinal || !totalPreventa || !comprobante) {
       ToastAlert(
         "warning",
-        "Por favor seleccione el método de pago y complete todos los campos requeridos."
+        "Por favor seleccione el método de pago y complete todos los campos requeridos.",
       );
       return;
     }
