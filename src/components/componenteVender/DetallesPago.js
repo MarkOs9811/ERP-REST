@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getPreventaMesa } from "../../service/preventaService";
 
@@ -19,6 +19,8 @@ import { DetallePedido } from "./tareasVender/DetallePedido";
 import { RealizarPago } from "./tareasVender/RealizarPago";
 import { clearPedidoWeb } from "../../redux/pedidoWebSlice";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useReactToPrint } from "react-to-print";
+import { TicketImpresion } from "./tareasVender/TicketImpresion";
 
 export function DetallesPago() {
   // VARIABELS EN REDUX SI ES QUE LO HAY
@@ -45,7 +47,18 @@ export function DetallesPago() {
   // PARA OBTENER EL ID DEL PEDIDO UNICAMENTE CUANDO ES PEDIDO WEB
   const { idPedidoWeb } = useParams();
 
-  console.log("id del pedido web" + idPedidoWeb);
+  // DATOS PARA LA IMPRESION
+  const componentRef = useRef();
+  const [datosVenta, setDatosVenta] = useState(null);
+  // Configuración de la impresión
+  const handlePrint = useReactToPrint({
+    contentRef: componentRef,
+    // ESTO ES CLAVE: Solo limpia y navega después de imprimir
+    onAfterPrint: () => {
+      setDatosVenta(null);
+      ejecutarNavegacionFinal();
+    },
+  });
   // REACTK HOOK FORM
   const {
     register,
@@ -176,39 +189,37 @@ export function DetallesPago() {
   const handleShowFactura = (estado) => {
     setCuotas(false);
   };
-
+  const ejecutarNavegacionFinal = () => {
+    queryClient.invalidateQueries(["mesas"]);
+    if (estadoTipoVenta === "llevar") {
+      navigate("/vender/ventasLlevar");
+      dispatch(clearPedidoLlevar());
+    } else if (estadoTipoVenta === "web") {
+      navigate("/vender/pedidosWeb");
+      dispatch(clearPedidoWeb());
+    } else {
+      navigate("/vender/mesas");
+      dispatch(clearPedido());
+    }
+  };
   // ESTAS 3 FUNCIONES SE ENCARGAN DE REALIZAR LA VENTA Y REGISTRAR
   const realizarVentaPago = async (data) => {
     const result = await RealizarVenta(data);
-    if (result.success) {
-      ToastAlert("success", "Venta realizada con éxito");
-      if (estadoTipoVenta == "llevar") {
-        queryClient.invalidateQueries(["mesas"]);
-        navigate("/vender/ventasLlevar");
-        dispatch(clearPedidoLlevar());
-      } else if (estadoTipoVenta == "web") {
-        queryClient.invalidateQueries(["mesas"]);
-        navigate("/vender/pedidosWeb");
-        dispatch(clearPedidoWeb());
-      } else {
-        queryClient.invalidateQueries(["mesas"]);
-        navigate("/vender/mesas");
-        dispatch(clearPedido());
-      }
-    } else {
-      const errorMessage = result.errorDetails
-        ? `Error: ${result.errorDetails.statusText} (${
-            result.errorDetails.status
-          }). Detalles: ${
-            result.errorDetails.data?.message ||
-            "No se proporcionaron detalles adicionales"
-          }`
-        : result.message;
 
-      ToastAlert(
-        "error",
-        `Ocurrió un error al realizar la venta: ${errorMessage}`,
-      );
+    if (result.success) {
+      // 1. Guardar datos en el estado
+      setDatosVenta(result.ticket);
+      console.log("Datos para el ticket:", result.ticket);
+      // 2. Darle un respiro a React para que pinte los datos
+      setTimeout(() => {
+        if (componentRef.current) {
+          handlePrint(); // Aquí se abre la ventana que ya lograste ver
+          ToastAlert("success", "Venta realizada con éxito");
+        }
+      }, 1000); // 1 segundo completo para asegurar que los datos estén ahí
+    } else {
+      // Tu lógica de manejo de errores...
+      ToastAlert("error", "Error al realizar la venta");
     }
   };
   const { loading, error, execute } = useEstadoAsyn(realizarVentaPago);
@@ -388,6 +399,12 @@ export function DetallesPago() {
             loading={loading}
             error={loading}
           />
+          <div style={{ display: "none" }}>
+            <TicketImpresion
+              ref={componentRef}
+              venta={datosVenta || { productos: [] }}
+            />
+          </div>
         </div>
       </div>
     </div>

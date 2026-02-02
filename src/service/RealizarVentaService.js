@@ -4,12 +4,13 @@ export const RealizarVenta = async (data) => {
   try {
     const response = await axiosInstance.post(
       "/vender/preventa/realizarVenta",
-      data
+      data,
     );
     if (response.data.success) {
       return {
         success: true,
-        preventas: response.data.preVenta,
+        ticket: response.data.ticket,
+        message: response.data.message,
       };
     } else {
       return {
