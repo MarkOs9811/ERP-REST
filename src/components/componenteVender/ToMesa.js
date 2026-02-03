@@ -14,13 +14,14 @@ import { GetMesasVender } from "../../service/accionesVender/GetMesasVender";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { setIdPreventaMesa } from "../../redux/mesaSlice";
 import { GetPlatosVender } from "../../service/accionesVender/GetPlatosVender";
-import { Cargando } from "../componentesReutilizables/Cargando";
 // AGREGADO: Importamos el icono Search
-import { Minus, MinusIcon, Plus, Search, Trash2 } from "lucide-react";
-import { useState } from "react";
+import { Minus, Plus, Trash2 } from "lucide-react";
+import { useRef, useState } from "react";
 import BotonAnimado from "../componentesReutilizables/BotonAnimado";
 import { BuscadorPlatos } from "./tareasVender/BuscadorPlatos";
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
+import { useReactToPrint } from "react-to-print";
+import { TicketsPedido } from "./TiketsType/TicketsPedido";
 
 export function ToMesa() {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -81,9 +82,18 @@ export function ToMesa() {
   };
 
   const handleRemovePlatoPreventa = (productoId) => {
-    // Eliminar el plato de la mesa actual
     dispatch(removeItem({ id: productoId, mesaId: id }));
   };
+  // DATOS PARA LA IMPRESION
+  const componentRef = useRef();
+  const [datosVenta, setDatosVenta] = useState(null);
+  // Configuración de la impresión
+  const handlePrint = useReactToPrint({
+    contentRef: componentRef,
+    onAfterPrint: () => {
+      setDatosVenta(null);
+    },
+  });
 
   // FUNCION PARA REALIZAR EL PEDIDO Y VOLVER A MESAS
   const handleAddPlatoPreventaMesas = async () => {
@@ -105,12 +115,19 @@ export function ToMesa() {
       );
 
       if (response.data.success) {
-        ToastAlert("success", response.data.message + " MESA " + id);
-        Object.keys(mesas).forEach((mesaId) => {
-          dispatch(clearPedido(mesaId));
-        });
-        queryClient.invalidateQueries(["mesas"]);
-        navigate(`/vender/mesas`);
+        setDatosVenta(response.data.data);
+
+        setTimeout(() => {
+          if (componentRef.current) {
+            handlePrint(); // Aquí se abre la ventana que ya lograste ver
+            ToastAlert("success", response.data.message + " MESA " + id);
+            Object.keys(mesas).forEach((mesaId) => {
+              dispatch(clearPedido(mesaId));
+            });
+            queryClient.invalidateQueries(["mesas"]);
+            navigate(`/vender/mesas`);
+          }
+        }, 1000);
       } else {
         ToastAlert("error", response.data.message);
       }
@@ -342,6 +359,12 @@ export function ToMesa() {
               >
                 Realizar Pedido
               </BotonAnimado>
+              <div style={{ display: "none" }}>
+                <TicketsPedido
+                  ref={componentRef}
+                  venta={datosVenta || { productos: [] }}
+                />
+              </div>
             </div>
           </div>
         </div>

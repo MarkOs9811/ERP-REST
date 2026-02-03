@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../api/AxiosInstance";
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import ModalAlertQuestion from "../componenteToast/ModalAlertQuestion";
 
 import { addItem, clearPedido } from "../../redux/pedidoSlice";
@@ -28,11 +28,15 @@ import {
   Trash2,
   ShoppingCart,
   CheckCircle,
+  Printer,
 } from "lucide-react";
 import { getPreventaMesa } from "../../service/preventaService";
 import { BuscadorPlatos } from "./tareasVender/BuscadorPlatos";
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
 import BotonAnimado from "../componentesReutilizables/BotonAnimado";
+import { TicketImpresion } from "./TiketsType/TicketImpresion";
+import { useReactToPrint } from "react-to-print";
+import { TicketPreVenta } from "./TiketsType/TicketPreVenta";
 
 export function PreventaMesa() {
   const idMesa = useSelector((state) => state.mesa.idPreventaMesa);
@@ -50,6 +54,17 @@ export function PreventaMesa() {
   const mesas = useSelector((state) => state.pedido.mesas);
   const BASE_URL = process.env.REACT_APP_BASE_URL;
 
+  // DATOS PARA LA IMPRESION
+  const componentRef = useRef();
+  const [datosPreventa, setDatosPreventa] = useState(null);
+  // Configuración de la impresión
+  const handlePrint = useReactToPrint({
+    contentRef: componentRef,
+    onAfterPrint: () => {
+      setDatosPreventa(null);
+    },
+  });
+
   // Preventas desde BD
   const {
     data: preventas = [],
@@ -64,6 +79,20 @@ export function PreventaMesa() {
 
   const mesa = preventas?.[0]?.mesa?.numero;
 
+  const handleImprimirTicket = async () => {
+    const dataActual = preventas?.data || preventas;
+
+    if (dataActual && dataActual.length > 0) {
+      setDatosPreventa(dataActual);
+      if (componentRef.current) {
+        setTimeout(() => {
+          handlePrint();
+        }, 700); // Un pelín más de tiempo para asegurar el render
+      }
+    } else {
+      ToastAlert("error", "No hay platos registrados en esta mesa");
+    }
+  };
   // Platos disponibles
   const {
     data: productos = [],
@@ -79,10 +108,10 @@ export function PreventaMesa() {
 
   // Separar preventas en dos: solicitados y enviados
   const platosSolicitados = preventas.filter(
-    (p) => p.estado !== "entregado" && p.estado !== "completado",
+    (p) => p.estadoPedido?.estado === 0,
   );
   const platosEntregados = preventas.filter(
-    (p) => p.estado === "entregado" || p.estado === "completado",
+    (p) => p.estadoPedido?.estado === 1,
   );
 
   // Items en el carrito (Redux)
@@ -339,7 +368,7 @@ export function PreventaMesa() {
           <div className="card shadow-sm flex-grow-1 h-100 d-flex flex-column p-2">
             <div className="card-header d-flex align-items-center justify-content-between p-0 mb-2">
               <h6 className="mb-0 text-dark fw-bold d-flex align-items-center gap-2">
-                <ShoppingCart size={18} className="text-warning" />A Pedir
+                <ShoppingCart size={18} className="text-dark" />A Pedir
               </h6>
               <span className="badge bg-warning text-dark">
                 {itemsCarrito.length}
@@ -448,7 +477,7 @@ export function PreventaMesa() {
           <div className="card shadow-sm flex-grow-1 h-100 d-flex flex-column p-2">
             {/* SOLICITADOS */}
 
-            <div className="card d-flex  mb-2 flex-row align-items-center p-2 border">
+            <div className="card-header d-flex  mb-2 flex-row align-items-center p-2 border-none">
               <h5 className="mb-0 text-success fw-bold">
                 Mesa {mesa || "---"}
               </h5>
@@ -460,12 +489,12 @@ export function PreventaMesa() {
                 Volver
               </button>
             </div>
-            <div className="card p-2 border mb-2">
+            <div className=" card-body overflow-auto flex-grow-1 p-0 mb-2">
               <h6 className="mb-2 p-3 text-dark fw-bold d-flex align-items-center gap-2 small">
                 <ShoppingCart size={16} />
                 Solicitados
               </h6>
-              <div className=" rounded p-2 bg-light">
+              <div className="">
                 <TablaPlatos
                   items={platosSolicitados}
                   titulo="Platos Solicitados"
@@ -473,9 +502,9 @@ export function PreventaMesa() {
                 />
               </div>
             </div>
-
+            <hr></hr>
             {/* ENTREGADOS */}
-            <div className="card p-2 border  flex-grow-1 d-flex flex-column">
+            <div className="card p-2   flex-grow-1 d-flex flex-column">
               <h6 className="mb-2 p-3 text-dark fw-bold d-flex align-items-center gap-2 small">
                 <CheckCircle size={16} className="text-success" />
                 Entregados
@@ -493,33 +522,48 @@ export function PreventaMesa() {
             </div>
 
             {/* BOTONES DE ACCIÓN */}
-            <div className="mt-3 pt-2 border-top">
-              <div className="row g-2">
+            <div className="card-footer mt-3 pt-2 border-top">
+              <div className="row g-2 d-flex justify-content-center">
                 <div className="col-12">
                   <BotonAnimado
                     className="btn-realizarPedido btn-block w-100 p-3"
                     onClick={() => handleRealizarPago()}
                     disabled={
-                      itemsCarrito.length === 0 &&
-                      platosSolicitados.length === 0
+                      itemsCarrito.length === 0 && platosEntregados.length === 0
                     }
                   >
                     Pagar{" "}
                   </BotonAnimado>
                 </div>
-                <div className="col-6">
+                <div className="col-4">
                   <button
-                    className="btn btn-outline-dark w-100 btn-sm"
+                    className="btn btn-outline-dark w-100  rounded-pill"
                     onClick={() => handleTranferirToMesa()}
                   >
                     <Repeat size={14} className="me-1" />
                     Mover
                   </button>
                 </div>
-                <div className="col-6">
+                <div className="col-4">
                   <button
-                    className="btn btn-outline-danger w-100 btn-sm"
+                    className="btn btn-outline-dark w-100  rounded-pill"
+                    onClick={() => handleImprimirTicket()}
+                  >
+                    <Printer size={14} className="me-1" />
+                    Imprimir
+                  </button>
+                  <div style={{ display: "none" }}>
+                    <TicketPreVenta
+                      ref={componentRef}
+                      dataActual={datosPreventa}
+                    />
+                  </div>
+                </div>
+                <div className="col-4">
+                  <button
+                    className="btn btn-outline-danger w-100  rounded-pill"
                     onClick={() => handleCancelarPedidosQuestion()}
+                    disabled={platosEntregados.length >= 1}
                   >
                     <BanIcon size={14} className="me-1" />
                     Cancelar

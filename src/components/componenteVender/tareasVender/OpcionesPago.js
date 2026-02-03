@@ -205,6 +205,20 @@ export function OpcionesPago(props) {
             >
               <ReceiptText color="auto" /> Boleta
             </button>
+            {/* Boleta siempre visible */}
+            <button
+              type="button"
+              className={`boton-opcion-pago p-3 w-50 ${
+                comprobante === "S" ? "btn-seleccionado" : "btn-outline-dark"
+              }`}
+              onClick={() => {
+                handleShowFactura(false);
+                handleShowDatosClientes(false);
+                handleSlectComprobante("S");
+              }}
+            >
+              <ReceiptText color="auto" /> Boleta Simple
+            </button>
 
             {/* Factura visible solo si Sunat está habilitado */}
             {estadoSunat?.estado === 1 ? (
@@ -244,7 +258,7 @@ export function OpcionesPago(props) {
                   setTipoDocumento,
                   setValue,
                   "tipo_documento",
-                  [{ name: "numero_documento", setter: setNumeroDocumento }]
+                  [{ name: "numero_documento", setter: setNumeroDocumento }],
                 )}
                 style={{ border: "1px solid black" }}
               >
@@ -294,7 +308,7 @@ export function OpcionesPago(props) {
                   setValue,
                   "numero_documento",
                   /^\d*$/,
-                  tipoDocumento === "DNI" ? 8 : 10
+                  tipoDocumento === "DNI" ? 8 : 10,
                 )}
                 style={{ border: "1px solid black" }}
               />

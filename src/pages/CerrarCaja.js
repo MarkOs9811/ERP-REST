@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import ModalAlertQuestion from "../components/componenteToast/ModalAlertQuestion";
 import axiosInstance from "../api/AxiosInstance";
@@ -28,6 +28,8 @@ import {
 } from "lucide-react";
 import { cerrarCaja } from "../redux/cajaSlice";
 import { useDispatch } from "react-redux";
+import { useReactToPrint } from "react-to-print";
+import { TicketCerrarCaja } from "../components/componenteVender/TiketsType/TicketCerrarCaja";
 
 export const fetchCajaClose = async (cajaId) => {
   try {
@@ -70,7 +72,30 @@ export function CerrarCaja() {
     queryFn: () => fetchCajaClose(caja?.id),
     enabled: !!caja?.id,
   });
-
+  // DATOS PARA LA IMPRESION
+  const componentRef = useRef();
+  const [datosCerrarCaja, setDatosCerrarCaja] = useState(null);
+  // Configuración de la impresión
+  const handlePrint = useReactToPrint({
+    contentRef: componentRef,
+    onAfterPrint: () => {
+      setDatosCerrarCaja(null);
+    },
+  });
+  const handleImprimirCaja = async () => {
+    const dataActual = cajaData?.data || cajaData;
+    console.log("Datos para imprimir cierre de caja:", dataActual);
+    if (dataActual) {
+      setDatosCerrarCaja(dataActual);
+      if (componentRef.current) {
+        setTimeout(() => {
+          handlePrint();
+        }, 700); // Un pelín más de tiempo para asegurar el render
+      }
+    } else {
+      ToastAlert("error", "No hay platos registrados en esta mesa");
+    }
+  };
   useEffect(() => {
     if (cajaData?.totalVenta !== undefined) {
       const montoVendido = Number(cajaData.totalVenta).toFixed(2);
@@ -392,6 +417,7 @@ export function CerrarCaja() {
                 <div className="card-footer bg-transparent border-0 pt-0">
                   <div className="d-flex flex-column gap-3">
                     <BotonAnimado
+                      onClick={handleImprimirCaja}
                       loading={isLoading}
                       error={error}
                       className="btn btn-outline-dark px-4 py-3 rounded-3 fw-semibold border-2"
@@ -401,6 +427,12 @@ export function CerrarCaja() {
                         Solo Imprimir
                       </span>
                     </BotonAnimado>
+                    <div style={{ display: "none" }}>
+                      <TicketCerrarCaja
+                        ref={componentRef}
+                        cajaData={datosCerrarCaja}
+                      />
+                    </div>
 
                     <BotonAnimado
                       loading={isLoading}

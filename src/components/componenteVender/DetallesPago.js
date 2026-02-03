@@ -20,7 +20,7 @@ import { RealizarPago } from "./tareasVender/RealizarPago";
 import { clearPedidoWeb } from "../../redux/pedidoWebSlice";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useReactToPrint } from "react-to-print";
-import { TicketImpresion } from "./tareasVender/TicketImpresion";
+import { TicketImpresion } from "./TiketsType/TicketImpresion";
 
 export function DetallesPago() {
   // VARIABELS EN REDUX SI ES QUE LO HAY
@@ -50,6 +50,7 @@ export function DetallesPago() {
   // DATOS PARA LA IMPRESION
   const componentRef = useRef();
   const [datosVenta, setDatosVenta] = useState(null);
+  const [nombreReferencia, setNombreCliente] = useState("");
   // Configuración de la impresión
   const handlePrint = useReactToPrint({
     contentRef: componentRef,
@@ -203,13 +204,13 @@ export function DetallesPago() {
     }
   };
   // ESTAS 3 FUNCIONES SE ENCARGAN DE REALIZAR LA VENTA Y REGISTRAR
-  const realizarVentaPago = async (data) => {
+  const realizarVentaPago = async (data, nombreReferencia) => {
     const result = await RealizarVenta(data);
 
     if (result.success) {
       // 1. Guardar datos en el estado
       setDatosVenta(result.ticket);
-      console.log("Datos para el ticket:", result.ticket);
+      setNombreCliente(nombreReferencia);
       // 2. Darle un respiro a React para que pinte los datos
       setTimeout(() => {
         if (componentRef.current) {
@@ -224,7 +225,7 @@ export function DetallesPago() {
   };
   const { loading, error, execute } = useEstadoAsyn(realizarVentaPago);
 
-  const handleCrearJson = async () => {
+  const handleCrearJson = async (nombreReferenciaPrincipal) => {
     let datosCliente = {}; // Objeto independiente para los datos del cliente
     let metodoPagoFinal = "";
 
@@ -273,6 +274,12 @@ export function DetallesPago() {
           return;
         }
       }
+    } else if (comprobante === "S") {
+      // Boleta simple no requiere datos del cliente
+      datosCliente = {
+        nombre: nombreReferenciaPrincipal || "CLIENTE GENERICO",
+        documento: "00000000",
+      };
     }
 
     // Inicializar variables
@@ -336,7 +343,7 @@ export function DetallesPago() {
       return;
     }
 
-    await execute(data);
+    await execute(data, nombreReferenciaPrincipal);
   };
 
   // =======================================================================
@@ -403,6 +410,7 @@ export function DetallesPago() {
             <TicketImpresion
               ref={componentRef}
               venta={datosVenta || { productos: [] }}
+              cliente={nombreReferencia}
             />
           </div>
         </div>
