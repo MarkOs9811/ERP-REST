@@ -106,7 +106,7 @@ export function ToLlevar() {
                             {/* COLUMNA 1: Nombre y Precio Unitario */}
                             <td className="ps-3 py-3">
                               <div className="d-flex flex-column">
-                                <span className="fw-bold text-dark fs-6">
+                                <span className="fw-bold  small">
                                   {item.nombre}
                                 </span>
                                 <span className="text-muted small">
@@ -268,8 +268,8 @@ export function ToLlevar() {
 
         {/* Columna de los productos */}
         <div className="col-md-9 h-100">
-          <div className="card shadow-sm  flex-grow-1 h-100  p-0">
-            <div className="card-header d-flex justify-content-between align-items-center bg-light text-dark p-3">
+          <div className="card shadow-sm  flex-grow-1 h-100  p-0 m-0 overflow-auto">
+            <div className="card-header d-flex justify-content-between align-items-center bg-light text-dark m-0 p-3">
               <div className="d-flex align-items-center gap-3 w-100">
                 <h4 className="mb-0 text-dark ">Platos</h4>
 

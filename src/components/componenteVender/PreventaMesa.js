@@ -14,7 +14,7 @@ import { TransferirToMesa } from "./tareasVender/TransferirToMesa";
 import { setIdPreventaMesa } from "../../redux/mesaSlice";
 import { setEstado } from "../../redux/tipoVentaSlice";
 import { CategoriaPlatos } from "./tareasVender/CategoriaPlatos";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { GetPlatosVender } from "../../service/accionesVender/GetPlatosVender";
 import {
   BanIcon,
@@ -226,6 +226,43 @@ export function PreventaMesa() {
     navigate("/vender/mesas/detallesPago");
   };
 
+  // Mutations para aumentar/disminuir cantidad en preventa (solicitados)
+  const aumentarMutation = useMutation({
+    mutationFn: async (idPlato) => {
+      const resp = await axiosInstance.get(
+        `/vender/preventa/preventeMesaAumentar/${idPlato}/${idMesa}`,
+      );
+      return resp.data;
+    },
+    onSuccess: (data) => {
+      // if (data?.success) {
+      //   ToastAlert("success", data.message || "Cantidad aumentada");
+      // }
+      queryClient.invalidateQueries(["preventaMesa", idMesa, caja?.id]);
+    },
+    onError: (err) => {
+      ToastAlert("error", "Error al aumentar: " + err.message);
+    },
+  });
+
+  const disminuirMutation = useMutation({
+    mutationFn: async (idPlato) => {
+      const resp = await axiosInstance.get(
+        `/vender/preventa/preventeMesaDiminuir/${idPlato}/${idMesa}`,
+      );
+      return resp.data;
+    },
+    onSuccess: (data) => {
+      // if (data?.success) {
+      //   ToastAlert("success", data.message || "Cantidad disminuida");
+      // }
+      queryClient.invalidateQueries(["preventaMesa", idMesa, caja?.id]);
+    },
+    onError: (err) => {
+      ToastAlert("error", "Error al disminuir: " + err.message);
+    },
+  });
+
   // Componente para mostrar tabla de platos
   const TablaPlatos = ({ items, titulo, tipo = "carrito" }) => {
     if (items.length === 0) {
@@ -319,6 +356,39 @@ export function PreventaMesa() {
                           className="btn btn-sm btn-link text-decoration-none text-dark p-0"
                           style={{ width: "20px", height: "20px" }}
                           onClick={() => handleAddPlatoPreventa(item)}
+                        >
+                          <Plus size={12} />
+                        </button>
+                      </div>
+                    ) : tipo === "solicitados" ? (
+                      <div
+                        className="d-flex align-items-center justify-content-center bg-light rounded-pill px-1 py-0 mx-auto"
+                        style={{
+                          width: "60px",
+                          border: "1px solid #e0e0e0",
+                        }}
+                      >
+                        <button
+                          type="button"
+                          className="btn btn-sm btn-link text-decoration-none text-dark p-0"
+                          style={{ width: "20px", height: "20px" }}
+                          onClick={() => disminuirMutation.mutate(item.idPlato)}
+                          disabled={disminuirMutation.isLoading}
+                        >
+                          <Minus size={12} />
+                        </button>
+                        <span
+                          className="fw-bold mx-1"
+                          style={{ fontSize: "0.85rem" }}
+                        >
+                          {item.cantidad}
+                        </span>
+                        <button
+                          type="button"
+                          className="btn btn-sm btn-link text-decoration-none text-dark p-0"
+                          style={{ width: "20px", height: "20px" }}
+                          onClick={() => aumentarMutation.mutate(item.idPlato)}
+                          disabled={aumentarMutation.isLoading}
                         >
                           <Plus size={12} />
                         </button>
@@ -524,6 +594,7 @@ export function PreventaMesa() {
             {/* BOTONES DE ACCIÓN */}
             <div className="card-footer mt-3 pt-2 border-top">
               <div className="row g-2 d-flex justify-content-center">
+                {/* Botón Pagar (Sin cambios) */}
                 <div className="col-12">
                   <BotonAnimado
                     className="btn-realizarPedido btn-block w-100 p-3"
@@ -532,25 +603,35 @@ export function PreventaMesa() {
                       itemsCarrito.length === 0 && platosEntregados.length === 0
                     }
                   >
-                    Pagar{" "}
+                    Pagar
                   </BotonAnimado>
                 </div>
+
+                {/* Botón Mover (CORREGIDO) */}
                 <div className="col-4">
                   <button
-                    className="btn btn-outline-dark w-100  rounded-pill"
+                    className="btn btn-outline-dark w-100 rounded-pill d-flex align-items-center justify-content-center px-1"
                     onClick={() => handleTranferirToMesa()}
+                    title="Mover"
                   >
-                    <Repeat size={14} className="me-1" />
-                    Mover
+                    <Repeat size={18} />
+                    {/* CAMBIO AQUÍ: d-lg-inline */}
+                    <span className="d-none d-lg-inline ms-1 small">Mover</span>
                   </button>
                 </div>
+
+                {/* Botón Imprimir (CORREGIDO) */}
                 <div className="col-4">
                   <button
-                    className="btn btn-outline-dark w-100  rounded-pill"
+                    className="btn btn-outline-dark w-100 rounded-pill d-flex align-items-center justify-content-center px-1"
                     onClick={() => handleImprimirTicket()}
+                    title="Imprimir"
                   >
-                    <Printer size={14} className="me-1" />
-                    Imprimir
+                    <Printer size={18} />
+                    {/* CAMBIO AQUÍ: d-lg-inline */}
+                    <span className="d-none d-lg-inline ms-1 small">
+                      Imprimir
+                    </span>
                   </button>
                   <div style={{ display: "none" }}>
                     <TicketPreVenta
@@ -559,14 +640,20 @@ export function PreventaMesa() {
                     />
                   </div>
                 </div>
+
+                {/* Botón Cancelar (CORREGIDO) */}
                 <div className="col-4">
                   <button
-                    className="btn btn-outline-danger w-100  rounded-pill"
+                    className="btn btn-outline-danger w-100 rounded-pill d-flex align-items-center justify-content-center px-1"
                     onClick={() => handleCancelarPedidosQuestion()}
                     disabled={platosEntregados.length >= 1}
+                    title="Cancelar"
                   >
-                    <BanIcon size={14} className="me-1" />
-                    Cancelar
+                    <BanIcon size={18} />
+                    {/* CAMBIO AQUÍ: d-lg-inline */}
+                    <span className="d-none d-lg-inline ms-1 small">
+                      Cancelar
+                    </span>
                   </button>
                 </div>
               </div>

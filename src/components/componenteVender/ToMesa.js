@@ -371,8 +371,8 @@ export function ToMesa() {
 
         {/* Columna de los productos */}
         <div className="col-md-9 h-100">
-          <div className="card shadow-sm flex-grow-1 h-100">
-            <div className="card-header d-flex flex-wrap bg-white  ">
+          <div className="card shadow-sm flex-grow-1 h-100 overflow-auto">
+            <div className="card-header d-flex justify-content-between align-items-center bg-light text-dark m-0 p-3">
               <div className="d-flex align-items-center gap-2 w-100">
                 <h4 className="mb-0 text-dark">Platos</h4>
 
