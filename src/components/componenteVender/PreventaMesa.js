@@ -47,6 +47,7 @@ export function PreventaMesa() {
 
   const caja = useSelector((state) => state.caja.caja);
   const [searchTerm, setSearchTerm] = useState("");
+  const [deletingProductId, setDeletingProductId] = useState(null);
 
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
@@ -126,6 +127,7 @@ export function PreventaMesa() {
   };
 
   const handleRemoveFromPreventaByPlato = async (idProducto) => {
+    setDeletingProductId(idProducto);
     try {
       const response = await axiosInstance.delete(
         `/vender/preventa/deletePlatoPreventa/${idProducto}/${idMesa}`,
@@ -138,6 +140,8 @@ export function PreventaMesa() {
       }
     } catch (error) {
       console.log("error", error);
+    } finally {
+      setDeletingProductId(null);
     }
   };
 
@@ -413,8 +417,17 @@ export function PreventaMesa() {
                         type="button"
                         className="btn btn-sm btn-outline-danger border-0 bg-transparent p-0"
                         onClick={() => handleRemovePlatoPreventa(item.id)}
+                        disabled={deletingProductId === item.id}
                       >
-                        <Trash2 size={14} />
+                        {deletingProductId === item.id ? (
+                          <Repeat
+                            size={14}
+                            className="spinner"
+                            style={{ animation: "spin 1s linear infinite" }}
+                          />
+                        ) : (
+                          <Trash2 size={14} />
+                        )}
                       </button>
                     </td>
                   )}

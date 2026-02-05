@@ -1,6 +1,7 @@
 import { capitalizeFirstLetter } from "../../../hooks/FirstLetterUp";
 
 export function ModalCuerpo({ selectedPedido }) {
+  console.log("Pedido seleccionado en ModalCuerpo:", selectedPedido);
   return (
     <div className="card-body h-100 p-0">
       <ul className=" m-3">
@@ -42,7 +43,7 @@ export function ModalCuerpo({ selectedPedido }) {
                 {selectedPedido.detalles_pedido
                   .reduce(
                     (total, detalle) => total + parseFloat(detalle.precio),
-                    0
+                    0,
                   )
                   .toFixed(2)}
               </strong>

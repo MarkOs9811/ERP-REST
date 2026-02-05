@@ -215,3 +215,13 @@ body.dark-theme .table-borderless tbody tr:hover td {
   color: #fff !important;
 }
 /* ========== FIN TEMA OSCURO PLATOS ESTILO MODERNO ========== */
+
+/* Animación para el icono de reload/spinner */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

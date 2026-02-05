@@ -190,12 +190,18 @@ export function DetallesPago() {
   const handleShowFactura = (estado) => {
     setCuotas(false);
   };
-  const ejecutarNavegacionFinal = () => {
+  const ejecutarNavegacionFinal = async () => {
     queryClient.invalidateQueries(["mesas"]);
     if (estadoTipoVenta === "llevar") {
       navigate("/vender/ventasLlevar");
       dispatch(clearPedidoLlevar());
     } else if (estadoTipoVenta === "web") {
+      // Forzar refetch inmediato de todas las queries de pedidos web
+      await Promise.all([
+        queryClient.refetchQueries(["pedidosPendientes"]),
+        queryClient.refetchQueries(["listaPedidosProceso"]),
+        queryClient.refetchQueries(["listaPedidosListos"]),
+      ]);
       navigate("/vender/pedidosWeb");
       dispatch(clearPedidoWeb());
     } else {

@@ -10,6 +10,10 @@ import {
   PrinterIcon,
   UserRound,
 } from "lucide-react";
+import { useRef, useState } from "react";
+import React from "react";
+import { useReactToPrint } from "react-to-print";
+import { TicketPedidosWeb } from "./TiketsType/TicketPedidosWeb";
 
 const PedidoCard = ({ pedido, onOpenModal }) => {
   // 1. Inicializas el hook
@@ -21,9 +25,41 @@ const PedidoCard = ({ pedido, onOpenModal }) => {
     procesarPago(pedido);
   };
 
+  const componentRef = useRef();
+  const [datosVenta, setDatosVenta] = useState(null);
+  const handlePrint = useReactToPrint({
+    contentRef: componentRef,
+    onAfterPrint: () => {
+      setDatosVenta(null);
+    },
+  });
+
+  const ImprimirPedidoWeb = () => {
+    const datosParaImprimir = {
+      codigo_pedido: pedido.codigo_pedido,
+      nombre_cliente: pedido.nombre_cliente || "Cliente",
+      numero_cliente: pedido.numero_cliente,
+      estado_pago: pedido.estado_pago,
+      productos: (pedido.detalles_pedido || []).map((detalle) => ({
+        nombre: detalle.plato?.nombre || "Producto",
+        precio: detalle.precio || detalle.plato?.precio || 0,
+        cantidad: detalle.cantidad || 1,
+      })),
+      total:
+        pedido.detalles_pedido?.reduce(
+          (total, detalle) => total + parseFloat(detalle.precio),
+          0,
+        ) || 0,
+      fecha: pedido.fecha || new Date().toLocaleDateString(),
+    };
+    setDatosVenta(datosParaImprimir);
+    setTimeout(() => {
+      handlePrint();
+    }, 100);
+  };
   const estadoClases = {
     3: {
-      bgColor: "bg-light",
+      bgColor: "#fff3cd",
       icono: <AlarmClock color="#ffc100" size={16} />,
       botones: (
         <div className="d-flex flex-column align-items-center justify-content-center gap-2 w-100 h-100">
@@ -34,19 +70,26 @@ const PedidoCard = ({ pedido, onOpenModal }) => {
       ),
     },
     4: {
-      bgColor: "bg-light",
+      bgColor: "#ffe2e2",
       icono: <AlarmClock color="#007bff" size={16} />,
       botones: (
         <div className="d-flex flex-column align-items-center justify-content-center gap-2 w-100 h-100">
-          <button className="btn-principal p-1">
+          <button
+            className="btn-principal p-1"
+            onClick={ImprimirPedidoWeb}
+            type="button"
+          >
             <Printer className="text-auto" />
           </button>
+          <div style={{ display: "none" }}>
+            <TicketPedidosWeb ref={componentRef} dataActual={datosVenta} />
+          </div>
           <NotificacionBtn pedido={pedido} className="text-auto" />
         </div>
       ),
     },
     5: {
-      bgColor: "bg-light",
+      bgColor: "#def8e4",
       icono: <CheckCheck color="#28a745" size={16} />,
       botones: (
         <div className="d-flex flex-column align-items-center justify-content-center gap-2 w-100 h-100">
@@ -57,9 +100,12 @@ const PedidoCard = ({ pedido, onOpenModal }) => {
           >
             <CheckCheckIcon className="text-auto" />
           </button>
-          <button className="btn-principal p-1">
+          <button className="btn-principal p-1" onClick={ImprimirPedidoWeb}>
             <PrinterIcon className="text-auto" />
           </button>
+          <div style={{ display: "none" }}>
+            <TicketPedidosWeb ref={componentRef} dataActual={datosVenta} />
+          </div>
           <NotificacionBtn pedido={pedido} />
         </div>
       ),
@@ -72,6 +118,7 @@ const PedidoCard = ({ pedido, onOpenModal }) => {
     <div
       className={`mb-2 rounded position-relative overflow-hidden shadow-sm ${estadoActual.bgColor}`}
       style={{
+        background: estadoActual.bgColor,
         borderLeft: `4px solid ${
           pedido.estado_pedido === 3
             ? "#ffc013"

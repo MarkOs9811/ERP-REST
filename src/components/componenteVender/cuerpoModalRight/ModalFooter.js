@@ -1,16 +1,15 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { useReactToPrint } from "react-to-print";
+import { TicketPedidosWeb } from "../TiketsType/TicketPedidosWeb";
 import NotificacionBtn from "../../componentesReutilizables/componentesPedidosWeb/NotificacionBtn";
 import {
   BadgeCheck,
   CalendarClock,
   CheckCheck,
-  CookingPot,
   Megaphone,
   Printer,
-  ReceiptText,
   MapPin, // Importamos ícono de mapa
   ExternalLink,
-  ReceiptTextIcon,
   CookingPotIcon, // Importamos ícono de enlace externo
 } from "lucide-react";
 import { useProcesarPagoWeb } from "../../../hooks/VenderDeliveryHook/UseProcesarPagoWeb";
@@ -18,8 +17,41 @@ import { useProcesarPagoWeb } from "../../../hooks/VenderDeliveryHook/UseProcesa
 export function ModalFooter({ selectedPedido }) {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
   const [modalOpen, setModalOpen] = useState(false);
+  const [datosVenta, setDatosVenta] = useState(null);
+  const componentRef = useRef();
 
   const { procesarPago } = useProcesarPagoWeb();
+
+  const handlePrint = useReactToPrint({
+    contentRef: componentRef,
+    onAfterPrint: () => {
+      setDatosVenta(null);
+    },
+  });
+
+  const ImprimirPedidoWeb = () => {
+    const datosParaImprimir = {
+      codigo_pedido: selectedPedido.codigo_pedido,
+      nombre_cliente: selectedPedido.nombre_cliente || "Cliente",
+      numero_cliente: selectedPedido.numero_cliente,
+      estado_pago: selectedPedido.estado_pago,
+      productos: (selectedPedido.detalles_pedido || []).map((detalle) => ({
+        nombre: detalle.plato?.nombre || "Producto",
+        precio: detalle.precio || detalle.plato?.precio || 0,
+        cantidad: detalle.cantidad || 1,
+      })),
+      total:
+        selectedPedido.detalles_pedido?.reduce(
+          (total, detalle) => total + parseFloat(detalle.precio),
+          0,
+        ) || 0,
+      fecha: selectedPedido.fecha || new Date().toLocaleDateString(),
+    };
+    setDatosVenta(datosParaImprimir);
+    setTimeout(() => {
+      handlePrint();
+    }, 100);
+  };
 
   // 2. Tu función del botón se reduce a esto:
   const handleRealizarPago = () => {
@@ -90,9 +122,16 @@ export function ModalFooter({ selectedPedido }) {
 
           {selectedPedido.estado_pedido === 4 && (
             <>
-              <button className="btn-principal p-1 ms-auto">
+              <button
+                className="btn-principal p-1 ms-auto"
+                onClick={ImprimirPedidoWeb}
+                type="button"
+              >
                 <Printer />
               </button>
+              <div style={{ display: "none" }}>
+                <TicketPedidosWeb ref={componentRef} dataActual={datosVenta} />
+              </div>
               <NotificacionBtn pedido={selectedPedido} />
             </>
           )}
@@ -106,9 +145,16 @@ export function ModalFooter({ selectedPedido }) {
               >
                 <CheckCheck /> Pagar
               </button>
-              <button className="btn-principal ms-2  p-1 ms-auto">
+              <button
+                className="btn-principal ms-2  p-1 ms-auto"
+                onClick={ImprimirPedidoWeb}
+                type="button"
+              >
                 <Printer />
               </button>
+              <div style={{ display: "none" }}>
+                <TicketPedidosWeb ref={componentRef} dataActual={datosVenta} />
+              </div>
 
               <NotificacionBtn pedido={selectedPedido} />
             </>

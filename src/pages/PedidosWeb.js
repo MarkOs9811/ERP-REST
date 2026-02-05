@@ -25,7 +25,7 @@ export function PedidosWeb() {
   } = useQuery({
     queryKey: ["listaPedidosProceso"],
     queryFn: getPedidosEnProceso,
-    retry: 1, // Intentar solo 1 vez en caso de error
+    retry: 1,
     refetchOnWindowFocus: false,
   });
 
@@ -36,7 +36,7 @@ export function PedidosWeb() {
   } = useQuery({
     queryKey: ["listaPedidosListos"],
     queryFn: getPedidosListos,
-    retry: 1, // Intentar solo 1 vez en caso de error
+    retry: 1,
     refetchOnWindowFocus: false,
   });
 
@@ -47,7 +47,7 @@ export function PedidosWeb() {
   } = useQuery({
     queryKey: ["pedidosPendientes"],
     queryFn: getPedidosPendientes,
-    retry: 1, // Intentar solo 1 vez en caso de error
+    retry: 1,
     refetchOnWindowFocus: false,
   });
 
@@ -145,9 +145,7 @@ export function PedidosWeb() {
         idPedido: movedItem.id,
         nuevoEstado: nuevoEstado, // Ahora es un número
       });
-      console.log(`✅ Pedido ${movedItem.id} cambiado a estado ${nuevoEstado}`);
     } catch (error) {
-      console.error("❌ Error al actualizar el estado del pedido:", error);
       // Opcional: Revertir el estado si la actualización falla
       setPedidos((prev) => ({
         ...prev,

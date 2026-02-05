@@ -25,7 +25,7 @@ root.render(
         <App />
       </Provider>
     </QueryClientProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );
 
 reportWebVitals();
