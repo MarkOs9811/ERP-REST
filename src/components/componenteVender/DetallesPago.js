@@ -211,22 +211,34 @@ export function DetallesPago() {
   };
   // ESTAS 3 FUNCIONES SE ENCARGAN DE REALIZAR LA VENTA Y REGISTRAR
   const realizarVentaPago = async (data, nombreReferencia) => {
-    const result = await RealizarVenta(data);
+    try {
+      // Llamada al backend
+      const result = await RealizarVenta(data);
 
-    if (result.success) {
-      // 1. Guardar datos en el estado
-      setDatosVenta(result.ticket);
-      setNombreCliente(nombreReferencia);
-      // 2. Darle un respiro a React para que pinte los datos
-      setTimeout(() => {
-        if (componentRef.current) {
-          handlePrint(); // Aquí se abre la ventana que ya lograste ver
-          ToastAlert("success", "Venta realizada con éxito");
-        }
-      }, 1000); // 1 segundo completo para asegurar que los datos estén ahí
-    } else {
-      // Tu lógica de manejo de errores...
-      ToastAlert("error", "Error al realizar la venta");
+      if (result.success) {
+        // --- CASO DE ÉXITO ---
+        setDatosVenta(result.ticket);
+        setNombreCliente(nombreReferencia);
+
+        setTimeout(() => {
+          if (componentRef.current) {
+            handlePrint();
+            ToastAlert("success", "Venta realizada con éxito");
+          }
+        }, 1000);
+      } else {
+        // --- CASO DE ERROR LÓGICO (El backend respondió, pero dijo success: false) ---
+        // Aquí capturas: "Método de pago no encontrado", "Su código no pertenece...", etc.
+        const mensajeDelBackend =
+          result.message || "Error desconocido al realizar la venta";
+        ToastAlert("error", mensajeDelBackend);
+      }
+    } catch (error) {
+      const mensajeCritico =
+        error.response?.data?.message ||
+        error.message ||
+        "Ocurrió un error inesperado";
+      ToastAlert("error", mensajeCritico);
     }
   };
   const { loading, error, execute } = useEstadoAsyn(realizarVentaPago);
