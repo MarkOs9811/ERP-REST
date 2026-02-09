@@ -97,7 +97,7 @@ export function ToMesa() {
 
   // FUNCION PARA REALIZAR EL PEDIDO Y VOLVER A MESAS
   const handleAddPlatoPreventaMesas = async () => {
-    setLoadingPedido(true); // 1. Iniciamos carga
+    setLoadingPedido(true); // 1. Bloqueamos botón
 
     try {
       const datosPreventa =
@@ -119,7 +119,7 @@ export function ToMesa() {
 
         setTimeout(() => {
           if (componentRef.current) {
-            handlePrint(); // Aquí se abre la ventana que ya lograste ver
+            handlePrint();
             ToastAlert("success", response.data.message + " MESA " + id);
             Object.keys(mesas).forEach((mesaId) => {
               dispatch(clearPedido(mesaId));
@@ -130,14 +130,13 @@ export function ToMesa() {
         }, 1000);
       } else {
         ToastAlert("error", response.data.message);
+        setLoadingPedido(false); // <--- Desbloquear para que corrija y reintente
       }
     } catch (error) {
       ToastAlert("error", "Error de conexión: " + error.message);
-    } finally {
       setLoadingPedido(false);
     }
   };
-
   return (
     <div className="  h-100 bg-transparent">
       <div className="row h-100">

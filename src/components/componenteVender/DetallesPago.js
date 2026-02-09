@@ -11,32 +11,40 @@ import {
 import { useForm } from "react-hook-form";
 import { RealizarVenta } from "../../service/RealizarVentaService";
 import ToastAlert from "../componenteToast/ToastAlert";
-import { useEstadoAsyn } from "../../hooks/EstadoAsync";
+// import { useEstadoAsyn } from "../../hooks/EstadoAsync"; // YA NO LO USAREMOS AQUÍ PARA EVITAR EL AUTO-FALSE
 import { OpcionesPago } from "./tareasVender/OpcionesPago";
 import { clearPedidoLlevar } from "../../redux/pedidoLlevarSlice";
 import { clearPedido } from "../../redux/pedidoSlice";
 import { DetallePedido } from "./tareasVender/DetallePedido";
 import { RealizarPago } from "./tareasVender/RealizarPago";
 import { clearPedidoWeb } from "../../redux/pedidoWebSlice";
+import { clearCuentaSeparada } from "../../redux/cuentaSeparadaSlice";
+
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useReactToPrint } from "react-to-print";
 import { TicketImpresion } from "./TiketsType/TicketImpresion";
+import { FileText } from "lucide-react";
 
 export function DetallesPago() {
-  // VARIABELS EN REDUX SI ES QUE LO HAY
   const idMesa = useSelector((state) => state.mesa.idPreventaMesa);
   const caja = useSelector((state) => state.caja.caja);
   const estadoTipoVenta = useSelector((state) => state.tipoVenta.estado);
   const usuarioLogeado = JSON.parse(localStorage.getItem("user"));
   const pedidoLlevar = useSelector((state) => state.pedidoLlevar);
   const pedidoWeb = useSelector((state) => state.pedidoWeb);
+
+  const { idMesa: idMesaSeparada, itemsSeleccionados } = useSelector(
+    (state) => state.cuentaSeparada,
+  );
+  const isSplitPayment =
+    idMesaSeparada === idMesa && itemsSeleccionados.length > 0;
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  // PARA VALIDAR EL TIPO DE DOCUMENTO
+
   const [tipoDocumento, setTipoDocumento] = useState("DNI");
   const [numeroDocumento, setNumeroDocumento] = useState("");
-  // DATOS DEL CLIENTE
   const [nombres, setNombres] = useState("");
   const [apellidos, setApellidos] = useState("");
   const [ruc, setRuc] = useState("");
@@ -44,23 +52,23 @@ export function DetallesPago() {
   const [direccion, setDireccion] = useState("");
   const [numeroCuotas, setNumeroCuotas] = useState("");
 
-  // PARA OBTENER EL ID DEL PEDIDO UNICAMENTE CUANDO ES PEDIDO WEB
   const { idPedidoWeb } = useParams();
 
-  // DATOS PARA LA IMPRESION
   const componentRef = useRef();
   const [datosVenta, setDatosVenta] = useState(null);
   const [nombreReferencia, setNombreCliente] = useState("");
-  // Configuración de la impresión
+
+  // === ESTADO DE BLOQUEO MANUAL ===
+  const [isProcessing, setIsProcessing] = useState(false);
+
   const handlePrint = useReactToPrint({
     contentRef: componentRef,
-    // ESTO ES CLAVE: Solo limpia y navega después de imprimir
     onAfterPrint: () => {
       setDatosVenta(null);
       ejecutarNavegacionFinal();
     },
   });
-  // REACTK HOOK FORM
+
   const {
     register,
     handleSubmit,
@@ -77,7 +85,7 @@ export function DetallesPago() {
   } = useQuery({
     queryKey: ["preventasMesa", idMesa, caja?.id],
     queryFn: () => getPreventaMesa(idMesa, caja.id),
-    enabled: !!idMesa && !!caja?.id, // solo si existen ambos
+    enabled: !!idMesa && !!caja?.id,
   });
 
   let preventas = [];
@@ -85,16 +93,24 @@ export function DetallesPago() {
   if (estadoTipoVenta === "llevar") {
     preventas = pedidoLlevar.items;
   } else if (estadoTipoVenta === "web") {
-    // ❌ dispatch(clearPedidoWeb());  <-- ¡BORRA ESTA LÍNEA!
-
-    // ✅ Solo leemos los datos que cargamos desde PedidoCard
     preventas = pedidoWeb.items;
   } else if (idMesa && caja?.id) {
-    preventas = preventasMesa ?? [];
+    if (isSplitPayment) {
+      preventas = itemsSeleccionados.map((item) => ({
+        ...item,
+        plato:
+          typeof item.plato === "string"
+            ? { nombre: item.plato, precio: item.precio }
+            : item.plato,
+        precio: item.precio,
+      }));
+    } else {
+      preventas = preventasMesa ?? [];
+    }
   }
-  // ======================
+
   const mesa = preventasMesa?.[0]?.mesa?.numero ?? null;
-  // calculo para el total e igv
+
   const totalPreventa = (preventas ?? [])
     .reduce(
       (acc, item) => acc + item.cantidad * (item.plato?.precio || item.precio),
@@ -103,8 +119,6 @@ export function DetallesPago() {
     .toFixed(2);
 
   const igv = (totalPreventa * 0.18).toFixed(2);
-
-  // =====================================
 
   const [metodoSeleccionado, setMetodoSeleccionado] = useState(null);
   const [comprobante, setComprobante] = useState(null);
@@ -115,7 +129,6 @@ export function DetallesPago() {
   const [clienteBoleta, setClienteBoleta] = useState(false);
   const [clienteFactura, setClienteFactura] = useState(false);
 
-  // FUNCION PARA SELECCIONAR EL METODO DE PAGO
   const handleSelectMetodo = (metodo) => {
     setMetodoSeleccionado(metodo);
     setComprobante(false);
@@ -129,12 +142,11 @@ export function DetallesPago() {
     }
   };
 
-  // FUNCION PARA SLECCIONAR EL TIPO DE TARJETA
   const handleSelectCardType = (estado) => {
     setTarjetas(estado);
     setCuotas(false);
   };
-  //FUNCION PARA SELECIONAR EL TIPO DE TARJETA DEBITO - CREDITO
+
   const handleTypeTarjeta = (typeTarjeta) => {
     setTypeTarjeta(typeTarjeta);
     setTipoComporbante(true);
@@ -144,7 +156,6 @@ export function DetallesPago() {
     setCuotas(false);
   };
 
-  // FUNCION PARA SELECIONAR EL COMPROBANTE DE PAGO
   const handleSlectComprobante = (comprobante) => {
     if (metodoSeleccionado === "tarjeta") {
       setComprobante(comprobante);
@@ -181,22 +192,25 @@ export function DetallesPago() {
     }
   };
 
-  // funcion para ocutar o mostrar campo de cuotas
   const handleShowDatosClientes = (estado) => {
     setCuotas(estado);
   };
 
-  // funcion para cuando es una factura
   const handleShowFactura = (estado) => {
     setCuotas(false);
   };
+
   const ejecutarNavegacionFinal = async () => {
     queryClient.invalidateQueries(["mesas"]);
+
+    if (isSplitPayment) {
+      dispatch(clearCuentaSeparada());
+    }
+
     if (estadoTipoVenta === "llevar") {
       navigate("/vender/ventasLlevar");
       dispatch(clearPedidoLlevar());
     } else if (estadoTipoVenta === "web") {
-      // Forzar refetch inmediato de todas las queries de pedidos web
       await Promise.all([
         queryClient.refetchQueries(["pedidosPendientes"]),
         queryClient.refetchQueries(["listaPedidosProceso"]),
@@ -209,14 +223,16 @@ export function DetallesPago() {
       dispatch(clearPedido());
     }
   };
-  // ESTAS 3 FUNCIONES SE ENCARGAN DE REALIZAR LA VENTA Y REGISTRAR
+
+  // === LÓGICA DE VENTA CON BLOQUEO MANUAL ===
   const realizarVentaPago = async (data, nombreReferencia) => {
+    // 1. Iniciamos bloqueo
+    setIsProcessing(true);
+
     try {
-      // Llamada al backend
       const result = await RealizarVenta(data);
 
       if (result.success) {
-        // --- CASO DE ÉXITO ---
         setDatosVenta(result.ticket);
         setNombreCliente(nombreReferencia);
 
@@ -224,14 +240,15 @@ export function DetallesPago() {
           if (componentRef.current) {
             handlePrint();
             ToastAlert("success", "Venta realizada con éxito");
+            // OJO: NO desbloqueamos aquí (setIsProcessing(false))
+            // Se quedará true hasta que el componente muera al navegar
           }
         }, 1000);
       } else {
-        // --- CASO DE ERROR LÓGICO (El backend respondió, pero dijo success: false) ---
-        // Aquí capturas: "Método de pago no encontrado", "Su código no pertenece...", etc.
         const mensajeDelBackend =
           result.message || "Error desconocido al realizar la venta";
         ToastAlert("error", mensajeDelBackend);
+        setIsProcessing(false); // Si falló, desbloqueamos para reintentar
       }
     } catch (error) {
       const mensajeCritico =
@@ -239,51 +256,41 @@ export function DetallesPago() {
         error.message ||
         "Ocurrió un error inesperado";
       ToastAlert("error", mensajeCritico);
+      setIsProcessing(false); // Si hubo error de red, desbloqueamos
     }
   };
-  const { loading, error, execute } = useEstadoAsyn(realizarVentaPago);
 
   const handleCrearJson = async (nombreReferenciaPrincipal) => {
-    let datosCliente = {}; // Objeto independiente para los datos del cliente
+    let datosCliente = {};
     let metodoPagoFinal = "";
 
-    // Validar el método de pago seleccionado
     if (metodoSeleccionado === "tarjeta") {
-      // Concatenar tarjeta y tipo
       metodoPagoFinal = metodoSeleccionado + " " + (typeTarjeta || "");
-
       if (!typeTarjeta) {
         ToastAlert("warning", "Por favor seleccione el tipo de tarjeta");
         return;
       }
     } else {
-      // Otros métodos de pago (e.g., YAPE, efectivo, etc.)
       metodoPagoFinal = metodoSeleccionado;
     }
 
-    // Validar datos del cliente según el tipo de comprobante y condiciones específicas
     if (comprobante === "F") {
-      // Para factura (siempre se requieren datos del cliente)
       datosCliente = {
         ruc,
         razonSocial,
         direccion,
       };
-
       if (!ruc || !razonSocial || !direccion) {
         ToastAlert("warning", "Por favor ingrese los campos de factura");
         return;
       }
     } else if (comprobante === "B") {
-      // Para boleta
       if (metodoSeleccionado === "tarjeta" && typeTarjeta === "credito") {
-        // Solo requerir datos del cliente si es tarjeta y crédito
         datosCliente = {
           dni: numeroDocumento,
           nombre: nombres,
           apellidos,
         };
-
         if (!numeroDocumento || !nombres || !apellidos) {
           ToastAlert(
             "warning",
@@ -293,66 +300,62 @@ export function DetallesPago() {
         }
       }
     } else if (comprobante === "S") {
-      // Boleta simple no requiere datos del cliente
       datosCliente = {
         nombre: nombreReferenciaPrincipal || "CLIENTE GENERICO",
         documento: "00000000",
       };
     }
 
-    // Inicializar variables
     let data = {};
     let pedidoToLlevar = null;
-    let pedidoToWeb = null;
-    // Verificar el estado del tipo de venta y construir el objeto `data`
+
     if (estadoTipoVenta === "mesa") {
-      // Datos para ventas en mesa
       data = {
         metodoPago: metodoPagoFinal,
-        totalPreventa: totalPreventa ?? 0, // Asegurar que totalPreventa tenga un valor válido
-        comprobante: comprobante ?? "", // Tipo de comprobante (asegurar valor por defecto)
-        cuotas: numeroCuotas ?? 0, // Cuotas si aplica
-        tarjeta: typeTarjeta ?? null, // Tipo de tarjeta (Débito o Crédito)
-        datosCliente: datosCliente ?? {}, // Validar datosCliente para evitar errores
-        idCaja: caja?.id ?? null, // Validar idCaja
-        idMesa: idMesa ?? null, // Validar idMesa
-        idUsuario: usuarioLogeado?.id ?? null, // Validar idUsuario
+        totalPreventa: totalPreventa ?? 0,
+        comprobante: comprobante ?? "",
+        cuotas: numeroCuotas ?? 0,
+        tarjeta: typeTarjeta ?? null,
+        datosCliente: datosCliente ?? {},
+        idCaja: caja?.id ?? null,
+        idMesa: idMesa ?? null,
+        idUsuario: usuarioLogeado?.id ?? null,
         tipoVenta: estadoTipoVenta,
+        esCuentaSeparada: isSplitPayment,
+        pedidosSeleccionados: isSplitPayment ? itemsSeleccionados : [],
       };
     } else if (estadoTipoVenta === "llevar") {
-      // Construir el objeto para pedido "llevar"
       pedidoToLlevar = pedidoLlevar?.items ?? [];
-
       data = {
         metodoPago: metodoPagoFinal,
-        totalPreventa: totalPreventa ?? 0, // Total preventa
-        comprobante: comprobante ?? "", // Tipo de comprobante
-        cuotas: numeroCuotas ?? 0, // Cuotas si aplica
-        tarjeta: typeTarjeta ?? null, // Tipo de tarjeta (Débito o Crédito)
-        datosCliente: datosCliente ?? {}, // Validar datosCliente
-        pedidoToLlevar, // Agregar pedido a llevar
-        idCaja: caja?.id ?? null, // Validar idCaja
-        idMesa: null, // idMesa es null porque es "llevar"
-        idUsuario: usuarioLogeado?.id ?? null, // Validar idUsuario
+        totalPreventa: totalPreventa ?? 0,
+        comprobante: comprobante ?? "",
+        cuotas: numeroCuotas ?? 0,
+        tarjeta: typeTarjeta ?? null,
+        datosCliente: datosCliente ?? {},
+        pedidoToLlevar,
+        observacion: pedidoLlevar.descripcion || "",
+        idCaja: caja?.id ?? null,
+        idMesa: null,
+        idUsuario: usuarioLogeado?.id ?? null,
         tipoVenta: estadoTipoVenta,
       };
     } else {
       data = {
         metodoPago: metodoPagoFinal,
-        totalPreventa: totalPreventa ?? 0, // Total preventa
-        comprobante: comprobante ?? "", // Tipo de comprobante
-        cuotas: numeroCuotas ?? 0, // Cuotas si aplica
-        tarjeta: typeTarjeta ?? null, // Tipo de tarjeta (Débito o Crédito)
-        datosCliente: datosCliente ?? {}, // Validar datosCliente
-        idPedidoWeb: idPedidoWeb, // Agregar pedido a web
-        idCaja: caja?.id ?? null, // Validar idCaja
-        idMesa: null, // idMesa es null porque es "web"
-        idUsuario: usuarioLogeado?.id ?? null, // Validar idUsuario
+        totalPreventa: totalPreventa ?? 0,
+        comprobante: comprobante ?? "",
+        cuotas: numeroCuotas ?? 0,
+        tarjeta: typeTarjeta ?? null,
+        datosCliente: datosCliente ?? {},
+        idPedidoWeb: idPedidoWeb,
+        idCaja: caja?.id ?? null,
+        idMesa: null,
+        idUsuario: usuarioLogeado?.id ?? null,
         tipoVenta: estadoTipoVenta,
       };
     }
 
-    // Validaciones generales antes de continuar
     if (!metodoPagoFinal || !totalPreventa || !comprobante) {
       ToastAlert(
         "warning",
@@ -361,16 +364,16 @@ export function DetallesPago() {
       return;
     }
 
-    await execute(data, nombreReferenciaPrincipal);
+    // Ejecutamos la función directa (sin el hook useEstadoAsyn para tener control manual)
+    await realizarVentaPago(data, nombreReferenciaPrincipal);
   };
 
-  // =======================================================================
   if (isLoading) return <p>Cargando preventas...</p>;
-  if (isError) return <p>Error: {error.message}</p>;
+  if (isError) return <p>Error: {errorPreventaMesa?.message}</p>;
+
   return (
     <div className="card h-100 bg-transparent ">
       <div className="row h-100 g-3">
-        {/* Columna DetallePedido */}
         <div className="col-lg-3 col-md-4 col-sm-6 col-12 d-flex flex-column h-100">
           <DetallePedido
             idMesa={idMesa}
@@ -381,9 +384,18 @@ export function DetallesPago() {
             totalPreventa={totalPreventa}
             igv={igv}
           />
+          {estadoTipoVenta === "llevar" && pedidoLlevar.descripcion && (
+            <div className="mt-2 p-2 bg-warning bg-opacity-10 border border-warning rounded small text-dark">
+              <div className="d-flex align-items-center gap-1 fw-bold mb-1">
+                <FileText size={14} /> Notas del pedido:
+              </div>
+              <p className="m-0 fst-italic text-break">
+                {pedidoLlevar.descripcion}
+              </p>
+            </div>
+          )}
         </div>
 
-        {/* Columna OpcionesPago */}
         <div className="col-lg-6 col-md-8 col-sm-12 col-12 d-flex flex-column">
           <OpcionesPago
             handleSelectMetodo={handleSelectMetodo}
@@ -415,14 +427,14 @@ export function DetallesPago() {
           />
         </div>
 
-        {/* Columna RealizarPago */}
         <div className="col-lg-3 col-md-12 col-sm-12 col-12 d-flex flex-column">
           <RealizarPago
             totalPreventa={totalPreventa}
             igv={igv}
             handleCrearJson={handleCrearJson}
-            loading={loading}
-            error={loading}
+            // AQUI USAMOS EL ESTADO MANUAL
+            loading={isProcessing}
+            error={null}
           />
           <div style={{ display: "none" }}>
             <TicketImpresion

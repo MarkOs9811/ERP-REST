@@ -1,42 +1,100 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 export const TicketPreVenta = React.forwardRef((props, ref) => {
   const { dataActual } = props;
 
-  // Cálculos de seguridad
-  const items = Array.isArray(dataActual) ? dataActual : [];
-  const total = items.reduce(
-    (acc, item) => acc + parseFloat(item.plato?.precio || 0),
+  // 1. SOLUCIÓN CANTIDAD: Agrupar items iguales por ID de plato
+  const itemsAgrupados = useMemo(() => {
+    if (!dataActual || !Array.isArray(dataActual)) return [];
+
+    const agrupados = {};
+
+    dataActual.forEach((item) => {
+      // Usamos el ID del plato para identificar duplicados
+      const idPlato = item.plato?.id || item.idPlato;
+
+      if (!agrupados[idPlato]) {
+        // Si no existe, lo creamos clonando el item
+        agrupados[idPlato] = {
+          ...item,
+          cantidad: Number(item.cantidad), // Asegurar que sea número
+          // Guardamos precio base para cálculos
+          precioUnitario: parseFloat(item.plato?.precio || 0),
+        };
+      } else {
+        // Si ya existe, sumamos la cantidad
+        agrupados[idPlato].cantidad += Number(item.cantidad);
+      }
+    });
+
+    return Object.values(agrupados);
+  }, [dataActual]);
+
+  // Cálculos totales usando la lista YA AGRUPADA
+  const total = itemsAgrupados.reduce(
+    (acc, item) => acc + item.cantidad * item.precioUnitario,
     0,
   );
+
   const subtotal = total / 1.18;
   const igv = total - subtotal;
-  const mesa = items[0]?.mesa?.numero || "S/N";
-  const mozo = items[0]?.usuario?.name || "General";
+
+  // Datos de cabecera (tomamos del primer item original si existe)
+  const mesa =
+    (Array.isArray(dataActual) && dataActual[0]?.mesa?.numero) || "S/N";
+  const mozo =
+    (Array.isArray(dataActual) && dataActual[0]?.usuario?.name) || "General";
 
   return (
     <div
       ref={ref}
       style={{
-        width: "68mm",
-        padding: "5mm", // Añadimos un poco de padding real
+        width: "72mm", // Aumenté un poco para asegurar márgenes
+        padding: "2mm",
         margin: "0",
         color: "black",
         backgroundColor: "white",
-        fontFamily: "'Courier New', Courier, monospace", // Fuente fuera del style tag
+        fontFamily: "'Courier New', Courier, monospace",
       }}
     >
-      {items.length > 0 && (
+      {itemsAgrupados.length > 0 && (
         <div className="ticket-container">
-          {/* Mantenemos el style para ajustes finos, pero quitamos el @media print para la estructura base */}
           <style>{`
             .text-center { text-align: center; }
             .text-right { text-align: right; }
             .bold { font-weight: bold; }
-            table { width: 100%; border-collapse: collapse; table-layout: fixed; margin-top: 5px; }
-            .col-cant { width: 15%; font-size: 8pt; }
-            .col-desc { width: 55%; font-size: 8pt; overflow: hidden; white-space: nowrap; }
-            .col-total { width: 30%; font-size: 8pt; text-align: right; }
+            
+            table { 
+                width: 100%; 
+                border-collapse: collapse; 
+                margin-top: 5px; 
+            }
+            
+            td, th { vertical-align: top; padding-top: 2px; }
+
+            .col-cant { 
+                width: 12%; 
+                font-size: 9pt; 
+                text-align: center;
+            }
+            
+            /* 2. SOLUCIÓN TEXTO CORTADO */
+            .col-desc { 
+                width: 58%; 
+                font-size: 8pt; 
+                /* Quitamos nowrap y hidden para permitir salto de línea */
+                white-space: normal; 
+                word-wrap: break-word;
+                line-height: 1.1; 
+                padding-right: 5px;
+            }
+            
+            .col-total { 
+                width: 30%; 
+                font-size: 9pt; 
+                text-align: right; 
+            }
+            
             hr { border: none; border-top: 1px dashed black; margin: 5px 0; }
             
             @media print {
@@ -50,7 +108,9 @@ export const TicketPreVenta = React.forwardRef((props, ref) => {
             <p className="bold" style={{ margin: "2px 0", fontSize: "10pt" }}>
               *** PRE-CUENTA ***
             </p>
-            <p style={{ margin: "0", fontSize: "9pt" }}>MESA: {mesa}</p>
+            <p style={{ margin: "0", fontSize: "10pt", fontWeight: "bold" }}>
+              MESA: {mesa}
+            </p>
           </div>
 
           <hr />
@@ -62,29 +122,26 @@ export const TicketPreVenta = React.forwardRef((props, ref) => {
 
           <table>
             <thead>
-              <tr style={{ fontSize: "8pt" }}>
-                <th className="col-cant" align="left">
-                  CANT
-                </th>
+              <tr style={{ fontSize: "8pt", borderBottom: "1px solid #000" }}>
+                <th className="col-cant">CANT</th>
                 <th className="col-desc" align="left">
                   DESCRIPCIÓN
                 </th>
                 <th className="col-total" align="right">
-                  TOTAL
+                  IMPORTE
                 </th>
               </tr>
             </thead>
             <tbody>
-              {items.map((item, i) => (
+              {itemsAgrupados.map((item, i) => (
                 <tr key={i}>
-                  <td className="col-cant" valign="top">
-                    1
+                  <td className="col-cant">{item.cantidad}</td>
+                  <td className="col-desc">
+                    {/* Renderizamos nombre completo sin cortar */}
+                    {item.plato?.nombre}
                   </td>
-                  <td className="col-desc" valign="top">
-                    {item.plato?.nombre?.substring(0, 20)}
-                  </td>
-                  <td className="col-total" valign="top" align="right">
-                    {parseFloat(item.plato?.precio || 0).toFixed(2)}
+                  <td className="col-total">
+                    {(item.precioUnitario * item.cantidad).toFixed(2)}
                   </td>
                 </tr>
               ))}
@@ -97,19 +154,17 @@ export const TicketPreVenta = React.forwardRef((props, ref) => {
               SUBTOTAL: S/ {subtotal.toFixed(2)}
             </p>
             <p style={{ margin: "1px 0" }}>IGV (18%): S/ {igv.toFixed(2)}</p>
-            <p style={{ margin: "2px 0", fontSize: "11pt" }} className="bold">
-              TOTAL A PAGAR: S/ {total.toFixed(2)}
+            <p style={{ margin: "4px 0", fontSize: "12pt" }} className="bold">
+              TOTAL: S/ {total.toFixed(2)}
             </p>
           </div>
 
           <div
             className="text-center"
-            style={{ marginTop: "10px", fontSize: "8pt" }}
+            style={{ marginTop: "15px", fontSize: "8pt" }}
           >
-            <p style={{ margin: "5px 0" }}>
-              Este documento no es un comprobante de pago.
-            </p>
-            <p style={{ margin: "0" }}>Solicite su Boleta o Factura en Caja.</p>
+            <p style={{ margin: "0" }}>No válido como comprobante.</p>
+            <p style={{ margin: "0" }}>Solicite su comprobante en Caja.</p>
             <br />
             <p style={{ color: "white" }}>.</p>
           </div>

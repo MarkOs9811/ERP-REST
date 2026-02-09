@@ -5,10 +5,13 @@ import { useForm } from "react-hook-form";
 import ToastAlert from "../../componenteToast/ToastAlert";
 import { useNavigate } from "react-router-dom";
 import { Repeat } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
 
 export function TransferirToMesa({ show, handleCloseModal, idMesa, mesa }) {
   const [mesasFree, setMesasFree] = useState([]);
   const [mesaDestino, setMesaDestino] = useState("");
+
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const {
     register,
@@ -38,7 +41,7 @@ export function TransferirToMesa({ show, handleCloseModal, idMesa, mesa }) {
     try {
       const response = await axiosInstance.put(
         `/vender/transferirToMesa/${idMesa}`,
-        data
+        data,
       );
       if (response.data.success) {
         const mesaOrigen = `<b>Mesa ${response.data.mesaOrigen.numero}</b>`;
@@ -46,8 +49,8 @@ export function TransferirToMesa({ show, handleCloseModal, idMesa, mesa }) {
         const mensaje = `${response.data.message}<br> ${mesaOrigen} a ${mesaDestino}`;
 
         ToastAlert("success", mensaje); // Aquí pasas el mensaje con HTML
-
-        navigate(`/vender/ventasMesas`);
+        queryClient.invalidateQueries(["mesas"]);
+        navigate(`/vender/mesas`);
       } else {
         ToastAlert("error", response.data.message);
       }

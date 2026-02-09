@@ -7,7 +7,7 @@ import BotonAnimado from "../../components/componentesReutilizables/BotonAnimado
 import Pusher from "pusher-js";
 import "../../css/EstilosCocina.css";
 import Masonry from "react-masonry-css";
-import { CheckCheck, PrinterIcon, RotateCcw } from "lucide-react";
+import { CheckCheck, PrinterIcon, RotateCcw, AlertCircle } from "lucide-react"; // Importamos AlertCircle
 import { PutData } from "../../service/CRUD/PutData";
 import { CondicionCarga } from "../../components/componentesReutilizables/CondicionCarga";
 import { BadgeComponent } from "../../components/componentesReutilizables/BadgeComponent";
@@ -25,17 +25,11 @@ function TarjetaPedido({ pedido }) {
 
   const cambiarEstado = async () => {
     setCargando(true);
-
     const nuevoEstado = esListo ? 0 : 1;
-
-    // Enviamos el nuevo estado en el cuerpo de la petición (data)
-    // Asumo que tu backend recibe { estado: X } para actualizar
     const success = await PutData("pedidoCocina", pedido.id, {
       estado: nuevoEstado,
     });
-
     setCargando(false);
-
     if (success) {
       queryClient.invalidateQueries(["pedidosEstado"]);
     }
@@ -120,24 +114,45 @@ function TarjetaPedido({ pedido }) {
             >
               <span className={esListo ? "" : "fw-bold"}>{plato.cantidad}</span>
               <span className="mx-2 text-muted">x</span>
-              <span>{plato.nombre}</span>
+              <span style={{ whiteSpace: "normal" }}>{plato.nombre}</span>{" "}
+              {/* Ajuste para nombres largos */}
             </li>
           ))}
         </ul>
-        {pedido.detalle_cliente && (
-          <div
-            className={`alert p-2 mx-2 ${
-              esListo ? "alert-success border-0" : "alert-secondary text-muted"
-            }`}
-            style={{ fontSize: "0.85rem" }}
-          >
-            <strong>Nota:</strong> {pedido.detalle_cliente}
+
+        {/* ============ SECCIÓN DE NOTAS DE COCINA (Detalles Extras) ============ */}
+        {pedido.detalles_extras && (
+          <div className="px-3 pb-2">
+            <div
+              className={`d-flex align-items-start gap-2 p-2 rounded ${
+                esListo
+                  ? "bg-secondary bg-opacity-10 text-muted"
+                  : "bg-warning bg-opacity-25 text-dark"
+              }`}
+              style={{
+                fontSize: "0.85rem",
+                border: esListo ? "1px solid #e5e7eb" : "1px solid #ffc107",
+              }}
+            >
+              <AlertCircle
+                size={16}
+                className={esListo ? "text-secondary" : "text-dark"}
+                style={{ minWidth: "16px", marginTop: "2px" }}
+              />
+              <div>
+                <span className="fw-bold d-block mb-1">Nota de Cocina:</span>
+                <span className="fst-italic" style={{ lineHeight: "1.2" }}>
+                  {pedido.detalles_extras}
+                </span>
+              </div>
+            </div>
           </div>
         )}
+        {/* ==================================================================== */}
       </div>
 
       {/* Footer */}
-      <div className="card-footer d-flex bg-transparent border-top-0 pb-3 pt-0 align-items-center">
+      <div className="card-footer d-flex bg-transparent border-top-0 pb-3 pt-0 align-items-center mt-2">
         <button
           className={`btn btn-sm ${
             esListo ? "btn-light text-muted" : "btn-outline-dark"
@@ -147,12 +162,9 @@ function TarjetaPedido({ pedido }) {
           <PrinterIcon className="text-auto" size={18} />
         </button>
 
-        {/* BOTÓN DINÁMICO: CAMBIA SEGÚN EL ESTADO */}
         <BotonAnimado
           className={`h6 p-1 ms-auto ${
-            esListo
-              ? "btn btn-outline-dark border-1" // Estilo sutil para deshacer
-              : "btn-realizarPedido" // Estilo principal
+            esListo ? "btn btn-outline-dark border-1" : "btn-realizarPedido"
           }`}
           onClick={() => cambiarEstado()}
           loading={cargando}
@@ -164,7 +176,6 @@ function TarjetaPedido({ pedido }) {
             )
           }
         >
-          {/* AQUÍ PASAMOS EL TEXTO (CHILDREN) */}
           {esListo ? "Deshacer" : "Marcar Listo"}
         </BotonAnimado>
       </div>
@@ -175,9 +186,9 @@ function TarjetaPedido({ pedido }) {
 export function CocinaDespacho() {
   const queryClient = useQueryClient();
   const breakpointColumnsObj = {
-    default: 5, // columnas en escritorio grande
-    1200: 4,
-    992: 3,
+    default: 4,
+    1400: 4,
+    1100: 3,
     768: 2,
     576: 1,
   };
@@ -211,19 +222,26 @@ export function CocinaDespacho() {
 
   return (
     <div className="row g-3 h-100">
-      {/* MESAS */}
       <div className="col-lg-12 col-sm-12 h-100">
-        <div className="card shadow-sm h-100">
-          <div className="card-header  text-center p-3 border-bottom">
-            <p className="h5 "> Por Servir </p>
+        <div className="card shadow-sm h-100 border-0 p-0">
+          {" "}
+          {/* Fondo transparente para mejor look en cocina */}
+          <div className="card-header bg-white text-center p-3 m-0 border-bottom rounded-top shadow-sm mb-3">
+            <h5 className="m-0 fw-bold d-flex align-items-center justify-content-center gap-2">
+              Pedidos en Cocina / Despacho
+            </h5>
           </div>
           <CondicionCarga isLoading={isLoading} isError={isError}>
             <div
-              className="card-body overflow-auto p-4 justify-content-start  contenedor-platos "
-              style={{ height: "calc(100vh - 200px)" }}
+              className="card-body overflow-auto p-2 justify-content-start"
+              style={{ height: "calc(100vh - 180px)" }}
             >
               {pedidos.length === 0 ? (
-                <p className="text-muted text-center">No hay pedidos.</p>
+                <div className="d-flex flex-column align-items-center justify-content-center h-100 text-muted opacity-50">
+                  <CheckCheck size={60} className="mb-3" />
+                  <h4>Todo despachado</h4>
+                  <p>Esperando nuevos pedidos...</p>
+                </div>
               ) : (
                 <Masonry
                   breakpointCols={breakpointColumnsObj}

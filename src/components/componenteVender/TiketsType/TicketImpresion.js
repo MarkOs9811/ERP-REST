@@ -54,7 +54,7 @@ export const TicketImpresion = React.forwardRef(
             <hr />
             <div style={{ fontSize: "8pt" }}>
               <p style={{ margin: "0" }}>FECHA: {venta.fecha}</p>
-              <h1 style={{ margin: "0" }}>
+              <h1 style={{ margin: "0", fontSize: "10pt" }}>
                 CLIENTE: {venta.cliente?.nombre?.substring(0, 20) || cliente}
               </h1>
               <p style={{ margin: "0" }}>DOC: {venta.cliente?.documento}</p>
@@ -94,6 +94,30 @@ export const TicketImpresion = React.forwardRef(
                 ))}
               </tbody>
             </table>
+
+            {/* ======================================================= */}
+            {/* AQUÍ AGREGAMOS LA OBSERVACIÓN O DETALLE EXTRA DEL PEDIDO */}
+            {/* ======================================================= */}
+            {venta.observacion && (
+              <div style={{ marginTop: "5px" }}>
+                <hr />
+                <div style={{ fontSize: "8pt", fontStyle: "italic" }}>
+                  <p className="bold" style={{ margin: "0" }}>
+                    NOTAS / OBSERVACIÓN:
+                  </p>
+                  <p
+                    style={{
+                      margin: "0",
+                      whiteSpace: "normal", // Permite que el texto baje de línea si es largo
+                      wordBreak: "break-all", // Evita que palabras muy largas rompan el diseño
+                    }}
+                  >
+                    {venta.observacion}
+                  </p>
+                </div>
+              </div>
+            )}
+            {/* ======================================================= */}
 
             <hr />
             <div
