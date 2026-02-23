@@ -113,7 +113,7 @@ export function PlatoList({ search }) {
     {
       name: "Foto",
       cell: (
-        row // 'cell' es mejor para JSX que 'selector'
+        row, // 'cell' es mejor para JSX que 'selector'
       ) => (
         <img
           src={

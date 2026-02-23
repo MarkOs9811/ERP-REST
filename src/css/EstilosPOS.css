@@ -1,15 +1,101 @@
-.contenedor-scroll{
-    height: calc(100vh - 65px)!important;
-    background-color: rgb(233, 233, 233);
+/* --- ESTILOS RESPONSIVOS PARA BOTONES POS --- */
+
+/* Permitir scroll horizontal oculto si los módulos no caben en un celular muy angosto */
+.barra-modulos-pos {
+    overflow-x: auto;
+    scrollbar-width: none;
+    /* Firefox */
 }
-/* 📱 Para tablets y celulares */
-@media (max-width: 991px) {
-    .contenedor-scroll {
-        height: calc(100vh - 120px);
+
+.barra-modulos-pos::-webkit-scrollbar {
+    display: none;
+    /* Chrome/Safari */
+}
+
+/* 📱 Para tablets y celulares (Pantallas menores a 768px) */
+@media (max-width: 768px) {
+
+    /* 1. Ocultamos todo el texto de los botones */
+    .pos-btn-text {
+        display: none !important;
+    }
+
+    /* 2. Reducimos el padding para que queden como botones cuadrados/circulares */
+    .boton-venta,
+    .btn-pos-action {
+        padding: 8px 12px !important;
+        min-width: 45px;
+        /* Evita que el botón colapse demasiado */
+    }
+
+    /* 3. Eliminamos los márgenes laterales de los iconos para que queden 100% centrados */
+    .pos-icon {
+        margin: 0 !important;
     }
 }
 
-body.dark-theme .contenedor-scroll{
+/* --- TUS ESTILOS EXISTENTES --- */
+.contenedor-scroll {
+    height: calc(100vh - 85px) !important;
+    background-color: rgb(233, 233, 233);
+    overflow-y: auto;
+}
+
+@media (max-width: 991px) {
+    .contenedor-scroll {
+        /* Ajustamos la altura considerando que los botones ya no ocupan doble fila */
+        height: calc(100vh - 70px) !important;
+    }
+}
+
+body.dark-theme .contenedor-scroll {
     background-color: rgb(45, 52, 59);
 }
 
+/* --- ESTILOS PARA EL TABLERO KANBAN (PEDIDOS) --- */
+.kanban-container {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    gap: 1rem;
+    padding-bottom: 10px;
+    /* Espacio para el scrollbar */
+    scroll-snap-type: x mandatory;
+    /* Hace que el deslizamiento se pegue a cada columna */
+    -webkit-overflow-scrolling: touch;
+    /* Scroll suave en iOS */
+}
+
+/* Ocultar la barra de scroll para que se vea más limpio como una App nativa */
+.kanban-container::-webkit-scrollbar {
+    height: 6px;
+}
+
+.kanban-container::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 10px;
+}
+
+.kanban-col {
+    flex: 0 0 auto;
+    width: 85vw;
+    /* En celular, cada columna ocupa el 85% de la pantalla para que asome la siguiente */
+    scroll-snap-align: center;
+    /* Centra la columna al terminar de hacer swipe */
+    height: 100%;
+}
+
+/* 💻 Para PC y Tablets grandes (volvemos al formato de 3 columnas iguales) */
+@media (min-width: 768px) {
+    .kanban-container {
+        overflow-x: hidden;
+        /* En PC no necesitamos scroll horizontal */
+        scroll-snap-type: none;
+    }
+
+    .kanban-col {
+        width: calc(33.333% - 0.66rem);
+        /* Divide exactamente en 3 columnas respetando el gap */
+    }
+}

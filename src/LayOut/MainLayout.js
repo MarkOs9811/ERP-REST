@@ -64,14 +64,18 @@ import { StepCaja } from "../components/componentesFirstSteps/StepCaja";
 import { StepPlatosProductos } from "../components/componentesFirstSteps/StepPlatosPorductos";
 import { StepUsuario } from "../components/componentesFirstSteps/StepUsuario";
 import { Usuarios } from "../pages/moduloPlanilla/Usuarios";
+import { LayOutDelivery } from "./LayOutDelivery";
+import { PedidosDelivery } from "../pages/moduloDelivery/PedidosDelivery";
 
 export const MainLayout = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const empresa = JSON.parse(localStorage.getItem("empresa")) || {};
 
-  const cargoUsuario = user?.empleado?.cargo?.nombre; // ej: "atencion al cliente"
-  const showFullLayout = cargoUsuario != "atencion al cliente";
-  const showHeader = cargoUsuario != "atencion al cliente";
+  const cargoUsuario = user?.empleado?.cargo?.nombre?.toLowerCase(); // Pasamos a minúscula por seguridad  const showFullLayout = cargoUsuario != "atencion al cliente";
+  const esRolEspecial =
+    cargoUsuario === "atencion al cliente" || cargoUsuario === "delivery";
+  const showFullLayout = !esRolEspecial;
+  const showHeader = !esRolEspecial;
 
   const [step, setStep] = useState((empresa?.setup_steps || 0) < 5);
   const [showWelcome, setShowWelcome] = useState(empresa?.setup_steps == 0);
@@ -80,6 +84,11 @@ export const MainLayout = () => {
   const totalSteps = 5;
   const rawPercentage = ((currentStep + 1) / totalSteps) * 100;
   const progressPercentage = Math.min(100, rawPercentage);
+  const renderHomePorRol = () => {
+    if (cargoUsuario === "atencion al cliente") return <LayOutAtencion />;
+    if (cargoUsuario === "delivery") return <LayOutDelivery />;
+    return <Home />; // Por defecto para admin, finanzas, etc.
+  };
   return (
     <div className="main-container p-0 m-0 h-screen flex">
       {showFullLayout && <SideBar />}
@@ -132,6 +141,7 @@ export const MainLayout = () => {
                   <ContenedorPrincipal>
                     <ToastContainer />
                     <Routes>
+                      <Route path="/" element={renderHomePorRol()} />
                       <Route
                         path="/cocina"
                         element={
@@ -146,16 +156,7 @@ export const MainLayout = () => {
                         path="/marcarAsistencia"
                         element={<TakeAsistencia />}
                       />
-                      <Route
-                        path="/"
-                        element={
-                          cargoUsuario !== "atencion al cliente" ? (
-                            <Home />
-                          ) : (
-                            <LayOutAtencion />
-                          )
-                        }
-                      />
+
                       <Route
                         path="/usuarios"
                         element={
@@ -166,7 +167,18 @@ export const MainLayout = () => {
                           </PrivateRoute>
                         }
                       />
-
+                      {/* RUTA PARA DELIVERY
+                       */}
+                      <Route
+                        path="/pedidosDelivery"
+                        element={
+                          <PrivateRoute
+                            allowedRoles={["delivery", "administrador"]}
+                          >
+                            <PedidosDelivery />
+                          </PrivateRoute>
+                        }
+                      />
                       {/* --- PEGADO DE TODAS TUS RUTAS --- */}
 
                       {/* RUTAS PARA MODULO ALMACEN */}

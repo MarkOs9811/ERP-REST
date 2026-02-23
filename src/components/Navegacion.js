@@ -8,10 +8,11 @@ import {
   Megaphone,
   StoreIcon,
   UserRoundCheck,
+  BikeIcon, // <- 1. Importamos el ícono para el botón de Delivery
 } from "lucide-react";
 
 export function Navegacion() {
-  const location = useLocation(); // Obtiene la ubicación actual
+  const location = useLocation();
   const pathnames = location.pathname.split("/").filter((x) => x);
   const navigate = useNavigate();
 
@@ -19,7 +20,6 @@ export function Navegacion() {
   const userStr = localStorage.getItem("user");
   const rol = userStr ? JSON.parse(userStr) : null;
 
-  // Mapea las rutas a nombres amigables
   const routeNames = {
     "": "Inicio",
     productos: "Productos",
@@ -37,26 +37,18 @@ export function Navegacion() {
   const handleSideBar = () => {
     dispatch(toggleSidebar());
   };
+
   return (
     <div className="nav-navegacion">
       <nav
         aria-label="breadcrumb"
-        className="d-flex justify-content-between align-items-center  w-100 "
+        className="d-flex justify-content-between align-items-center w-100"
         style={{
           height: "50px",
           boxShadow: "0px 3px 10px 1px rgba(0,0,0,0.2)!important",
         }}
       >
-        {/* Contenedor flexible para alinear el botón y la navegación */}
         <div className="d-flex align-items-center">
-          {/* Botón de compresión de sidebar */}
-          {/* <button
-            className="btn me-3 ms-2 d-flex align-items-center"
-            onClick={handleSideBar}
-          >
-            <FontAwesomeIcon icon={faBars} size="lg" className="text-auto" />
-          </button> */}
-
           {/* Breadcrumbs */}
           <div
             className="d-flex align-items-center breadcrumb-nav ms-3"
@@ -109,44 +101,68 @@ export function Navegacion() {
             )}
           </div>
         </div>
-        <div className="d-flex align-items-center ">
-          <div className="d-flex me-3 gap-2 align-items-center">
+
+        {/* --- CONTENEDOR DE BOTONES DE ACCIÓN --- */}
+        {/* Usamos gap-2 para separar los botones y pe-2 para que no pegue al borde derecho */}
+        <div className="d-flex align-items-center gap-2 pe-3">
+          {/* 1. Asistencia */}
+          <button
+            className="btn btn-outline-dark d-flex align-items-center gap-1 px-2 px-md-3"
+            onClick={() => navigate("/marcarAsistencia")}
+            title="Asistencia" // El title ayuda a que en celular, si lo mantienen presionado, diga qué es
+          >
+            <UserRoundCheck size={20} />
+            <span className="d-none d-md-inline">Asistencia</span>
+          </button>
+
+          {/* 2. Eventos */}
+          {rolesLocalStorage.some((r) => r.nombre === "incidencias") && (
             <button
-              className="btn btn-outline-dark d-flex align-items-center gap-1"
-              onClick={() => navigate("/marcarAsistencia")}
+              className="btn btn-outline-dark d-flex align-items-center gap-1 px-2 px-md-3"
+              onClick={() => navigate("/incidencias")}
+              title="Eventos"
             >
-              <UserRoundCheck /> Asistencia
+              <Megaphone size={20} className="text-auto" />
+              <span className="d-none d-md-inline">Eventos</span>
             </button>
-          </div>
-          {rolesLocalStorage.some((rol) => rol.nombre === "incidencias") && (
-            <div className="d-flex me-3 gap-2 align-items-center">
-              <button
-                className="btn btn-outline-dark d-flex align-items-center gap-1"
-                onClick={() => navigate("/incidencias")}
-              >
-                <Megaphone className="text-auto" />
-                Eventos
-              </button>
-            </div>
           )}
-          <div className="d-flex me-3 gap-2 align-items-center">
+
+          {/* 3. Pedidos Delivery (NUEVO - Solo visible para delivery y administradores) */}
+          {["delivery", "administrador"].includes(
+            rol?.empleado?.cargo?.nombre,
+          ) && (
             <button
-              className="btn btn-outline-dark d-flex align-items-center gap-1"
-              onClick={() => navigate("/vender/mesas")}
+              className="btn btn-outline-dark d-flex align-items-center gap-1 px-2 px-md-3"
+              onClick={() => navigate("/pedidosDelivery")}
+              title="Pedidos Delivery"
             >
-              <StoreIcon /> POS
+              <BikeIcon size={20} />
+              <span className="d-none d-md-inline">Pedidos</span>
             </button>
-          </div>
-          {rol && rol.empleado?.cargo?.nombre === "cocinero" && (
-            <div className="d-flex me-3 gap-2 align-items-center">
-              <button
-                className="btn btn-outline-dark d-flex align-items-center gap-1"
-                onClick={() => navigate("/cocina")}
-              >
-                <CookingPotIcon className="text-auto" />
-                Cocina
-              </button>
-            </div>
+          )}
+
+          {/* 4. POS (Oculto estrictamente si el rol es "delivery") */}
+          {rol?.empleado?.cargo?.nombre !== "delivery" && (
+            <button
+              className="btn btn-outline-dark d-flex align-items-center gap-1 px-2 px-md-3"
+              onClick={() => navigate("/vender/mesas")}
+              title="POS"
+            >
+              <StoreIcon size={20} />
+              <span className="d-none d-md-inline">POS</span>
+            </button>
+          )}
+
+          {/* 5. Cocina */}
+          {rol?.empleado?.cargo?.nombre === "cocinero" && (
+            <button
+              className="btn btn-outline-dark d-flex align-items-center gap-1 px-2 px-md-3"
+              onClick={() => navigate("/cocina")}
+              title="Cocina"
+            >
+              <CookingPotIcon size={20} className="text-auto" />
+              <span className="d-none d-md-inline">Cocina</span>
+            </button>
           )}
         </div>
       </nav>

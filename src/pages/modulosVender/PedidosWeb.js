@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
 import Pusher from "pusher-js";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getPedidosPendientes } from "../service/GetPedidosPendientes";
+import { getPedidosPendientes } from "../../service/GetPedidosPendientes";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import PedidoCard from "../components/componenteVender/CardPedidosPendientes";
-import { Cargando } from "../components/componentesReutilizables/Cargando";
-import axiosInstance from "../api/AxiosInstance";
-import { getPedidosEnProceso } from "../service/GetPedidosProceso";
-import { getPedidosListos } from "../service/GetPedidosListos";
+import PedidoCard from "../../components/componenteVender/CardPedidosPendientes";
+import { Cargando } from "../../components/componentesReutilizables/Cargando";
+import axiosInstance from "../../api/AxiosInstance";
+import { getPedidosEnProceso } from "../../service/GetPedidosProceso";
+import { getPedidosListos } from "../../service/GetPedidosListos";
 
-import ModalRight from "../components/componentesReutilizables/ModalRight";
-import { ModalFooter } from "../components/componenteVender/cuerpoModalRight/ModalFooter";
-import { ModalCabecera } from "../components/componenteVender/cuerpoModalRight/ModalCabecera";
-import { ModalCuerpo } from "../components/componenteVender/cuerpoModalRight/ModalCuerpo";
+import ModalRight from "../../components/componentesReutilizables/ModalRight";
+import { ModalFooter } from "../../components/componenteVender/cuerpoModalRight/ModalFooter";
+import { ModalCabecera } from "../../components/componenteVender/cuerpoModalRight/ModalCabecera";
+import { ModalCuerpo } from "../../components/componenteVender/cuerpoModalRight/ModalCuerpo";
 import { CheckCheck, CookingPot, Hourglass } from "lucide-react";
 
 export function PedidosWeb() {
@@ -161,7 +161,8 @@ export function PedidosWeb() {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <div className="row g-3 h-100">
+      {/* CAMBIO 1: Quitamos "row g-3" y ponemos nuestra clase kanban-container */}
+      <div className="kanban-container h-100  px-md-0">
         {[
           {
             key: "pendientes",
@@ -191,7 +192,8 @@ export function PedidosWeb() {
             ),
           },
         ].map(({ key, title, border, icon }) => (
-          <div key={key} className="col-md-4 h-100">
+          /* CAMBIO 2: Quitamos "col-md-4" y ponemos nuestra clase kanban-col */
+          <div key={key} className="kanban-col">
             <div
               className="card flex-grow-1 h-100 d-flex shadow-sm"
               style={{
@@ -199,24 +201,25 @@ export function PedidosWeb() {
                 borderRadius: "0.5rem",
               }}
             >
-              <div className="d-flex card-header bg-transparent  border-bottom p-2">
-                <h3 className="text-dark">{title}</h3>
+              <div className="d-flex card-header bg-transparent border-bottom p-2 align-items-center">
+                <h3 className="text-dark mb-0 fs-5 fw-bold">{title}</h3>
                 <div className="text-end ms-auto">{icon}</div>
               </div>
+
               <Droppable droppableId={key}>
                 {(provided) => (
                   <div
                     ref={provided.innerRef}
                     {...provided.droppableProps}
-                    className="card-body overflow-auto p-3"
+                    className="card-body overflow-auto p-2 p-md-3"
                   >
                     {isLoading && <Cargando />}
                     {isError && (
-                      <div className="error">
-                        Error al cargar Pedidos Pendientes
+                      <div className="error text-danger">
+                        Error al cargar Pedidos
                       </div>
                     )}
-                    {pedidos[key].map((pedido, index) => (
+                    {pedidos[key]?.map((pedido, index) => (
                       <Draggable
                         key={pedido.id}
                         draggableId={pedido.id.toString()}
@@ -227,12 +230,13 @@ export function PedidosWeb() {
                             ref={provided.innerRef}
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
+                            className="mb-3" /* Separación entre tarjetas */
                           >
                             <PedidoCard
                               pedido={pedido}
                               onOpenModal={() => {
-                                setSelectedPedido(pedido); // Guardar el pedido seleccionado
-                                setIsModalOpen(true); // Abrir el modal
+                                setSelectedPedido(pedido);
+                                setIsModalOpen(true);
                               }}
                             />
                           </div>
@@ -248,11 +252,12 @@ export function PedidosWeb() {
         ))}
       </div>
 
+      {/* MODAL (Se queda exactamente igual) */}
       <ModalRight
         isOpen={isModalOpen}
         onClose={() => {
           setIsModalOpen(false);
-          setSelectedPedido(null); // Limpiar el pedido seleccionado al cerrar
+          setSelectedPedido(null);
         }}
         title="Detalles del Pedido"
         submitText="Pagar"
@@ -262,19 +267,9 @@ export function PedidosWeb() {
         }}
       >
         {selectedPedido ? (
-          <div className="p-0 rounded-0 border-none ">
-            {/* ============================= */}
-            {/* CABECERA DEL MODAL*/}
-            {/* ============================= */}
+          <div className="p-0 rounded-0 border-none d-flex flex-column h-100">
             <ModalCabecera selectedPedido={selectedPedido} />
-            {/* ============================= */}
-            {/* CUERPO DEL MODAL*/}
-            {/* ============================= */}
             <ModalCuerpo selectedPedido={selectedPedido} />
-
-            {/* ============================= */}
-            {/* PIES DEL MODAL*/}
-            {/* ============================= */}
             <ModalFooter selectedPedido={selectedPedido} />
           </div>
         ) : (

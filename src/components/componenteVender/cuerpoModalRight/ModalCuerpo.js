@@ -3,7 +3,7 @@ import { capitalizeFirstLetter } from "../../../hooks/FirstLetterUp";
 export function ModalCuerpo({ selectedPedido }) {
   console.log("Pedido seleccionado en ModalCuerpo:", selectedPedido);
   return (
-    <div className="card-body h-100 p-0">
+    <div className="card-body p-0">
       <ul className=" m-3">
         {selectedPedido?.detalles_pedido?.length > 0 ? (
           <>

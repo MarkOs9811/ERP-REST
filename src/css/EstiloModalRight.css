@@ -236,3 +236,72 @@ body.dark-theme .modal-right-backdrop {
     background-color: rgba(21, 26, 32, 0) !important;
 }
 /* ========== FIN TEMA OSCURO MODAL RIGHT ESTILO MODERNO ========== */
+
+/* ========================================= */
+/* BOTON PARA CERRAR MODAL (COMPORTAMIENTO PC) */
+/* ========================================= */
+.btn-close-auto {
+    position: absolute;
+    /* En PC flota fuera del modal */
+    width: 40px;
+    height: 40px;
+    top: 15px;
+    left: -20px;
+    z-index: 2000;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.btn-close-auto:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+
+.btn-close-auto:active {
+    transform: scale(0.95);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Margen en PC para que el título no choque con el botón flotante */
+.modal-title-wrapper {
+    margin-left: 10px;
+}
+
+
+/* ========================================= */
+/* RESPONSIVE MÓVIL (PANTALLAS CELULAR)      */
+/* ========================================= */
+@media (max-width: 768px) {
+
+    /* 1. El modal debe ocupar el 100% del ancho, ignorando el "500px" del inline style */
+    .custom-width-mobile {
+        width: 100% !important;
+        border-radius: 0 !important;
+        /* Quitamos bordes redondeados si tuviera */
+    }
+
+    /* 2. El botón de cerrar DEJA de flotar afuera y se pone normal adentro del header */
+    .btn-close-auto {
+        position: static !important;
+        /* Vuelve al flujo normal */
+        width: 35px;
+        height: 35px;
+        box-shadow: none;
+        /* Quitamos sombra exagerada en móvil */
+        background-color: transparent;
+        border: none;
+    }
+
+    /* En móvil no necesitamos el margen extra del título */
+    .modal-title-wrapper {
+        margin-left: 0;
+    }
+
+    /* Ajustes sutiles de fuentes para móvil */
+    .modal-right-title {
+        font-size: 1.1rem;
+    }
+}

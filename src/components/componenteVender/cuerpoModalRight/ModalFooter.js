@@ -8,9 +8,9 @@ import {
   CheckCheck,
   Megaphone,
   Printer,
-  MapPin, // Importamos ícono de mapa
+  MapPin,
   ExternalLink,
-  CookingPotIcon, // Importamos ícono de enlace externo
+  CookingPotIcon,
 } from "lucide-react";
 import { useProcesarPagoWeb } from "../../../hooks/VenderDeliveryHook/UseProcesarPagoWeb";
 
@@ -53,21 +53,22 @@ export function ModalFooter({ selectedPedido }) {
     }, 100);
   };
 
-  // 2. Tu función del botón se reduce a esto:
   const handleRealizarPago = () => {
     procesarPago(selectedPedido);
   };
+
   // Validamos si tenemos coordenadas
   const tieneUbicacion = selectedPedido.latitud && selectedPedido.longitud;
 
+  // Variable rápida para saber si está pagado
+  const estaPagado = selectedPedido.estado_pago === "pagado";
+
   return (
     <>
-      <div className="card-footer d-flex justify-content-between align-items-center">
-        {/* ... (TODA TU LÓGICA DE ESTADOS Y BOTONES SE MANTIENE IGUAL AQUÍ) ... */}
-
-        {/* Estado del pedido (Tu código original) */}
+      <div className="card-footer d-flex justify-content-between align-items-center flex-wrap gap-2">
+        {/* --- ESTADO DEL PEDIDO --- */}
         <div
-          className="badge p-2 "
+          className="badge p-2 d-flex align-items-center"
           style={{
             backgroundColor:
               selectedPedido.estado_pedido === 3
@@ -91,8 +92,9 @@ export function ModalFooter({ selectedPedido }) {
           </span>
         </div>
 
-        {/* Botones según el estado (Tu código original) */}
-        <div className="d-flex gap-2">
+        {/* --- BOTONES DE ACCIÓN --- */}
+        <div className="d-flex gap-2 align-items-center">
+          {/* Modal del Comprobante (Imagen) */}
           <div className="comprobante-container">
             {modalOpen && (
               <div
@@ -111,67 +113,83 @@ export function ModalFooter({ selectedPedido }) {
             )}
           </div>
 
+          {/* ESTADO 3: PENDIENTE */}
           {selectedPedido.estado_pedido === 3 && (
-            <button
-              className="btn-principal p-1 ms-auto"
-              title="Notificar al cliente"
-            >
+            <button className="btn-principal p-1" title="Notificar al cliente">
               <Megaphone />
             </button>
           )}
 
+          {/* ESTADO 4: EN PROCESO */}
           {selectedPedido.estado_pedido === 4 && (
             <>
-              <button
-                className="btn-principal p-1 ms-auto"
-                onClick={ImprimirPedidoWeb}
-                type="button"
-              >
-                <Printer />
-              </button>
-              <div style={{ display: "none" }}>
-                <TicketPedidosWeb ref={componentRef} dataActual={datosVenta} />
-              </div>
+              {!estaPagado && (
+                <>
+                  <button
+                    className="btn-principal p-1"
+                    onClick={ImprimirPedidoWeb}
+                    type="button"
+                    title="Imprimir Ticket"
+                  >
+                    <Printer />
+                  </button>
+                  <div style={{ display: "none" }}>
+                    <TicketPedidosWeb
+                      ref={componentRef}
+                      dataActual={datosVenta}
+                    />
+                  </div>
+                </>
+              )}
               <NotificacionBtn pedido={selectedPedido} />
             </>
           )}
 
+          {/* ESTADO 5: LISTO PARA RECOGER */}
           {selectedPedido.estado_pedido === 5 && (
             <>
-              <button
-                type="button"
-                className="btn-principal ms-2  p-1 ms-auto"
-                onClick={() => handleRealizarPago()}
-              >
-                <CheckCheck /> Pagar
-              </button>
-              <button
-                className="btn-principal ms-2  p-1 ms-auto"
-                onClick={ImprimirPedidoWeb}
-                type="button"
-              >
-                <Printer />
-              </button>
-              <div style={{ display: "none" }}>
-                <TicketPedidosWeb ref={componentRef} dataActual={datosVenta} />
-              </div>
-
+              {!estaPagado && (
+                <>
+                  <button
+                    type="button"
+                    className="btn-principal p-1"
+                    onClick={handleRealizarPago}
+                    title="Procesar Pago"
+                  >
+                    <CheckCheck /> Pagar
+                  </button>
+                  <button
+                    className="btn-principal p-1"
+                    onClick={ImprimirPedidoWeb}
+                    type="button"
+                    title="Imprimir Ticket"
+                  >
+                    <Printer />
+                  </button>
+                  <div style={{ display: "none" }}>
+                    <TicketPedidosWeb
+                      ref={componentRef}
+                      dataActual={datosVenta}
+                    />
+                  </div>
+                </>
+              )}
               <NotificacionBtn pedido={selectedPedido} />
             </>
           )}
 
-          {selectedPedido.estado_pago === "pagado" && (
-            <button className="btn btn-sm btn-warning p-1 ms-auto">
-              <CheckCheck className="me-1" /> Confirmar Comprobante
+          {/* ESTADO PAGADO: Solo confirmación del comprobante */}
+          {estaPagado && (
+            <button className="btn btn-sm btn-warning p-1 text-dark fw-bold">
+              <CheckCheck className="me-1" size={18} /> Confirmar Comprobante
             </button>
           )}
         </div>
       </div>
 
       {/* ======================================================= */}
-      {/* 🗺️ SECCIÓN DEL MAPA (AQUÍ ESTÁ EL CAMBIO IMPORTANTE) 🗺️ */}
+      {/* 🗺️ SECCIÓN DEL MAPA (CON URLS CORREGIDAS) 🗺️ */}
       {/* ======================================================= */}
-
       {tieneUbicacion ? (
         <div className="card m-2 overflow-hidden border-0 shadow-sm">
           {/* Encabezado del mapa */}
@@ -186,7 +204,7 @@ export function ModalFooter({ selectedPedido }) {
           </div>
 
           <div className="position-relative">
-            {/* 1. IFRAME DE GOOGLE MAPS (GRATIS) */}
+            {/* IFRAME DE GOOGLE MAPS CORREGIDO */}
             <iframe
               title="Mapa de entrega"
               width="100%"
@@ -195,11 +213,10 @@ export function ModalFooter({ selectedPedido }) {
               loading="lazy"
               allowFullScreen
               referrerPolicy="no-referrer-when-downgrade"
-              // z=15 es el zoom, output=embed crea la vista incrustada
               src={`https://maps.google.com/maps?q=${selectedPedido.latitud},${selectedPedido.longitud}&hl=es&z=16&output=embed`}
             ></iframe>
 
-            {/* Botón flotante para abrir en app externa */}
+            {/* Botón flotante para abrir en app externa (Corregido) */}
             <div className="position-absolute bottom-0 end-0 p-2">
               <a
                 href={`https://www.google.com/maps/search/?api=1&query=${selectedPedido.latitud},${selectedPedido.longitud}`}
@@ -208,7 +225,7 @@ export function ModalFooter({ selectedPedido }) {
                 className="btn btn-primary btn-sm shadow"
                 style={{ fontSize: "0.8rem" }}
               >
-                <ExternalLink className="me-1" /> Abrir en Google Maps
+                <ExternalLink className="me-1" size={14} /> Abrir en Maps
               </a>
             </div>
           </div>
@@ -216,7 +233,7 @@ export function ModalFooter({ selectedPedido }) {
       ) : (
         // Si es delivery pero no mandó ubicación (o es recojo en tienda)
         selectedPedido.tipo_entrega === "delivery" && (
-          <div className="alert alert-warning m-2 d-flex align-items-center gap-2">
+          <div className="alert alert-warning m-2 d-flex align-items-center gap-2 border-0">
             <MapPin size={16} />
             <small>
               Este pedido es delivery pero no tiene ubicación registrada.

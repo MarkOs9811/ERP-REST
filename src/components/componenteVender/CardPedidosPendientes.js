@@ -16,12 +16,10 @@ import { useReactToPrint } from "react-to-print";
 import { TicketPedidosWeb } from "./TiketsType/TicketPedidosWeb";
 
 const PedidoCard = ({ pedido, onOpenModal }) => {
-  // 1. Inicializas el hook
   const { procesarPago } = useProcesarPagoWeb();
 
-  // 2. Función del botón
   const handleRealizarPago = (e) => {
-    e.stopPropagation(); // Evita que se abra el modal al dar click en pagar
+    e.stopPropagation();
     procesarPago(pedido);
   };
 
@@ -57,6 +55,7 @@ const PedidoCard = ({ pedido, onOpenModal }) => {
       handlePrint();
     }, 100);
   };
+
   const estadoClases = {
     3: {
       bgColor: "#fff3cd",
@@ -76,7 +75,10 @@ const PedidoCard = ({ pedido, onOpenModal }) => {
         <div className="d-flex flex-column align-items-center justify-content-center gap-2 w-100 h-100">
           <button
             className="btn-principal p-1"
-            onClick={ImprimirPedidoWeb}
+            onClick={(e) => {
+              e.stopPropagation(); // Buena práctica
+              ImprimirPedidoWeb();
+            }}
             type="button"
           >
             <Printer className="text-auto" />
@@ -93,19 +95,35 @@ const PedidoCard = ({ pedido, onOpenModal }) => {
       icono: <CheckCheck color="#28a745" size={16} />,
       botones: (
         <div className="d-flex flex-column align-items-center justify-content-center gap-2 w-100 h-100">
-          <button
-            type="button"
-            className="btn-principal p-1"
-            onClick={handleRealizarPago}
-          >
-            <CheckCheckIcon className="text-auto" />
-          </button>
-          <button className="btn-principal p-1" onClick={ImprimirPedidoWeb}>
-            <PrinterIcon className="text-auto" />
-          </button>
-          <div style={{ display: "none" }}>
-            <TicketPedidosWeb ref={componentRef} dataActual={datosVenta} />
-          </div>
+          {/* LÓGICA APLICADA AQUÍ: Solo mostrar si NO está pagado */}
+          {pedido.estado_pago !== "pagado" && (
+            <>
+              <button
+                type="button"
+                className="btn-principal p-1"
+                onClick={handleRealizarPago}
+                title="Procesar Pago"
+              >
+                <CheckCheckIcon className="text-auto" />
+              </button>
+
+              <button
+                className="btn-principal p-1"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  ImprimirPedidoWeb();
+                }}
+                title="Imprimir Ticket"
+              >
+                <PrinterIcon className="text-auto" />
+              </button>
+              <div style={{ display: "none" }}>
+                <TicketPedidosWeb ref={componentRef} dataActual={datosVenta} />
+              </div>
+            </>
+          )}
+
+          {/* Este botón siempre se muestra */}
           <NotificacionBtn pedido={pedido} />
         </div>
       ),
@@ -116,7 +134,7 @@ const PedidoCard = ({ pedido, onOpenModal }) => {
 
   return (
     <div
-      className={`mb-2 rounded position-relative overflow-hidden shadow-sm ${estadoActual.bgColor}`}
+      className={`mb-2 rounded position-relative overflow-hidden shadow-sm`}
       style={{
         background: estadoActual.bgColor,
         borderLeft: `4px solid ${
@@ -128,18 +146,10 @@ const PedidoCard = ({ pedido, onOpenModal }) => {
         }`,
       }}
     >
-      {/* CORRECCIONES CLAVE EN EL ROW:
-         1. 'g-0': Elimina los espaciados negativos para ajustar perfecto al contenedor.
-         2. 'm-0': Asegura que no haya márgenes externos.
-         3. Quitamos 'align-items-center' del row: Así las columnas se estiran al 100% de alto (full height).
-         4. Quitamos 'ms-auto': Esto causaba que se moviera.
-      */}
       <div className="row g-0 w-100 m-0">
         {/* Columna Izquierda (Texto) */}
-        {/* Agregamos 'd-flex flex-column justify-content-center' para centrar el texto verticalmente */}
-        {/* Agregamos 'p-3' para dar aire al texto ya que quitamos los gutters */}
         <div
-          className="col-md-7 p-3 d-flex flex-column justify-content-center"
+          className="col-7 col-md-7 p-3 d-flex flex-column justify-content-center"
           onClick={onOpenModal}
           style={{ cursor: "pointer" }}
         >
@@ -160,7 +170,7 @@ const PedidoCard = ({ pedido, onOpenModal }) => {
 
         {/* Columna Derecha (Precios) */}
         <div
-          className="col-md-4 p-3 d-flex flex-column justify-content-center align-items-end"
+          className="col-3 col-md-4 p-3 d-flex flex-column justify-content-center align-items-end"
           onClick={onOpenModal}
           style={{ cursor: "pointer" }}
         >
@@ -187,9 +197,8 @@ const PedidoCard = ({ pedido, onOpenModal }) => {
         </div>
 
         {/* Columna Lateral (Botones) */}
-        {/* 'bg-dark' llenará toda la altura porque quitamos align-items-center del row padre */}
         <div
-          className="col-md-1 py-2  d-flex align-items-center justify-content-center border-start"
+          className="col-2 col-md-1 py-2 d-flex align-items-center justify-content-center border-start"
           style={{ background: "#ffffff" }}
         >
           {estadoActual.botones}

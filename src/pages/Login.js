@@ -43,7 +43,7 @@ export const Login = () => {
       //   email: data.email,
       //   password: data.password,
       // });
-      const response = await axios.post("http://erp-api.test/api/login", {
+      const response = await axios.post("http://192.168.1.12:8000/api/login", {
         email: data.email,
         password: data.password,
       });
@@ -94,11 +94,6 @@ export const Login = () => {
       <div className="login-container-grid">
         {/* === COLUMNA IZQUIERDA (MARCA CON TU IMAGEN) === */}
         <div className="login-left-panel">
-          <img
-            src="/images/LOGO_ERP_.png"
-            alt="Logo Fire Wok"
-            className="login-logo"
-          />
           <h1 className="login-brand-title">Bienvenido </h1>
           <p className="login-brand-subtitle">
             Gestiona tu restaurante de forma eficiente.

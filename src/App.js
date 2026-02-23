@@ -28,7 +28,7 @@ import { CerrarCaja } from "./pages/CerrarCaja";
 import { PreventaMesa } from "./components/componenteVender/PreventaMesa";
 import { DetallesPago } from "./components/componenteVender/DetallesPago";
 
-import { PedidosWeb } from "./pages/PedidosWeb";
+import { PedidosWeb } from "./pages/modulosVender/PedidosWeb";
 import { TakeAsistencia } from "./pages/TakeAsistencia";
 import { CocinaDespacho } from "./pages/modulosVender/CocinaDespacho";
 import LayoutPOS from "./LayoutPOS";
