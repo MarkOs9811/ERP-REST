@@ -9,13 +9,12 @@ function ModalGenerales({
   mensaje,
   cuerpo,
   children,
-
-  width = "500px", // Ancho por defecto
-  height = "auto", // Alto por defecto
-  showButtons = true, // Mostrar botones por defecto
-  textConfirm = "Confirmar", // Texto botón aceptar
-  textCancel = "Cancelar", // Texto botón cancelar
-  btnConfirmColor = "btn-danger", // Color botón confirmar (opcional)
+  width = "400px", // Un poco más angosto hace que las alertas se vean mejor
+  height = "auto",
+  showButtons = true,
+  textConfirm = "Confirmar",
+  textCancel = "Cancelar",
+  btnConfirmColor = "btn-danger",
 }) {
   const handleConfirm = async () => {
     try {
@@ -32,23 +31,29 @@ function ModalGenerales({
   if (!show) return null;
 
   return (
-    <div className={`modal-overlay ${show ? "show" : ""} m-0 p-0`}>
+    <div
+      className={`modal-overlay ${show ? "show" : ""} m-0 p-0 d-flex justify-content-center align-items-center`}
+      style={{ zIndex: 1050 }}
+    >
       <div
-        className="contenido-model bg-white m-0 p-0"
-        // Aquí aplicamos los estilos dinámicos pasados por props
+        className="bg-white rounded-4 shadow-lg d-flex flex-column overflow-hidden"
         style={{
           width: width,
           height: height,
           maxWidth: "95vw",
           maxHeight: "95vh",
-          overflowY: "auto",
+          animation: "fadeIn 0.2s ease-in-out", // Si tienes esta animación en tu CSS
         }}
       >
-        {/* Título */}
-        {mensaje && <h3 className="p-3">{mensaje}</h3>}
+        {/* Título más limpio sin el fondo gris duro */}
+        {mensaje && (
+          <div className="pt-4 pb-2 px-4 text-center">
+            <h4 className="fw-bold text-dark m-0">{mensaje}</h4>
+          </div>
+        )}
 
-        {/* Contenido (Children tiene prioridad) */}
-        <div className="modal-body p-0">
+        {/* Contenido centrado */}
+        <div className="modal-body px-4 py-3 text-center">
           {children
             ? children
             : cuerpo &&
@@ -57,17 +62,20 @@ function ModalGenerales({
                 : cuerpo)}
         </div>
 
-        {/* Botones de Acción (Renderizado condicional) */}
+        {/* Botones centrados y redondeados */}
         {showButtons && (
-          <div className="modal-footer p-3 text-end">
+          <div className="d-flex justify-content-center gap-3 px-4 pb-4 pt-2">
+            <button
+              onClick={handleCloseModal}
+              className="btn btn-light fw-bold rounded-pill px-4 py-2 text-muted border"
+            >
+              {textCancel}
+            </button>
             <button
               onClick={handleConfirm}
-              className={`btn ${btnConfirmColor} mx-2`}
+              className={`btn ${btnConfirmColor} fw-bold rounded-pill px-4 py-2 shadow-sm`}
             >
               {textConfirm}
-            </button>
-            <button onClick={handleCloseModal} className="btn btn-secondary">
-              {textCancel}
             </button>
           </div>
         )}

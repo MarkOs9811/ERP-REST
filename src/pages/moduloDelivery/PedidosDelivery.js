@@ -2,7 +2,14 @@ import { useEffect, useState } from "react";
 import Pusher from "pusher-js";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { MapPin, Package, CheckCircle2, Bike, ArrowRight } from "lucide-react";
+import {
+  MapPin,
+  Package,
+  CheckCircle2,
+  Bike,
+  ArrowRight,
+  AlertCircleIcon,
+} from "lucide-react";
 import { getPedidosListos } from "../../service/GetPedidosListos";
 import axiosInstance from "../../api/AxiosInstance";
 import ToastAlert from "../../components/componenteToast/ToastAlert";
@@ -13,6 +20,9 @@ import { ModalCabecera } from "../../components/componenteVender/cuerpoModalRigh
 import { ModalCuerpo } from "../../components/componenteVender/cuerpoModalRight/ModalCuerpo";
 import { ModalFooter } from "../../components/componenteVender/cuerpoModalRight/ModalFooter";
 import { GetPedidosEnCamino } from "../../service/GetPedidosEnCamino";
+import ModalGenerales from "../../components/componentesReutilizables/ModalGenerales";
+
+// Importación del Modal General
 
 export function PedidosDelivery() {
   const queryClient = useQueryClient();
@@ -20,6 +30,14 @@ export function PedidosDelivery() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPedido, setSelectedPedido] = useState(null);
+
+  // --- ESTADO PARA EL MODAL DE CONFIRMACIÓN ---
+  const [confirmConfig, setConfirmConfig] = useState({
+    show: false,
+    idPedido: null,
+    nuevoEstado: null,
+    accionTexto: "",
+  });
 
   // --- QUERIES ---
   const { data: listaRecoger = [], isLoading: loadRecoger } = useQuery({
@@ -54,8 +72,32 @@ export function PedidosDelivery() {
     };
   }, [queryClient]);
 
-  // --- ACCIÓN: CAMBIAR ESTADO ---
-  const cambiarEstado = async (idPedido, nuevoEstado) => {
+  // --- FUNCIÓN PARA ABRIR MODAL DE CONFIRMACIÓN ---
+  const solicitarCambioEstado = (idPedido, nuevoEstado) => {
+    const accionTexto =
+      nuevoEstado === 55 ? "Iniciar Ruta de Entrega" : "Confirmar Entrega";
+    setConfirmConfig({
+      show: true,
+      idPedido: idPedido,
+      nuevoEstado: nuevoEstado,
+      accionTexto: accionTexto,
+    });
+  };
+
+  const cerrarConfirmacion = () => {
+    setConfirmConfig({
+      show: false,
+      idPedido: null,
+      nuevoEstado: null,
+      accionTexto: "",
+    });
+  };
+
+  // --- ACCIÓN DEFINITIVA: CAMBIAR ESTADO ---
+  const ejecutarCambioEstado = async () => {
+    const { idPedido, nuevoEstado } = confirmConfig;
+    if (!idPedido || !nuevoEstado) return;
+
     try {
       await axiosInstance.put("/pedidosPendientes/cambiarEstado", {
         idPedido: idPedido,
@@ -69,21 +111,25 @@ export function PedidosDelivery() {
 
       setIsModalOpen(false);
       setSelectedPedido(null);
+      cerrarConfirmacion();
+
+      return true;
     } catch (error) {
       const mensaje =
         error.response?.data?.message || "Error al actualizar la ruta";
       ToastAlert("error", mensaje);
+      cerrarConfirmacion();
+      return false;
     }
   };
 
-  // Función auxiliar para abrir el modal
+  // Función auxiliar para abrir el modal de detalles
   const handleAbrirDetalle = (pedido) => {
     setSelectedPedido(pedido);
     setIsModalOpen(true);
   };
 
   return (
-    // CAMBIO DE DISEÑO: Fondo ultra claro (#f8f9fa) para que las tarjetas blancas resalten
     <div className="d-flex flex-column h-100  ">
       {/* --- NAVEGACIÓN POR PESTAÑAS (TABS) MODERNAS --- */}
       <div
@@ -104,7 +150,6 @@ export function PedidosDelivery() {
         >
           <Package className="me-2" size={18} style={{ marginBottom: "2px" }} />
           Por Recoger
-          {/* Badge sutil con el número */}
           <span className="badge bg-white text-dark ms-2 rounded-pill px-2">
             {listaRecoger.length}
           </span>
@@ -154,7 +199,6 @@ export function PedidosDelivery() {
                     pedido={pedido}
                     onOpenModal={() => handleAbrirDetalle(pedido)}
                   />
-                  {/* Botón Integrado y limpio */}
                   <div className="p-3 bg-white border-top border-light">
                     <button
                       className="btn w-100 fw-bold rounded-pill py-2 shadow-sm d-flex justify-content-center align-items-center gap-2"
@@ -164,7 +208,7 @@ export function PedidosDelivery() {
                         color: "white",
                         border: "none",
                       }}
-                      onClick={() => cambiarEstado(pedido.id, 55)}
+                      onClick={() => solicitarCambioEstado(pedido.id, 55)}
                     >
                       <Bike size={20} />
                       Iniciar Ruta
@@ -200,7 +244,6 @@ export function PedidosDelivery() {
                     onOpenModal={() => handleAbrirDetalle(pedido)}
                   />
                   <div className="p-3 bg-white border-top border-light d-flex gap-3">
-                    {/* AHORA SÍ: El botón Mapa abre el modal */}
                     <button
                       className="btn flex-grow-1 fw-bold rounded-pill py-2 d-flex justify-content-center align-items-center gap-2"
                       style={{
@@ -219,7 +262,7 @@ export function PedidosDelivery() {
                         color: "white",
                         border: "none",
                       }}
-                      onClick={() => cambiarEstado(pedido.id, 6)}
+                      onClick={() => solicitarCambioEstado(pedido.id, 6)}
                     >
                       <CheckCircle2 size={18} /> Entregado
                     </button>
@@ -262,7 +305,7 @@ export function PedidosDelivery() {
                     color: "white",
                     border: "none",
                   }}
-                  onClick={() => cambiarEstado(selectedPedido.id, 55)}
+                  onClick={() => solicitarCambioEstado(selectedPedido.id, 55)}
                 >
                   <Bike size={20} />
                   Iniciar Ruta de Entrega
@@ -275,7 +318,7 @@ export function PedidosDelivery() {
                     color: "white",
                     border: "none",
                   }}
-                  onClick={() => cambiarEstado(selectedPedido.id, 6)}
+                  onClick={() => solicitarCambioEstado(selectedPedido.id, 6)}
                 >
                   <CheckCircle2 size={20} />
                   Confirmar Entrega
@@ -287,6 +330,39 @@ export function PedidosDelivery() {
           <Cargando />
         )}
       </ModalRight>
+
+      {/* --- MODAL GENERAL DE CONFIRMACIÓN --- */}
+      <ModalGenerales
+        show={confirmConfig.show}
+        handleAccion={ejecutarCambioEstado}
+        handleCloseModal={cerrarConfirmacion}
+        mensaje="Confirmar Acción"
+        btnConfirmColor="btn-danger" // Puedes cambiarlo a btn-dark si prefieres
+      >
+        <div className="d-flex flex-column align-items-center">
+          {/* Ícono llamativo para la acción */}
+          <div
+            className="bg-danger bg-opacity-10 text-danger rounded-circle d-flex align-items-center justify-content-center mb-3"
+            style={{ width: "64px", height: "64px" }}
+          >
+            <AlertCircleIcon size={32} />
+          </div>
+
+          <p className="text-muted mb-4 px-2" style={{ fontSize: "1.05rem" }}>
+            ¿Estás seguro de que deseas cambiar el estado de este pedido?
+          </p>
+
+          {/* Caja de resumen de la acción */}
+          <div className="w-100 p-3 bg-light rounded-4 border border-light shadow-sm d-flex flex-column align-items-center">
+            <span className="badge bg-white text-secondary border px-3 py-1 rounded-pill mb-2 shadow-sm">
+              Pedido #{confirmConfig.idPedido}
+            </span>
+            <h5 className="text-danger fw-bold m-0">
+              {confirmConfig.accionTexto}
+            </h5>
+          </div>
+        </div>
+      </ModalGenerales>
     </div>
   );
 }
