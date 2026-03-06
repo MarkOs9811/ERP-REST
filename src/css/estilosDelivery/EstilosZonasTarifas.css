@@ -1,0 +1,63 @@
+/* EstilosZonas.css */
+
+.sede-config-card {
+    transition: all 0.3s ease;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #eaeaea;
+    background-color: #ffffff;
+}
+
+.sede-config-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.06) !important;
+    border-color: #d1d5db;
+}
+
+.icon-box {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f9fa;
+    color: #4b5563;
+}
+
+.icon-box-primary {
+    background-color: rgba(13, 110, 253, 0.1);
+    color: #0d6efd;
+}
+
+.icon-box-success {
+    background-color: rgba(25, 135, 84, 0.1);
+    color: #198754;
+}
+
+.icon-box-warning {
+    background-color: rgba(255, 193, 7, 0.15);
+    color: #d97706;
+}
+
+.config-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px dashed #e5e7eb;
+}
+
+.config-item:last-child {
+    border-bottom: none;
+}
+
+.propina-badge {
+    background-color: #f3f4f6;
+    color: #374151;
+    border: 1px solid #e5e7eb;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}

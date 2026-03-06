@@ -1,0 +1,58 @@
+/* EstilosPromociones.css */
+
+.promo-card {
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid #eaeaea;
+    background-color: #ffffff;
+    transition: all 0.3s ease;
+}
+
+.promo-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08) !important;
+    border-color: #d1d5db;
+}
+
+/* El contenedor de la foto para que siempre mantenga proporción */
+.promo-banner-container {
+    width: 100%;
+    height: 160px;
+    position: relative;
+    overflow: hidden;
+    background-color: #f3f4f6;
+}
+
+.promo-banner {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.promo-card:hover .promo-banner {
+    transform: scale(1.05);
+    /* Pequeño zoom al pasar el mouse */
+}
+
+/* Insignia flotante sobre la imagen */
+.promo-badge-status {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    backdrop-filter: blur(4px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.price-old {
+    text-decoration: line-through;
+    color: #9ca3af;
+    font-size: 0.9rem;
+}
+
+.price-new {
+    color: #dc3545;
+    /* Rojo llamativo para la oferta */
+    font-size: 1.3rem;
+    font-weight: 800;
+}

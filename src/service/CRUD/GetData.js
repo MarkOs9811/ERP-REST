@@ -6,8 +6,7 @@ export const GetData = async (tabla) => {
   try {
     const response = await axiosInstance.get(`/${tabla}`);
     if (response.data.success) {
-      ToastAlert("success", "Datos obtenidos correctamente");
-      return true;
+      return response.data.data;
     }
     return false;
   } catch (error) {

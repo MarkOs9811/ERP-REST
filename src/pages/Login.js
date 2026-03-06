@@ -43,14 +43,13 @@ export const Login = () => {
       //   email: data.email,
       //   password: data.password,
       // });
-      // const response = await axios.post("http://192.168.1.12:8000/api/login", {
-      const response = await axios.post(
-        "https://fe27-38-43-130-95.ngrok-free.app/api/login",
-        {
-          email: data.email,
-          password: data.password,
-        },
-      );
+      const response = await axios.post("http://erp-api.test/api/login", {
+        // const response = await axios.post(
+        //   "https://fe27-38-43-130-95.ngrok-free.app/api/login",
+        //   {
+        email: data.email,
+        password: data.password,
+      });
 
       if (response.data.token) {
         login(response.data.token, response.data.user);

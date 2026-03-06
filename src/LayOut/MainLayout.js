@@ -66,6 +66,10 @@ import { StepUsuario } from "../components/componentesFirstSteps/StepUsuario";
 import { Usuarios } from "../pages/moduloPlanilla/Usuarios";
 import { LayOutDelivery } from "./LayOutDelivery";
 import { PedidosDelivery } from "../pages/moduloDelivery/PedidosDelivery";
+import { Despacho } from "../pages/moduloDelivery/Despacho";
+import { Repartidores } from "../pages/moduloDelivery/Repartidores";
+import { ZonaTarifa } from "../pages/moduloDelivery/ZonaTarifa";
+import { Promociones } from "../pages/moduloDelivery/Promociones";
 
 export const MainLayout = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -485,8 +489,102 @@ export const MainLayout = () => {
                           }
                         />
                       </Route>
+                      {/* RUTAS PARA MODULO DELIVERY */}
+                      <Route path="/delivery">
+                        <Route
+                          index
+                          element={
+                            <PrivateRoute
+                              allowedRoles={["delivery", "administrador"]}
+                            >
+                              <Despacho />
+                            </PrivateRoute>
+                          }
+                        />
+                        <Route
+                          path="pedidos"
+                          element={
+                            <PrivateRoute
+                              allowedRoles={["delivery", "administrador"]}
+                            >
+                              <Despacho />
+                            </PrivateRoute>
+                          }
+                        />
+                        <Route
+                          path="repartidores"
+                          element={
+                            <PrivateRoute
+                              allowedRoles={["delivery", "administrador"]}
+                            >
+                              <Repartidores />
+                            </PrivateRoute>
+                          }
+                        />
+                        <Route
+                          path="zonas-y-tarifas"
+                          element={
+                            <PrivateRoute
+                              allowedRoles={["delivery", "administrador"]}
+                            >
+                              <ZonaTarifa />
+                            </PrivateRoute>
+                          }
+                        />
+                        <Route
+                          path="promociones-app"
+                          element={
+                            <PrivateRoute
+                              allowedRoles={["delivery", "administrador"]}
+                            >
+                              <Promociones />
+                            </PrivateRoute>
+                          }
+                        />
+                        <Route
+                          path="mesas"
+                          element={
+                            <PrivateRoute
+                              allowedRoles={["delivery", "administrador"]}
+                            >
+                              <Mesas />
+                            </PrivateRoute>
+                          }
+                        />
+                        <Route
+                          path="reportes"
+                          element={
+                            <PrivateRoute
+                              allowedRoles={["delivery", "administrador"]}
+                            >
+                              <Reportes />
+                            </PrivateRoute>
+                          }
+                        />
+                        <Route
+                          path="ajustes-ventas"
+                          element={
+                            <PrivateRoute
+                              allowedRoles={["delivery", "administrador"]}
+                            >
+                              <AjustesVentas />
+                            </PrivateRoute>
+                          }
+                        />
+                        <Route
+                          path="cajas"
+                          element={
+                            <PrivateRoute
+                              allowedRoles={["delivery", "administrador"]}
+                            >
+                              <Cajas />
+                            </PrivateRoute>
+                          }
+                        />
+                      </Route>
 
                       {/* RUTA PARA UNICAMENTE COCINA */}
+
                       <Route
                         path="/vender/cocina"
                         element={

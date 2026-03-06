@@ -20,6 +20,7 @@ import {
   ChevronRight,
   Warehouse,
   UsersRound,
+  BikeIcon,
 } from "lucide-react";
 import { useAuth } from "../AuthContext";
 import { capitalizeFirstLetter } from "../hooks/FirstLetterUp";
@@ -56,10 +57,12 @@ export function SideBar() {
     finanzas: TrendingUp,
     "areas-y-cargos": Building2,
     configuracion: Settings,
+    delivery: BikeIcon,
   };
 
   const customOrder = [
     "ventas",
+    "delivery",
     "platos",
     "vender",
     "almacen",
@@ -81,6 +84,14 @@ export function SideBar() {
       "Reportes",
       "Mesas",
       "Ajustes Ventas",
+    ],
+    delivery: [
+      "Pedidos",
+      "Repartidores",
+      "Zonas y Tarifas",
+      "Promociones App",
+      "Configuracion App",
+      "Reportes",
     ],
     rrhh: [
       "Usuarios",
@@ -132,7 +143,7 @@ export function SideBar() {
         {},
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        }
+        },
       );
       logout();
       navigate("/login");
@@ -175,13 +186,13 @@ export function SideBar() {
         if (estiloObj.clave) {
           document.documentElement.style.setProperty(
             "--color-brand",
-            estiloObj.clave
+            estiloObj.clave,
           );
         }
       } else if (parsedData.clave) {
         document.documentElement.style.setProperty(
           "--color-brand",
-          parsedData.clave
+          parsedData.clave,
         );
       }
     }
@@ -242,7 +253,6 @@ export function SideBar() {
             const hasSubmenu = subMenus[roleName];
 
             if (hasSubmenu) {
-              console.log("submenu del sidebar", hasSubmenu);
               return (
                 <div key={role.id}>
                   <li
