@@ -71,34 +71,31 @@
 
 /* BOTON PARA CERRAR MODAL */
 .btn-close-auto {
-    position: absolute;
-    width: 45px;
-    height: 45px;
-    top: 15px;
-    left: -25px;
-    /* Se muestra fuera del borde del modal */
+    position: relative;
+    width: 36px;
+    height: 36px;
     z-index: 2000;
-    background-color: #fff;
+    background-color: transparent;
+    color: var(--text-muted);
     border: none;
     border-radius: 50%;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    transition: all 0.2s ease;
 }
 
 /* Efecto hover */
 .btn-close-auto:hover {
-    transform: scale(1.1);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+    background-color: rgba(238, 82, 82, 0.1);
+    color: var(--brand-primary);
+    transform: scale(1.05);
 }
 
 /* Efecto al presionar */
 .btn-close-auto:active {
     transform: scale(0.95);
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
 }
 
 @keyframes slideIn {
@@ -197,15 +194,16 @@ body.dark-theme .modal-right-container {
 }
 
 body.dark-theme .btn-close-auto {
-    background-color: #2a2a2a42;
-    color: #fff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-    border:1px solid #313a46!important;
+    background-color: transparent;
+    color: var(--text-muted);
+    border: none !important;
+    box-shadow: none;
 }
 
 body.dark-theme .btn-close-auto:hover {
-    background-color: #3a3a3a;
-    transform: scale(1.1);
+    background-color: rgba(238, 82, 82, 0.15);
+    color: var(--brand-primary);
+    transform: scale(1.05);
 }
 body.dark-theme .modal-right-title {
     color: #ee5252 !important;
@@ -240,30 +238,7 @@ body.dark-theme .modal-right-backdrop {
 /* ========================================= */
 /* BOTON PARA CERRAR MODAL (COMPORTAMIENTO PC) */
 /* ========================================= */
-.btn-close-auto {
-    position: absolute;
-    /* En PC flota fuera del modal */
-    width: 40px;
-    height: 40px;
-    top: 15px;
-    left: -20px;
-    z-index: 2000;
-    background-color: #fff;
-    border: 1px solid #e0e0e0;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-
-.btn-close-auto:hover {
-    transform: scale(1.1);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
-}
-
-.btn-close-auto:active {
-    transform: scale(0.95);
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-}
+/* Se eliminaron duplicados absolutos de PC ya que se estandarizó como relative */
 
 /* Margen en PC para que el título no choque con el botón flotante */
 .modal-title-wrapper {
@@ -285,14 +260,9 @@ body.dark-theme .modal-right-backdrop {
 
     /* 2. El botón de cerrar DEJA de flotar afuera y se pone normal adentro del header */
     .btn-close-auto {
-        position: static !important;
         /* Vuelve al flujo normal */
         width: 35px;
         height: 35px;
-        box-shadow: none;
-        /* Quitamos sombra exagerada en móvil */
-        background-color: transparent;
-        border: none;
     }
 
     /* En móvil no necesitamos el margen extra del título */

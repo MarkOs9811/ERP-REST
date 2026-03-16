@@ -31,9 +31,16 @@ export function SideBar() {
   const navigate = useNavigate();
   const BASE_URL = process.env.REACT_APP_BASE_URL;
   const miEmpresa = JSON.parse(localStorage.getItem("empresa")) || {};
-  const fotoEmpresa = miEmpresa.logo
-    ? `${BASE_URL}/storage/${miEmpresa.logo}`
-    : null;
+  const formatLogoUrl = (path) => {
+    if (!path) return null;
+    if (path.startsWith("http")) return path;
+    let p = path.startsWith("/") ? path.substring(1) : path;
+    if (!p.startsWith("storage/")) {
+      p = "storage/" + p;
+    }
+    return `${BASE_URL}/${p}`;
+  };
+  const fotoEmpresa = formatLogoUrl(miEmpresa.logo);
 
   const roles = JSON.parse(localStorage.getItem("roles")) || [];
   const dispatch = useDispatch();
@@ -198,8 +205,8 @@ export function SideBar() {
     }
   }, []);
   return (
-    <div className={`sidebar compressed justify-content-between m-auto`}>
-      <div className="sidebar-header d-flex">
+    <div className={`sidebar justify-content-between m-auto`} style={{ background: 'var(--glass-bg)', backdropFilter: 'var(--glass-blur)', borderRight: '1px solid var(--glass-border)', boxShadow: 'var(--shadow-soft)', transition: 'all var(--transition-smooth)' }}>
+      <div className="sidebar-header d-flex flex-nowrap">
         {fotoEmpresa && (
           <img
             src={fotoEmpresa}
@@ -213,8 +220,8 @@ export function SideBar() {
             }}
           />
         )}
-        <div className="p-0 m-0">
-          <p className="h5 fw-bold p-0 my-2 text-white">{miEmpresa.nombre}</p>
+        <div className="p-0 m-0 sidebar-text-container">
+          <p className="h5 fw-bold p-0 my-2 text-truncate" style={{ color: 'var(--text-main)', maxWidth: '140px' }}>{miEmpresa.nombre}</p>
         </div>
       </div>
 
@@ -228,13 +235,12 @@ export function SideBar() {
             onClick={(e) => handleModuloSeleccionado("accesos rapido", e)}
           >
             <li
-              className={`menu-item p-2 my-2 h-100 ${
-                location.pathname === `/` ? "active" : ""
-              }`}
+              className={`menu-item px-3 py-2 mx-2 my-1 ${location.pathname === `/` ? "active" : ""
+                }`}
             >
-              <div className="d-flex gap-2 align-items-center m-auto">
-                <Home className="icon-lucide" size={20} />
-                <small className="small " style={{ fontSize: "14px" }}>
+              <div className="d-flex gap-2 align-items-center justify-content-center justify-content-md-start m-auto w-100">
+                <Home className="icon-lucide flex-shrink-0" size={20} />
+                <small className="small sidebar-text" style={{ fontSize: "14px", transition: 'opacity 0.2s' }}>
                   Inicio
                 </small>
               </div>
@@ -256,31 +262,29 @@ export function SideBar() {
               return (
                 <div key={role.id}>
                   <li
-                    className={`menu-item p-2 mx-1 h-100 ${
-                      isActive ? "active" : ""
-                    }`}
+                    className={`menu-item px-3 py-2 mx-2 my-1 ${isActive ? "active" : ""
+                      }`}
                     onClick={() => handleAccordionToggle(roleName)}
                     style={{ cursor: "pointer" }}
                   >
-                    <div className="d-flex gap-2 align-items-center justify-content-between">
+                    <div className="d-flex w-100 gap-2 align-items-center justify-content-center justify-content-md-between px-2">
                       <div className="d-flex gap-2 align-items-center">
-                        <IconComponent className="icon-lucide" size={20} />
-                        <small className="small " style={{ fontSize: "14px" }}>
+                        <IconComponent className="icon-lucide flex-shrink-0" size={20} />
+                        <small className="small sidebar-text" style={{ fontSize: "14px", transition: 'opacity 0.2s' }}>
                           {capitalizeFirstLetter(role.nombre)}
                         </small>
                       </div>
                       {openAccordion === roleName ? (
-                        <ChevronDown size={18} color="#fff" />
+                        <ChevronDown size={18} color="var(--brand-primary)" />
                       ) : (
-                        <ChevronRight size={18} color="#fff" />
+                        <ChevronRight size={18} color="var(--text-muted)" />
                       )}
                     </div>
                   </li>
 
                   <div
-                    className={`submenu px-2 mx-2 shadow-none ${
-                      openAccordion === roleName ? "submenu-open" : ""
-                    }`}
+                    className={`submenu px-2 mx-2 shadow-none ${openAccordion === roleName ? "submenu-open" : ""
+                      }`}
                   >
                     {hasSubmenu.map((sub, index) => {
                       const subUrl =
@@ -295,11 +299,10 @@ export function SideBar() {
                           onClick={(e) => handleModuloSeleccionado(subUrl, e)}
                         >
                           <li
-                            className={`menu-item-sub px-4 py-1 my-1 ${
-                              location.pathname.includes(`/${subUrl}`)
-                                ? "active-sub"
-                                : ""
-                            }`}
+                            className={`menu-item-sub px-4 py-1 my-1 ${location.pathname.includes(`/${subUrl}`)
+                              ? "active-sub"
+                              : ""
+                              }`}
                           >
                             <small style={{ fontSize: "12px" }}>{sub}</small>
                           </li>
@@ -321,13 +324,12 @@ export function SideBar() {
                 onClick={(e) => handleModuloSeleccionado(roleUrl, e)}
               >
                 <li
-                  className={`menu-item p-2 mx-1 my-2 h-100 ${
-                    isActive ? "active" : ""
-                  }`}
+                  className={`menu-item px-3 py-2 mx-2 my-1 ${isActive ? "active" : ""
+                    }`}
                 >
-                  <div className="d-flex gap-2 align-items-center m-auto">
-                    <IconComponent className="icon-lucide" size={20} />
-                    <small className="small " style={{ fontSize: "14px" }}>
+                  <div className="d-flex w-100 gap-2 align-items-center justify-content-center justify-content-md-start m-auto px-2">
+                    <IconComponent className="icon-lucide flex-shrink-0" size={20} />
+                    <small className="small sidebar-text" style={{ fontSize: "14px", transition: 'opacity 0.2s' }}>
                       {capitalizeFirstLetter(role.nombre)}
                     </small>
                   </div>
@@ -348,18 +350,20 @@ export function SideBar() {
           onClick={(e) => handleModuloSeleccionado("", e)}
         >
           <button
-            className={`menu-item btn border-0 w-100 d-flex align-items-center justify-content-start ${
-              location.pathname.includes("/configuracion") ? "active" : ""
-            }`}
+            className={`menu-item btn border-0 w-100 d-flex align-items-center justify-content-start ${location.pathname.includes("/configuracion") ? "active" : ""
+              }`}
             style={{
               padding: "15px 10px",
-              borderRadius: "8px",
+              borderRadius: "var(--radius-md)",
+              transition: "transform var(--transition-bounce), background-color var(--transition-smooth)"
             }}
+            onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.03)'}
+            onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
           >
-            <Settings className="icon-lucide me-2" size={20} />
+            <Settings className="icon-lucide flex-shrink-0 me-0 me-md-2" size={20} />
             <small
-              className="text-white"
-              style={{ fontSize: "14px", textAlign: "left" }}
+              className="sidebar-text"
+              style={{ fontSize: "14px", textAlign: "left", color: "var(--text-main)", transition: 'opacity 0.2s' }}
             >
               Ajustes
             </small>

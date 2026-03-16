@@ -13,7 +13,7 @@ import { useForm } from "react-hook-form";
 import { FormularioAddHorasExtras } from "../../components/componentePlanillas/componentesHorasExtras/FormularioAddHorasExtras";
 import axiosInstance from "../../api/AxiosInstance";
 import ToastAlert from "../../components/componenteToast/ToastAlert";
-import { Eye, EyeIcon, FileText, Pencil, Plus, Trash2 } from "lucide-react";
+import { Eye, EyeIcon, FileText, Pencil, Plus, Trash2, Search } from "lucide-react";
 import { FormularioEditHorasExtras } from "../../components/componentePlanillas/componentesHorasExtras/FormularioEditHorasExtras";
 import ModalAlertQuestion from "../../components/componenteToast/ModalAlertQuestion";
 import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteExcel";
@@ -333,34 +333,42 @@ export function HorasExtras() {
   return (
     <div>
       <div className="card shadow-sm py-2">
-        <div className="card-header d-flex justify-content-between align-items-center p-3">
-          <h3 className=" mb-0">Horas Extras</h3>
-          <div className="d-flex ms-auto mx-2">
-            <input
-              type="text"
-              placeholder="Buscar..."
-              className="form-control"
-              onChange={(e) => setFiltro(e.target.value)} // Actualiza el state 'filtro'
-            />
+        <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-3">
+          <div className="d-flex align-items-center">
+            <h4 className="card-title mb-0 titulo-card-especial">
+              Panel de Horas Extras
+            </h4>
+            <span className="badge-header">Registros</span>
           </div>
-          <button
-            className="btn btn-sm btn-outline-dark btn-sm"
-            title="Reporte"
-            onClick={() => GetReporteExcel("/reporteHorasExtras")}
-          >
-            <FileText className="me-1 text-auto" />
-            Reporte
-          </button>
-          <button
-            className="btn btn-sm btn-outline-dark btn-sm mx-2"
-            title="Agregar"
-            onClick={() => {
-              setIsModalOpen(true); // Abrir el modal
-            }}
-          >
-            <Plus className="me-1 text-auto" />
-            Agregar
-          </button>
+          <div className="d-flex align-items-center flex-wrap gap-2 mt-3 mt-md-0">
+            <div className="header-search-container">
+              <Search className="search-icon" />
+              <input
+                type="text"
+                placeholder="Buscar horas extras..."
+                className="form-control"
+                onChange={(e) => setFiltro(e.target.value)}
+              />
+            </div>
+            <button
+              className="btn btn-outline-dark px-3"
+              title="Reporte"
+              onClick={() => GetReporteExcel("/reporteHorasExtras")}
+            >
+              <FileText size={18} />
+              Reporte
+            </button>
+            <button
+              className="btn btn-dark px-3"
+              title="Agregar"
+              onClick={() => {
+                setIsModalOpen(true);
+              }}
+            >
+              <Plus size={18} />
+              Agregar
+            </button>
+          </div>
         </div>
         <div className="card-body p-0">
           <TablasGenerales columnas={columnas} datos={datosFiltrados} />

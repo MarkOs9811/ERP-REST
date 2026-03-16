@@ -15,25 +15,29 @@ export function Solicitud() {
     <div className="row g-3">
       <div className="col-lg-12">
         <div className="card shadow-sm py-2">
-          <div className="card-header border-bottom d-flex justify-content-between align-content-center">
-            <div className="m-2">
-              <h3>Mis Solicitudes</h3>
-              <small>Solicitudes para el almacen</small>
-            </div>
+          <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-3">
             <div className="d-flex align-items-center">
-              <div className="d-flex">
-                <input
-                  className="form-control"
-                  placeholder="Buscar..."
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                />
+              <h4 className="card-title mb-0 titulo-card-especial">
+                Mis Solicitudes
+                <span className="badge-header">Almacén</span>
+              </h4>
+            </div>
+            
+            <div className="d-flex flex-wrap gap-2 mt-3 mt-md-0 align-items-center ms-auto">
+              <div className="header-search-container">
+                 <input
+                   className="form-control"
+                   placeholder="Buscar..."
+                   value={search}
+                   onChange={(e) => setSearch(e.target.value)}
+                 />
               </div>
               <button
-                className="btn ms-2 btn-outline-dark"
+                className="btn btn-dark px-3"
                 onClick={() => handleGoAddSolicitud()}
               >
-                <Plus className="text-auto" />
+                <Plus size={18} className="me-1" />
+                Nueva Solicitud
               </button>
             </div>
           </div>

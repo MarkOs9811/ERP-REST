@@ -98,27 +98,26 @@ export const MainLayout = () => {
       {showFullLayout && <SideBar />}
 
       <div
-        className={`content p-0`}
+        className={`content p-0 ${showFullLayout ? 'with-sidebar' : ''}`}
         style={{
-          width: showFullLayout ? "calc(100% - 230px)" : "100%",
-          marginLeft: showFullLayout ? "230px" : "0px",
+          transition: "margin-left var(--transition-smooth), width var(--transition-smooth)"
         }}
       >
-        <div className="card p-0 m-0 rounded-0 vh-100">
-          <div className="card-body shadow-none p-0 h-100 contenido">
+        <div className="p-0 m-0 rounded-0 vh-100" style={{ background: 'transparent' }}>
+          <div className="shadow-none p-0 h-100 contenido">
             <div className="row h-100 g-0 d-flex ">
               <div
                 className={`h-100 flex-column align-items-center justify-content-center overflow-auto p-0
                 transition-all`}
                 style={{
-                  transition: "width 0.3s ease, margin 0.3s ease",
+                  transition: "width var(--transition-smooth), margin var(--transition-smooth)",
                 }}
               >
                 <div
-                  className="d-flex flex-column position-fixed "
+                  className={`d-flex flex-column position-fixed ${showFullLayout ? 'header-with-sidebar' : 'w-100'}`}
                   style={{
                     zIndex: 100,
-                    width: showFullLayout ? "calc(100% - 230px)" : "100%",
+                    transition: "width var(--transition-smooth)"
                   }}
                 >
                   {!showHeader && <Header />}

@@ -4,7 +4,7 @@ import { ProveedorList } from "../components/componenteProveedor/ProveedorList";
 import { Modal } from "react-bootstrap";
 import { ProveedorAdd } from "../components/componenteProveedor/ProveedorAdd";
 import { ContenedorPrincipal } from "../components/componentesReutilizables/ContenedorPrincipal";
-import { FileChartColumnIncreasing, Plus, PlusIcon } from "lucide-react";
+import { FileText, Plus, Search } from "lucide-react";
 import { GetReporteExcel } from "../service/accionesReutilizables/GetReporteExcel";
 import { CondicionCarga } from "../components/componentesReutilizables/CondicionCarga";
 import ModalRight from "../components/componentesReutilizables/ModalRight";
@@ -25,38 +25,43 @@ export function Proveedores() {
       <div className="row g-3">
         <div className="col-md-12">
           <CondicionCarga isLoading={updateList} isError={null}>
-            <div className="card shadow-sm py-2">
-              <div className="card-header  border-bottom d-flex justify-content-between align-items-center">
-                <div className="m-2">
+            <div className="card shadow-sm border-0 mb-4 rounded-4">
+              <div className="card-header border-bottom-0 d-flex justify-content-between align-items-center">
+                <div className="d-flex align-items-center">
                   <h4 className="card-title mb-0 titulo-card-especial">
-                    Proveedores
+                    Panel de Proveedores
                   </h4>
+                  <span className="badge-header">Activos</span>
                 </div>
 
-                <div className="d-flex align-items-center">
-                  <div className="d-flex">
+                <div className="d-flex align-items-center flex-wrap gap-2 mt-3 mt-md-0">
+                  <div className="header-search-container">
+                    <Search className="search-icon" />
                     <input
                       type="text"
-                      placeholder="Buscar..."
+                      placeholder="Buscar proveedor..."
                       className="form-control"
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
                     />
-                    <button
-                      className="btn mx-3 btn-outline-dark"
-                      onClick={() => handleAddProveedor()}
-                    >
-                      <PlusIcon className="text-auto" />
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-dark"
-                      onClick={() => GetReporteExcel("/reporteProveedores")}
-                      title="Descargar Reporte de proveedores"
-                    >
-                      <FileChartColumnIncreasing className="text-auto" />
-                    </button>
                   </div>
+                  
+                  <button
+                    type="button"
+                    className="btn btn-outline-dark px-3"
+                    onClick={() => GetReporteExcel("/reporteProveedores")}
+                  >
+                    <FileText size={18} />
+                    Reporte
+                  </button>
+
+                  <button
+                    className="btn btn-dark px-3"
+                    onClick={() => handleAddProveedor()}
+                  >
+                    <Plus size={18} />
+                    Agregar
+                  </button>
                 </div>
               </div>
               <div className="card-body p-0">

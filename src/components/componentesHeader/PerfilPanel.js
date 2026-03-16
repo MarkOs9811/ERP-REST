@@ -44,7 +44,6 @@ export function PerfilPanel({ user, fotoPerfil }) {
     retry: 1,
     refetchOnWindowFocus: false,
   });
-
   // 🔹 Cambiar sede del usuario
   const handleChangeSede = async (idSede) => {
     setSelectedSede(idSede);

@@ -5,8 +5,9 @@ import { GetInventario } from "../../service/GetInventario";
 import { Cargando } from "../../components/componentesReutilizables/Cargando";
 
 import {
-  FileChartColumnIncreasing,
+  FileText,
   Plus,
+  Search,
   StickyNote,
   Store,
   TriangleAlert,
@@ -86,37 +87,41 @@ export function Inventario() {
 
       <div className="col-lg-12">
         <div className="card shadow-sm py-2">
-          <div className="card-header p-0 border-bottom d-flex justify-content-between align-items-center fw-none fw-0">
-            <div className="m-3">
-              <h3 className="card-title mb-0 titulo-card-especial">
-                Mi Inventario
-              </h3>
-              <small className="text-secondary fw-0">
-                Aqui se muestran los productos que estan puestos en ventas
-              </small>
+          <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+            <div className="d-flex align-items-center">
+              <h4 className="card-title mb-0 titulo-card-especial">
+                Panel de Inventario
+              </h4>
+              <span className="badge-header">Productos</span>
             </div>
-            <div className="d-flex align-items-center justify-content-end">
-              <div className="d-flex">
+            
+            <div className="d-flex align-items-center flex-wrap gap-2 mt-3 mt-md-0">
+              <div className="header-search-container">
+                <Search className="search-icon" />
                 <input
                   type="text"
-                  placeholder="Buscar..."
+                  placeholder="Buscar en inventario..."
                   className="form-control"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
               </div>
-              <button
-                className="btn mx-2 btn-outline-dark"
-                onClick={() => navigate("/ventas/solicitud/realizarSolicitud")}
-              >
-                <Plus className="text-auto" />
-              </button>
+              
               <button
                 type="button"
-                className="btn btn-dark"
+                className="btn btn-outline-dark px-3"
                 onClick={() => GetReporteExcel("/reporteInventarioTodo")}
               >
-                <FileChartColumnIncreasing className="text-auto" />
+                <FileText size={18} />
+                Reporte
+              </button>
+
+              <button
+                className="btn btn-dark px-3"
+                onClick={() => navigate("/ventas/solicitud/realizarSolicitud")}
+              >
+                <Plus size={18} />
+                Solicitar
               </button>
             </div>
           </div>

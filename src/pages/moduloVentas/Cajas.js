@@ -9,7 +9,7 @@ import ToastAlert from "../../components/componenteToast/ToastAlert";
 import { FormAddCaja } from "../../components/componentesModuloVentas/accionesCaja/FormAddCaja";
 import { useForm } from "react-hook-form";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Plus } from "lucide-react";
+import { Plus, Search } from "lucide-react";
 import { RegistrosCajasList } from "../../components/componentesModuloVentas/RegistrosCajasList";
 import { GetCajas } from "../../service/accionesVentas/GetCajas";
 import { CondicionCarga } from "../../components/componentesReutilizables/CondicionCarga";
@@ -93,25 +93,22 @@ export function Cajas() {
       <div className="col-lg-12 col-sm-12">
         <CondicionCarga isLoading={isLoading} isError={isError}>
           <div className="card shadow-sm overflow-hidden">
-            <div className="card-header">
-              <div className="container-fluid">
-                <div className="row align-items-center">
-                  {/* Título de la lista */}
-                  <div className="col-12 col-md-6 mb-3 mb-md-0">
-                    <h3 className="text-center text-md-start">Lista Caja</h3>
-                  </div>
-
-                  {/* Input de búsqueda y botón */}
-                  <div className="col-12 col-md-6 d-flex flex-column flex-md-row align-items-center justify-content-md-end">
-                    <button
-                      type="button"
-                      className="btn btn-outline-dark  ms-0 ms-md-2"
-                      onClick={() => setModalAddCaja(true)}
-                    >
-                      <Plus className="text-auto" />
-                    </button>
-                  </div>
-                </div>
+            <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+              <div className="d-flex align-items-center">
+                <h4 className="card-title mb-0 titulo-card-especial">
+                  Panel de Cajas
+                </h4>
+                <span className="badge-header">Registro</span>
+              </div>
+              <div className="d-flex align-items-center flex-wrap gap-2 mt-3 mt-md-0">
+                <button
+                  type="button"
+                  className="btn btn-dark px-3"
+                  onClick={() => setModalAddCaja(true)}
+                >
+                  <Plus size={18} />
+                  Abrir Caja
+                </button>
               </div>
             </div>
 
@@ -124,45 +121,45 @@ export function Cajas() {
       <div className="col-lg-12 col-sm-12">
         <CondicionCarga isLoading={isLoading} isError={isError}>
           <div className="card shadow-sm overflow-hidden">
-            <div className="card-header">
-              <div className="container-fluid">
-                <div className="align-items-center d-flex justify-content-between flex-wrap">
-                  {/* Título de la lista */}
-                  <div className="mb-3 mb-md-0">
-                    <h3 className="text-center text-md-start">
-                      Registros Caja
-                    </h3>
-                  </div>
+            <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+              <div className="d-flex align-items-center">
+                <h4 className="card-title mb-0 titulo-card-especial">
+                  Registros Caja
+                </h4>
+                <span className="badge-header">Historial</span>
+              </div>
 
-                  {/* Input de búsqueda y botón */}
-                  <div className=" d-flex flex-column flex-md-row align-items-center justify-content-md-end">
-                    <input
-                      type="search"
-                      className="form-control mb-3 mb-md-0"
-                      placeholder="Buscar..."
-                      value={search}
-                      onChange={(e) => setSearch(e.target.value)}
-                    />
-                    <select
-                      className="form-select mb-3 mb-md-0 ms-0 ms-md-2"
-                      value={search}
-                      onChange={(e) => setSearch(e.target.value)}
-                    >
-                      <option value="">Todos</option>
-                      {cajas?.map((caja) => (
-                        <option key={caja.id} value={caja.nombreCaja}>
-                          {caja.nombreCaja}
-                        </option>
-                      ))}
-                    </select>
-                    <input
-                      type="date"
-                      className="form-control mb-3 mb-md-0 ms-0 ms-md-2"
-                      value={search}
-                      onChange={(e) => setSearch(e.target.value)}
-                    />
-                  </div>
+              <div className="d-flex flex-column flex-md-row align-items-center justify-content-md-end gap-2 mt-3 mt-md-0">
+                <div className="header-search-container">
+                  <Search className="search-icon" />
+                  <input
+                    type="search"
+                    className="form-control"
+                    placeholder="Buscar registro..."
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                  />
                 </div>
+                <select
+                  className="form-select"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  style={{minWidth: "150px"}}
+                >
+                  <option value="">Todas las cajas</option>
+                  {cajas?.map((caja) => (
+                    <option key={caja.id} value={caja.nombreCaja}>
+                      {caja.nombreCaja}
+                    </option>
+                  ))}
+                </select>
+                <input
+                  type="date"
+                  className="form-control"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  style={{maxWidth: "180px"}}
+                />
               </div>
             </div>
             <div className="card-body p-0">

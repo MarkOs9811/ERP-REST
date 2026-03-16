@@ -2,7 +2,7 @@ import { useState } from "react";
 import { SolicitudesLista } from "../../components/componenteAlmacen/SolicitudesLista";
 
 import { ContenedorPrincipal } from "../../components/componentesReutilizables/ContenedorPrincipal";
-import { Plus } from "lucide-react";
+import { Plus, Search } from "lucide-react";
 import ModalRight from "../../components/componentesReutilizables/ModalRight";
 import { FormAddSolicitudExterna } from "../../components/componenteAlmacen/componenteSolicitud/FormAddSolicitudExterna";
 
@@ -14,29 +14,32 @@ export function Solicitudes() {
   return (
     <div>
       <div className="card shadow-sm py-2">
-        <div className="card-header border-bottom d-flex justify-content-between align-items-center">
-          <div className="m-2">
-            <h4 className="card-title mb-0 titulo-card-especial">
-              Solicitudes
-            </h4>
-          </div>
+        <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
           <div className="d-flex align-items-center">
-            <div className="d-flex">
+            <h4 className="card-title mb-0 titulo-card-especial">
+              Panel de Solicitudes
+            </h4>
+            <span className="badge-header">Registro</span>
+          </div>
+          <div className="d-flex align-items-center flex-wrap gap-2 mt-3 mt-md-0">
+            <div className="header-search-container">
+              <Search className="search-icon" />
               <input
                 type="text"
-                placeholder="Buscar..."
+                placeholder="Buscar solicitud..."
                 className="form-control"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
-              <button
-                className="btn ms-2 btn-outline-dark"
-                onClick={setShowModalAdd}
-                title="Realiza una solicitud"
-              >
-                <Plus className="color-auto" />
-              </button>
             </div>
+            <button
+              className="btn btn-dark px-3"
+              onClick={setShowModalAdd}
+              title="Realiza una solicitud"
+            >
+              <Plus size={18} />
+              Agregar
+            </button>
           </div>
         </div>
         <div className="card-body p-0">

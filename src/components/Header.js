@@ -15,6 +15,7 @@ export function Header() {
   const fotoEmpresa = empresa.logo
     ? `${BASE_URL}/storage/${empresa.logo}`
     : null;
+  console.log("Ruta de la foto", fotoEmpresa);
   const fotoPerfilLocal = JSON.parse(localStorage.getItem("user"));
   const user = JSON.parse(localStorage.getItem("user"));
   const cajaDetalles = JSON.parse(localStorage.getItem("caja"));
@@ -48,8 +49,8 @@ export function Header() {
   }, [darkMode]);
 
   return (
-    <header className="navbar  header-contenido p-0 m-0 border-bottom">
-      <nav className="container-fluid d-flex align-items-center justify-content-center p-0 m-0">
+    <header className="navbar header-contenido p-0 m-0 border-bottom">
+      <nav className="container-fluid d-flex flex-nowrap align-items-center justify-content-between p-0 m-0">
         <div className="d-flex align-items-center justify-content-center gap-2 mx-3 ">
           <div className="logo-empresa d-flex align-items-center ">
             {cargo?.empleado?.cargo?.nombre === "atencion al cliente" ? (
@@ -107,7 +108,9 @@ export function Header() {
           <button
             className="ico-header border-0 rounded-pill d-flex align-items-center justify-content-center"
             title="Cambiar tema"
-            style={{ width: 44, height: 44, padding: 0 }}
+            style={{ width: 44, height: 44, padding: 0, transition: 'transform var(--transition-bounce)' }}
+            onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+            onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
             onClick={toggleTheme}
           >
             {darkMode ? (
@@ -129,7 +132,9 @@ export function Header() {
           {/* Botón de Notificaciones */}
           <button
             className="ico-header border-0 rounded-pill d-flex align-items-center justify-content-center position-relative"
-            style={{ width: 44, height: 44, padding: 0 }}
+            style={{ width: 44, height: 44, padding: 0, transition: 'transform var(--transition-bounce)' }}
+            onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+            onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
             onClick={() => setShowNotificaciones(true)}
           >
             <Bell
@@ -161,7 +166,9 @@ export function Header() {
           </button>
           <button
             className="ico-header border-0 rounded-pill d-flex align-items-center justify-content-center"
-            style={{ width: 44, height: 44, padding: 0 }}
+            style={{ width: 44, height: 44, padding: 0, transition: 'transform var(--transition-bounce)' }}
+            onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+            onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
             onClick={() => setShowPerfilPanel(true)}
           >
             {fotoPerfil && (

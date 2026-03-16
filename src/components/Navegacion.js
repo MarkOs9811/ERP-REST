@@ -42,9 +42,10 @@ export function Navegacion() {
     <div className="nav-navegacion">
       <nav
         aria-label="breadcrumb"
-        className="d-flex justify-content-between align-items-center w-100"
+        className="d-flex justify-content-between align-items-center w-100 flex-wrap py-2"
         style={{
-          height: "50px",
+          minHeight: "50px",
+          height: "auto",
           boxShadow: "0px 3px 10px 1px rgba(0,0,0,0.2)!important",
         }}
       >
@@ -104,7 +105,7 @@ export function Navegacion() {
 
         {/* --- CONTENEDOR DE BOTONES DE ACCIÓN --- */}
         {/* Usamos gap-2 para separar los botones y pe-2 para que no pegue al borde derecho */}
-        <div className="d-flex align-items-center gap-2 pe-3">
+        <div className="d-flex align-items-center flex-wrap justify-content-end gap-2 pe-3 mt-2 mt-sm-0">
           {/* 1. Asistencia */}
           <button
             className="btn btn-outline-dark d-flex align-items-center gap-1 px-2 px-md-3"

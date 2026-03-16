@@ -160,139 +160,137 @@ export function Nomina() {
   ];
   return (
     <div>
-      {/* Contenedor principal sin padding extra para alinearse con el layout */}
-      <div className="d-flex flex-column gap-3">
-        {/* HEADER Y TARJETAS (Resumen Macro) */}
-        <div className="card p-3 shadow-sm border-0">
-          <div className="d-flex justify-content-between align-items-center mb-4">
-            <div>
-              <h4 className="titulo-card-especial mb-1">Gestión de Nómina</h4>
-              <p className="text-muted small mb-0">
-                Periodo: <span className="fw-bold text-dark">{periodo}</span>
-              </p>
-            </div>
-
-            {/* Selector de Fecha */}
-            <div className="d-flex gap-2">
-              <div className="d-flex gap-2 align-items-center bg-white px-3 rounded border">
-                <CalendarDays size={20} className="text-danger" />
-                <input
-                  type="month"
-                  className="form-control border-0 p-1 bg-transparent"
-                  value={periodo}
-                  onChange={(e) => setPeriodo(e.target.value)}
-                  style={{
-                    fontWeight: "bold",
-                    color: "#333",
-                    cursor: "pointer",
-                  }}
-                />
-              </div>
-              <button
-                className="btn-principal"
-                onClick={() => navigate("/rrhh/ajustes")}
-              >
-                <Eye size={16} className="mx-2" /> Ver todos los periodos
-              </button>
-            </div>
+      <div className="card shadow-sm">
+        {/* HEADER UNIFICADO */}
+        <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-3 bg-white">
+          <div className="d-flex align-items-center">
+            <h4 className="card-title mb-0 titulo-card-especial">
+              Gestión de Nómina
+              <span className="badge-header">Periodo: {periodo}</span>
+            </h4>
           </div>
 
-          <CondicionCarga isLoading={isLoading} isError={isError}>
-            <div className="row g-3">
-              {/* Tarjetas de Resumen (Usan nominaData?.resumen) */}
-              <div className="col-md-4">
-                <div className="card  border h-100">
-                  <div className="card-body d-flex align-items-center">
-                    <div className="bg-white p-3 rounded-circle text-danger me-3 shadow-sm">
-                      <Users size={24} />
-                    </div>
-                    <div>
-                      <h6 className="text-muted small mb-1">Empleados</h6>
-                      <h3 className="mb-0 fw-bold">
-                        {nominaData?.resumen?.totalEmpleados || 0}
-                      </h3>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-4">
-                <div className="card  border h-100">
-                  <div className="card-body d-flex align-items-center">
-                    <div className="bg-white p-3 rounded-circle text-dark me-3 shadow-sm">
-                      <span className="h5 fw-bold">S/. </span>
-                    </div>
-                    <div>
-                      <h6 className="text-muted small mb-1">Total Nómina</h6>
-                      <h3 className="mb-0 fw-bold">
-                        S/ {nominaData?.resumen?.totalPagar || "0.00"}
-                      </h3>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-4">
-                <div
-                  className={`card border-0 h-100 ${
-                    nominaData?.resumen?.estado === "PAGADO"
-                      ? "bg-success text-white"
-                      : "bg-warning bg-opacity-10"
-                  }`}
-                >
-                  <div className="card-body d-flex align-items-center">
-                    <div className="p-3 rounded-circle me-3 bg-white bg-opacity-25">
-                      <AlertCircle size={24} />
-                    </div>
-                    <div>
-                      <h6 className="small mb-1 opacity-75">Estado</h6>
-                      <span className="mb-0 fw-bold h3">
-                        {nominaData?.resumen?.estado || "PENDIENTE"}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+          <div className="d-flex flex-wrap gap-2 mt-3 mt-md-0 align-items-center ms-auto">
+            <div className="d-flex gap-2 align-items-center bg-light px-3 py-1 rounded-pill border">
+              <CalendarDays size={18} className="text-danger" />
+              <input
+                type="month"
+                className="form-control border-0 p-1 bg-transparent"
+                value={periodo}
+                onChange={(e) => setPeriodo(e.target.value)}
+                style={{
+                  fontWeight: "bold",
+                  color: "#333",
+                  cursor: "pointer",
+                }}
+              />
             </div>
-          </CondicionCarga>
+            <button
+              className="btn btn-dark px-3"
+              onClick={() => navigate("/rrhh/ajustes")}
+            >
+              <Eye size={18} className="me-1" /> Ver todos los periodos
+            </button>
+          </div>
         </div>
 
-        {/* TABLA DE DETALLE (Vista Micro) */}
-        <div className="card p-0 shadow-sm border-0 py-2">
-          {/* Cabecera de la tabla con Buscador y Botones */}
-          <div className="card-header d-flex justify-content-between align-items-center mb-3">
-            <div className="input-group" style={{ maxWidth: "300px" }}>
-              <span className="input-group-text bg-white border-end-0">
-                <Search size={16} />
-              </span>
+        <div className="card-body">
+          {/* TABLERO DE RESUMEN MACRO */}
+          <div className="border-bottom bg-light px-4 py-3">
+            <CondicionCarga isLoading={isLoading} isError={isError}>
+              <div className="row g-3">
+                <div className="col-md-4">
+                  <div className="card border-0 shadow-sm h-100 bg-white">
+                    <div className="card-body d-flex align-items-center p-3">
+                      <div className="bg-light p-3 rounded-circle text-danger me-3">
+                        <Users size={24} />
+                      </div>
+                      <div>
+                        <h6 className="text-muted small mb-0">Empleados</h6>
+                        <h4 className="mb-0 fw-bold text-dark">
+                          {nominaData?.resumen?.totalEmpleados || 0}
+                        </h4>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-4">
+                  <div className="card border-0 shadow-sm h-100 bg-white">
+                    <div className="card-body d-flex align-items-center p-3">
+                      <div className="bg-light p-3 rounded-circle text-dark me-3">
+                        <DollarSign size={24} />
+                      </div>
+                      <div>
+                        <h6 className="text-muted small mb-0">Total Nómina</h6>
+                        <h4 className="mb-0 fw-bold text-dark">
+                          S/ {nominaData?.resumen?.totalPagar || "0.00"}
+                        </h4>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-4">
+                  <div
+                    className={`card border-0 shadow-sm h-100 ${
+                      nominaData?.resumen?.estado === "PAGADO"
+                        ? "bg-success text-white"
+                        : "bg-warning bg-opacity-10 text-dark"
+                    }`}
+                  >
+                    <div className="card-body d-flex align-items-center p-3">
+                      <div className="p-3 rounded-circle me-3 bg-white bg-opacity-50">
+                        {nominaData?.resumen?.estado === "PAGADO" ? (
+                          <CheckCircle size={24} className={nominaData?.resumen?.estado === "PAGADO" ? "text-success" : "text-dark"} />
+                        ) : (
+                          <AlertCircle size={24} className="text-warning" />
+                        )}
+                      </div>
+                      <div>
+                        <h6 className="small mb-0 opacity-75">Estado</h6>
+                        <h4 className="mb-0 fw-bold">
+                          {nominaData?.resumen?.estado || "PENDIENTE"}
+                        </h4>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CondicionCarga>
+          </div>
+
+          {/* BARRA DE HERRAMIENTAS DE TABLA */}
+          <div className="px-4 py-3 border-bottom bg-white d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+            <div className="header-search-container m-0">
+              <Search className="search-icon" />
               <input
                 type="text"
-                className="form-control border-start-0"
                 placeholder="Buscar empleado..."
+                className="form-control"
                 value={filterText}
                 onChange={(e) => setFilterText(e.target.value)}
               />
             </div>
-
-            <div className="d-flex gap-2">
-              <BotonMotionGeneral
-                text="Reporte"
-                onClick={() =>
-                  GetReporteExcel(`/reporteNomina?periodo=${periodo}`)
-                }
-                icon={<FileChartColumnIncreasing size={16} />}
-                classDefault=" text-center align-items-center gap-1 p-2 w-auto rounded-3 border shadow-sm ms-auto"
-              />
-
-              {/* Botones de acción principales */}
-              <BotonMotionGeneral
-                text="Validar periodo"
+            
+            <div className="d-flex flex-wrap gap-2">
+              <button
+                className="btn btn-outline-dark px-3"
+                onClick={() => GetReporteExcel(`/reporteNomina?periodo=${periodo}`)}
+              >
+                <FileChartColumnIncreasing size={18} className="me-1" />
+                Reporte
+              </button>
+              <button
+                className="btn btn-outline-primary px-3"
                 onClick={() => setModalValidarNomina(true)}
-                icon={<UserRoundCheck size={16} />}
-                classDefault=" text-center align-items-center gap-1 p-2 w-auto rounded-3 border shadow-sm ms-auto"
-              />
+              >
+                <UserRoundCheck size={18} className="me-1" />
+                Validar Periodo
+              </button>
             </div>
           </div>
-          <div className="card-body p-0">
-            {/* Tabla React Data Table */}
+
+          {/* TABLA PRINCIPAL */}
+          <div>
             <CondicionCarga isLoading={isLoading} isError={isError}>
               <TablasGenerales columnas={columns} datos={filteredItems} />
             </CondicionCarga>

@@ -48,53 +48,41 @@ export function Promociones() {
     <div className="container-fluid p-0">
       <div className="card shadow-sm border-0 rounded-4">
         {/* HEADER DE LA VISTA */}
-        <div className="card-header bg-white border-bottom-0 d-flex flex-wrap justify-content-between align-items-center p-4 pb-2">
-          <h3 className="mb-2 mb-md-0 fw-bold d-flex align-items-center gap-2">
-            Promociones App
-            <span className="badge bg-light text-dark border rounded-pill fs-6 fw-medium">
-              {promociones?.length || 0} registradas
-            </span>
-          </h3>
+        <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-3">
+          <div className="d-flex align-items-center">
+            <h4 className="card-title mb-0 titulo-card-especial">
+              Promociones App
+              <span className="badge-header">
+                {promociones?.length || 0} registradas
+              </span>
+            </h4>
+          </div>
 
-          <div className="d-flex flex-wrap gap-2 ms-auto align-items-center">
-            <div className="position-relative">
+          <div className="d-flex flex-wrap gap-2 mt-3 mt-md-0 align-items-center ms-auto">
+            <div className="header-search-container">
+              <Search className="search-icon" />
               <input
                 type="text"
                 placeholder="Buscar promoción..."
-                className="form-control form-control-sm search-input bg-light border-0"
-                style={{
-                  minWidth: "220px",
-                  paddingLeft: "35px",
-                  borderRadius: "20px",
-                  padding: "0.375rem 1rem",
-                }}
-              />
-              <Search
-                size={16}
-                className="position-absolute text-muted"
-                style={{
-                  left: "12px",
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                }}
+                className="form-control"
               />
             </div>
 
             <button
-              className="btn-ver gap-1 text-decoration-none px-3"
+              className="btn btn-outline-dark px-3"
               title="Reporte"
             >
-              <FileText size={16} />
+              <FileText size={18} />
               <span className="d-none d-sm-inline">Reporte</span>
             </button>
 
             {/* BOTÓN QUE ABRE EL MODAL */}
             <button
-              className="btn-guardar gap-1 px-3"
+              className="btn btn-dark px-3"
               title="Crear Promoción"
               onClick={() => setIsModalOpen(true)}
             >
-              <Plus size={16} />
+              <Plus size={18} />
               <span className="d-none d-sm-inline">Crear Promo</span>
             </button>
           </div>

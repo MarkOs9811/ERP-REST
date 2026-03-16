@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import "../../css/EstiloModalRight.css";
 import { capitalizeFirstLetter } from "../../hooks/FirstLetterUp";
 import { X } from "lucide-react";
@@ -37,7 +38,7 @@ const ModalRight = ({
 
   if (!shouldRender) return null;
 
-  return (
+  return createPortal(
     <div className="modal-right-overlay m-0 p-0">
       <div className="modal-right-backdrop" onClick={handleClose} />
 
@@ -102,7 +103,8 @@ const ModalRight = ({
           </div>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

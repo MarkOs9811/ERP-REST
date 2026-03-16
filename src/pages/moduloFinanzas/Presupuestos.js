@@ -10,27 +10,25 @@ export function Presupuestos() {
       <div className="row g-3">
         <div className="col-md-12">
           <div className="card shadow-sm py-2">
-            <div className="card-header p-3 d-flex align-items-center">
-              <Calculator color={"#ea4f4f"} height="45px" width="45px" />
-              <div>
-                <p className="h4 card-title ms-2 mb-0">Presupuestos</p>
-                <small
-                  className=" ms-2 text-secondary"
-                  style={{ fontWeight: "none" }}
-                >
-                  Administra y crea presupuestos, carga inicial de caja y
-                  compara.
-                </small>
+            <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-3">
+              <div className="d-flex align-items-center">
+                <Calculator color={"#ea4f4f"} height="45px" width="45px" className="me-2" />
+                <div>
+                  <h4 className="card-title mb-0 titulo-card-especial">Presupuestos</h4>
+                  <small className="text-secondary" style={{ fontWeight: "normal" }}>
+                    Administra y crea presupuestos, carga inicial de caja y compara.
+                  </small>
+                </div>
               </div>
 
-              <div className="d-flex ms-auto">
-                <button className="btn btn-outline-primary ms-auto mx-2  d-flex align-items-center p-2">
-                  <PlusIcon className={"text-auto mx-2"} />
-                  Registrar saldo
+              <div className="d-flex flex-wrap gap-2 mt-3 mt-md-0 align-items-center ms-auto">
+                <button className="btn btn-outline-dark px-3">
+                  <PlusIcon size={18} />
+                  Registrar Saldo
                 </button>
 
-                <button className="btn btn-outline-dark ms-auto mx-2 d-flex align-items-center p-2">
-                  <PlusIcon className={"text-auto mx-2"} />
+                <button className="btn btn-dark px-3">
+                  <PlusIcon size={18} />
                   Crear Presupuesto
                 </button>
               </div>

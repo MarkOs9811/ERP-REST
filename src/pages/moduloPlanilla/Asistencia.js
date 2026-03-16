@@ -24,6 +24,7 @@ import {
   CircleCheckBig,
   Eye,
   FileText,
+  Search,
 } from "lucide-react";
 import { useState } from "react";
 import ModalRight from "../../components/componentesReutilizables/ModalRight";
@@ -251,25 +252,30 @@ export function Asistencia() {
         {/* Resto de tu código... */}
         <div className="col-md-8 col-sm-12">
           <div className="card shadow-sm h-100">
-            <div className="card-header d-flex justify-content-between align-items-center p-3">
-              <p className="h4 mb-0">
-                <CalendarCheck className="me-2 color-auto" />
-                Asistencia de hoy
-              </p>
-              <div className="d-flex ms-auto mx-2">
-                <input
-                  type="text"
-                  placeholder="Buscar..."
-                  className="form-control"
-                />
+            <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-3">
+              <div className="d-flex align-items-center">
+                <h4 className="card-title mb-0 titulo-card-especial">
+                  Panel de Asistencia
+                </h4>
+                <span className="badge-header">Hoy</span>
               </div>
-              <button
-                className="btn btn-sm btn-outline-dark"
-                onClick={() => GetReporteExcel("/reporteAsistenciaHoy")}
-              >
-                <FileText className="me-1 text-auto" />
-                Reporte
-              </button>
+              <div className="d-flex align-items-center flex-wrap gap-2 mt-3 mt-md-0">
+                <div className="header-search-container">
+                  <Search className="search-icon" />
+                  <input
+                    type="text"
+                    placeholder="Buscar asistencia..."
+                    className="form-control"
+                  />
+                </div>
+                <button
+                  className="btn btn-outline-dark px-3"
+                  onClick={() => GetReporteExcel("/reporteAsistenciaHoy")}
+                >
+                  <FileText size={18} />
+                  Reporte
+                </button>
+              </div>
             </div>
             <div className="card-body p-0">
               <DataTable

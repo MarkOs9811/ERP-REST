@@ -83,27 +83,29 @@ export function LibroDiario() {
       <div className="row g-3">
         <div className="col-md-12">
           <div className="card shadow-sm py-2">
-            <div className="card-header p-3 d-flex align-items-center">
-              <BookText color={"#ea4f4f"} height="45px" width="45px" />
-              <p className="h4 card-title ms-2 mb-0">Libro Diario</p>
-              <div className="d-flex ms-auto">
+            <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-3">
+              <div className="d-flex align-items-center">
+                <BookText color={"#ea4f4f"} height="45px" width="45px" className="me-2" />
+                <h4 className="card-title mb-0 titulo-card-especial">Libro Diario</h4>
+              </div>
+              <div className="d-flex flex-wrap gap-2 mt-3 mt-md-0 align-items-center ms-auto">
                 {/* BOTÓN 1: CIERRE VENTAS */}
                 <button
-                  className="btn btn-outline-primary ms-auto mx-2 d-flex align-items-center p-2"
+                  className="btn btn-outline-dark px-3"
                   onClick={() => setModalCierreVentas(true)} // Abre el modal
                   disabled={loadingVentas}
                 >
                   {loadingVentas ? (
                     <span className="spinner-border spinner-border-sm me-2"></span>
                   ) : (
-                    <ArchiveX className={"mx-2 text-auto"} />
+                    <ArchiveX size={18} className="me-1" />
                   )}
                   Cierre Ventas
                 </button>
 
                 {/* BOTÓN 2: CARGA LIBRO MAYOR */}
                 <button
-                  className="btn btn-outline-dark ms-auto mx-2 d-flex align-items-center p-2"
+                  className="btn btn-dark px-3"
                   onClick={() => setModalCargaMayor(true)} // Abre el modal
                   disabled={loadingCarga}
                 >
@@ -114,14 +116,14 @@ export function LibroDiario() {
                       aria-hidden="true"
                     ></span>
                   ) : (
-                    <BookOpenCheck className={"mx-2 text-auto"} />
+                    <BookOpenCheck size={18} className="me-1" />
                   )}
-                  {loadingCarga ? " Procesando..." : " Carga Libro Mayor"}
+                  {loadingCarga ? " Procesando..." : " Cargar Libro Mayor"}
                 </button>
 
-                <button className="btn btn-outline-secondary ms-auto mx-2 d-flex align-items-center p-2">
-                  <ClipboardType className={"mx-2 text-auto"} />
-                  Generar Reporte
+                <button className="btn btn-outline-dark px-3">
+                  <ClipboardType size={18} className="me-1" />
+                  Reporte
                 </button>
               </div>
             </div>

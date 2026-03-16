@@ -20,6 +20,7 @@ import {
   Pencil,
   Plus,
   Trash2,
+  Search,
 } from "lucide-react";
 
 export function AdelantoSueldo() {
@@ -161,9 +162,9 @@ export function AdelantoSueldo() {
     setIsModalOpenQuestion(true);
   };
 
-  const verDetalles = (id) => {};
-  const eliminarAdelantoSueldo = (id) => {};
-  const getEditAdelantoSueldo = (id) => {};
+  const verDetalles = (id) => { };
+  const eliminarAdelantoSueldo = (id) => { };
+  const getEditAdelantoSueldo = (id) => { };
   const columnas = [
     { name: "ID", selector: (row) => row.id, sortable: true, grow: true },
     {
@@ -215,9 +216,8 @@ export function AdelantoSueldo() {
             style={{ textAlign: "center" }}
           >
             <p
-              className={`badge ${
-                row.estado == 1 ? "bg-success" : "bg-warning text-dark"
-              }`}
+              className={`badge ${row.estado == 1 ? "bg-success" : "bg-warning text-dark"
+                }`}
               style={{ margin: 0 }}
             >
               {row.estado == 1 ? "Aprobado" : "Pendiente"}
@@ -288,33 +288,41 @@ export function AdelantoSueldo() {
 
   return (
     <div>
-      <div className="card">
-        <div className="card-header d-flex justify-content-between align-items-center p-3">
-          <h3 className=" mb-0">Adelanto Sueldo</h3>
-          <div className="d-flex ms-auto mx-2">
-            <input
-              type="text"
-              placeholder="Buscar..."
-              className="form-control"
-            />
+      <div className="card py-2" >
+        <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-3">
+          <div className="d-flex align-items-center">
+            <h4 className="card-title mb-0 titulo-card-especial">
+              Panel de Adelantos
+            </h4>
+            <span className="badge-header">Registros</span>
           </div>
-          <button
-            className="btn btn-sm btn-outline-dark btn-sm"
-            title="Reporte"
-          >
-            <FileText className="me-1 text-auto" />
-            Reporte
-          </button>
-          <button
-            className="btn btn-sm btn-outline-dark btn-sm mx-2"
-            title="Agregar"
-            onClick={() => {
-              setIsModalOpen(true); // Abrir el modal
-            }}
-          >
-            <Plus className="me-1 text-auto" />
-            Agregar
-          </button>
+          <div className="d-flex align-items-center flex-wrap gap-2 mt-3 mt-md-0">
+            <div className="header-search-container">
+              <Search className="search-icon" />
+              <input
+                type="text"
+                placeholder="Buscar adelanto..."
+                className="form-control"
+              />
+            </div>
+            <button
+              className="btn btn-outline-dark px-3"
+              title="Reporte"
+            >
+              <FileText size={18} />
+              Reporte
+            </button>
+            <button
+              className="btn btn-dark px-3"
+              title="Agregar"
+              onClick={() => {
+                setIsModalOpen(true);
+              }}
+            >
+              <Plus size={18} />
+              Agregar
+            </button>
+          </div>
         </div>
         <div className="card-body p-0">
           <TablasGenerales columnas={columnas} datos={adelantoSueldoList} />

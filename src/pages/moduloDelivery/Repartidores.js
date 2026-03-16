@@ -32,47 +32,40 @@ export function Repartidores() {
     <div className="container-fluid p-0">
       <div className="card shadow-sm border-0 rounded-4">
         {/* HEADER DE LA VISTA */}
-        <div className="card-header bg-white border-bottom-0 d-flex flex-wrap justify-content-between align-items-center p-4 pb-2">
-          <h3 className="mb-2 mb-md-0 fw-bold d-flex align-items-center gap-2">
-            Panel de Repartidores
-            <span className="badge bg-light text-dark border rounded-pill fs-6 fw-medium">
-              {usuariosRepartidores.length} activos
-            </span>
-          </h3>
+        <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-3">
+          <div className="d-flex align-items-center">
+            <h4 className="card-title mb-0 titulo-card-especial">
+              Panel de Repartidores
+              <span className="badge-header">
+                {usuariosRepartidores.length} activos
+              </span>
+            </h4>
+          </div>
 
-          <div className="d-flex flex-wrap gap-2 ms-auto align-items-center">
-            <div className="position-relative">
+          <div className="d-flex flex-wrap gap-2 mt-3 mt-md-0 align-items-center ms-auto">
+            <div className="header-search-container">
+              <Search className="search-icon" />
               <input
                 type="text"
                 placeholder="Buscar repartidor..."
-                className="form-control form-control-sm search-input bg-light border-0"
-                style={{ minWidth: "220px", paddingLeft: "35px" }}
-              />
-              <Search
-                size={16}
-                className="position-absolute text-muted"
-                style={{
-                  left: "12px",
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                }}
+                className="form-control"
               />
             </div>
             <button
-              className="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1 px-3 rounded-pill"
+              className="btn btn-outline-dark px-3"
               title="Generar Reporte Completo"
             >
-              <FileText size={16} />
+              <FileText size={18} />
               <span className="d-none d-sm-inline">Reporte</span>
             </button>
             <button
-              className="btn btn-sm btn-dark d-flex align-items-center gap-1 px-3 rounded-pill"
+              className="btn btn-dark px-3"
               title="Agregar Nuevo Repartidor"
               onClick={() => {
                 // Abrir el modal
               }}
             >
-              <Plus size={16} />
+              <Plus size={18} />
               <span className="d-none d-sm-inline">Agregar</span>
             </button>
           </div>

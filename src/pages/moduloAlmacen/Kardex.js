@@ -4,7 +4,7 @@ import { useCallback } from "react";
 import { GetKardex } from "../../service/GetKardex";
 
 import { ContenedorPrincipal } from "../../components/componentesReutilizables/ContenedorPrincipal";
-import { ArrowDown, ArrowUp, FileText } from "lucide-react";
+import { ArrowDown, ArrowUp, FileText, Search } from "lucide-react";
 import ToastAlert from "../../components/componenteToast/ToastAlert";
 import axiosInstance from "../../api/AxiosInstance";
 import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteExcel";
@@ -123,15 +123,19 @@ export function Kardex() {
         <div className="col-md-12">
           <CondicionCarga isLoading={isLoading} isError={isError}>
             <div className="card shadow-sm py-2">
-              <div className="card-header border-bottom d-flex justify-content-between align-items-center">
-                <div className="">
-                  <h5> Kardex</h5>
+              <div className="card-header border-bottom-0 d-flex justify-content-between align-items-center gap-2 flex-wrap">
+                <div className="d-flex align-items-center">
+                  <h4 className="card-title mb-0 titulo-card-especial">
+                    Panel de Kardex
+                  </h4>
+                  <span className="badge-header">Movimientos</span>
                 </div>
                 <div className="d-flex align-items-center">
-                  <div className="d-flex">
+                  <div className="header-search-container">
+                    <Search className="search-icon" />
                     <input
                       type="text"
-                      placeholder="Buscar..."
+                      placeholder="Buscar producto..."
                       className="form-control"
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}

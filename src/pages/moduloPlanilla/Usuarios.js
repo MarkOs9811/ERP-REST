@@ -3,9 +3,10 @@ import { UsuariosList } from "../../components/componenteUsuario/UsuarioList";
 import { UsuarioForm } from "../../components/componenteUsuario/UsuarioForm";
 
 import {
-  FileChartColumnIncreasing,
+  FileText,
   FileUserIcon,
-  PlusIcon,
+  Plus,
+  Search
 } from "lucide-react";
 import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteExcel";
 import ModalRight from "../../components/componentesReutilizables/ModalRight";
@@ -18,46 +19,49 @@ export function Usuarios() {
   const navigate = useNavigate();
   return (
     <div>
-      <div className="card border-0 shadow-sm py-2">
-        <div className="card-header border-bottom d-flex justify-content-between align-items-center">
-          <div className="m-2">
+      <div className="card shadow-sm">
+        <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-3">
+          <div className="d-flex align-items-center">
             <h4 className="card-title mb-0 titulo-card-especial">
-              Lista de Usuarios
+              Panel de Usuarios
+              <span className="badge-header">Activos</span>
             </h4>
           </div>
 
-          <div className="d-flex gap-2">
-            <div className="d-flex">
+          <div className="d-flex flex-wrap gap-2 mt-3 mt-md-0 align-items-center ms-auto">
+            <div className="header-search-container">
+              <Search className="search-icon" />
               <input
                 type="text"
-                placeholder="Buscar..."
+                placeholder="Buscar usuario..."
                 className="form-control"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
             </div>
+            
             <button
-              className="btn  btn-outline-dark w-auto"
-              onClick={() => setShowModal(true)}
-            >
-              <PlusIcon className="text-auto" />
-              Crear usuario rapido
-            </button>
-
-            <button
-              className="btn  btn-outline-dark"
+              className="btn btn-outline-dark px-3"
               onClick={() => navigate("/rrhh/ingreso-a-planilla")}
             >
-              <FileUserIcon className="text-auto" /> Ingreso a planilla
+               Ingreso a Planilla
             </button>
 
             <button
               type="button"
-              className="btn btn-dark"
+              className="btn btn-outline-dark px-3"
               onClick={() => GetReporteExcel("/reporteUsuarios")}
-              title="Descargar Reporte de usuarios"
             >
-              <FileChartColumnIncreasing className="text-auto" />
+              <FileText size={18} className="me-1" />
+              Reporte
+            </button>
+
+            <button
+              className="btn btn-dark px-3"
+              onClick={() => setShowModal(true)}
+            >
+              <Plus size={18} />
+              Agregar
             </button>
           </div>
         </div>

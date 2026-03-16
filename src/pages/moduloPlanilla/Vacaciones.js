@@ -11,7 +11,7 @@ import { FormularioVacaciones } from "../../components/componentePlanillas/compo
 import { GetUsuarios } from "../../service/GetUsuarios";
 import axiosInstance from "../../api/AxiosInstance";
 import ToastAlert from "../../components/componenteToast/ToastAlert";
-import { FileText, Pencil, Plus, ShoppingBag, Trash2 } from "lucide-react";
+import { FileText, Pencil, Plus, ShoppingBag, Trash2, Search } from "lucide-react";
 import { FormularioVenderDias } from "../../components/componentePlanillas/componenteVacaciones/FormularioVenderDias";
 import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteExcel";
 
@@ -159,8 +159,8 @@ export function Vacaciones() {
       ToastAlert(
         "error",
         error.response?.data?.message || // Mensaje de la API (ej. "Errores de validación")
-          error.message || // Mensaje de red (ej. "Network Error")
-          "Ocurrió un error inesperado" // Mensaje por defecto
+        error.message || // Mensaje de red (ej. "Network Error")
+        "Ocurrió un error inesperado" // Mensaje por defecto
       );
     }
   };
@@ -286,9 +286,8 @@ export function Vacaciones() {
       name: "Estado",
       cell: (row) => (
         <span
-          className={`badge rounded-pill text-bg-${
-            row.estado === 1 ? "success" : "danger"
-          }`}
+          className={`badge rounded-pill text-bg-${row.estado === 1 ? "success" : "danger"
+            }`}
         >
           {row.estado === 1 ? "Completado" : "Pendiente"}
         </span>
@@ -369,35 +368,43 @@ export function Vacaciones() {
   ];
   return (
     <div>
-      <div className="card shadow-sm">
-        <div className="card-header d-flex justify-content-between align-items-center p-3">
-          <h3 className=" mb-0">Vacaciones</h3>
-          <div className="d-flex ms-auto mx-2">
-            <input
-              type="text"
-              placeholder="Buscar..."
-              className="form-control"
-              onChange={(e) => setFiltro(e.target.value)}
-            />
+      <div className="card shadow-sm py-2">
+        <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-3">
+          <div className="d-flex align-items-center">
+            <h4 className="card-title mb-0 titulo-card-especial">
+              Panel de Vacaciones
+            </h4>
+            <span className="badge-header">Registros</span>
           </div>
-          <button
-            className="btn btn-sm btn-outline-dark btn-sm"
-            title="Reporte"
-            onClick={() => GetReporteExcel("/reporteVacaciones")}
-          >
-            <FileText className="me-1 text-auto" />
-            Reporte
-          </button>
-          <button
-            className="btn btn-sm btn-outline-dark btn-sm mx-2"
-            title="Agregar"
-            onClick={() => {
-              setIsModalOpen(true); // Abrir el modal
-            }}
-          >
-            <Plus className="me-1 text-auto" />
-            Agregar
-          </button>
+          <div className="d-flex align-items-center flex-wrap gap-2 mt-3 mt-md-0">
+            <div className="header-search-container">
+              <Search className="search-icon" />
+              <input
+                type="text"
+                placeholder="Buscar vacaciones..."
+                className="form-control"
+                onChange={(e) => setFiltro(e.target.value)}
+              />
+            </div>
+            <button
+              className="btn btn-outline-dark px-3"
+              title="Reporte"
+              onClick={() => GetReporteExcel("/reporteVacaciones")}
+            >
+              <FileText size={18} />
+              Reporte
+            </button>
+            <button
+              className="btn btn-dark px-3"
+              title="Agregar"
+              onClick={() => {
+                setIsModalOpen(true);
+              }}
+            >
+              <Plus size={18} />
+              Agregar
+            </button>
+          </div>
         </div>
         <div className="card-body p-0">
           <TablasGenerales

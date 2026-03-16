@@ -8,8 +8,7 @@
     top: 0;
     left: 0;
     height: 100%;
-    background-color: #1d2530;
-    color: #ffffff;
+    color: var(--text-main);
     overflow-y: hidden;
     transition: all 0.3s ease, border-radius 0.3s ease;
     width: 230px;
@@ -29,14 +28,12 @@
     text-align: left;
 }
 
-.sidebar.compressed {
-    width: 230px;
-    overflow-x: hidden;
-}
+/* Removed unused compressed classes */
 
 .sidebar-header {
-    background-color: var(--color-brand);
-    color: #2a2f30;
+    background-color: transparent;
+    border-bottom: 1px solid var(--glass-border);
+    color: var(--brand-primary);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -63,22 +60,7 @@
     padding-left: 20px;
 }
 
-.sidebar.compressed .menu-item {
-    height: 40px;
-    width: 100%;
-    justify-content: center;
-    padding: 10px 23px;
-    cursor: pointer;
-    text-align: center;
-}
-
-.sidebar.compressed .icon {
-    margin: 0;
-}
-.sidebar.compressed .sidebar-header .header-title {
-    opacity: 0;
-    visibility: hidden;
-}
+/* Eliminated specific compressed rules */
 .menu-list {
     list-style: none!important;
     padding: 0;
@@ -87,27 +69,24 @@
     overflow-x: hidden;
 }
 .menu-item {
-    margin-top: 3px;
     text-align: center;
-    padding: 0px;
-    color: #dadada !important;
-    
+    color: var(--text-muted) !important;
+    transition: all 0.2s ease-in-out;
+    border-radius: 50px; /* Material 3 Pill shape */
 }
 
 .menu-item:hover {
-    background-color: #3c4550 !important;
-    border-radius: 8px;
+    background-color: rgba(0, 0, 0, 0.05) !important;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    color: var(--text-main) !important;
+    transform: translateX(4px);
 }
 
 .menu-item.active {
-    background: linear-gradient(135deg, #492a2a7c, #5c363681);
-    border-radius: 8px;
-    font-weight: bold;
-    color: rgb(252, 183, 162)!important;
-    text-shadow: 1px 1px 2px rgb(44, 20, 20);
-    
+    background-color: rgba(238, 82, 82, 0.1) !important; /* Soft tint */
+    font-weight: 600;
+    color: var(--brand-primary) !important;
+    box-shadow: none;
 }
 .menu-footer {
     position: absolute;
@@ -119,50 +98,103 @@
 .submenu {
     list-style: none;
     padding-left: 10px;
-    background-color: #1b222b73 !important;
-    margin: 0;
+    margin-left: 20px;
+    border-left: 1px solid rgba(0,0,0,0.06);
+    background-color: transparent !important;
     overflow: hidden;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all var(--transition-bounce);
     max-height: 0;
     opacity: 0;
-    border: none;
-    border-top-left-radius: 0px!important;
-    border-top-right-radius: 0px!important;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
 }
 
 .submenu-open {
     max-height: 500px;
     opacity: 1;
     padding-bottom: 5px;
+    padding-top: 5px;
 }
 .menu-item-sub {
     cursor: pointer;
-    border-radius: 6px;
-    color: #dadada;
+    border-radius: 50px;
+    color: var(--text-muted);
+    transition: all 0.2s ease;
 }
 
 .menu-item-sub:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(0, 0, 0, 0.04);
+    color: var(--text-main);
+    transform: translateX(4px);
 }
 
 .active-sub {
-    background-color: rgba(255, 255, 255, 0.2);
-    font-weight: bold;
+    background-color: rgba(238, 82, 82, 0.05);
+    font-weight: 600;
+    color: var(--brand-primary);
+}
+
+/* Dark Theme Overrides */
+body.dark-theme .menu-item {
+    color: var(--text-muted) !important;
+}
+
+body.dark-theme .menu-item:hover {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    color: #eaeaea !important;
 }
 
 body.dark-theme .submenu {
-   
-    background-color: #1b222b1c !important;
-    box-shadow: none!important;
+    border-left: 1px solid rgba(255,255,255,0.06);
 }
 
 body.dark-theme .menu-item.active {
-    background: linear-gradient(135deg, #492a2a7c, #5c363681)!important;
-    border-radius: 8px;
-    font-weight: bold;
-    color: rgb(252, 183, 162) !important;
-    text-shadow: 1px 1px 2px rgb(44, 20, 20);
+    background-color: rgba(238, 82, 82, 0.15) !important;
+    color: #ff8a8a !important;
+}
 
+body.dark-theme .menu-item-sub {
+    color: var(--text-muted);
+}
+
+body.dark-theme .menu-item-sub:hover {
+    background-color: rgba(255, 255, 255, 0.04);
+    color: #eaeaea;
+}
+
+body.dark-theme .active-sub {
+    background-color: rgba(238, 82, 82, 0.1);
+    color: #ff8a8a;
+}
+
+/* ========================================= */
+/* RESPONSIVE MÓVIL (PANTALLAS CELULAR)      */
+/* ========================================= */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 60px !important;
+        overflow: hidden;
+    }
+    .sidebar-text-container,
+    .sidebar-text {
+        opacity: 0 !important;
+        display: none !important;
+    }
+    .menu-item .d-flex {
+        justify-content: center !important;
+        padding-left: 0;
+    }
+    
+    /* Hover state for mobile - expands to reveal text */
+    .sidebar:hover {
+        width: 230px !important;
+        box-shadow: 5px 0 15px rgba(0,0,0,0.1) !important;
+    }
+    .sidebar:hover .sidebar-text-container,
+    .sidebar:hover .sidebar-text {
+        opacity: 1 !important;
+        display: block !important;
+    }
+    .sidebar:hover .menu-item .d-flex {
+        justify-content: flex-start !important;
+        padding-left: 10px;
+    }
 }

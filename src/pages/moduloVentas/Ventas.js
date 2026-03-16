@@ -9,7 +9,8 @@ import { getVentas } from "../../service/ObtenerVentasDetalle";
 import { ContenedorPrincipal } from "../../components/componentesReutilizables/ContenedorPrincipal";
 import {
   CalendarFold,
-  FileChartColumnIncreasing,
+  FileText,
+  Search,
   TrendingDown,
   TrendingUp,
   DollarSign,
@@ -121,11 +122,11 @@ export function Ventas() {
                   <div className="d-flex ms-auto">
                     <button
                       type="button"
-                      className="btn d-flex btn-outline-dark px-2 py-2 btn-sm rounded"
+                      className="btn d-flex btn-outline-dark px-3"
                       onClick={() => GetReporteExcel("/reporteVentasHOY")}
                     >
-                      <FileChartColumnIncreasing className="text-auto" />{" "}
-                      Reporte de ventas Hoy
+                      <FileText size={18} />
+                      Reporte Hoy
                     </button>
                   </div>
                 </div>
@@ -304,25 +305,33 @@ export function Ventas() {
       <div className="col-12">
         <CondicionCarga isLoading={isLoading} isError={isError}>
           <div className="card shadow-sm py-2">
-            <div className="card-header d-flex flex-column flex-md-row justify-content-between gap-2">
-              <h3>Ventas</h3>
-              <div className="d-flex flex-column flex-md-row gap-2 ">
-                {/* Filtro por texto */}
-                <input
-                  type="text"
-                  placeholder="Buscar..."
-                  className="form-control"
-                  value={search}
-                  onChange={(e) => {
-                    setSearch(e.target.value);
-                    setSelectedDate(""); // limpiar fecha si escribes texto
-                  }}
-                />
+            <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+              <div className="d-flex align-items-center">
+                <h4 className="card-title mb-0 titulo-card-especial">
+                  Panel de Ventas
+                </h4>
+                <span className="badge-header">Registros</span>
+              </div>
+              
+              <div className="d-flex align-items-center flex-wrap gap-2 mt-3 mt-md-0">
+                <div className="header-search-container">
+                  <Search className="search-icon" />
+                  <input
+                    type="text"
+                    placeholder="Buscar venta..."
+                    className="form-control"
+                    value={search}
+                    onChange={(e) => {
+                      setSearch(e.target.value);
+                      setSelectedDate(""); // limpiar fecha si escribes texto
+                    }}
+                  />
+                </div>
 
                 {/* Filtro por fecha */}
                 <input
                   type="date"
-                  className="form-control"
+                  className="form-control x-2"
                   value={selectedDate}
                   onChange={(e) => {
                     const rawDate = e.target.value;
@@ -330,13 +339,15 @@ export function Ventas() {
                     const formatted = formatToDMY(rawDate);
                     setSearch(formatted);
                   }}
+                  style={{maxWidth: "180px", minWidth: "150px"}}
                 />
                 <button
                   type="button"
-                  className="btn btn-dark"
+                  className="btn btn-outline-dark px-3"
                   onClick={() => GetReporteExcel("/reporteVentasTodo")}
                 >
-                  <FileChartColumnIncreasing className="text-auto" />
+                  <FileText size={18} />
+                  Reporte General
                 </button>
               </div>
             </div>

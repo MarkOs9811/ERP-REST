@@ -4,7 +4,7 @@ import { GetPlanillaCargo } from "../../service/GetTrabajadorCargo";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import { TablasGenerales } from "../../components/componentesReutilizables/TablasGenerales";
-import { Eye, FileText, Plus } from "lucide-react";
+import { Eye, FileText, Plus, Search } from "lucide-react";
 
 export function ListaTrabajador() {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -193,33 +193,37 @@ export function ListaTrabajador() {
 
   return (
     <div>
-      <div className="card shadow-sm h-100 m-0 p-0">
-        <div className="card-header border-bottom d-flex justify-content-between align-items-center">
-          <div className="m-2">
-            <h4 className="card-title mb-0 titulo-card-especial">Planilla</h4>
-            <h6>
+      <div className="card shadow-sm">
+        <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-3">
+          <div className="d-flex align-items-center">
+            <h4 className="card-title mb-0 titulo-card-especial">
+              Panel Planilla
+            </h4>
+            <span className="badge-header">
               {listaTrabajador?.length > 0
                 ? `${listaTrabajador[0].cargo}`
-                : `${idCargo ? `(Cargo ID: ${idCargo})` : ""}`}
-            </h6>
+                : `${idCargo ? `(Cargo ID: ${idCargo})` : "Trabajadores"}`}
+            </span>
           </div>
-          <div className="d-flex align-items-center">
-            <div className="d-flex">
+          <div className="d-flex align-items-center flex-wrap gap-2 mt-3 mt-md-0">
+            <div className="header-search-container">
+              <Search className="search-icon" />
               <input
                 type="text"
-                placeholder="Buscar..."
+                placeholder="Buscar trabajador..."
                 className="form-control"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
-              <button
-                type="button"
-                className="btn ms-2 border"
-                onClick={handleRegistrarEmpleado}
-              >
-                <Plus color={"auto"} />
-              </button>
             </div>
+            <button
+              type="button"
+              className="btn btn-dark px-3"
+              onClick={handleRegistrarEmpleado}
+            >
+              <Plus size={18} />
+              Agregar
+            </button>
           </div>
         </div>
         {isLoading && <p>Cargando Trabajador...</p>}

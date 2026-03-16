@@ -5,8 +5,9 @@ import { ContenedorPrincipal } from "../components/componentesReutilizables/Cont
 import {
   BanknoteArrowUp,
   CalendarDays,
-  FileChartColumnIncreasing,
-  PlusIcon,
+  FileText,
+  Plus,
+  Search,
   ShoppingCart,
   Trophy,
 } from "lucide-react";
@@ -118,42 +119,52 @@ export function Compras() {
         <div className="col-md-12 h-100">
           <CondicionCarga isLoading={isLoading} isError={isError}>
             <div className="card p-0 shadow-sm py-2 h-100">
-              <div className="card-header d-flex justify-content-between">
-                <h3 className="texto-principal">Compras</h3>
-                <div className="d-flex">
-                  {/* Input de texto */}
-                  <input
-                    type="text"
-                    placeholder="Buscar..."
-                    className="form-control"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                  />
+              <div className="card-header border-bottom-0 d-flex justify-content-between align-items-center">
+                <div className="d-flex align-items-center">
+                  <h4 className="card-title mb-0 titulo-card-especial">
+                    Panel de Compras
+                  </h4>
+                  <span className="badge-header">Registro</span>
+                </div>
+
+                <div className="d-flex align-items-center flex-wrap gap-2 mt-3 mt-md-0">
+                  <div className="header-search-container">
+                    <Search className="search-icon" />
+                    <input
+                      type="text"
+                      placeholder="Buscar compra..."
+                      className="form-control"
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                    />
+                  </div>
 
                   {/* Input de fecha */}
                   <input
                     type="date"
-                    className="form-control mx-3"
+                    className="form-control mx-1"
                     {...register("fecha", { required: false })}
                     onChange={(e) => {
-                      // cuando seleccionas una fecha, se refleja en el input de texto
                       setSearch(e.target.value);
                     }}
+                    style={{maxWidth: "180px", minWidth: "150px"}}
                   />
-                  <button
-                    className="btn mx-3 btn-outline-dark"
-                    onClick={() => setModalAddCompra(true)}
-                    title="Agregar Compra"
-                  >
-                    <PlusIcon className="text-auto" />
-                  </button>
+                  
                   <button
                     type="button"
-                    className="btn btn-dark"
+                    className="btn btn-outline-dark px-3"
                     onClick={() => GetReporteExcel("/reporteCompras")}
-                    title="Descargar Reporte de proveedores"
                   >
-                    <FileChartColumnIncreasing className="text-auto" />
+                    <FileText size={18} />
+                    Reporte
+                  </button>
+
+                  <button
+                    className="btn btn-dark px-3"
+                    onClick={() => setModalAddCompra(true)}
+                  >
+                    <Plus size={18} />
+                    Agregar
                   </button>
                 </div>
               </div>
