@@ -37,12 +37,12 @@ const NotificacionBtn = ({ pedido }) => {
   return (
     <button
       type="button"
-      className="btn-principal  p-1"
+      className="btn-accion-card"
       disabled={loading}
       title="Notificar al cliente"
       onClick={() => handleNotificar()}
     >
-      <MegaphoneIcon />
+      <MegaphoneIcon size={18} />
     </button>
   );
 };

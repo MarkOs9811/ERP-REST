@@ -70,8 +70,10 @@ import { Despacho } from "../pages/moduloDelivery/Despacho";
 import { Repartidores } from "../pages/moduloDelivery/Repartidores";
 import { ZonaTarifa } from "../pages/moduloDelivery/ZonaTarifa";
 import { Promociones } from "../pages/moduloDelivery/Promociones";
+import { useSelector } from "react-redux";
 
 export const MainLayout = () => {
+  const isCompressed = useSelector((state) => state.sidebar?.isCompressed || false);
   const user = JSON.parse(localStorage.getItem("user"));
   const empresa = JSON.parse(localStorage.getItem("empresa")) || {};
 
@@ -98,7 +100,7 @@ export const MainLayout = () => {
       {showFullLayout && <SideBar />}
 
       <div
-        className={`content p-0 ${showFullLayout ? 'with-sidebar' : ''}`}
+        className={`content p-0 ${showFullLayout ? 'with-sidebar' : ''} ${isCompressed ? 'content-compressed' : ''}`}
         style={{
           transition: "margin-left var(--transition-smooth), width var(--transition-smooth)"
         }}
@@ -114,7 +116,7 @@ export const MainLayout = () => {
                 }}
               >
                 <div
-                  className={`d-flex flex-column position-fixed ${showFullLayout ? 'header-with-sidebar' : 'w-100'}`}
+                  className={`d-flex flex-column position-fixed ${showFullLayout ? (isCompressed ? 'header-compressed' : 'header-with-sidebar') : 'w-100'}`}
                   style={{
                     zIndex: 100,
                     transition: "width var(--transition-smooth)"

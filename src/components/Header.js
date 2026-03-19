@@ -6,10 +6,13 @@ import RippleWrapper from "./componentesReutilizables/RippleWrapper";
 import { PerfilPanel } from "./componentesHeader/PerfilPanel";
 import { NotificacionesPanel } from "./componentesHeader/NotificacionesPanel";
 import { capitalizeFirstLetter } from "../hooks/FirstLetterUp";
-import { Bell, Moon, SunMediumIcon } from "lucide-react";
+import { Bell, Menu, Moon, SunMediumIcon } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { toggleSidebar } from "../redux/sideBarSlice";
 import ModalRight from "./componentesReutilizables/ModalRight";
 import { BadgeComponent } from "./componentesReutilizables/BadgeComponent";
 export function Header() {
+  const dispatch = useDispatch();
   const BASE_URL = process.env.REACT_APP_BASE_URL;
   const empresa = JSON.parse(localStorage.getItem("empresa")) || {};
   const fotoEmpresa = empresa.logo
@@ -52,6 +55,18 @@ export function Header() {
     <header className="navbar header-contenido p-0 m-0 border-bottom">
       <nav className="container-fluid d-flex flex-nowrap align-items-center justify-content-between p-0 m-0">
         <div className="d-flex align-items-center justify-content-center gap-2 mx-3 ">
+          {/* Botón para comprimir/expandir Sidebar */}
+          <button
+            className="ico-header border-0 rounded-pill d-flex align-items-center justify-content-center bg-transparent"
+            title="Contraer Menú"
+            onClick={() => dispatch(toggleSidebar())}
+            style={{ width: 44, height: 44, padding: 0, transition: 'transform var(--transition-bounce)' }}
+            onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+            onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+          >
+            <Menu className="text-muted" height="24px" width="24px" />
+          </button>
+          
           <div className="logo-empresa d-flex align-items-center ">
             {cargo?.empleado?.cargo?.nombre === "atencion al cliente" ? (
               <img

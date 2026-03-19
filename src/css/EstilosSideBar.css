@@ -21,14 +21,73 @@
     cursor: pointer;
     font-size: 1.25rem;
 }
+
+/* Comportamiento de expansión (Hover/Default) */
 .sidebar:hover {
-    width: 230px;
+    width: 230px !important;
     overflow-y: auto;
     max-height: 100%;
     text-align: left;
 }
 
-/* Removed unused compressed classes */
+/* COMPRESED STATE (DESKTOP) */
+.sidebar.sidebar-compressed {
+    width: 80px;
+    overflow-x: hidden;
+}
+
+.sidebar.sidebar-compressed .sidebar-text-container,
+.sidebar.sidebar-compressed .sidebar-text {
+    opacity: 0;
+    display: none;
+}
+
+.sidebar.sidebar-compressed .menu-item {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    width: 45px !important;
+    height: 45px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sidebar.sidebar-compressed .menu-item .d-flex {
+    justify-content: center !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin: 0 !important;
+    width: auto !important;
+}
+
+/* HOVER SOBRE SIDEBAR COMPRESS (EXPANSIÓN TEMPORAL MÁGICA) */
+.sidebar.sidebar-compressed:hover {
+    width: 230px !important;
+    box-shadow: 5px 0 15px rgba(0,0,0,0.1) !important;
+}
+
+.sidebar.sidebar-compressed:hover .sidebar-text-container,
+.sidebar.sidebar-compressed:hover .sidebar-text {
+    opacity: 1;
+    display: block;
+}
+
+.sidebar.sidebar-compressed:hover .menu-item {
+    width: auto !important;
+    height: auto !important;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+    margin-left: 8px !important;
+    margin-right: 8px !important;
+}
+
+.sidebar.sidebar-compressed:hover .menu-item .d-flex {
+    justify-content: flex-start !important;
+    padding-left: 0 !important;
+    width: 100% !important;
+}
 
 .sidebar-header {
     background-color: transparent;
@@ -36,10 +95,16 @@
     color: var(--brand-primary);
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     padding: 9px;
+    padding-left: 20px;
     gap: 10px;
     transition: height 0.3s ease;
+}
+
+.sidebar.sidebar-compressed .sidebar-header {
+    justify-content: center !important;
+    padding-left: 0 !important;
 }
 
 .sidebar-header .header-icon {

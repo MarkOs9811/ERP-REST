@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axiosInstance from "../api/AxiosInstance";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { subMenuClick } from "../redux/subMenuSlice";
 import "../css/EstilosSideBar.css";
 import { setSidebarCompressed } from "../redux/sideBarSlice";
@@ -27,6 +27,7 @@ import { capitalizeFirstLetter } from "../hooks/FirstLetterUp";
 import { useEffect, useState } from "react";
 
 export function SideBar() {
+  const isCompressed = useSelector((state) => state.sidebar.isCompressed);
   const location = useLocation();
   const navigate = useNavigate();
   const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -173,7 +174,6 @@ export function SideBar() {
 
   const handleModuloSeleccionado = (nombreOpcion, event) => {
     dispatch(subMenuClick(nombreOpcion));
-    dispatch(setSidebarCompressed(true));
   };
 
   const handleAccordionToggle = (roleName) => {
@@ -205,7 +205,7 @@ export function SideBar() {
     }
   }, []);
   return (
-    <div className={`sidebar justify-content-between m-auto`} style={{ background: 'var(--glass-bg)', backdropFilter: 'var(--glass-blur)', borderRight: '1px solid var(--glass-border)', boxShadow: 'var(--shadow-soft)', transition: 'all var(--transition-smooth)' }}>
+    <div className={`sidebar justify-content-between m-auto ${isCompressed ? 'sidebar-compressed' : ''}`} style={{ background: 'var(--glass-bg)', backdropFilter: 'var(--glass-blur)', borderRight: '1px solid var(--glass-border)', boxShadow: 'var(--shadow-soft)', transition: 'all var(--transition-smooth)' }}>
       <div className="sidebar-header d-flex flex-nowrap">
         {fotoEmpresa && (
           <img
@@ -215,7 +215,6 @@ export function SideBar() {
             style={{
               maxWidth: "35px",
               borderRadius: "50%",
-              marginLeft: "10px",
               height: "28px",
             }}
           />
@@ -238,7 +237,7 @@ export function SideBar() {
               className={`menu-item px-3 py-2 mx-2 my-1 ${location.pathname === `/` ? "active" : ""
                 }`}
             >
-              <div className="d-flex gap-2 align-items-center justify-content-center justify-content-md-start m-auto w-100">
+              <div className="d-flex w-100 gap-2 align-items-center justify-content-md-start m-auto px-2">
                 <Home className="icon-lucide flex-shrink-0" size={20} />
                 <small className="small sidebar-text" style={{ fontSize: "14px", transition: 'opacity 0.2s' }}>
                   Inicio
@@ -267,7 +266,7 @@ export function SideBar() {
                     onClick={() => handleAccordionToggle(roleName)}
                     style={{ cursor: "pointer" }}
                   >
-                    <div className="d-flex w-100 gap-2 align-items-center justify-content-center justify-content-md-between px-2">
+                    <div className="d-flex w-100 gap-2 align-items-center justify-content-between px-2">
                       <div className="d-flex gap-2 align-items-center">
                         <IconComponent className="icon-lucide flex-shrink-0" size={20} />
                         <small className="small sidebar-text" style={{ fontSize: "14px", transition: 'opacity 0.2s' }}>
@@ -275,9 +274,9 @@ export function SideBar() {
                         </small>
                       </div>
                       {openAccordion === roleName ? (
-                        <ChevronDown size={18} color="var(--brand-primary)" />
+                        <ChevronDown className="chevron-icon sidebar-text" size={18} color="var(--brand-primary)" />
                       ) : (
-                        <ChevronRight size={18} color="var(--text-muted)" />
+                        <ChevronRight className="chevron-icon sidebar-text" size={18} color="var(--text-muted)" />
                       )}
                     </div>
                   </li>
@@ -327,7 +326,7 @@ export function SideBar() {
                   className={`menu-item px-3 py-2 mx-2 my-1 ${isActive ? "active" : ""
                     }`}
                 >
-                  <div className="d-flex w-100 gap-2 align-items-center justify-content-center justify-content-md-start m-auto px-2">
+                  <div className="d-flex w-100 gap-2 align-items-center justify-content-md-start m-auto px-2">
                     <IconComponent className="icon-lucide flex-shrink-0" size={20} />
                     <small className="small sidebar-text" style={{ fontSize: "14px", transition: 'opacity 0.2s' }}>
                       {capitalizeFirstLetter(role.nombre)}

@@ -195,13 +195,13 @@ export function PedidosWeb() {
           /* CAMBIO 2: Quitamos "col-md-4" y ponemos nuestra clase kanban-col */
           <div key={key} className="kanban-col">
             <div
-              className="card flex-grow-1 h-100 d-flex shadow-sm"
+              className="kanban-column flex-grow-1 h-100 d-flex flex-column shadow-sm"
               style={{
                 borderTop: `10px solid ${border}`,
                 borderRadius: "0.5rem",
               }}
             >
-              <div className="d-flex card-header bg-transparent border-bottom p-2 align-items-center">
+              <div className="d-flex bg-transparent border-bottom p-2 align-items-center">
                 <h3 className="text-dark mb-0 fs-5 fw-bold">{title}</h3>
                 <div className="text-end ms-auto">{icon}</div>
               </div>
@@ -211,7 +211,7 @@ export function PedidosWeb() {
                   <div
                     ref={provided.innerRef}
                     {...provided.droppableProps}
-                    className="card-body overflow-auto p-2 p-md-3"
+                    className="flex-grow-1 overflow-auto p-2 p-md-3"
                   >
                     {isLoading && <Cargando />}
                     {isError && (

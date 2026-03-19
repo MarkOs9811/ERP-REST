@@ -76,8 +76,17 @@ button {
   width: calc(100% - 230px);
 }
 
+.content.content-compressed {
+  margin-left: 80px !important;
+  width: calc(100% - 80px) !important;
+}
+
 .header-with-sidebar {
   width: calc(100% - 230px);
+}
+
+.header-compressed {
+  width: calc(100% - 80px) !important;
 }
 
 
@@ -198,6 +207,16 @@ button {
   transition: transform var(--transition-bounce), box-shadow var(--transition-bounce), background-color var(--transition-smooth) !important;
   backdrop-filter: blur(10px);
 }
+
+.kanban-column {
+  border: 1px solid var(--glass-border) !important;
+  overflow: visible !important;
+  background-color: var(--bg-card) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: var(--shadow-soft) !important;
+  /* IMPORTANTE: Sin backdrop-filter ni transform para que el Drag and Drop funcione correctamente */
+}
+
 .card-platos {
   transition: all ease-out 0.2s;
 }
@@ -410,13 +429,44 @@ button:disabled {
 }
 
 .btn-principal:hover {
-  background-color: var(--brand-secondary);
+  background-color: #d14141;
   box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
 }
 
 .btn-principal:active {
   background-color: #b32b2b !important;
   box-shadow: none;
+}
+
+/* --- Botones de Acción (Minimalistas y Neutros para Cards) --- */
+.btn-accion-card {
+  width: 36px;
+  height: 36px;
+  background-color: #f8fafc;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-sm); /* Menos redondo, 10px */
+  padding: 0; /* Padding quitado porque width/height lo controlan */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  cursor: pointer;
+}
+
+.btn-accion-card:hover {
+  background-color: #f1f5f9;
+  color: #0f172a;
+  border-color: #cbd5e1;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.btn-accion-card:active {
+  background-color: #e2e8f0;
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 
 /* --- Botón Editar (Gris Sutil) --- */
@@ -437,12 +487,12 @@ button:disabled {
 }
 
 .btn-editar:hover {
-  background-color: rgba(238, 82, 82, 0.05);
+  background-color: rgba(59, 130, 246, 0.05);
   border-color: var(--brand-secondary);
 }
 
 .btn-editar:active {
-  background-color: rgba(238, 82, 82, 0.1) !important;
+  background-color: rgba(59, 130, 246, 0.1) !important;
 }
 
 /* --- Botón Eliminar (Rojo) --- */
@@ -518,7 +568,7 @@ button:disabled {
 }
 
 .btn-guardar:hover {
-  background-color: var(--brand-secondary);
+  background-color: #d14141;
   box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
 }
 

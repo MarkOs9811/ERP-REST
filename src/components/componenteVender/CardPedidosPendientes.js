@@ -62,8 +62,8 @@ const PedidoCard = ({ pedido, onOpenModal }) => {
       icono: <AlarmClock color="#ffc100" size={16} />,
       botones: (
         <div className="d-flex flex-column align-items-center justify-content-center gap-2 w-100 h-100">
-          <button className="btn-principal p-1" title="Notificar al cliente">
-            <Megaphone size={"auto"} className="text-auto" />
+          <button className="btn-accion-card" title="Notificar al cliente">
+            <Megaphone size={18} />
           </button>
         </div>
       ),
@@ -74,19 +74,20 @@ const PedidoCard = ({ pedido, onOpenModal }) => {
       botones: (
         <div className="d-flex flex-column align-items-center justify-content-center gap-2 w-100 h-100">
           <button
-            className="btn-principal p-1"
+            className="btn-accion-card"
             onClick={(e) => {
               e.stopPropagation(); // Buena práctica
               ImprimirPedidoWeb();
             }}
             type="button"
+            title="Imprimir Ticket"
           >
-            <Printer className="text-auto" />
+            <Printer size={18} />
           </button>
           <div style={{ display: "none" }}>
             <TicketPedidosWeb ref={componentRef} dataActual={datosVenta} />
           </div>
-          <NotificacionBtn pedido={pedido} className="text-auto" />
+          <NotificacionBtn pedido={pedido} />
         </div>
       ),
     },
@@ -100,22 +101,22 @@ const PedidoCard = ({ pedido, onOpenModal }) => {
             <>
               <button
                 type="button"
-                className="btn-principal p-1"
+                className="btn-accion-card"
                 onClick={handleRealizarPago}
                 title="Procesar Pago"
               >
-                <CheckCheckIcon className="text-auto" />
+                <CheckCheckIcon size={18} />
               </button>
 
               <button
-                className="btn-principal p-1"
+                className="btn-accion-card"
                 onClick={(e) => {
                   e.stopPropagation();
                   ImprimirPedidoWeb();
                 }}
                 title="Imprimir Ticket"
               >
-                <PrinterIcon className="text-auto" />
+                <PrinterIcon size={18} />
               </button>
               <div style={{ display: "none" }}>
                 <TicketPedidosWeb ref={componentRef} dataActual={datosVenta} />
