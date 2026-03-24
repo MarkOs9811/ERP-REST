@@ -47,9 +47,6 @@ export function SideBar() {
   const dispatch = useDispatch();
   const { logout } = useAuth();
 
-  // Estado para abrir/cerrar acordeones
-  const [openAccordion, setOpenAccordion] = useState(null);
-
   const icons = {
     inicio: Home,
     usuarios: Users,
@@ -82,58 +79,6 @@ export function SideBar() {
     "areas-y-cargos",
     "configuracion",
   ];
-
-  const subMenus = {
-    ventas: [
-      "Mis Ventas",
-      "Inventario",
-      "Cajas",
-      "Solicitud",
-      "Reportes",
-      "Mesas",
-      "Ajustes Ventas",
-    ],
-    delivery: [
-      "Pedidos",
-      "Repartidores",
-      "Zonas y Tarifas",
-      "Promociones App",
-      "Configuracion App",
-      "Reportes",
-    ],
-    rrhh: [
-      "Usuarios",
-      "Nomina",
-      "Ingreso a Planilla",
-      "Asistencia",
-      "Horas Extras",
-      "Adelanto de Sueldo",
-      "Vacaciones",
-      "Reportes",
-      "Ajustes",
-    ],
-    finanzas: [
-      "Informes Financieros",
-      "Presupuestos",
-      "Libro Diario",
-      "Libro Mayor",
-      "Cuentas por Cobrar",
-      "Cuentas por Pagar",
-      "Firmar Solicitud",
-      "Reportes Financieros",
-      "Ajustes",
-    ],
-    almacen: [
-      "Almacenes",
-      "Registro",
-      "Transferencia",
-      "Solicitud",
-      "Movimientos",
-      "Kardex",
-      "Reportes",
-      "Ajustes",
-    ],
-  };
 
   const getIconForRole = (roleName) => {
     const roleKey = roleName
@@ -174,10 +119,6 @@ export function SideBar() {
 
   const handleModuloSeleccionado = (nombreOpcion, event) => {
     dispatch(subMenuClick(nombreOpcion));
-  };
-
-  const handleAccordionToggle = (roleName) => {
-    setOpenAccordion(openAccordion === roleName ? null : roleName);
   };
 
   // para estilo del header
@@ -246,74 +187,21 @@ export function SideBar() {
             </li>
           </Link>
 
-          {/* Módulos dinámicos */}
           {orderedRoles.map((role) => {
             const roleName = role.nombre.toLowerCase();
-            if (["vender", "incidencias", "usuarios"].includes(roleName))
-              return null;
-
             const roleUrl = formatRoleToUrl(role.nombre);
+            
+            // Ocultamos los modulos que ahora viven dentro de otros como tabs (ej. compras -> almacen)
+            const ocultos = [
+              "vender", "incidencias", "usuarios", 
+              "compras", "proveedores", "areas y cargos"
+            ];
+            if (ocultos.includes(roleName)) return null;
+
             const isActive = location.pathname.includes(`/${roleUrl}`);
             const IconComponent = getIconForRole(role.nombre);
-            const hasSubmenu = subMenus[roleName];
 
-            if (hasSubmenu) {
-              return (
-                <div key={role.id}>
-                  <li
-                    className={`menu-item px-3 py-2 mx-2 my-1 ${isActive ? "active" : ""
-                      }`}
-                    onClick={() => handleAccordionToggle(roleName)}
-                    style={{ cursor: "pointer" }}
-                  >
-                    <div className="d-flex w-100 gap-2 align-items-center justify-content-between px-2">
-                      <div className="d-flex gap-2 align-items-center">
-                        <IconComponent className="icon-lucide flex-shrink-0" size={20} />
-                        <small className="small sidebar-text" style={{ fontSize: "14px", transition: 'opacity 0.2s' }}>
-                          {capitalizeFirstLetter(role.nombre)}
-                        </small>
-                      </div>
-                      {openAccordion === roleName ? (
-                        <ChevronDown className="chevron-icon sidebar-text" size={18} color="var(--brand-primary)" />
-                      ) : (
-                        <ChevronRight className="chevron-icon sidebar-text" size={18} color="var(--text-muted)" />
-                      )}
-                    </div>
-                  </li>
-
-                  <div
-                    className={`submenu px-2 mx-2 shadow-none ${openAccordion === roleName ? "submenu-open" : ""
-                      }`}
-                  >
-                    {hasSubmenu.map((sub, index) => {
-                      const subUrl =
-                        formatRoleToUrl(sub) === roleUrl
-                          ? roleUrl
-                          : `${roleUrl}/${formatRoleToUrl(sub)}`;
-                      return (
-                        <Link
-                          key={index}
-                          to={`/${subUrl}`}
-                          className="link-opcion text-decoration-none "
-                          onClick={(e) => handleModuloSeleccionado(subUrl, e)}
-                        >
-                          <li
-                            className={`menu-item-sub px-4 py-1 my-1 ${location.pathname.includes(`/${subUrl}`)
-                              ? "active-sub"
-                              : ""
-                              }`}
-                          >
-                            <small style={{ fontSize: "12px" }}>{sub}</small>
-                          </li>
-                        </Link>
-                      );
-                    })}
-                  </div>
-                </div>
-              );
-            }
-
-            // Roles sin submenú
+            // Roles ahora son items de nivel superior directos sin submenus en el sidebar
             return (
               <Link
                 key={role.id}

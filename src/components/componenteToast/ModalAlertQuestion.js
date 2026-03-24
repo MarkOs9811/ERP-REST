@@ -1,6 +1,7 @@
 import "react-toastify/dist/ReactToastify.css";
 import "../../css/ModalAlertQuestion.css"; // Importar CSS correctamente
 import { useQueryClient } from "@tanstack/react-query";
+import ReactDOM from "react-dom";
 
 function ModalAlertQuestion({
   show,
@@ -26,10 +27,11 @@ function ModalAlertQuestion({
     }
   };
 
-  return (
-    show && (
-      <div className={`modal-overlay ${show ? "show" : ""} m-0 p-0`}>
-        {" "}
+  if (!show) return null;
+
+  return ReactDOM.createPortal(
+    <div className={`modal-overlay ${show ? "show" : ""} m-0 p-0`}>
+      {" "}
         {/* Agregar clase show */}
         <div className="contenido-model bg-white">
           <p className="h5">
@@ -47,8 +49,8 @@ function ModalAlertQuestion({
             </button>
           </div>
         </div>
-      </div>
-    )
+      </div>,
+    document.body
   );
 }
 

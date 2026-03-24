@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 import { TicketPedidosWeb } from "../TiketsType/TicketPedidosWeb";
+import ReactDOM from "react-dom";
 import NotificacionBtn from "../../componentesReutilizables/componentesPedidosWeb/NotificacionBtn";
 import {
   BadgeCheck,
@@ -96,7 +97,7 @@ export function ModalFooter({ selectedPedido }) {
         <div className="d-flex gap-2 align-items-center">
           {/* Modal del Comprobante (Imagen) */}
           <div className="comprobante-container">
-            {modalOpen && (
+            {modalOpen && ReactDOM.createPortal(
               <div
                 className="modal-overlay"
                 onClick={() => setModalOpen(false)}
@@ -109,7 +110,8 @@ export function ModalFooter({ selectedPedido }) {
                     className="comprobante-grande mx-auto"
                   />
                 </div>
-              </div>
+              </div>,
+              document.body
             )}
           </div>
 

@@ -1,4 +1,5 @@
 import "../../css/ModalAlertQuestion.css";
+import ReactDOM from "react-dom";
 
 function ModalGeneral({
   show,
@@ -21,9 +22,10 @@ function ModalGeneral({
     }
   };
 
-  return (
-    show && (
-      <div className={`modal-overlay ${show ? "show" : ""} m-0 p-0`}>
+  if (!show) return null;
+
+  return ReactDOM.createPortal(
+    <div className={`modal-overlay ${show ? "show" : ""} m-0 p-0`}>
         <div className="contenido-model bg-white">
           <h3>{mensaje}</h3>
           {/* Renderiza children si existen */}
@@ -45,8 +47,8 @@ function ModalGeneral({
             </button>
           </div>
         </div>
-      </div>
-    )
+      </div>,
+    document.body
   );
 }
 

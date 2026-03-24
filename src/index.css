@@ -3,7 +3,7 @@
 :root {
   /* 2026 Modern Liquid/Glassmorphism Aesthetic */
   --brand-primary: #EE5252;
-  --brand-secondary: #3b82f6; /* Changed from #8b5cf6 (purple) to blue */
+  --brand-secondary: #ff8787; /* Removed any blue presence */
   --bg-main: #f4f7f9;
   --bg-card: rgba(255, 255, 255, 0.75);
   --text-main: #1e293b;
@@ -28,7 +28,7 @@
 
 body.dark-theme {
   --brand-primary: #ff6b6b;
-  --brand-secondary: #60a5fa; /* Added lighter blue for dark mode */
+  --brand-secondary: #ff9b9b; /* Removed any blue presence */
   --bg-main: #0b0f15;
   --bg-card: rgba(21, 26, 35, 0.65);
   --text-main: #f8fafc;
@@ -60,3 +60,100 @@ code {
 .bg-success {
   background-color: #10b981 !important;
 }
+
+/* ========== BOOTSTRAP DARK THEME GLOBAL OVERRIDES ========== */
+/* This engine intercepts hardcoded bootstrap classes acting as technical debt 
+   and bends them to the dark theme variables. */
+body.dark-theme .bg-white,
+body.dark-theme .bg-light {
+  background-color: #212b36 !important;
+  color: #cfd8dc !important;
+}
+
+body.dark-theme .text-dark,
+body.dark-theme .text-body {
+  color: #cfd8dc !important;
+}
+
+body.dark-theme .text-muted {
+  color: #888 !important;
+}
+
+body.dark-theme .table {
+  color: #cfd8dc !important;
+}
+
+body.dark-theme .card-header,
+body.dark-theme .card-footer,
+body.dark-theme .modal-header,
+body.dark-theme .modal-footer {
+  background-color: #1a222b !important; /* Slightly darker to separate from body */
+  border-color: #313a46 !important;
+  color: #cfd8dc !important;
+}
+
+body.dark-theme .list-group-item {
+  background-color: #212b36 !important;
+  border-color: #313a46 !important;
+  color: #cfd8dc !important;
+}
+
+body.dark-theme .border,
+body.dark-theme .border-bottom,
+body.dark-theme .border-top,
+body.dark-theme .border-start,
+body.dark-theme .border-end,
+body.dark-theme .border-light {
+  border-color: #313a46 !important;
+}
+
+body.dark-theme .shadow-sm,
+body.dark-theme .shadow,
+body.dark-theme .shadow-lg {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25) !important;
+}
+/* ========================================================== */
+
+/* ========== BRAND COLOR CONSOLIDATION (NO BLUE) ========== */
+/* Replaces all default Bootstrap "primary" blues with system Brand Red */
+:root {
+  --bs-primary: #EE5252;
+  --bs-primary-rgb: 238, 82, 82;
+}
+
+.text-primary { color: var(--brand-primary) !important; }
+.bg-primary { background-color: var(--brand-primary) !important; }
+
+.btn-primary {
+  background-color: var(--brand-primary) !important;
+  border-color: var(--brand-primary) !important;
+  color: #fff !important;
+}
+.btn-primary:hover {
+  background-color: #d43d3d !important;
+  border-color: #c93939 !important;
+}
+
+.btn-outline-primary {
+  color: var(--brand-primary) !important;
+  border-color: var(--brand-primary) !important;
+}
+.btn-outline-primary:hover {
+  background-color: var(--brand-primary) !important;
+  color: #fff !important;
+}
+
+.badge.bg-primary {
+  background-color: var(--brand-primary) !important;
+}
+
+.alert-primary {
+  background-color: rgba(238, 82, 82, 0.1) !important;
+  color: var(--brand-primary) !important;
+  border-color: rgba(238, 82, 82, 0.2) !important;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+  background-color: var(--brand-primary) !important;
+}
+/* ========================================================== */

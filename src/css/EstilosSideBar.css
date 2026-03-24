@@ -43,12 +43,14 @@
 }
 
 .sidebar.sidebar-compressed .menu-item {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
+    padding: 0 !important;
     margin-left: auto !important;
     margin-right: auto !important;
     width: 45px !important;
     height: 45px !important;
+    max-width: 45px !important;
+    aspect-ratio: 1 / 1 !important;
+    border-radius: 50% !important;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -75,12 +77,15 @@
 }
 
 .sidebar.sidebar-compressed:hover .menu-item {
-    width: auto !important;
+    width: calc(100% - 16px) !important;
+    max-width: none !important;
     height: auto !important;
-    padding-left: 15px !important;
-    padding-right: 15px !important;
+    padding: 8px 15px !important;
     margin-left: 8px !important;
     margin-right: 8px !important;
+    aspect-ratio: auto !important;
+    border-radius: 50px !important;
+    display: block !important;
 }
 
 .sidebar.sidebar-compressed:hover .menu-item .d-flex {

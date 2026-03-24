@@ -1,7 +1,5 @@
-import { LayoutPanelTop } from "lucide-react";
+import { Globe, ShoppingBag, Utensils } from "lucide-react";
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBurger, faTruckFast } from "@fortawesome/free-solid-svg-icons";
 
 export function VentasTipo({ load, error, ventasList }) {
   // Obtener el mes y año actual
@@ -45,61 +43,46 @@ export function VentasTipo({ load, error, ventasList }) {
 
   // Contar las ventas por web
   const totalVentasWeb = ventasWebMes.length || 0;
+
   return (
-    <div className="card bg-transparent h-100">
-      <div className="row g-3 h-100">
-        <div className="col-md-12 col-sm-12 ">
-          <CondicionCarga isLoading={load} isError={error}>
-            <div className="card shadow-sm h-100 card-pedidos-web overflow-hidden">
-              <div className="card-header-web position-relative"></div>
-              <div className="card-body text-auto position-relative d-flex flex-column justify-content-center align-items-center ">
-                <div className="ico-bagde resumen-mes-pedidos-web">
-                  <LayoutPanelTop color={"white"} />
-                </div>
-                <div className="text-center ">
-                  <p className="h2 fw-bold">{totalVentasWeb}</p>
-                  <p className="h6">Pedidos Web</p>
-                  <small>Este Mes</small>
-                </div>
-              </div>
-            </div>
-          </CondicionCarga>
+    <CondicionCarga isLoading={load} isError={error}>
+      <div className="d-flex flex-column gap-3">
+        {/* Pedidos Web */}
+        <div className="d-flex align-items-center p-3 rounded-3 bg-light border border-light">
+          <div className="p-2 bg-primary bg-opacity-10 text-primary rounded-circle me-3 d-flex align-items-center justify-content-center" style={{ width: "48px", height: "48px" }}>
+            <Globe size={24} />
+          </div>
+          <div className="flex-grow-1">
+            <div className="fw-bold text-dark">Pedidos Web</div>
+            <div className="small text-muted">Este mes</div>
+          </div>
+          <div className="fs-4 fw-bold text-dark">{totalVentasWeb}</div>
         </div>
-        <div className="col-md-12 col-sm-12 ">
-          <CondicionCarga isLoading={load} isError={error}>
-            <div className="card shadow-sm h-100 card-pedido-llevar overflow-hidden">
-              <div className="card-header-llevar position-relative"></div>
-              <div className="card-body text-auto position-relative d-flex flex-column justify-content-center align-items-center">
-                <div className="ico-bagde resumen-mes-pedidos-llevar">
-                  <FontAwesomeIcon icon={faTruckFast} />
-                </div>
-                <div className="text-center ">
-                  <p className="h2 fw-bold">{totalPedidosLlevar}</p>
-                  <p className="h6">Pedidos Llevar</p>
-                  <small>Este Mes</small>
-                </div>
-              </div>
-            </div>
-          </CondicionCarga>
+
+        {/* Pedidos Llevar */}
+        <div className="d-flex align-items-center p-3 rounded-3 bg-light border border-light">
+          <div className="p-2 bg-warning bg-opacity-10 text-warning rounded-circle me-3 d-flex align-items-center justify-content-center" style={{ width: "48px", height: "48px" }}>
+            <ShoppingBag size={24} />
+          </div>
+          <div className="flex-grow-1">
+            <div className="fw-bold text-dark">Llevar</div>
+            <div className="small text-muted">Este mes</div>
+          </div>
+          <div className="fs-4 fw-bold text-dark">{totalPedidosLlevar}</div>
         </div>
-        <div className="col-md-12 col-sm-12 h-100">
-          <CondicionCarga isLoading={load} isError={error}>
-            <div className="card shadow-sm  card-pedido-mesa overflow-hidden">
-              <div className="card-header-mesa position-relative"></div>
-              <div className="card-body text-auto position-relative d-flex flex-column justify-content-center align-items-center">
-                <div className="ico-bagde resumen-mes-pedidos-mesa">
-                  <FontAwesomeIcon icon={faBurger} />
-                </div>
-                <div className="text-center ">
-                  <p className="h2 fw-bold">{totalPedidosMesa}</p>
-                  <p className="h6">Pedidos Mesa</p>
-                  <small>Este Mes</small>
-                </div>
-              </div>
-            </div>
-          </CondicionCarga>
+
+        {/* Pedidos Mesa */}
+        <div className="d-flex align-items-center p-3 rounded-3 bg-light border border-light">
+          <div className="p-2 bg-success bg-opacity-10 text-success rounded-circle me-3 d-flex align-items-center justify-content-center" style={{ width: "48px", height: "48px" }}>
+            <Utensils size={24} />
+          </div>
+          <div className="flex-grow-1">
+            <div className="fw-bold text-dark">En Mesa</div>
+            <div className="small text-muted">Este mes</div>
+          </div>
+          <div className="fs-4 fw-bold text-dark">{totalPedidosMesa}</div>
         </div>
       </div>
-    </div>
+    </CondicionCarga>
   );
 }

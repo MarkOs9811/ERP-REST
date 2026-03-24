@@ -1,32 +1,63 @@
-import { Building2, Plus, LayoutGrid, Briefcase } from "lucide-react"; // Importamos los nuevos íconos
+import { useState } from "react";
 import { Areas } from "../../components/componentesAreasCargos/Areas";
 import { Cargos } from "../../components/componentesAreasCargos/Cargos";
 import { Sedes } from "../../components/componentesAreasCargos/componetesSedes/Sedes";
-import { BotonMotionGeneral } from "../../components/componentesReutilizables/BotonMotionGeneral";
 
 export function AreasCargo() {
-  // --- Handlers para los modales ---
-  // Es una buena práctica tenerlos listos
-  const handleOpenSedeModal = () => console.log("Abrir modal Sede");
-  const handleOpenAreaModal = () => console.log("Abrir modal Area");
-  const handleOpenCargoModal = () => console.log("Abrir modal Cargo");
+  const [activeTab, setActiveTab] = useState("areas");
 
   return (
-    <div>
-      <div className="row g-3 ">
-        <div className="col-md-12">
-          <Sedes />
-        </div>
+    <div className="bg-white rounded shadow-sm p-4">
+      <ul className="nav nav-pills mb-4" id="pills-tab" role="tablist">
+        <li className="nav-item" role="presentation">
+          <button
+            className={`nav-link ${activeTab === 'areas' ? 'active fw-bold' : 'text-muted'}`}
+            onClick={() => setActiveTab('areas')}
+            type="button"
+          >
+            Áreas
+          </button>
+        </li>
+        <li className="nav-item" role="presentation">
+          <button
+            className={`nav-link ${activeTab === 'cargos' ? 'active fw-bold' : 'text-muted'}`}
+            onClick={() => setActiveTab('cargos')}
+            type="button"
+          >
+            Cargos
+          </button>
+        </li>
+        <li className="nav-item" role="presentation">
+          <button
+            className={`nav-link ${activeTab === 'sedes' ? 'active fw-bold' : 'text-muted'}`}
+            onClick={() => setActiveTab('sedes')}
+            type="button"
+          >
+            Sedes
+          </button>
+        </li>
+      </ul>
 
-        {/* --- ÁREAS --- */}
-        <div className="col-md-8">
-          <Areas />
-        </div>
-
-        {/* --- CARGOS --- */}
-        <div className="col-md-4">
-          <Cargos />
-        </div>
+      <div className="tab-content">
+        {activeTab === 'areas' && (
+          <div className="animation-fade-in">
+            <Areas />
+          </div>
+        )}
+        {activeTab === 'cargos' && (
+          <div className="animation-fade-in">
+            <div className="row">
+              <div className="col-md-10 offset-md-1">
+                <Cargos />
+              </div>
+            </div>
+          </div>
+        )}
+        {activeTab === 'sedes' && (
+          <div className="animation-fade-in">
+            <Sedes />
+          </div>
+        )}
       </div>
     </div>
   );

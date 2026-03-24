@@ -8,7 +8,7 @@ export function StepAreaCargo({ onFinish }) {
   const [loading, setLoading] = useState(false);
   const cambiarEstado = async (estado) => {
     setLoading(true); // Bloqueamos el botón para que no den doble click
-    navigate("/areas-y-cargos");
+    navigate("/rrhh/areas-y-cargos");
     const success = await PutData("empresasSteps", estado);
 
     if (success) {

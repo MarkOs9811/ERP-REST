@@ -11,6 +11,8 @@ import { useDispatch } from "react-redux";
 import { toggleSidebar } from "../redux/sideBarSlice";
 import ModalRight from "./componentesReutilizables/ModalRight";
 import { BadgeComponent } from "./componentesReutilizables/BadgeComponent";
+import { useQuery } from "@tanstack/react-query";
+import { GetNotificaciones } from "../service/accionesGenerales/GetNotificaciones";
 export function Header() {
   const dispatch = useDispatch();
   const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -28,7 +30,15 @@ export function Header() {
   // PARA MOSTRAR LOS PANELES
   const [showPerfilPanel, setShowPerfilPanel] = useState(false);
   const [showNotificaciones, setShowNotificaciones] = useState(false);
-  const notificacionesCount = 3;
+  
+  // Obtener notificaciones globalmente (usando caché de react-query)
+  const { data: todasNotificaciones = [] } = useQuery({
+    queryKey: ["notificaciones"],
+    queryFn: GetNotificaciones,
+    staleTime: 1000 * 60 * 5,
+  });
+  const notificacionesCount = todasNotificaciones.filter((n) => n.estado == 0).length;
+
   // aqui declaro variables de mi localstorage para mostrarlo en mi vista
   const [darkMode, setDarkMode] = useState(
     localStorage.getItem("theme") === "dark"

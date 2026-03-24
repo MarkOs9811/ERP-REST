@@ -9,7 +9,7 @@ const getIcon = (tipo, prioridad) => {
   if (tipo === "alerta" || prioridad === "alta") {
     return <AlertTriangle size={24} className="text-danger" />;
   }
-  return <Bell size={24} className="text-primary" />;
+  return <Bell size={24} style={{ color: "var(--brand-primary)" }} />;
 };
 
 const getPriorityBadge = (prioridad) => {
@@ -105,7 +105,7 @@ export function NotificacionesPanel({ show, onClose }) {
           className="d-flex justify-content-center align-items-center"
           style={{ minHeight: 200 }}
         >
-          <div className="spinner-border text-primary" role="status">
+          <div className="spinner-border" style={{ color: "var(--brand-primary)" }} role="status">
             <span className="visually-hidden">Cargando...</span>
           </div>
         </div>
@@ -161,7 +161,7 @@ export function NotificacionesPanel({ show, onClose }) {
       <div className="notificaciones-panel-list">{renderContenido()}</div>
 
       <div className="text-center py-2 border-top">
-        <button className="btn btn-link fw-bold text-primary">
+        <button className="btn btn-link fw-bold" style={{ color: "var(--brand-primary)", textDecoration: "none" }}>
           Marcar todas como leídas
         </button>
       </div>

@@ -101,12 +101,13 @@ export function PerfilPanel({ user, fotoPerfil }) {
         <img
           src={fotoPerfil}
           alt="Perfil"
+          className="shadow-sm"
           style={{
             width: 80,
             height: 80,
             borderRadius: "50%",
             objectFit: "cover",
-            border: "3px solid #2196f3",
+            border: "3px solid var(--brand-primary)",
           }}
         />
         <h5 className="mt-3 mb-0">{user?.name || "Usuario"}</h5>
@@ -119,84 +120,57 @@ export function PerfilPanel({ user, fotoPerfil }) {
       <hr />
 
       {/* 🔸 Menú */}
-      <ul className="list-unstyled px-4">
+      <ul className="list-unstyled px-4 mt-3">
         <li className="mb-3">
           <button
-            className="btn w-100 text-start d-flex align-items-center"
+            className="btn w-100 text-start d-flex align-items-center fw-medium pb-2 border-bottom border-light"
             onClick={() => navigate("/")}
           >
-            <House className="text-auto me-1" height="20px" width="20px" />
-            Inicio
+            <House style={{ color: "var(--brand-primary)" }} className="me-3" height="20px" width="20px" />
+            Panel Principal
           </button>
         </li>
         <li className="mb-3">
           <button
-            className="btn w-100 text-start d-flex align-items-center"
+            className="btn w-100 text-start d-flex align-items-center fw-medium pb-2 border-bottom border-light"
             onClick={() => navigate("/configuracion/MiPerfil")}
           >
-            <User className="text-auto me-1" height="20px" width="20px" />
+            <User style={{ color: "var(--brand-primary)" }} className="me-3" height="20px" width="20px" />
             Mi Perfil
           </button>
         </li>
         <li className="mb-3">
-          <button className="btn w-100 text-start d-flex align-items-center">
-            <BriefcaseBusiness
-              className="text-auto me-1"
-              height="20px"
-              width="20px"
-            />
-            Proyectos <span className="badge bg-danger ms-2">3</span>
-          </button>
-        </li>
-        <li className="mb-3">
-          <button className="btn w-100 text-start d-flex align-items-center">
-            <CreditCard className="text-auto me-1" height="20px" width="20px" />
-            Suscripción
-          </button>
-        </li>
-        <li className="mb-3">
-          <button className="btn w-100 text-start d-flex align-items-center">
-            <ShieldCheck
-              className="text-auto me-1"
-              height="20px"
-              width="20px"
-            />
-            Seguridad
+          <button 
+            className="btn w-100 text-start d-flex align-items-center fw-medium pb-2 border-bottom border-light"
+            onClick={() => navigate("/rr.hh/asistencia")}
+          >
+            <ShieldCheck style={{ color: "var(--brand-primary)" }} className="me-3" height="20px" width="20px" />
+            Mis Asistencias
           </button>
         </li>
         <li className="mb-3">
           <button
-            className="btn w-100 text-start d-flex align-items-center"
+            className="btn w-100 text-start d-flex align-items-center fw-medium pb-2 border-bottom border-light"
             onClick={() => navigate("/configuracion")}
           >
-            <UserRoundCog
-              className="text-auto me-1"
-              height="20px"
-              width="20px"
-            />
-            Ajustes de cuenta
+            <UserRoundCog style={{ color: "var(--brand-primary)" }} className="me-3" height="20px" width="20px" />
+            Configuración Global
           </button>
         </li>
       </ul>
 
       {/* 🔸 Selector de sede */}
       {rolUsuario == "administrador" ? (
-        <div className="p-4">
-          <div
-            className="rounded-3 p-3 mb-3 shadow-sm border"
-            style={{
-              background: "linear-gradient(145deg, #ffffff, #f3f4f6)",
-              color: "#252525ff",
-            }}
-          >
+        <div className="px-4 pb-2">
+          <div className="rounded-3 p-3 mb-3 shadow-sm border bg-light">
             <div className="d-flex align-items-center mb-2">
-              <i className="fa-solid fa-building fa-lg me-2 text-primary"></i>
-              <h6 className="mb-0 fw-semibold">Cambiar de Sede</h6>
+              <i className="fa-solid fa-building fa-lg me-2" style={{ color: "var(--brand-primary)" }}></i>
+              <h6 className="mb-0 fw-semibold text-dark">Cambiar de Sede</h6>
             </div>
 
             {isLoading ? (
               <div className="text-center py-3">
-                <div className="spinner-border text-primary" role="status">
+                <div className="spinner-border" style={{ color: "var(--brand-primary)" }} role="status">
                   <span className="visually-hidden">Cargando...</span>
                 </div>
               </div>
@@ -208,12 +182,8 @@ export function PerfilPanel({ user, fotoPerfil }) {
               <div className="form-floating mt-2">
                 <select
                   id="selectSede"
-                  className="form-select border-0 shadow-sm"
-                  style={{
-                    backgroundColor: "rgba(255,255,255,0.9)",
-                    color: "#333",
-                    borderRadius: "10px",
-                  }}
+                  className="form-select border-light shadow-sm bg-body text-body"
+                  style={{ borderRadius: "10px" }}
                   value={selectedSede}
                   onChange={(e) => handleChangeSede(e.target.value)}
                 >
@@ -227,7 +197,7 @@ export function PerfilPanel({ user, fotoPerfil }) {
                     ))}
                 </select>
                 <label htmlFor="selectSede">
-                  <i className="fa-solid fa-map-marker-alt me-2 text-primary"></i>
+                  <i className="fa-solid fa-map-marker-alt me-2" style={{ color: "var(--brand-primary)" }}></i>
                   Sede
                 </label>
               </div>
@@ -243,13 +213,9 @@ export function PerfilPanel({ user, fotoPerfil }) {
             </div>
           </div>
         </div>
-      ) : (
-        <>
-          <div>no somos nada</div>
-        </>
-      )}
+      ) : null}
 
-      <div className="p-4 d-flex bottom-0">
+      <div className="px-4 pb-4 d-flex mt-auto">
         {/* 🔸 Botón de cerrar sesión */}
         <button
           className="btn btn-danger w-100 d-flex align-items-center justify-content-center mb-0 shadow-sm"

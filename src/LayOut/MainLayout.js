@@ -71,6 +71,7 @@ import { Repartidores } from "../pages/moduloDelivery/Repartidores";
 import { ZonaTarifa } from "../pages/moduloDelivery/ZonaTarifa";
 import { Promociones } from "../pages/moduloDelivery/Promociones";
 import { useSelector } from "react-redux";
+import { SubMenuTabs } from "../components/componentesReutilizables/SubMenuTabs";
 
 export const MainLayout = () => {
   const isCompressed = useSelector((state) => state.sidebar?.isCompressed || false);
@@ -145,6 +146,7 @@ export const MainLayout = () => {
                 >
                   <ContenedorPrincipal>
                     <ToastContainer />
+                    <SubMenuTabs />
                     <Routes>
                       <Route path="/" element={renderHomePorRol()} />
                       <Route
@@ -268,6 +270,26 @@ export const MainLayout = () => {
                             </PrivateRoute>
                           }
                         />
+                        <Route
+                          path="compras"
+                          element={
+                            <PrivateRoute
+                              allowedRoles={["compras", "administrador"]}
+                            >
+                              <Compras />
+                            </PrivateRoute>
+                          }
+                        />
+                        <Route
+                          path="proveedores"
+                          element={
+                            <PrivateRoute
+                              allowedRoles={["proveedores", "administrador"]}
+                            >
+                              <Proveedores />
+                            </PrivateRoute>
+                          }
+                        />
                       </Route>
 
                       {/* RUTAS PARA MODULO RECURSOS HUMANOS PLANILLAS */}
@@ -383,19 +405,19 @@ export const MainLayout = () => {
                             </PrivateRoute>
                           }
                         />
+                        <Route
+                          path="areas-y-cargos"
+                          element={
+                            <PrivateRoute
+                              allowedRoles={["areas y cargos", "administrador"]}
+                            >
+                              <AreasCargo />
+                            </PrivateRoute>
+                          }
+                        />
                       </Route>
 
-                      {/* RUTAS PARA MODULO COMPRAS */}
-                      <Route
-                        path="/compras"
-                        element={
-                          <PrivateRoute
-                            allowedRoles={["compras", "administrador"]}
-                          >
-                            <Compras />
-                          </PrivateRoute>
-                        }
-                      />
+                      {/* RUTAS PARA MODULO COMPRAS ANTERIORMENTE AQUI - AHORA DENTRO DE ALMACEN */}
 
                       {/* RUTAS PARA MODULO VENTAS */}
                       <Route path="/ventas">
@@ -470,7 +492,7 @@ export const MainLayout = () => {
                           }
                         />
                         <Route
-                          path="ajustes-ventas"
+                          path="ajustesVentas"
                           element={
                             <PrivateRoute
                               allowedRoles={["ventas", "administrador"]}
@@ -562,6 +584,7 @@ export const MainLayout = () => {
                             </PrivateRoute>
                           }
                         />
+                        {/* ================ */}
                         <Route
                           path="ajustes-ventas"
                           element={
@@ -597,29 +620,7 @@ export const MainLayout = () => {
                         }
                       />
 
-                      {/* Proveedores */}
-                      <Route
-                        path="/proveedores"
-                        element={
-                          <PrivateRoute
-                            allowedRoles={["proveedores", "administrador"]}
-                          >
-                            <Proveedores />
-                          </PrivateRoute>
-                        }
-                      />
-
-                      {/* Áreas y cargos */}
-                      <Route
-                        path="/areas-y-cargos"
-                        element={
-                          <PrivateRoute
-                            allowedRoles={["areas y cargos", "administrador"]}
-                          >
-                            <AreasCargo />
-                          </PrivateRoute>
-                        }
-                      />
+                      {/* Proveedores y Áreas movidos a Almacén y RRHH */}
 
                       {/* RUTAS PARA MODULO INCIDENCIAS */}
                       <Route path="/incidencias">

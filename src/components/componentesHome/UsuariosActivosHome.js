@@ -25,17 +25,17 @@ export function UsuariosActivosHome() {
 
   return (
     <CondicionCarga isLoading={isLoadingUsuarios} isError={isErrorUsuarios}>
-      <div className="card shadow-sm h-100 p-0">
-        <div className="card-header  mb-3 d-flex gap-2 align-middle justify-content-left">
-          <span className="alert border-0 alert-danger text-danger p-2 mb-0">
+      <div className="h-100 p-0">
+        <div className="mb-3 d-flex gap-2 align-middle justify-content-left p-3 border-bottom card-header bg-light">
+          <span className="p-2 mb-0 rounded-circle bg-danger bg-opacity-10" style={{ color: "#ea4848" }}>
             <UserRound size={25} />
           </span>
           <h6 className="mb-1 d-flex flex-column gap-1">
-            <span className="fw-bold">Usuarios activos</span>
+            <span className="fw-bold text-dark">Usuarios activos</span>
             <p className="text-muted small mb-0">{listaAsistenciaHoy.length}</p>
           </h6>
         </div>
-        <div className="card-body p-4">
+        <div className="p-3">
           {isLoadingUsuarios ? (
             <p className="text-muted">Cargando usuarios...</p>
           ) : isErrorUsuarios ? (
@@ -65,13 +65,7 @@ export function UsuariosActivosHome() {
                       }}
                     />
                     <div style={{ flex: 1 }}>
-                      <p
-                        style={{
-                          margin: 0,
-                          fontWeight: "bold",
-                          color: "#333",
-                        }}
-                      >
+                      <p className="fw-bold mb-0 text-dark">
                         {capitalizeFirstLetter(
                           usuario?.empleado?.nombre.toLowerCase()
                         )}{" "}

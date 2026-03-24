@@ -94,8 +94,8 @@ export function GraficoIAhome() {
           {
             label: "Ventas Reales",
             data: dataVentas,
-            borderColor: "rgba(75, 145, 192, 1)",
-            backgroundColor: "rgba(75, 165, 192, 0.2)",
+            borderColor: "rgba(249, 115, 22, 1)",
+            backgroundColor: "rgba(249, 115, 22, 0.2)",
             fill: true,
           },
           {
@@ -116,8 +116,8 @@ export function GraficoIAhome() {
       0,
       chartArea.bottom
     );
-    gradientReales.addColorStop(0, "rgba(75, 135, 192, 0.5)");
-    gradientReales.addColorStop(1, "rgba(75, 192, 192, 0)");
+    gradientReales.addColorStop(0, "rgba(249, 115, 22, 0.5)");
+    gradientReales.addColorStop(1, "rgba(249, 115, 22, 0)");
 
     const gradientIA = ctx.createLinearGradient(
       0,
@@ -134,13 +134,13 @@ export function GraficoIAhome() {
         {
           label: "Ventas Reales",
           data: dataVentas,
-          borderColor: "rgba(55, 171, 218, 1)",
+          borderColor: "rgba(249, 115, 22, 1)",
           backgroundColor: gradientReales,
           tension: 0.4,
           fill: true,
           pointRadius: 6,
           pointHoverRadius: 8,
-          pointBackgroundColor: "rgba(52, 154, 212, 1)",
+          pointBackgroundColor: "rgba(249, 115, 22, 1)",
           pointBorderColor: "#fff",
         },
         {
@@ -222,34 +222,27 @@ export function GraficoIAhome() {
   const hasError = isErrorVentas || isErrorVentasIA;
 
   return (
-    <div className="row mb-3 g-3">
-      <div className="col-md-12">
-        <CondicionCarga isLoading={isLoadingVentasIA} isError={isErrorVentasIA}>
-          <div className="card shadow-sm chart-container h-100">
-            <div
-              className="card-header d-flex gap-2 align-middle justify-content-left"
-              style={{
-                backgroundColor: "#f8f9fa",
-                borderBottom: "1px solid #e9ecef",
-              }}
+    <div className="w-100">
+      <CondicionCarga isLoading={isLoadingVentasIA} isError={isErrorVentasIA}>
+        <div className="h-100">
+          <div className="d-flex gap-2 align-middle justify-content-left p-3 border-bottom card-header bg-light">
+            <span
+              className="p-2 mb-0 rounded-circle"
+              style={{ backgroundColor: "#e2e8f0", color: "#475569" }}
             >
-              <span
-                className="alert border-0 alert-primary text-primary p-2 mb-0 "
-                style={{ backgroundColor: "#e0f7fa" }}
-              >
-                <ChartNoAxesCombined size={25} />
+              <ChartNoAxesCombined size={25} />
+            </span>
+            <h6 className="mb-1 d-flex flex-column gap-1">
+              <span className="fw-bold text-dark" style={{ fontSize: "1.1rem" }}>
+                Ventas Históricas y Predicciones
               </span>
-              <h6 className="mb-1 d-flex flex-column gap-1">
-                <span className="fw-bold">
-                  Ventas Históricas y Predicciones
-                </span>
-                <p className="text-muted small mb-0">
-                  Últimos 7 días y pronóstico
-                </p>
-              </h6>
-            </div>
+              <p className="text-muted small mb-0">
+                Últimos 7 días y pronóstico
+              </p>
+            </h6>
+          </div>
 
-            <div className="card-body">
+          <div className="p-3">
               <div className="" style={{ height: "300px" }}>
                 {hasError ? (
                   <p className="text-danger text-center">
@@ -264,9 +257,8 @@ export function GraficoIAhome() {
                 )}
               </div>
             </div>
-          </div>
-        </CondicionCarga>
-      </div>
+        </div>
+      </CondicionCarga>
     </div>
   );
 }

@@ -95,7 +95,7 @@ export function Ventas() {
               <div className="card shadow-sm py-2 h-100">
                 <div className="card-header d-flex p-4 bg-transparent">
                   <div>
-                    <h1 className="text-primary">¡Buen día!</h1>
+                    <h1 className="text-dark">¡Buen día!</h1>
                     <p className="fw-normal text-secondary">
                       Esto es lo que sucede con tus Ventas Hoy
                     </p>
@@ -242,11 +242,10 @@ export function Ventas() {
                   >
                     <div className="d-flex align-items-center gap-2 mb-2">
                       <span
-                        className={`rounded-circle p-2 ${
-                          diferenciaVentas > 0
-                            ? "bg-success bg-opacity-10"
-                            : "bg-danger bg-opacity-10"
-                        }`}
+                        className={`rounded-circle p-2 ${diferenciaVentas > 0
+                          ? "bg-success bg-opacity-10"
+                          : "bg-danger bg-opacity-10"
+                          }`}
                       >
                         {diferenciaVentas > 0 ? (
                           <TrendingUp size={28} className="text-success" />
@@ -255,9 +254,8 @@ export function Ventas() {
                         )}
                       </span>
                       <span
-                        className={`ms-auto fw-bold ${
-                          diferenciaVentas > 0 ? "text-success" : "text-danger"
-                        }`}
+                        className={`ms-auto fw-bold ${diferenciaVentas > 0 ? "text-success" : "text-danger"
+                          }`}
                       >
                         {diferenciaVentas > 0 ? "+" : ""}
                         {(
@@ -270,9 +268,8 @@ export function Ventas() {
                     <div>
                       <span className="text-muted">Diferencia</span>
                       <h3
-                        className={`fw-bold mb-0 ${
-                          diferenciaVentas > 0 ? "text-success" : "text-danger"
-                        }`}
+                        className={`fw-bold mb-0 ${diferenciaVentas > 0 ? "text-success" : "text-danger"
+                          }`}
                       >
                         S/ {diferenciaVentas}
                       </h3>
@@ -312,7 +309,7 @@ export function Ventas() {
                 </h4>
                 <span className="badge-header">Registros</span>
               </div>
-              
+
               <div className="d-flex align-items-center flex-wrap gap-2 mt-3 mt-md-0">
                 <div className="header-search-container">
                   <Search className="search-icon" />
@@ -339,7 +336,7 @@ export function Ventas() {
                     const formatted = formatToDMY(rawDate);
                     setSearch(formatted);
                   }}
-                  style={{maxWidth: "180px", minWidth: "150px"}}
+                  style={{ maxWidth: "180px", minWidth: "150px" }}
                 />
                 <button
                   type="button"

@@ -1,5 +1,6 @@
 import React from "react";
 import "../../css/ModalAlertQuestion.css";
+import ReactDOM from "react-dom";
 
 function ModalGenerales({
   show,
@@ -30,7 +31,9 @@ function ModalGenerales({
 
   if (!show) return null;
 
-  return (
+  if (!show) return null;
+
+  return ReactDOM.createPortal(
     <div
       className={`modal-overlay ${show ? "show" : ""} m-0 p-0 d-flex justify-content-center align-items-center`}
       style={{ zIndex: 1050 }}
@@ -80,7 +83,8 @@ function ModalGenerales({
           </div>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 

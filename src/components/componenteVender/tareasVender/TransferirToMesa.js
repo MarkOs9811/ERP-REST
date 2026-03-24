@@ -6,6 +6,7 @@ import ToastAlert from "../../componenteToast/ToastAlert";
 import { useNavigate } from "react-router-dom";
 import { Repeat } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
+import ReactDOM from "react-dom";
 
 export function TransferirToMesa({ show, handleCloseModal, idMesa, mesa }) {
   const [mesasFree, setMesasFree] = useState([]);
@@ -61,7 +62,9 @@ export function TransferirToMesa({ show, handleCloseModal, idMesa, mesa }) {
 
   if (!show) return null; // No renderizar si el modal no debe mostrarse.
 
-  return (
+  if (!show) return null; // No renderizar si el modal no debe mostrarse.
+
+  return ReactDOM.createPortal(
     <div className="modal-overlay m-0">
       <div className="contenido-model bg-white p-4 rounded-3 shadow-lg">
         {/* Cabecera del Modal */}
@@ -144,6 +147,7 @@ export function TransferirToMesa({ show, handleCloseModal, idMesa, mesa }) {
           </div>
         </form>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

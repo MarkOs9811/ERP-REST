@@ -1,6 +1,7 @@
 import "react-toastify/dist/ReactToastify.css";
 import "../../css/ModalAlertActivar.css"; // Importar CSS correctamente
 import { useQueryClient } from "@tanstack/react-query";
+import ReactDOM from "react-dom";
 
 function ModalAlertActivar({
   show,
@@ -29,9 +30,10 @@ function ModalAlertActivar({
     }
   };
 
-  return (
-    show && (
-      <div className={`modal-overlay my-0 ${show ? "show" : ""}`}>
+  if (!show) return null;
+
+  return ReactDOM.createPortal(
+    <div className={`modal-overlay my-0 ${show ? "show" : ""}`}>
         <div className="contenido-model bg-white">
           <p className="h5">¿Estás seguro de Activar este {tipo}?</p>
           <h4 className="modal-name-activar">
@@ -65,8 +67,8 @@ function ModalAlertActivar({
             </button>
           </div>
         </div>
-      </div>
-    )
+      </div>,
+    document.body
   );
 }
 
