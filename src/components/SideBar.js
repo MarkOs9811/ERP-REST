@@ -21,6 +21,7 @@ import {
   Warehouse,
   UsersRound,
   BikeIcon,
+  LucideActivity,
 } from "lucide-react";
 import { useAuth } from "../AuthContext";
 import { capitalizeFirstLetter } from "../hooks/FirstLetterUp";
@@ -146,7 +147,16 @@ export function SideBar() {
     }
   }, []);
   return (
-    <div className={`sidebar justify-content-between m-auto ${isCompressed ? 'sidebar-compressed' : ''}`} style={{ background: 'var(--glass-bg)', backdropFilter: 'var(--glass-blur)', borderRight: '1px solid var(--glass-border)', boxShadow: 'var(--shadow-soft)', transition: 'all var(--transition-smooth)' }}>
+    <div
+      className={`sidebar justify-content-between m-auto ${isCompressed ? "sidebar-compressed" : ""}`}
+      style={{
+        background: "var(--glass-bg)",
+        backdropFilter: "var(--glass-blur)",
+        borderRight: "1px solid var(--glass-border)",
+        boxShadow: "var(--shadow-soft)",
+        transition: "all var(--transition-smooth)",
+      }}
+    >
       <div className="sidebar-header d-flex flex-nowrap">
         {fotoEmpresa && (
           <img
@@ -161,7 +171,12 @@ export function SideBar() {
           />
         )}
         <div className="p-0 m-0 sidebar-text-container">
-          <p className="h5 fw-bold p-0 my-2 text-truncate" style={{ color: 'var(--text-main)', maxWidth: '140px' }}>{miEmpresa.nombre}</p>
+          <p
+            className="h5 fw-bold p-0 my-2 text-truncate"
+            style={{ color: "var(--text-main)", maxWidth: "140px" }}
+          >
+            {miEmpresa.nombre}
+          </p>
         </div>
       </div>
 
@@ -175,12 +190,16 @@ export function SideBar() {
             onClick={(e) => handleModuloSeleccionado("accesos rapido", e)}
           >
             <li
-              className={`menu-item px-3 py-2 mx-2 my-1 ${location.pathname === `/` ? "active" : ""
-                }`}
+              className={`menu-item px-3 py-2 mx-2 my-1 ${
+                location.pathname === `/` ? "active" : ""
+              }`}
             >
               <div className="d-flex w-100 gap-2 align-items-center justify-content-md-start m-auto px-2">
                 <Home className="icon-lucide flex-shrink-0" size={20} />
-                <small className="small sidebar-text" style={{ fontSize: "14px", transition: 'opacity 0.2s' }}>
+                <small
+                  className="small sidebar-text"
+                  style={{ fontSize: "14px", transition: "opacity 0.2s" }}
+                >
                   Inicio
                 </small>
               </div>
@@ -190,11 +209,15 @@ export function SideBar() {
           {orderedRoles.map((role) => {
             const roleName = role.nombre.toLowerCase();
             const roleUrl = formatRoleToUrl(role.nombre);
-            
+
             // Ocultamos los modulos que ahora viven dentro de otros como tabs (ej. compras -> almacen)
             const ocultos = [
-              "vender", "incidencias", "usuarios", 
-              "compras", "proveedores", "areas y cargos"
+              "vender",
+              "incidencias",
+              "usuarios",
+              "compras",
+              "proveedores",
+              "areas y cargos",
             ];
             if (ocultos.includes(roleName)) return null;
 
@@ -211,12 +234,19 @@ export function SideBar() {
                 onClick={(e) => handleModuloSeleccionado(roleUrl, e)}
               >
                 <li
-                  className={`menu-item px-3 py-2 mx-2 my-1 ${isActive ? "active" : ""
-                    }`}
+                  className={`menu-item px-3 py-2 mx-2 my-1 ${
+                    isActive ? "active" : ""
+                  }`}
                 >
                   <div className="d-flex w-100 gap-2 align-items-center justify-content-md-start m-auto px-2">
-                    <IconComponent className="icon-lucide flex-shrink-0" size={20} />
-                    <small className="small sidebar-text" style={{ fontSize: "14px", transition: 'opacity 0.2s' }}>
+                    <IconComponent
+                      className="icon-lucide flex-shrink-0"
+                      size={20}
+                    />
+                    <small
+                      className="small sidebar-text"
+                      style={{ fontSize: "14px", transition: "opacity 0.2s" }}
+                    >
                       {capitalizeFirstLetter(role.nombre)}
                     </small>
                   </div>
@@ -231,26 +261,76 @@ export function SideBar() {
         style={{ margin: "15px 0" }}
       >
         <Link
+          to="/iaMoodle"
+          className="text-decoration-none w-90"
+          style={{ width: "85%" }} // deja un margen lateral bonito
+          onClick={(e) => handleModuloSeleccionado("", e)}
+        >
+          <button
+            className={`menu-item btn border-0 w-100 d-flex align-items-center justify-content-start ${
+              location.pathname.includes("/iaMoodle") ? "active" : ""
+            }`}
+            style={{
+              padding: "15px 10px",
+              borderRadius: "var(--radius-md)",
+              transition:
+                "transform var(--transition-bounce), background-color var(--transition-smooth)",
+            }}
+            onMouseOver={(e) =>
+              (e.currentTarget.style.transform = "scale(1.03)")
+            }
+            onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
+          >
+            <LucideActivity
+              className="icon-lucide flex-shrink-0 me-0 me-md-2"
+              size={20}
+            />
+            <small
+              className="sidebar-text"
+              style={{
+                fontSize: "14px",
+                textAlign: "left",
+                color: "var(--text-main)",
+                transition: "opacity 0.2s",
+              }}
+            >
+              IA Moodle
+            </small>
+          </button>
+        </Link>
+        <Link
           to="/configuracion"
           className="text-decoration-none w-90"
           style={{ width: "85%" }} // deja un margen lateral bonito
           onClick={(e) => handleModuloSeleccionado("", e)}
         >
           <button
-            className={`menu-item btn border-0 w-100 d-flex align-items-center justify-content-start ${location.pathname.includes("/configuracion") ? "active" : ""
-              }`}
+            className={`menu-item btn border-0 w-100 d-flex align-items-center justify-content-start ${
+              location.pathname.includes("/configuracion") ? "active" : ""
+            }`}
             style={{
               padding: "15px 10px",
               borderRadius: "var(--radius-md)",
-              transition: "transform var(--transition-bounce), background-color var(--transition-smooth)"
+              transition:
+                "transform var(--transition-bounce), background-color var(--transition-smooth)",
             }}
-            onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.03)'}
-            onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+            onMouseOver={(e) =>
+              (e.currentTarget.style.transform = "scale(1.03)")
+            }
+            onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
           >
-            <Settings className="icon-lucide flex-shrink-0 me-0 me-md-2" size={20} />
+            <Settings
+              className="icon-lucide flex-shrink-0 me-0 me-md-2"
+              size={20}
+            />
             <small
               className="sidebar-text"
-              style={{ fontSize: "14px", textAlign: "left", color: "var(--text-main)", transition: 'opacity 0.2s' }}
+              style={{
+                fontSize: "14px",
+                textAlign: "left",
+                color: "var(--text-main)",
+                transition: "opacity 0.2s",
+              }}
             >
               Ajustes
             </small>

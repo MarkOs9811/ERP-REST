@@ -72,9 +72,12 @@ import { ZonaTarifa } from "../pages/moduloDelivery/ZonaTarifa";
 import { Promociones } from "../pages/moduloDelivery/Promociones";
 import { useSelector } from "react-redux";
 import { SubMenuTabs } from "../components/componentesReutilizables/SubMenuTabs";
+import { IAMoodle } from "../pages/moduloIAmoodle/IAMoodle";
 
 export const MainLayout = () => {
-  const isCompressed = useSelector((state) => state.sidebar?.isCompressed || false);
+  const isCompressed = useSelector(
+    (state) => state.sidebar?.isCompressed || false,
+  );
   const user = JSON.parse(localStorage.getItem("user"));
   const empresa = JSON.parse(localStorage.getItem("empresa")) || {};
 
@@ -101,26 +104,31 @@ export const MainLayout = () => {
       {showFullLayout && <SideBar />}
 
       <div
-        className={`content p-0 ${showFullLayout ? 'with-sidebar' : ''} ${isCompressed ? 'content-compressed' : ''}`}
+        className={`content p-0 ${showFullLayout ? "with-sidebar" : ""} ${isCompressed ? "content-compressed" : ""}`}
         style={{
-          transition: "margin-left var(--transition-smooth), width var(--transition-smooth)"
+          transition:
+            "margin-left var(--transition-smooth), width var(--transition-smooth)",
         }}
       >
-        <div className="p-0 m-0 rounded-0 vh-100" style={{ background: 'transparent' }}>
+        <div
+          className="p-0 m-0 rounded-0 vh-100"
+          style={{ background: "transparent" }}
+        >
           <div className="shadow-none p-0 h-100 contenido">
             <div className="row h-100 g-0 d-flex ">
               <div
                 className={`h-100 flex-column align-items-center justify-content-center overflow-auto p-0
                 transition-all`}
                 style={{
-                  transition: "width var(--transition-smooth), margin var(--transition-smooth)",
+                  transition:
+                    "width var(--transition-smooth), margin var(--transition-smooth)",
                 }}
               >
                 <div
-                  className={`d-flex flex-column position-fixed ${showFullLayout ? (isCompressed ? 'header-compressed' : 'header-with-sidebar') : 'w-100'}`}
+                  className={`d-flex flex-column position-fixed ${showFullLayout ? (isCompressed ? "header-compressed" : "header-with-sidebar") : "w-100"}`}
                   style={{
                     zIndex: 100,
-                    transition: "width var(--transition-smooth)"
+                    transition: "width var(--transition-smooth)",
                   }}
                 >
                   {!showHeader && <Header />}
@@ -782,6 +790,7 @@ export const MainLayout = () => {
                         />
                       </Route>
                       <Route path="/abrirCaja" element={<AbrirCaja />} />
+                      <Route path="/iaMoodle" element={<IAMoodle />} />
                     </Routes>
                   </ContenedorPrincipal>
                 </div>

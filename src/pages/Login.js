@@ -39,11 +39,11 @@ export const Login = () => {
     setLoading(true);
 
     try {
-      // const response = await axios.post("http://127.0.0.1:8000/api/login", {
-      //   email: data.email,
-      //   password: data.password,
-      // });
-      const response = await axios.post("http://erp-api.test/api/login", {
+      const response = await axios.post("http://127.0.0.1:8000/api/login", {
+        //   email: data.email,
+        //   password: data.password,
+        // });
+        // const response = await axios.post("http://erp-api.test/api/login", {
         // const response = await axios.post(
         //   "https://fe27-38-43-130-95.ngrok-free.app/api/login",
         //   {
@@ -113,8 +113,9 @@ export const Login = () => {
               <FontAwesomeIcon icon={faUser} className="input-icon" />
               <input
                 type="text"
-                className={`form-control-custom ${errors.email ? "is-invalid" : ""
-                  }`}
+                className={`form-control-custom ${
+                  errors.email ? "is-invalid" : ""
+                }`}
                 {...register("email", {
                   required: "El nombre de usuario es obligatorio",
                   minLength: {
@@ -141,8 +142,9 @@ export const Login = () => {
               <FontAwesomeIcon icon={faUnlockKeyhole} className="input-icon" />
               <input
                 type={showPassword ? "text" : "password"}
-                className={`form-control-custom ${errors.password ? "is-invalid" : ""
-                  }`}
+                className={`form-control-custom ${
+                  errors.password ? "is-invalid" : ""
+                }`}
                 {...register("password", {
                   required: "La contraseña es obligatoria",
                   minLength: {
