@@ -6,11 +6,22 @@ import {
   User,
   Search,
   Eye,
-  MoreVertical,
+  PowerOff,
+  Trash2,
+  Edit2,
 } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { GetUsuarios } from "../../service/GetUsuarios";
 import "../../css/estilosDelivery/EstilosRepartidores.css";
+
+import ModalRight from "../../components/componentesReutilizables/ModalRight";
+import ModalAlertQuestion from "../../components/componenteToast/ModalAlertQuestion";
+import { FormAddRepartidor } from "../../components/componenteDelivery/FormAddRepartidor";
+import { FormEditRepartidor } from "../../components/componenteDelivery/FormEditRepartidor";
+import { PutData } from "../../service/CRUD/PutData";
+import { DeleteData } from "../../service/CRUD/DeleteData";
+import { useNavigate } from "react-router-dom";
 
 export function Repartidores() {
   const {
@@ -22,10 +33,41 @@ export function Repartidores() {
     queryFn: GetUsuarios,
   });
 
+  const queryClient = useQueryClient();
+
+  const navigate = useNavigate();
+  const [isModalEditOpen, setIsModalEditOpen] = useState(false);
+  const [repartidorSelected, setRepartidorSelected] = useState(null);
+
+  const [showModalActivar, setShowModalActivar] = useState(false);
+  const [repartidorAccion, setRepartidorAccion] = useState(null);
+
+  const [showModalEliminar, setShowModalEliminar] = useState(false);
+  const [repartidorDelete, setRepartidorDelete] = useState(null);
+
+  const handleToggleEstado = async (id) => {
+    const nuevoEstado = repartidorAccion?.estado == 1 ? 0 : 1;
+    const exito = await PutData("delivery/repartidores-estado", id, { estado: nuevoEstado });
+    if (exito) {
+      queryClient.invalidateQueries(["repartidores"]);
+      return true;
+    }
+    return false;
+  };
+
+  const handleDeleteRepartidor = async (id) => {
+    const exito = await DeleteData("delivery/repartidores", id);
+    if (exito) {
+      queryClient.invalidateQueries(["repartidores"]);
+      return true;
+    }
+    return false;
+  };
+
   const usuariosRepartidores = repartidores
     ? repartidores.filter(
-        (usuario) => usuario?.empleado?.cargo?.nombre === "delivery",
-      )
+      (usuario) => usuario?.empleado?.cargo?.nombre === "delivery",
+    )
     : [];
 
   return (
@@ -62,7 +104,7 @@ export function Repartidores() {
               className="btn btn-dark px-3"
               title="Agregar Nuevo Repartidor"
               onClick={() => {
-                // Abrir el modal
+                navigate("/rrhh")
               }}
             >
               <Plus size={18} />
@@ -108,8 +150,8 @@ export function Repartidores() {
                           <User size={24} strokeWidth={1.5} />
                         </div>
                         <div
-                          className="status-indicator-horizontal"
-                          title="Activo/Conectado"
+                          className={`status-indicator-horizontal ${repartidor.estado == 1 ? "bg-success" : "bg-danger"}`}
+                          title={repartidor.estado == 1 ? "Activo/Conectado" : "Inactivo"}
                         ></div>
                       </div>
 
@@ -163,16 +205,39 @@ export function Repartidores() {
                       </div>
 
                       {/* 3. Acciones alineadas a la derecha */}
-                      <div className="d-flex flex-column justify-content-center align-items-end flex-shrink-0 gap-2">
+                      <div className="d-flex justify-content-center align-items-center flex-shrink-0 gap-2">
                         <button
-                          className="btn btn-sm btn-light border rounded-circle d-flex align-items-center justify-content-center"
-                          style={{ width: "32px", height: "32px" }}
-                          title="Ver Detalles"
+                          className="btn btn-sm btn-outline-primary border rounded-circle d-flex align-items-center justify-content-center"
+                          style={{ width: "32px", height: "32px", padding: 0 }}
+                          title="Editar Repartidor"
+                          onClick={() => {
+                            setRepartidorSelected(repartidor);
+                            setIsModalEditOpen(true);
+                          }}
                         >
-                          <Eye size={14} className="text-dark" />
+                          <Edit2 size={14} />
                         </button>
-                        <button className="btn btn-link text-muted p-0 m-0">
-                          <MoreVertical size={16} />
+                        <button
+                          className="btn btn-sm btn-outline-secondary border rounded-circle d-flex align-items-center justify-content-center"
+                          style={{ width: "32px", height: "32px", padding: 0 }}
+                          title={repartidor.estado == 1 ? "Desactivar Repartidor" : "Activar Repartidor"}
+                          onClick={() => {
+                            setRepartidorAccion(repartidor);
+                            setShowModalActivar(true);
+                          }}
+                        >
+                          <PowerOff size={14} />
+                        </button>
+                        <button
+                          className="btn btn-sm btn-outline-danger border rounded-circle d-flex align-items-center justify-content-center"
+                          style={{ width: "32px", height: "32px", padding: 0 }}
+                          title="Eliminar Repartidor"
+                          onClick={() => {
+                            setRepartidorDelete(repartidor);
+                            setShowModalEliminar(true);
+                          }}
+                        >
+                          <Trash2 size={14} />
                         </button>
                       </div>
                     </div>
@@ -183,6 +248,55 @@ export function Repartidores() {
           </div>
         </div>
       </div>
+
+
+      {/* MODAL PARA EDITAR REPARTIDOR */}
+      <ModalRight
+        isOpen={isModalEditOpen}
+        onClose={() => {
+          setIsModalEditOpen(false);
+          setRepartidorSelected(null);
+        }}
+        title="Editar Repartidor"
+        subtitulo="Modifica la información de contacto y vehículo"
+        hideFooter={true}
+        width="450px"
+      >
+        {({ handleClose }) => (
+          <FormEditRepartidor
+            onClose={handleClose}
+            repartidor={repartidorSelected}
+          />
+        )}
+      </ModalRight>
+
+      {/* MODAL PARA CONFIRMAR ACTIVAR/DESACTIVAR */}
+      <ModalAlertQuestion
+        show={showModalActivar}
+        handleCloseModal={() => {
+          setShowModalActivar(false);
+          setRepartidorAccion(null);
+        }}
+        handleEliminar={handleToggleEstado}
+        idEliminar={repartidorAccion?.id}
+        nombre={repartidorAccion ? `${repartidorAccion.empleado?.persona?.nombre} ${repartidorAccion.empleado?.persona?.apellidos}` : ""}
+        pregunta={`¿Estás seguro de ${repartidorAccion?.estado == 1 ? 'desactivar' : 'activar'}`}
+        tipo="el repartidor"
+      />
+
+      {/* MODAL PARA CONFIRMAR ELIMINAAR */}
+      <ModalAlertQuestion
+        show={showModalEliminar}
+        handleCloseModal={() => {
+          setShowModalEliminar(false);
+          setRepartidorDelete(null);
+        }}
+        handleEliminar={handleDeleteRepartidor}
+        idEliminar={repartidorDelete?.id}
+        nombre={repartidorDelete ? `${repartidorDelete.empleado?.persona?.nombre} ${repartidorDelete.empleado?.persona?.apellidos}` : ""}
+        pregunta="¿Estás completamente seguro de ELIMINAR"
+        tipo="el repartidor"
+      />
     </div>
   );
 }

@@ -4,15 +4,24 @@ import {
   Plus,
   MapPin,
   Settings,
-  DollarSign,
   Clock,
   HeartHandshake,
   Map,
   AlertCircle,
+  PowerOff,
+  Trash2,
 } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 import "../../css/estilosDelivery/EstilosZonasTarifas.css";
 import { GetSedes } from "../../service/accionesAreasCargos/GetSedes";
+
+import ModalRight from "../../components/componentesReutilizables/ModalRight";
+import ModalAlertQuestion from "../../components/componenteToast/ModalAlertQuestion";
+import { FormAddConfigTarifa } from "../../components/componenteDelivery/FormAddConfigTarifa";
+import { FormEditConfigTarifa } from "../../components/componenteDelivery/FormEditConfigTarifa";
+import { PutData } from "../../service/CRUD/PutData";
+import { DeleteData } from "../../service/CRUD/DeleteData";
 
 export function ZonaTarifa() {
   const {
@@ -23,6 +32,39 @@ export function ZonaTarifa() {
     queryKey: ["sedesConfiguracion"],
     queryFn: GetSedes,
   });
+
+  const queryClient = useQueryClient();
+
+  const [isModalAddOpen, setIsModalAddOpen] = useState(false);
+  const [sedeForAdd, setSedeForAdd] = useState(null);
+
+  const [isModalEditOpen, setIsModalEditOpen] = useState(false);
+  const [configSelected, setConfigSelected] = useState(null);
+
+  const [showModalActivar, setShowModalActivar] = useState(false);
+  const [configAccion, setConfigAccion] = useState(null);
+
+  const [showModalEliminar, setShowModalEliminar] = useState(false);
+  const [configDelete, setConfigDelete] = useState(null);
+
+  const handleToggleEstado = async (id) => {
+    const nuevoEstado = configAccion?.estado == 1 ? 0 : 1;
+    const exito = await PutData("delivery/zona-tarifa-estado", id, { estado: nuevoEstado });
+    if (exito) {
+      queryClient.invalidateQueries(["sedesConfiguracion"]);
+      return true;
+    }
+    return false;
+  };
+
+  const handleDeleteConfig = async (id) => {
+    const exito = await DeleteData("delivery/zona-tarifa", id);
+    if (exito) {
+      queryClient.invalidateQueries(["sedesConfiguracion"]);
+      return true;
+    }
+    return false;
+  };
 
   return (
     <div className="container-fluid p-0">
@@ -51,10 +93,7 @@ export function ZonaTarifa() {
               <FileText size={18} />
               <span className="d-none d-sm-inline">Reporte</span>
             </button>
-            <button className="btn btn-dark px-3">
-              <Plus size={18} />
-              <span className="d-none d-sm-inline">Nueva Zona</span>
-            </button>
+
           </div>
         </div>
 
@@ -76,7 +115,7 @@ export function ZonaTarifa() {
                   Error al cargar las sedes: {error.message}
                 </div>
               </div>
-            ) : sedes?.length === 0 ? (
+            ) : sedes?.length == 0 ? (
               <div className="col-12 text-center py-5">
                 <p className="text-muted fs-5">
                   No hay sedes registradas en la empresa.
@@ -92,7 +131,7 @@ export function ZonaTarifa() {
                 let propinas = [];
                 try {
                   propinas =
-                    config && typeof config.propinas_sugeridas === "string"
+                    config && typeof config.propinas_sugeridas == "string"
                       ? JSON.parse(config.propinas_sugeridas)
                       : config?.propinas_sugeridas || [];
                 } catch (e) {
@@ -101,7 +140,7 @@ export function ZonaTarifa() {
 
                 return (
                   <div className="col-12 col-xl-6" key={sede.id}>
-                    <div className="card h-100 sede-config-card shadow-sm border">
+                    <div className={`card h-100 sede-config-card shadow-sm border ${config && config.estado !== 1 ? 'bg-light' : ''}`}>
                       {/* Cabecera de la Tarjeta (Datos de la Sede) */}
                       <div className="card-header bg-transparent border-bottom px-4 py-3 d-flex justify-content-between align-items-center">
                         <div>
@@ -114,9 +153,9 @@ export function ZonaTarifa() {
                           </div>
                         </div>
                         <span
-                          className={`badge ${sede.estado === 1 ? "bg-success" : "bg-danger"} bg-opacity-10 text-${sede.estado === 1 ? "success" : "danger"} border border-${sede.estado === 1 ? "success" : "danger"} border-opacity-25 rounded-pill px-3 py-2`}
+                          className={`badge ${config?.estado == 1 ? "bg-success" : "bg-danger"} bg-opacity-10 text-${config?.estado == 1 ? "success" : "danger"} border border-${config?.estado == 1 ? "success" : "danger"} border-opacity-25 rounded-pill px-3 py-2`}
                         >
-                          {sede.estado === 1 ? "Activa" : "Inactiva"}
+                          {config?.estado == 1 ? "Activa" : "Inactiva"}
                         </span>
                       </div>
 
@@ -127,7 +166,7 @@ export function ZonaTarifa() {
                             {/* Tarifas Base y Prioridad */}
                             <div className="config-item">
                               <div className="icon-box icon-box-primary flex-shrink-0">
-                                <DollarSign size={20} strokeWidth={2} />
+                                <span className="fw-bold" style={{ fontSize: "1.2rem" }}>S/</span>
                               </div>
                               <div className="w-100 d-flex justify-content-between align-items-center">
                                 <div>
@@ -224,7 +263,13 @@ export function ZonaTarifa() {
                               Esta sede no tiene costos ni tiempos definidos
                               aún.
                             </p>
-                            <button className="btn btn-sm btn-outline-primary rounded-pill px-4">
+                            <button
+                              className="btn btn-sm btn-outline-primary rounded-pill px-4"
+                              onClick={() => {
+                                setSedeForAdd(sede);
+                                setIsModalAddOpen(true);
+                              }}
+                            >
                               Configurar Sede
                             </button>
                           </div>
@@ -234,19 +279,53 @@ export function ZonaTarifa() {
                       {/* Pie de la Tarjeta (Botones de Acción) */}
                       <div className="card-footer bg-transparent border-top px-4 py-3 d-flex gap-2">
                         <button
-                          className="btn btn-dark border flex-grow-1 d-flex justify-content-center align-items-center gap-2 rounded-pill fw-medium "
+                          className="btn btn-dark border d-flex justify-content-center align-items-center gap-2 rounded-pill fw-medium "
                           disabled={!config}
+                          style={{ minWidth: '110px' }}
+                          onClick={() => {
+                            if (config) {
+                              setConfigSelected(config);
+                              setIsModalEditOpen(true);
+                            }
+                          }}
                         >
                           <Settings size={15} />
                           Ajustes
                         </button>
                         <button
-                          className="btn-principal flex-grow-1 d-flex justify-content-center align-items-center gap-2 rounded-pill fw-medium"
+                          className="btn-principal d-flex flex-grow-1 justify-content-center align-items-center gap-2 rounded-pill fw-medium"
                           disabled={!config}
                         >
                           <Map size={15} />
-                          Zonas de Reparto
+                          Zonas
                         </button>
+
+                        {config && (
+                          <div className="d-flex ms-auto gap-2">
+                            <button
+                              className="btn btn-outline-secondary d-flex justify-content-center align-items-center rounded-circle"
+                              style={{ width: '38px', height: '38px', padding: 0 }}
+                              title={config.estado == 1 ? "Desactivar Configuración" : "Activar Configuración"}
+                              onClick={() => {
+                                setConfigAccion(config);
+                                setShowModalActivar(true);
+                              }}
+                            >
+                              <PowerOff size={16} />
+                            </button>
+                            <button
+                              className="btn btn-outline-danger d-flex justify-content-center align-items-center rounded-circle"
+                              style={{ width: '38px', height: '38px', padding: 0 }}
+                              title="Eliminar Configuración"
+                              onClick={() => {
+                                setConfigDelete(config);
+                                setShowModalEliminar(true);
+                              }}
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -256,6 +335,74 @@ export function ZonaTarifa() {
           </div>
         </div>
       </div>
+
+      {/* MODAL PARA CONFIGURAR SEDE (AGREGAR) */}
+      <ModalRight
+        isOpen={isModalAddOpen}
+        onClose={() => {
+          setIsModalAddOpen(false);
+          setSedeForAdd(null);
+        }}
+        title="Configurar Sede"
+        subtitulo={sedeForAdd ? `Sede: ${sedeForAdd.nombre}` : ""}
+        hideFooter={true}
+        width="450px"
+      >
+        {({ handleClose }) => (
+          <FormAddConfigTarifa
+            onClose={handleClose}
+            sedeId={sedeForAdd?.id}
+          />
+        )}
+      </ModalRight>
+
+      {/* MODAL PARA AJUSTES (EDITAR) */}
+      <ModalRight
+        isOpen={isModalEditOpen}
+        onClose={() => {
+          setIsModalEditOpen(false);
+          setConfigSelected(null);
+        }}
+        title="Ajustes de Delivery"
+        subtitulo="Modificar la configuración de tarifa y tiempo"
+        hideFooter={true}
+        width="450px"
+      >
+        {({ handleClose }) => (
+          <FormEditConfigTarifa
+            onClose={handleClose}
+            configuracion={configSelected}
+          />
+        )}
+      </ModalRight>
+
+      {/* MODAL PARA CONFIRMAR ACTIVAR/DESACTIVAR */}
+      <ModalAlertQuestion
+        show={showModalActivar}
+        handleCloseModal={() => {
+          setShowModalActivar(false);
+          setConfigAccion(null);
+        }}
+        handleEliminar={handleToggleEstado}
+        idEliminar={configAccion?.id}
+        nombre="Configuración de Sede"
+        pregunta={`¿Estás seguro de ${configAccion?.estado == 1 ? 'desactivar' : 'activar'}`}
+        tipo="esta configuración"
+      />
+
+      {/* MODAL PARA CONFIRMAR ELIMINAR OPCIÓN DEFINITIVA */}
+      <ModalAlertQuestion
+        show={showModalEliminar}
+        handleCloseModal={() => {
+          setShowModalEliminar(false);
+          setConfigDelete(null);
+        }}
+        handleEliminar={handleDeleteConfig}
+        idEliminar={configDelete?.id}
+        nombre="Configuración de Sede"
+        pregunta="¿Estás completamente seguro de ELIMINAR"
+        tipo="esta configuración"
+      />
     </div>
   );
 }

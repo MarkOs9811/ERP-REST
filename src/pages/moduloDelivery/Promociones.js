@@ -9,34 +9,66 @@ import {
   PowerOff,
   Calendar,
 } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { GetPlatos } from "../../service/GetPlatos";
 
 import "../../css/estilosDelivery/EstilosPromociones.css";
 import { FormAddPromocion } from "../../components/componenteDelivery/FormAddPromocion";
 import ModalRight from "../../components/componentesReutilizables/ModalRight";
 import { GetData } from "../../service/CRUD/GetData";
+import { PutData } from "../../service/CRUD/PutData";
+import { DeleteData } from "../../service/CRUD/DeleteData";
 import { CondicionCarga } from "../../components/componentesReutilizables/CondicionCarga";
+import { FormEditPromocion } from "../../components/componenteDelivery/FormEditPromocion";
+import ModalAlertQuestion from "../../components/componenteToast/ModalAlertQuestion";
 
 export function Promociones() {
-  // Estado para controlar el modal
+  // Estado para controlar los modales y el registro seleccionado
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalEditOpen, setIsModalEditOpen] = useState(false);
+  const [promocionSelected, setPromocionSelected] = useState(null);
+  const [showModalActivar, setShowModalActivar] = useState(false);
+  const [promoAccion, setPromoAccion] = useState(null);
+  const [showModalEliminar, setShowModalEliminar] = useState(false);
+  const [promoDelete, setPromoDelete] = useState(null);
+  const queryClient = useQueryClient();
 
-  // 1. Traer los platos (Para pasárselos al formulario)
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
+
+  const handleToggleEstado = async (id) => {
+    const nuevoEstado = promoAccion.estado === 1 ? 0 : 1;
+    const exito = await PutData("delivery/promociones", id, { estado: nuevoEstado });
+    if (exito) {
+      queryClient.invalidateQueries(["promocionesApp"]);
+      return true;
+    }
+    return false;
+  };
+
+  const handleDeletePromocion = async (id) => {
+    const exito = await DeleteData("delivery/promociones", id);
+    if (exito) {
+      queryClient.invalidateQueries(["promocionesApp"]);
+      return true;
+    }
+    return false;
+  };
+
   const { data: platos } = useQuery({
     queryKey: ["platos"],
     queryFn: GetPlatos,
   });
 
-  // 2. Traer las Promociones REAELS usando tu servicio genérico
+
   const {
     data: promociones,
     isLoading,
     error,
   } = useQuery({
     queryKey: ["promocionesApp"],
-    queryFn: GetData("delivery/promociones"),
+    queryFn: () => GetData("delivery/promociones"),
   });
+
 
   const getBadgeClass = (estado) => {
     return estado === 1 || estado === true || estado === "Activa"
@@ -94,14 +126,13 @@ export function Promociones() {
             <div className="row g-4">
               {Array.isArray(promociones) &&
                 promociones.map((promo) => (
-                  <div className="col-12 col-md-6 col-xl-4" key={promo.id}>
-                    <div className="card h-100 promo-card shadow-sm border-0">
+                  <div className="col-12 col-md-6 col-xl-3" key={promo.id}>
+                    <div className={`card h-100 promo-card shadow-sm border-secondary overflow-hidden ${promo.estado === 1 ? '' : 'inactiva'}`}>
                       {/* Banner Image */}
                       <div className="promo-banner-container">
                         <img
                           src={
-                            promo.imagen_banner ||
-                            "https://via.placeholder.com/500x200?text=Sin+Imagen"
+                            BASE_URL + "/storage/" + promo.imagen_banner
                           }
                           alt={promo.titulo}
                           className="promo-banner"
@@ -117,8 +148,8 @@ export function Promociones() {
                       <div className="card-body p-4 pb-2">
                         <div className="d-flex align-items-center gap-2 mb-1">
                           <Tag
-                            size={16}
-                            className="text-primary flex-shrink-0"
+                            size={18}
+                            className="text-danger flex-shrink-0 fw-bold"
                           />
                           <h5
                             className="mb-0 fw-bold text-truncate"
@@ -164,18 +195,33 @@ export function Promociones() {
 
                       {/* Acciones */}
                       <div className="card-footer bg-light border-top-0 p-3 d-flex justify-content-end gap-2">
-                        <button className="btn-editar" title="Editar Promoción">
+                        <button
+                          className="btn-editar"
+                          title="Editar Promoción"
+                          onClick={() => {
+                            setPromocionSelected(promo);
+                            setIsModalEditOpen(true);
+                          }}
+                        >
                           <Edit2 size={16} />
                         </button>
                         <button
-                          className="btn-desactivar"
+                          className={promo.estado === 1 ? "btn-desactivar" : "btn-activar"}
                           title={promo.estado === 1 ? "Desactivar" : "Activar"}
+                          onClick={() => {
+                            setPromoAccion(promo);
+                            setShowModalActivar(true);
+                          }}
                         >
                           <PowerOff size={16} />
                         </button>
                         <button
                           className="btn-eliminar"
                           title="Eliminar Promoción"
+                          onClick={() => {
+                            setPromoDelete(promo);
+                            setShowModalEliminar(true);
+                          }}
                         >
                           <Trash2 size={16} />
                         </button>
@@ -188,13 +234,13 @@ export function Promociones() {
         </div>
       </div>
 
-      {/* AQUÍ INVOCAMOS TU MODAL RIGHT */}
+      {/* AQUÍ INVOCAMOS TU MODAL RIGHT PARA AGREGAR */}
       <ModalRight
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         title="Crear Nueva Promoción"
         subtitulo="Atrae más clientes con ofertas exclusivas"
-        hideFooter={true} // Ocultamos el footer del modal porque el FormAddPromocion ya tiene los botones "Guardar" y "Cancelar"
+        hideFooter={true}
         width="450px"
       >
         <FormAddPromocion
@@ -202,6 +248,52 @@ export function Promociones() {
           platos={platos}
         />
       </ModalRight>
+
+      {/* AQUÍ INVOCAMOS TU MODAL RIGHT PARA EDITAR */}
+      <ModalRight
+        isOpen={isModalEditOpen}
+        onClose={() => setIsModalEditOpen(false)}
+        title="Editar Promoción"
+        subtitulo="Actualiza los detalles de la oferta"
+        hideFooter={true}
+        width="450px"
+      >
+        {({ handleClose }) => (
+          <FormEditPromocion
+            onClose={handleClose}
+            platos={platos}
+            promocionSelected={promocionSelected}
+          />
+        )}
+      </ModalRight>
+
+      {/* MODAL PARA CONFIRMAR ACTIVAR/DESACTIVAR */}
+      <ModalAlertQuestion
+        show={showModalActivar}
+        handleCloseModal={() => {
+          setShowModalActivar(false);
+          setPromoAccion(null);
+        }}
+        handleEliminar={handleToggleEstado}
+        idEliminar={promoAccion?.id}
+        nombre={promoAccion?.titulo}
+        pregunta={`¿Estás seguro de ${promoAccion?.estado === 1 ? 'desactivar' : 'activar'}`}
+        tipo="esta promoción"
+      />
+
+      {/* MODAL PARA CONFIRMAR ELIMINAR OPCIÓN DEFINITIVA */}
+      <ModalAlertQuestion
+        show={showModalEliminar}
+        handleCloseModal={() => {
+          setShowModalEliminar(false);
+          setPromoDelete(null);
+        }}
+        handleEliminar={handleDeletePromocion}
+        idEliminar={promoDelete?.id}
+        nombre={promoDelete?.titulo}
+        pregunta="¿Estás completamente seguro de ELIMINAR"
+        tipo="esta promoción"
+      />
     </div>
   );
 }

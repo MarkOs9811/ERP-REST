@@ -131,9 +131,8 @@ export function Mesas() {
                           </h5>
                           <div>
                             <span
-                              className={`badge w-auto ${
-                                mesa?.estado == 1 ? "bg-success" : "bg-danger"
-                              }`}
+                              className={`badge w-auto ${mesa?.estado == 1 ? "bg-success" : "bg-danger"
+                                }`}
                             >
                               {mesa?.estado == 1 ? "Disponible" : "Ocupada"}
                             </span>
