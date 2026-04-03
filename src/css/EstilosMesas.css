@@ -9,20 +9,31 @@
   position: relative;
   height: 200px;
   background-color: #fff;
-  border:none;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
   padding: 16px;
   flex-grow: 1;
   flex-basis: 200px;
   text-align: left;
-  transition: transform 0.2s;
+  transition: all 0.15s ease-out;
   overflow: hidden;
-}
-.mesa-card:active {
-  transform: scale(0.97, 0.97)!important;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
 }
 
+/* EFECTO ACTIVE OPTIMIZADO PARA TOUCH */
+.mesa-card:active {
+  transform: scale(0.96);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* FONDO DECORATIVO */
 .mesa-card::after {
   content: "";
   position: absolute;
@@ -30,87 +41,113 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-size: 150px;
+  background-size: 140px;
   background-repeat: no-repeat;
-  background-position: right center;
- 
-  /* Opacidad de la imagen */
+  background-position: right bottom;
   z-index: 1;
-  /* Asegura que la imagen esté detrás del contenido */
   pointer-events: none;
-  /* Permite interactuar con el contenido del card */
+  opacity: 0.6;
+  transition: opacity 0.15s ease-out;
 }
 
+.mesa-card:active::after {
+  opacity: 0.8;
+}
+
+/* MESA DISPONIBLE - VERDE */
 .mesa-card.disponible::after {
   background-image: url("../../public/images/img-disponible-mesa.svg");
-  background-color: #b8fad1;
-  border-left:4px solid #0b884e;
-}
-.mesa-card.disponible:active::after {
-  background-image: url("../../public/images/img-disponible-mesa.svg");
-  background-color: #7fd4a0;
-  border-left: 4px solid #07160f;
+  background-color: #c8fce0;
+  border-left: 5px solid #0b884e;
 }
 
+.mesa-card.disponible:active::after {
+  background-color: #96e8c6;
+}
+
+/* MESA EN ATENCIÓN - ROJO */
 .mesa-card.en-atencion::after {
   background-image: url("../../public/images/img-en-atencion.svg");
-  background-color: #ffc6c6;
-  border-left:4px solid #920404;
-}
-.mesa-card.en-atencion:active::after {
-  background-image: url("../../public/images/img-en-atencion.svg");
-  background-color: #faa3a3;
-  border-left: 4px solid #920404;
-}
-.mesa-card:hover {
-  transform: scale(1.02);
-  /* Efecto de zoom al pasar el mouse */
+  background-color: #ffd6d6;
+  border-left: 5px solid #c41c3b;
 }
 
+.mesa-card.en-atencion:active::after {
+  background-color: #ffb3b3;
+}
+
+/* NÚMERO DE MESA */
 .mesa-numero {
-  font-size: 1.2em;
-  font-weight: bold;
-  color: #333;
+  font-size: 1.25em;
+  font-weight: 700;
+  color: #222;
   text-align: center;
   z-index: 2;
-  /* Asegura que el texto esté encima de la imagen */
   position: relative;
+  width: 100%;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
+/* DETALLES DE LA MESA */
 .mesa-card p {
-  margin: 8px 0;
-  font-size: 0.9em;
-  color: #555;
+  margin: 6px 0;
+  font-size: 0.85em;
+  color: #444;
   z-index: 2;
-  /* Asegura que el texto esté encima de la imagen */
   position: relative;
+  font-weight: 500;
 }
 
-/* ========== TEMA OSCURO MESAS ESTILO MODERNO CON ROJO CORPORATIVO ========== */
+/* ETIQUETA DE ACCIÓN */
+.mesa-action-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 6px;
+  font-size: 0.75em;
+  font-weight: 700;
+  color: #222;
+  z-index: 2;
+  position: relative;
+  margin-top: auto;
+  width: 100%;
+  letter-spacing: 0.5px;
+}
+
+.mesa-card.disponible .mesa-action-label {
+  background-color: rgba(11, 136, 78, 0.12);
+  color: #0b884e;
+}
+
+.mesa-card.en-atencion .mesa-action-label {
+  background-color: rgba(196, 28, 59, 0.12);
+  color: #c41c3b;
+}
+
+.mesa-action-label svg {
+  stroke-width: 2.5;
+}
+
+/* ========== TEMA OSCURO ========== */
 body.dark-theme .mesas-container {
   background: #151a20 !important;
 }
 
 body.dark-theme .mesa-card {
-  background-color: #212b36 !important;
-  color: #cfd8dc !important;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.25) !important;
-  border: none !important;
+  background-color: #1e2936 !important;
+  color: #e0e6ed !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35) !important;
 }
 
-body.dark-theme .mesa-card::after {
-  opacity: 0.8!important;
-  /* Mantiene la imagen de fondo pero más sutil en dark mode */
-}
-
-body.dark-theme .mesa-card.disponible::after {
-  background-color: #6db993 !important;
-  border-left: 2px solid #27ae60 !important;
-}
-
-body.dark-theme .mesa-card.en-atencion::after {
-  background-color: #da4343 !important;
-  border-left: 2px solid #ee5252 !important;
+body.dark-theme .mesa-card:active {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45) !important;
 }
 
 body.dark-theme .mesa-numero {
@@ -118,6 +155,47 @@ body.dark-theme .mesa-numero {
 }
 
 body.dark-theme .mesa-card p {
-  color: #cfd8dc !important;
+  color: #c0c7d4 !important;
 }
-/* ========== FIN TEMA OSCURO MESAS ESTILO MODERNO ========== */
+
+body.dark-theme .mesa-card::after {
+  opacity: 0.5 !important;
+}
+
+body.dark-theme .mesa-card:active::after {
+  opacity: 0.65 !important;
+}
+
+body.dark-theme .mesa-card.disponible::after {
+  background-color: #2d5a47 !important;
+  border-left-color: #27ae60 !important;
+}
+
+body.dark-theme .mesa-card.disponible:active::after {
+  background-color: #3a7054 !important;
+}
+
+body.dark-theme .mesa-card.en-atencion::after {
+  background-color: #5a2e3a !important;
+  border-left-color: #ee5252 !important;
+}
+
+body.dark-theme .mesa-card.en-atencion:active::after {
+  background-color: #6d3847 !important;
+}
+
+body.dark-theme .mesa-action-label {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  color: #c0c7d4 !important;
+}
+
+body.dark-theme .mesa-card.disponible .mesa-action-label {
+  background-color: rgba(39, 174, 96, 0.15) !important;
+  color: #27ae60 !important;
+}
+
+body.dark-theme .mesa-card.en-atencion .mesa-action-label {
+  background-color: rgba(238, 82, 82, 0.15) !important;
+  color: #ee5252 !important;
+}
+/* ========== FIN TEMA OSCURO ========== */

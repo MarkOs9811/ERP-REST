@@ -6,7 +6,6 @@ import GraficoLineaEjemplo from "../../graficosChar/GraficoLineVentas";
 import GraficoLineaDayVentas from "../../graficosChar/GraficoLineDayVentas";
 import "../../css/EstilosVentas.css";
 import { getVentas } from "../../service/ObtenerVentasDetalle";
-import { ContenedorPrincipal } from "../../components/componentesReutilizables/ContenedorPrincipal";
 import {
   CalendarFold,
   FileText,
@@ -93,10 +92,10 @@ export function Ventas() {
           <div className="col-12">
             <CondicionCarga isLoading={isLoading} isError={isError}>
               <div className="card shadow-sm py-2 h-100">
-                <div className="card-header d-flex p-4 bg-transparent">
+                <div className="card-header d-flex p-4 bg-transparent justify-content-between align-items-center">
                   <div>
-                    <h1 className="text-dark">¡Buen día!</h1>
-                    <p className="fw-normal text-secondary">
+                    <h1 className="m-0 mb-2">¡Buen día!</h1>
+                    <p className="fw-normal text-secondary m-0">
                       Esto es lo que sucede con tus Ventas Hoy
                     </p>
                   </div>
@@ -110,11 +109,11 @@ export function Ventas() {
                 </div>
                 <div className="card-body">
                   <div>
-                    <p className="totalVentasTitulo mb-0">
+                    <p className="totalVentasTitulo mb-2">
                       S/.{totalVentasHoy}
                     </p>
                     <small className="text-secondary fw-normal">
-                      Ventas Hoy.
+                      Ventas Hoy
                     </small>
                   </div>
                 </div>
@@ -133,10 +132,11 @@ export function Ventas() {
               </div>
             </CondicionCarga>
           </div>
-          {/* Gráfico de ventas por hora */}
+          {/* Gráficos Row 1 */}
           <div className="col-md-4 ">
             <CondicionCarga isLoading={isLoading} isError={isError}>
               <div className="card p-3 shadow-sm h-100 w-100 m-0">
+                <h6 className="fw-bold mb-3" style={{ fontSize: '0.95rem', color: '#374151' }}>Ventas por Hora</h6>
                 <GraficoLineaDayVentas />
               </div>
             </CondicionCarga>
@@ -144,6 +144,7 @@ export function Ventas() {
           <div className="col-md-4 ">
             <CondicionCarga isLoading={isLoading} isError={isError}>
               <div className="card p-3 shadow-sm h-100 w-100 m-0">
+                <h6 className="fw-bold mb-3" style={{ fontSize: '0.95rem', color: '#374151' }}>Métodos de Pago</h6>
                 <GraficoMetodoPago />
               </div>
             </CondicionCarga>
@@ -151,6 +152,7 @@ export function Ventas() {
           <div className="col-md-4 ">
             <CondicionCarga isLoading={isLoading} isError={isError}>
               <div className="card p-3 shadow-sm h-100 w-100 m-0">
+                <h6 className="fw-bold mb-3" style={{ fontSize: '0.95rem', color: '#374151' }}>Top Ventas</h6>
                 <PlatoMasVendido />
               </div>
             </CondicionCarga>
@@ -172,24 +174,22 @@ export function Ventas() {
                 >
                   <div
                     className="card shadow-sm border-0 p-3 d-flex flex-column justify-content-between"
-                    style={{ background: "#f1faf6", minHeight: 120 }}
+                    style={{ background: "#f1faf6", minHeight: 140 }}
                   >
-                    <div className="d-flex align-items-center gap-2 mb-2">
-                      <span className="bg-success bg-opacity-10 rounded-circle p-2">
-                        <DollarSign size={28} className="text-success" />
+                    <div className="d-flex align-items-center gap-2 mb-3">
+                      <span className="bg-success bg-opacity-10 rounded-circle p-3">
+                        <DollarSign size={24} className="text-success" />
                       </span>
-                      <span className="ms-auto text-success fw-bold">
-                        <TrendingUp size={18} /> +
-                        {(
+                      <span className="ms-auto text-success fw-bold d-flex align-items-center gap-1" style={{ fontSize: '0.9rem' }}>
+                        <TrendingUp size={16} /> +{(
                           (diferenciaVentas / totalVentasMesPasado) *
                           100
-                        ).toFixed(1)}
-                        %
+                        ).toFixed(1)}%
                       </span>
                     </div>
                     <div>
-                      <span className="text-muted">Este Mes</span>
-                      <h3 className="fw-bold text-dark mb-0">
+                      <span className="text-muted fw-600" style={{ fontSize: '0.85rem', display: 'block', marginBottom: '4px' }}>Este Mes</span>
+                      <h3 className="fw-bold text-dark mb-0" style={{ fontSize: '1.3rem' }}>
                         S/ {totalVentas}
                       </h3>
                     </div>
@@ -204,23 +204,21 @@ export function Ventas() {
                 >
                   <div
                     className="card shadow-sm border-0 p-3 d-flex flex-column justify-content-between"
-                    style={{ background: "#fff6f6", minHeight: 120 }}
+                    style={{ background: "#fff6f6", minHeight: 140 }}
                   >
-                    <div className="d-flex align-items-center gap-2 mb-2">
-                      <span className="bg-warning bg-opacity-10 rounded-circle p-2">
-                        <CalendarFold size={28} className="text-warning" />
+                    <div className="d-flex align-items-center gap-2 mb-3">
+                      <span className="bg-warning bg-opacity-10 rounded-circle p-3">
+                        <CalendarFold size={24} className="text-warning" />
                       </span>
-                      <span className="ms-auto text-warning fw-bold">
-                        <TrendingUp size={18} /> +
-                        {((totalVentasMesPasado / totalVentas) * 100).toFixed(
-                          1
-                        )}
-                        %
+                      <span className="ms-auto text-warning fw-bold d-flex align-items-center gap-1" style={{ fontSize: '0.9rem' }}>
+                        <TrendingUp size={16} /> +{((totalVentasMesPasado / totalVentas) * 100).toFixed(
+                          1,
+                        )}%
                       </span>
                     </div>
                     <div>
-                      <span className="text-muted">Mes Pasado</span>
-                      <h3 className="fw-bold text-dark mb-0">
+                      <span className="text-muted fw-600" style={{ fontSize: '0.85rem', display: 'block', marginBottom: '4px' }}>Mes Pasado</span>
+                      <h3 className="fw-bold text-dark mb-0" style={{ fontSize: '1.3rem' }}>
                         S/ {totalVentasMesPasado}
                       </h3>
                     </div>
@@ -237,15 +235,16 @@ export function Ventas() {
                     className="card shadow-sm border-0 p-3 d-flex flex-column justify-content-between"
                     style={{
                       background: diferenciaVentas > 0 ? "#e8f5e9" : "#ffebee",
-                      minHeight: 120,
+                      minHeight: 140,
                     }}
                   >
-                    <div className="d-flex align-items-center gap-2 mb-2">
+                    <div className="d-flex align-items-center gap-2 mb-3">
                       <span
-                        className={`rounded-circle p-2 ${diferenciaVentas > 0
-                          ? "bg-success bg-opacity-10"
-                          : "bg-danger bg-opacity-10"
-                          }`}
+                        className={`rounded-circle p-3 ${
+                          diferenciaVentas > 0
+                            ? "bg-success bg-opacity-10"
+                            : "bg-danger bg-opacity-10"
+                        }`}
                       >
                         {diferenciaVentas > 0 ? (
                           <TrendingUp size={28} className="text-success" />
@@ -254,8 +253,10 @@ export function Ventas() {
                         )}
                       </span>
                       <span
-                        className={`ms-auto fw-bold ${diferenciaVentas > 0 ? "text-success" : "text-danger"
-                          }`}
+                        className={`ms-auto fw-bold text-sm ${
+                          diferenciaVentas > 0 ? "text-success" : "text-danger"
+                        }`}
+                        style={{ fontSize: '0.9rem' }}
                       >
                         {diferenciaVentas > 0 ? "+" : ""}
                         {(
@@ -266,10 +267,12 @@ export function Ventas() {
                       </span>
                     </div>
                     <div>
-                      <span className="text-muted">Diferencia</span>
+                      <span className="text-muted fw-600" style={{ fontSize: '0.85rem', display: 'block', marginBottom: '4px' }}>Diferencia</span>
                       <h3
-                        className={`fw-bold mb-0 ${diferenciaVentas > 0 ? "text-success" : "text-danger"
-                          }`}
+                        className={`fw-bold mb-0 ${
+                          diferenciaVentas > 0 ? "text-success" : "text-danger"
+                        }`}
+                        style={{ fontSize: '1.3rem' }}
                       >
                         S/ {diferenciaVentas}
                       </h3>
@@ -282,7 +285,8 @@ export function Ventas() {
           {/* Gráfico mensual de todas las ventas */}
           <div className="col-12">
             <CondicionCarga isLoading={isLoading} isError={isError}>
-              <div className="card p-3 shadow-sm h-100">
+              <div className="card p-4 shadow-sm h-100">
+                <h6 className="fw-bold mb-3" style={{ fontSize: '0.95rem', color: '#374151' }}>Ventas Acumuladas</h6>
                 <GraficoBarVentas />
               </div>
             </CondicionCarga>
@@ -290,7 +294,8 @@ export function Ventas() {
           {/* Gráfico ventas solo del ultimo mes*/}
           <div className="col-12">
             <CondicionCarga isLoading={isLoading} isError={isError}>
-              <div className="card p-3 shadow-sm h-100">
+              <div className="card p-4 shadow-sm h-100">
+                <h6 className="fw-bold mb-3" style={{ fontSize: '0.95rem', color: '#374151' }}>Tendencia Mensual</h6>
                 <GraficoLineaEjemplo />
               </div>
             </CondicionCarga>
@@ -302,7 +307,7 @@ export function Ventas() {
       <div className="col-12">
         <CondicionCarga isLoading={isLoading} isError={isError}>
           <div className="card shadow-sm py-2">
-            <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+            <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-start align-md-items-center gap-3 p-4">
               <div className="d-flex align-items-center">
                 <h4 className="card-title mb-0 titulo-card-especial">
                   Panel de Ventas
@@ -310,9 +315,9 @@ export function Ventas() {
                 <span className="badge-header">Registros</span>
               </div>
 
-              <div className="d-flex align-items-center flex-wrap gap-2 mt-3 mt-md-0">
+              <div className="d-flex align-items-center flex-wrap gap-2 mt-0" style={{ width: 'auto' }}>
                 <div className="header-search-container">
-                  <Search className="search-icon" />
+                  <Search className="search-icon" size={18} />
                   <input
                     type="text"
                     placeholder="Buscar venta..."
@@ -328,7 +333,7 @@ export function Ventas() {
                 {/* Filtro por fecha */}
                 <input
                   type="date"
-                  className="form-control x-2"
+                  className="form-control"
                   value={selectedDate}
                   onChange={(e) => {
                     const rawDate = e.target.value;

@@ -1,94 +1,467 @@
+/* ===== VENTAS MODERNO 2024 - DISEÑO PREMIUM ===== */
+
+:root {
+  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --success-gradient: linear-gradient(135deg, #10ba82 0%, #0b884e 100%);
+  --danger-gradient: linear-gradient(135deg, #ff6b6b 0%, #c41c3b 100%);
+  --warning-gradient: linear-gradient(135deg, #ffa500 0%, #ff8c00 100%);
+  --light-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+/* ===== CARDS GENERALES ===== */
 .card {
-    border-radius: 8px;
-    overflow: hidden;
+  border: none !important;
+  border-radius: 16px !important;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  position: relative;
 }
 
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.12);
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ===== CARD HEADER ===== */
 .card-header {
-    background-color: #ffffff !important;
-    padding: 20px;
-    position: relative;
+  background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%) !important;
+  padding: 28px 32px !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+  position: relative;
+  z-index: 1;
 }
 
+.card-header h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+  letter-spacing: -1px;
+}
 
+.card-header p {
+  font-size: 0.95rem;
+  color: #6b7280;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+/* ===== IMAGEN DE TIENDA ===== */
 .store-image {
-    width: 180px;
-    /* Se ajusta al tamaño del contenedor */
-    height: auto;
-    /* Mantiene la proporción */
-    border-radius: 4px;
-    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.2));
-    opacity: 0.6;
-    top: 50;
-    right: 0;
-    position: absolute;
+  width: 200px;
+  height: auto;
+  border-radius: 12px;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.15));
+  opacity: 0.85;
+  transition: all 0.3s ease;
+}
+
+.card-header:hover .store-image {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+/* ===== CARD BODY ===== */
+.card-body {
+  padding: 28px 32px !important;
+  position: relative;
+  z-index: 1;
 }
 
 .card-body-ventasDahs {
-    padding: 20px;
-    background: #f2fbff;
+  padding: 24px !important;
+  background: transparent !important;
+  position: relative;
 }
 
+/* ===== TOTAL VENTAS TITULO ===== */
 .totalVentasTitulo {
-    font-size: 60px !important;
-    color: #ff6a6a;
-    font-weight: normal;
+  font-size: 3.5rem !important;
+  font-weight: 900 !important;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+  letter-spacing: -2px;
+  line-height: 1;
 }
 
-
-/* estilos para ajustes de ventas */
-.custom-control-input:checked~.custom-control-label::before {
-    background-color: #0d6efd;
-    /* Bootstrap primary color */
-    border-color: #0d6efd;
+.card-body > small {
+  font-size: 0.95rem !important;
+  font-weight: 600;
+  color: #9ca3af;
+  letter-spacing: 0.5px;
 }
 
-.custom-control-input:focus~.custom-control-label::before {
-    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+/* ===== CARD FOOTER ===== */
+.card-footer {
+  background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, transparent 100%) !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.05) !important;
+  padding: 20px 32px !important;
+  position: relative;
+  z-index: 1;
 }
 
-.custom-control-input:not(:checked)~.custom-control-label::before {
-    background-color: #e9ecef;
-    border-color: #ced4da;
+/* ===== TARJETAS RESUMEN KPI ===== */
+.card[style*="background: #"] {
+  background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%) !important;
+  border-left: 5px solid transparent;
+  position: relative;
 }
 
-/* ========== TEMA OSCURO PARA VENTAS ========== */
+/* Tarjeta de Este Mes */
+.card[style*="#f1faf6"] {
+  border-left-color: #10ba82 !important;
+  background: linear-gradient(135deg, rgba(16, 186, 130, 0.08) 0%, rgba(11, 136, 78, 0.04) 100%) !important;
+}
+
+/* Tarjeta de Mes Pasado */
+.card[style*="#fff6f6"] {
+  border-left-color: #ffa500 !important;
+  background: linear-gradient(135deg, rgba(255, 165, 0, 0.08) 0%, rgba(255, 140, 0, 0.04) 100%) !important;
+}
+
+/* Tarjeta de Diferencia */
+.card[style*="#e8f5e9"],
+.card[style*="#ffebee"] {
+  border-left-color: #ff6b6b;
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.08) 0%, rgba(196, 28, 59, 0.04) 100%) !important;
+}
+
+/* ===== ESTILOS PARA BADGES Y ICONOS ===== */
+.card span[class*="rounded-circle"] {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.card .bg-success {
+  background: linear-gradient(135deg, #10ba82 0%, #0b884e 100%) !important;
+}
+
+.card .bg-warning {
+  background: linear-gradient(135deg, #ffa500 0%, #ff8c00 100%) !important;
+}
+
+.card .bg-danger {
+  background: linear-gradient(135deg, #ff6b6b 0%, #c41c3b 100%) !important;
+}
+
+/* ===== BOTONES ===== */
+.btn {
+  border-radius: 10px !important;
+  font-weight: 600;
+  padding: 10px 20px !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid #e5e7eb !important;
+  font-size: 0.9rem;
+  letter-spacing: 0.3px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-outline-dark {
+  color: #1f2937 !important;
+  background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%) !important;
+  border: 2px solid #e5e7eb !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.btn-outline-dark:hover {
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: #d1d5db !important;
+}
+
+.btn-outline-dark:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+/* ===== BUSCADOR ===== */
+.header-search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 380px;
+}
+
+.header-search-container .form-control {
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 10px 16px 10px 40px;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+  font-weight: 500;
+}
+
+.header-search-container .form-control:focus {
+  border-color: #667eea;
+  background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  outline: none;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  color: #9ca3af;
+  pointer-events: none;
+  size: 18px;
+}
+
+/* ===== INPUT DATE ===== */
+.form-control[type="date"] {
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+}
+
+.form-control[type="date"]:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  outline: none;
+}
+
+/* ===== TÍTULO CARD ESPECIAL ===== */
+.titulo-card-especial {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #1f2937;
+  margin-bottom: 4px;
+  letter-spacing: -0.5px;
+}
+
+.badge-header {
+  display: inline-block;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-left: 12px;
+  letter-spacing: 0.5px;
+}
+
+/* ===== ANIMACIONES ===== */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 8px 32px rgba(102, 126, 234, 0.15);
+  }
+  50% {
+    box-shadow: 0 8px 40px rgba(102, 126, 234, 0.25);
+  }
+}
+
+.card {
+  animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== TEMA OSCURO VENTAS PREMIUM ===== */
 body.dark-theme .card {
-    background: #1c252e !important;
-    color: #cfd8dc !important;
-    border-color: #232c36 !important;
+  background: linear-gradient(135deg, #1c252e 0%, #151a20 100%) !important;
+  color: #e0e6ed !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+}
+
+body.dark-theme .card:hover {
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.5) !important;
 }
 
 body.dark-theme .card-header {
-    background-color: #1c252e !important;
-    color: #fff !important;
+  background: linear-gradient(135deg, #1c252e 0%, #151a20 100%) !important;
+  border-bottom-color: rgba(255, 255, 255, 0.08) !important;
 }
 
-body.dark-theme .card-body-ventasDahs {
-    background: #151a20 !important;
-    color: #cfd8dc !important;
+body.dark-theme .card-header h1 {
+  background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+body.dark-theme .card-header p {
+  color: #9ca3af;
+}
+
+body.dark-theme .card-body {
+  background: transparent !important;
 }
 
 body.dark-theme .totalVentasTitulo {
-    color: #ee5252 !important;
+  background: linear-gradient(135deg, #ee5252 0%, #f77a7a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+body.dark-theme .titulo-card-especial {
+  color: #e0e6ed;
+}
+
+body.dark-theme .card-footer {
+  background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 100%) !important;
+  border-top-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+body.dark-theme .btn-outline-dark {
+  color: #e0e6ed !important;
+  background: linear-gradient(135deg, #2a3647 0%, #1f2937 100%) !important;
+  border-color: #3a4554 !important;
+}
+
+body.dark-theme .btn-outline-dark:hover {
+  background: linear-gradient(135deg, #3f4d5e 0%, #2a3647 100%) !important;
+  border-color: #4a5566 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-theme .header-search-container .form-control {
+  border-color: #3a4554;
+  background: linear-gradient(135deg, #2a3647 0%, #1f2937 100%);
+  color: #e0e6ed;
+}
+
+body.dark-theme .header-search-container .form-control:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+}
+
+body.dark-theme .header-search-container .search-icon {
+  color: #6b7280;
+}
+
+body.dark-theme .form-control[type="date"] {
+  border-color: #3a4554;
+  background: linear-gradient(135deg, #2a3647 0%, #1f2937 100%);
+  color: #e0e6ed;
+}
+
+body.dark-theme .form-control[type="date"]:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+}
+
+body.dark-theme .badge-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+body.dark-theme .card[style*="#f1faf6"] {
+  background: linear-gradient(135deg, rgba(16, 186, 130, 0.12) 0%, rgba(11, 136, 78, 0.06) 100%) !important;
+  border-left-color: #27ae60 !important;
+}
+
+body.dark-theme .card[style*="#fff6f6"] {
+  background: linear-gradient(135deg, rgba(255, 165, 0, 0.12) 0%, rgba(255, 140, 0, 0.06) 100%) !important;
+  border-left-color: #ff9500 !important;
+}
+
+body.dark-theme .card[style*="#e8f5e9"],
+body.dark-theme .card[style*="#ffebee"] {
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.12) 0%, rgba(196, 28, 59, 0.06) 100%) !important;
+  border-left-color: #ff6b6b !important;
 }
 
 body.dark-theme .store-image {
-    filter: drop-shadow(2px 2px 8px rgba(0, 0, 0, 0.4));
-    opacity: 0.8;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.35));
+  opacity: 0.9;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .card-header {
+    padding: 20px 24px !important;
+  }
+
+  .card-header h1 {
+    font-size: 2rem;
+  }
+
+  .card-body {
+    padding: 20px 24px !important;
+  }
+
+  .store-image {
+    width: 140px;
+  }
+
+  .header-search-container .form-control {
+    padding: 8px 12px 8px 36px;
+    font-size: 0.85rem;
+  }
+
+  .totalVentasTitulo {
+    font-size: 2.5rem !important;
+  }
+}
+
+/* ===== ESTILOS ANTIGUOS COMPATIBILIDAD ===== */
+.custom-control-input:checked~.custom-control-label::before {
+  background-color: #667eea;
+  border-color: #667eea;
+}
+
+.custom-control-input:focus~.custom-control-label::before {
+  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+.custom-control-input:not(:checked)~.custom-control-label::before {
+  background-color: #e9ecef;
+  border-color: #ced4da;
 }
 
 body.dark-theme .custom-control-input:checked~.custom-control-label::before {
-    background-color: #ee5252 !important;
-    border-color: #ee5252 !important;
+  background-color: #ee5252;
+  border-color: #ee5252;
 }
 
 body.dark-theme .custom-control-input:not(:checked)~.custom-control-label::before {
-    background-color: #313a46 !important;
-    border-color: #232c36 !important;
+  background-color: #313a46;
+  border-color: #232c36;
 }
 
 body.dark-theme .custom-control-input:focus~.custom-control-label::before {
-    box-shadow: 0 0 0 0.2rem rgba(238, 82, 82, 0.25) !important;
+  box-shadow: 0 0 0 0.2rem rgba(238, 82, 82, 0.25);
 }
-
-/* ========== FIN TEMA OSCURO VENTAS ESTILO MODERNO ========== */

@@ -69,64 +69,50 @@ export function MesasList() {
       <CondicionCarga isLoading={loading} isError={error} mode="cards">
         <div className="mesas-container card-body overflow-auto">
           {listaMesas.map((mesa) => (
-            <div
+            <button
               key={mesa.id}
-              // Usamos DIV, no BUTTON, para el contenedor padre
-              // Mantenemos tus clases 'mesa-card' y 'm-3'
-              // Agregamos 'd-flex flex-column' para organizar el contenido verticalmente
-              className={`mesa-card m-3 d-flex flex-column justify-content-between ${
+              className={`mesa-card m-3 ${
                 mesa.estado === 1 ? "disponible" : "en-atencion"
               }`}
-              // IMPORTANTE: Quitamos onClick del padre para evitar conflictos
+              onClick={() =>
+                mesa.estado === 1
+                  ? handleMesaAddPlato(mesa.id)
+                  : handleShowPedido(mesa.id)
+              }
             >
-              {/* --- GRUPO 1: TEXTO E INFORMACIÓN --- */}
-              {/* Este div ya se ve porque tus estilos CSS .mesa-numero y p tienen z-index: 2 */}
-              <div>
-                <h6 className="mesa-numero d-flex align-items-center justify-content-center gap-2">
-                  <UtensilsCrossed size={18} />
-                  Mesa {mesa.numero}
-                </h6>
+              {/* ICONO Y NÚMERO DE MESA */}
+              <h6 className="mesa-numero d-flex align-items-center justify-content-center gap-2">
+                <UtensilsCrossed size={20} />
+                Mesa {mesa.numero}
+              </h6>
 
-                {/* Contenedor de detalles */}
-                <div className="mt-2 px-2">
-                  <p className="d-flex align-items-center gap-2 mb-1">
-                    <Layers size={16} className="text-secondary" />
-                    <span>Piso: {mesa.piso}</span>
-                  </p>
-                  <p className="d-flex align-items-center gap-2 mb-0">
-                    <Users size={16} className="text-secondary" />
-                    <span>Capacidad: {mesa.capacidad}</span>
-                  </p>
-                </div>
+              {/* DETALLES DE LA MESA */}
+              <div className="mt-3 px-2">
+                <p className="d-flex align-items-center gap-2 mb-2">
+                  <Layers size={16} />
+                  <span>Piso: {mesa.piso}</span>
+                </p>
+                <p className="d-flex align-items-center gap-2 mb-0">
+                  <Users size={16} />
+                  <span>Capacidad: {mesa.capacidad}</span>
+                </p>
               </div>
 
-              {/* --- GRUPO 2: BOTONES DE ACCIÓN --- */}
-              {/* CORRECCIÓN: Agregamos zIndex: 2 y position: relative aquí */}
-              <div
-                className="mt-3 w-auto"
-                style={{ position: "relative", zIndex: 2 }}
-              >
+              {/* ETIQUETA DE ACCIÓN */}
+              <div className="mesa-action-label">
                 {mesa.estado === 1 ? (
-                  <button
-                    // Botón "Abrir" (Verde oscuro para resaltar sobre el fondo claro)
-                    className="btn-activar w-auto px-3 "
-                    onClick={() => handleMesaAddPlato(mesa.id)}
-                  >
-                    <PlusCircle size={18} />
-                    ABRIR
-                  </button>
+                  <>
+                    <PlusCircle size={16} />
+                    <span>ABRIR</span>
+                  </>
                 ) : (
-                  <button
-                    // Botón "Ver" (Rojo para resaltar)
-                    className="btn-eliminar w-auto px-3"
-                    onClick={() => handleShowPedido(mesa.id)}
-                  >
-                    <Eye size={18} />
-                    VER PEDIDO
-                  </button>
+                  <>
+                    <Eye size={16} />
+                    <span>VER PEDIDO</span>
+                  </>
                 )}
               </div>
-            </div>
+            </button>
           ))}
         </div>
       </CondicionCarga>
