@@ -1,7 +1,7 @@
   .nav-navegacion {
-    background-color: rgba(248, 248, 248, 0.2) !important;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background-color: var(--bg-sidebar-header) !important;
+    border-bottom: none !important;
+    z-index: 100;
   }
 
   .breadcrumb {
@@ -41,17 +41,17 @@
 
   /* ========== TEMA OSCURO NAVEGACIÓN ESTILO MODERNO ========== */
   body.dark-theme .card {
-    background: #212b36 !important;
-    color: #cfd8dc !important;
-    border: 1px solid #313a46 !important;
+    background: #3a3f47 !important;
+    color: #e8eaed !important;
+    border: none !important;
   }
 
   body.dark-theme .card-shadow {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
   }
 
   body.dark-theme .card.rounded {
-    border-radius: 10px !important;
+    border-radius: 8px !important;
   }
 
   body.dark-theme .breadcrumb {
@@ -64,12 +64,17 @@
   }
 
   body.dark-theme .breadcrumb-item.active {
-    color: #cfd8dc !important;
+    color: #e8eaed !important;
   }
 
   body.dark-theme .breadcrumb-item+.breadcrumb-item::before {
     color: #6c757d !important;
     padding: 0 8px;
+  }
+
+  body.dark-theme .nav-navegacion {
+    background-color: var(--bg-sidebar-header) !important;
+    border-bottom: none !important;
   }
 
   /* ========== FIN TEMA OSCURO NAVEGACIÓN ESTILO MODERNO ========== */
@@ -95,7 +100,8 @@
 
   /* ========== SUBMENU TABS (MÓDULOS) ========== */
   .submenu-tabs-container {
-    background-color: #fff;
+    background-color: white !important;
+    border-bottom: none !important;
     transition: background-color 0.3s ease;
   }
 
@@ -121,12 +127,12 @@
 
   /* ========== TEMA OSCURO SUBMENU TABS ========== */
   body.dark-theme .submenu-tabs-container {
-    background-color: #212b36 !important;
-    border-bottom-color: #313a46 !important;
+    background-color: #3a3f47 !important;
+    border-bottom-color: transparent !important;
   }
 
   body.dark-theme .submenu-tab-link {
-    color: #cfd8dc !important;
+    color: #9ca3af !important;
   }
 
   body.dark-theme .submenu-tab-link:hover {
@@ -135,7 +141,7 @@
   }
 
   body.dark-theme .submenu-tab-link.active {
-    background-color: #212b36 !important;
+    background-color: transparent !important;
     border-bottom: 2px solid var(--color-brand, #d33c3c) !important;
     color: var(--color-brand, #d33c3c) !important;
   }

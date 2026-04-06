@@ -4,22 +4,23 @@
   /* 2026 Modern Liquid/Glassmorphism Aesthetic */
   --brand-primary: #EE5252;
   --brand-secondary: #ff8787; /* Removed any blue presence */
-  --bg-main: #f4f7f9;
-  --bg-card: rgba(255, 255, 255, 0.75);
+  --bg-main: #f0f1f3;
+  --bg-sidebar-header: #f0f1f3;
+  --bg-card: #ffffff;
   --text-main: #1e293b;
   --text-muted: #64748b;
 
-  --glass-bg: rgba(255, 255, 255, 0.65);
-  --glass-border: rgba(255, 255, 255, 0.4);
-  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
-  --glass-blur: blur(20px);
+  --glass-bg: transparent;
+  --glass-border: transparent;
+  --glass-shadow: none;
+  --glass-blur: blur(0px);
 
-  --shadow-soft: 0 4px 24px -4px rgba(0, 0, 0, 0.06);
-  --shadow-hover: 0 12px 32px -4px rgba(0, 0, 0, 0.12);
+  --shadow-soft: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.1);
 
-  --radius-sm: 10px;
-  --radius-md: 18px;
-  --radius-lg: 24px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
   --radius-pill: 9999px;
 
   --transition-bounce: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -29,14 +30,16 @@
 body.dark-theme {
   --brand-primary: #ff6b6b;
   --brand-secondary: #ff9b9b; /* Removed any blue presence */
-  --bg-main: #0b0f15;
-  --bg-card: rgba(21, 26, 35, 0.65);
-  --text-main: #f8fafc;
-  --text-muted: #94a3b8;
+  --bg-main: #2a2d31;
+  --bg-sidebar-header: #2a2d31;
+  --bg-card: #3a3f47;
+  --text-main: #e8eaed;
+  --text-muted: #9ca3af;
 
-  --glass-bg: rgba(15, 20, 28, 0.6);
-  --glass-border: rgba(255, 255, 255, 0.08);
-  --glass-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.4);
+  --glass-bg: transparent;
+  --glass-border: transparent;
+  --glass-shadow: none;
+  --glass-blur: blur(0px);
 }
 
 body {

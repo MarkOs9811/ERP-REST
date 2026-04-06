@@ -16,27 +16,26 @@
 
 /* --- Tus estilos de íconos y perfil (sin cambios) --- */
 .ico-header {
-    background-color: #fff;
+    background-color: transparent;
     transition: transform 0.3s ease;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    color: #555;
 }
 
 .ico-header:hover {
     transform: scale(1.1);
-    background-color: #f0f0f0;
+    background-color: rgba(0, 0, 0, 0.05);
 }
 
 body.dark-theme .ico-header {
-    background-color: transparent;
-    color: white;
+    color: #e8eaed;
 }
 
 body.dark-theme .ico-header:hover {
-    transform: scale(1.1);
-    background-color: #343e4d;
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 body.dark-theme .offcanvas-end-custom {

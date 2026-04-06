@@ -51,13 +51,29 @@ button {
 }
 
 
-
 .contenido {
   background: var(--bg-main) !important;
-  /* background-image: url('../public/images/background2.jpg'); */
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   transition: background-color var(--transition-smooth);
+  padding: 20px;
+}
+
+.contenido > div {
+  background: transparent !important;
+}
+
+.contenido > div > div:last-child {
+  background: white !important;
+  border-radius: 20px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  border: none !important;
+  overflow: auto;
+}
+
+body.dark-theme .contenido > div > div:last-child {
+  background: #3a3f47 !important;
+  color: #e8eaed;
 }
 
 .row-cuerpo {
@@ -163,20 +179,17 @@ button {
 
 /* ========== HEADER ========== */
 .header-contenido {
-  background-color: var(--glass-bg) !important;
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border-bottom: 1px solid var(--glass-border) !important;
-  box-shadow: var(--shadow-soft) !important;
-  transition: background-color var(--transition-smooth), border-color var(--transition-smooth);
+  background-color: var(--bg-sidebar-header) !important;
+  border-bottom: none !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03) !important;
+  transition: background-color var(--transition-smooth);
 }
 
 .navbar {
-  
   background-color: transparent;
-  color: #ecf0f1;
+  color: var(--text-main);
   align-items: center;
-  z-index: 1001;
+  z-index: 999;
   min-height: 59px;
   flex-wrap: nowrap;
 }
@@ -199,22 +212,26 @@ button {
 
 /* ========== CARDS Y ESTADÍSTICAS ========== */
 .card {
-  border: 1px solid var(--glass-border) !important;
+  border: none !important;
   overflow: visible !important;
   background-color: var(--bg-card) !important;
   border-radius: var(--radius-md) !important;
   box-shadow: var(--shadow-soft) !important;
   transition: transform var(--transition-bounce), box-shadow var(--transition-bounce), background-color var(--transition-smooth) !important;
-  backdrop-filter: blur(10px);
+  backdrop-filter: none;
+}
+
+body.dark-theme .card {
+  background-color: #3a3f47 !important;
+  color: #e8eaed;
 }
 
 .kanban-column {
-  border: 1px solid var(--glass-border) !important;
+  border: none !important;
   overflow: visible !important;
-  background-color: var(--bg-card) !important;
+  background-color: transparent !important;
   border-radius: var(--radius-md) !important;
-  box-shadow: var(--shadow-soft) !important;
-  /* IMPORTANTE: Sin backdrop-filter ni transform para que el Drag and Drop funcione correctamente */
+  box-shadow: none !important;
 }
 
 .card-platos {
@@ -241,12 +258,16 @@ button {
   box-shadow: var(--shadow-soft);
   border-radius: var(--radius-md);
   background-color: var(--bg-card);
-  border: 1px solid var(--glass-border);
-  backdrop-filter: blur(10px);
+  border: none !important;
+  backdrop-filter: none;
   transition: transform var(--transition-bounce), box-shadow var(--transition-bounce);
   display: flex;
   align-items: center;
   padding: 5px;
+}
+
+body.dark-theme .stats-card {
+  background-color: #3a3f47 !important;
 }
 
 .stats-card:hover {
@@ -1391,4 +1412,4 @@ body.dark-theme .card-header .btn-outline-dark:hover {
   .card-header .btn {
     flex: 1; /* Los botones comparten el espacio abajo del buscador */
   }
-}
+}
