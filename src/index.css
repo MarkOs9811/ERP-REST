@@ -7,8 +7,8 @@
   --bg-main: #f0f1f3;
   --bg-sidebar-header: #f0f1f3;
   --bg-card: #ffffff;
-  --text-main: #1e293b;
-  --text-muted: #64748b;
+  --text-main: #000000;
+  --text-muted: #000000;
 
   --glass-bg: transparent;
   --glass-border: transparent;
@@ -33,7 +33,7 @@ body.dark-theme {
   --bg-main: #2a2d31;
   --bg-sidebar-header: #2a2d31;
   --bg-card: #3a3f47;
-  --text-main: #e8eaed;
+  --text-main: #ffffff;
   --text-muted: #9ca3af;
 
   --glass-bg: transparent;
@@ -42,8 +42,13 @@ body.dark-theme {
   --glass-blur: blur(0px);
 }
 
+html {
+  height: 100%;
+}
+
 body {
   margin: 0;
+  height: 100%;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;

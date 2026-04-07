@@ -1,5 +1,12 @@
+.header-menu{
+    margin-left: 220px!important;
+}
+.compressedHeader{
+    margin-left: 60px!important;
+}
 .notificaciones-panel-list {
     background: rgba(241, 241, 241, 0.822)!important;
+   
 }
 .notificacion-item{
     background-color: transparent!important;

@@ -2,12 +2,7 @@ import { useState } from "react";
 import { UsuariosList } from "../../components/componenteUsuario/UsuarioList";
 import { UsuarioForm } from "../../components/componenteUsuario/UsuarioForm";
 
-import {
-  FileText,
-  FileUserIcon,
-  Plus,
-  Search
-} from "lucide-react";
+import { FileText, FileUserIcon, Plus, Search } from "lucide-react";
 import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteExcel";
 import ModalRight from "../../components/componentesReutilizables/ModalRight";
 import { useNavigate } from "react-router-dom";
@@ -39,12 +34,12 @@ export function Usuarios() {
                 onChange={(e) => setSearch(e.target.value)}
               />
             </div>
-            
+
             <button
               className="btn btn-outline-dark px-3"
               onClick={() => navigate("/rrhh/ingreso-a-planilla")}
             >
-               Ingreso a Planilla
+              Ingreso a Planilla
             </button>
 
             <button

@@ -72,7 +72,7 @@ export function ListVentas({ search }) {
       ];
 
       return camposAFiltrar.some((campo) =>
-        String(campo).toLowerCase().includes(searchLower)
+        String(campo).toLowerCase().includes(searchLower),
       );
     });
 
@@ -121,15 +121,15 @@ export function ListVentas({ search }) {
             row.documento === "B"
               ? "bg-success"
               : row.documento === "F"
-              ? "bg-primary"
-              : "bg-secondary"
+                ? "bg-primary"
+                : "bg-secondary"
           }`}
         >
           {row.documento === "B"
             ? "Boleta"
             : row.documento === "F"
-            ? "Factura"
-            : "Otro"}
+              ? "Factura"
+              : "Otro"}
         </span>
       ),
       sortable: true,
@@ -167,10 +167,10 @@ export function ListVentas({ search }) {
             <span>{row.usuario?.email}</span>
             <small className="text-muted">
               {capitalizeFirstLetter(
-                row.usuario?.empleado?.persona?.nombre.toLowerCase()
+                row.usuario?.empleado?.persona?.nombre.toLowerCase(),
               )}{" "}
               {capitalizeFirstLetter(
-                row.usuario?.empleado?.persona?.apellidos.toLowerCase()
+                row.usuario?.empleado?.persona?.apellidos.toLowerCase(),
               )}
             </small>
           </div>
@@ -202,8 +202,8 @@ export function ListVentas({ search }) {
           row.documento === "B"
             ? row.boleta?.estado
             : row.documento === "F"
-            ? row.factura?.estado
-            : null;
+              ? row.factura?.estado
+              : null;
 
         let icon = null;
         let text = "";
@@ -225,8 +225,8 @@ export function ListVentas({ search }) {
               estado === 1
                 ? "badge-ok"
                 : estado === 0
-                ? "badge-fail"
-                : "badge-alert"
+                  ? "badge-fail"
+                  : "badge-alert"
             }`}
           >
             {icon}
@@ -246,15 +246,15 @@ export function ListVentas({ search }) {
           row.documento === "B"
             ? row.boleta?.rutaXml
             : row.documento === "F"
-            ? row.factura?.rutaXml
-            : null;
+              ? row.factura?.rutaXml
+              : null;
 
         const rutaCdr =
           row.documento === "B"
             ? row.boleta?.rutaCdr
             : row.documento === "F"
-            ? row.factura?.rutaCdr
-            : null;
+              ? row.factura?.rutaCdr
+              : null;
 
         return (
           <div className="d-flex align-items-center gap-2 p-2">
@@ -291,7 +291,7 @@ export function ListVentas({ search }) {
   ];
 
   return (
-    <div className="card">
+    <div className="card shadow-none border-0">
       {isLoading && <Cargando />}
       {isError && <div className="error">Error al cargar ventas</div>}
       <TablasGenerales columnas={columns} datos={filteredVentas} />

@@ -7,7 +7,7 @@ import { PerfilPanel } from "./componentesHeader/PerfilPanel";
 import { NotificacionesPanel } from "./componentesHeader/NotificacionesPanel";
 import { capitalizeFirstLetter } from "../hooks/FirstLetterUp";
 import { Bell, Menu, Moon, SunMediumIcon } from "lucide-react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toggleSidebar } from "../redux/sideBarSlice";
 import ModalRight from "./componentesReutilizables/ModalRight";
 import { BadgeComponent } from "./componentesReutilizables/BadgeComponent";
@@ -20,7 +20,7 @@ export function Header() {
   const fotoEmpresa = empresa.logo
     ? `${BASE_URL}/storage/${empresa.logo}`
     : null;
-  console.log("Ruta de la foto", fotoEmpresa);
+
   const fotoPerfilLocal = JSON.parse(localStorage.getItem("user"));
   const user = JSON.parse(localStorage.getItem("user"));
   const cajaDetalles = JSON.parse(localStorage.getItem("caja"));
@@ -30,18 +30,20 @@ export function Header() {
   // PARA MOSTRAR LOS PANELES
   const [showPerfilPanel, setShowPerfilPanel] = useState(false);
   const [showNotificaciones, setShowNotificaciones] = useState(false);
-  
+
   // Obtener notificaciones globalmente (usando caché de react-query)
   const { data: todasNotificaciones = [] } = useQuery({
     queryKey: ["notificaciones"],
     queryFn: GetNotificaciones,
     staleTime: 1000 * 60 * 5,
   });
-  const notificacionesCount = todasNotificaciones.filter((n) => n.estado == 0).length;
+  const notificacionesCount = todasNotificaciones.filter(
+    (n) => n.estado == 0,
+  ).length;
 
   // aqui declaro variables de mi localstorage para mostrarlo en mi vista
   const [darkMode, setDarkMode] = useState(
-    localStorage.getItem("theme") === "dark"
+    localStorage.getItem("theme") === "dark",
   );
 
   // Cambia el tema y guarda en localStorage
@@ -51,7 +53,7 @@ export function Header() {
     document.body.classList.toggle("dark-theme", !darkMode);
     localStorage.setItem("theme", newTheme);
   };
-
+  const isCompressed = useSelector((state) => state.sidebar.isCompressed);
   // Aplica el tema al cargar
   React.useEffect(() => {
     if (darkMode) {
@@ -62,21 +64,28 @@ export function Header() {
   }, [darkMode]);
 
   return (
-    <header className="navbar header-contenido p-0 m-0 border-bottom">
-      <nav className="container-fluid d-flex flex-nowrap align-items-center justify-content-between p-0 m-0">
+    <div className={"header-menu " + (isCompressed ? " compressedHeader" : "")}>
+      <nav className=" d-flex flex-nowrap align-items-center justify-content-between p-2 m-0">
         <div className="d-flex align-items-center justify-content-center gap-2 mx-3 ">
           {/* Botón para comprimir/expandir Sidebar */}
           <button
             className="ico-header border-0 rounded-pill d-flex align-items-center justify-content-center bg-transparent"
             title="Contraer Menú"
             onClick={() => dispatch(toggleSidebar())}
-            style={{ width: 44, height: 44, padding: 0, transition: 'transform var(--transition-bounce)' }}
-            onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
-            onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+            style={{
+              width: 44,
+              height: 44,
+              padding: 0,
+              transition: "transform var(--transition-bounce)",
+            }}
+            onMouseOver={(e) =>
+              (e.currentTarget.style.transform = "scale(1.1)")
+            }
+            onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
           >
             <Menu className="text-muted" height="24px" width="24px" />
           </button>
-          
+
           <div className="logo-empresa d-flex align-items-center ">
             {cargo?.empleado?.cargo?.nombre === "atencion al cliente" ? (
               <img
@@ -120,7 +129,7 @@ export function Header() {
             </RippleWrapper>
           )}
           {["administrador", "atencion al cliente", "cocinero"].includes(
-            cargo?.empleado?.cargo?.nombre
+            cargo?.empleado?.cargo?.nombre,
           ) &&
             cajaDetalles && (
               <RippleWrapper>
@@ -133,9 +142,16 @@ export function Header() {
           <button
             className="ico-header border-0 rounded-pill d-flex align-items-center justify-content-center"
             title="Cambiar tema"
-            style={{ width: 44, height: 44, padding: 0, transition: 'transform var(--transition-bounce)' }}
-            onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
-            onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+            style={{
+              width: 44,
+              height: 44,
+              padding: 0,
+              transition: "transform var(--transition-bounce)",
+            }}
+            onMouseOver={(e) =>
+              (e.currentTarget.style.transform = "scale(1.1)")
+            }
+            onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
             onClick={toggleTheme}
           >
             {darkMode ? (
@@ -157,9 +173,16 @@ export function Header() {
           {/* Botón de Notificaciones */}
           <button
             className="ico-header border-0 rounded-pill d-flex align-items-center justify-content-center position-relative"
-            style={{ width: 44, height: 44, padding: 0, transition: 'transform var(--transition-bounce)' }}
-            onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
-            onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+            style={{
+              width: 44,
+              height: 44,
+              padding: 0,
+              transition: "transform var(--transition-bounce)",
+            }}
+            onMouseOver={(e) =>
+              (e.currentTarget.style.transform = "scale(1.1)")
+            }
+            onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
             onClick={() => setShowNotificaciones(true)}
           >
             <Bell
@@ -191,9 +214,16 @@ export function Header() {
           </button>
           <button
             className="ico-header border-0 rounded-pill d-flex align-items-center justify-content-center"
-            style={{ width: 44, height: 44, padding: 0, transition: 'transform var(--transition-bounce)' }}
-            onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
-            onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+            style={{
+              width: 44,
+              height: 44,
+              padding: 0,
+              transition: "transform var(--transition-bounce)",
+            }}
+            onMouseOver={(e) =>
+              (e.currentTarget.style.transform = "scale(1.1)")
+            }
+            onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
             onClick={() => setShowPerfilPanel(true)}
           >
             {fotoPerfil && (
@@ -232,6 +262,6 @@ export function Header() {
           </ModalRight>
         </div>
       </nav>
-    </header>
+    </div>
   );
 }

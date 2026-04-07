@@ -1,7 +1,7 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "../css/NavegacionEstilos.css";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toggleSidebar } from "../redux/sideBarSlice";
 import {
   CookingPotIcon,
@@ -63,9 +63,9 @@ export function Navegacion() {
     { label: "Cajas", path: "/ventas/cajas" },
     { label: "Mesas", path: "/ventas/mesas" },
     { label: "Platos", path: "/platos" },
-    { label: "Configuración", path: "/configuracion" }
+    { label: "Configuración", path: "/configuracion" },
   ];
-
+  const isCompressed = useSelector((state) => state.sidebar.isCompressed);
   const [searchTerm, setSearchTerm] = useState("");
   const [showSearchDropdown, setShowSearchDropdown] = useState(false);
   const searchRef = useRef(null);
@@ -80,26 +80,30 @@ export function Navegacion() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const filteredSearch = searchOptions.filter(opt => 
-    opt.label.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredSearch = searchOptions.filter((opt) =>
+    opt.label.toLowerCase().includes(searchTerm.toLowerCase()),
   );
   // ===================================
 
   return (
-    <div className="nav-navegacion">
+    <div
+      className={
+        "nav-navegacion  border-none " +
+        (isCompressed ? " compressedNavegacion" : "")
+      }
+    >
       <nav
         aria-label="breadcrumb"
-        className="d-flex justify-content-between align-items-center w-100 flex-wrap py-2"
+        className="d-flex justify-content-between align-items-center w-100 flex-wrap border-none "
         style={{
           minHeight: "50px",
           height: "auto",
-          boxShadow: "0px 3px 10px 1px rgba(0,0,0,0.2)!important",
         }}
       >
-        <div className="d-flex align-items-center">
+        <div className="d-flex align-items-center ">
           {/* Breadcrumbs */}
           <div
-            className="d-flex align-items-center breadcrumb-nav ms-3"
+            className="d-flex align-items-center breadcrumb-nav ms-3 "
             style={{ gap: 8 }}
           >
             {pathnames.length === 0 ? (
@@ -152,17 +156,24 @@ export function Navegacion() {
 
         {/* --- CONTENEDOR DERECHO (Buscador + Acciones) --- */}
         <div className="d-flex align-items-center flex-wrap justify-content-end gap-2 pe-3 mt-2 mt-sm-0">
-          
           {/* --- BUSCADOR MINIMALISTA --- */}
-          <div 
-            className="d-none d-md-block position-relative me-2" 
+          <div
+            className="d-none d-md-block position-relative me-2"
             ref={searchRef}
             style={{ width: "220px" }}
           >
-            <Search size={15} className="text-muted position-absolute" style={{ top: "50%", left: "12px", transform: "translateY(-50%)" }} />
-            <input 
-              type="text" 
-              className="form-control shadow-none" 
+            <Search
+              size={15}
+              className="text-muted position-absolute"
+              style={{
+                top: "50%",
+                left: "12px",
+                transform: "translateY(-50%)",
+              }}
+            />
+            <input
+              type="text"
+              className="form-control shadow-none"
               placeholder="Buscar vista..."
               value={searchTerm}
               onChange={(e) => {
@@ -170,29 +181,41 @@ export function Navegacion() {
                 setShowSearchDropdown(true);
               }}
               onFocus={() => setShowSearchDropdown(true)}
-              style={{ 
-                borderRadius: "20px", 
-                paddingLeft: "34px", 
+              style={{
+                borderRadius: "20px",
+                paddingLeft: "34px",
                 fontSize: "0.85rem",
                 backgroundColor: "rgba(0,0,0,0.03)",
                 border: "1px solid rgba(0,0,0,0.08)",
-                transition: "all 0.2s ease"
+                transition: "all 0.2s ease",
               }}
             />
             {showSearchDropdown && searchTerm.trim() !== "" && (
-              <div 
-                className="position-absolute bg-white shadow border rounded-3 w-100 mt-1" 
-                style={{ top: "100%", left: 0, zIndex: 1050, maxHeight: "250px", overflowY: "auto" }}
+              <div
+                className="position-absolute bg-white shadow border rounded-3 w-100 mt-1"
+                style={{
+                  top: "100%",
+                  left: 0,
+                  zIndex: 1050,
+                  maxHeight: "250px",
+                  overflowY: "auto",
+                }}
               >
                 <ul className="list-unstyled m-0 py-1">
                   {filteredSearch.length > 0 ? (
                     filteredSearch.map((item, idx) => (
                       <li key={idx}>
-                        <button 
+                        <button
                           className="btn btn-sm w-100 text-start px-3 py-2 text-dark bg-transparent border-0"
                           style={{ transition: "background-color 0.2s" }}
-                          onMouseOver={(e) => e.currentTarget.style.backgroundColor = "rgba(0,0,0,0.04)"}
-                          onMouseOut={(e) => e.currentTarget.style.backgroundColor = "transparent"}
+                          onMouseOver={(e) =>
+                            (e.currentTarget.style.backgroundColor =
+                              "rgba(0,0,0,0.04)")
+                          }
+                          onMouseOut={(e) =>
+                            (e.currentTarget.style.backgroundColor =
+                              "transparent")
+                          }
                           onClick={() => {
                             navigate(item.path);
                             setSearchTerm("");
@@ -204,7 +227,9 @@ export function Navegacion() {
                       </li>
                     ))
                   ) : (
-                    <li className="px-3 py-2 text-muted small text-center">Sin resultados</li>
+                    <li className="px-3 py-2 text-muted small text-center">
+                      Sin resultados
+                    </li>
                   )}
                 </ul>
               </div>
@@ -213,7 +238,7 @@ export function Navegacion() {
 
           {/* 1. Asistencia */}
           <button
-            className="btn btn-outline-dark d-flex align-items-center gap-1 px-2 px-md-3"
+            className="btn btn-outline-dark d-flex align-items-center gap-1 px-2 p-1 px-md-3"
             onClick={() => navigate("/marcarAsistencia")}
             title="Asistencia" // El title ayuda a que en celular, si lo mantienen presionado, diga qué es
           >
@@ -224,7 +249,7 @@ export function Navegacion() {
           {/* 2. Eventos */}
           {rolesLocalStorage.some((r) => r.nombre === "incidencias") && (
             <button
-              className="btn btn-outline-dark d-flex align-items-center gap-1 px-2 px-md-3"
+              className="btn btn-outline-dark d-flex align-items-center gap-1 px-2 p-1 px-md-3"
               onClick={() => navigate("/incidencias")}
               title="Eventos"
             >
@@ -238,7 +263,7 @@ export function Navegacion() {
             rol?.empleado?.cargo?.nombre,
           ) && (
             <button
-              className="btn btn-outline-dark d-flex align-items-center gap-1 px-2 px-md-3"
+              className="btn btn-outline-dark d-flex align-items-center gap-1 px-2 p-1 px-md-3"
               onClick={() => navigate("/pedidosDelivery")}
               title="Pedidos Delivery"
             >
@@ -250,7 +275,7 @@ export function Navegacion() {
           {/* 4. POS (Oculto estrictamente si el rol es "delivery") */}
           {rol?.empleado?.cargo?.nombre !== "delivery" && (
             <button
-              className="btn btn-outline-dark d-flex align-items-center gap-1 px-2 px-md-3"
+              className="btn btn-outline-dark d-flex align-items-center gap-1 px-2 p-1 px-md-3"
               onClick={() => navigate("/vender/mesas")}
               title="POS"
             >
@@ -262,7 +287,7 @@ export function Navegacion() {
           {/* 5. Cocina */}
           {rol?.empleado?.cargo?.nombre === "cocinero" && (
             <button
-              className="btn btn-outline-dark d-flex align-items-center gap-1 px-2 px-md-3"
+              className="btn btn-outline-dark d-flex align-items-center gap-1 px-2 p-1 px-md-3"
               onClick={() => navigate("/cocina")}
               title="Cocina"
             >

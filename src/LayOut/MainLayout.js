@@ -102,700 +102,596 @@ export const MainLayout = () => {
   return (
     <div className="main-container p-0 m-0 h-screen flex">
       {showFullLayout && <SideBar />}
-
+      {!showHeader && <Header />}
+      {showFullLayout && <Header />}
+      {/* Tu PrivateRoute original para Navegacion está perfecto */}
+      {showFullLayout && (
+        <PrivateRoute
+          allowedRoles={["ventas", "finanzas", "cocinero", "administrador"]}
+        >
+          <Navegacion />
+        </PrivateRoute>
+      )}
+      {!showHeader && <Navegacion />}
       <div
-        className={`content p-0 ${showFullLayout ? "with-sidebar" : ""} ${isCompressed ? "content-compressed" : ""}`}
+        className={`content  p-0 ${showFullLayout ? "with-sidebar" : ""} ${isCompressed ? "content-compressed" : ""}`}
         style={{
           transition:
             "margin-left var(--transition-smooth), width var(--transition-smooth)",
         }}
       >
         <div
-          className="p-0 m-0 rounded-0 vh-100"
-          style={{ background: "transparent" }}
-        >
-          <div className="shadow-none p-0 h-100 contenido">
-            <div className="row h-100 g-0 d-flex ">
-              <div
-                className={`h-100 flex-column align-items-center justify-content-center overflow-auto p-0
+          className={` contenido flex-column align-items-center justify-content-center overflow-auto p-0
                 transition-all`}
-                style={{
-                  transition:
-                    "width var(--transition-smooth), margin var(--transition-smooth)",
-                }}
-              >
-                <div
-                  className={`d-flex flex-column position-fixed ${showFullLayout ? (isCompressed ? "header-compressed" : "header-with-sidebar") : "w-100"}`}
-                  style={{
-                    zIndex: 100,
-                    transition: "width var(--transition-smooth)",
-                  }}
-                >
-                  {!showHeader && <Header />}
-                  {showFullLayout && <Header />}
-                  {/* Tu PrivateRoute original para Navegacion está perfecto */}
-                  {showFullLayout && (
-                    <PrivateRoute
-                      allowedRoles={[
-                        "ventas",
-                        "finanzas",
-                        "cocinero",
-                        "administrador",
-                      ]}
-                    >
-                      <Navegacion />
+          style={{
+            transition:
+              "width var(--transition-smooth), margin var(--transition-smooth)",
+          }}
+        >
+          <div
+            className="overflow-y-scroll overflow-x-hidden px-2 py-2 "
+            style={{
+              height: "calc(100vh - 120px)",
+            }}
+          >
+            <ContenedorPrincipal>
+              <ToastContainer />
+              <SubMenuTabs />
+              <Routes>
+                <Route path="/" element={renderHomePorRol()} />
+                <Route
+                  path="/cocina"
+                  element={
+                    <PrivateRoute allowedRoles={["cocinero", "administrador"]}>
+                      <CocinaDespacho />
                     </PrivateRoute>
-                  )}
-                  {!showHeader && <Navegacion />}
-                </div>
-                <div
-                  className="px-3 overflow-y-auto overflow-x-hidden"
-                  style={{ marginTop: "120px" }}
-                >
-                  <ContenedorPrincipal>
-                    <ToastContainer />
-                    <SubMenuTabs />
-                    <Routes>
-                      <Route path="/" element={renderHomePorRol()} />
-                      <Route
-                        path="/cocina"
-                        element={
-                          <PrivateRoute
-                            allowedRoles={["cocinero", "administrador"]}
-                          >
-                            <CocinaDespacho />
-                          </PrivateRoute>
-                        }
-                      />
-                      <Route
-                        path="/marcarAsistencia"
-                        element={<TakeAsistencia />}
-                      />
+                  }
+                />
+                <Route path="/marcarAsistencia" element={<TakeAsistencia />} />
 
-                      <Route
-                        path="/usuarios"
-                        element={
-                          <PrivateRoute
-                            allowedRoles={["usuario", "administrador"]}
-                          >
-                            <Usuarios />
-                          </PrivateRoute>
-                        }
-                      />
-                      {/* RUTA PARA DELIVERY
-                       */}
-                      <Route
-                        path="/pedidosDelivery"
-                        element={
-                          <PrivateRoute
-                            allowedRoles={["delivery", "administrador"]}
-                          >
-                            <PedidosDelivery />
-                          </PrivateRoute>
-                        }
-                      />
-                      {/* --- PEGADO DE TODAS TUS RUTAS --- */}
+                <Route
+                  path="/usuarios"
+                  element={
+                    <PrivateRoute allowedRoles={["usuario", "administrador"]}>
+                      <Usuarios />
+                    </PrivateRoute>
+                  }
+                />
+                {/* RUTA PARA DELIVERY
+                 */}
+                <Route
+                  path="/pedidosDelivery"
+                  element={
+                    <PrivateRoute allowedRoles={["delivery", "administrador"]}>
+                      <PedidosDelivery />
+                    </PrivateRoute>
+                  }
+                />
+                {/* --- PEGADO DE TODAS TUS RUTAS --- */}
 
-                      {/* RUTAS PARA MODULO ALMACEN */}
-                      <Route path="/almacen">
-                        <Route
-                          index
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["almacen", "administrador"]}
-                            >
-                              <Almacen />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route
-                          path="Almacenes"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["almacen", "administrador"]}
-                            >
-                              <Almacen />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route
-                          path="registro"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["almacen", "administrador"]}
-                            >
-                              <Registro />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route
-                          path="transferencia"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["almacen", "administrador"]}
-                            >
-                              <Transferencias />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route
-                          path="solicitud"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["almacen", "administrador"]}
-                            >
-                              <Solicitudes />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route
-                          path="kardex"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["almacen", "administrador"]}
-                            >
-                              <Kardex />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route
-                          path="reportes"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["almacen", "administrador"]}
-                            >
-                              <ReportesAlmacen />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route
-                          path="ajustes"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["almacen", "administrador"]}
-                            >
-                              <AjustesAlmacen />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route
-                          path="compras"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["compras", "administrador"]}
-                            >
-                              <Compras />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route
-                          path="proveedores"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["proveedores", "administrador"]}
-                            >
-                              <Proveedores />
-                            </PrivateRoute>
-                          }
-                        />
-                      </Route>
+                {/* RUTAS PARA MODULO ALMACEN */}
+                <Route path="/almacen">
+                  <Route
+                    index
+                    element={
+                      <PrivateRoute allowedRoles={["almacen", "administrador"]}>
+                        <Almacen />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="Almacenes"
+                    element={
+                      <PrivateRoute allowedRoles={["almacen", "administrador"]}>
+                        <Almacen />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="registro"
+                    element={
+                      <PrivateRoute allowedRoles={["almacen", "administrador"]}>
+                        <Registro />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="transferencia"
+                    element={
+                      <PrivateRoute allowedRoles={["almacen", "administrador"]}>
+                        <Transferencias />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="solicitud"
+                    element={
+                      <PrivateRoute allowedRoles={["almacen", "administrador"]}>
+                        <Solicitudes />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="kardex"
+                    element={
+                      <PrivateRoute allowedRoles={["almacen", "administrador"]}>
+                        <Kardex />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="reportes"
+                    element={
+                      <PrivateRoute allowedRoles={["almacen", "administrador"]}>
+                        <ReportesAlmacen />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="ajustes"
+                    element={
+                      <PrivateRoute allowedRoles={["almacen", "administrador"]}>
+                        <AjustesAlmacen />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="compras"
+                    element={
+                      <PrivateRoute allowedRoles={["compras", "administrador"]}>
+                        <Compras />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="proveedores"
+                    element={
+                      <PrivateRoute
+                        allowedRoles={["proveedores", "administrador"]}
+                      >
+                        <Proveedores />
+                      </PrivateRoute>
+                    }
+                  />
+                </Route>
 
-                      {/* RUTAS PARA MODULO RECURSOS HUMANOS PLANILLAS */}
-                      <Route path="/rrhh">
-                        <Route
-                          index
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["RRHH", "administrador"]}
-                            >
-                              <Usuarios />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route
-                          path="usuarios"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["RRHH", "administrador"]}
-                            >
-                              <Usuarios />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route
-                          path="planilla"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["RRHH", "administrador"]}
-                            >
-                              <Usuarios />
-                            </PrivateRoute>
-                          }
-                        />
+                {/* RUTAS PARA MODULO RECURSOS HUMANOS PLANILLAS */}
+                <Route path="/rrhh">
+                  <Route
+                    index
+                    element={
+                      <PrivateRoute allowedRoles={["RRHH", "administrador"]}>
+                        <Usuarios />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="usuarios"
+                    element={
+                      <PrivateRoute allowedRoles={["RRHH", "administrador"]}>
+                        <Usuarios />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="planilla"
+                    element={
+                      <PrivateRoute allowedRoles={["RRHH", "administrador"]}>
+                        <Usuarios />
+                      </PrivateRoute>
+                    }
+                  />
 
-                        <Route
-                          path="ingreso-a-planilla"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["RRHH", "administrador"]}
-                            >
-                              <IngresoPlanilla />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route
-                          path="nomina"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["RRHH", "administrador"]}
-                            >
-                              <Nomina />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route
-                          path="asistencia"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["RRHH", "administrador"]}
-                            >
-                              <Asistencia />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route
-                          path="horas-extras"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["RRHH", "administrador"]}
-                            >
-                              <HorasExtras />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route
-                          path="adelanto-de-sueldo"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["RRHH", "administrador"]}
-                            >
-                              <AdelantoSueldo />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route
-                          path="vacaciones"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["RRHH", "administrador"]}
-                            >
-                              <Vacaciones />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route
-                          path="reportes"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["RRHH", "administrador"]}
-                            >
-                              <ReportePlanilla />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route
-                          path="ajustes"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["RRHH", "administrador"]}
-                            >
-                              <AjustesPlanilla />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route
-                          path="areas-y-cargos"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["areas y cargos", "administrador"]}
-                            >
-                              <AreasCargo />
-                            </PrivateRoute>
-                          }
-                        />
-                      </Route>
+                  <Route
+                    path="ingreso-a-planilla"
+                    element={
+                      <PrivateRoute allowedRoles={["RRHH", "administrador"]}>
+                        <IngresoPlanilla />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="nomina"
+                    element={
+                      <PrivateRoute allowedRoles={["RRHH", "administrador"]}>
+                        <Nomina />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="asistencia"
+                    element={
+                      <PrivateRoute allowedRoles={["RRHH", "administrador"]}>
+                        <Asistencia />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="horas-extras"
+                    element={
+                      <PrivateRoute allowedRoles={["RRHH", "administrador"]}>
+                        <HorasExtras />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="adelanto-de-sueldo"
+                    element={
+                      <PrivateRoute allowedRoles={["RRHH", "administrador"]}>
+                        <AdelantoSueldo />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="vacaciones"
+                    element={
+                      <PrivateRoute allowedRoles={["RRHH", "administrador"]}>
+                        <Vacaciones />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="reportes"
+                    element={
+                      <PrivateRoute allowedRoles={["RRHH", "administrador"]}>
+                        <ReportePlanilla />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="ajustes"
+                    element={
+                      <PrivateRoute allowedRoles={["RRHH", "administrador"]}>
+                        <AjustesPlanilla />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="areas-y-cargos"
+                    element={
+                      <PrivateRoute
+                        allowedRoles={["areas y cargos", "administrador"]}
+                      >
+                        <AreasCargo />
+                      </PrivateRoute>
+                    }
+                  />
+                </Route>
 
-                      {/* RUTAS PARA MODULO COMPRAS ANTERIORMENTE AQUI - AHORA DENTRO DE ALMACEN */}
+                {/* RUTAS PARA MODULO COMPRAS ANTERIORMENTE AQUI - AHORA DENTRO DE ALMACEN */}
 
-                      {/* RUTAS PARA MODULO VENTAS */}
-                      <Route path="/ventas">
-                        <Route
-                          index
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["ventas", "administrador"]}
-                            >
-                              <Ventas />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route
-                          path="mis-ventas"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["ventas", "administrador"]}
-                            >
-                              <Ventas />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route
-                          path="inventario"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["ventas", "administrador"]}
-                            >
-                              <Inventario />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route
-                          path="solicitud"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["ventas", "administrador"]}
-                            >
-                              <Solicitud />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route
-                          path="solicitud/realizarSolicitud"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["ventas", "administrador"]}
-                            >
-                              <RealizarSolicitud />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route
-                          path="mesas"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["ventas", "administrador"]}
-                            >
-                              <Mesas />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route
-                          path="reportes"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["ventas", "administrador"]}
-                            >
-                              <Reportes />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route
-                          path="ajustesVentas"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["ventas", "administrador"]}
-                            >
-                              <AjustesVentas />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route
-                          path="cajas"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["ventas", "administrador"]}
-                            >
-                              <Cajas />
-                            </PrivateRoute>
-                          }
-                        />
-                      </Route>
-                      {/* RUTAS PARA MODULO DELIVERY */}
-                      <Route path="/delivery">
-                        <Route
-                          index
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["delivery", "administrador"]}
-                            >
-                              <Despacho />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route
-                          path="pedidos"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["delivery", "administrador"]}
-                            >
-                              <Despacho />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route
-                          path="repartidores"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["delivery", "administrador"]}
-                            >
-                              <Repartidores />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route
-                          path="zonas-y-tarifas"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["delivery", "administrador"]}
-                            >
-                              <ZonaTarifa />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route
-                          path="promociones-app"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["delivery", "administrador"]}
-                            >
-                              <Promociones />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route
-                          path="mesas"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["delivery", "administrador"]}
-                            >
-                              <Mesas />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route
-                          path="reportes"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["delivery", "administrador"]}
-                            >
-                              <Reportes />
-                            </PrivateRoute>
-                          }
-                        />
-                        {/* ================ */}
-                        <Route
-                          path="ajustes-ventas"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["delivery", "administrador"]}
-                            >
-                              <AjustesVentas />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route
-                          path="cajas"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["delivery", "administrador"]}
-                            >
-                              <Cajas />
-                            </PrivateRoute>
-                          }
-                        />
-                      </Route>
+                {/* RUTAS PARA MODULO VENTAS */}
+                <Route path="/ventas">
+                  <Route
+                    index
+                    element={
+                      <PrivateRoute allowedRoles={["ventas", "administrador"]}>
+                        <Ventas />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="mis-ventas"
+                    element={
+                      <PrivateRoute allowedRoles={["ventas", "administrador"]}>
+                        <Ventas />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="inventario"
+                    element={
+                      <PrivateRoute allowedRoles={["ventas", "administrador"]}>
+                        <Inventario />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="solicitud"
+                    element={
+                      <PrivateRoute allowedRoles={["ventas", "administrador"]}>
+                        <Solicitud />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="solicitud/realizarSolicitud"
+                    element={
+                      <PrivateRoute allowedRoles={["ventas", "administrador"]}>
+                        <RealizarSolicitud />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="mesas"
+                    element={
+                      <PrivateRoute allowedRoles={["ventas", "administrador"]}>
+                        <Mesas />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="reportes"
+                    element={
+                      <PrivateRoute allowedRoles={["ventas", "administrador"]}>
+                        <Reportes />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="ajustesVentas"
+                    element={
+                      <PrivateRoute allowedRoles={["ventas", "administrador"]}>
+                        <AjustesVentas />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="cajas"
+                    element={
+                      <PrivateRoute allowedRoles={["ventas", "administrador"]}>
+                        <Cajas />
+                      </PrivateRoute>
+                    }
+                  />
+                </Route>
+                {/* RUTAS PARA MODULO DELIVERY */}
+                <Route path="/delivery">
+                  <Route
+                    index
+                    element={
+                      <PrivateRoute
+                        allowedRoles={["delivery", "administrador"]}
+                      >
+                        <Despacho />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="pedidos"
+                    element={
+                      <PrivateRoute
+                        allowedRoles={["delivery", "administrador"]}
+                      >
+                        <Despacho />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="repartidores"
+                    element={
+                      <PrivateRoute
+                        allowedRoles={["delivery", "administrador"]}
+                      >
+                        <Repartidores />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="zonas-y-tarifas"
+                    element={
+                      <PrivateRoute
+                        allowedRoles={["delivery", "administrador"]}
+                      >
+                        <ZonaTarifa />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="promociones-app"
+                    element={
+                      <PrivateRoute
+                        allowedRoles={["delivery", "administrador"]}
+                      >
+                        <Promociones />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="mesas"
+                    element={
+                      <PrivateRoute
+                        allowedRoles={["delivery", "administrador"]}
+                      >
+                        <Mesas />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="reportes"
+                    element={
+                      <PrivateRoute
+                        allowedRoles={["delivery", "administrador"]}
+                      >
+                        <Reportes />
+                      </PrivateRoute>
+                    }
+                  />
+                  {/* ================ */}
+                  <Route
+                    path="ajustes-ventas"
+                    element={
+                      <PrivateRoute
+                        allowedRoles={["delivery", "administrador"]}
+                      >
+                        <AjustesVentas />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="cajas"
+                    element={
+                      <PrivateRoute
+                        allowedRoles={["delivery", "administrador"]}
+                      >
+                        <Cajas />
+                      </PrivateRoute>
+                    }
+                  />
+                </Route>
 
-                      {/* RUTA PARA UNICAMENTE COCINA */}
+                {/* RUTA PARA UNICAMENTE COCINA */}
 
-                      <Route
-                        path="/vender/cocina"
-                        element={
-                          <PrivateRoute
-                            allowedRoles={["cocina", "administrador"]}
-                          >
-                            <CocinaDespacho />
-                          </PrivateRoute>
-                        }
-                      />
+                <Route
+                  path="/vender/cocina"
+                  element={
+                    <PrivateRoute allowedRoles={["cocina", "administrador"]}>
+                      <CocinaDespacho />
+                    </PrivateRoute>
+                  }
+                />
 
-                      {/* Proveedores y Áreas movidos a Almacén y RRHH */}
+                {/* Proveedores y Áreas movidos a Almacén y RRHH */}
 
-                      {/* RUTAS PARA MODULO INCIDENCIAS */}
-                      <Route path="/incidencias">
-                        <Route
-                          index
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["incidencias", "administrador"]}
-                            >
-                              <Eventos />
-                            </PrivateRoute>
-                          }
-                        />
-                      </Route>
+                {/* RUTAS PARA MODULO INCIDENCIAS */}
+                <Route path="/incidencias">
+                  <Route
+                    index
+                    element={
+                      <PrivateRoute
+                        allowedRoles={["incidencias", "administrador"]}
+                      >
+                        <Eventos />
+                      </PrivateRoute>
+                    }
+                  />
+                </Route>
 
-                      {/* Platos */}
-                      <Route
-                        path="/platos"
-                        element={
-                          <PrivateRoute
-                            allowedRoles={["platos", "administrador"]}
-                          >
-                            <MenuPlato />
-                          </PrivateRoute>
-                        }
-                      />
+                {/* Platos */}
+                <Route
+                  path="/platos"
+                  element={
+                    <PrivateRoute allowedRoles={["platos", "administrador"]}>
+                      <MenuPlato />
+                    </PrivateRoute>
+                  }
+                />
 
-                      {/* RUTAS PARA MODULO FINANZAS */}
-                      <Route path="/finanzas">
-                        <Route
-                          index
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["finanzas", "administrador"]}
-                            >
-                              <InformesFinancieros />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route
-                          path="informes-financieros"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["finanzas", "administrador"]}
-                            >
-                              <InformesFinancieros />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route
-                          path="presupuestos"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["finanzas", "administrador"]}
-                            >
-                              <Presupuestos />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route
-                          path="ajustes"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["finanzas", "administrador"]}
-                            >
-                              <AjustesFinanzas />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route
-                          path="reportes-financieros"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["finanzas", "administrador"]}
-                            >
-                              <ReportesFinanzas />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route
-                          path="firmar-solicitud"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["finanzas", "administrador"]}
-                            >
-                              <FirmasSolicitud />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route
-                          path="libro-diario"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["finanzas", "administrador"]}
-                            >
-                              <LibroDiario />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route
-                          path="libro-mayor"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["finanzas", "administrador"]}
-                            >
-                              <LibroMayor />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route
-                          path="cuentas-por-cobrar"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["finanzas", "administrador"]}
-                            >
-                              <CuentasPorCobrar />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route
-                          path="cuentas-por-pagar"
-                          element={
-                            <PrivateRoute
-                              allowedRoles={["finanzas", "administrador"]}
-                            >
-                              <CuentasPorPagar />
-                            </PrivateRoute>
-                          }
-                        />
-                      </Route>
+                {/* RUTAS PARA MODULO FINANZAS */}
+                <Route path="/finanzas">
+                  <Route
+                    index
+                    element={
+                      <PrivateRoute
+                        allowedRoles={["finanzas", "administrador"]}
+                      >
+                        <InformesFinancieros />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="informes-financieros"
+                    element={
+                      <PrivateRoute
+                        allowedRoles={["finanzas", "administrador"]}
+                      >
+                        <InformesFinancieros />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="presupuestos"
+                    element={
+                      <PrivateRoute
+                        allowedRoles={["finanzas", "administrador"]}
+                      >
+                        <Presupuestos />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="ajustes"
+                    element={
+                      <PrivateRoute
+                        allowedRoles={["finanzas", "administrador"]}
+                      >
+                        <AjustesFinanzas />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="reportes-financieros"
+                    element={
+                      <PrivateRoute
+                        allowedRoles={["finanzas", "administrador"]}
+                      >
+                        <ReportesFinanzas />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="firmar-solicitud"
+                    element={
+                      <PrivateRoute
+                        allowedRoles={["finanzas", "administrador"]}
+                      >
+                        <FirmasSolicitud />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="libro-diario"
+                    element={
+                      <PrivateRoute
+                        allowedRoles={["finanzas", "administrador"]}
+                      >
+                        <LibroDiario />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="libro-mayor"
+                    element={
+                      <PrivateRoute
+                        allowedRoles={["finanzas", "administrador"]}
+                      >
+                        <LibroMayor />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="cuentas-por-cobrar"
+                    element={
+                      <PrivateRoute
+                        allowedRoles={["finanzas", "administrador"]}
+                      >
+                        <CuentasPorCobrar />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="cuentas-por-pagar"
+                    element={
+                      <PrivateRoute
+                        allowedRoles={["finanzas", "administrador"]}
+                      >
+                        <CuentasPorPagar />
+                      </PrivateRoute>
+                    }
+                  />
+                </Route>
 
-                      {/* Configuración */}
-                      <Route path="/configuracion" element={<Configuracion />}>
-                        <Route
-                          path="general"
-                          element={
-                            <PrivateRoute allowedRoles={["administrador"]}>
-                              <Generales />
-                            </PrivateRoute>
-                          }
-                        />
-                        <Route path="MiPerfil" element={<MiPerfil />} />
-                        <Route path="MiEmpresa" element={<MiEmpresa />} />
-                        <Route
-                          path="Integraciones"
-                          element={<Integraciones />}
-                        />
-                        <Route
-                          path="ServicioSunat"
-                          element={<ServicioSunat />}
-                        />
-                        <Route
-                          path="Mantenimiento"
-                          element={<Mantenimiento />}
-                        />
-                        <Route
-                          path="SoporteContacto"
-                          element={<SoporteContacto />}
-                        />
-                      </Route>
-                      <Route path="/abrirCaja" element={<AbrirCaja />} />
-                      <Route path="/iaMoodle" element={<IAMoodle />} />
-                    </Routes>
-                  </ContenedorPrincipal>
-                </div>
-              </div>
-            </div>
+                {/* Configuración */}
+                <Route path="/configuracion" element={<Configuracion />}>
+                  <Route
+                    path="general"
+                    element={
+                      <PrivateRoute allowedRoles={["administrador"]}>
+                        <Generales />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route path="MiPerfil" element={<MiPerfil />} />
+                  <Route path="MiEmpresa" element={<MiEmpresa />} />
+                  <Route path="Integraciones" element={<Integraciones />} />
+                  <Route path="ServicioSunat" element={<ServicioSunat />} />
+                  <Route path="Mantenimiento" element={<Mantenimiento />} />
+                  <Route path="SoporteContacto" element={<SoporteContacto />} />
+                </Route>
+                <Route path="/abrirCaja" element={<AbrirCaja />} />
+                <Route path="/iaMoodle" element={<IAMoodle />} />
+              </Routes>
+            </ContenedorPrincipal>
           </div>
         </div>
       </div>

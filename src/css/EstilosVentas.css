@@ -8,61 +8,7 @@
   --light-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 }
 
-/* ===== CARDS GENERALES ===== */
-.card {
-  border: none !important;
-  border-radius: 16px !important;
-  overflow: hidden;
-  backdrop-filter: blur(10px);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-  position: relative;
-}
 
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.12);
-}
-
-.card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, transparent 100%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* ===== CARD HEADER ===== */
-.card-header {
-  background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%) !important;
-  padding: 28px 32px !important;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
-  position: relative;
-  z-index: 1;
-}
-
-.card-header h1 {
-  font-size: 2.5rem;
-  font-weight: 800;
-  background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: 8px;
-  letter-spacing: -1px;
-}
-
-.card-header p {
-  font-size: 0.95rem;
-  color: #6b7280;
-  font-weight: 500;
-  letter-spacing: 0.3px;
-}
 
 /* ===== IMAGEN DE TIENDA ===== */
 .store-image {
@@ -114,8 +60,8 @@
 
 /* ===== CARD FOOTER ===== */
 .card-footer {
-  background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, transparent 100%) !important;
-  border-top: 1px solid rgba(0, 0, 0, 0.05) !important;
+  background: white !important;
+  border: none !important;
   padding: 20px 32px !important;
   position: relative;
   z-index: 1;
@@ -123,28 +69,28 @@
 
 /* ===== TARJETAS RESUMEN KPI ===== */
 .card[style*="background: #"] {
-  background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%) !important;
-  border-left: 5px solid transparent;
+  background: rgb(190, 190, 190) !important;
+  border: none;
   position: relative;
 }
 
 /* Tarjeta de Este Mes */
 .card[style*="#f1faf6"] {
-  border-left-color: #10ba82 !important;
-  background: linear-gradient(135deg, rgba(16, 186, 130, 0.08) 0%, rgba(11, 136, 78, 0.04) 100%) !important;
+  border: none !important;
+  background: white !important;
 }
 
 /* Tarjeta de Mes Pasado */
 .card[style*="#fff6f6"] {
-  border-left-color: #ffa500 !important;
-  background: linear-gradient(135deg, rgba(255, 165, 0, 0.08) 0%, rgba(255, 140, 0, 0.04) 100%) !important;
+  border: none !important;
+  background: white !important;
 }
 
 /* Tarjeta de Diferencia */
 .card[style*="#e8f5e9"],
 .card[style*="#ffebee"] {
-  border-left-color: #ff6b6b;
-  background: linear-gradient(135deg, rgba(255, 107, 107, 0.08) 0%, rgba(196, 28, 59, 0.04) 100%) !important;
+  border: none;
+  background: white !important;
 }
 
 /* ===== ESTILOS PARA BADGES Y ICONOS ===== */
@@ -180,42 +126,22 @@
   gap: 8px;
 }
 
-.btn-outline-dark {
-  color: #1f2937 !important;
-  background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%) !important;
-  border: 2px solid #e5e7eb !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-.btn-outline-dark:hover {
-  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%) !important;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border-color: #d1d5db !important;
-}
-
-.btn-outline-dark:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-}
 
 /* ===== BUSCADOR ===== */
 .header-search-container {
   position: relative;
   display: flex;
   align-items: center;
-  width: 100%;
   max-width: 380px;
 }
 
 .header-search-container .form-control {
-  border: 2px solid #e5e7eb;
+  border: 2px solid #000000;
   border-radius: 10px;
   padding: 10px 16px 10px 40px;
   font-size: 0.9rem;
   transition: all 0.3s ease;
-  background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
-  font-weight: 500;
+  background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
 }
 
 .header-search-container .form-control:focus {
@@ -261,42 +187,7 @@
   letter-spacing: -0.5px;
 }
 
-.badge-header {
-  display: inline-block;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 4px 12px;
-  border-radius: 8px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  margin-left: 12px;
-  letter-spacing: 0.5px;
-}
 
-/* ===== ANIMACIONES ===== */
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes glow {
-  0%, 100% {
-    box-shadow: 0 8px 32px rgba(102, 126, 234, 0.15);
-  }
-  50% {
-    box-shadow: 0 8px 40px rgba(102, 126, 234, 0.25);
-  }
-}
-
-.card {
-  animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-}
 
 /* ===== TEMA OSCURO VENTAS PREMIUM ===== */
 body.dark-theme .card {
@@ -311,7 +202,7 @@ body.dark-theme .card:hover {
 
 body.dark-theme .card-header {
   background: linear-gradient(135deg, #1c252e 0%, #151a20 100%) !important;
-  border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+  border: none !important;
 }
 
 body.dark-theme .card-header h1 {
@@ -342,7 +233,7 @@ body.dark-theme .titulo-card-especial {
 
 body.dark-theme .card-footer {
   background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 100%) !important;
-  border-top-color: rgba(255, 255, 255, 0.08) !important;
+  border: none !important;
 }
 
 body.dark-theme .btn-outline-dark {

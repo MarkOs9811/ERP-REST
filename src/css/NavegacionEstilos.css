@@ -2,8 +2,11 @@
     background-color: var(--bg-sidebar-header) !important;
     border-bottom: none !important;
     z-index: 100;
+    margin-left: 240px;
   }
-
+  .compressedNavegacion {
+    margin-left: 80px;
+  }
   .breadcrumb {
     background-color: transparent;
     /* Fondo transparente para el breadcrumb */
@@ -31,7 +34,7 @@
 
   .card-shadow {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    /* Sombra suave */
+  
   }
 
   .card.rounded {
@@ -59,7 +62,7 @@
   }
 
   body.dark-theme .breadcrumb-item a {
-    color: #ee5252 !important;
+    color: #000000 !important;
     font-weight: bold;
   }
 
@@ -85,7 +88,7 @@
   }
 
   body.dark-theme .breadcrumb-nav a.text-decoration-none.fw-semibold:hover {
-    color: #ee5252 !important;
+    color: #000000 !important;
     text-decoration: underline;
   }
 
@@ -118,11 +121,12 @@
   }
 
   .submenu-tab-link.active {
-    color: #e76363 !important;
+    color: #ffffff !important;
     border-top: none !important;
     border-left: none !important;
     border-right: none !important;
-    border-bottom: 3px solid #db4646 !important;
+    border-bottom: none !important;
+    background-color: #000000 !important;
   }
 
   /* ========== TEMA OSCURO SUBMENU TABS ========== */

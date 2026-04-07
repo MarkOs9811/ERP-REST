@@ -148,12 +148,10 @@ export function SideBar() {
   }, []);
   return (
     <div
-      className={`sidebar justify-content-between m-auto ${isCompressed ? "sidebar-compressed" : ""}`}
+      className={`sidebar justify-content-between border-none m-auto ${isCompressed ? "sidebar-compressed" : ""}`}
       style={{
         background: "var(--glass-bg)",
         backdropFilter: "var(--glass-blur)",
-        borderRight: "1px solid var(--glass-border)",
-        boxShadow: "var(--shadow-soft)",
         transition: "all var(--transition-smooth)",
       }}
     >

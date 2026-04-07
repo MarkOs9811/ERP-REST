@@ -1,42 +1,51 @@
 const getCustomDataTableStyles = (isDark) => ({
   rows: {
     style: {
-      borderLeftWidth: "2px",
-      borderLeftStyle: "solid",
-      borderLeftColor: isDark ? "#313a46" : "#eaeaea",
-      backgroundColor: isDark ? "#1C252E" : "#fff", // Fondo base filas
-      color: isDark ? "#cfd8dc" : "#222",
+      borderLeftWidth: "0",
+      borderLeftStyle: "none",
+      borderLeftColor: "transparent",
+      backgroundColor: isDark ? "#1a202c" : "#ffffff",
+      color: isDark ? "#cbd5e1" : "#2d3748",
+      borderBottom: isDark ? "1px solid #2d3748" : "1px solid #e2e8f0",
+      fontSize: "14px",
+    },
+    highlightOnHoverStyle: {
+      backgroundColor: isDark ? "#262f3d" : "#f7fafc",
+      cursor: "pointer",
     },
   },
   headCells: {
     style: {
-      backgroundColor: isDark ? "#1C252E" : "#fafafa", // Fondo header
-      color: isDark ? "#cfd8dc" : "#5a6267",
-      fontSize: "15px",
-      fontWeight: "bold",
-      textAlign: "center",
-      padding: "12px",
-      borderBottom: isDark ? "2px solid #313a46" : "2px solid #eaeaea",
+      backgroundColor: isDark ? "#0f172a" : "#f9fafb",
+      color: isDark ? "#94a3b8" : "#4b5563",
+      fontSize: "13px",
+      fontWeight: "600",
+      textAlign: "left",
+      padding: "12px 16px",
+      borderBottom: isDark ? "1px solid #2d3748" : "1px solid #e2e8f0",
+      textTransform: "none",
+      letterSpacing: "0",
     },
   },
   header: {
     style: {
-      backgroundColor: isDark ? "#1C252E" : "#fafafa",
-      color: isDark ? "#cfd8dc" : "#222",
+      backgroundColor: isDark ? "#0f172a" : "#f9fafb",
+      color: isDark ? "#cbd5e1" : "#2d3748",
     },
   },
   footer: {
     style: {
-      backgroundColor: isDark ? "#1C252E" : "#fafafa",
-      color: isDark ? "#cfd8dc" : "#222",
-      borderTop: isDark ? "2px solid #313a46" : "2px solid #eaeaea",
+      backgroundColor: isDark ? "#0f172a" : "#f9fafb",
+      color: isDark ? "#cbd5e1" : "#2d3748",
+      borderTop: isDark ? "1px solid #2d3748" : "1px solid #e2e8f0",
     },
   },
   pagination: {
     style: {
-      backgroundColor: isDark ? "#1C252E" : "#fff",
-      color: isDark ? "#ee5252" : "#333",
-      fontSize: "14px",
+      backgroundColor: isDark ? "#0f172a" : "#f9fafb",
+      color: isDark ? "#cbd5e1" : "#2d3748",
+      fontSize: "13px",
+      borderTop: isDark ? "1px solid #2d3748" : "1px solid #e2e8f0",
     },
   },
 });

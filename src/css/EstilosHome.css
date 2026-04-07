@@ -1,156 +1,390 @@
 /* ================================
-   PALETA DE COLORES CORPORATIVA
+   PALETA DE COLORES NEUTRA - ADOBE CLOUD STYLE
 ================================= */
 :root {
-    /* Colores neutros */
-    --color-dark: #1a2b3c;
-    /* Azul/gris oscuro corporativo */
-    --color-dark-light: #2c3e50;
-    /* Azul/gris medio */
-    --color-gray: #7f8c8d;
-    /* Gris neutro */
-    --color-gray-light: #ecf0f1;
-    /* Gris muy claro */
-    --color-light: #f9fbfd;
-    /* Blanco de fondo */
-
-    /* Colores corporativos */
-    --color-primary: #2980b9;
-    /* Azul corporativo principal */
-    --color-primary-light: #3498db;
-    /* Azul corporativo secundario */
-    --color-accent: #16a085;
-    /* Verde azulado para acentos */
-
-    /* Colores para estados */
-    --color-success: #27ae60;
-    /* Verde corporativo */
-    --color-warning: #f39c12;
-    /* Amarillo/naranja discreto */
-    --color-danger: #c0392b;
-    /* Rojo corporativo */
-    --color-info: #3a7ca5;
-    /* Azul información */
-
+    /* Colores neutros - Solo grises y tonos lineales */
+    --color-white: #ffffff;
+    --color-off-white: #f8f9fa;
+    --color-gray-50: #fafafa;
+    --color-gray-100: #f5f5f5;
+    --color-gray-200: #e8e8e8;
+    --color-gray-300: #d4d4d4;
+    --color-gray-400: #b4b4b4;
+    --color-gray-500: #8b8b8b;
+    --color-gray-600: #6b6b6b;
+    --color-gray-700: #424242;
+    --color-gray-800: #262626;
+    --color-gray-900: #0d0d0d;
+    
+    /* Acentos neutrales muy sutiles */
+    --color-primary: #5a5a5a;
+    --color-primary-light: #7a7a7a;
+    --color-accent: #6a6a6a;
+    
+    /* Estados - Colores en escala de grises */
+    --color-success: #5a5a5a;
+    --color-warning: #7a7a7a;
+    --color-danger: #636363;
+    --color-info: #5a5a5a;
+    
     /* Sombras sutiles */
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
-    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 8px 15px rgba(0, 0, 0, 0.12);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+    --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.08);
+    --shadow-xl: 0 8px 16px rgba(0, 0, 0, 0.1);
+    
+    /* Espaciado */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
 }
 
 /* ================================
-   ESTRUCTURA GENERAL
+   ESTRUCTURA GENERAL - DASHBOARD
 ================================= */
 
-.card-pedidos-web{
-    background-color: #E5FBFF!important;
+.dashboard-container {
+    width: 100%;
+    padding: var(--spacing-2xl) var(--spacing-xl);
+    min-height: 100vh;
 }
-.card-pedido-llevar{
-    background-color: #DEDDFF!important;
+
+.dashboard-header {
+    margin-bottom: var(--spacing-2xl);
+    padding-bottom: var(--spacing-xl);
+    border-bottom: 1px solid var(--color-gray-200);
 }
-.card-pedido-mesa{
-    background-color: #FFD6E5!important;
+
+.dashboard-header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--color-gray-900);
+    margin: 0 0 var(--spacing-sm) 0;
+    letter-spacing: -0.025em;
 }
-.ico-bagde{
-    width: 70px;
-    height: 50px;
+
+.dashboard-header p {
+    font-size: 1rem;
+    color: var(--color-gray-600);
+    margin: 0;
+    font-weight: 400;
+}
+
+/* Grid System */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: var(--spacing-lg);
+    width: 100%;
+    margin-bottom: var(--spacing-2xl);
+}
+
+.dashboard-grid.grid-2col {
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+}
+
+.dashboard-grid.grid-3col {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+/* Card Base - Adobe Cloud Style */
+.dashboard-card {
+    background-color: var(--color-white);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--color-gray-200);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* Card Header - Modern Style */
+.card-header-modern {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+    border-bottom: 1px solid var(--color-gray-100);
+    background-color: var(--color-gray-50);
+}
+
+.card-header-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background-color: var(--color-gray-100);
+}
+
+.card-header-title h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-gray-900);
+    margin: 0;
+}
+
+.card-header-title p {
+    font-size: 0.875rem;
+    color: var(--color-gray-500);
+    margin: var(--spacing-xs) 0 0 0;
+}
+
+/* Card Body */
+.card-body-modern {
+    padding: var(--spacing-lg);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-body-modern > * {
+    width: 100%;
+}
+
+/* Métricas Rápidas */
+.metrics-quick {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-md);
+    width: 100%;
+}
+
+.metric-item {
+    background-color: var(--color-white);
+    border: 1px solid var(--color-gray-200);
+    border-radius: 6px;
+    padding: var(--spacing-lg);
+    text-align: left;
+}
+
+.metric-label {
+    font-size: 0.875rem;
+    color: var(--color-gray-500);
+    font-weight: 500;
+    margin-bottom: var(--spacing-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.metric-value {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: var(--color-gray-900);
+    margin: 0;
+    display: flex;
+    align-items: baseline;
+    gap: var(--spacing-sm);
+}
+
+.metric-change {
+    font-size: 0.875rem;
+    color: var(--color-success);
+    font-weight: 500;
+}
+
+.metric-change.negative {
+    color: var(--color-danger);
+}
+
+/* Typographic Elements */
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Outfit", sans-serif;
+    color: var(--color-gray-900);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+}
+
+p, span {
+    font-family: "Inter", sans-serif;
+}
+
+.text-muted {
+    color: var(--color-gray-500);
+}
+
+.text-success {
+    color: var(--color-success);
+    font-weight: 500;
+}
+
+.text-danger {
+    color: var(--color-danger);
+    font-weight: 500;
+}
+
+.text-warning {
+    color: var(--color-warning);
+    font-weight: 500;
+}
+
+/* Botones para Dashboard */
+.btn-dashboard {
+    padding: 0.625rem 1rem;
+    border-radius: 6px;
+    border: none;
+    font-weight: 500;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.btn-dashboard-primary {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+.btn-dashboard-secondary {
+    background-color: var(--color-gray-200);
+    color: var(--color-gray-800);
+}
+
+.btn-dashboard-outline {
+    background-color: transparent;
+    border: 1px solid var(--color-gray-300);
+    color: var(--color-gray-700);
+}
+
+/* ================================
+   RESPONSIVE DESIGN
+================================= */
+@media (max-width: 768px) {
+    .dashboard-container {
+        padding: var(--spacing-lg) var(--spacing-md);
+    }
+
+    .dashboard-header {
+        margin-bottom: var(--spacing-xl);
+    }
+
+    .dashboard-header h1 {
+        font-size: 1.875rem;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+
+    .dashboard-grid.grid-2col {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-card {
+        border-radius: 8px;
+    }
+
+    .card-header-modern,
+    .card-body-modern {
+        padding: var(--spacing-md);
+    }
+
+    .metrics-quick {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-sm);
+    }
+}
+
+/* ================================
+   CARD VARIANTS - NEUTRAL STYLE
+================================= */
+
+.card-pedido-mesa {
+    background-color: var(--color-white);
+    border: 1px solid var(--color-gray-200);
+    border-radius: 8px;
+}
+
+.ico-badge {
+    width: 60px;
+    height: 60px;
     margin: auto;
-    border-radius: 20px;
+    border-radius: 12px;
     text-align: center;
-    line-height: 50px;
-}
-.resumen-mes-pedidos-web{
-    background-color: #55D1BE;
-}
-.resumen-mes-pedidos-llevar{
-    background-color: #6E55D1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-gray-100);
+    color: var(--color-gray-700);
     font-size: 1.5rem;
-    color: white;
-}
-.resumen-mes-pedidos-mesa{
-    background-color: #D15569;
-    font-size: 1.5rem;
-    color: white;
+    font-weight: 600;
 }
 
-.badge-ico{
-    padding: 10px;
-    border-radius: 10px;
-}
-.badge-ico-pedidos-pendientes{
-   
-    background-color: #f8e2a6;
-        color: #885d00;
-}
-.badge-ico-almacen{
-background-color: #ffd5dc;
-    color: #610505;
+.resumen-mes-pedidos-web {
+    background-color: var(--color-gray-100);
+    color: var(--color-gray-900);
+    border-radius: 8px;
+    padding: var(--spacing-lg);
 }
 
-/* ================================ */
-/* ESTILOS PARA CARD MEDIO */
+.resumen-mes-pedidos-llevar {
+    background-color: var(--color-gray-100);
+    color: var(--color-gray-900);
+    font-size: 1.25rem;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: var(--spacing-lg);
+}
 
+.resumen-mes-pedidos-mesa {
+    background-color: var(--color-gray-100);
+    color: var(--color-gray-900);
+    font-size: 1.25rem;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: var(--spacing-lg);
+}
+
+.badge-ico {
+    padding: var(--spacing-md);
+    border-radius: 8px;
+    background-color: var(--color-gray-100);
+    color: var(--color-gray-700);
+    font-weight: 500;
+}
+
+.badge-ico-pedidos-pendientes {
+    background-color: var(--color-gray-200);
+    color: var(--color-gray-700);
+}
+
+.badge-ico-almacen {
+    background-color: var(--color-gray-200);
+    color: var(--color-gray-700);
+}
+
+/* Card Estados - Sin Gradientes */
 .card-pedidos-pendientes {
-    background: linear-gradient(135deg, #f5c430 0%, #f39c12 100%);
-    
-    /* Asegura que el texto sea blanco */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-    /* Sombra suave */
-    border-radius: 10px;
-    /* Bordes redondeados */
+    background-color: var(--color-gray-100);
+    color: var(--color-gray-900);
+    box-shadow: var(--shadow-sm);
+    border-radius: 8px;
+    border: 1px solid var(--color-gray-200);
+    padding: var(--spacing-lg);
 }
 
 .card-alerta-almacen {
-    background: linear-gradient(135deg, #f8a5a5 0%, #e74c3c 100%);
-    
-    /* Asegura que el texto sea blanco */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-    /* Sombra suave */
-    border-radius: 10px;
-    /* Bordes redondeados */
+    background-color: var(--color-gray-100);
+    color: var(--color-gray-900);
+    box-shadow: var(--shadow-sm);
+    border-radius: 8px;
+    border: 1px solid var(--color-gray-200);
+    padding: var(--spacing-lg);
 }
-/* ===================================== */
-/* ESTILOS PARA FORMAS DE CABECERA */
-/* ===================================== */
-/* Estilo base para los card-header */
+/* ================================
+   DECORATIVE SHAPES REMOVED - CLEAN DESIGN
+================================= */
+/* Formas decorativas removidas para diseño limpio tipo Adobe */
 
-  
-  /* Forma para el card-header de Pedidos Web */
-  .card-header-web::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 110px;
-    height: 110px;
-    background-color:#A4D7D7; /* Color semitransparente */
-    clip-path: circle(50% at 100% 0);
-  }
-  
-  /* Forma para el card-header de Pedidos Llevar */
-  .card-header-llevar::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 110px;
-    height: 110px;
-    background-color: #B9A4D7; /* Color semitransparente */
-    clip-path: ellipse(60% 40% at 100% 0);
-  }
-  
-  /* Forma para el card-header de Pedidos Mesa */
-  .card-header-mesa::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 110px;
-    height: 110px;
-    background-color: #D7A4A5; /* Color semitransparente */
-    clip-path: ellipse(60% 40% at 100% 0);
-  }
-/* =========================== */
 /* Asistente flotante */
 .ai-assistant-floating {
     position: fixed;
@@ -184,12 +418,6 @@ background-color: #ffd5dc;
     height: 60px;
     background: rgba(255, 255, 255, 0.2);
     border-radius: 50%;
-    transition: all 0.3s ease;
-}
-
-.ai-assistant-floating button:hover::before {
-    transform: scale(1.5);
-    opacity: 0;
 }
 
 .ai-assistant-card {
@@ -248,103 +476,270 @@ background-color: #ffd5dc;
 /* ================================
    MEDIA QUERIES PARA RESPONSIVIDAD
 ================================= */
-@media (max-width: 768px) {
-    .dashboard-container {
-        padding: 1rem;
-    }
-
-    .dashboard-card {
-        padding: 1.25rem;
-    }
-
-    .dashboard-card h3 {
-        font-size: 1.5rem;
-    }
-
-    .dashboard-card::before {
-        width: 60px;
-        height: 60px;
-    }
-}
-
-/* ========== TEMA OSCURO HOME ESTILO MODERNO ========== */
+/* ========== DARK THEME - NEUTRAL STYLE ========== */
 body.dark-theme {
-    --color-dark: #151a20;
-    --color-dark-light: #212b36;
-    --color-gray: #cfd8dc;
-    --color-gray-light: #212b36;
-    --color-light: #181a20;
-    --color-primary: #2980b9;
-    --color-primary-light: #3498db;
-    --color-accent: #16a085;
-    --color-success: #27ae60;
-    --color-warning: #f39c12;
-    --color-danger: #c0392b;
-    --color-info: #3a7ca5;
+    --color-white: #0f172a;
+    --color-off-white: #1e293b;
+    --color-gray-50: #1a202c;
+    --color-gray-100: #1e293b;
+    --color-gray-200: #334155;
+    --color-gray-300: #475569;
+    --color-gray-400: #64748b;
+    --color-gray-500: #94a3b8;
+    --color-gray-600: #cbd5e1;
+    --color-gray-700: #e2e8f0;
+    --color-gray-800: #f1f5f9;
+    --color-gray-900: #f8fafc;
+    
+    --color-primary: #818cf8;
+    --color-primary-light: #a5b4fc;
 }
 
-body.dark-theme .card-pedidos-web {
-    background-color: #212b36 !important;
-    color: #cfd8dc !important;
+body.dark-theme .dashboard-container {
+    background-color: var(--color-gray-50);
 }
+
+body.dark-theme .dashboard-header {
+    border-bottom-color: var(--color-gray-200);
+}
+
+body.dark-theme .dashboard-header h1 {
+    color: var(--color-gray-900);
+}
+
+body.dark-theme .dashboard-header p {
+    color: var(--color-gray-600);
+}
+
+body.dark-theme .dashboard-card {
+    background-color: var(--color-gray-100);
+    border-color: var(--color-gray-200);
+}
+
+body.dark-theme .card-header-modern {
+    background-color: var(--color-gray-50);
+    border-bottom-color: var(--color-gray-200);
+}
+
+body.dark-theme .card-header-title h3 {
+    color: var(--color-gray-900);
+}
+
+body.dark-theme .card-header-title p {
+    color: var(--color-gray-600);
+}
+
+body.dark-theme .metric-item {
+    background-color: var(--color-gray-100);
+    border-color: var(--color-gray-200);
+    color: var(--color-gray-900);
+}
+
+body.dark-theme .metric-label {
+    color: var(--color-gray-600);
+}
+
+body.dark-theme .metric-value {
+    color: var(--color-gray-900);
+}
+
+body.dark-theme .card-pedido-mesa,
+body.dark-theme .card-pedidos-web,
 body.dark-theme .card-pedido-llevar {
-    background-color: #23273b !important;
-    color: #cfd8dc !important;
-}
-body.dark-theme .card-pedido-mesa {
-    background-color: #2b2323 !important;
-    color: #cfd8dc !important;
+    background-color: var(--color-gray-100);
+    border-color: var(--color-gray-200);
 }
 
-body.dark-theme .badge-ico-pedidos-pendientes {
-    background-color: #f8e2a6 !important;
-    color: #885d00 !important;
-}
+body.dark-theme .badge-ico,
+body.dark-theme .badge-ico-pedidos-pendientes,
 body.dark-theme .badge-ico-almacen {
-    background-color: #ffd5dc !important;
-    color: #610505 !important;
+    background-color: var(--color-gray-200);
+    color: var(--color-gray-800);
 }
-body.dark-theme .card-pedidos-pendientes {
-    background: linear-gradient(135deg, #bfa52e 0%, #b87d0e 100%) !important;
-    color: #fff !important;
+
+body.dark-theme .resumen-mes-pedidos-web,
+body.dark-theme .resumen-mes-pedidos-llevar,
+body.dark-theme .resumen-mes-pedidos-mesa {
+    background-color: var(--color-gray-200);
+    color: var(--color-gray-900);
 }
+
+body.dark-theme .card-pedidos-pendientes,
 body.dark-theme .card-alerta-almacen {
-    background: linear-gradient(135deg, #c97c7c 0%, #a93226 100%) !important;
-    color: #fff !important;
+    background-color: var(--color-gray-200);
+    border-color: var(--color-gray-300);
+    color: var(--color-gray-900);
 }
-body.dark-theme .card-header-web::before {
-    background-color: #22303a !important;
+
+body.dark-theme .ai-assistant-floating button {
+    background-color: var(--color-primary);
+    color: white;
 }
-body.dark-theme .card-header-llevar::before {
-    background-color: #23273b !important;
-}
-body.dark-theme .card-header-mesa::before {
-    background-color: #2b2323 !important;
-}
+
 body.dark-theme .ai-assistant-card {
-    background: #212b36 !important;
-    color: #cfd8dc !important;
-    border: 1px solid #232c36 !important;
+    background: var(--color-gray-100);
+    color: var(--color-gray-900);
+    border: 1px solid var(--color-gray-200);
 }
+
 body.dark-theme .ai-assistant-card .card-header {
-    background-color: #151a20 !important;
-    color: #ffe066 !important;
+    background-color: var(--color-gray-50);
+    color: var(--color-primary);
 }
+
 body.dark-theme .ai-response {
-    background-color: #212b36 !important;
-    border-left: 3px solid #ffe066 !important;
-    color: #ffe066 !important;
-}
-body.dark-theme .user-avatar {
-    border: 2px solid #232c36 !important;
+    background-color: var(--color-gray-100);
+    border-left: 3px solid var(--color-primary);
+    color: var(--color-primary);
 }
 
-body.dark-theme .dashboard-card h3 {
-    color: #ffe066 !important;
-}
-body.dark-theme .dashboard-card::before {
-    background: #212b36 !important;
+/* ========== FIN DARK THEME ========== */
+
+/* ================================
+   ADDITIONAL COMPONENT STYLES
+================================= */
+
+/* Cabecera Home */
+.cabecera-home {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--spacing-lg);
 }
 
+.cabecera-home-content h2 {
+    font-size: 1.5rem;
+    margin: 0 0 var(--spacing-xs) 0;
+}
 
-/* ========== FIN TEMA OSCURO HOME ESTILO MODERNO ========== */
+.cabecera-home-content p {
+    color: var(--color-gray-600);
+    margin: 0;
+}
+
+.cabecera-home-image {
+    width: 200px;
+    height: 150px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+/* Tablas integradas */
+.table-container {
+    overflow-x: auto;
+    border-radius: 8px;
+}
+
+.table-responsive {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Gráficos */
+.grafico-container {
+    width: 100%;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.grafico-container canvas {
+    max-height: 100%;
+}
+
+/* Loading States */
+.loading-skeleton {
+    background: linear-gradient(90deg, var(--color-gray-200) 25%, var(--color-gray-300) 50%, var(--color-gray-200) 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* Empty States */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-2xl);
+    color: var(--color-gray-500);
+    text-align: center;
+}
+
+.empty-state-icon {
+    font-size: 3rem;
+    margin-bottom: var(--spacing-lg);
+    opacity: 0.5;
+}
+
+.empty-state-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-gray-700);
+}
+
+.empty-state-description {
+    font-size: 0.875rem;
+    color: var(--color-gray-500);
+}
+
+/* Badge Styles */
+.badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.badge-success {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.badge-warning {
+    background-color: #fef3c7;
+    color: #78350f;
+}
+
+.badge-danger {
+    background-color: #fee2e2;
+    color: #7f1d1d;
+}
+
+.badge-info {
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+body.dark-theme .badge-success {
+    background-color: rgba(16, 185, 129, 0.2);
+    color: #86efac;
+}
+
+body.dark-theme .badge-warning {
+    background-color: rgba(245, 158, 11, 0.2);
+    color: #fcd34d;
+}
+
+body.dark-theme .badge-danger {
+    background-color: rgba(239, 68, 68, 0.2);
+    color: #fca5a5;
+}
+
+body.dark-theme .badge-info {
+    background-color: rgba(59, 130, 246, 0.2);
+    color: #93c5fd;
+}

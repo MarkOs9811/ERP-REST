@@ -178,10 +178,8 @@ export function InformacionRapidaHome({}) {
           <div className="card h-100 shadow-sm card-alerta-almacen">
             <div className="card-body d-flex align-items-center">
               <div>
-                <p className="h6" style={{ color: "white" }}>
-                  Alertas Almacen
-                </p>
-                <p className="mb-0 text-white fw-semibold">
+                <p className="h6">Alertas Almacen</p>
+                <p className="mb-0 fw-semibold">
                   {productosBajoStock} productos en bajo stock
                 </p>
               </div>

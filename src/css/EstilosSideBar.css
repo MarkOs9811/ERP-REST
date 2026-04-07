@@ -32,6 +32,14 @@
     text-align: left;
 }
 
+.sidebar.sidebar-compressed:hover {
+    width: 230px !important;
+    overflow-y: auto;
+    max-height: 100%;
+    text-align: left;
+    background-color: rgb(255, 255, 255) !important;
+}
+
 /* COMPRESED STATE (DESKTOP) */
 .sidebar.sidebar-compressed {
     width: 80px;
@@ -48,11 +56,12 @@
     padding: 0 !important;
     margin-left: auto !important;
     margin-right: auto !important;
-    width: 45px !important;
-    height: 45px !important;
-    max-width: 45px !important;
+    margin-top: 10px !important ;
+    width: 35px !important;
+    height: 35px !important;
+    max-width: 35px !important;
     aspect-ratio: 1 / 1 !important;
-    border-radius: 50% !important;
+    border-radius: 20% !important;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -86,7 +95,7 @@
     margin-left: 8px !important;
     margin-right: 8px !important;
     aspect-ratio: auto !important;
-    border-radius: 50px !important;
+    border-radius: 10px !important;
     display: block !important;
 }
 
@@ -144,7 +153,7 @@
     text-align: center;
     color: var(--text-muted) !important;
     transition: all 0.2s ease-in-out;
-    border-radius: 50px; /* Material 3 Pill shape */
+    border-radius: 10px; /* Material 3 Pill shape */
 }
 
 .menu-item:hover {
@@ -155,10 +164,11 @@
 }
 
 .menu-item.active {
-    background-color: rgba(238, 82, 82, 0.1) !important; /* Soft tint */
+    background-color: rgba(0, 0, 0, 0.808) !important; /* Soft tint */
     font-weight: 600;
-    color: var(--brand-primary) !important;
+    color: #eaeaea !important;
     box-shadow: none;
+    border-radius: 10px;
 }
 .menu-footer {
     position: absolute;

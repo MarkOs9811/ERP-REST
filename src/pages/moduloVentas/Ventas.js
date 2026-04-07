@@ -91,7 +91,7 @@ export function Ventas() {
         <div className="row g-3 ">
           <div className="col-12">
             <CondicionCarga isLoading={isLoading} isError={isError}>
-              <div className="card shadow-sm py-2 h-100">
+              <div className="card  py-2 h-100">
                 <div className="card-header d-flex p-4 bg-transparent justify-content-between align-items-center">
                   <div>
                     <h1 className="m-0 mb-2">¡Buen día!</h1>
@@ -135,24 +135,39 @@ export function Ventas() {
           {/* Gráficos Row 1 */}
           <div className="col-md-4 ">
             <CondicionCarga isLoading={isLoading} isError={isError}>
-              <div className="card p-3 shadow-sm h-100 w-100 m-0">
-                <h6 className="fw-bold mb-3" style={{ fontSize: '0.95rem', color: '#374151' }}>Ventas por Hora</h6>
+              <div className="card p-3  h-100 w-100 m-0">
+                <h6
+                  className="fw-bold mb-3"
+                  style={{ fontSize: "0.95rem", color: "#374151" }}
+                >
+                  Ventas por Hora
+                </h6>
                 <GraficoLineaDayVentas />
               </div>
             </CondicionCarga>
           </div>
           <div className="col-md-4 ">
             <CondicionCarga isLoading={isLoading} isError={isError}>
-              <div className="card p-3 shadow-sm h-100 w-100 m-0">
-                <h6 className="fw-bold mb-3" style={{ fontSize: '0.95rem', color: '#374151' }}>Métodos de Pago</h6>
+              <div className="card p-3  h-100 w-100 m-0">
+                <h6
+                  className="fw-bold mb-3"
+                  style={{ fontSize: "0.95rem", color: "#374151" }}
+                >
+                  Métodos de Pago
+                </h6>
                 <GraficoMetodoPago />
               </div>
             </CondicionCarga>
           </div>
           <div className="col-md-4 ">
             <CondicionCarga isLoading={isLoading} isError={isError}>
-              <div className="card p-3 shadow-sm h-100 w-100 m-0">
-                <h6 className="fw-bold mb-3" style={{ fontSize: '0.95rem', color: '#374151' }}>Top Ventas</h6>
+              <div className="card p-3  h-100 w-100 m-0">
+                <h6
+                  className="fw-bold mb-3"
+                  style={{ fontSize: "0.95rem", color: "#374151" }}
+                >
+                  Top Ventas
+                </h6>
                 <PlatoMasVendido />
               </div>
             </CondicionCarga>
@@ -173,23 +188,40 @@ export function Ventas() {
                   mode="single-card"
                 >
                   <div
-                    className="card shadow-sm border-0 p-3 d-flex flex-column justify-content-between"
-                    style={{ background: "#f1faf6", minHeight: 140 }}
+                    className="card  border-0 p-3 d-flex flex-column justify-content-between"
+                    style={{ background: "white", minHeight: 140 }}
                   >
                     <div className="d-flex align-items-center gap-2 mb-3">
                       <span className="bg-success bg-opacity-10 rounded-circle p-3">
                         <DollarSign size={24} className="text-success" />
                       </span>
-                      <span className="ms-auto text-success fw-bold d-flex align-items-center gap-1" style={{ fontSize: '0.9rem' }}>
-                        <TrendingUp size={16} /> +{(
+                      <span
+                        className="ms-auto text-success fw-bold d-flex align-items-center gap-1"
+                        style={{ fontSize: "0.9rem" }}
+                      >
+                        <TrendingUp size={16} /> +
+                        {(
                           (diferenciaVentas / totalVentasMesPasado) *
                           100
-                        ).toFixed(1)}%
+                        ).toFixed(1)}
+                        %
                       </span>
                     </div>
                     <div>
-                      <span className="text-muted fw-600" style={{ fontSize: '0.85rem', display: 'block', marginBottom: '4px' }}>Este Mes</span>
-                      <h3 className="fw-bold text-dark mb-0" style={{ fontSize: '1.3rem' }}>
+                      <span
+                        className="text-muted fw-600"
+                        style={{
+                          fontSize: "0.85rem",
+                          display: "block",
+                          marginBottom: "4px",
+                        }}
+                      >
+                        Este Mes
+                      </span>
+                      <h3
+                        className="fw-bold text-dark mb-0"
+                        style={{ fontSize: "1.3rem" }}
+                      >
                         S/ {totalVentas}
                       </h3>
                     </div>
@@ -203,22 +235,39 @@ export function Ventas() {
                   mode="single-card"
                 >
                   <div
-                    className="card shadow-sm border-0 p-3 d-flex flex-column justify-content-between"
-                    style={{ background: "#fff6f6", minHeight: 140 }}
+                    className="card  border-0 p-3 d-flex flex-column justify-content-between"
+                    style={{ background: "white", minHeight: 140 }}
                   >
                     <div className="d-flex align-items-center gap-2 mb-3">
                       <span className="bg-warning bg-opacity-10 rounded-circle p-3">
                         <CalendarFold size={24} className="text-warning" />
                       </span>
-                      <span className="ms-auto text-warning fw-bold d-flex align-items-center gap-1" style={{ fontSize: '0.9rem' }}>
-                        <TrendingUp size={16} /> +{((totalVentasMesPasado / totalVentas) * 100).toFixed(
+                      <span
+                        className="ms-auto text-warning fw-bold d-flex align-items-center gap-1"
+                        style={{ fontSize: "0.9rem" }}
+                      >
+                        <TrendingUp size={16} /> +
+                        {((totalVentasMesPasado / totalVentas) * 100).toFixed(
                           1,
-                        )}%
+                        )}
+                        %
                       </span>
                     </div>
                     <div>
-                      <span className="text-muted fw-600" style={{ fontSize: '0.85rem', display: 'block', marginBottom: '4px' }}>Mes Pasado</span>
-                      <h3 className="fw-bold text-dark mb-0" style={{ fontSize: '1.3rem' }}>
+                      <span
+                        className="text-muted fw-600"
+                        style={{
+                          fontSize: "0.85rem",
+                          display: "block",
+                          marginBottom: "4px",
+                        }}
+                      >
+                        Mes Pasado
+                      </span>
+                      <h3
+                        className="fw-bold text-dark mb-0"
+                        style={{ fontSize: "1.3rem" }}
+                      >
                         S/ {totalVentasMesPasado}
                       </h3>
                     </div>
@@ -232,9 +281,9 @@ export function Ventas() {
                   mode="single-card"
                 >
                   <div
-                    className="card shadow-sm border-0 p-3 d-flex flex-column justify-content-between"
+                    className="card  border-0 p-3 d-flex flex-column justify-content-between"
                     style={{
-                      background: diferenciaVentas > 0 ? "#e8f5e9" : "#ffebee",
+                      background: "white",
                       minHeight: 140,
                     }}
                   >
@@ -256,7 +305,7 @@ export function Ventas() {
                         className={`ms-auto fw-bold text-sm ${
                           diferenciaVentas > 0 ? "text-success" : "text-danger"
                         }`}
-                        style={{ fontSize: '0.9rem' }}
+                        style={{ fontSize: "0.9rem" }}
                       >
                         {diferenciaVentas > 0 ? "+" : ""}
                         {(
@@ -267,12 +316,21 @@ export function Ventas() {
                       </span>
                     </div>
                     <div>
-                      <span className="text-muted fw-600" style={{ fontSize: '0.85rem', display: 'block', marginBottom: '4px' }}>Diferencia</span>
+                      <span
+                        className="text-muted fw-600"
+                        style={{
+                          fontSize: "0.85rem",
+                          display: "block",
+                          marginBottom: "4px",
+                        }}
+                      >
+                        Diferencia
+                      </span>
                       <h3
                         className={`fw-bold mb-0 ${
                           diferenciaVentas > 0 ? "text-success" : "text-danger"
                         }`}
-                        style={{ fontSize: '1.3rem' }}
+                        style={{ fontSize: "1.3rem" }}
                       >
                         S/ {diferenciaVentas}
                       </h3>
@@ -285,8 +343,13 @@ export function Ventas() {
           {/* Gráfico mensual de todas las ventas */}
           <div className="col-12">
             <CondicionCarga isLoading={isLoading} isError={isError}>
-              <div className="card p-4 shadow-sm h-100">
-                <h6 className="fw-bold mb-3" style={{ fontSize: '0.95rem', color: '#374151' }}>Ventas Acumuladas</h6>
+              <div className="card p-4  h-100">
+                <h6
+                  className="fw-bold mb-3"
+                  style={{ fontSize: "0.95rem", color: "#374151" }}
+                >
+                  Ventas Acumuladas
+                </h6>
                 <GraficoBarVentas />
               </div>
             </CondicionCarga>
@@ -295,7 +358,12 @@ export function Ventas() {
           <div className="col-12">
             <CondicionCarga isLoading={isLoading} isError={isError}>
               <div className="card p-4 shadow-sm h-100">
-                <h6 className="fw-bold mb-3" style={{ fontSize: '0.95rem', color: '#374151' }}>Tendencia Mensual</h6>
+                <h6
+                  className="fw-bold mb-3"
+                  style={{ fontSize: "0.95rem", color: "#374151" }}
+                >
+                  Tendencia Mensual
+                </h6>
                 <GraficoLineaEjemplo />
               </div>
             </CondicionCarga>
@@ -306,7 +374,7 @@ export function Ventas() {
       {/* Lista de ventas */}
       <div className="col-12">
         <CondicionCarga isLoading={isLoading} isError={isError}>
-          <div className="card shadow-sm py-2">
+          <div className="card  py-2 shadow-none">
             <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-start align-md-items-center gap-3 p-4">
               <div className="d-flex align-items-center">
                 <h4 className="card-title mb-0 titulo-card-especial">
@@ -315,7 +383,10 @@ export function Ventas() {
                 <span className="badge-header">Registros</span>
               </div>
 
-              <div className="d-flex align-items-center flex-wrap gap-2 mt-0" style={{ width: 'auto' }}>
+              <div
+                className="d-flex align-items-center flex-wrap gap-2 mt-0"
+                style={{ width: "auto" }}
+              >
                 <div className="header-search-container">
                   <Search className="search-icon" size={18} />
                   <input

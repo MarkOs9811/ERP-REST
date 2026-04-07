@@ -43,7 +43,7 @@ h4 {
 }
 
 .tituloCard {
-  color: #34485c !important;
+  color: #171b1f !important;
 }
 
 button {
@@ -177,48 +177,17 @@ body.dark-theme .contenido > div > div:last-child {
 }
 
 
-/* ========== HEADER ========== */
-.header-contenido {
-  background-color: var(--bg-sidebar-header) !important;
-  border-bottom: none !important;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03) !important;
-  transition: background-color var(--transition-smooth);
-}
 
-.navbar {
-  background-color: transparent;
-  color: var(--text-main);
-  align-items: center;
-  z-index: 999;
-  min-height: 59px;
-  flex-wrap: nowrap;
-}
-
-
-
-.navbar-title {
-  margin: 0;
-  font-size: 1.5rem;
-  font-weight: 500;
-}
-
-.navbar-icon {
-  background: none;
-  border: none;
-  color: #ecf0f1;
-  cursor: pointer;
-  font-size: 1.25rem;
-}
 
 /* ========== CARDS Y ESTADÍSTICAS ========== */
 .card {
-  border: none !important;
   overflow: visible !important;
   background-color: var(--bg-card) !important;
   border-radius: var(--radius-md) !important;
-  box-shadow: var(--shadow-soft) !important;
-  transition: transform var(--transition-bounce), box-shadow var(--transition-bounce), background-color var(--transition-smooth) !important;
   backdrop-filter: none;
+  border:1px solid rgb(231, 231, 231)!important;
+  box-shadow: none  !important;
+  overflow-x: hidden;
 }
 
 body.dark-theme .card {
@@ -271,7 +240,6 @@ body.dark-theme .stats-card {
 }
 
 .stats-card:hover {
-  transform: translateY(-5px) scale(1.02);
   box-shadow: var(--shadow-hover);
 }
 
@@ -384,52 +352,57 @@ button:disabled {
   min-width: 35px;
   width: auto;
   height: 35px;
-  border-radius: var(--radius-pill);
+  border-radius: 6px;
   padding: 0.5rem 1rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background-color: transparent;
-  color: #5f6368;
-  border: 1px solid #dadce0;
+  background-color: #f5f5f5;
+  color: #5a5a5a;
+  border: 1px solid #d4d4d4;
   font-weight: 500;
-  transition: all 0.2s ease-in-out;
+  font-size: 13px;
+  cursor: pointer;
 }
 
 .btn-ver:hover {
-  background-color: #f1f3f4;
-  color: #202124;
+  background-color: #e8e8e8;
+  color: #2d3748;
+  border-color: #8b8b8b;
 }
 
 .btn-ver:active {
-  background-color: #e8eaed;
+  background-color: #d4d4d4;
+  border-color: #636363;
 }
 
-/* --- Botón Activar (Verde) --- */
+/* --- Botón Activar (Gris Neutro) --- */
 .btn-activar {
   min-width: 35px;
   width: auto;
   height: 35px;
-  background-color: #e6f4ea;
-  color: #137333;
-  border: none;
-  border-radius: var(--radius-pill);
+  background-color: #f5f5f5;
+  color: #5a5a5a;
+  border: 1px solid #d4d4d4;
+  border-radius: 6px;
   padding: 0.5rem 1rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   font-weight: 500;
-  transition: all 0.2s ease-in-out;
+  font-size: 13px;
+  cursor: pointer;
 }
 
 .btn-activar:hover {
-  background-color: #ceead6;
-  box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+  background-color: #e8e8e8;
+  color: #2d3748;
+  border-color: #8b8b8b;
 }
 
 .btn-activar:active {
-  background-color: #a8dab5;
-  box-shadow: none;
+  background-color: #d4d4d4;
+  border-color: #636363;
 }
 
 /* --- Botón Principal (Brand) --- */
@@ -490,85 +463,91 @@ button:disabled {
   box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 
-/* --- Botón Editar (Gris Sutil) --- */
+/* --- Botón Editar (Gris Neutro) --- */
 .btn-editar {
   min-width: 35px;
   width: auto;
   height: 35px;
-  color: var(--brand-secondary);
+  color: #5a5a5a;
   background-color: transparent;
-  border: 1px solid #dadce0;
-  border-radius: var(--radius-pill);
+  border: 1px solid #d4d4d4;
+  border-radius: 6px;
   padding: 0.5rem 1rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   font-weight: 500;
-  transition: all 0.2s ease-in-out;
+  font-size: 13px;
+  cursor: pointer;
 }
 
 .btn-editar:hover {
-  background-color: rgba(59, 130, 246, 0.05);
-  border-color: var(--brand-secondary);
+  background-color: #f5f5f5;
+  border-color: #b4b4b4;
+  color: #2d3748;
 }
 
 .btn-editar:active {
-  background-color: rgba(59, 130, 246, 0.1) !important;
+  background-color: #e8e8e8 !important;
+  border-color: #8b8b8b;
 }
 
-/* --- Botón Eliminar (Rojo) --- */
+/* --- Botón Eliminar (Gris Oscuro) --- */
 .btn-eliminar {
   min-width: 35px;
   width: auto;
   height: 35px;
-  color: #d93025;
+  color: #636363;
   background-color: transparent;
-  border: 1px solid #d93025;
-  border-radius: var(--radius-pill);
+  border: 1px solid #d4d4d4;
+  border-radius: 6px;
   padding: 0.5rem 1rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   font-weight: 500;
-  transition: all 0.2s ease-in-out;
+  font-size: 13px;
+  cursor: pointer;
 }
 
 .btn-eliminar:hover {
-  background-color: #fce8e6;
-  border-color: #d93025;
-  color: #d93025;
+  background-color: #f5f5f5;
+  border-color: #8b8b8b;
+  color: #2d3748;
 }
 
 .btn-eliminar:active {
-  background-color: #fad2cf!important;
-  border-color: #d93025;
-  color: #d93025!important;
+  background-color: #e8e8e8;
+  border-color: #636363;
 }
 
-/* --- Botón Desactivar (Gris Oscuro) --- */
+/* --- Botón Desactivar (Gris Neutro) --- */
 .btn-desactivar {
   min-width: 35px;
   width: auto;
   height: 35px;
-  color: #5f6368;
-  background-color: transparent;
-  border: 1px solid #dadce0;
-  border-radius: var(--radius-pill);
+  color: #5a5a5a;
+  background-color: #f5f5f5;
+  border: 1px solid #d4d4d4;
+  border-radius: 6px;
   padding: 0.5rem 1rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   font-weight: 500;
-  transition: all 0.2s ease-in-out;
+  font-size: 13px;
+  cursor: pointer;
 }
 
 .btn-desactivar:hover {
-  background-color: #f1f3f4;
-  color: #202124;
+  background-color: #e8e8e8;
+  color: #2d3748;
+  border-color: #8b8b8b;
 }
 
 .btn-desactivar:active {
-  background-color: #e8eaed;
+  background-color: #d4d4d4;
+  border-color: #636363;
 }
 
 /* --- Botón Guardar (Grande) --- */
@@ -802,7 +781,7 @@ body.dark-theme .navbar {
   background-color: var(--glass-bg) !important;
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
-  border-bottom: 1px solid var(--glass-border) !important;
+  border: none !important;
   color: var(--text-main) !important;
 }
 
@@ -865,9 +844,9 @@ body.dark-theme .btn-guardar,
 body.dark-theme .btn-editar,
 body.dark-theme .btn-eliminar,
 body.dark-theme .btn-cerrar-modal {
-  background-color: #212b36 !important;
-  color: #ee5252 !important;
-  border-color: #ee5252 !important;
+  background-color: transparent !important;
+  color: #cbd5e1 !important;
+  border-color: #475569 !important;
 }
 
 body.dark-theme .btn:hover,
@@ -875,8 +854,9 @@ body.dark-theme .btn-guardar:hover,
 body.dark-theme .btn-editar:hover,
 body.dark-theme .btn-eliminar:hover,
 body.dark-theme .btn-cerrar-modal:hover {
-  background-color: #ee5252 !important;
-  color: #fff !important;
+  background-color: rgba(203, 213, 225, 0.1) !important;
+  color: #e2e8f0 !important;
+  border-color: #64748b !important;
 }
 
 body.dark-theme .tablaGeneral .rdt_TableBody .rdt_TableRow {
@@ -989,63 +969,70 @@ body.dark-theme .boton-venta:active {
 
 /* ========== BOTONES DARK MODE DIFERENCIADOS Y MODERNOS (SIN DEGRADADO) ========== */
 
-/* Botón guardar (primario) */
+/* Botón guardar (primario - tema oscuro) */
 body.dark-theme .btn-guardar {
-  background: var(--brand-primary) !important;
-  color: #ffffff !important;
-  border: none !important;
+  background: #2d3748 !important;
+  color: #e2e8f0 !important;
+  border: 1px solid #475569 !important;
   box-shadow: none;
   font-weight: 600;
   letter-spacing: 0.25px;
-  border-radius: var(--radius-pill)!important;
+  border-radius: 6px !important;
 }
 
 body.dark-theme .btn-guardar:hover {
-  background: var(--brand-secondary) !important;
+  background: #3a4454 !important;
+  color: #e2e8f0 !important;
+  border-color: #64748b !important;
   box-shadow: 0 1px 2px 0 rgba(0,0,0,0.3), 0 1px 3px 1px rgba(0,0,0,0.15);
 }
 
-/* Botón editar (outline gris) */
+/* Botón editar (outline gris - tema oscuro) */
 body.dark-theme .btn-editar {
   background: transparent !important;
-  color: var(--brand-primary) !important;
-  border: 1px solid var(--brand-secondary) !important;
+  color: #cbd5e1 !important;
+  border: 1px solid #475569 !important;
   box-shadow: none;
   font-weight: 600;
-  border-radius: var(--radius-pill)!important;
+  border-radius: 6px !important;
 }
 
 body.dark-theme .btn-editar:hover {
-  background: rgba(238, 82, 82, 0.1) !important;
+  background: rgba(203, 213, 225, 0.1) !important;
+  color: #e2e8f0 !important;
+  border-color: #64748b !important;
 }
 
-/* Botón eliminar (rojo claro opuesto) */
+/* Botón eliminar (gris neutral - tema oscuro) */
 body.dark-theme .btn-eliminar {
   background: transparent !important;
-  color: #f28b82 !important;
-  border: 1px solid #5f6368 !important;
+  color: #cbd5e1 !important;
+  border: 1px solid #475569 !important;
   box-shadow: none;
   font-weight: 600;
-  border-radius: var(--radius-pill)!important;
+  border-radius: 6px !important;
 }
 
 body.dark-theme .btn-eliminar:hover {
-  background: rgba(242, 139, 130, 0.08) !important;
-  border-color: #f28b82 !important;
+  background: rgba(203, 213, 225, 0.1) !important;
+  color: #e2e8f0 !important;
+  border-color: #64748b !important;
 }
 
-/* Botón cerrar/cancelar (gris elegante) */
+/* Botón cerrar/cancelar (gris neutral - tema oscuro) */
 body.dark-theme .btn-cerrar-modal {
-  background: transparent !important;
-  color: #e8eaed !important;
-  border: 1px solid #5f6368 !important;
+  background: #2d3748 !important;
+  color: #cbd5e1 !important;
+  border: 1px solid #475569 !important;
   box-shadow: none;
   font-weight: 600;
-  border-radius: var(--radius-pill)!important;
+  border-radius: 6px !important;
 }
 
 body.dark-theme .btn-cerrar-modal:hover {
-  background: rgba(232, 234, 237, 0.08) !important;
+  background: #3a4454 !important;
+  color: #e2e8f0 !important;
+  border-color: #64748b !important;
 }
 
 /* Botón genérico (gris azulado, para otros casos) */
@@ -1234,7 +1221,7 @@ body.dark-theme .cardbody-pedidosWeb {
 ========================================================== */
 .card-header {
   background-color: transparent !important;
-  border-bottom: 1px solid var(--glass-border) !important;
+  border: none !important;
   padding: 1.25rem 1.5rem !important;
   display: flex;
   align-items: center;
@@ -1260,9 +1247,7 @@ body.dark-theme .cardbody-pedidosWeb {
 ========================================================== 
 */
 .card:has(.titulo-card-especial) {
-  border: 1px solid var(--glass-border) !important;
   border-radius: 12px !important;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03) !important;
   margin: 0 !important;
   background-color: #ffffff;
   overflow: hidden; 
@@ -1270,7 +1255,7 @@ body.dark-theme .cardbody-pedidosWeb {
 
 body.dark-theme .card:has(.titulo-card-especial) {
   background-color: #1a202c !important;
-  border-color: #2d3748 !important;
+  border: none !important;
 }
 
 /* Override body padding uniformly for standard views (Tablas Generales inside) 
@@ -1280,13 +1265,13 @@ body.dark-theme .card:has(.titulo-card-especial) {
 }
 
 /* Badge junto al título (ej. "0 activos") */
-.titulo-card-especial .badge-header {
+ .badge-header {
   font-size: 0.85rem;
   font-weight: 500;
-  background-color: #f8f9fa;
-  color: #4a5568;
+  background-color: #1a1a1a;
+  color: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: var(--radius-pill);
+  border-radius: 8px;
   padding: 0.2rem 0.6rem;
   margin-left: 10px;
   top: -2px;
