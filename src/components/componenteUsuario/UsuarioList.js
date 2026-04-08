@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faPowerOff } from "@fortawesome/free-solid-svg-icons";
-import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import { faPowerOff } from "@fortawesome/free-solid-svg-icons";
 import { UsuarioEditar } from "./UsuarioEditar";
 import { Modal } from "react-bootstrap";
 import { toast } from "react-toastify";
@@ -22,6 +21,11 @@ import {
 import ModalRight from "../componentesReutilizables/ModalRight";
 import { PerfilGeneralNomina } from "../componentePlanillas/PerfilGeneralNomina";
 import { BadgeComponent } from "../componentesReutilizables/BadgeComponent";
+import {
+  BtnEditar,
+  BtnEliminar,
+  BtnVer,
+} from "../componentesReutilizables/BotonesAccion";
 
 // LOS PROPS SON PARAMETROS QUE SE ESTA RECIEBIENDO EN ESTA FUNCTION COMO "SEARCH" Y "UPDATELIST"
 export function UsuariosList({ search, updateList }) {
@@ -306,33 +310,23 @@ export function UsuariosList({ search, updateList }) {
           <div className="d-flex justify-content-center w-100 gap-2">
             {estado == 1 ? (
               <>
-                <button
-                  className="btn-editar"
+                <BtnEditar
                   onClick={() => handleOpenModalEdit(row)}
-                  title="Editar"
-                >
-                  <Pencil size={16} />{" "}
-                  {/* Ajusté el tamaño para consistencia */}
-                </button>
-                <button
-                  className="btn-principal"
+                  title="Editar Usuario"
+                />
+                <BtnVer
                   onClick={() => {
                     setModalPerfilEmpleado(true);
                     setIdEmpleado(row.id);
                   }}
                   title="Ver Perfil Completo"
-                >
-                  <Eye size={16} />
-                </button>
-                <button
-                  className="btn-eliminar"
+                />
+                <BtnEliminar
                   onClick={() =>
                     handleDeleteClick(row.id, row.empleado?.persona?.nombre)
                   }
                   title="Desactivar"
-                >
-                  <Trash2 size={16} />
-                </button>
+                />
               </>
             ) : (
               <button

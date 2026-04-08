@@ -1,14 +1,7 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Cargando } from "../../componentesReutilizables/Cargando";
 import { TablasGenerales } from "../../componentesReutilizables/TablasGenerales";
-import {
-  CheckCheck,
-  Coins,
-  FileText,
-  Pencil,
-  Plus,
-  Trash2,
-} from "lucide-react";
+import { CheckCheck, Coins, FileText, Plus } from "lucide-react";
 import { useMemo, useState } from "react";
 import ModalRight from "../../componentesReutilizables/ModalRight";
 import {
@@ -20,6 +13,10 @@ import axiosInstance from "../../../api/AxiosInstance";
 import ToastAlert from "../../componenteToast/ToastAlert";
 import { GetBonificacionAll } from "../../../service/accionesPlanilla/GetBonificacionesAll";
 import ModalAlertActivar from "../../componenteToast/ModalAlertActivar";
+import {
+  BtnEditar,
+  BtnEliminar,
+} from "../../componentesReutilizables/BotonesAccion";
 
 export function AjustesBonificaciones() {
   const queryClient = useQueryClient();
@@ -76,7 +73,7 @@ export function AjustesBonificaciones() {
     setLoadingDelete(true);
     try {
       const response = await axiosInstance.put(
-        `/bonificaciones/${idBonificacion}`
+        `/bonificaciones/${idBonificacion}`,
       );
 
       if (response.data.success) {
@@ -94,7 +91,7 @@ export function AjustesBonificaciones() {
     setLoadingActivar(true);
     try {
       const response = await axiosInstance.put(
-        `/bonificaciones/activar/${idBonificacion}`
+        `/bonificaciones/activar/${idBonificacion}`,
       );
 
       if (response.data.success) {
@@ -158,34 +155,22 @@ export function AjustesBonificaciones() {
           {row.estado == 1 ? (
             <>
               {/* Botón Editar */}
-              <button
-                className=" btn-editar btn-sm"
-                title="Editar"
+              <BtnEditar
                 onClick={() => {
                   setModalAddBoni(true);
                   setModalEditBoni(true);
                   setDataBonificacion(row);
                 }}
-              >
-                <Pencil className="text-auto" size={"auto"} />
-              </button>
-              <button
-                className="btn-eliminar btn-sm ms-2"
-                title="Eliminar"
+                title="Editar Bonificación"
+              />
+              <BtnEliminar
                 onClick={() => {
                   setModalQuestionDesactivar(true);
                   setDataBonificacion(row);
                 }}
                 disabled={loadingDelete}
-              >
-                {loadingDelete ? (
-                  <span className="spinner-border-sm" role="status"></span>
-                ) : (
-                  <>
-                    <Trash2 className="text-auto" size={"auto"} />
-                  </>
-                )}
-              </button>
+                title="Eliminar Bonificación"
+              />
             </>
           ) : (
             <button

@@ -37,7 +37,9 @@ export function Promociones() {
 
   const handleToggleEstado = async (id) => {
     const nuevoEstado = promoAccion.estado === 1 ? 0 : 1;
-    const exito = await PutData("delivery/promociones", id, { estado: nuevoEstado });
+    const exito = await PutData("delivery/promociones", id, {
+      estado: nuevoEstado,
+    });
     if (exito) {
       queryClient.invalidateQueries(["promocionesApp"]);
       return true;
@@ -59,7 +61,6 @@ export function Promociones() {
     queryFn: GetPlatos,
   });
 
-
   const {
     data: promociones,
     isLoading,
@@ -68,7 +69,6 @@ export function Promociones() {
     queryKey: ["promocionesApp"],
     queryFn: () => GetData("delivery/promociones"),
   });
-
 
   const getBadgeClass = (estado) => {
     return estado === 1 || estado === true || estado === "Activa"
@@ -100,10 +100,7 @@ export function Promociones() {
               />
             </div>
 
-            <button
-              className="btn btn-outline-dark px-3"
-              title="Reporte"
-            >
+            <button className="btn btn-outline-dark px-3" title="Reporte">
               <FileText size={18} />
               <span className="d-none d-sm-inline">Reporte</span>
             </button>
@@ -127,13 +124,13 @@ export function Promociones() {
               {Array.isArray(promociones) &&
                 promociones.map((promo) => (
                   <div className="col-12 col-md-6 col-xl-3" key={promo.id}>
-                    <div className={`card h-100 promo-card shadow-sm border-secondary overflow-hidden ${promo.estado === 1 ? '' : 'inactiva'}`}>
+                    <div
+                      className={`card h-100 promo-card shadow-sm border-secondary overflow-hidden ${promo.estado === 1 ? "" : "inactiva"}`}
+                    >
                       {/* Banner Image */}
                       <div className="promo-banner-container">
                         <img
-                          src={
-                            BASE_URL + "/storage/" + promo.imagen_banner
-                          }
+                          src={BASE_URL + "/storage/" + promo.imagen_banner}
                           alt={promo.titulo}
                           className="promo-banner"
                         />
@@ -206,7 +203,11 @@ export function Promociones() {
                           <Edit2 size={16} />
                         </button>
                         <button
-                          className={promo.estado === 1 ? "btn-desactivar" : "btn-activar"}
+                          className={
+                            promo.estado === 1
+                              ? "btn-desactivar"
+                              : "btn-activar"
+                          }
                           title={promo.estado === 1 ? "Desactivar" : "Activar"}
                           onClick={() => {
                             setPromoAccion(promo);
@@ -277,7 +278,7 @@ export function Promociones() {
         handleEliminar={handleToggleEstado}
         idEliminar={promoAccion?.id}
         nombre={promoAccion?.titulo}
-        pregunta={`¿Estás seguro de ${promoAccion?.estado === 1 ? 'desactivar' : 'activar'}`}
+        pregunta={`¿Estás seguro de ${promoAccion?.estado === 1 ? "desactivar" : "activar"}`}
         tipo="esta promoción"
       />
 

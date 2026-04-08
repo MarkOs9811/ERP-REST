@@ -1,4 +1,30 @@
 /* ========== FUENTES Y BASE ========== */
+
+/* ======================== */
+/* PALETA DE COLORES NEUTROS Y ACCIONES */
+:root {
+  /* Fondo y texto */
+  --color-bg: #F5F5F7;
+  --color-bg-card: #FFFFFF;
+  --color-text: #222222;
+  --color-border: #E0E0E0;
+
+  /* Botones y acciones */
+  --color-btn-primary: #2563EB; /* Ver */
+  --color-btn-primary-text: #FFFFFF;
+  --color-btn-edit: #F59E42;
+  --color-btn-edit-text: #FFFFFF;
+  --color-btn-delete: #EF4444;
+  --color-btn-delete-text: #FFFFFF;
+  --color-btn-secondary: #6B7280;
+  --color-btn-secondary-text: #FFFFFF;
+
+  /* Estados */
+  --color-success: #22C55E;
+  --color-warning: #FACC15;
+  --color-hover: #E5E7EB;
+}
+
 @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
 
 p,
@@ -49,6 +75,135 @@ h4 {
 button {
   font-family: "Poppins", serif;
 }
+
+/* ======================== */
+/* BOTONES NEUTROS Y DE ACCIÓN */
+.btn-ver {
+  min-width: 35px;
+  width: auto;
+  height: 35px;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-btn-primary);
+  color: var(--color-btn-primary-text);
+  border: 1px solid var(--color-border);
+  font-weight: 500;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+}
+.btn-ver:hover {
+  background-color: var(--color-hover);
+  color: var(--color-btn-primary);
+  border-color: var(--color-btn-primary);
+}
+.btn-ver:active {
+  background-color: var(--color-btn-primary);
+  color: var(--color-btn-primary-text);
+  border-color: var(--color-btn-primary);
+  filter: brightness(0.95);
+}
+
+.btn-editar {
+  min-width: 35px;
+  width: auto;
+  height: 35px;
+  color: var(--color-btn-edit-text);
+  background-color: var(--color-btn-edit);
+  border: 1px solid var(--color-btn-edit);
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+}
+.btn-editar:hover {
+  background-color: var(--color-hover);
+  color: var(--color-btn-edit);
+  border-color: var(--color-btn-edit);
+}
+.btn-editar:active {
+  background-color: var(--color-btn-edit);
+  color: var(--color-btn-edit-text);
+  border-color: var(--color-btn-edit);
+  filter: brightness(0.95);
+}
+
+.btn-eliminar {
+  min-width: 35px;
+  width: auto;
+  height: 35px;
+  color: var(--color-btn-delete-text);
+  background-color: var(--color-btn-delete);
+  border: 1px solid var(--color-btn-delete);
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+}
+.btn-eliminar:hover {
+  background-color: var(--color-hover);
+  color: var(--color-btn-delete);
+  border-color: var(--color-btn-delete);
+}
+.btn-eliminar:active {
+  background-color: var(--color-btn-delete);
+  color: var(--color-btn-delete-text);
+  border-color: var(--color-btn-delete);
+  filter: brightness(0.95);
+}
+
+.btn-secondary {
+  min-width: 35px;
+  width: auto;
+  height: 35px;
+  color: var(--color-btn-secondary-text);
+  background-color: var(--color-btn-secondary);
+  border: 1px solid var(--color-btn-secondary);
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+}
+.btn-secondary:hover {
+  background-color: var(--color-hover);
+  color: var(--color-btn-secondary);
+  border-color: var(--color-btn-secondary);
+}
+.btn-secondary:active {
+  background-color: var(--color-btn-secondary);
+  color: var(--color-btn-secondary-text);
+  border-color: var(--color-btn-secondary);
+  filter: brightness(0.95);
+}
+
+/* Estados */
+.alert-success {
+  background: var(--color-success);
+  color: #fff;
+}
+.alert-warning {
+  background: var(--color-warning);
+  color: #222;
+}
+
 
 
 .contenido {

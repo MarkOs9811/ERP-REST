@@ -1,14 +1,11 @@
 import { TablasGenerales } from "../../componentesReutilizables/TablasGenerales";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Cargando } from "../../componentesReutilizables/Cargando";
+import { Check, CircleMinus, FileText, Plus } from "lucide-react";
 import {
-  Check,
-  CircleMinus,
-  FileText,
-  Pencil,
-  Plus,
-  Trash2,
-} from "lucide-react";
+  BtnEditar,
+  BtnEliminar,
+} from "../../componentesReutilizables/BotonesAccion";
 import { useMemo, useState } from "react";
 import ModalRight from "../../componentesReutilizables/ModalRight";
 import { FormularioDeduccion } from "./formulariosAjustes/FormularioDeduccion";
@@ -84,7 +81,7 @@ export function AjustesDeducciones() {
     setLoadingActivar(true);
     try {
       const response = await axiosInstance.put(
-        `/deducciones/activar/${idDeduccion}`
+        `/deducciones/activar/${idDeduccion}`,
       );
 
       if (response.data.success) {
@@ -147,32 +144,22 @@ export function AjustesDeducciones() {
         <div className="d-flex justify-content-center">
           {row.estado == 1 ? (
             <>
-              <button
-                className=" btn-editar mx-1"
-                title="Editar"
+              <BtnEditar
                 onClick={() => {
                   setModalAddDeduccion(true);
                   setEditarDeduccion(true);
                   setDataDeduccion(row);
                 }}
-              >
-                <Pencil className="text-auto" size={"auto"} />
-              </button>
-              <button
-                className="btn-eliminar"
-                title="Eliminar"
+                title="Editar Deducción"
+              />
+              <BtnEliminar
                 disabled={loadingDelete}
                 onClick={() => {
                   setModalSuspenderDeduccion(true);
                   setDataDeduccion(row);
                 }}
-              >
-                {loadingDelete ? (
-                  <SpinnerCargando />
-                ) : (
-                  <Trash2 className="text-auto" size={"auto"} />
-                )}
-              </button>
+                title="Eliminar Deducción"
+              />
             </>
           ) : (
             <button

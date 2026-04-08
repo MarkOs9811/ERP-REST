@@ -4,15 +4,16 @@ import { useEstadoAsyn } from "../../hooks/EstadoAsync";
 import { Cargando } from "../componentesReutilizables/Cargando";
 import { useCallback } from "react";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
-
 import { TablasGenerales } from "../componentesReutilizables/TablasGenerales";
 import { CheckCheck } from "lucide-react";
 import ModalAlertQuestion from "../componenteToast/ModalAlertQuestion";
 import axiosInstance from "../../api/AxiosInstance";
 import ToastAlert from "../componenteToast/ToastAlert";
 import ModalRight from "../componentesReutilizables/ModalRight";
+import {
+  BtnEditar,
+  BtnEliminar,
+} from "../componentesReutilizables/BotonesAccion";
 import { FormEditarSolicitud } from "./FormEditarSolicitud";
 import { useQuery } from "@tanstack/react-query";
 
@@ -101,26 +102,20 @@ export function SolicitudesList({ search }) {
           <div className="d-flex justify-content-around py-2">
             {estado == 0 ? (
               <>
-                <button
-                  className="btn-editar me-2"
-                  title="Editar Solicitud"
+                <BtnEditar
                   onClick={() => {
                     setModalEditarSoli(true);
                     setDatoSolicitud(row);
                   }}
-                >
-                  <FontAwesomeIcon icon={faPenToSquare} />
-                </button>
-                <button
-                  className="btn-eliminar me-2"
-                  title="Eliminar Solicitud"
+                  title="Editar Solicitud"
+                />
+                <BtnEliminar
                   onClick={() => {
                     setAlertEliminar(true);
                     setDatoSolicitud(row);
                   }}
-                >
-                  <FontAwesomeIcon icon={faTrashCan} />
-                </button>
+                  title="Eliminar Solicitud"
+                />
               </>
             ) : (
               <button className="btn btn-guardar w-100">

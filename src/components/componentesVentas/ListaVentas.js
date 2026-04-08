@@ -12,10 +12,10 @@ import {
   CircleAlert,
   CircleX,
   CloudDownload,
-  Eye,
 } from "lucide-react";
 import ModalRight from "../componentesReutilizables/ModalRight";
 import { ModalDetallesVentas } from "./ModalDetallesVentas";
+import { BtnVer } from "../componentesReutilizables/BotonesAccion";
 
 export function ListVentas({ search }) {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -96,18 +96,13 @@ export function ListVentas({ search }) {
       name: "Detalles",
       cell: (row) => (
         <div className="d-flex ">
-          {/* Botón para ver detalles */}
-          <button
-            className="btn-editar align-items-center "
+          <BtnVer
             onClick={() => {
               setDataVentas(row);
               setModalDetallesVenta(true);
             }}
-            title="Detalles"
-          >
-            <Eye height="16px" width="16px" className="text-auto" />
-          </button>
-          {/* Botón para descargar comprobante PDF */}
+            title="Ver Detalles de Venta"
+          />
         </div>
       ),
       center: true,

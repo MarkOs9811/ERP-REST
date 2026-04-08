@@ -6,11 +6,14 @@ import { CondicionCarga } from "../../componentesReutilizables/CondicionCarga";
 import { useMemo, useState } from "react";
 import ModalRight from "../../componentesReutilizables/ModalRight";
 import { FormularioGenerarPeriodo } from "./formulariosAjustes/FormularioGenerarPeriodo";
-import { Pen, PenIcon, Trash } from "lucide-react";
 import { FormularioEditarPeriodo } from "./formulariosAjustes/FormularioEditarPeriodo";
 import ModalAlertQuestion from "../../componenteToast/ModalAlertQuestion";
 import axiosInstance from "../../../api/AxiosInstance";
 import ToastAlert from "../../componenteToast/ToastAlert";
+import {
+  BtnEditar,
+  BtnEliminar,
+} from "../../componentesReutilizables/BotonesAccion";
 
 export function PeriodoNomina() {
   const queryClient = useQueryClient();
@@ -55,7 +58,7 @@ export function PeriodoNomina() {
       return null; // DB Vacía
     }
     const ultimoPeriodo = [...dataPeriodo].sort(
-      (a, b) => new Date(b.fecha_fin) - new Date(a.fecha_fin)
+      (a, b) => new Date(b.fecha_fin) - new Date(a.fecha_fin),
     )[0];
     return ultimoPeriodo.fecha_fin;
   }, [dataPeriodo]);
@@ -66,7 +69,7 @@ export function PeriodoNomina() {
 
     // Ordenamos por fecha_inicio más reciente
     const ultimoPeriodo = [...dataPeriodo].sort(
-      (a, b) => new Date(b.fecha_inicio) - new Date(a.fecha_inicio)
+      (a, b) => new Date(b.fecha_inicio) - new Date(a.fecha_inicio),
     )[0];
 
     return ultimoPeriodo.id;
@@ -93,8 +96,7 @@ export function PeriodoNomina() {
 
     return (
       <>
-        <button
-          className="btn-editar mx-2"
+        <BtnEditar
           disabled={!puedeEditar}
           onClick={() => {
             setModalEditarPeriodo(true);
@@ -103,23 +105,17 @@ export function PeriodoNomina() {
           title={
             !puedeEditar
               ? "No se puede editar un periodo en proceso o cerrado"
-              : "Editar Periodo"
+              : "Editar Período"
           }
-        >
-          <Pen className="text-auto" size={"auto"} />
-        </button>{" "}
-        <button
-          className="btn-eliminar"
-          size="sm"
-          disabled={!puedeEliminar} // <-- LÓGICA APLICADA
-          title={titleEliminar} // <-- Título dinámico
+        />
+        <BtnEliminar
+          disabled={!puedeEliminar}
           onClick={() => {
             setModalQuestionDelete(true);
             setDataPeriodoEdit(row);
           }}
-        >
-          <Trash className="text-auto" size={"auto"} />
-        </button>
+          title={titleEliminar}
+        />
       </>
     );
   };

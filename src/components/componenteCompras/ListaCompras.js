@@ -7,6 +7,10 @@ import axiosInstance from "../../api/AxiosInstance";
 import ModalRight from "../componentesReutilizables/ModalRight";
 import { FormEditarCompra } from "./FormEditarCompra";
 import { useForm } from "react-hook-form";
+import {
+  BtnEditar,
+  BtnEliminar,
+} from "../componentesReutilizables/BotonesAccion";
 
 export function ListaCompras({ data, search }) {
   const [modalEditarCompra, setModalEditarCompra] = useState(false);
@@ -129,24 +133,20 @@ export function ListaCompras({ data, search }) {
       name: "Acciones",
       cell: (row) => (
         <div className="d-flex gap-2">
-          <button
-            className="btn-editar btn-sm"
+          <BtnEditar
             onClick={() => {
               setModalEditarCompra(true);
               setDataCompra(row);
             }}
-          >
-            <Eye className="text-auto" size={18} />
-          </button>
-          <button
-            className="btn-eliminar btn-sm"
+            title="Ver Compra"
+          />
+          <BtnEliminar
             onClick={() => {
               setModalQuestionEliminar(true);
               setDataCompra(row);
             }}
-          >
-            <Trash2 className="text-auto" size={18} />
-          </button>
+            title="Eliminar Compra"
+          />
         </div>
       ),
       width: "120px",

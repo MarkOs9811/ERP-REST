@@ -13,7 +13,11 @@ import { useQuery } from "@tanstack/react-query";
 import { Cargando } from "../componentesReutilizables/Cargando";
 import ModalRight from "../componentesReutilizables/ModalRight";
 import { useForm } from "react-hook-form";
-import { Check, Pencil, Trash2Icon } from "lucide-react";
+import { Check } from "lucide-react";
+import {
+  BtnEditar,
+  BtnEliminar,
+} from "../componentesReutilizables/BotonesAccion";
 
 export function CategoriaList() {
   const [categoria, setCategoria] = useState([]);
@@ -42,7 +46,7 @@ export function CategoriaList() {
 
   // Filtrar las categorías basadas en la búsqueda
   const filteredCategorias = categoriasList.filter((cat) =>
-    cat.nombre.toLowerCase().includes(searchTerm.toLowerCase())
+    cat.nombre.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   // Manejar el registro de una nueva categoría
@@ -50,7 +54,7 @@ export function CategoriaList() {
     try {
       const response = await axiosInstance.post(
         "/gestionPlatos/registerCategoria",
-        { nombre: data.nombre }
+        { nombre: data.nombre },
       );
 
       if (response.data.success) {
@@ -60,7 +64,7 @@ export function CategoriaList() {
       } else {
         ToastAlert(
           "error",
-          response.data.message || "Error al registrar la categoría"
+          response.data.message || "Error al registrar la categoría",
         );
       }
     } catch (error) {
@@ -70,12 +74,12 @@ export function CategoriaList() {
           ToastAlert(
             "error",
             error.response.data.message ||
-              "El nombre de la categoría ya existe."
+              "El nombre de la categoría ya existe.",
           );
         } else if (status === 500) {
           ToastAlert(
             "error",
-            "Ocurrió un error en el servidor. Inténtalo más tarde."
+            "Ocurrió un error en el servidor. Inténtalo más tarde.",
           );
         } else {
           ToastAlert("error", "Ocurrió un error inesperado.");
@@ -122,7 +126,7 @@ export function CategoriaList() {
   const handleEliminarCategoria = async (idCat) => {
     try {
       const response = await axiosInstance.get(
-        `/gestionPlatos/deleteCategoria/${idCat}`
+        `/gestionPlatos/deleteCategoria/${idCat}`,
       );
 
       if (response.data.success) {
@@ -141,7 +145,7 @@ export function CategoriaList() {
   const handleActivarCategoria = async (idCat) => {
     try {
       const response = await axiosInstance.get(
-        `/gestionPlatos/activarCategoria/${idCat}`
+        `/gestionPlatos/activarCategoria/${idCat}`,
       );
       if (response.data.success) {
         ToastAlert("success", response.data.message);
@@ -243,37 +247,29 @@ export function CategoriaList() {
               </div>
 
               <div className="ms-auto">
-                <button
-                  type="button"
-                  className="btn-editar btn-sm me-2"
+                <BtnEditar
                   onClick={() => handleOpenEditarCat(categoria)}
-                >
-                  <Pencil size={"auto"} />
-                </button>
+                  title="Editar Categoría"
+                />
 
                 {categoria.estado === 1 ? (
-                  <button
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="right"
-                    title="Eliminar Categoria"
-                    className="btn-eliminar btn-sm"
+                  <BtnEliminar
                     onClick={() =>
                       handleEliminarCat(categoria.id, categoria.nombre)
                     }
-                  >
-                    <Trash2Icon size={"auto"} />
-                  </button>
+                    title="Eliminar Categoría"
+                  />
                 ) : (
                   <button
                     data-bs-toggle="tooltip"
                     data-bs-placement="top"
-                    title="Activar Categoria"
-                    className="btn-activar btn-sm"
+                    title="Activar Categoría"
+                    className="btn-secondary"
                     onClick={() =>
                       handleActivar(categoria.id, categoria.nombre)
                     }
                   >
-                    <Check size={"auto"} />
+                    <Check size={18} />
                   </button>
                 )}
               </div>

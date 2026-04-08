@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import axiosInstance from "../../api/AxiosInstance";
 import ToastAlert from "../componenteToast/ToastAlert";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
-import { faPowerOff, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { faPowerOff } from "@fortawesome/free-solid-svg-icons";
 import { Modal } from "react-bootstrap";
 import { ProveedorEdit } from "./ProveedorEdit";
 import ModalAlertQuestion from "../componenteToast/ModalAlertQuestion";
@@ -13,6 +12,10 @@ import { GetProveedores } from "../../service/GetProveedores";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
 import ModalRight from "../componentesReutilizables/ModalRight";
+import {
+  BtnEditar,
+  BtnEliminar,
+} from "../componentesReutilizables/BotonesAccion";
 
 export function ProveedorList({ search, updateList }) {
   const [filterProveedores, setFilterProveedores] = useState([]);
@@ -108,7 +111,7 @@ export function ProveedorList({ search, updateList }) {
     try {
       // Realiza la solicitud POST para cambiar el estado del usuario
       const response = await axiosInstance.delete(
-        `/proveedores/deleteProveedor/${id}`
+        `/proveedores/deleteProveedor/${id}`,
       );
 
       if (response.data.success) {
@@ -131,7 +134,7 @@ export function ProveedorList({ search, updateList }) {
     try {
       // Realiza la solicitud POST para cambiar el estado del usuario
       const response = await axiosInstance.put(
-        `/proveedores/activarProveedor/${id}`
+        `/proveedores/activarProveedor/${id}`,
       );
 
       if (response.data.success) {
@@ -196,18 +199,14 @@ export function ProveedorList({ search, updateList }) {
           <div className="d-flex justify-content-around py-2">
             {estado == 1 ? (
               <>
-                <button
-                  className="btn-editar me-2"
+                <BtnEditar
                   onClick={() => handleOpenModalEdit(row)}
-                >
-                  <FontAwesomeIcon icon={faPenToSquare} />
-                </button>
-                <button
-                  className="btn-eliminar me-2"
+                  title="Editar Proveedor"
+                />
+                <BtnEliminar
                   onClick={() => handleQuestionDelete(row.id, row.nombre)}
-                >
-                  <FontAwesomeIcon icon={faTrashCan} />
-                </button>
+                  title="Eliminar Proveedor"
+                />
               </>
             ) : (
               <button

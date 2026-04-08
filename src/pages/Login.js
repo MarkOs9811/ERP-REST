@@ -39,11 +39,11 @@ export const Login = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/login", {
+      // const response = await axios.post("http://127.0.0.1:8000/api/login", {
       //   email: data.email,
       //   password: data.password,
       // });
-      // const response = await axios.post("http://erp-api.test/api/login", {
+      const response = await axios.post("http://erp-api.test/api/login", {
         // const response = await axios.post(
         //   "https://fe27-38-43-130-95.ngrok-free.app/api/login",
         //   {

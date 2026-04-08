@@ -16,8 +16,11 @@ import { Cargando } from "../componentesReutilizables/Cargando";
 import ToastAlert from "../componenteToast/ToastAlert";
 import ModalAlertActivar from "../componenteToast/ModalAlertActivar";
 import { TablasGenerales } from "../componentesReutilizables/TablasGenerales";
-import { Pen, Pencil, Trash } from "lucide-react";
 import ModalRight from "../componentesReutilizables/ModalRight";
+import {
+  BtnEditar,
+  BtnEliminar,
+} from "../componentesReutilizables/BotonesAccion";
 
 export function PlatoList({ search }) {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -191,35 +194,25 @@ export function PlatoList({ search }) {
     {
       name: "Acciones",
       center: true,
-      grow: 2, // Damos espacio suficiente
+      grow: 2,
       cell: (row) => {
         const { estado } = row;
         return (
-          // <-- CAMBIO: Usamos gap-2 para un espaciado limpio
           <div className="d-flex gap-2">
             {estado === 1 ? (
               <>
-                <button
-                  className="btn-editar btn-sm" // <-- btn-sm para tamaño consistente
-                  data-bs-toggle="tooltip"
-                  title="Editar Plato"
+                <BtnEditar
                   onClick={() => handleOpenEditar(row)}
-                >
-                  <Pencil size={"auto"} />
-                </button>
-
-                <button
-                  className="btn-eliminar btn-sm" // <-- btn-sm
-                  data-bs-toggle="tooltip"
-                  title="Eliminar Plato"
+                  title="Editar Plato"
+                />
+                <BtnEliminar
                   onClick={() => handleEliminarQuestion(row)}
-                >
-                  <Trash size={"auto"} />
-                </button>
+                  title="Eliminar Plato"
+                />
               </>
             ) : (
               <button
-                className="btn btn-outline-success btn-sm" // <-- btn-sm
+                className="btn btn-outline-success btn-sm"
                 data-bs-toggle="tooltip"
                 title="Activar Plato"
                 onClick={() => {

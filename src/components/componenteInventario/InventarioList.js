@@ -2,23 +2,22 @@ import { useState, useEffect, useCallback, useMemo } from "react";
 import { useEstadoAsyn } from "../../hooks/EstadoAsync";
 import { GetInventario } from "../../service/GetInventario";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faEye,
-  faEyeSlash,
-  faPenToSquare,
-  faTrashCan,
-} from "@fortawesome/free-regular-svg-icons";
+import { faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { TablasGenerales } from "../componentesReutilizables/TablasGenerales";
 import { Alert } from "react-bootstrap";
 import ModalAlertQuestion from "../componenteToast/ModalAlertQuestion";
+import {
+  BtnEditar,
+  BtnEliminar,
+} from "../componentesReutilizables/BotonesAccion";
 import axiosInstance from "../../api/AxiosInstance";
 import ToastAlert from "../componenteToast/ToastAlert";
 import ModalAlertActivar from "../componenteToast/ModalAlertActivar";
 import ModalRight from "../componentesReutilizables/ModalRight";
 import { FormEditarInventario } from "./FormEditarInventario";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Eye, EyeIcon } from "lucide-react";
 
 export function InventarioList({ search }) {
   const [inventario, setInvetario] = useState([]);
@@ -157,29 +156,22 @@ export function InventarioList({ search }) {
           <div className="d-flex justify-content-around flex-wrap p-2">
             {estado == 1 ? (
               <>
-                <button
-                  className="btn-editar me-2"
-                  title="Editar Producto"
+                <BtnEditar
                   onClick={() => {
                     setModalEdit(true);
                     setdataProducto(row);
                   }}
-                >
-                  <FontAwesomeIcon icon={faPenToSquare} />
-                </button>
-                <button
-                  className="btn-eliminar"
-                  title="Eliminar el producto"
+                  title="Editar Producto"
+                />
+
+                <BtnEliminar
                   onClick={() => {
                     setQuestionEliminar(true);
                     setdataProducto(row);
                   }}
-                >
-                  <FontAwesomeIcon
-                    icon={faTrashCan}
-                    title="Eliminar Producto"
-                  />
-                </button>
+                  title="Eliminar Producto"
+                />
+
                 <button
                   className=" btn-desactivar ms-2"
                   onClick={() => {
@@ -200,7 +192,7 @@ export function InventarioList({ search }) {
                   setdataProducto(row);
                 }}
               >
-                <FontAwesomeIcon icon={faEye} />
+                <EyeIcon />
               </button>
             )}
           </div>

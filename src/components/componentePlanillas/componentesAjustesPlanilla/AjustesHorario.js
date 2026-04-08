@@ -1,15 +1,7 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Cargando } from "../../componentesReutilizables/Cargando";
 import { TablasGenerales } from "../../componentesReutilizables/TablasGenerales";
-import {
-  Check,
-  CheckCheck,
-  FileText,
-  Pencil,
-  Plus,
-  Timer,
-  Trash2,
-} from "lucide-react";
+import { Check, CheckCheck, FileText, Plus, Timer } from "lucide-react";
 import { useMemo, useState } from "react";
 import ToastAlert from "../../componenteToast/ToastAlert";
 import axiosInstance from "../../../api/AxiosInstance";
@@ -18,6 +10,10 @@ import ModalAlertActivar from "../../componenteToast/ModalAlertActivar";
 import { SpinnerCargando } from "../../componentesReutilizables/SpinnerCargando";
 import ModalRight from "../../componentesReutilizables/ModalRight";
 import { FormularioHorario } from "./formulariosAjustes/FormularioHorario";
+import {
+  BtnEditar,
+  BtnEliminar,
+} from "../../componentesReutilizables/BotonesAccion";
 import { GetHorariosAll } from "../../../service/accionesPlanilla/GetHorarioAll";
 
 export function AjustesHorario() {
@@ -84,7 +80,7 @@ export function AjustesHorario() {
     setLoadingActivar(true);
     try {
       const response = await axiosInstance.put(
-        `/horarios/activar/${idDeduccion}`
+        `/horarios/activar/${idDeduccion}`,
       );
 
       if (response.data.success) {
@@ -151,32 +147,22 @@ export function AjustesHorario() {
         <div className="d-flex justify-content-center">
           {row.estado == 1 ? (
             <>
-              <button
-                className=" btn-editar mx-1"
-                title="Editar"
+              <BtnEditar
                 onClick={() => {
                   setModalAddHorario(true);
                   setEditarHorario(true);
                   setDataHorario(row);
                 }}
-              >
-                <Pencil className="text-auto" size={"auto"} />
-              </button>
-              <button
-                className="btn-eliminar"
-                title="Eliminar"
+                title="Editar Horario"
+              />
+              <BtnEliminar
                 disabled={loadingDelete}
                 onClick={() => {
                   setModalSuspenderHorario(true);
                   setDataHorario(row);
                 }}
-              >
-                {loadingDelete ? (
-                  <SpinnerCargando />
-                ) : (
-                  <Trash2 className="text-auto" size={"auto"} />
-                )}
-              </button>
+                title="Eliminar Horario"
+              />
             </>
           ) : (
             <button

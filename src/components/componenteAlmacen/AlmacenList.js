@@ -1,9 +1,4 @@
-import {
-  faEdit,
-  faPlus,
-  faPowerOff,
-  faTrashCan,
-} from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faPowerOff } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { useEffect, useState } from "react";
@@ -13,11 +8,15 @@ import ModalAlertQuestion from "../componenteToast/ModalAlertQuestion";
 import { toast } from "react-toastify";
 import ModalAlertActivar from "../componenteToast/ModalAlertActivar";
 import { Modal } from "react-bootstrap";
+import {
+  BtnEditar,
+  BtnEliminar,
+} from "../componentesReutilizables/BotonesAccion";
 import { AlmacenStockAdd } from "./AlmacenStockAdd";
 import axiosInstance from "../../api/AxiosInstance";
 import { Cargando } from "../componentesReutilizables/Cargando";
 import { TablasGenerales } from "../componentesReutilizables/TablasGenerales";
-import { Redo } from "lucide-react";
+import { Redo, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import ModalRight from "../componentesReutilizables/ModalRight";
 import { FormularioEditarAlmacen } from "./FormularioEditarAlmacen";
@@ -78,7 +77,7 @@ export function AlmacenList({ search, updateList }) {
     // normalizar almacenData a un array seguro
     const list = Array.isArray(almacenData)
       ? almacenData
-      : almacenData?.data ?? [];
+      : (almacenData?.data ?? []);
     setAlmacen(list);
     setFilteredAlmacen(list);
   }, [almacenData]);
@@ -155,7 +154,7 @@ export function AlmacenList({ search, updateList }) {
   const handleEliminarProductoSi = async (idActivo) => {
     try {
       const response = await axiosInstance.post(
-        `/almacen/eliminar/${idActivo}`
+        `/almacen/eliminar/${idActivo}`,
       );
       if (response.data.success) {
         toast.success("Activo desactivado correctamente");
@@ -225,20 +224,19 @@ export function AlmacenList({ search, updateList }) {
                 >
                   <FontAwesomeIcon icon={faPlus} />
                 </button>
-                <button
-                  className=" btn-editar me-2"
+                <BtnEditar
                   onClick={() => {
                     setDataAlmance(row);
                     setModalEditarAlmacen(true);
                   }}
-                >
-                  <FontAwesomeIcon icon={faEdit} />
-                </button>
-                <button
-                  className="btn-eliminar me-2"
-                  onClick={() => handleEliminarProducto(row.id, row.nombre)}
-                >
-                  <FontAwesomeIcon icon={faTrashCan} />
+                  title="Editar Producto"
+                />
+                <button>
+                  <BtnEliminar
+                    onClick={() => handleEliminarProducto(row.id, row.nombre)}
+                    title="Eliminar Producto"
+                  />
+                  <Trash2 />
                 </button>
                 <button
                   className=" btn btn-transferir-directo me-2"
