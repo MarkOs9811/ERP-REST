@@ -2,8 +2,8 @@
 
 :root {
   /* 2026 Modern Liquid/Glassmorphism Aesthetic */
-  --brand-primary: #EE5252;
-  --brand-secondary: #ff8787; /* Removed any blue presence */
+  --brand-primary: #161616;
+  --brand-secondary: #444444; /* Removed any blue presence */
   --bg-main: #f0f1f3;
   --bg-sidebar-header: #f0f1f3;
   --bg-card: #ffffff;

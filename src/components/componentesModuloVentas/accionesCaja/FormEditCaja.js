@@ -1,4 +1,13 @@
+import { useEffect } from "react";
+
 export function FormEditCaja({ onSubmit, register, errors, data, setValue }) {
+  // PONER POR DEFECTO EL NOMBRE DE LA CAJA EN EL INPUT CUANDO SE ABRE EL MODAL DE EDITAR CAJA
+  useEffect(() => {
+    if (data) {
+      setValue("nombreCaja", data.nombreCaja);
+    }
+  }, [data, setValue]);
+
   return (
     <form onSubmit={onSubmit} className="p-3">
       <div className="mb-3">

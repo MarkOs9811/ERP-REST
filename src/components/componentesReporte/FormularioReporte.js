@@ -13,8 +13,10 @@ const getTodayDate = () => {
 
 export default function FormularioReporte({
   titulo,
-  onSubmit,
-  isLoading,
+  onSubmitGoogle,
+  onSubmitClasico,
+  isLoadingGoogle,
+  isLoadingClasico,
   tipo,
   estadoIntegracionGoogle,
 }) {
@@ -22,23 +24,25 @@ export default function FormularioReporte({
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: { tipo: tipo }, // Forzamos el valor por defecto aquí
+  });
+
+  // Determinamos si los botones deben bloquearse
+  const isAnyLoading = isLoadingGoogle || isLoadingClasico;
 
   return (
     <div className="col-lg-4 col-sm-12">
-      <div className="card border shadow-sm h-100 p-0  py-2">
+      <div className="card border shadow-sm h-100 p-0 py-2">
         <div className="card-header py-2 px-3 border-bottom ">
           <p className="h6 mb-0">{titulo}</p>
         </div>
-        <form onSubmit={handleSubmit(onSubmit)}>
+
+        {/* Ya no usamos onSubmit en la etiqueta <form> */}
+        <form>
           <div className="card-body py-3 px-3">
-            <input
-              type="hidden"
-              defaultValue={tipo}
-              {...register("tipo", {
-                required: "El tipo de reporte es obligatorio",
-              })}
-            />
+            <input type="hidden" {...register("tipo")} />
+
             <div className="row g-2">
               <div className="col-6">
                 <label htmlFor="fechaInicio" className="form-label small mb-1">
@@ -62,6 +66,7 @@ export default function FormularioReporte({
                   </div>
                 )}
               </div>
+
               <div className="col-6">
                 <label htmlFor="fechaFin" className="form-label small mb-1">
                   Fecha Fin
@@ -86,27 +91,67 @@ export default function FormularioReporte({
               </div>
             </div>
           </div>
-          <div className="card-footer px-3 bg-white border-top d-flex justify-content-end">
-            <>
-              {estadoIntegracionGoogle?.estado === 1 ? (
+
+          {/* Footer con los botones */}
+          <div className="card-footer px-3 bg-white border-top d-flex justify-content-end gap-2">
+            {estadoIntegracionGoogle?.estado === 1 ? (
+              // VISUALIZACIÓN CUANDO GOOGLE ESTÁ INTEGRADO (Muestra ambas opciones)
+              <>
                 <RippleWrapper className="p-0">
                   <BotonAnimado
-                    type="submit"
-                    loading={isLoading}
-                    className="btn-realizarPedido rounded-none btn-sm px-3 h6 py-2"
+                    type="button" // <--- IMPORTANTE: type="button" para que no recargue la página
+                    loading={isLoadingClasico}
+                    disabled={isAnyLoading}
+                    className="btn btn-outline-dark"
                     icon={
-                      !isLoading ? <FileTextIcon className="me-1" /> : undefined
+                      !isLoadingClasico ? (
+                        <FileTextIcon className="me-1" />
+                      ) : undefined
                     }
+                    onClick={handleSubmit(onSubmitClasico)}
                   >
-                    {isLoading ? "Generando..." : "Generar Reporte"}
+                    {isLoadingClasico ? "..." : "Excel"}
                   </BotonAnimado>
                 </RippleWrapper>
-              ) : (
-                <small className="text-muted">
-                  No disponible, inicie sesión con su cuenta de Google
-                </small>
-              )}
-            </>
+
+                <RippleWrapper className="p-0">
+                  <BotonAnimado
+                    type="button"
+                    loading={isLoadingGoogle}
+                    disabled={isAnyLoading}
+                    className="btn-realizarPedido rounded-none btn-sm px-3 h6 py-2"
+                    icon={
+                      !isLoadingGoogle ? (
+                        <FileTextIcon className="me-1" />
+                      ) : undefined
+                    }
+                    onClick={handleSubmit(onSubmitGoogle)}
+                  >
+                    {isLoadingGoogle ? "Generando..." : "Google Sheets"}
+                  </BotonAnimado>
+                </RippleWrapper>
+              </>
+            ) : (
+              // VISUALIZACIÓN CUANDO GOOGLE NO ESTÁ INTEGRADO (Solo Excel Clásico)
+              <RippleWrapper className="p-0">
+                <BotonAnimado
+                  type="button"
+                  loading={isLoadingClasico}
+                  disabled={isAnyLoading}
+                  className="px-3 h6 py-2" // Lo pintamos más llamativo (primary)
+                  icon={
+                    !isLoadingClasico ? (
+                      <FileTextIcon className="me-1" />
+                    ) : undefined
+                  }
+                  onClick={handleSubmit(onSubmitClasico)}
+                >
+                  {isLoadingClasico
+                    ? "Generando..."
+                    : "Descargar Reporte Excel"}
+                </BotonAnimado>
+              </RippleWrapper>
+            )}
           </div>
         </form>
       </div>

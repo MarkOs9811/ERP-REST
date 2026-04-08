@@ -297,6 +297,7 @@ export function ListVentas({ search }) {
         title="Detalles de la Venta"
         submitText="Imprimir"
         cancelText="Cerrar"
+        hideFooter={true}
       >
         <ModalDetallesVentas dataVentas={dataVentas} />
       </ModalRight>

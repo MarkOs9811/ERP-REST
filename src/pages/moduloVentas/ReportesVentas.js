@@ -1,16 +1,15 @@
-import FormularioReporte from "../../components/componentesReporte/FormularioReporte";
-import ToastAlert from "../../components/componenteToast/ToastAlert";
-import axiosInstance from "../../api/AxiosInstance";
 import { useState } from "react";
+import FormularioReporte from "../../components/componentesReporte/FormularioReporte";
 import ModalReportes from "../../components/componentesReutilizables/ModalReportes";
-import { Cargando } from "../../components/componentesReutilizables/Cargando";
+import axiosInstance from "../../api/AxiosInstance";
+import ToastAlert from "../../components/componenteToast/ToastAlert";
 import { EstadoIntegraciones } from "../../hooks/EstadoIntegraciones";
 
-export function ReportesAlmacen() {
+export function ReportesVentas() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [sheetUrl, setSheetUrl] = useState("");
   const [fechas, setFechas] = useState([]);
-  const [loadingTipo, setLoadingTipo] = useState(""); // Ej: "almacen-google" o "almacen-clasico"
+  const [loadingTipo, setLoadingTipo] = useState(""); // Ej: 'ventas-google', 'ventas-clasico'
   const [tipoGenerado, setTipoGenerado] = useState("");
 
   const {
@@ -25,6 +24,7 @@ export function ReportesAlmacen() {
     setLoadingTipo(`${data.tipo}-google`);
     try {
       const response = await axiosInstance.post("/reportes/google-sheet", data);
+
       if (response.data.success) {
         ToastAlert("success", "Reporte generado en Google Sheets", false);
         setSheetUrl(response.data.data);
@@ -41,7 +41,7 @@ export function ReportesAlmacen() {
     } catch (error) {
       ToastAlert("error", "Hubo un error al generar el reporte.", false);
     } finally {
-      setLoadingTipo("");
+      setLoadingTipo(""); // desactiva el loading
     }
   };
 
@@ -50,7 +50,7 @@ export function ReportesAlmacen() {
     setLoadingTipo(`${data.tipo}-clasico`);
     try {
       const response = await axiosInstance.post("/reportes/clasico", data, {
-        responseType: "blob", // La clave mágica para archivos
+        responseType: "blob", // Para descargar el archivo binario
       });
 
       const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -91,55 +91,54 @@ export function ReportesAlmacen() {
   if (isError) return <p>Error: {error.message}</p>;
 
   return (
-    <div>
-      <div className="card shadow-sm p-3">
-        <h3 className="mb-4">Reportes</h3>
-        <div className="row g-3 mb-4">
-          <FormularioReporte
-            titulo="Reporte de Almacen"
-            onSubmitGoogle={handleReporteGoogle}
-            onSubmitClasico={handleReporteClasico}
-            isLoadingGoogle={loadingTipo === "almacen-google"}
-            isLoadingClasico={loadingTipo === "almacen-clasico"}
-            tipo="almacen"
-            estadoIntegracionGoogle={estadoGoogleConfig}
-          />
-          <FormularioReporte
-            titulo="Reporte de Movimientos"
-            onSubmitGoogle={handleReporteGoogle}
-            onSubmitClasico={handleReporteClasico}
-            isLoadingGoogle={loadingTipo === "movimiento-google"}
-            isLoadingClasico={loadingTipo === "movimiento-clasico"}
-            tipo="movimiento"
-            estadoIntegracionGoogle={estadoGoogleConfig}
-          />
-          <FormularioReporte
-            titulo="Reporte de Kardex"
-            onSubmitGoogle={handleReporteGoogle}
-            onSubmitClasico={handleReporteClasico}
-            isLoadingGoogle={loadingTipo === "kardex-google"}
-            isLoadingClasico={loadingTipo === "kardex-clasico"}
-            tipo="kardex"
-            estadoIntegracionGoogle={estadoGoogleConfig}
-          />
-          <FormularioReporte
-            titulo="Reporte de Solcitudes"
-            onSubmitGoogle={handleReporteGoogle}
-            onSubmitClasico={handleReporteClasico}
-            isLoadingGoogle={loadingTipo === "solicitudes-google"}
-            isLoadingClasico={loadingTipo === "solicitudes-clasico"}
-            tipo="solicitudes"
-            estadoIntegracionGoogle={estadoGoogleConfig}
-          />
+    <div className="card shadow-sm border-0 p-3">
+      <div className="row g-3 mb-4">
+        <div className="col-md-12">
+          <h3 className="mb-4">Reportes</h3>
         </div>
+
+        <FormularioReporte
+          titulo="Reporte de Ventas"
+          onSubmitGoogle={handleReporteGoogle}
+          onSubmitClasico={handleReporteClasico}
+          isLoadingGoogle={loadingTipo === "ventas-google"}
+          isLoadingClasico={loadingTipo === "ventas-clasico"}
+          tipo="ventas"
+          estadoIntegracionGoogle={estadoGoogleConfig}
+        />
+
+        <FormularioReporte
+          titulo="Reporte de Cajas"
+          onSubmitGoogle={handleReporteGoogle}
+          onSubmitClasico={handleReporteClasico}
+          isLoadingGoogle={loadingTipo === "cajas-google"}
+          isLoadingClasico={loadingTipo === "cajas-clasico"}
+          tipo={"cajas"}
+          estadoIntegracionGoogle={estadoGoogleConfig}
+        />
+
+        <FormularioReporte
+          titulo="Reporte de Inventario"
+          onSubmitGoogle={handleReporteGoogle}
+          onSubmitClasico={handleReporteClasico}
+          isLoadingGoogle={loadingTipo === "inventario-google"}
+          isLoadingClasico={loadingTipo === "inventario-clasico"}
+          tipo={"inventario"}
+          estadoIntegracionGoogle={estadoGoogleConfig}
+        />
+
+        <FormularioReporte
+          titulo="Reporte de Compras"
+          onSubmitGoogle={handleReporteGoogle}
+          onSubmitClasico={handleReporteClasico}
+          isLoadingGoogle={loadingTipo === "compras-google"}
+          isLoadingClasico={loadingTipo === "compras-clasico"}
+          tipo="compras"
+          estadoIntegracionGoogle={estadoGoogleConfig}
+        />
       </div>
 
-      {loadingTipo && (
-        <div className="d-flex justify-content-center">
-          <Cargando />
-        </div>
-      )}
-
+      {/* Modal para mostrar la hoja de cálculo */}
       <ModalReportes
         isOpen={isModalOpen}
         setIsOpen={setIsModalOpen}

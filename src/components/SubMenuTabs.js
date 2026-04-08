@@ -11,6 +11,7 @@ import {
   PieChart,
   Settings,
   Settings2,
+  ChartArea,
 } from "lucide-react";
 
 const subMenuGroups = {
@@ -133,12 +134,18 @@ const subMenuGroups = {
     },
   ],
   "/ventas": [
-    { label: "Mis Ventas", path: "/ventas", icon: <ShoppingCart size={16} /> },
+    { label: "Dashboard", path: "/ventas", icon: <ChartArea size={16} /> },
+    {
+      label: "Mis Ventas",
+      path: "/ventas/mis-ventas",
+      icon: <ShoppingCart size={16} />,
+    },
     {
       label: "Inventario",
       path: "/ventas/inventario",
       icon: <Box size={16} />,
     },
+
     { label: "Cajas", path: "/ventas/cajas", icon: <Wallet size={16} /> },
     {
       label: "Solicitud",

@@ -9,6 +9,7 @@ import {
   PowerOff,
   Trash2,
   Edit2,
+  Power,
 } from "lucide-react";
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -47,7 +48,9 @@ export function Repartidores() {
 
   const handleToggleEstado = async (id) => {
     const nuevoEstado = repartidorAccion?.estado == 1 ? 0 : 1;
-    const exito = await PutData("delivery/repartidores-estado", id, { estado: nuevoEstado });
+    const exito = await PutData("delivery/repartidores-estado", id, {
+      estado: nuevoEstado,
+    });
     if (exito) {
       queryClient.invalidateQueries(["repartidores"]);
       return true;
@@ -66,13 +69,13 @@ export function Repartidores() {
 
   const usuariosRepartidores = repartidores
     ? repartidores.filter(
-      (usuario) => usuario?.empleado?.cargo?.nombre === "delivery",
-    )
+        (usuario) => usuario?.empleado?.cargo?.nombre === "delivery",
+      )
     : [];
 
   return (
     <div className="container-fluid p-0">
-      <div className="card shadow-sm border-0 rounded-4">
+      <div className="card rounded-4">
         {/* HEADER DE LA VISTA */}
         <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-3">
           <div className="d-flex align-items-center">
@@ -101,10 +104,10 @@ export function Repartidores() {
               <span className="d-none d-sm-inline">Reporte</span>
             </button>
             <button
-              className="btn btn-dark px-3"
+              className="btn btn-primary px-3"
               title="Agregar Nuevo Repartidor"
               onClick={() => {
-                navigate("/rrhh")
+                navigate("/rrhh");
               }}
             >
               <Plus size={18} />
@@ -141,7 +144,7 @@ export function Repartidores() {
               usuariosRepartidores.map((repartidor) => (
                 /* AQUÍ ESTÁ LA CLAVE: col-md-6 (2 por fila en tablet) col-xl-4 o col-xl-3 (3 o 4 por fila en desktop) */
                 <div className="col-12 col-md-6 col-xl-4" key={repartidor.id}>
-                  <div className="card h-100 repartidor-card-horizontal bg-white shadow-sm">
+                  <div className="card h-100  bg-white ">
                     {/* Rejilla interna simplificada con Flexbox puro */}
                     <div className="card-body p-3 d-flex align-items-center gap-3">
                       {/* 1. Avatar fijo a la izquierda */}
@@ -151,7 +154,11 @@ export function Repartidores() {
                         </div>
                         <div
                           className={`status-indicator-horizontal ${repartidor.estado == 1 ? "bg-success" : "bg-danger"}`}
-                          title={repartidor.estado == 1 ? "Activo/Conectado" : "Inactivo"}
+                          title={
+                            repartidor.estado == 1
+                              ? "Activo/Conectado"
+                              : "Inactivo"
+                          }
                         ></div>
                       </div>
 
@@ -169,7 +176,7 @@ export function Repartidores() {
 
                         <div className="mb-2">
                           <span
-                            className="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-2 py-0"
+                            className="badge bg-success bg-opacity-10  border border-success border-opacity-25 rounded-pill px-2 py-1"
                             style={{ fontSize: "0.65rem" }}
                           >
                             Motorizado
@@ -186,7 +193,8 @@ export function Repartidores() {
                               className="text-secondary flex-shrink-0"
                             />
                             <span className="text-truncate">
-                              {repartidor.telefono || "Sin registro"}
+                              {repartidor?.empleado?.persona?.telefono ||
+                                "Sin registro"}
                             </span>
                           </div>
                           <div className="d-flex align-items-center gap-2 text-truncate">
@@ -207,37 +215,32 @@ export function Repartidores() {
                       {/* 3. Acciones alineadas a la derecha */}
                       <div className="d-flex justify-content-center align-items-center flex-shrink-0 gap-2">
                         <button
-                          className="btn btn-sm btn-outline-primary border rounded-circle d-flex align-items-center justify-content-center"
-                          style={{ width: "32px", height: "32px", padding: 0 }}
+                          className="btn btn-sm btn-outline-primary p-2"
                           title="Editar Repartidor"
                           onClick={() => {
                             setRepartidorSelected(repartidor);
                             setIsModalEditOpen(true);
                           }}
                         >
-                          <Edit2 size={14} />
+                          <Edit2 size={18} />
                         </button>
                         <button
-                          className="btn btn-sm btn-outline-secondary border rounded-circle d-flex align-items-center justify-content-center"
-                          style={{ width: "32px", height: "32px", padding: 0 }}
-                          title={repartidor.estado == 1 ? "Desactivar Repartidor" : "Activar Repartidor"}
+                          className={`btn btn-sm  p-2 ${repartidor.estado == 1 ? "btn-outline-danger" : "btn-outline-success"}`}
+                          title={
+                            repartidor.estado == 1
+                              ? "Desactivar Repartidor"
+                              : "Activar Repartidor"
+                          }
                           onClick={() => {
                             setRepartidorAccion(repartidor);
                             setShowModalActivar(true);
                           }}
                         >
-                          <PowerOff size={14} />
-                        </button>
-                        <button
-                          className="btn btn-sm btn-outline-danger border rounded-circle d-flex align-items-center justify-content-center"
-                          style={{ width: "32px", height: "32px", padding: 0 }}
-                          title="Eliminar Repartidor"
-                          onClick={() => {
-                            setRepartidorDelete(repartidor);
-                            setShowModalEliminar(true);
-                          }}
-                        >
-                          <Trash2 size={14} />
+                          {repartidor.estado == 0 ? (
+                            <Power size={18} />
+                          ) : (
+                            <PowerOff size={18} />
+                          )}
                         </button>
                       </div>
                     </div>
@@ -248,7 +251,6 @@ export function Repartidores() {
           </div>
         </div>
       </div>
-
 
       {/* MODAL PARA EDITAR REPARTIDOR */}
       <ModalRight
@@ -279,22 +281,12 @@ export function Repartidores() {
         }}
         handleEliminar={handleToggleEstado}
         idEliminar={repartidorAccion?.id}
-        nombre={repartidorAccion ? `${repartidorAccion.empleado?.persona?.nombre} ${repartidorAccion.empleado?.persona?.apellidos}` : ""}
-        pregunta={`¿Estás seguro de ${repartidorAccion?.estado == 1 ? 'desactivar' : 'activar'}`}
-        tipo="el repartidor"
-      />
-
-      {/* MODAL PARA CONFIRMAR ELIMINAAR */}
-      <ModalAlertQuestion
-        show={showModalEliminar}
-        handleCloseModal={() => {
-          setShowModalEliminar(false);
-          setRepartidorDelete(null);
-        }}
-        handleEliminar={handleDeleteRepartidor}
-        idEliminar={repartidorDelete?.id}
-        nombre={repartidorDelete ? `${repartidorDelete.empleado?.persona?.nombre} ${repartidorDelete.empleado?.persona?.apellidos}` : ""}
-        pregunta="¿Estás completamente seguro de ELIMINAR"
+        nombre={
+          repartidorAccion
+            ? `${repartidorAccion.empleado?.persona?.nombre} ${repartidorAccion.empleado?.persona?.apellidos}`
+            : ""
+        }
+        pregunta={`¿Estás seguro de ${repartidorAccion?.estado == 1 ? "desactivar" : "activar"}`}
         tipo="el repartidor"
       />
     </div>

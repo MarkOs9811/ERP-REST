@@ -70,26 +70,26 @@
 /* ===== TARJETAS RESUMEN KPI ===== */
 .card[style*="background: #"] {
   background: rgb(190, 190, 190) !important;
-  border: none;
+  
   position: relative;
 }
 
 /* Tarjeta de Este Mes */
 .card[style*="#f1faf6"] {
-  border: none !important;
+ 
   background: white !important;
 }
 
 /* Tarjeta de Mes Pasado */
 .card[style*="#fff6f6"] {
-  border: none !important;
+ 
   background: white !important;
 }
 
 /* Tarjeta de Diferencia */
 .card[style*="#e8f5e9"],
 .card[style*="#ffebee"] {
-  border: none;
+  
   background: white !important;
 }
 
@@ -127,13 +127,6 @@
 }
 
 
-/* ===== BUSCADOR ===== */
-.header-search-container {
-  position: relative;
-  display: flex;
-  align-items: center;
-  max-width: 380px;
-}
 
 .header-search-container .form-control {
   border: 2px solid #000000;
@@ -158,35 +151,6 @@
   pointer-events: none;
   size: 18px;
 }
-
-/* ===== INPUT DATE ===== */
-.form-control[type="date"] {
-  border: 2px solid #e5e7eb;
-  border-radius: 10px;
-  padding: 10px 16px;
-  font-size: 0.9rem;
-  transition: all 0.3s ease;
-  background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
-  font-weight: 500;
-  color: #374151;
-  cursor: pointer;
-}
-
-.form-control[type="date"]:focus {
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-  outline: none;
-}
-
-/* ===== TÍTULO CARD ESPECIAL ===== */
-.titulo-card-especial {
-  font-size: 1.4rem;
-  font-weight: 800;
-  color: #1f2937;
-  margin-bottom: 4px;
-  letter-spacing: -0.5px;
-}
-
 
 
 /* ===== TEMA OSCURO VENTAS PREMIUM ===== */

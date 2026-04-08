@@ -38,7 +38,7 @@ export function SubMenu() {
                       className: "access-sales",
                       path: "/vender/ventasMesas",
                       show: ["administrador", "atencion al cliente"].includes(
-                        cargo?.empleado?.cargo?.nombre
+                        cargo?.empleado?.cargo?.nombre,
                       ),
                     },
                     {
@@ -144,7 +144,7 @@ export function SubMenu() {
                 ];
 
                 const esSubruta = subrutas.some((ruta) =>
-                  location.pathname.startsWith(ruta)
+                  location.pathname.startsWith(ruta),
                 );
                 const esPlanilla =
                   location.pathname === "/rr-hh" ||
@@ -171,7 +171,7 @@ export function SubMenu() {
                     <li
                       className={`p-0 d-flex ${
                         location.pathname.startsWith(
-                          "/rr-hh/ingreso-a-planilla"
+                          "/rr-hh/ingreso-a-planilla",
                         )
                           ? "active"
                           : ""
@@ -262,83 +262,68 @@ export function SubMenu() {
 
             {moduloAplicado === "ventas" &&
               (() => {
-                const subrutasVentas = [
-                  "/ventas/inventario",
-                  "/ventas/cajas",
-                  "/ventas/solicitud",
-                  "/ventas/reportes",
-                  "/ventas/ajustes-ventas",
-                ];
-
-                const esSubrutaVentas = subrutasVentas.some((ruta) =>
-                  location.pathname.startsWith(ruta)
-                );
-                const esMisVentas =
-                  location.pathname === "/ventas" ||
-                  (location.pathname.startsWith("/ventas") && !esSubrutaVentas);
+                // Guardamos la ruta actual en una variable más corta
+                const path = location.pathname;
 
                 return (
                   <>
-                    <li className={`p-0 d-flex ${esMisVentas ? "active" : ""}`}>
-                      <Link to="/ventas" className="w-100 p-2">
+                    {/* 1. OPCIÓN NUEVA: Dashboard de Ventas */}
+                    <li
+                      className={`p-0 d-flex ${path === "/ventas" || path.startsWith("/ventas/dashboard") ? "active" : ""}`}
+                    >
+                      <Link to="/ventas/dashboard" className="w-100 p-2">
+                        Dashboard Ventas
+                      </Link>
+                    </li>
+
+                    {/* 2. OPCIÓN SEPARADA: Mis Ventas */}
+                    <li
+                      className={`p-0 d-flex ${path.startsWith("/ventas/mis-ventas") ? "active" : ""}`}
+                    >
+                      <Link to="/ventas/mis-ventas" className="w-100 p-2">
                         Mis Ventas
                       </Link>
                     </li>
 
+                    {/* 3. Inventario */}
                     <li
-                      className={`p-0 d-flex ${
-                        location.pathname.startsWith("/ventas/inventario")
-                          ? "active"
-                          : ""
-                      }`}
+                      className={`p-0 d-flex ${path.startsWith("/ventas/inventario") ? "active" : ""}`}
                     >
                       <Link to="/ventas/inventario" className="w-100 p-2">
                         Inventario
                       </Link>
                     </li>
 
+                    {/* 4. Cajas */}
                     <li
-                      className={`p-0 d-flex ${
-                        location.pathname.startsWith("/ventas/cajas")
-                          ? "active"
-                          : ""
-                      }`}
+                      className={`p-0 d-flex ${path.startsWith("/ventas/cajas") ? "active" : ""}`}
                     >
                       <Link to="/ventas/cajas" className="w-100 p-2">
                         Cajas
                       </Link>
                     </li>
 
+                    {/* 5. Solicitud */}
                     <li
-                      className={`p-0 d-flex ${
-                        location.pathname.startsWith("/ventas/solicitud")
-                          ? "active"
-                          : ""
-                      }`}
+                      className={`p-0 d-flex ${path.startsWith("/ventas/solicitud") ? "active" : ""}`}
                     >
                       <Link to="/ventas/solicitud" className="w-100 p-2">
                         Solicitud
                       </Link>
                     </li>
 
+                    {/* 6. Reportes */}
                     <li
-                      className={`p-0 d-flex ${
-                        location.pathname.startsWith("/ventas/reportes")
-                          ? "active"
-                          : ""
-                      }`}
+                      className={`p-0 d-flex ${path.startsWith("/ventas/reportes") ? "active" : ""}`}
                     >
                       <Link to="/ventas/reportes" className="w-100 p-2">
                         Reportes
                       </Link>
                     </li>
 
+                    {/* 7. Ajustes Ventas */}
                     <li
-                      className={`p-0 d-flex ${
-                        location.pathname.startsWith("/ventas/ajustes-ventas")
-                          ? "active"
-                          : ""
-                      }`}
+                      className={`p-0 d-flex ${path.startsWith("/ventas/ajustes-ventas") ? "active" : ""}`}
                     >
                       <Link to="/ventas/ajustes-ventas" className="w-100 p-2">
                         Ajustes Ventas

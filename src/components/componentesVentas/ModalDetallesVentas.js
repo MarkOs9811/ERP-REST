@@ -1,3 +1,8 @@
+import { Printer } from "lucide-react";
+import { TicketImpresion } from "../componenteVender/TiketsType/TicketImpresion";
+import { useReactToPrint } from "react-to-print";
+import { useRef, useState } from "react";
+
 export function ModalDetallesVentas({ dataVentas }) {
   const {
     id,
@@ -19,9 +24,46 @@ export function ModalDetallesVentas({ dataVentas }) {
   const documento = boleta
     ? `Boleta B001-${boleta.numero}`
     : factura
-    ? `Factura F001-${factura.numero}`
-    : "Documento no disponible";
+      ? `Factura F001-${factura.numero}`
+      : "Documento no disponible";
 
+  // PARA IMPRIMIR
+  const componentRef = useRef();
+
+  // 1. Ya no necesitamos el useState(null), porque vamos a mapear los datos directamente.
+  const handlePrint = useReactToPrint({
+    contentRef: componentRef, // o content: () => componentRef.current (dependiendo de tu versión de react-to-print)
+  });
+
+  const ventaParaImpresion = {
+    tipo_comprobante: boleta
+      ? "BOLETA DE VENTA"
+      : factura
+        ? "FACTURA"
+        : "TICKET DE VENTA",
+    serie_correlativo: documento, // Ya lo tienes calculado arriba
+    fecha: fechaVenta,
+    cliente: {
+      // Ajusta las rutas de cliente según cómo venga tu backend
+      nombre:
+        pedido?.cliente?.nombre ||
+        dataVentas?.cliente?.nombre ||
+        "Público General",
+      documento:
+        pedido?.cliente?.documento || dataVentas?.cliente?.documento || "---",
+    },
+    productos: detallePedidos.map((item) => ({
+      cantidad: item.cantidad,
+      descripcion: item.producto?.nombre || item.plato?.nombre || "Desconocido",
+      precio_unitario:
+        parseFloat(item.precio_unitario) || parseFloat(item.plato?.precio) || 0,
+    })),
+    subtotal: subTotal,
+    igv: igv,
+    total: total,
+    metodo_pago: metodo_pago?.nombre || "N/A",
+    observacion: pedido?.observaciones || dataVentas?.observacion || "", // Si manejas observaciones
+  };
   if (!dataVentas) return <div>Cargando...</div>;
 
   return (
@@ -101,6 +143,19 @@ export function ModalDetallesVentas({ dataVentas }) {
         <p className="h5 fw-bold text-success">
           Total: S/ {parseFloat(total).toFixed(2)}
         </p>
+      </div>
+      <div className="card-footer mt-4">
+        <button
+          onClick={() => handlePrint()}
+          className="btn btn-outline-primary"
+        >
+          <Printer size={18} className="me-2" /> Imprimir Ticket
+        </button>
+
+        {/* 3. Pasamos el objeto mapeado al ticket oculto */}
+        <div style={{ display: "none" }}>
+          <TicketImpresion ref={componentRef} venta={ventaParaImpresion} />
+        </div>
       </div>
     </div>
   );

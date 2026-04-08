@@ -29,7 +29,8 @@ export function FormEditRepartidor({ onClose, repartidor }) {
         nombres: repartidor?.empleado?.persona?.nombre || "",
         apellidos: repartidor?.empleado?.persona?.apellidos || "",
         dni: repartidor?.empleado?.persona?.documento_identidad || "",
-        telefono: repartidor?.telefono || repartidor?.empleado?.persona?.telefono || "",
+        telefono:
+          repartidor?.telefono || repartidor?.empleado?.persona?.telefono || "",
         email: repartidor?.email || "",
         placa: repartidor?.placa_vehiculo || repartidor?.empleado?.placa || "", // Si existe en un futuro
       });
@@ -46,7 +47,11 @@ export function FormEditRepartidor({ onClose, repartidor }) {
       placa: data.placa,
     };
 
-    const exito = await PutData("delivery/repartidores", repartidor.id, payload);
+    const exito = await PutData(
+      "delivery/repartidores",
+      repartidor.id,
+      payload,
+    );
 
     if (exito) {
       queryClient.invalidateQueries(["repartidores"]);
@@ -55,12 +60,19 @@ export function FormEditRepartidor({ onClose, repartidor }) {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="d-flex flex-column h-100 p-4">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="d-flex flex-column h-100 p-4"
+    >
       {/* DATOS PERSONALES */}
-      <h6 className="fw-bold mb-3 mt-2 text-dark border-bottom pb-2">Datos Personales</h6>
+      <h6 className="fw-bold mb-3 mt-2 text-dark border-bottom pb-2">
+        Datos Personales
+      </h6>
       <div className="row g-3 mb-4">
         <div className="col-12">
-          <label className="form-label fw-medium text-dark small">Nombres</label>
+          <label className="form-label fw-medium text-dark small">
+            Nombres
+          </label>
           <div className="input-group shadow-sm">
             <span className="input-group-text bg-white">
               <User size={16} className="text-muted" />
@@ -72,11 +84,15 @@ export function FormEditRepartidor({ onClose, repartidor }) {
               {...register("nombres", { required: "Campo obligatorio" })}
             />
           </div>
-          {errors.nombres && <span className="text-danger small">{errors.nombres.message}</span>}
+          {errors.nombres && (
+            <span className="text-danger small">{errors.nombres.message}</span>
+          )}
         </div>
 
         <div className="col-12">
-          <label className="form-label fw-medium text-dark small">Apellidos</label>
+          <label className="form-label fw-medium text-dark small">
+            Apellidos
+          </label>
           <div className="input-group shadow-sm">
             <span className="input-group-text bg-white">
               <User size={16} className="text-muted" />
@@ -88,27 +104,37 @@ export function FormEditRepartidor({ onClose, repartidor }) {
               {...register("apellidos", { required: "Campo obligatorio" })}
             />
           </div>
-          {errors.apellidos && <span className="text-danger small">{errors.apellidos.message}</span>}
+          {errors.apellidos && (
+            <span className="text-danger small">
+              {errors.apellidos.message}
+            </span>
+          )}
         </div>
 
         <div className="col-6">
-          <label className="form-label fw-medium text-dark small">DNI / Documento</label>
+          <label className="form-label fw-medium text-dark small">
+            DNI / Documento
+          </label>
           <div className="input-group shadow-sm">
             <span className="input-group-text bg-white">
               <Hash size={16} className="text-muted" />
             </span>
             <input
-              type="text"
+              type="number"
               className={`form-control ${errors.dni ? "is-invalid" : ""}`}
               placeholder="N° de doc."
               {...register("dni", { required: "Campo obligatorio" })}
             />
           </div>
-          {errors.dni && <span className="text-danger small">{errors.dni.message}</span>}
+          {errors.dni && (
+            <span className="text-danger small">{errors.dni.message}</span>
+          )}
         </div>
 
         <div className="col-6">
-          <label className="form-label fw-medium text-dark small">Teléfono</label>
+          <label className="form-label fw-medium text-dark small">
+            Teléfono
+          </label>
           <div className="input-group shadow-sm">
             <span className="input-group-text bg-white">
               <Phone size={16} className="text-muted" />
@@ -120,15 +146,21 @@ export function FormEditRepartidor({ onClose, repartidor }) {
               {...register("telefono", { required: "Campo obligatorio" })}
             />
           </div>
-          {errors.telefono && <span className="text-danger small">{errors.telefono.message}</span>}
+          {errors.telefono && (
+            <span className="text-danger small">{errors.telefono.message}</span>
+          )}
         </div>
       </div>
 
       {/* DATOS DE CONTACTO & VEHÍCULO */}
-      <h6 className="fw-bold mb-3 text-dark border-bottom pb-2">Información Adicional</h6>
+      <h6 className="fw-bold mb-3 text-dark border-bottom pb-2">
+        Información Adicional
+      </h6>
       <div className="row g-3 mb-4">
         <div className="col-12">
-          <label className="form-label fw-medium text-dark small">Correo Electrónico (Opcional)</label>
+          <label className="form-label fw-medium text-dark small">
+            Correo Electrónico (Opcional)
+          </label>
           <div className="input-group shadow-sm">
             <span className="input-group-text bg-white">
               <Mail size={16} className="text-muted" />
@@ -143,7 +175,9 @@ export function FormEditRepartidor({ onClose, repartidor }) {
         </div>
 
         <div className="col-12">
-          <label className="form-label fw-medium text-dark small">Placa de Vehículo (Moto/Auto)</label>
+          <label className="form-label fw-medium text-dark small">
+            Placa de Vehículo (Moto/Auto)
+          </label>
           <div className="input-group shadow-sm mb-1">
             <span className="input-group-text bg-white">
               <Car size={16} className="text-muted" />

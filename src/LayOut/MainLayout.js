@@ -37,7 +37,7 @@ import { Proveedores } from "../pages/Proveedores";
 import { CocinaDespacho } from "../pages/modulosVender/CocinaDespacho";
 import { Cajas } from "../pages/moduloVentas/Cajas";
 import AjustesVentas from "../pages/moduloVentas/AjustesVentas";
-import { Reportes } from "../pages/moduloVentas/Reportes";
+import { Reportes, ReportesVentas } from "../pages/moduloVentas/ReportesVentas";
 import { Mesas } from "../pages/moduloVentas/Mesas";
 import { RealizarSolicitud } from "../pages/moduloVentas/RealizarSolicitud";
 import { Solicitud } from "../pages/moduloVentas/Solicitud";
@@ -71,8 +71,10 @@ import { Repartidores } from "../pages/moduloDelivery/Repartidores";
 import { ZonaTarifa } from "../pages/moduloDelivery/ZonaTarifa";
 import { Promociones } from "../pages/moduloDelivery/Promociones";
 import { useSelector } from "react-redux";
-import { SubMenuTabs } from "../components/componentesReutilizables/SubMenuTabs";
+import { SubMenuTabs } from "../components/SubMenuTabs";
 import { IAMoodle } from "../pages/moduloIAmoodle/IAMoodle";
+import { DetallesVentas } from "../pages/moduloVentas/DetallesVentas";
+import { ReporteDelivery } from "../pages/moduloDelivery/ReporteDelivery";
 
 export const MainLayout = () => {
   const isCompressed = useSelector(
@@ -371,10 +373,18 @@ export const MainLayout = () => {
                     }
                   />
                   <Route
-                    path="mis-ventas"
+                    path="dashboard"
                     element={
                       <PrivateRoute allowedRoles={["ventas", "administrador"]}>
                         <Ventas />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="mis-ventas"
+                    element={
+                      <PrivateRoute allowedRoles={["ventas", "administrador"]}>
+                        <DetallesVentas />
                       </PrivateRoute>
                     }
                   />
@@ -414,7 +424,7 @@ export const MainLayout = () => {
                     path="reportes"
                     element={
                       <PrivateRoute allowedRoles={["ventas", "administrador"]}>
-                        <Reportes />
+                        <ReportesVentas />
                       </PrivateRoute>
                     }
                   />
@@ -503,7 +513,7 @@ export const MainLayout = () => {
                       <PrivateRoute
                         allowedRoles={["delivery", "administrador"]}
                       >
-                        <Reportes />
+                        <ReporteDelivery />
                       </PrivateRoute>
                     }
                   />

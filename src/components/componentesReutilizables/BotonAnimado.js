@@ -6,7 +6,7 @@ const BotonAnimado = ({
   loading = false,
   error = null,
   onClick,
-  className = "btn-realizarPedido w-auto h-100 p-3 ms-auto",
+  className = " w-auto h-100 p-3 ms-auto",
   icon = <CheckCheck className="text-auto" width="20px" height="20px" />,
   ...props
 }) => {

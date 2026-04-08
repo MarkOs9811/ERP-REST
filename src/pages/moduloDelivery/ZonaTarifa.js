@@ -49,7 +49,9 @@ export function ZonaTarifa() {
 
   const handleToggleEstado = async (id) => {
     const nuevoEstado = configAccion?.estado == 1 ? 0 : 1;
-    const exito = await PutData("delivery/zona-tarifa-estado", id, { estado: nuevoEstado });
+    const exito = await PutData("delivery/zona-tarifa-estado", id, {
+      estado: nuevoEstado,
+    });
     if (exito) {
       queryClient.invalidateQueries(["sedesConfiguracion"]);
       return true;
@@ -68,15 +70,13 @@ export function ZonaTarifa() {
 
   return (
     <div className="container-fluid p-0">
-      <div className="card shadow-sm border-0 rounded-4">
+      <div className="card  rounded-4">
         {/* HEADER DE LA VISTA */}
         <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-3">
           <div className="d-flex align-items-center">
             <h4 className="card-title mb-0 titulo-card-especial">
               Zonas y Tarifas
-              <span className="badge-header">
-                {sedes?.length || 0} sedes
-              </span>
+              <span className="badge-header">{sedes?.length || 0} sedes</span>
             </h4>
           </div>
 
@@ -93,7 +93,6 @@ export function ZonaTarifa() {
               <FileText size={18} />
               <span className="d-none d-sm-inline">Reporte</span>
             </button>
-
           </div>
         </div>
 
@@ -140,7 +139,9 @@ export function ZonaTarifa() {
 
                 return (
                   <div className="col-12 col-xl-6" key={sede.id}>
-                    <div className={`card h-100 sede-config-card shadow-sm border ${config && config.estado !== 1 ? 'bg-light' : ''}`}>
+                    <div
+                      className={`card h-100 sede-config-card  ${config && config.estado !== 1 ? "bg-light" : ""}`}
+                    >
                       {/* Cabecera de la Tarjeta (Datos de la Sede) */}
                       <div className="card-header bg-transparent border-bottom px-4 py-3 d-flex justify-content-between align-items-center">
                         <div>
@@ -153,7 +154,7 @@ export function ZonaTarifa() {
                           </div>
                         </div>
                         <span
-                          className={`badge ${config?.estado == 1 ? "bg-success" : "bg-danger"} bg-opacity-10 text-${config?.estado == 1 ? "success" : "danger"} border border-${config?.estado == 1 ? "success" : "danger"} border-opacity-25 rounded-pill px-3 py-2`}
+                          className={`badge ${config?.estado == 1 ? "bg-success" : "bg-danger"} bg-opacity-10 text-white border border-${config?.estado == 1 ? "success" : "danger"} border-opacity-25 rounded-pill px-3 py-2`}
                         >
                           {config?.estado == 1 ? "Activa" : "Inactiva"}
                         </span>
@@ -166,7 +167,12 @@ export function ZonaTarifa() {
                             {/* Tarifas Base y Prioridad */}
                             <div className="config-item">
                               <div className="icon-box icon-box-primary flex-shrink-0">
-                                <span className="fw-bold" style={{ fontSize: "1.2rem" }}>S/</span>
+                                <span
+                                  className="fw-bold"
+                                  style={{ fontSize: "1.2rem" }}
+                                >
+                                  S/
+                                </span>
                               </div>
                               <div className="w-100 d-flex justify-content-between align-items-center">
                                 <div>
@@ -279,9 +285,8 @@ export function ZonaTarifa() {
                       {/* Pie de la Tarjeta (Botones de Acción) */}
                       <div className="card-footer bg-transparent border-top px-4 py-3 d-flex gap-2">
                         <button
-                          className="btn btn-dark border d-flex justify-content-center align-items-center gap-2 rounded-pill fw-medium "
+                          className="btn btn-outline-secondary d-flex justify-content-center align-items-center gap-2  fw-medium "
                           disabled={!config}
-                          style={{ minWidth: '110px' }}
                           onClick={() => {
                             if (config) {
                               setConfigSelected(config);
@@ -292,20 +297,16 @@ export function ZonaTarifa() {
                           <Settings size={15} />
                           Ajustes
                         </button>
-                        <button
-                          className="btn-principal d-flex flex-grow-1 justify-content-center align-items-center gap-2 rounded-pill fw-medium"
-                          disabled={!config}
-                        >
-                          <Map size={15} />
-                          Zonas
-                        </button>
 
                         {config && (
                           <div className="d-flex ms-auto gap-2">
                             <button
-                              className="btn btn-outline-secondary d-flex justify-content-center align-items-center rounded-circle"
-                              style={{ width: '38px', height: '38px', padding: 0 }}
-                              title={config.estado == 1 ? "Desactivar Configuración" : "Activar Configuración"}
+                              className="btn btn-outline-secondary d-flex justify-content-center align-items-center "
+                              title={
+                                config.estado == 1
+                                  ? "Desactivar Configuración"
+                                  : "Activar Configuración"
+                              }
                               onClick={() => {
                                 setConfigAccion(config);
                                 setShowModalActivar(true);
@@ -314,8 +315,7 @@ export function ZonaTarifa() {
                               <PowerOff size={16} />
                             </button>
                             <button
-                              className="btn btn-outline-danger d-flex justify-content-center align-items-center rounded-circle"
-                              style={{ width: '38px', height: '38px', padding: 0 }}
+                              className="btn btn-outline-danger d-flex justify-content-center align-items-center "
                               title="Eliminar Configuración"
                               onClick={() => {
                                 setConfigDelete(config);
@@ -349,10 +349,7 @@ export function ZonaTarifa() {
         width="450px"
       >
         {({ handleClose }) => (
-          <FormAddConfigTarifa
-            onClose={handleClose}
-            sedeId={sedeForAdd?.id}
-          />
+          <FormAddConfigTarifa onClose={handleClose} sedeId={sedeForAdd?.id} />
         )}
       </ModalRight>
 
@@ -386,7 +383,7 @@ export function ZonaTarifa() {
         handleEliminar={handleToggleEstado}
         idEliminar={configAccion?.id}
         nombre="Configuración de Sede"
-        pregunta={`¿Estás seguro de ${configAccion?.estado == 1 ? 'desactivar' : 'activar'}`}
+        pregunta={`¿Estás seguro de ${configAccion?.estado == 1 ? "desactivar" : "activar"}`}
         tipo="esta configuración"
       />
 
