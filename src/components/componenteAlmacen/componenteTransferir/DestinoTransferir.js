@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import BotonConfirmar from "../../componentesReutilizables/BotonConfirmar";
 
 import { GetAreas } from "../../../service/GetAreas";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -17,7 +16,7 @@ export function DestinoTransferir() {
 
   const queryClient = useQueryClient(); // ← Obtienes el cliente
   const productoSeleccionado = useSelector(
-    (state) => state.productoTransferir.items
+    (state) => state.productoTransferir.items,
   );
 
   const {
@@ -27,9 +26,7 @@ export function DestinoTransferir() {
   } = useQuery({
     queryKey: ["areas"],
     queryFn: GetAreas,
-    retry: 1,
   });
-
   const handleArchivoChange = (e) => {
     const file = e.target.files[0];
     if (
@@ -81,7 +78,7 @@ export function DestinoTransferir() {
     try {
       const response = await axiosInstance.post(
         "/almacen/transferirInventario",
-        formData
+        formData,
       );
       if (response.data.success) {
         ToastAlert("success", "Se transferio correctamente");
@@ -98,20 +95,23 @@ export function DestinoTransferir() {
   return (
     <div className="card-body">
       <div className="mb-3 position-relative">
-        <div className="form-floating">
+        <div className="">
+          <label forHtml="destino">Destino</label>
           <select
+            id="destino"
             className="form-select"
             value={idDestino}
             onChange={(e) => setIdDestino(e.target.value)}
           >
             <option value="">Seleccione un área</option>
-            {dataAra?.data?.map((item) => (
-              <option key={item.id} value={item.id}>
-                {item.nombre}
-              </option>
-            ))}
+            {dataAra
+              ?.filter((item) => item.nombre.toLowerCase().includes("ventas"))
+              .map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item.nombre}
+                </option>
+              ))}
           </select>
-          <label>Destino</label>
         </div>
       </div>
 

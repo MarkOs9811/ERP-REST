@@ -11,13 +11,18 @@ function ModalAlertQuestion({
   handleCloseModal,
   tipo,
   pregunta = "¿Estás seguro de eliminar este",
+  loading = false, // <-- 1. Agregado el prop loading
 }) {
   const queryClient = useQueryClient();
+  const isLoading = Boolean(loading); // <-- 2. Constante booleana
+
   const handleConfirm = async () => {
     try {
       // Ejecutar la función de eliminación pasando el ID
       const success = await handleEliminar(idEliminar);
       if (success) {
+        // Si necesitas invalidar la caché como en activar, descomenta la siguiente línea:
+        // queryClient.invalidateQueries({ queryKey: ["usuarios"] });
         handleCloseModal();
       } else {
         handleCloseModal();
@@ -30,27 +35,47 @@ function ModalAlertQuestion({
   if (!show) return null;
 
   return ReactDOM.createPortal(
-    <div className={`modal-overlay ${show ? "show" : ""} m-0 p-0`}>
-      {" "}
-        {/* Agregar clase show */}
-        <div className="contenido-model bg-white">
-          <p className="h5">
-            {pregunta} {tipo}?
-          </p>
-          <h4 className="modal-name-delete">
-            {nombre || "Nombre no disponible"}
-          </h4>
-          <div>
-            <button onClick={handleConfirm} className="btn btn-danger  mx-2">
-              Confirmar
-            </button>
-            <button onClick={handleCloseModal} className="btn btn-secondary">
-              Cancelar
-            </button>
-          </div>
+    <div className={`modal-overlay my-0 ${show ? "show" : ""}`}>
+      <div className="contenido-model bg-white">
+        <p className="h5">
+          {pregunta} {tipo}?
+        </p>
+        <h4 className="modal-name-delete">
+          {nombre || "Nombre no disponible"}
+        </h4>
+
+        <div>
+          {/* Botón Confirmar con estado de carga (Spinner) */}
+          <button
+            onClick={handleConfirm}
+            className="btn-eliminarToast mx-2"
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <>
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                Eliminando...
+              </>
+            ) : (
+              "Confirmar"
+            )}
+          </button>
+          {/* Botón Cancelar */}
+          <button
+            onClick={handleCloseModal}
+            className="btn-cancelar"
+            disabled={isLoading}
+          >
+            {isLoading ? "Espere..." : "Cancelar"}
+          </button>
         </div>
-      </div>,
-    document.body
+      </div>
+    </div>,
+    document.body,
   );
 }
 

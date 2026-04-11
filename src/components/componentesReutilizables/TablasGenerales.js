@@ -4,7 +4,7 @@ import getCustomDataTableStyles from "../../css/estilosComponentesTable/DataTabl
 export function TablasGenerales({ columnas, datos, conditionalRowStyles }) {
   const isDark = document.body.classList.contains("dark-theme"); // O usa tu contexto de tema
   return (
-    <div>
+    <div className="">
       <DataTable
         className="tablaGeneral"
         columns={columnas}

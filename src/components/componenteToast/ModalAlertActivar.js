@@ -34,41 +34,41 @@ function ModalAlertActivar({
 
   return ReactDOM.createPortal(
     <div className={`modal-overlay my-0 ${show ? "show" : ""}`}>
-        <div className="contenido-model bg-white">
-          <p className="h5">¿Estás seguro de Activar este {tipo}?</p>
-          <h4 className="modal-name-activar">
-            {nombre || "Nombre no disponible"}
-          </h4>
-          <div>
-            <button
-              onClick={handleConfirm}
-              className="btn-activarUsuario mx-2"
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <>
-                  <span
-                    className="spinner-border spinner-border-sm me-2"
-                    role="status"
-                    aria-hidden="true"
-                  ></span>
-                  Activando...
-                </>
-              ) : (
-                "Confirmar"
-              )}
-            </button>
-            <button
-              onClick={handleCloseModal}
-              className="btn-cancelar"
-              disabled={isLoading}
-            >
-              {isLoading ? "Espere..." : "Cancelar"}
-            </button>
-          </div>
+      <div className="contenido-model bg-white">
+        <p className="h5">¿Estás seguro de Activar este {tipo}?</p>
+        <h4 className="modal-name-activar">
+          {nombre || "Nombre no disponible"}
+        </h4>
+        <div>
+          <button
+            onClick={handleConfirm}
+            className="btn-activarToast mx-2"
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <>
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                Activando...
+              </>
+            ) : (
+              "Confirmar"
+            )}
+          </button>
+          <button
+            onClick={handleCloseModal}
+            className="btn-cancelar"
+            disabled={isLoading}
+          >
+            {isLoading ? "Espere..." : "Cancelar"}
+          </button>
         </div>
-      </div>,
-    document.body
+      </div>
+    </div>,
+    document.body,
   );
 }
 

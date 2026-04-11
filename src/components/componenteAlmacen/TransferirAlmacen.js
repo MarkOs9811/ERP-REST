@@ -58,7 +58,7 @@ export function TransferirAlmacen() {
         presentacion: item?.presentacion,
         precioUnit: item?.precioUnit,
         stock: item?.cantidad,
-      })
+      }),
     );
 
     // Desactiva el efecto ripple después de 600 ms
@@ -87,8 +87,8 @@ export function TransferirAlmacen() {
       const filtrados = (Array.isArray(dataAlmacen) ? dataAlmacen : []).filter(
         (item) =>
           ["nombre", "descripcion", "marca"].some((key) =>
-            item[key]?.toLowerCase().includes(term)
-          )
+            item[key]?.toLowerCase().includes(term),
+          ),
       );
       setFilteredData(filtrados);
     }
@@ -97,8 +97,8 @@ export function TransferirAlmacen() {
   return (
     <div className="row g-3 ">
       <div className="col-lg-4 col-md-4 col-sm-12">
-        <div className="card border h-100  bg-light ">
-          <div className="card-header  bg-light d-flex align-content-between align-align-items-center border-bottom ">
+        <div className="card border h-100   ">
+          <div className="card-header   d-flex align-content-between align-align-items-center border-bottom ">
             <p className="card-title">Almacen</p>
             <div className="ms-auto position-relative d-flex">
               <Search className="position-absolute   my-2 text-muted ms-2" />
@@ -219,7 +219,7 @@ export function TransferirAlmacen() {
                 {seleccionados.map((item) => (
                   <li
                     key={item?.id}
-                    className="list-group-item d-flex justify-content-between align-items-center bg-success bg-opacity-10 position-relative group-hoverable"
+                    className="list-group-item d-flex justify-content-between align-items-center  bg-opacity-10 position-relative group-hoverable"
                   >
                     <div className="d-flex align-items-center gap-2">
                       {/* Botón eliminar, oculto hasta hover */}
@@ -228,13 +228,12 @@ export function TransferirAlmacen() {
                         onClick={(e) => {
                           e.stopPropagation();
                           dispatch(
-                            removeProductoSeleccionado({ id: item?.id })
+                            removeProductoSeleccionado({ id: item?.id }),
                           );
                         }}
                       >
-                        <Trash2 className="text-auto" />
+                        <Trash2 />
                       </button>
-                      <CheckCheck color="#28a745" width="20px" height="20px" />
 
                       <div className="d-flex flex-column">
                         <span className="fw-bold text-secondary">
@@ -247,17 +246,17 @@ export function TransferirAlmacen() {
                       </div>
                     </div>
 
-                    <div className="d-flex align-items-center gap-3">
+                    <div className="d-flex align-items-center justify-content-center gap-3">
                       <div className="btn-group" role="group">
                         <button
-                          className="btn btn-outline-dark btn-sm"
+                          className="btn btn-outline-dark btn-sm p-2"
                           onClick={(e) => {
                             e.stopPropagation();
                             dispatch(removeItem({ id: item?.id }));
                           }}
                           disabled={item?.cantidad <= 1}
                         >
-                          <Minus className="text-auto" />
+                          <Minus size={18} />
                         </button>
 
                         <span className="px-2 fw-bold text-secondary">
@@ -265,15 +264,15 @@ export function TransferirAlmacen() {
                         </span>
 
                         <button
-                          className="btn btn-outline-primary btn-sm"
+                          className="btn btn-outline-primary btn-sm p-2"
                           onClick={(e) => {
                             e.stopPropagation();
                             dispatch(
-                              addItem({ id: item?.id, nombre: item?.nombre })
+                              addItem({ id: item?.id, nombre: item?.nombre }),
                             );
                           }}
                         >
-                          <PlusIcon className="text-auto" />
+                          <PlusIcon size={18} />
                         </button>
                       </div>
 

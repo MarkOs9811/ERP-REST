@@ -9,14 +9,25 @@ export function Presupuestos() {
     <div>
       <div className="row g-3">
         <div className="col-md-12">
-          <div className="card shadow-sm py-2">
+          <div className="card  py-2">
             <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-3">
               <div className="d-flex align-items-center">
-                <Calculator color={"#ea4f4f"} height="45px" width="45px" className="me-2" />
+                <Calculator
+                  color={"#ea4f4f"}
+                  height="45px"
+                  width="45px"
+                  className="me-2"
+                />
                 <div>
-                  <h4 className="card-title mb-0 titulo-card-especial">Presupuestos</h4>
-                  <small className="text-secondary" style={{ fontWeight: "normal" }}>
-                    Administra y crea presupuestos, carga inicial de caja y compara.
+                  <h4 className="card-title mb-0 titulo-card-especial">
+                    Presupuestos
+                  </h4>
+                  <small
+                    className="text-secondary"
+                    style={{ fontWeight: "normal" }}
+                  >
+                    Administra y crea presupuestos, carga inicial de caja y
+                    compara.
                   </small>
                 </div>
               </div>
@@ -36,7 +47,7 @@ export function Presupuestos() {
           </div>
         </div>
         <div className="col-md-12 d-flex  w-100 gap-3">
-          <div className="card shadow-card border-0 p-3 w-100 shadow-sm">
+          <div className="card shadow-card border-0 p-3 w-100 ">
             <div className="card-header d-flex align-items-center justify-content-between p-3 text-primary">
               <div className="d-flex align-items-center">
                 <ChartColumnBig
@@ -74,7 +85,7 @@ export function Presupuestos() {
               <FlujoCaja />
             </div>
           </div>
-          <div className="card shadow-sm py-2 w-50">
+          <div className="card  py-2 w-50">
             <div className="card-header p-3 d-flex align-items-center ">
               <div className="d-flex align-items-center">
                 <p className="h4 card-title ms-2 mb-0">Activos y Pasivos</p>

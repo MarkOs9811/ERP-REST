@@ -50,7 +50,6 @@
 /* El cuerpo del card ocupa el espacio restante entre header y footer */
 .card-body {
   flex: 1;
-  overflow-y: auto;
 }
 
 /* El footer se mantiene visible al final */

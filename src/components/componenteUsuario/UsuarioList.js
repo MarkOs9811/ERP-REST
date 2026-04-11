@@ -307,7 +307,7 @@ export function UsuariosList({ search, updateList }) {
       cell: (row) => {
         const { estado } = row;
         return (
-          <div className="d-flex justify-content-center w-100 gap-2">
+          <div className="d-flex justify-content-center w-100 ">
             {estado == 1 ? (
               <>
                 <BtnEditar

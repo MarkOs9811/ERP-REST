@@ -31,8 +31,6 @@ export function ProveedorList({ search, updateList }) {
   } = useQuery({
     queryKey: ["proveedores", updateList], // se vuelve a ejecutar cuando cambia updateList
     queryFn: GetProveedores,
-    staleTime: 1000 * 60 * 5, // cache 5 min
-    retry: 1,
   });
 
   // 🟦 2. Filtrar registros según búsqueda

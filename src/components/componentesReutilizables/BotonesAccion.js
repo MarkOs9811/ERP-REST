@@ -1,14 +1,8 @@
-import React from "react";
 import { Eye, Pencil, Trash2 } from "lucide-react";
-
-/**
- * Componente estandarizado para botones de acción (Ver, Editar, Eliminar)
- * Garantiza consistencia visual y de iconos en todo el proyecto
- */
 
 export const BtnVer = ({ onClick, disabled = false, title = "Ver" }) => (
   <button
-    className="btn-ver"
+    className="btn-ver mx-1 p-1 my-2"
     onClick={onClick}
     disabled={disabled}
     data-bs-toggle="tooltip"
@@ -20,7 +14,7 @@ export const BtnVer = ({ onClick, disabled = false, title = "Ver" }) => (
 
 export const BtnEditar = ({ onClick, disabled = false, title = "Editar" }) => (
   <button
-    className="btn-editar"
+    className="btn-editar mx-1 p-1 my-2"
     onClick={onClick}
     disabled={disabled}
     data-bs-toggle="tooltip"
@@ -36,7 +30,7 @@ export const BtnEliminar = ({
   title = "Eliminar",
 }) => (
   <button
-    className="btn-eliminar"
+    className="btn-eliminar mx-1 p-1 my-2"
     onClick={onClick}
     disabled={disabled}
     data-bs-toggle="tooltip"

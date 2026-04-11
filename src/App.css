@@ -1236,60 +1236,7 @@ body.dark-theme .border-bottom {
   border-bottom: 1px solid #313a46 !important;
 }
 
-/* ========== FORM-FLOATING DARK MODE ========== */
-body.dark-theme .form-floating>.form-control,
-body.dark-theme .form-floating>.form-select {
-  background-color: #232b36 !important;
-  color: #cfd8dc !important;
-  border: 1px solid #313a46 !important;
-}
 
-body.dark-theme .form-floating>label {
-  color: #b0b8c1 !important;
-  background: transparent !important;
-  /* Para que el label no tape el texto al estar flotando */
-}
-
-body.dark-theme .form-floating>.form-control:focus,
-body.dark-theme .form-floating>.form-select:focus {
-  border-color: #2196f3 !important;
-  box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.15);
-  background-color: #232b36 !important;
-  color: #fff !important;
-}
-
-body.dark-theme .form-floating>.form-control::placeholder {
-  color: #888 !important;
-  opacity: 1;
-}
-
-body.dark-theme .form-floating>.form-control:disabled,
-body.dark-theme .form-floating>.form-select:disabled {
-  background-color: #202122 !important;
-  color: #888 !important;
-}
-
-body.dark-theme .form-floating>.is-invalid,
-body.dark-theme .form-floating>.is-invalid:focus {
-  border-color: #ee5252 !important;
-  background-color: #232b36 !important;
-  color: #fff !important;
-}
-
-/* Mejor contraste para label flotante en dark mode */
-body.dark-theme .form-floating>label,
-body.dark-theme .form-floating>.form-control:focus~label,
-body.dark-theme .form-floating>.form-control:not(:placeholder-shown)~label,
-body.dark-theme .form-floating>.form-control:disabled~label,
-body.dark-theme .form-floating>.form-control:-webkit-autofill~label,
-body.dark-theme .form-floating>.form-select:focus~label,
-body.dark-theme .form-floating>.form-select:not([value=""])~label,
-body.dark-theme .form-floating>.form-select:disabled~label {
-  color: #cfd8dc !important;
-  /* Más contraste */
-  background: transparent !important;
-  opacity: 1 !important;
-}
 
 /* Sombra más notoria para cards en dark mode */
 body.dark-theme .card,

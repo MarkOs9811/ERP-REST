@@ -5,7 +5,8 @@ import ToastAlert from "../../components/componenteToast/ToastAlert";
 export const GetReporteExcel = async (
   endpoint,
   fechaInicio = null,
-  fechaFin = null
+  fechaFin = null,
+  tipo = null,
 ) => {
   try {
     // Axios se encarga de armar la URL (ej: endpoint?fecha_inicio=2023-01-01&fecha_fin=...)
@@ -19,15 +20,18 @@ export const GetReporteExcel = async (
 
     const now = new Date();
     const fechaHora = `${now.getFullYear()}-${String(
-      now.getMonth() + 1
+      now.getMonth() + 1,
     ).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}_${String(
-      now.getHours()
+      now.getHours(),
     ).padStart(2, "0")}-${String(now.getMinutes()).padStart(2, "0")}`;
 
     // Nombre dinámico
-    const fileName = `Reporte_${fechaHora}.xlsx`;
+    const fileName = `Reporte_${tipo}_${fechaHora}.xlsx`;
 
-    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const blob = new Blob([response.data], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+    const url = window.URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
     link.setAttribute("download", fileName);

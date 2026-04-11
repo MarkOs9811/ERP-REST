@@ -1,13 +1,11 @@
 import { useState } from "react";
-import { ProveedorList } from "../components/componenteProveedor/ProveedorList";
 
-import { Modal } from "react-bootstrap";
-import { ProveedorAdd } from "../components/componenteProveedor/ProveedorAdd";
-import { ContenedorPrincipal } from "../components/componentesReutilizables/ContenedorPrincipal";
+import { ProveedorAdd } from "../../components/componenteProveedor/ProveedorAdd";
 import { FileText, Plus, Search } from "lucide-react";
-import { GetReporteExcel } from "../service/accionesReutilizables/GetReporteExcel";
-import { CondicionCarga } from "../components/componentesReutilizables/CondicionCarga";
-import ModalRight from "../components/componentesReutilizables/ModalRight";
+import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteExcel";
+import ModalRight from "../../components/componentesReutilizables/ModalRight";
+import { CondicionCarga } from "../../components/componentesReutilizables/CondicionCarga";
+import { ProveedorList } from "../../components/componenteProveedor/ProveedorList";
 
 export function Proveedores() {
   const [search, setSearch] = useState("");
@@ -25,7 +23,7 @@ export function Proveedores() {
       <div className="row g-3">
         <div className="col-md-12">
           <CondicionCarga isLoading={updateList} isError={null}>
-            <div className="card shadow-sm border-0 mb-4 rounded-4">
+            <div className="card  mb-4 rounded-4">
               <div className="card-header border-bottom-0 d-flex justify-content-between align-items-center">
                 <div className="d-flex align-items-center">
                   <h4 className="card-title mb-0 titulo-card-especial">
@@ -45,11 +43,18 @@ export function Proveedores() {
                       onChange={(e) => setSearch(e.target.value)}
                     />
                   </div>
-                  
+
                   <button
                     type="button"
                     className="btn btn-outline-dark px-3"
-                    onClick={() => GetReporteExcel("/reporteProveedores")}
+                    onClick={() =>
+                      GetReporteExcel(
+                        "/reporteProveedores",
+                        null,
+                        null,
+                        "Proveedores",
+                      )
+                    }
                   >
                     <FileText size={18} />
                     Reporte

@@ -33,7 +33,7 @@ import { InformesFinancieros } from "../pages/moduloFinanzas/InformesFinancieros
 import { MenuPlato } from "../pages/MenuPlato";
 import { Eventos } from "../pages/moduloIncidencias/Eventos";
 import { AreasCargo } from "../pages/moduloAreasCargos/AreasCargos";
-import { Proveedores } from "../pages/Proveedores";
+import { Proveedores } from "../pages/moduloAlmacen/Proveedores";
 import { CocinaDespacho } from "../pages/modulosVender/CocinaDespacho";
 import { Cajas } from "../pages/moduloVentas/Cajas";
 import AjustesVentas from "../pages/moduloVentas/AjustesVentas";
@@ -43,7 +43,6 @@ import { RealizarSolicitud } from "../pages/moduloVentas/RealizarSolicitud";
 import { Solicitud } from "../pages/moduloVentas/Solicitud";
 import { Inventario } from "../pages/moduloVentas/Inventario";
 import { Ventas } from "../pages/moduloVentas/Ventas";
-import { Compras } from "../pages/Compras";
 import { AjustesPlanilla } from "../pages/moduloPlanilla/AjustesPlanilla";
 import { ReportePlanilla } from "../pages/moduloPlanilla/ReportePlanilla";
 import { Vacaciones } from "../pages/moduloPlanilla/Vacaciones";
@@ -75,6 +74,7 @@ import { SubMenuTabs } from "../components/SubMenuTabs";
 import { IAMoodle } from "../pages/moduloIAmoodle/IAMoodle";
 import { DetallesVentas } from "../pages/moduloVentas/DetallesVentas";
 import { ReporteDelivery } from "../pages/moduloDelivery/ReporteDelivery";
+import { Compras } from "../pages/moduloAlmacen/Compras";
 
 export const MainLayout = () => {
   const isCompressed = useSelector(

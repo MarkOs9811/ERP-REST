@@ -40,7 +40,7 @@ export function Kardex() {
       <div className="row g-3">
         <div className="col-sm-12 col-md-6">
           <CondicionCarga isLoading={isLoading} isError={isError}>
-            <div className="card h-100 shadow-sm d-flex flex-row align-items-center justify-content-between p-3">
+            <div className="card h-100  d-flex flex-row align-items-center justify-content-between p-3">
               <div
                 className="rounded-pill d-flex align-items-center justify-content-center p-3"
                 style={{
@@ -79,7 +79,7 @@ export function Kardex() {
 
         <div className="col-sm-12 col-md-6">
           <CondicionCarga isLoading={isLoading} isError={isError}>
-            <div className="card h-100 shadow-sm d-flex flex-row align-items-center justify-content-between p-3">
+            <div className="card h-100  d-flex flex-row align-items-center justify-content-between p-3">
               {/* Ícono y texto de Salidas */}
               <div className="d-flex align-items-center">
                 <div
@@ -122,7 +122,7 @@ export function Kardex() {
 
         <div className="col-md-12">
           <CondicionCarga isLoading={isLoading} isError={isError}>
-            <div className="card shadow-sm py-2">
+            <div className="card  py-2">
               <div className="card-header border-bottom-0 d-flex justify-content-between align-items-center gap-2 flex-wrap">
                 <div className="d-flex align-items-center">
                   <h4 className="card-title mb-0 titulo-card-especial">

@@ -5,133 +5,158 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
+    background: rgba(15, 23, 42, 0.4);
+    /* Un tono oscuro más moderno y azulado */
+    backdrop-filter: blur(4px);
+    /* Efecto desenfoque en el fondo */
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1050; /* Asegúrate de que esté por encima de otros elementos */
-    padding: 20px; /* Espaciado */
-    
+    z-index: 1050;
+    padding: 20px;
 }
 
 /* Estilos para el contenido del modal */
 .contenido-model {
-    background: white;
-    padding: 30px;
-    border-radius: 10px!important;
+    background: #ffffff;
+    padding: 32px 40px;
+    border-radius: 16px !important;
+    /* Bordes más suaves */
     text-align: center;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    max-width: 500px; /* Máximo ancho */
-    width: 100%; /* Responsivo */
-    animation: fadeIn 0.2s ease-out; /* Animación de aparición */
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    max-width: 420px;
+    /* Un poco más compacto para verse más elegante */
+    width: 100%;
+    animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    /* Animación con ligero rebote */
 }
 
-/* Animación de desvanecimiento */
-@keyframes fadeIn {
+/* Animación de entrada más fluida */
+@keyframes modalPop {
     0% {
         opacity: 0;
-        transform: scale(0.8);
+        transform: scale(0.9) translateY(15px);
     }
-    50% {
-        opacity: 1;
-        transform: scale(1.1);
-    }
+
     100% {
         opacity: 1;
-        transform: scale(1);
+        transform: scale(1) translateY(0);
     }
 }
 
 /* Título del modal */
-h3 {
-    margin-bottom: 15px;
-    font-weight: 500;
-    color: #333;
+.contenido-model h3 {
+    margin-bottom: 8px;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1e293b;
 }
 
-/* Nombre de la persona a eliminar */
+/* Nombre del proveedor a activar */
 .modal-name-activar {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #358bdc; /* Rojo para resaltar el nombre */
-    margin-bottom: 20px;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 24px;
     text-transform: capitalize;
-    
+    padding: 10px 16px;
+    /* Fondo sutil para enmarcar el nombre */
+    border-radius: 8px;
+    display: inline-block;
 }
 
-/* Estilos para los botones */
-button {
-    margin: 10px;
+/* NUEVO: Contenedor flex para alinear los botones perfectamente */
+.modal-botones {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 10px;
 }
 
-/* Botón de Confirmar */
-.btn-activarUsuario {
-    background-color: #2284d4;
+/* Botón de Confirmar (Match con el ícono verde de la tabla y botón redondo) */
+.btn-activarToast
+ {
+    background-color: #10b981;
+    /* Verde esmeralda */
     color: white;
     border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
+    padding: 10px 24px;
+    font-weight: 500;
+    border-radius: 50px;
+    /* Estilo píldora */
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2);
 }
 
-.btn-activarUsuario:hover {
-    background-color: #19507c;
+.btn-activarToast
+:hover {
+    background-color: #059669;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 8px -1px rgba(16, 185, 129, 0.3);
 }
 
-/* Botón de Cancelar */
+/* Botón de Cancelar (Match con tu botón "Reporte") */
 .btn-cancelar {
-    background-color: #6c757d;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
+    background-color: #f8fafc;
+    color: #475569;
+    border: 1px solid #cbd5e1;
+    padding: 10px 24px;
+    font-weight: 500;
+    border-radius: 50px;
+    /* Estilo píldora */
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: all 0.2s ease;
 }
 
 .btn-cancelar:hover {
-    background-color: #5a6268;
+    background-color: #e2e8f0;
+    color: #1e293b;
 }
 
 /* ========== TEMA OSCURO MODAL ALERT ACTIVAR ESTILO MODERNO ========== */
 body.dark-theme .modal-overlay {
-    background: rgba(21, 26, 32, 0.95) !important;
+    background: rgba(15, 23, 42, 0.8) !important;
 }
 
 body.dark-theme .contenido-model {
-    background: #23272b !important;
-    color: #cfd8dc !important;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.45) !important;
+    background: #1e293b !important;
+    /* Gris oscuro azulado elegante */
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5) !important;
+    border: 1px solid #334155;
 }
 
 body.dark-theme .contenido-model h3 {
-    color: #ee5252 !important;
+    color: #f8fafc !important;
 }
 
 body.dark-theme .modal-name-activar {
-    color: #ee5252 !important;
+    color: #f8fafc !important;
+    background: #0f172a !important;
+    border-color: #334155 !important;
 }
 
-body.dark-theme .btn-activarUsuario {
-    background-color: #ee5252 !important;
+body.dark-theme .btn-activarToast
+ {
+    background-color: #10b981 !important;
+    /* Verde semántico para activar */
     color: #fff !important;
-    border: none !important;
 }
 
-body.dark-theme .btn-activarUsuario:hover {
-    background-color: #b32b2b !important;
-    color: #fff !important;
+body.dark-theme .btn-activarToast
+:hover {
+    background-color: #34d399 !important;
 }
 
 body.dark-theme .btn-cancelar {
-    background-color: #313a46 !important;
-    color: #cfd8dc !important;
-    border: none !important;
+    background-color: transparent !important;
+    color: #cbd5e1 !important;
+    border: 1px solid #475569 !important;
 }
 
 body.dark-theme .btn-cancelar:hover {
-    background-color: #23272b !important;
+    background-color: #334155 !important;
     color: #fff !important;
 }
+
 /* ========== FIN TEMA OSCURO MODAL ALERT ACTIVAR ESTILO MODERNO ========== */

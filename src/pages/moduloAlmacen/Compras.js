@@ -1,7 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
-import { ListaCompras } from "../components/componenteCompras/ListaCompras";
-import { ContenedorPrincipal } from "../components/componentesReutilizables/ContenedorPrincipal";
 import {
   BanknoteArrowUp,
   CalendarDays,
@@ -11,13 +9,14 @@ import {
   ShoppingCart,
   Trophy,
 } from "lucide-react";
-import { GetReporteExcel } from "../service/accionesReutilizables/GetReporteExcel";
-import ModalRight from "../components/componentesReutilizables/ModalRight";
 import { useForm } from "react-hook-form";
-import { FormAddCompras } from "../components/componenteCompras/FormAddCompras";
 import { useQuery } from "@tanstack/react-query";
-import { GetCompras } from "../service/GetCompras";
-import { CondicionCarga } from "../components/componentesReutilizables/CondicionCarga";
+import { CondicionCarga } from "../../components/componentesReutilizables/CondicionCarga";
+import { GetCompras } from "../../service/GetCompras";
+import { FormAddCompras } from "../../components/componenteCompras/FormAddCompras";
+import { ListaCompras } from "../../components/componenteCompras/ListaCompras";
+import ModalRight from "../../components/componentesReutilizables/ModalRight";
+import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteExcel";
 export function Compras() {
   const [modalAddCompra, setModalAddCompra] = useState(false);
   const [search, setSearch] = useState("");
@@ -62,7 +61,7 @@ export function Compras() {
   }, {});
   const proveedorTop = Object.entries(proveedorRecurrente).reduce(
     (max, entry) => (entry[1] > max[1] ? entry : max),
-    ["", 0]
+    ["", 0],
   )[0];
 
   // Extraer compras de la data
@@ -71,7 +70,7 @@ export function Compras() {
       <div className="row g-3">
         <div className="col-md-3 col-sm-12 h-100">
           <CondicionCarga isLoading={isLoading} isError={isError}>
-            <div className="card shadow-sm p-3 d-flex flex-row align-items-center">
+            <div className="card  p-3 d-flex flex-row align-items-center">
               <ShoppingCart color="#f4a261" width="63px" height="63px" />
               <div className="ms-auto text-end">
                 <h5 className="fw-light ">Compras</h5>
@@ -83,7 +82,7 @@ export function Compras() {
 
         <div className="col-md-3 col-sm-12">
           <CondicionCarga isLoading={isLoading} isError={isError}>
-            <div className="card shadow-sm p-3 d-flex flex-row align-items-center">
+            <div className="card  p-3 d-flex flex-row align-items-center">
               <CalendarDays color="#2a9d8f" width="63px" height="63px" />
               <div className="ms-auto text-end">
                 <h5 className="fw-light ">Compras del Mes</h5>
@@ -95,7 +94,7 @@ export function Compras() {
 
         <div className="col-md-3 col-sm-12">
           <CondicionCarga isLoading={isLoading} isError={isError}>
-            <div className="card shadow-sm p-3 d-flex flex-row align-items-center">
+            <div className="card  p-3 d-flex flex-row align-items-center">
               <BanknoteArrowUp color="#e76f51" width="63px" height="63px" />
               <div className="ms-auto text-end">
                 <h5 className="fw-light ">Egresos del Mes</h5>
@@ -107,7 +106,7 @@ export function Compras() {
 
         <div className="col-md-3 col-sm-12">
           <CondicionCarga isLoading={isLoading} isError={isError}>
-            <div className="card shadow-sm p-3 d-flex flex-row align-items-center">
+            <div className="card  p-3 d-flex flex-row align-items-center">
               <Trophy color="#f4a261" width="63px" height="63px" />
               <div className="ms-auto text-end">
                 <h5 className="fw-light ">Proveedor TOP</h5>
@@ -118,7 +117,7 @@ export function Compras() {
         </div>
         <div className="col-md-12 h-100">
           <CondicionCarga isLoading={isLoading} isError={isError}>
-            <div className="card p-0 shadow-sm py-2 h-100">
+            <div className="card p-0  py-2 h-100">
               <div className="card-header border-bottom-0 d-flex justify-content-between align-items-center">
                 <div className="d-flex align-items-center">
                   <h4 className="card-title mb-0 titulo-card-especial">
@@ -147,9 +146,9 @@ export function Compras() {
                     onChange={(e) => {
                       setSearch(e.target.value);
                     }}
-                    style={{maxWidth: "180px", minWidth: "150px"}}
+                    style={{ maxWidth: "180px", minWidth: "150px" }}
                   />
-                  
+
                   <button
                     type="button"
                     className="btn btn-outline-dark px-3"

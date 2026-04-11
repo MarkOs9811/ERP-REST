@@ -130,11 +130,18 @@ export function CuentasPorPagar() {
     <div>
       <div className="row g-3">
         <div className="col-md-12">
-          <div className="card shadow-sm py-2">
+          <div className="card  py-2">
             <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-3">
               <div className="d-flex align-items-center">
-                <Coins color={"#ea4f4f"} height="45px" width="45px" className="me-2" />
-                <h4 className="card-title mb-0 titulo-card-especial">Cuentas por Pagar</h4>
+                <Coins
+                  color={"#ea4f4f"}
+                  height="45px"
+                  width="45px"
+                  className="me-2"
+                />
+                <h4 className="card-title mb-0 titulo-card-especial">
+                  Cuentas por Pagar
+                </h4>
               </div>
             </div>
             <div className="card-body">

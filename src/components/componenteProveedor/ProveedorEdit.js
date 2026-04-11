@@ -60,7 +60,7 @@ export function ProveedorEdit({
       // Incluimos el idProveedor en los datos que se envían en la solicitud PUT
       const response = await axiosInstance.put(
         `/proveedores/updateProveedores/${dataProveedor.id}`,
-        data
+        data,
       );
       if (response.data.success) {
         ToastAlert("success", response.data.message);
@@ -108,7 +108,7 @@ export function ProveedorEdit({
                   setTipoDocumento,
                   setValue,
                   "tipo_documento",
-                  [{ name: "numero_documento", setter: setNumeroDocumento }]
+                  [{ name: "numero_documento", setter: setNumeroDocumento }],
                 )}
               >
                 <option value="DNI">DNI</option>
@@ -144,7 +144,7 @@ export function ProveedorEdit({
                   setValue,
                   "numero_documento",
                   /^\d*$/,
-                  tipoDocumento === "DNI" ? 8 : 11
+                  tipoDocumento === "DNI" ? 8 : 11,
                 )}
               />
               <label>

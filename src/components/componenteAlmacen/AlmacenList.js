@@ -7,19 +7,15 @@ import { GetAlmacen } from "../../service/serviceAlmacen/GetAlmacen";
 import ModalAlertQuestion from "../componenteToast/ModalAlertQuestion";
 import { toast } from "react-toastify";
 import ModalAlertActivar from "../componenteToast/ModalAlertActivar";
-import { Modal } from "react-bootstrap";
-import {
-  BtnEditar,
-  BtnEliminar,
-} from "../componentesReutilizables/BotonesAccion";
+
 import { AlmacenStockAdd } from "./AlmacenStockAdd";
 import axiosInstance from "../../api/AxiosInstance";
 import { Cargando } from "../componentesReutilizables/Cargando";
 import { TablasGenerales } from "../componentesReutilizables/TablasGenerales";
-import { Redo, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import ModalRight from "../componentesReutilizables/ModalRight";
 import { FormularioEditarAlmacen } from "./FormularioEditarAlmacen";
+import AccionesAlmacenList from "./AccionesAlmacenList";
 
 export function AlmacenList({ search, updateList }) {
   const navigate = useNavigate();
@@ -27,8 +23,6 @@ export function AlmacenList({ search, updateList }) {
 
   const [almacen, setAlmacen] = useState([]);
   const [filterAlmacen, setFilteredAlmacen] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   const [dataAlmance, setDataAlmance] = useState([]);
   const [modalEditarAlmacen, setModalEditarAlmacen] = useState(false);
@@ -203,66 +197,49 @@ export function AlmacenList({ search, updateList }) {
   const columns = [
     {
       name: "ID",
-      selector: (row) => row.id,
+      selector: (row) => row.id, // Mantiene la función de ordenar de menor a mayor
       sortable: true,
-      wrap: true,
       center: true,
+      cell: (row) => (
+        <div className="d-flex align-items-center justify-content-center gap-2">
+          {/* El puntito de color */}
+          <div
+            style={{
+              width: "10px",
+              height: "10px",
+              borderRadius: "50%",
+              backgroundColor: row.estado == 1 ? "#2cc07b" : "#e03b4b", // Verde (success) o Rojo (danger)
+              flexShrink: 0, // Evita que el punto se aplaste si hay poco espacio
+            }}
+            title={row.estado == 1 ? "Activo" : "Inactivo"} // Tooltip al pasar el mouse
+          />
+          {/* El número de ID */}
+          <span>{row.id}</span>
+        </div>
+      ),
     },
     {
       name: "Acciones",
       cell: (row) => {
-        const { estado } = row;
+        const accionesFila = {
+          ingresarStock: handleAddStockModal,
+          editar: (data) => {
+            setDataAlmance(data);
+            setModalEditarAlmacen(true);
+          },
+          eliminar: handleEliminarProducto,
+          transferir: () => navigate("/almacen/transferencia"),
+          activar: handleActivarProducto,
+        };
 
-        return (
-          <div className="d-flex justify-content-around py-2">
-            {estado == 1 ? (
-              <>
-                <button
-                  className=" btn-add-stock me-2"
-                  onClick={() => handleAddStockModal(row)}
-                  title="Ingresar Stock"
-                >
-                  <FontAwesomeIcon icon={faPlus} />
-                </button>
-                <BtnEditar
-                  onClick={() => {
-                    setDataAlmance(row);
-                    setModalEditarAlmacen(true);
-                  }}
-                  title="Editar Producto"
-                />
-                <button>
-                  <BtnEliminar
-                    onClick={() => handleEliminarProducto(row.id, row.nombre)}
-                    title="Eliminar Producto"
-                  />
-                  <Trash2 />
-                </button>
-                <button
-                  className=" btn btn-transferir-directo me-2"
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="right"
-                  title="Transferir Producto"
-                  onClick={() => navigate("/almacen/transferencia")}
-                >
-                  <Redo className="text-auto" />
-                </button>
-              </>
-            ) : (
-              <button
-                className="btn btn-outline-success"
-                onClick={() => handleActivarProducto(row.id, row.nombre)}
-              >
-                <FontAwesomeIcon icon={faPowerOff} />
-              </button>
-            )}
-          </div>
-        );
+        return <AccionesAlmacenList row={row} acciones={accionesFila} />;
       },
       wrap: true,
-      sortable: true,
+      sortable: false,
       ignoreRowClick: true,
       center: true,
+      allowOverflow: true,
+      button: true,
     },
     {
       name: "Producto",
@@ -321,7 +298,7 @@ export function AlmacenList({ search, updateList }) {
   ];
 
   return (
-    <div className="h-100">
+    <div className="">
       <TablasGenerales columnas={columns} datos={filterAlmacen} />
       <ModalRight
         isOpen={isModalOpen}

@@ -14,12 +14,14 @@ export function Solicitudes() {
   return (
     <div>
       <div className="card shadow-sm py-2">
-        <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
-          <div className="d-flex align-items-center">
-            <h4 className="card-title mb-0 titulo-card-especial">
-              Panel de Solicitudes
-            </h4>
-            <span className="badge-header">Registro</span>
+        <div className="card-header  d-flex flex-column border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+          <div className="d-flex flex-column">
+            <h4 className="m-0">Panel de Solicitudes</h4>
+            <div>
+              <span className="text-muted small">
+                Lista de solicitudes por parte del usuario en ventas
+              </span>
+            </div>
           </div>
           <div className="d-flex align-items-center flex-wrap gap-2 mt-3 mt-md-0">
             <div className="header-search-container">

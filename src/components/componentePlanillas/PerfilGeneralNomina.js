@@ -58,7 +58,7 @@ export function PerfilGeneralNomina({ idEmpleado }) {
             </div>
           ) : (
             <>
-              <div className="card d-flex shadow-sm border-0 text-left overflow-hidden p-0 position-relative">
+              <div className="card d-flex   text-left overflow-hidden p-0 position-relative">
                 <div
                   className="row g-3 position-relative"
                   style={{ zIndex: 2 }}
@@ -96,11 +96,11 @@ export function PerfilGeneralNomina({ idEmpleado }) {
                         {perfil?.usuario?.empleado?.fecha_contrato
                           ? new Date(
                               perfil.usuario.empleado.fecha_contrato.includes(
-                                "T"
+                                "T",
                               )
                                 ? perfil.usuario.empleado.fecha_contrato
                                 : perfil.usuario.empleado.fecha_contrato +
-                                  "T00:00:00"
+                                    "T00:00:00",
                             ).toLocaleDateString("es-ES", {
                               day: "numeric",
                               month: "long",
@@ -158,7 +158,7 @@ export function PerfilGeneralNomina({ idEmpleado }) {
                               </h4>
                               <small>
                                 {parseFloat(
-                                  perfil?.porcentaje_dias_trabajados ?? 0
+                                  perfil?.porcentaje_dias_trabajados ?? 0,
                                 ).toFixed(0)}
                                 % Asistencia
                               </small>
@@ -177,7 +177,7 @@ export function PerfilGeneralNomina({ idEmpleado }) {
                               <h4 className="mb-0 fw-bold">
                                 {perfil?.usuario?.empleado?.salario
                                   ? `S/ ${parseFloat(
-                                      perfil?.usuario?.empleado.salario
+                                      perfil?.usuario?.empleado.salario,
                                     ).toFixed(2)}`
                                   : "S/ 0.00"}
                               </h4>
@@ -235,9 +235,9 @@ export function PerfilGeneralNomina({ idEmpleado }) {
       {/* Bonificaciones y deducciones */}
       <div className="row g-3 mt-2">
         <div className="col-md-8">
-          <div className="card shadow-sm border-0 p-3">
+          <div className="card   p-3">
             <div className="card-header d-flex gap-2 align-middle justify-content-left">
-              <span className="alert border-0 alert-primary text-primary p-2 mb-0">
+              <span className="alert  alert-primary text-danger p-2 mb-0">
                 <User size={25} className="text-auto" />
               </span>
               <h6 className="mb-1 d-flex flex-column gap-1">
@@ -296,9 +296,9 @@ export function PerfilGeneralNomina({ idEmpleado }) {
           </div>
         </div>
         <div className="col-md-4">
-          <div className="card shadow-sm border-0 p-3 h-100">
+          <div className="card   p-3 h-100">
             <div className="card-header d-flex gap-2 align-middle justify-content-left">
-              <span className="alert border-0 alert-success text-primary p-2 mb-0">
+              <span className="alert  alert-success text-primary p-2 mb-0">
                 <TrendingUp className="me-1 text-success" size={25} />
               </span>
               <h6 className="mb-1 d-flex flex-column gap-1">
@@ -338,9 +338,9 @@ export function PerfilGeneralNomina({ idEmpleado }) {
         </div>
 
         <div className="col-md-8">
-          <div className="card shadow-sm border-0 p-3">
+          <div className="card   p-3">
             <div className="card-header d-flex gap-2 align-middle justify-content-left">
-              <span className="alert border-0 alert-primary text-primary p-2 mb-0">
+              <span className="alert  alert-primary text-primary p-2 mb-0">
                 <BriefcaseBusiness size={25} className="text-auto" />
               </span>
               <h6 className="mb-1 d-flex flex-column gap-1">
@@ -392,9 +392,9 @@ export function PerfilGeneralNomina({ idEmpleado }) {
           </div>
         </div>
         <div className="col-md-4">
-          <div className="card shadow-sm border-0 p-3 h-100">
+          <div className="card   p-3 h-100">
             <div className="card-header d-flex gap-2 align-middle justify-content-left">
-              <span className="alert border-0 alert-danger text-primary p-2 mb-0">
+              <span className="alert  alert-danger text-primary p-2 mb-0">
                 <TrendingDown className="me-1 text-danger" size={25} />
               </span>
               <h6 className="mb-1 d-flex flex-column gap-1">
@@ -427,9 +427,9 @@ export function PerfilGeneralNomina({ idEmpleado }) {
       {/* Pagos */}
       <div className="row g-3 mt-2">
         <div className="col-md-8">
-          <div className="card shadow-sm border-0 p-3">
+          <div className="card   p-3">
             <div className="card-header d-flex gap-2 align-middle justify-content-left">
-              <span className="alert border-0 alert-primary text-primary p-2 mb-0">
+              <span className="alert  alert-primary text-primary p-2 mb-0">
                 <CreditCardIcon size={25} className="text-auto" />
               </span>
               <h6 className="mb-1 d-flex flex-column gap-1">
@@ -478,7 +478,7 @@ export function PerfilGeneralNomina({ idEmpleado }) {
         </div>
         <div className="col-md-4">
           <div
-            className="card shadow-sm border-0 p-3 h-100"
+            className="card   p-3 h-100"
             style={{
               background:
                 "linear-gradient(135deg, #494e52ff 0%, #252525ff 100%)",
@@ -488,11 +488,11 @@ export function PerfilGeneralNomina({ idEmpleado }) {
             }}
           >
             <div
-              className="card-header d-flex gap-2 align-middle justify-content-left bg-transparent border-0"
+              className="card-header d-flex gap-2 align-middle justify-content-left bg-transparent "
               style={{ background: "transparent" }}
             >
               <span
-                className="alert border-0 p-2 mb-0"
+                className="alert  p-2 mb-0"
                 style={{ background: "rgba(255,255,255,0.15)" }}
               >
                 <Coins className="me-1 text-light" size={25} />
@@ -507,7 +507,7 @@ export function PerfilGeneralNomina({ idEmpleado }) {
             <div className="card-body">
               <ul className="list-group list-group-flush bg-transparent">
                 <li
-                  className="list-group-item d-flex justify-content-between align-items-center bg-transparent border-0"
+                  className="list-group-item d-flex justify-content-between align-items-center bg-transparent "
                   style={{ color: "#fff" }}
                 >
                   <span>Salario Base:</span>
@@ -516,7 +516,7 @@ export function PerfilGeneralNomina({ idEmpleado }) {
                   </span>
                 </li>
                 <li
-                  className="list-group-item d-flex justify-content-between align-items-center bg-transparent border-0"
+                  className="list-group-item d-flex justify-content-between align-items-center bg-transparent "
                   style={{ color: "#fff" }}
                 >
                   <span>Total Bonificaciones:</span>
@@ -525,7 +525,7 @@ export function PerfilGeneralNomina({ idEmpleado }) {
                   </span>
                 </li>
                 <li
-                  className="list-group-item d-flex justify-content-between align-items-center bg-transparent border-0"
+                  className="list-group-item d-flex justify-content-between align-items-center bg-transparent "
                   style={{ color: "#fff" }}
                 >
                   <span>Total Deducciones:</span>
@@ -534,7 +534,7 @@ export function PerfilGeneralNomina({ idEmpleado }) {
                   </span>
                 </li>
                 <li
-                  className="list-group-item d-flex justify-content-between align-items-center bg-transparent border-0"
+                  className="list-group-item d-flex justify-content-between align-items-center bg-transparent "
                   style={{ color: "#fff" }}
                 >
                   <span>Salario Neto:</span>

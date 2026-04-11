@@ -1,5 +1,4 @@
 import { AlmacenRegister } from "../../components/componenteAlmacen/AlmacenRegister";
-import { ContenedorPrincipal } from "../../components/componentesReutilizables/ContenedorPrincipal";
 
 export function Registro() {
   return (

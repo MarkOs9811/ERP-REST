@@ -1,0 +1,84 @@
+.almacen-card {
+  
+  padding: 1.75rem;
+}
+
+.almacen-header {
+  margin-bottom: 1.5rem;
+}
+
+.almacen-header h2 {
+  margin: 0;
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.almacen-subtitle {
+  margin: 0.4rem 0 0;
+  color: #475569;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.almacen-field .invalid-feedback {
+  margin-top: 0.35rem;
+  font-size: 0.85rem;
+}
+
+.almacen-file-group {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+}
+
+.almacen-file-group .almacen-field {
+  margin-bottom: 1rem;
+}
+
+.almacen-helptext {
+  display: block;
+  margin-top: 0.5rem;
+  color: #475569;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.almacen-helptext.success {
+  color: #166534;
+}
+
+.almacen-helptext.warning {
+  color: #92400e;
+}
+
+.almacen-footer {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+
+
+@media (max-width: 767px) {
+  .almacen-card {
+    padding: 1.25rem;
+  }
+
+  .almacen-footer {
+    justify-content: stretch;
+  }
+
+  .almacen-footer .btn-guardar {
+    width: 100%;
+  }
+}
+
+
+
+body.dark-theme .almacen-file-group {
+    background: #181a1d;
+    border-color: #1d2024;
+}

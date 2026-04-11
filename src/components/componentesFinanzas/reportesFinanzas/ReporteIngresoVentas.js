@@ -36,11 +36,11 @@ export function ReporteIngresoVentas() {
 
   const sumaIngresos = ingresos.reduce(
     (acc, val) => acc + parseFloat(val || 0),
-    0
+    0,
   );
   const sumaEgresos = egresos.reduce(
     (acc, val) => acc + parseFloat(val || 0),
-    0
+    0,
   );
 
   const motoPagadoDeudas = dataInformes.montoPagado || {};
@@ -49,7 +49,7 @@ export function ReporteIngresoVentas() {
   const montoPagado = parseFloat(motoPagadoDeudas) || 0;
   const montoRestante = Math.max(
     parseFloat(totalDeudas) - parseFloat(montoPagado),
-    0
+    0,
   );
 
   const generarReporte = useGenerarReporte("reporte_ventas.pdf");
@@ -95,7 +95,7 @@ export function ReporteIngresoVentas() {
         <div ref={reporteRef} id="reporte-ingresos-ventas" className="row g-3">
           <div className="col-md-12 d-flex gap-3">
             <div className="col-md-3">
-              <div className="card shadow-sm h-100">
+              <div className="card  h-100">
                 <div className="card-header my-2 d-flex gap-2 align-middle justify-content-left">
                   <span className="alert border-0 alert-success text-success p-2 mb-0">
                     <TrendingUp size={25} />
@@ -113,7 +113,7 @@ export function ReporteIngresoVentas() {
               </div>
             </div>
             <div className="col-md-3">
-              <div className="card shadow-sm ">
+              <div className="card  ">
                 <div className="card-header my-2 d-flex gap-2 align-middle justify-content-left">
                   <span className="alert border-0 alert-danger text-danger p-2 mb-0">
                     <TrendingDown size={25} />
@@ -132,7 +132,7 @@ export function ReporteIngresoVentas() {
           <div className="col-md-12">
             <div className="row g-3">
               <div className="col-md-4">
-                <div className="card shadow-sm h-100 rounded">
+                <div className="card  h-100 rounded">
                   <GraficoCuentasPorCobrar />
 
                   <div
@@ -169,12 +169,12 @@ export function ReporteIngresoVentas() {
                 </div>
               </div>
               <div className="col-md-4">
-                <div className="card shadow-sm  h-100 rounded">
+                <div className="card   h-100 rounded">
                   <GraficoMetodoPago />
                 </div>
               </div>
               <div className="col-md-4">
-                <div className="card shadow-sm  h-100 rounded">
+                <div className="card   h-100 rounded p-3">
                   <PlatoMasVendido />
                 </div>
               </div>

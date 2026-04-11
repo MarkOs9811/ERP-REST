@@ -82,11 +82,18 @@ export function LibroDiario() {
     <div>
       <div className="row g-3">
         <div className="col-md-12">
-          <div className="card shadow-sm py-2">
+          <div className="card  py-2">
             <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-3">
               <div className="d-flex align-items-center">
-                <BookText color={"#ea4f4f"} height="45px" width="45px" className="me-2" />
-                <h4 className="card-title mb-0 titulo-card-especial">Libro Diario</h4>
+                <BookText
+                  color={"#ea4f4f"}
+                  height="45px"
+                  width="45px"
+                  className="me-2"
+                />
+                <h4 className="card-title mb-0 titulo-card-especial">
+                  Libro Diario
+                </h4>
               </div>
               <div className="d-flex flex-wrap gap-2 mt-3 mt-md-0 align-items-center ms-auto">
                 {/* BOTÓN 1: CIERRE VENTAS */}
@@ -133,7 +140,7 @@ export function LibroDiario() {
         {/* ... Resto del renderizado de la tabla de asientos (sin cambios) ... */}
         <div className="col-md-12">
           {/* ... Código de la card de asientos ... */}
-          <div className="card shadow-sm py-2">
+          <div className="card  py-2">
             <div className="card-header p-3">
               <p className="h4 card-title mb-0">Asientos contables</p>
             </div>
@@ -144,14 +151,14 @@ export function LibroDiario() {
                 {asientos.map((asiento) => {
                   // Filtrar detalles por tipo
                   const debeDetalles = (asiento.detalles || []).filter(
-                    (d) => d.tipo === "debe"
+                    (d) => d.tipo === "debe",
                   );
                   const haberDetalles = (asiento.detalles || []).filter(
-                    (d) => d.tipo === "haber"
+                    (d) => d.tipo === "haber",
                   );
                   const maxRows = Math.max(
                     debeDetalles.length,
-                    haberDetalles.length
+                    haberDetalles.length,
                   );
 
                   return (
@@ -225,7 +232,7 @@ export function LibroDiario() {
                                           ?.length > 20
                                           ? debeDetalles[i].cuenta.nombre.slice(
                                               0,
-                                              20
+                                              20,
                                             ) + "..."
                                           : debeDetalles[i].cuenta?.nombre}
                                       </small>
@@ -233,7 +240,7 @@ export function LibroDiario() {
                                   </div>
                                 ) : (
                                   <div key={i} style={{ height: "28px" }}></div>
-                                )
+                                ),
                               )}
                             </div>
                             {/* HABER */}
@@ -261,13 +268,13 @@ export function LibroDiario() {
                                     <span className="text-success fw-bold">
                                       S/.{" "}
                                       {Number(haberDetalles[i].monto).toFixed(
-                                        2
+                                        2,
                                       )}
                                     </span>
                                   </div>
                                 ) : (
                                   <div key={i} style={{ height: "28px" }}></div>
-                                )
+                                ),
                               )}
                             </div>
                           </div>

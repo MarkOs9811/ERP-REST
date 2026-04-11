@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axiosInstance from "../../api/AxiosInstance";
 import ToastAlert from "../componenteToast/ToastAlert";
-import { Save } from "lucide-react";
+import { Save, SaveAll } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { GetProveedores } from "../../service/GetProveedores";
+import "../../css/AlmacenRegister.css";
 
 export function AlmacenRegister() {
   const {
@@ -17,7 +18,6 @@ export function AlmacenRegister() {
   // Estados para almacenar las opciones de los combobox
   const [categorias, setCategorias] = useState([]);
   const [unidades, setUnidades] = useState([]);
-  const [proveedores, setProveedores] = useState([]);
 
   // Función para obtener las categorías
   const fetchCategorias = async () => {
@@ -43,15 +43,9 @@ export function AlmacenRegister() {
     }
   };
 
-  const {
-    data: dataProveedores = [],
-    isLoading: loadingProveedor,
-    isError: errorPorveedor,
-  } = useQuery({
+  const { data: dataProveedores = [] } = useQuery({
     queryKey: ["proveedores"],
     queryFn: GetProveedores,
-    retry: 1,
-    refetchOnWindowFocus: false,
   });
 
   // Ejecutar las consultas al montar el componente
@@ -95,7 +89,7 @@ export function AlmacenRegister() {
         // El servidor respondió con un código de estado fuera del rango 2xx
         ToastAlert(
           "error",
-          error.response.data.message || "Error en el servidor"
+          error.response.data.message || "Error en el servidor",
         );
       } else if (error.request) {
         // La solicitud fue hecha pero no se recibió respuesta
@@ -110,23 +104,20 @@ export function AlmacenRegister() {
 
   return (
     <form id="productForm" onSubmit={handleSubmit(onSubmit)}>
-      <div className="card p-3">
-        {/* Nombre del Producto */}
+      <div className="almacen-card">
         <div className="row g-3">
           <div className="col-md-6">
-            <div className="form-floating mb-3">
+            <div className="almacen-field">
+              <label htmlFor="nombreProducto">Nombre Producto/Activo</label>
               <input
                 type="text"
-                className={`form-control ${
-                  errors.nombreProducto ? "is-invalid" : ""
-                }`}
+                className={`form-control ${errors.nombreProducto ? "is-invalid" : ""}`}
                 id="nombreProducto"
-                placeholder="Ingrese nombre del producto"
+                placeholder="Nombre del producto"
                 {...register("nombreProducto", {
                   required: "Este campo es obligatorio",
                 })}
               />
-              <label htmlFor="nombreProducto">Nombre Producto/Activo</label>
               {errors.nombreProducto && (
                 <div className="invalid-feedback">
                   {errors.nombreProducto.message}
@@ -135,16 +126,14 @@ export function AlmacenRegister() {
             </div>
           </div>
 
-          {/* Cantidad */}
           <div className="col-md-6">
-            <div className="form-floating mb-3">
+            <div className="almacen-field">
+              <label htmlFor="cantidad">Cantidad</label>
               <input
                 type="number"
-                className={`form-control ${
-                  errors.cantidad ? "is-invalid" : ""
-                }`}
+                className={`form-control ${errors.cantidad ? "is-invalid" : ""}`}
                 id="cantidad"
-                placeholder="Ingrese cantidad del producto"
+                placeholder="Cantidad"
                 {...register("cantidad", {
                   required: "Este campo es obligatorio",
                   min: {
@@ -153,7 +142,6 @@ export function AlmacenRegister() {
                   },
                 })}
               />
-              <label htmlFor="cantidad">Cantidad</label>
               {errors.cantidad && (
                 <div className="invalid-feedback">
                   {errors.cantidad.message}
@@ -163,17 +151,15 @@ export function AlmacenRegister() {
           </div>
         </div>
 
-        {/* Precio Unitario y Descripción */}
-        <div className="row g-3">
+        <div className="row g-3 my-2">
           <div className="col-md-4">
-            <div className="form-floating mb-3">
+            <div className="almacen-field">
+              <label htmlFor="precioUnit">Precio Unitario S/.</label>
               <input
                 type="text"
-                className={`form-control ${
-                  errors.precioUnit ? "is-invalid" : ""
-                }`}
+                className={`form-control ${errors.precioUnit ? "is-invalid" : ""}`}
                 id="precioUnit"
-                placeholder="Ingrese precio unitario del producto"
+                placeholder="Precio unitario"
                 {...register("precioUnit", {
                   required: "Este campo es obligatorio",
                   pattern: {
@@ -182,7 +168,6 @@ export function AlmacenRegister() {
                   },
                 })}
               />
-              <label htmlFor="precioUnit">Precio Unitario S/.</label>
               {errors.precioUnit && (
                 <div className="invalid-feedback">
                   {errors.precioUnit.message}
@@ -191,20 +176,18 @@ export function AlmacenRegister() {
             </div>
           </div>
 
-          {/* Descripción */}
           <div className="col-md-4">
-            <div className="form-floating mb-3">
+            <div className="almacen-field">
+              <label htmlFor="descripcion">Descripción</label>
               <textarea
-                className={`form-control ${
-                  errors.descripcion ? "is-invalid" : ""
-                }`}
+                className={`form-control ${errors.descripcion ? "is-invalid" : ""}`}
                 id="descripcion"
-                placeholder="Descripción"
+                rows={3}
+                placeholder="Descripción del producto"
                 {...register("descripcion", {
                   required: "Este campo es obligatorio",
                 })}
               />
-              <label htmlFor="descripcion">Descripción</label>
               {errors.descripcion && (
                 <div className="invalid-feedback">
                   {errors.descripcion.message}
@@ -213,19 +196,18 @@ export function AlmacenRegister() {
             </div>
           </div>
 
-          {/* Marca */}
           <div className="col-md-4">
-            <div className="form-floating mb-3">
+            <div className="almacen-field">
+              <label htmlFor="marca">Marca</label>
               <input
                 type="text"
                 className={`form-control ${errors.marca ? "is-invalid" : ""}`}
                 id="marca"
-                placeholder="Ingrese marca del producto"
+                placeholder="Marca del producto"
                 {...register("marca", {
                   required: "Este campo es obligatorio",
                 })}
               />
-              <label htmlFor="marca">Marca</label>
               {errors.marca && (
                 <div className="invalid-feedback">{errors.marca.message}</div>
               )}
@@ -233,14 +215,12 @@ export function AlmacenRegister() {
           </div>
         </div>
 
-        {/* Categoría, Unidad de Medida y Proveedor */}
-        <div className="row g-3">
+        <div className="row g-3 my-2">
           <div className="col-md-4">
-            <div className="form-floating mb-3">
+            <div className="almacen-field">
+              <label htmlFor="categoria">Categoría</label>
               <select
-                className={`form-select ${
-                  errors.categoria ? "is-invalid" : ""
-                }`}
+                className={`form-select ${errors.categoria ? "is-invalid" : ""}`}
                 id="categoria"
                 {...register("categoria", {
                   required: "Este campo es obligatorio",
@@ -253,7 +233,6 @@ export function AlmacenRegister() {
                   </option>
                 ))}
               </select>
-              <label htmlFor="categoria">Categoría</label>
               {errors.categoria && (
                 <div className="invalid-feedback">
                   {errors.categoria.message}
@@ -262,9 +241,9 @@ export function AlmacenRegister() {
             </div>
           </div>
 
-          {/* Unidad de Medida */}
-          <div className="col-md-4">
-            <div className="form-floating mb-3">
+          <div className="col-md-4 ">
+            <div className="almacen-field">
+              <label htmlFor="unidad">Unidad de Medida</label>
               <select
                 className={`form-select ${errors.unidad ? "is-invalid" : ""}`}
                 id="unidad"
@@ -279,20 +258,17 @@ export function AlmacenRegister() {
                   </option>
                 ))}
               </select>
-              <label htmlFor="unidad">Unidad de Medida</label>
               {errors.unidad && (
                 <div className="invalid-feedback">{errors.unidad.message}</div>
               )}
             </div>
           </div>
 
-          {/* Proveedor */}
           <div className="col-md-4">
-            <div className="form-floating mb-3">
+            <div className="almacen-field">
+              <label htmlFor="proveedor">Proveedor</label>
               <select
-                className={`form-select ${
-                  errors.proveedor ? "is-invalid" : ""
-                }`}
+                className={`form-select ${errors.proveedor ? "is-invalid" : ""}`}
                 id="proveedor"
                 {...register("proveedor", {
                   required: "Este campo es obligatorio",
@@ -307,7 +283,6 @@ export function AlmacenRegister() {
                     </option>
                   ))}
               </select>
-              <label htmlFor="proveedor">Proveedor</label>
               {errors.proveedor && (
                 <div className="invalid-feedback">
                   {errors.proveedor.message}
@@ -317,52 +292,59 @@ export function AlmacenRegister() {
           </div>
         </div>
 
-        {/* Archivo PDF */}
-        <div className="form-floating mb-3">
-          <input
-            type="file"
-            className={`form-control ${errors.pdf_file ? "is-invalid" : ""}`}
-            id="pdf_file"
-            accept="application/pdf"
-            {...register("pdf_file", {
-              required: "Este campo es obligatorio",
-            })}
-          />
-          <label htmlFor="pdf_file">Seleccionar PDF</label>
-          {errors.pdf_file && (
-            <div className="invalid-feedback">{errors.pdf_file.message}</div>
-          )}
-          <small className="alert" style={{ color: "#179e5b" }}>
-            <i className="fas fa-exclamation-circle"></i> Cargar archivo firmado
-            por Administrador/Finanzas
-          </small>
+        <div className="almacen-file-group">
+          <div className="almacen-field mb-3">
+            <label htmlFor="pdf_file">Seleccionar PDF</label>
+            <input
+              type="file"
+              className={`form-control ${errors.pdf_file ? "is-invalid" : ""}`}
+              id="pdf_file"
+              accept="application/pdf"
+              {...register("pdf_file", {
+                required: "Este campo es obligatorio",
+              })}
+            />
+            {errors.pdf_file && (
+              <div className="invalid-feedback">{errors.pdf_file.message}</div>
+            )}
+            <small className="almacen-helptext success">
+              <i className="fas fa-exclamation-circle"></i> Cargar archivo
+              firmado por Administrador/Finanzas
+            </small>
+          </div>
+
+          <div className="almacen-field">
+            <label htmlFor="image_file">Cargar Firma</label>
+            <input
+              type="file"
+              className={`form-control ${errors.image_file ? "is-invalid" : ""}`}
+              id="image_file"
+              accept="image/*"
+              {...register("image_file", {
+                required: "Este campo es obligatorio",
+              })}
+            />
+            {errors.image_file && (
+              <div className="invalid-feedback">
+                {errors.image_file.message}
+              </div>
+            )}
+            <small className="almacen-helptext warning">
+              <i className="fas fa-exclamation-circle"></i> El archivo cargado
+              no debe ser pesado
+            </small>
+          </div>
         </div>
 
-        {/* Archivo de Imagen (Firma) */}
-        <div className="form-floating mb-3">
-          <input
-            type="file"
-            className={`form-control ${errors.image_file ? "is-invalid" : ""}`}
-            id="image_file"
-            accept="image/*"
-            {...register("image_file", {
-              required: "Este campo es obligatorio",
-            })}
-          />
-          <label htmlFor="image_file">Cargar Firma</label>
-          {errors.image_file && (
-            <div className="invalid-feedback">{errors.image_file.message}</div>
-          )}
-          <small className="alert" style={{ color: "#e0b12e" }}>
-            <i className="fas fa-exclamation-circle"></i> El archivo cargado no
-            debe ser pesado
-          </small>
+        <div className="almacen-footer">
+          <button
+            type="submit"
+            className="btn-guardar d-inline-flex align-items-center gap-2"
+          >
+            <SaveAll />
+            Guardar Registro
+          </button>
         </div>
-
-        <button type="submit" className="   btn-guardar">
-          <Save color={"auto"} />
-          Guardar Registro
-        </button>
       </div>
     </form>
   );

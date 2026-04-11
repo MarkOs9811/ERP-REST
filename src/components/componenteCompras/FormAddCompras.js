@@ -54,7 +54,7 @@ export function FormAddCompras() {
       if (error.response) {
         ToastAlert(
           "error",
-          error.response.data.message || "Error en el servidor"
+          error.response.data.message || "Error en el servidor",
         );
       } else {
         ToastAlert("error", "Error de red o del servidor");

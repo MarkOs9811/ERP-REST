@@ -18,7 +18,7 @@ export function Almacen() {
   };
   return (
     <div>
-      <div className="card  h-100 d-flex  shadow-sm py-2  ">
+      <div className="card  d-flex  py-2  ">
         <div className="card-header border-bottom-0 d-flex justify-content-between align-items-center">
           <div className="d-flex align-items-center">
             <h4 className="card-title mb-0 titulo-card-especial">
@@ -38,7 +38,7 @@ export function Almacen() {
                 onChange={(e) => setSearch(e.target.value)}
               />
             </div>
-            
+
             <button
               type="button"
               className="btn btn-outline-dark px-3"

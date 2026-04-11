@@ -34,11 +34,11 @@ export function InformesFinancieros() {
 
   const sumaIngresos = ingresos.reduce(
     (acc, val) => acc + parseFloat(val || 0),
-    0
+    0,
   );
   const sumaEgresos = egresos.reduce(
     (acc, val) => acc + parseFloat(val || 0),
-    0
+    0,
   );
 
   const motoPagadoDeudas = dataInformes.montoPagado || {};
@@ -47,7 +47,7 @@ export function InformesFinancieros() {
   const montoPagado = parseFloat(motoPagadoDeudas) || 0;
   const montoRestante = Math.max(
     parseFloat(totalDeudas) - parseFloat(montoPagado),
-    0
+    0,
   );
 
   return (
@@ -56,7 +56,7 @@ export function InformesFinancieros() {
         <div className="col-md-8">
           <div className="row g-3">
             <div className="col-md-12">
-              <div className="card shadow-sm ">
+              <div className="card  ">
                 <div className="card-header d-flex gap-2 align-middle justify-content-left">
                   <span className="alert border-0 alert-danger text-danger p-2 mb-0">
                     <ChartColumnBigIcon size={25} />
@@ -72,7 +72,7 @@ export function InformesFinancieros() {
               </div>
             </div>
             <div className="col-md-12 d-flex  gap-3">
-              <div className="card shadow-sm py-2 w-50">
+              <div className="card  py-2 w-50">
                 <div className="card-header p-3">
                   <p className="h4 card-title">Pagos Empleados</p>
                 </div>
@@ -80,7 +80,7 @@ export function InformesFinancieros() {
                   <GraficoPagoEmpleados />
                 </div>
               </div>
-              <div className="card shadow-sm py-2 w-50">
+              <div className="card  py-2 w-50">
                 <div className="card-header p-3">
                   <p className="h4 card-title">Ventas al Contado</p>
                 </div>
@@ -101,7 +101,7 @@ export function InformesFinancieros() {
             </div>
 
             <div className="col-md-12 ">
-              <div className="card shadow-sm py-2 ">
+              <div className="card  py-2 ">
                 <div className="card-body p-3 justify-content-center">
                   <GraficoCuentasPorCobrar />
                   <div
@@ -141,7 +141,7 @@ export function InformesFinancieros() {
           </div>
         </div>
         <div className="col-md-12">
-          <div className="card shadow-sm py-2">
+          <div className="card  py-2">
             <div className="card-header p-3">
               <p className="h4 card-title">Egresos mensuales</p>
             </div>

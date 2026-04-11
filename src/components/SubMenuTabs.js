@@ -95,8 +95,13 @@ const subMenuGroups = {
     },
   ],
   "/almacen": [
-    { label: "Kardex", path: "/almacen/kardex", icon: <Box size={16} /> },
     { label: "Almacenes", path: "/almacen", icon: <Building size={16} /> },
+    { label: "Kardex", path: "/almacen/kardex", icon: <Box size={16} /> },
+    {
+      label: "Registro",
+      path: "/almacen/registro",
+      icon: <FileText size={16} />,
+    },
     {
       label: "Compras",
       path: "/almacen/compras",
@@ -107,11 +112,7 @@ const subMenuGroups = {
       path: "/almacen/proveedores",
       icon: <Truck size={16} />,
     },
-    {
-      label: "Registro",
-      path: "/almacen/registro",
-      icon: <FileText size={16} />,
-    },
+
     {
       label: "Transferencia",
       path: "/almacen/transferencia",

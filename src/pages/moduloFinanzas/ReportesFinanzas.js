@@ -1,4 +1,3 @@
-import { ContenedorPrincipal } from "../../components/componentesReutilizables/ContenedorPrincipal";
 import {
   FileBarChart,
   DollarSign,
@@ -7,6 +6,7 @@ import {
   Calculator,
   TrendingUp,
   ChartNoAxesCombined,
+  Box,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import "../../css/EstilosFinanzas.css";
@@ -51,7 +51,7 @@ export function ReportesFinanzas() {
       dataModal: "reporteCaja",
       descripcion:
         "Revisa los movimientos de caja, ingresos y salidas por turno o usuario responsable.",
-      icono: <DollarSign className="icon icon-emerald" />,
+      icono: <Box className="icon icon-emerald" />,
     },
     {
       titulo: "Pagos y Planilla",
@@ -73,16 +73,16 @@ export function ReportesFinanzas() {
     <div>
       <div className="row gap-3">
         <div className="col-md-12">
-          <div className="card shadow-sm">
+          <div className="card ">
             <div className="card-body">
-              <h1 className="text-left">
+              <h4 className="text-left">
                 <ChartNoAxesCombined
                   color={"#ea4f4f"}
                   className="text-auto"
                   size={"30px"}
                 />{" "}
                 Reportes Financieros
-              </h1>
+              </h4>
               <p>
                 Analiza y controla el estado financiero general del restaurante
                 con reportes dinámicos y gráficos.
@@ -93,18 +93,11 @@ export function ReportesFinanzas() {
         <div className="col-md-12 ">
           <div className="reportes-grid">
             {reportes.map((reporte, index) => (
-              <motion.div
-                key={index}
-                className="reporte-card"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ scale: 1.05 }}
-              >
+              <motion.div key={index} className="card reporte-card">
                 <div className="reporte-icon">{reporte.icono}</div>
-                <h2 className="text-muted text-auto fw-bold">
+                <h5 className="text-dark text-auto fw-bold">
                   {reporte.titulo}
-                </h2>
+                </h5>
                 <p>{reporte.descripcion}</p>
                 <button
                   className="btn-guardar"

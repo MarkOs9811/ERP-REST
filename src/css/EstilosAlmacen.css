@@ -19,26 +19,7 @@
 .input-add-stock{
     border: 1px solid #00b652!important;
 }
-.btn-transferir-directo{
-    min-width: 35px;
-    width: auto;
-    background-color: rgb(11, 125, 218)!important;
-    line-height: 15px;
-    color: #fff!important;
-    border: none;
-    border-radius: 0.375rem;
-    padding: 0.5rem;
-    transition: background-color 0.3s ease;
-}
-    /* ESTILOS ALMACEN TRANFERENCIA */
-     .item-almacen-transfer{
-        transition: all 0.2s ease;
-        cursor: pointer;
-    }
-    /* En tu archivo CSS principal */
-   /* Efecto ripple (ola de agua) */
-  /* Efecto Ripple Mejorado */
- /* styles.css */
+
  @keyframes ripple {
      0% {
          transform: scale(0);

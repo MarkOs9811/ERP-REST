@@ -45,11 +45,11 @@ export function ReporteCaja() {
   // Resumen general
   const totalIngresos = registros.reduce(
     (acc, r) => acc + parseFloat(r.montoFinal || 0),
-    0
+    0,
   );
   const totalSalidas = registros.reduce(
     (acc, r) => acc + parseFloat(r.montoInicial || 0),
-    0
+    0,
   );
   const totalNeto = totalIngresos - totalSalidas;
 
@@ -76,7 +76,7 @@ export function ReporteCaja() {
   });
 
   return (
-    <div className="bg-light p-4">
+    <div className="p-4">
       <div className="row g-3 mb-3">
         {/* Botón de reporte */}
         <div className="col-md-12 d-flex justify-content-auto ms-auto">
@@ -109,36 +109,30 @@ export function ReporteCaja() {
         {/* Resumen general */}
         <div className="row g-3 mb-3">
           <div className="col-md-4">
-            <div className="card border-0 shadow-sm rounded-3 p-3 h-100">
+            <div className="card  rounded-3 p-3 h-100">
               <div className="d-flex align-items-center gap-2 mb-2">
-                <ArrowUpCircle className="text-success" size={28} />
-                <span className="fw-bold text-success">Ingresos Totales</span>
+                <ArrowUpCircle className="" size={28} />
+                <span className="fw-bold ">Ingresos Totales</span>
               </div>
-              <h4 className="fw-bold text-success mb-0">
-                S/ {totalIngresos.toFixed(2)}
-              </h4>
+              <h4 className="fw-bold  mb-0">S/ {totalIngresos.toFixed(2)}</h4>
             </div>
           </div>
           <div className="col-md-4">
-            <div className="card border-0 shadow-sm rounded-3 p-3 h-100">
+            <div className="card  rounded-3 p-3 h-100">
               <div className="d-flex align-items-center gap-2 mb-2">
-                <ArrowDownCircle className="text-danger" size={28} />
-                <span className="fw-bold text-danger">Salidas Totales</span>
+                <ArrowDownCircle className="" size={28} />
+                <span className="fw-bold ">Salidas Totales</span>
               </div>
-              <h4 className="fw-bold text-danger mb-0">
-                S/ {totalSalidas.toFixed(2)}
-              </h4>
+              <h4 className="fw-bold  mb-0">S/ {totalSalidas.toFixed(2)}</h4>
             </div>
           </div>
           <div className="col-md-4">
-            <div className="card border-0 shadow-sm rounded-3 p-3 h-100">
+            <div className="card  rounded-3 p-3 h-100">
               <div className="d-flex align-items-center gap-2 mb-2">
-                <DollarSign className="text-primary" size={28} />
-                <span className="fw-bold text-primary">Neto Vendido</span>
+                <span className="fw-bold">S/.</span>
+                <span className="fw-bold ">Neto Vendido</span>
               </div>
-              <h4 className="fw-bold text-primary mb-0">
-                S/ {totalNeto.toFixed(2)}
-              </h4>
+              <h4 className="fw-bold  mb-0">S/ {totalNeto.toFixed(2)}</h4>
             </div>
           </div>
         </div>
@@ -148,7 +142,7 @@ export function ReporteCaja() {
           <div className="col-md-12">
             <div className="card p-3 shadow-sm">
               <div className="card-header d-flex gap-2 align-middle justify-content-left p-3">
-                <span className="alert border-0 alert-primary text-primary p-2 mb-0">
+                <span className="alert border-0 alert-primary text-danger p-2 mb-0">
                   <ChartColumnBig size={25} />
                 </span>
                 <h6 className="mb-1 d-flex flex-column gap-1">

@@ -55,7 +55,7 @@ export function ReporteEgresoCompras() {
   }, {});
   const proveedorTop = Object.entries(proveedorRecurrente).reduce(
     (max, entry) => (entry[1] > max[1] ? entry : max),
-    ["", 0]
+    ["", 0],
   )[0];
 
   const reporteRef = useRef();
@@ -100,7 +100,7 @@ export function ReporteEgresoCompras() {
         </div>
         <div ref={reporteRef} id="reporte-ingresos-ventas" className="row g-3">
           <div className="col-md-3 col-sm-12">
-            <div className="card shadow-sm p-3 d-flex flex-row align-items-center h-100">
+            <div className="card  p-3 d-flex flex-row align-items-center h-100">
               <ShoppingCart color="#f4a261" width="63px" height="63px" />
               <div className="ms-auto text-end">
                 <h5 className="fw-light ">Compras</h5>
@@ -110,7 +110,7 @@ export function ReporteEgresoCompras() {
           </div>
 
           <div className="col-md-3 col-sm-12">
-            <div className="card shadow-sm p-3 d-flex flex-row align-items-center h-100">
+            <div className="card  p-3 d-flex flex-row align-items-center h-100">
               <CalendarDays color="#2a9d8f" width="63px" height="63px" />
               <div className="ms-auto text-end">
                 <h5 className="fw-light ">Compras del Mes</h5>
@@ -120,7 +120,7 @@ export function ReporteEgresoCompras() {
           </div>
 
           <div className="col-md-3 col-sm-12">
-            <div className="card shadow-sm p-3 d-flex flex-row align-items-center h-100">
+            <div className="card  p-3 d-flex flex-row align-items-center h-100">
               <BanknoteArrowUp color="#e76f51" width="63px" height="63px" />
               <div className="ms-auto text-end">
                 <h5 className="fw-light ">Egresos del Mes</h5>
@@ -130,7 +130,7 @@ export function ReporteEgresoCompras() {
           </div>
 
           <div className="col-md-3 col-sm-12">
-            <div className="card shadow-sm p-3 d-flex flex-row align-items-center h-100">
+            <div className="card  p-3 d-flex flex-row align-items-center h-100">
               <Trophy color="#f4a261" width="63px" height="63px" />
               <div className="ms-auto text-end">
                 <h5 className="fw-light ">Proveedor TOP</h5>
@@ -139,7 +139,7 @@ export function ReporteEgresoCompras() {
             </div>
           </div>
           <div className="col-md-12">
-            <div className="card shadow-sm p-3">
+            <div className="card  p-3">
               <GraficoEgresoTodo />
             </div>
           </div>

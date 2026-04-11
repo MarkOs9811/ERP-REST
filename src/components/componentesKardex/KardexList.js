@@ -57,9 +57,9 @@ export function KardexList({ search }) {
           stock_actual,
           fecha_movimiento,
         ].some((value) =>
-          value?.toString().toLowerCase().includes(searchLower)
+          value?.toString().toLowerCase().includes(searchLower),
         );
-      }
+      },
     );
 
     setFilterKardexList(result);
@@ -214,12 +214,12 @@ export function KardexList({ search }) {
             style={{ textAlign: "center" }}
           >
             <a
-              href={`${BASE_URL}/${row.documento}`}
+              href={`${BASE_URL}${row.documento}`}
               target="_blank"
               rel="noopener noreferrer"
-              className=" btn mx-2 mb-0"
+              className=" btn btn-ver mx-2 mb-0 p-2 py-1 "
             >
-              <FileText color={"#1591c6"} width="30px" height="30px" />
+              <FileText color={"#1591c6"} size={18} />
             </a>
           </div>
         );

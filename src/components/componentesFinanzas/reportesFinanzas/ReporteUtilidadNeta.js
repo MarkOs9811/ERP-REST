@@ -50,7 +50,7 @@ export function ReporteUtilidadNeta() {
   const totalCompras = Array.isArray(compras)
     ? compras.reduce(
         (acc, c) => acc + parseFloat(c.totalPagado || c.monto || 0),
-        0
+        0,
       )
     : 0;
   const costosOperativos = 0; // Si tienes este dato, cámbialo aquí
@@ -84,7 +84,7 @@ export function ReporteUtilidadNeta() {
 
   // Unifica todos los meses presentes en ventas y compras
   const mesesKeys = Array.from(
-    new Set([...Object.keys(ventasPorMes), ...Object.keys(comprasPorMes)])
+    new Set([...Object.keys(ventasPorMes), ...Object.keys(comprasPorMes)]),
   ).sort();
 
   // Meses en español
@@ -121,8 +121,8 @@ export function ReporteUtilidadNeta() {
   });
 
   return (
-    <div className="p-4 bg-light">
-      <div className="row g-3 mb-3">
+    <div className="p-4 ">
+      <div className="row g-3 mb-3 mb-4">
         {/* Botón de reporte */}
         <div className="col-md-12 d-flex justify-content-auto ms-auto">
           <div>
@@ -146,13 +146,13 @@ export function ReporteUtilidadNeta() {
           </div>
         </div>
       </div>
-      <div className="row g-3">
+      <div className="row g-3 mb-3">
         <div className="col-md-12" ref={reporteRef}>
           {/* Tarjetas resumen */}
           <div className="col-md-12 mb-2">
-            <div className="row g-3">
+            <div className="row g-3 mb-3">
               <div className="col-md-3">
-                <div className="card border-0 shadow-sm rounded-3 p-3 h-100">
+                <div className="card  rounded-3 p-3 h-100">
                   {loadingVentas ? (
                     <div>
                       <Cargando />
@@ -160,7 +160,6 @@ export function ReporteUtilidadNeta() {
                   ) : (
                     <>
                       <div className="d-flex align-items-center gap-2 mb-2">
-                        <DollarSign className="text-dark" size={28} />
                         <span className="fw-bold text-dark">
                           Ventas Totales
                         </span>
@@ -173,7 +172,7 @@ export function ReporteUtilidadNeta() {
                 </div>
               </div>
               <div className="col-md-3">
-                <div className="card border-0 shadow-sm rounded-3 p-3 h-100">
+                <div className="card  rounded-3 p-3 h-100">
                   {loadingCompras ? (
                     <div>
                       <Cargando />
@@ -194,7 +193,7 @@ export function ReporteUtilidadNeta() {
                 </div>
               </div>
               <div className="col-md-3">
-                <div className="card border-0 shadow-sm rounded-3 p-3 h-100">
+                <div className="card  rounded-3 p-3 h-100">
                   <div className="d-flex align-items-center gap-2 mb-2">
                     <TrendingUp className="text-dark" size={28} />
                     <span className="fw-bold text-dark">Utilidad Neta</span>
@@ -205,7 +204,7 @@ export function ReporteUtilidadNeta() {
                 </div>
               </div>
               <div className="col-md-3">
-                <div className="card border-0 shadow-sm rounded-3 p-3 h-100">
+                <div className="card  rounded-3 p-3 h-100">
                   <div className="d-flex align-items-center gap-2 mb-2">
                     <Percent className="text-dark" size={28} />
                     <span className="fw-bold text-dark">
@@ -220,8 +219,8 @@ export function ReporteUtilidadNeta() {
 
           {/* Desglose financiero */}
           <div className="col-md-12 mb-2">
-            <div className="card border-0 shadow-sm rounded-3 p-3">
-              <div className="d-flex align-items-center gap-2 mb-3">
+            <div className="card  rounded-3 p-3">
+              <div className="d-flex align-items-center gap-2 mb-4">
                 <BarChart2 className="text-dark" size={22} />
                 <span className="fw-bold text-dark">Desglose Financiero</span>
               </div>
@@ -267,8 +266,8 @@ export function ReporteUtilidadNeta() {
 
           {/* Comparativa mensual */}
           <div className="col-md-12 mb-2">
-            <div className="card border-0 shadow-sm rounded-3 p-3">
-              <div className="d-flex align-items-center gap-2 mb-3">
+            <div className="card  rounded-3 p-3">
+              <div className="d-flex align-items-center gap-2 mb-4">
                 <BarChart2 className="text-dark" size={22} />
                 <span className="fw-bold text-dark">Comparativa Mensual</span>
               </div>
@@ -309,9 +308,9 @@ export function ReporteUtilidadNeta() {
 
           {/* Gráfico */}
           <div className="col-md-12 gap-3">
-            <div className="card p-3 shadow-sm">
+            <div className="card p-3 ">
               <div className="card-header d-flex gap-2 align-middle justify-content-left p-3">
-                <span className="alert border-0 alert-primary text-primary p-2 mb-0">
+                <span className="alert alert-primary text-primary p-2 mb-0">
                   <PieChart size={25} />
                 </span>
                 <h6 className="mb-1 d-flex flex-column gap-1">
