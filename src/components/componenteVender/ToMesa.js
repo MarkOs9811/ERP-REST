@@ -29,6 +29,8 @@ import { TicketsPedido } from "./TiketsType/TicketsPedido";
 export function ToMesa() {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
   const id = useSelector((state) => state.mesa.idPreventaMesa);
+  const numeroMesa = useSelector((state) => state.mesa.numero);
+
   const categoriaFiltroPlatos = useSelector(
     (state) => state.categoriaFiltroPlatos.estado,
   );
@@ -74,7 +76,7 @@ export function ToMesa() {
   const handleLimpiarMesa = () => {
     dispatch(clearPedido(id));
     setNotaPedido("");
-    ToastAlert("info", "Pedido de la mesa " + id + " limpiado.");
+    ToastAlert("info", "Pedido de la mesa " + numeroMesa + " limpiado.");
   };
 
   const componentRef = useRef();
@@ -145,7 +147,9 @@ export function ToMesa() {
                 <FontAwesomeIcon icon={faArrowLeft} />
               </button>
               <div className="text-center">
-                <h6 className="m-0 fw-bold text-uppercase">Mesa {id}</h6>
+                <h6 className="m-0 fw-bold text-uppercase">
+                  Mesa {numeroMesa}
+                </h6>
                 <select
                   className="form-select form-select-sm mt-1"
                   value={id}
@@ -172,22 +176,27 @@ export function ToMesa() {
               </button>
             </div>
 
-            <div className="card-body p-0 overflow-auto">
+            <div className="card-body p-0 overflow-auto ">
               {pedido.mesas[id] && pedido.mesas[id].items.length > 0 ? (
-                <div className="table-responsive">
-                  <table className="table table-borderless align-middle mb-0">
-                    <thead className="text-muted small border-bottom text-center">
-                      <tr>
-                        <th className="ps-3 text-start fw-normal">Plato</th>
-                        <th className="fw-normal">Cant.</th>
-                        <th className="fw-normal">Total</th>
-                        <th className="fw-normal"></th>
+                <div className="table-responsive rounded-none">
+                  <table className="table table-borderless align-middle mb-0 bg-transparent">
+                    <thead className="text-muted small border-bottom text-center bg-transparent">
+                      <tr className="bg-transparent">
+                        <th className="ps-3 text-start fw-normal bg-transparent">
+                          Plato
+                        </th>
+                        <th className="fw-normal bg-transparent">Cant.</th>
+                        <th className="fw-normal bg-transparent">Total</th>
+                        <th className="fw-normal bg-transparent"></th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody className="">
                       {pedido.mesas[id].items.map((item) => (
-                        <tr key={item.id} className="border-bottom">
-                          <td className="ps-3 py-2">
+                        <tr
+                          key={item.id}
+                          className="border-bottom bg-transparent"
+                        >
+                          <td className="ps-3 py-2 bg-transparent">
                             <div className="d-flex flex-column">
                               <span className="fw-bold text-dark small">
                                 {item.nombre}
@@ -200,7 +209,7 @@ export function ToMesa() {
                               </span>
                             </div>
                           </td>
-                          <td className="py-2">
+                          <td className="py-2 bg-transparent">
                             <div
                               className="d-flex align-items-center justify-content-center bg-light rounded-pill border mx-auto"
                               style={{
@@ -209,7 +218,7 @@ export function ToMesa() {
                               }}
                             >
                               <button
-                                className="btn btn-sm p-0"
+                                className="btn btn-sm p-0 border-0"
                                 onClick={() =>
                                   handleRemovePlatoPreventa(item.id)
                                 }
@@ -220,19 +229,19 @@ export function ToMesa() {
                                 {item.cantidad}
                               </span>
                               <button
-                                className="btn btn-sm p-0"
+                                className="btn btn-sm p-0 border-0"
                                 onClick={() => handleAddPlatoPreventa(item)}
                               >
                                 <Plus size={12} />
                               </button>
                             </div>
                           </td>
-                          <td className="text-end py-2 fw-bold small">
+                          <td className="text-end text-auto py-2 fw-bold small bg-transparent">
                             S/. {Number(item.cantidad * item.precio).toFixed(2)}
                           </td>
-                          <td className="text-center py-2">
+                          <td className="text-center py-2 bg-transparent">
                             <button
-                              className="btn btn-sm text-danger p-0"
+                              className="btn btn-sm text-danger rounded-pill mx-2 p-0 border-0"
                               onClick={() =>
                                 handleRemovePlatoPreventa(item.id, true)
                               }

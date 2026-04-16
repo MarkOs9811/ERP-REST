@@ -161,8 +161,7 @@ export function PedidosWeb() {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      {/* CAMBIO 1: Quitamos "row g-3" y ponemos nuestra clase kanban-container */}
-      <div className="kanban-container h-100  px-md-0">
+      <div className="kanban-container h-100 px-md-0">
         {[
           {
             key: "pendientes",
@@ -172,6 +171,9 @@ export function PedidosWeb() {
             icon: (
               <Hourglass className="text-auto" height="35px" width="35px" />
             ),
+            // Asignamos los estados específicos para esta columna
+            colLoading: isLoading,
+            colError: isError,
           },
           {
             key: "proceso",
@@ -181,6 +183,9 @@ export function PedidosWeb() {
             icon: (
               <CookingPot className="text-auto" height="35px" width="35px" />
             ),
+            // Asignamos los estados específicos para esta columna
+            colLoading: isLoadingProceso,
+            colError: isErrorProceso,
           },
           {
             key: "listos",
@@ -190,12 +195,14 @@ export function PedidosWeb() {
             icon: (
               <CheckCheck className="text-auto" height="35px" width="35px" />
             ),
+            // Asignamos los estados específicos para esta columna
+            colLoading: isLoadingListos,
+            colError: isErrorListos,
           },
-        ].map(({ key, title, border, icon }) => (
-          /* CAMBIO 2: Quitamos "col-md-4" y ponemos nuestra clase kanban-col */
+        ].map(({ key, title, border, icon, colLoading, colError }) => (
           <div key={key} className="kanban-col">
             <div
-              className="kanban-column flex-grow-1 h-100 d-flex flex-column shadow-sm"
+              className=" kanban-column flex-grow-1 h-100 d-flex flex-column bg-white"
               style={{
                 borderTop: `10px solid ${border}`,
                 borderRadius: "0.5rem",
@@ -213,36 +220,58 @@ export function PedidosWeb() {
                     {...provided.droppableProps}
                     className="flex-grow-1 overflow-auto p-2 p-md-3"
                   >
-                    {isLoading && <Cargando />}
-                    {isError && (
-                      <div className="error text-danger">
+                    {/* ESTADOS ESPECÍFICOS DE CARGA PARA CADA COLUMNA */}
+                    {colLoading && (
+                      <div className="d-flex justify-content-center align-items-center py-4">
+                        {/* Opción 1: Tu componente con estilo inline para forzar que gire 
+                          (Necesitas tener @keyframes spin definido en tu CSS global, o usar clases como fa-spin) 
+                        */}
+                        <div style={{ animation: "spin 1s linear infinite" }}>
+                          <Cargando />
+                        </div>
+
+                        {/* Opción 2: Si el de arriba sigue sin girar, comenta el de arriba 
+                          y descomenta este spinner nativo de Bootstrap garantizado al 100%:
+                        
+                          <div className="spinner-border text-primary" role="status">
+                            <span className="visually-hidden">Cargando...</span>
+                          </div>
+                        */}
+                      </div>
+                    )}
+
+                    {colError && (
+                      <div className="error text-danger text-center fw-bold py-3">
                         Error al cargar Pedidos
                       </div>
                     )}
-                    {pedidos[key]?.map((pedido, index) => (
-                      <Draggable
-                        key={pedido.id}
-                        draggableId={pedido.id.toString()}
-                        index={index}
-                      >
-                        {(provided) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            className="mb-3" /* Separación entre tarjetas */
-                          >
-                            <PedidoCard
-                              pedido={pedido}
-                              onOpenModal={() => {
-                                setSelectedPedido(pedido);
-                                setIsModalOpen(true);
-                              }}
-                            />
-                          </div>
-                        )}
-                      </Draggable>
-                    ))}
+
+                    {/* Solo mapeamos los pedidos si NO está cargando */}
+                    {!colLoading &&
+                      pedidos[key]?.map((pedido, index) => (
+                        <Draggable
+                          key={pedido.id}
+                          draggableId={pedido.id.toString()}
+                          index={index}
+                        >
+                          {(provided) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              className="mb-3"
+                            >
+                              <PedidoCard
+                                pedido={pedido}
+                                onOpenModal={() => {
+                                  setSelectedPedido(pedido);
+                                  setIsModalOpen(true);
+                                }}
+                              />
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
                     {provided.placeholder}
                   </div>
                 )}

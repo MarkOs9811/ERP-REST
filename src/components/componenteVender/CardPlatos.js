@@ -11,7 +11,7 @@ export const CardPlatos = ({
 }) => {
   return (
     <div
-      className={`float-left card-platillo card p-0 m-2 ${
+      className={`float-left card-platillo card py-2 m-2 ${
         isSelected ? "selected" : ""
       }`}
     >
@@ -36,7 +36,7 @@ export const CardPlatos = ({
           S/. {item.precio}
         </span>
       </div>
-      <div className="card-footer border-0 w-100 p-1 d-flex justify-content-between">
+      <div className="card-footer border-0 w-100 p-1 d-flex bg-transparent justify-content-between">
         {isSelected ? (
           <>
             <button

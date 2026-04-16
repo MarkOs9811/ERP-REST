@@ -2,22 +2,14 @@ import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPowerOff } from "@fortawesome/free-solid-svg-icons";
 import { UsuarioEditar } from "./UsuarioEditar";
-import { Modal } from "react-bootstrap";
 import { toast } from "react-toastify";
 import ModalAlertQuestion from "../componenteToast/ModalAlertQuestion";
 import ModalAlertActivar from "../componenteToast/ModalAlertActivar";
 import axiosInstance from "../../api/AxiosInstance";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { GetUsuarios } from "../../service/GetUsuarios";
 import { TablasGenerales } from "../componentesReutilizables/TablasGenerales";
-import {
-  Ban,
-  CheckCircle2,
-  Eye,
-  Pencil,
-  ShieldCheck,
-  Trash2,
-} from "lucide-react";
+import { Ban, CheckCircle2, Pencil, ShieldCheck } from "lucide-react";
 import ModalRight from "../componentesReutilizables/ModalRight";
 import { PerfilGeneralNomina } from "../componentePlanillas/PerfilGeneralNomina";
 import { BadgeComponent } from "../componentesReutilizables/BadgeComponent";

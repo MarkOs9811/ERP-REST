@@ -20,13 +20,25 @@ export function MesasList() {
   });
   console.log("Mesas recibidas:", mesas, Array.isArray(mesas));
 
-  const handleMesaAddPlato = (id) => {
-    dispatch(setIdPreventaMesa(id));
+  const handleMesaAddPlato = (data) => {
+    // Enviamos un ÚNICO objeto como payload
+    dispatch(
+      setIdPreventaMesa({
+        id: data.id,
+        numero: data.numero,
+      }),
+    );
     navigate(`/vender/mesas/platos`);
   };
-  const handleShowPedido = (id) => {
-    dispatch(setIdPreventaMesa(id));
 
+  const handleShowPedido = (id) => {
+    // Como aquí solo tienes el ID, enviamos el numero como null (o búscalo si lo necesitas)
+    dispatch(
+      setIdPreventaMesa({
+        id: id,
+        numero: null,
+      }),
+    );
     navigate(`/vender/mesas/preVenta`);
   };
 
@@ -76,7 +88,7 @@ export function MesasList() {
               }`}
               onClick={() =>
                 mesa.estado === 1
-                  ? handleMesaAddPlato(mesa.id)
+                  ? handleMesaAddPlato(mesa)
                   : handleShowPedido(mesa.id)
               }
             >

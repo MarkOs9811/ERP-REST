@@ -1,5 +1,6 @@
 .header-menu{
     margin-left: 220px!important;
+    transition: all 0.3s ease;
 }
 .compressedHeader{
     margin-left: 60px!important;
@@ -18,8 +19,47 @@
     color: #222 !important;
     /* Color de texto base (modo claro) */
 }
+.btn-web-site {
+    position: relative;
+    overflow: hidden;
+    /* Mantiene la animación dentro del borde redondo */
+    background-color: transparent;
+    font-size: 13px;
+    padding: 3px 10px !important;
+    border: 1px solid silver;
+    border-radius: 50px;
+    color: #1a1a1a;
+   
+    transition: color 0.3s ease, border-color 0.3s ease;
+    z-index: 1;
+}
 
+/* El fondo falso que hará la magia */
+.btn-web-site::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.95);
+    transform: scaleY(0);
+    /* Escondido hacia abajo */
+    transform-origin: bottom;
+    /* El cubic-bezier le da ese toque de "rebote" suave y profesional */
+    transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    z-index: -1;
+}
 
+.btn-web-site:hover {
+    color: #ffffff !important;
+    border-color: rgba(0, 0, 0, 0.95);
+}
+
+.btn-web-site:hover::before {
+    transform: scaleY(1);
+   
+}
 
 /* --- Tus estilos de íconos y perfil (sin cambios) --- */
 .ico-header {

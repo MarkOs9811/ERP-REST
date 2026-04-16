@@ -93,7 +93,7 @@ export function ToLlevar() {
               )}
             </div>
 
-            <div className="card-body p-0 d-flex flex-column bg-light">
+            <div className="card-body p-0 d-flex flex-column ">
               {/* SECCIÓN NUEVA: Input de Descripción General */}
               <div className="p-3 bg-white mb-2 shadow-sm">
                 <label className="form-label text-muted small fw-bold d-flex align-items-center gap-1">
@@ -115,11 +115,11 @@ export function ToLlevar() {
               </div>
 
               {/* Lista de Platos */}
-              <div className="flex-grow-1 overflow-auto px-2">
+              <div className="flex-grow-1 overflow-auto px-2 ">
                 {items.length > 0 ? (
-                  <div className="table-responsive bg-white rounded shadow-sm border">
+                  <div className="table-responsive  rounded  border">
                     <table className="table table-borderless align-middle mb-0">
-                      <thead className="text-muted small border-bottom bg-light">
+                      <thead className="text-muted small border-bottom bg-danger ">
                         <tr>
                           <th scope="col" className="ps-3 fw-normal py-2">
                             Desc.
@@ -144,7 +144,7 @@ export function ToLlevar() {
                             <td className="ps-3 py-2">
                               <div className="d-flex flex-column">
                                 <span
-                                  className="fw-bold text-dark"
+                                  className="fw-bold "
                                   style={{ fontSize: "0.9rem" }}
                                 >
                                   {item.nombre}
@@ -159,14 +159,14 @@ export function ToLlevar() {
                             </td>
                             <td className="py-2 text-center">
                               <div
-                                className="d-flex align-items-center justify-content-center bg-light border rounded-pill px-1"
+                                className="d-flex align-items-center justify-content-center border rounded-pill px-1"
                                 style={{
                                   width: "fit-content",
                                   margin: "0 auto",
                                 }}
                               >
                                 <button
-                                  className="btn btn-sm btn-link text-dark p-0"
+                                  className="btn btn-sm btn-link border-0 text-dark p-0"
                                   style={{ width: "22px" }}
                                   onClick={() =>
                                     handleRemovePlatoPreventa(item.id)
@@ -181,7 +181,7 @@ export function ToLlevar() {
                                   {item.cantidad}
                                 </span>
                                 <button
-                                  className="btn btn-sm btn-link text-dark p-0"
+                                  className="btn btn-sm btn-link border-0 text-dark p-0"
                                   style={{ width: "22px" }}
                                   onClick={() => handleAddPlatoPreventa(item)}
                                 >
@@ -194,6 +194,16 @@ export function ToLlevar() {
                               style={{ fontSize: "0.9rem" }}
                             >
                               S/. {(item.cantidad * item.precio).toFixed(2)}
+                            </td>
+                            <td className="text-center py-2">
+                              <button
+                                className="btn btn-sm text-danger rounded-pill mx-2 p-0 border-0"
+                                onClick={() =>
+                                  handleRemovePlatoPreventa(item.id, true)
+                                }
+                              >
+                                <Trash2 size={14} />
+                              </button>
                             </td>
                           </tr>
                         ))}
@@ -251,7 +261,6 @@ export function ToLlevar() {
             </div>
           </div>
         </div>
-
         {/* COLUMNA DERECHA: CATÁLOGO (Sin cambios mayores, solo ancho) */}
         <div className="col-md-8 col-lg-9 h-100">
           <div className="card shadow-sm flex-grow-1 h-100 p-0 m-0 border-0">
@@ -282,7 +291,7 @@ export function ToLlevar() {
               isError={errorPlatos}
               mode="cards"
             >
-              <div className="card-body overflow-auto bg-light p-2">
+              <div className="card-body overflow-auto p-2">
                 <div className="contenedor-platos">
                   {/* Asegúrate que tu CSS defina .contenedor-platos como grid */}
                   {productos

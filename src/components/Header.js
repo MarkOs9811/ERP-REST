@@ -6,7 +6,7 @@ import RippleWrapper from "./componentesReutilizables/RippleWrapper";
 import { PerfilPanel } from "./componentesHeader/PerfilPanel";
 import { NotificacionesPanel } from "./componentesHeader/NotificacionesPanel";
 import { capitalizeFirstLetter } from "../hooks/FirstLetterUp";
-import { Bell, Menu, Moon, SunMediumIcon } from "lucide-react";
+import { Bell, Globe, Menu, Moon, SunMediumIcon } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleSidebar } from "../redux/sideBarSlice";
 import ModalRight from "./componentesReutilizables/ModalRight";
@@ -119,6 +119,18 @@ export function Header() {
         {/* Icono de usuario */}
         {/* Contenedor del usuario en la barra de navegación */}
         <div className="navbar-right d-flex align-items-center ms-auto gap-2 p-0 px-4">
+          <button
+            onClick={() =>
+              window.open(
+                "https://lustrous-cupcake-b9cf4a.netlify.app/",
+                "_blank",
+              )
+            }
+            className="btn-web-site  rounded-pill d-flex align-items-center justify-content-center"
+          >
+            <Globe size={16} className="me-2" />
+            Ver Web
+          </button>
           {fotoPerfilLocal && (
             <RippleWrapper>
               <BadgeComponent
@@ -133,9 +145,11 @@ export function Header() {
           ) &&
             cajaDetalles && (
               <RippleWrapper>
-                <span type="button" className="badge bg-success">
-                  {cajaDetalles.nombre}
-                </span>
+                <BadgeComponent
+                  label={cajaDetalles.nombre}
+                  variant="success"
+                  className="cursos-pointer"
+                />
               </RippleWrapper>
             )}
 

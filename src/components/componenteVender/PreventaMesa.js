@@ -31,10 +31,7 @@ import {
   Plus,
   Repeat,
   Trash2,
-  ShoppingCart,
-  CheckCircle,
   Printer,
-  Clock,
   Utensils,
   ChefHat,
   Scissors,
@@ -215,7 +212,7 @@ export function PreventaMesa() {
 
   const handleVolverMesas = () => {
     if (isSplitMode) dispatch(clearCuentaSeparada());
-    navigate(`/vender/mesas`);
+    navigate(-1);
   };
 
   const handleEliminarPreventeMesa = async (idEliminar) => {
@@ -407,7 +404,7 @@ export function PreventaMesa() {
           {isSplitMode && canSelect && isSelected && (
             <div className="d-flex align-items-center bg-primary bg-opacity-10 border border-primary rounded-pill px-1">
               <button
-                className="btn btn-sm btn-link text-primary p-0"
+                className="btn btn-sm btn-link text-primary border-none p-0"
                 onClick={(e) => {
                   e.stopPropagation();
                   onChangeSplitQty(item.id, -1, item.cantidad);
@@ -415,11 +412,11 @@ export function PreventaMesa() {
               >
                 <Minus size={14} />
               </button>
-              <span className="mx-2 fw-bold small text-primary">
+              <span className="mx-2 fw-bold small text-primary border-none">
                 {cantidadSeleccionada} / {item.cantidad}
               </span>
               <button
-                className="btn btn-sm btn-link text-primary p-0"
+                className="btn btn-sm btn-link text-primary border-none p-0"
                 onClick={(e) => {
                   e.stopPropagation();
                   onChangeSplitQty(item.id, 1, item.cantidad);

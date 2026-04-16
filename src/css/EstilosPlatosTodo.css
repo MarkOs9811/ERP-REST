@@ -14,21 +14,25 @@
     margin: 0 auto;
     box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.185);
     transition: all 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-    /* Agregamos transición al borde */
-
-    /* CORRECCIÓN: Quitamos el !important */
     border: 2px solid #7e7e7e;
 }
 
 .card-platillo:hover {
     transform: translateY(-5px);
-    background: #ac5a5a;
+    background: #fd6767;
     z-index: 1000;
     cursor: pointer;
-    border-color: #ac5a5a;
-    /* El borde se pinta del color del fondo al hacer hover */
+    border-color: #420f0f;
+    
 }
 
+.card-platillo.selected {
+    /* Ahora sí funcionará porque quitamos el !important de arriba */
+    border: 2px solid #ff4949 !important;
+    background-color: #ffe1e1 !important;
+    transform: translateY(-5px);
+    box-shadow: 0px 10px 20px rgba(172, 90, 90, 0.4);
+}
 
 
 .card-img-top {
@@ -46,9 +50,10 @@
     position: absolute;
     right: 5%;
     bottom: 27%;
-    background-color: #ffcbcb;
+    background-color: #0c0c0c;
     font-size: 13px;
-    color: #940404 !important;
+    border:1px solid #e0e0e0;
+    color: #eeeeee !important;
     box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -150,14 +155,7 @@ body.dark-theme .btn-disminuir:hover {
    === ESTADO SELECCIONADO (SELECTED) ===
    ========================================= */
 
-/* 1. Selected en Modo CLARO */
-.card-platillo.selected {
-    /* Ahora sí funcionará porque quitamos el !important de arriba */
-    border: 2px solid #ac5a5a !important;
-    background-color: #fff5f5;
-    transform: translateY(-5px);
-    box-shadow: 0px 10px 20px rgba(172, 90, 90, 0.4);
-}
+
 
 /* 2. Selected en Modo OSCURO */
 body.dark-theme .card-platillo.selected {

@@ -9,13 +9,14 @@
     transition: all 0.2s ease-in-out;
     border: 1px solid transparent;
     /* Para dar profundidad */
+    cursor: pointer;
 }
 
 /* Estado: Éxito (Pagado, Activo) - Verde Menta Profesional */
 .badge-soft-success {
-    background-color: #ecfdf5;
+    background-color: #7dfac0;
     /* Fondo muy suave */
-    color: #059669;
+    color: #006948;
     /* Texto verde fuerte */
     border-color: #68d19b;
     /* Borde sutil */

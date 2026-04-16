@@ -41,6 +41,7 @@ import { LoginAdmin } from "./pageAdmin/LoginAdmin";
 
 import { LayOutAdmin } from "./LayOut/LayOutAdmin";
 import { AuthProviderAdmin } from "./AuthContextAdmin";
+import { RestablecerPassword } from "./pages/RestablecerPassword";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 function App() {
@@ -65,6 +66,11 @@ function App() {
               {/* --- RUTAS PÚBLICAS (Sin cambios) --- */}
               <Route path="/errorVista" element={<ErrorVista />} />
               <Route path="/login" element={<Login />} />
+              {/* aqui paara restablecer la contraseña*/}
+              <Route
+                path="/restablecer-password"
+                element={<RestablecerPassword />}
+              />
               <Route path="/tomarAsistencia" element={<TakeAsistencia />} />
 
               {/* --- RUTAS POS (Sin cambios) --- */}

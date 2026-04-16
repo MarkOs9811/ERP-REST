@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  idPreventaMesa: null, // Estado inicial
+  idPreventaMesa: null,
+  numero: null, // Agregamos 'numero' al estado inicial
 };
 
 const mesaSlice = createSlice({
@@ -9,10 +10,17 @@ const mesaSlice = createSlice({
   initialState,
   reducers: {
     setIdPreventaMesa: (state, action) => {
-      state.idPreventaMesa = action.payload;
+      if (typeof action.payload === "object" && action.payload !== null) {
+        state.idPreventaMesa = action.payload.id;
+        state.numero = action.payload.numero;
+      } else {
+        state.idPreventaMesa = action.payload;
+        state.numero = null;
+      }
     },
     clearIdPreventaMesa: (state) => {
       state.idPreventaMesa = null;
+      state.numero = null;
     },
   },
 });

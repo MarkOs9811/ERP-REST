@@ -208,7 +208,7 @@ export function DetallesPago() {
     }
 
     if (estadoTipoVenta === "llevar") {
-      navigate("/vender/ventasLlevar");
+      navigate(-1);
       dispatch(clearPedidoLlevar());
     } else if (estadoTipoVenta === "web") {
       await Promise.all([
@@ -216,10 +216,10 @@ export function DetallesPago() {
         queryClient.refetchQueries(["listaPedidosProceso"]),
         queryClient.refetchQueries(["listaPedidosListos"]),
       ]);
-      navigate("/vender/pedidosWeb");
+      navigate(-1);
       dispatch(clearPedidoWeb());
     } else {
-      navigate("/vender/mesas");
+      navigate(-1);
       dispatch(clearPedido());
     }
   };

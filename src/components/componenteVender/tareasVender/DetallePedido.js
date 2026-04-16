@@ -11,7 +11,7 @@ export function DetallePedido({
   const navigate = useNavigate();
 
   const handleVolverPreVenta = () => {
-    navigate(`/vender/mesas/preVenta`);
+    navigate(-1); // Volver a la página anterior
   };
   const handleVolverLlevar = () => {
     navigate(`/vender/ventasLlevar`);
@@ -29,8 +29,8 @@ export function DetallePedido({
             estadoTipoVenta === "llevar"
               ? handleVolverLlevar()
               : estadoTipoVenta === "web"
-              ? handleVolverPedidoWeb()
-              : handleVolverPreVenta()
+                ? handleVolverPedidoWeb()
+                : handleVolverPreVenta()
           }
         >
           <ChevronLeft className="text-auto" />
@@ -41,8 +41,8 @@ export function DetallePedido({
           {estadoTipoVenta === "llevar"
             ? "Llevar"
             : mesa
-            ? `Mesa ${mesa}`
-            : "Web Pedido"}
+              ? `Mesa ${mesa}`
+              : "Web Pedido"}
         </h6>
       </div>
       <div className="card-body">
@@ -68,7 +68,7 @@ export function DetallePedido({
                       <span>
                         S/.{" "}
                         {Number(
-                          item.cantidad * (item.plato?.precio || item.precio)
+                          item.cantidad * (item.plato?.precio || item.precio),
                         ).toFixed(2)}
                       </span>
                     </td>
