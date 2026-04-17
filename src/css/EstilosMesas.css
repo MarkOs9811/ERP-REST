@@ -9,11 +9,10 @@
   position: relative;
   height: 200px;
   background-color: #fff;
-  border: none;
   border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
   padding: 16px;
-  flex-grow: 1;
+  border:1px solid grey;
+  flex-grow: 0;
   flex-basis: 200px;
   text-align: left;
   transition: all 0.15s ease-out;
@@ -25,6 +24,7 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
+  margin: 10px;
 }
 
 /* EFECTO ACTIVE OPTIMIZADO PARA TOUCH */
@@ -58,7 +58,7 @@
 .mesa-card.disponible::after {
   background-image: url("../../public/images/img-disponible-mesa.svg");
   background-color: #c8fce0;
-  border-left: 5px solid #0b884e;
+  border-bottom: 10px solid #0b884e;
 }
 
 .mesa-card.disponible:active::after {
@@ -69,7 +69,7 @@
 .mesa-card.en-atencion::after {
   background-image: url("../../public/images/img-en-atencion.svg");
   background-color: #ffd6d6;
-  border-left: 5px solid #c41c3b;
+  border-bottom: 10px solid #c41c3b;
 }
 
 .mesa-card.en-atencion:active::after {
@@ -101,15 +101,21 @@
   position: relative;
   font-weight: 500;
 }
-
-/* ETIQUETA DE ACCIÓN */
 .mesa-action-label {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
   padding: 8px 12px;
-  background-color: rgba(0, 0, 0, 0.05);
+
+  /* 1. Fondo con transparencia (necesario para que el desenfoque se note) */
+  background-color: rgba(255, 255, 255, 0.3);
+
+  /* 2. El efecto de difuminado */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  /* Soporte para Safari */
+
   border-radius: 6px;
   font-size: 0.75em;
   font-weight: 700;
@@ -119,16 +125,22 @@
   margin-top: auto;
   width: 100%;
   letter-spacing: 0.5px;
+
+  /* 3. Opcional: Un borde muy sutil para dar profundidad */
+  border: 1px solid rgba(41, 41, 41, 0.2);
 }
 
+/* Ajuste para los estados específicos */
 .mesa-card.disponible .mesa-action-label {
-  background-color: rgba(11, 136, 78, 0.12);
-  color: #0b884e;
+  background-color: rgba(11, 136, 78, 0.2);
+  /* Bajamos la opacidad */
+  color: #014d29;
 }
 
 .mesa-card.en-atencion .mesa-action-label {
-  background-color: rgba(196, 28, 59, 0.12);
-  color: #c41c3b;
+  background-color: rgba(196, 28, 59, 0.1);
+  /* Bajamos la opacidad */
+  color: #c20024;
 }
 
 .mesa-action-label svg {

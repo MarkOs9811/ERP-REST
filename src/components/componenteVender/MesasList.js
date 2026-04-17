@@ -17,8 +17,9 @@ export function MesasList() {
   } = useQuery({
     queryKey: ["mesas"],
     queryFn: GetMesasVender,
+    //HACER QUE CUANDO SE ENTRE A ESTA VISTA QUE SE EJECUTE ESTA BUSQUEA DE NUEVO, PARA QUE SI SE REGRESA A ESTA VISTA SE VEA ACTUALIZADA LA INFORMACIÓN DE LAS MESAS
+    refetchOnWindowFocus: true,
   });
-  console.log("Mesas recibidas:", mesas, Array.isArray(mesas));
 
   const handleMesaAddPlato = (data) => {
     // Enviamos un ÚNICO objeto como payload
@@ -45,8 +46,8 @@ export function MesasList() {
   // si no es array, inicialízalo vacío
   const listaMesas = Array.isArray(mesas) ? mesas : [];
   return (
-    <div className="card shadow-sm m-0 h-100">
-      <div className="card-header d-flex justify-content-between align-items-center">
+    <div className="card  m-0 h-100 overflow-auto">
+      <div className="card-header d-flex justify-content-between align-items-center border-bottom m-0">
         <h3 className="m-0 size-auto">Mesas</h3>
         <div className="d-flex align-middle">
           <p className="align-middle  fw-normal">
@@ -79,7 +80,7 @@ export function MesasList() {
         </div>
       </div>
       <CondicionCarga isLoading={loading} isError={error} mode="cards">
-        <div className="mesas-container card-body overflow-auto">
+        <div className="mesas-container card-body overflow-auto  justify-content-center">
           {listaMesas.map((mesa) => (
             <button
               key={mesa.id}

@@ -1,0 +1,254 @@
+/* Contenedor principal con desenfoque */
+.modal-overlay-custom {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.modal-content-custom {
+    background: #ffffff;
+    width: 90%;
+    max-width: 420px;
+    border-radius: 24px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    animation: slideUpModal 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+}
+
+/* Cabecera */
+.header-custom {
+    padding: 24px 24px 12px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.modal-title {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #1a1a1a;
+    letter-spacing: -0.5px;
+}
+
+.badge-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    color: #10ba82;
+    background: #e7f7f2;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-weight: 700;
+    margin-top: 4px;
+    width: fit-content;
+}
+
+.dot {
+    width: 7px;
+    height: 7px;
+    background: #10ba82;
+    border-radius: 50%;
+    box-shadow: 0 0 6px rgba(16, 186, 130, 0.6);
+}
+
+.btn-close-circle {
+    background: #f3f4f6;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-close-circle:hover {
+    background: #e5e7eb;
+}
+
+/* Área Visual de Transferencia */
+.transfer-visual-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    background: #f9fafb;
+    margin: 20px 24px;
+    padding: 24px;
+    border-radius: 20px;
+    border: 1px solid #f0f0f0;
+}
+
+.node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.node-circle {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1.25rem;
+    transition: all 0.3s ease;
+}
+
+.node.origin .node-circle {
+    background: #ffffff;
+    border: 2px solid #e5e7eb;
+    color: #4b5563;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.node.dest .node-circle {
+    background: #eff6ff;
+    border: 2px dashed #f63b3b;
+    color: #d81d1d;
+}
+
+.pulse-active .node-circle {
+    animation: pulseLight 2s infinite;
+}
+
+.node-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    color: #9ca3af;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+}
+
+.arrow-icon {
+    color: #d1d5db;
+    margin-top: -15px;
+}
+
+/* Formulario y Select */
+.modal-form {
+    padding: 0 24px 24px 24px;
+}
+
+.input-label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+.custom-select {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 14px;
+    border: 2px solid #f3f4f6;
+    font-size: 1rem;
+    color: #1f2937;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.custom-select:focus {
+    border-color: #f63b3b;
+    outline: none;
+    background-color: #fff;
+}
+
+.error-message {
+    color: #dc2626;
+    font-size: 0.75rem;
+    margin-top: 6px;
+    font-weight: 500;
+}
+
+/* Botones de Acción */
+.actions-container {
+    margin-top: 28px;
+}
+
+.btn-confirm-transfer {
+    background: #111827;
+    color: #ffffff;
+    border: none;
+    width: 100%;
+    padding: 16px;
+    border-radius: 16px;
+    font-weight: 700;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: transform 0.1s, background 0.2s;
+}
+
+.btn-confirm-transfer:hover {
+    background: #000000;
+}
+
+.btn-confirm-transfer:active {
+    transform: scale(0.98);
+}
+
+.btn-cancel-transfer {
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 16px;
+    color: #6b7280;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.btn-cancel-transfer:hover {
+    color: #111827;
+}
+
+/* Animaciones */
+@keyframes slideUpModal {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes pulseLight {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(246, 59, 59, 0.4);
+    }
+
+    70% {
+        transform: scale(1.03);
+        box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+    }
+
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+    }
+}

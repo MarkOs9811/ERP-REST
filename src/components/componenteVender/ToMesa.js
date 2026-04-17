@@ -18,7 +18,15 @@ import { GetMesasVender } from "../../service/accionesVender/GetMesasVender";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { setIdPreventaMesa } from "../../redux/mesaSlice";
 import { GetPlatosVender } from "../../service/accionesVender/GetPlatosVender";
-import { Minus, Plus, Trash2 } from "lucide-react";
+import {
+  FileText,
+  Hamburger,
+  Minus,
+  Notebook,
+  Plus,
+  Trash2,
+  Utensils,
+} from "lucide-react";
 import { useRef, useState } from "react";
 import BotonAnimado from "../componentesReutilizables/BotonAnimado";
 import { BuscadorPlatos } from "./tareasVender/BuscadorPlatos";
@@ -137,9 +145,9 @@ export function ToMesa() {
   return (
     <div className="h-100 bg-transparent">
       <div className="row h-100">
-        <div className="col-md-3 h-100">
-          <div className="card shadow-sm d-flex flex-column h-100 overflow-hidden p-2">
-            <div className="card-header d-flex justify-content-between align-items-center bg-white border-bottom-0">
+        <div className="col-md-4 col-lg-3 h-100">
+          <div className="card  flex-grow-1 h-100 d-flex flex-column border-0 overflow-hidden">
+            <div className="card-header m-0 bg-white border-bottom d-flex justify-content-between align-items-center py-3">
               <button
                 className="btn btn-outline-dark btn-sm"
                 onClick={habldeVolverMesas}
@@ -151,7 +159,7 @@ export function ToMesa() {
                   Mesa {numeroMesa}
                 </h6>
                 <select
-                  className="form-select form-select-sm mt-1"
+                  className="form-select form-select-sm "
                   value={id}
                   onChange={(e) =>
                     dispatch(setIdPreventaMesa(Number(e.target.value)))
@@ -176,21 +184,27 @@ export function ToMesa() {
               </button>
             </div>
 
-            <div className="card-body p-0 overflow-auto ">
+            <div className="card-body overflow-auto p-0 d-flex flex-column ">
               {pedido.mesas[id] && pedido.mesas[id].items.length > 0 ? (
-                <div className="table-responsive rounded-none">
+                <div className="overflow-auto  rounded-none">
                   <table className="table table-borderless align-middle mb-0 bg-transparent">
-                    <thead className="text-muted small border-bottom text-center bg-transparent">
-                      <tr className="bg-transparent">
-                        <th className="ps-3 text-start fw-normal bg-transparent">
-                          Plato
+                    <thead className="text-muted small border-bottom ">
+                      <tr>
+                        <th scope="col" className="ps-3 fw-normal py-2">
+                          Desc.
                         </th>
-                        <th className="fw-normal bg-transparent">Cant.</th>
-                        <th className="fw-normal bg-transparent">Total</th>
-                        <th className="fw-normal bg-transparent"></th>
+                        <th scope="col" className="text-center fw-normal py-2">
+                          Cant.
+                        </th>
+                        <th
+                          scope="col"
+                          className="text-end fw-normal py-2 pe-3"
+                        >
+                          Total
+                        </th>
                       </tr>
                     </thead>
-                    <tbody className="">
+                    <tbody>
                       {pedido.mesas[id].items.map((item) => (
                         <tr
                           key={item.id}
@@ -209,34 +223,42 @@ export function ToMesa() {
                               </span>
                             </div>
                           </td>
-                          <td className="py-2 bg-transparent">
+                          <td className="py-2 text-center bg-transparent">
                             <div
-                              className="d-flex align-items-center justify-content-center bg-light rounded-pill border mx-auto"
+                              className="d-flex align-items-center justify-content-center border rounded-pill  mx-auto px-1"
                               style={{
                                 width: "fit-content",
-                                padding: "2px 5px",
+                                margin: "0 auto",
                               }}
                             >
                               <button
-                                className="btn btn-sm p-0 border-0"
+                                className="btn btn-sm btn-link border-0 text-dark p-0"
+                                style={{ width: "22px" }}
                                 onClick={() =>
                                   handleRemovePlatoPreventa(item.id)
                                 }
                               >
-                                <Minus size={12} />
+                                <Minus size={14} />
                               </button>
-                              <span className="mx-2 small fw-bold">
+                              <span
+                                className="mx-1  fw-bold"
+                                style={{ fontSize: "0.85rem" }}
+                              >
                                 {item.cantidad}
                               </span>
                               <button
-                                className="btn btn-sm p-0 border-0"
+                                className="btn btn-sm btn-link border-0 text-dark p-0"
+                                style={{ width: "22px" }}
                                 onClick={() => handleAddPlatoPreventa(item)}
                               >
-                                <Plus size={12} />
+                                <Plus size={14} />
                               </button>
                             </div>
                           </td>
-                          <td className="text-end text-auto py-2 fw-bold small bg-transparent">
+                          <td
+                            className="text-end  py-2 pe-3 fw-bold text-dark  bg-transparent"
+                            style={{ fontSize: "0.9rem" }}
+                          >
                             S/. {Number(item.cantidad * item.precio).toFixed(2)}
                           </td>
                           <td className="text-center py-2 bg-transparent">
@@ -255,26 +277,35 @@ export function ToMesa() {
                   </table>
                 </div>
               ) : (
-                <div className="h-100 d-flex align-items-center justify-content-center">
+                <div className="h-100 d-flex align-items-center justify-content-center opacity-50">
+                  <FileText size={40} className="mb-2" />
                   <p className="text-muted small">Mesa vacía</p>
                 </div>
               )}
             </div>
 
-            <div className="card-footer bg-white border-top">
-              <div className="mb-3">
-                <label className="form-label small fw-bold text-success d-flex align-items-center">
-                  <FontAwesomeIcon icon={faClipboardList} className="me-2" />
-                  OBSERVACIONES COCINA
+            <div
+              className="card-footer  border-top p-3 shadow-lg"
+              style={{ zIndex: 10 }}
+            >
+              <div className=" p-3 mb-3">
+                <label className="form-label text-success small fw-bold d-flex align-items-center gap-1">
+                  <Notebook /> Cliente / Notas del Pedido:
                 </label>
-                <textarea
-                  className="form-control form-control-sm alert-warning bg-light border shadow-sm"
-                  rows="2"
-                  placeholder="Ej: Sin sal, término medio, etc."
-                  value={notaPedido}
-                  onChange={(e) => setNotaPedido(e.target.value)}
-                  style={{ resize: "none" }}
-                />
+                <div className="input-group">
+                  <span className="input-group-text bg-light border-end-0">
+                    <FileText size={16} className="text-secondary" />
+                  </span>
+
+                  <textarea
+                    className="form-control border-start-0 bg-light"
+                    rows="2"
+                    placeholder="Ej: Sin sal, término medio, etc."
+                    value={notaPedido}
+                    onChange={(e) => setNotaPedido(e.target.value)}
+                    style={{ resize: "none", fontSize: "0.9rem" }}
+                  />
+                </div>
               </div>
 
               <div className="d-flex justify-content-between align-items-center mb-2">
@@ -291,7 +322,7 @@ export function ToMesa() {
               </div>
 
               <BotonAnimado
-                className="btn-realizarPedido btn-block w-100 p-3 shadow-sm"
+                className="btn-realizarPedido py-2 fw-bold btn-block w-100 p-3 shadow-sm"
                 onClick={() => handleAddPlatoPreventaMesas()}
                 loading={isLoadignPedido}
                 disabled={
@@ -311,18 +342,22 @@ export function ToMesa() {
           </div>
         </div>
 
-        <div className="col-md-9 h-100">
-          <div className="card shadow-sm d-flex flex-column h-100">
-            <div className="card-header bg-light p-3">
-              <div className="d-flex align-items-center gap-3">
-                <h4 className="mb-0 fw-bold text-dark">Platos</h4>
-                <div className="ms-auto d-flex gap-2">
-                  <BuscadorPlatos
-                    searchTerm={searchTerm}
-                    setSearchTerm={setSearchTerm}
-                  />
-                  <CategoriaPlatos />
-                </div>
+        <div className="col-md-8 col-lg-9 h-100">
+          <div className="card d-flex flex-grow-1 flex-column h-100 p-0 m-0 overflow-auto">
+            <div className="card-header bg-white border-bottom  py-3 px-3 m-0">
+              <h6 className="m-0 text-dark fw-bold d-flex align-items-center gap-2 ">
+                <Hamburger size={28} /> Menú de Platos
+              </h6>
+              <div className="d-flex  gap-2 ">
+                <BuscadorPlatos
+                  searchTerm={searchTerm}
+                  setSearchTerm={setSearchTerm}
+                />
+                <CategoriaPlatos />
+              </div>
+              {/* Categorías en móvil si es necesario */}
+              <div className="d-md-none mt-2">
+                <CategoriaPlatos />
               </div>
             </div>
 
@@ -331,33 +366,35 @@ export function ToMesa() {
               isError={errorPlatos}
               mode="cards"
             >
-              <div className="card-body overflow-auto contenedor-platos">
-                {productos
-                  .filter((producto) => {
-                    const matchCat =
-                      categoriaFiltroPlatos === "todo" ||
-                      producto.categoria.nombre === categoriaFiltroPlatos;
-                    const matchBus = producto.nombre
-                      .toLowerCase()
-                      .includes(searchTerm.toLowerCase());
-                    return matchCat && matchBus;
-                  })
-                  .map((producto) => {
-                    const isSelected = pedido.mesas[id]?.items.some(
-                      (item) => item.id === producto.id,
-                    );
-                    return (
-                      <CardPlatos
-                        key={producto.id}
-                        item={producto}
-                        isSelected={isSelected}
-                        handleAdd={handleAddPlatoPreventa}
-                        handleRemove={handleRemovePlatoPreventa}
-                        BASE_URL={BASE_URL}
-                        capitalizeFirstLetter={capitalizeFirstLetter}
-                      />
-                    );
-                  })}
+              <div className="card-body overflow-auto  p-2">
+                <div className="contenedor-platos">
+                  {productos
+                    .filter((producto) => {
+                      const matchCat =
+                        categoriaFiltroPlatos === "todo" ||
+                        producto.categoria.nombre === categoriaFiltroPlatos;
+                      const matchBus = producto.nombre
+                        .toLowerCase()
+                        .includes(searchTerm.toLowerCase());
+                      return matchCat && matchBus;
+                    })
+                    .map((producto) => {
+                      const isSelected = pedido.mesas[id]?.items.some(
+                        (item) => item.id === producto.id,
+                      );
+                      return (
+                        <CardPlatos
+                          key={producto.id}
+                          item={producto}
+                          isSelected={isSelected}
+                          handleAdd={handleAddPlatoPreventa}
+                          handleRemove={handleRemovePlatoPreventa}
+                          BASE_URL={BASE_URL}
+                          capitalizeFirstLetter={capitalizeFirstLetter}
+                        />
+                      );
+                    })}
+                </div>
               </div>
             </CondicionCarga>
           </div>

@@ -219,14 +219,13 @@ export function DetallesPago() {
       navigate(-1);
       dispatch(clearPedidoWeb());
     } else {
-      navigate(-1);
+      navigate(`/vender/mesas`);
       dispatch(clearPedido());
     }
   };
 
   // === LÓGICA DE VENTA CON BLOQUEO MANUAL ===
   const realizarVentaPago = async (data, nombreReferencia) => {
-    // 1. Iniciamos bloqueo
     setIsProcessing(true);
 
     try {
@@ -240,8 +239,6 @@ export function DetallesPago() {
           if (componentRef.current) {
             handlePrint();
             ToastAlert("success", "Venta realizada con éxito");
-            // OJO: NO desbloqueamos aquí (setIsProcessing(false))
-            // Se quedará true hasta que el componente muera al navegar
           }
         }, 1000);
       } else {

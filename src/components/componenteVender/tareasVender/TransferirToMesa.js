@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import CloseButton from "../../componentesReutilizables/CloseButton";
 import axiosInstance from "../../../api/AxiosInstance";
 import { useForm } from "react-hook-form";
 import ToastAlert from "../../componenteToast/ToastAlert";
 import { useNavigate } from "react-router-dom";
-import { Repeat } from "lucide-react";
+import { Repeat, MoveRight, X } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import ReactDOM from "react-dom";
+import "../../../css/TransferirToMesa.css"; // Asegúrate de importar el CSS aquí
 
 export function TransferirToMesa({ show, handleCloseModal, idMesa, mesa }) {
   const [mesasFree, setMesasFree] = useState([]);
@@ -17,26 +17,23 @@ export function TransferirToMesa({ show, handleCloseModal, idMesa, mesa }) {
   const {
     register,
     handleSubmit,
-    setValue,
     formState: { errors },
-    reset,
   } = useForm();
+
   const getMesasFree = async () => {
     try {
       const response = await axiosInstance.get("/vender/mesasDisponibles");
       if (response.data.success) {
         setMesasFree(response.data.mesasFree);
-      } else {
-        console.log("error" + response.data.message);
       }
     } catch (error) {
-      console.log("error" + error);
+      console.error("Error al cargar mesas:", error);
     }
   };
 
   useEffect(() => {
-    getMesasFree();
-  }, [idMesa]);
+    if (show) getMesasFree();
+  }, [show, idMesa]);
 
   const onSubmit = async (data) => {
     try {
@@ -45,109 +42,93 @@ export function TransferirToMesa({ show, handleCloseModal, idMesa, mesa }) {
         data,
       );
       if (response.data.success) {
-        const mesaOrigen = `<b>Mesa ${response.data.mesaOrigen.numero}</b>`;
-        const mesaDestino = `<b>Mesa ${response.data.mesaDestino.numero}</b>`;
-        const mensaje = `${response.data.message}<br> ${mesaOrigen} a ${mesaDestino}`;
-
-        ToastAlert("success", mensaje); // Aquí pasas el mensaje con HTML
+        const mensaje = `¡Transferencia exitosa!<br><b>Mesa ${mesa}</b> → <b>Mesa ${response.data.mesaDestino.numero}</b>`;
+        ToastAlert("success", mensaje);
         queryClient.invalidateQueries(["mesas"]);
+        handleCloseModal();
         navigate(`/vender/mesas`);
       } else {
         ToastAlert("error", response.data.message);
       }
     } catch (error) {
-      ToastAlert("error", "error" + error);
+      ToastAlert("error", "Error en el servidor");
     }
   };
 
-  if (!show) return null; // No renderizar si el modal no debe mostrarse.
-
-  if (!show) return null; // No renderizar si el modal no debe mostrarse.
+  if (!show) return null;
 
   return ReactDOM.createPortal(
-    <div className="modal-overlay m-0">
-      <div className="contenido-model bg-white p-4 rounded-3 shadow-lg">
-        {/* Cabecera del Modal */}
-        <div className="modal-header d-flex justify-content-between align-items-center">
-          <h3 className="text-center mb-4">Transferir Pedidos</h3>
-          <p className="align-middle mx-2 fw-normal">
-            {mesasFree.filter((mesa) => mesa.estado === 1).length} Disponibles
-            <span
-              className="mx-2"
-              style={{
-                display: "inline-block",
-                width: "10px",
-                height: "10px",
-                borderRadius: "50%",
-                backgroundColor: "#10ba82",
-              }}
-            ></span>{" "}
-          </p>
-          <CloseButton onClose={handleCloseModal} />
+    <div className="modal-overlay-custom">
+      <div className="modal-content-custom">
+        <div className="header-custom">
+          <div className="header-title-container">
+            <h2 className="modal-title">Transferir Pedido</h2>
+            <div className="badge-status">
+              <div className="dot"></div> {mesasFree.length} Disponibles
+            </div>
+          </div>
+          <button className="btn-close-circle" onClick={handleCloseModal}>
+            <X size={20} color="#666" />
+          </button>
         </div>
 
-        {/* Mesa Origen */}
-        <div className="form-floating mb-2">
-          <input
-            type="text"
-            id="mesaOrigen"
-            className="form-control"
-            value={mesa}
-          />
-          <label htmlFor="mesaOrigen">Mesa Origen</label>
+        <div className="transfer-visual-container">
+          <div className="node origin">
+            <div className="node-circle">{mesa}</div>
+            <span className="node-label">Origen</span>
+          </div>
+          <MoveRight className="arrow-icon" size={24} />
+          <div className={`node dest ${!mesaDestino ? "pulse-active" : ""}`}>
+            <div className="node-circle">
+              {mesaDestino
+                ? mesasFree.find((m) => m.id == mesaDestino)?.numero
+                : "?"}
+            </div>
+            <span className="node-label">Destino</span>
+          </div>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
-          {/* Mesa Destino */}
-          <div className="form-floating">
-            <select
-              id="mesaDestino"
-              className={`form-select ${errors.contacto ? "is-invalid" : ""}`}
-              {...register("mesaDestino", {
-                required: "Seleccione una mesa de Destino",
-                onChange: (e) => setMesaDestino(e.target.value),
-              })}
-            >
-              <option value="">Elige una mesa</option>
-              {mesasFree.map((mesa) => (
-                <option key={mesa.id} value={mesa.id}>
-                  Mesa {mesa.numero} - Piso {mesa.piso}
-                </option>
-              ))}
-            </select>
-            <label htmlFor="mesaDestino" className="form-label">
-              Mesa Destino
-            </label>
+        <form onSubmit={handleSubmit(onSubmit)} className="modal-form">
+          <div className="select-group">
+            <label className="input-label">Mesa de destino</label>
+            <div className="select-wrapper">
+              <select
+                className={`custom-select ${errors.mesaDestino ? "is-invalid" : ""}`}
+                {...register("mesaDestino", {
+                  required: "Seleccione una mesa",
+                  onChange: (e) => setMesaDestino(e.target.value),
+                })}
+              >
+                <option value="">¿A qué mesa movemos el pedido?</option>
+                {mesasFree.map((m) => (
+                  <option key={m.id} value={m.id}>
+                    Mesa {m.numero} -{" "}
+                    {m.piso === 1 ? "1er Piso" : `Piso ${m.piso}`}
+                  </option>
+                ))}
+              </select>
+            </div>
             {errors.mesaDestino && (
-              <div className="invalid-feedback">
-                {errors.mesaDestino.message}
-              </div>
+              <p className="error-message">{errors.mesaDestino.message}</p>
             )}
           </div>
 
-          {/* Botón de Confirmar */}
-          <div className="text-center mt-4">
-            <button className="btn btn-primary w-100 p-3" type="submit">
-              Confirmar Transferencia
-              <Repeat
-                color="white"
-                style={{ fontSize: "20px", marginLeft: "8px" }}
-              />
+          <div className="actions-container">
+            <button className="w-100 btn-principal p-4" type="submit">
+              Confirmar Cambio
+              <Repeat size={18} />
             </button>
-          </div>
-
-          {/* Botón de Cancelar */}
-          <div className="text-center mt-3">
             <button
-              className="btn btn-secondary w-100 p-3"
+              className="btn-cancel-transfer"
+              type="button"
               onClick={handleCloseModal}
             >
-              Cancelar
+              Mantener en mesa actual
             </button>
           </div>
         </form>
       </div>
     </div>,
-    document.body
+    document.body,
   );
 }

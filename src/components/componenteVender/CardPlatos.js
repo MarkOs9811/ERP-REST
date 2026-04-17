@@ -11,7 +11,7 @@ export const CardPlatos = ({
 }) => {
   return (
     <div
-      className={`float-left card-platillo card py-2 m-2 ${
+      className={`float-left card-platillo card overflow-auto m-2 ${
         isSelected ? "selected" : ""
       }`}
     >

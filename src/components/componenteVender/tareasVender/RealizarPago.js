@@ -30,30 +30,15 @@ export function RealizarPago({
   const subTotal = (totalPreventa - igv).toFixed(2);
 
   return (
-    <div className="card h-100 shadow-sm">
-      <div className="card-header">
-        <h5>Resumen</h5>
+    <div className="card h-100 shadow-sm border-0 overflow-auto">
+      <div className="card-header bg-white py-3">
+        <h5 className="mb-0 fw-bold">Resumen</h5>
       </div>
 
-      {/* Resumen de totales */}
-      <div className="card p-3 border-pill shadow-none">
-        <div className="d-flex justify-content-between">
-          <span>Sub Total</span>
-          <span className="fw-bold text-success">S/. {subTotal}</span>
-        </div>
-        <div className="d-flex justify-content-between">
-          <span>IGV</span>
-          <span className="fw-normal text-secondary">S/. {igv}</span>
-        </div>
-        <div className="border-top mt-3 pt-2">
-          <div className="d-flex justify-content-between align-items-center">
-            <span className="h2">Total</span>
-            <span className="h2 fw-bold text-success">S/. {totalPreventa}</span>
-          </div>
-        </div>
-      </div>
-
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="d-flex flex-column h-100"
+      >
         <div className="card-body">
           {/* NUEVO CAMPO: Nombre del Cliente */}
           <div className="form-floating mb-3">
@@ -65,7 +50,7 @@ export function RealizarPago({
                 required: "El nombre es obligatorio",
               })}
             />
-            <label>Cliente </label>
+            <label>Cliente</label>
           </div>
 
           <div className="form-floating mb-3">
@@ -79,23 +64,46 @@ export function RealizarPago({
             <label>Pagar con: S/.</label>
           </div>
 
-          <div className="form-floating">
+          <div className="form-floating mb-4">
             <input
               type="text"
-              className="form-control"
+              className="form-control bg-light"
               readOnly
               value={vuelto}
             />
             <label>Cambio S/.</label>
           </div>
+
+          {/* SECCIÓN DE DESGLOSE DE PRECIOS ESTRUCTURADA */}
+          <div className="border-top pt-3">
+            <div className="d-flex justify-content-between mb-1">
+              <span className="text-muted">Sub Total</span>
+              <span className="fw-medium text-dark">S/. {subTotal}</span>
+            </div>
+
+            <div className="d-flex justify-content-between mb-3">
+              <span className="text-muted">IGV</span>
+              <span className="text-secondary">S/. {igv}</span>
+            </div>
+
+            <div className="d-flex justify-content-between align-items-center mt-2">
+              <span className="h4 mb-0">Total</span>
+              <div className="text-end">
+                {/* Aquí quité el .toFixed(2) que rompía la vista y lo dejé como tu original */}
+                <span className="h3 fw-bold text-success mb-0">
+                  S/. {totalPreventa}
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div className="card-footer mt-4 p-3 border-0">
+        <div className="card-footer bg-white border-0 p-3 overflow-auto">
           <BotonAnimado
             type="submit" // Importante: que sea tipo submit
             loading={loading}
             error={error}
-            className="btn-realizarPedido w-100 p-3 h-100"
+            className="btn-realizarPedido w-100 p-3 h-100 fs-5"
           >
             Realizar Pago
           </BotonAnimado>

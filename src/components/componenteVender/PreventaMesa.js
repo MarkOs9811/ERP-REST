@@ -36,6 +36,7 @@ import {
   ChefHat,
   Scissors,
   XCircle,
+  Hamburger,
 } from "lucide-react";
 import { getPreventaMesa } from "../../service/preventaService";
 import { BuscadorPlatos } from "./tareasVender/BuscadorPlatos";
@@ -485,12 +486,12 @@ export function PreventaMesa() {
         <div
           className={`col-lg-8 h-100 ${isSplitMode ? "opacity-50 pe-none" : ""}`}
         >
-          <div className="card shadow-sm h-100 d-flex flex-column">
-            <div className="card-header bg-white border-bottom py-2">
-              <h6 className="m-0 text-dark fw-bold d-flex align-items-center gap-2">
-                <Utensils size={18} /> Catálogo
+          <div className="card shadow-sm h-100 d-flex flex-column overflow-auto">
+            <div className="card-header bg-white border-bottom px-4 m-0 ">
+              <h6 className="m-0 text-dark fw-bold d-flex align-items-center gap-2 ">
+                <Hamburger size={28} /> Menú de Platos
               </h6>
-              <div className="d-flex flex-column gap-2 mt-2">
+              <div className="d-flex  gap-2 ">
                 <BuscadorPlatos
                   searchTerm={searchTerm}
                   setSearchTerm={setSearchTerm}
@@ -503,7 +504,7 @@ export function PreventaMesa() {
               isError={errorPlatos}
               mode="cards"
             >
-              <div className="card-body overflow-auto contenedor-platos p-2 bg-light">
+              <div className="card-body overflow-auto contenedor-platos p-2 ">
                 {productos
                   .filter(
                     (p) =>
@@ -707,7 +708,7 @@ export function PreventaMesa() {
                 <div className="row g-2">
                   <div className="col-4">
                     <button
-                      className="btn btn-outline-secondary w-100 btn-sm rounded-pill"
+                      className="btn btn-outline-dark w-100 btn-sm rounded-pill"
                       onClick={handleTranferirToMesa}
                     >
                       <Repeat size={16} /> Mover
@@ -715,7 +716,7 @@ export function PreventaMesa() {
                   </div>
                   <div className="col-4">
                     <button
-                      className="btn btn-outline-secondary w-100 btn-sm rounded-pill"
+                      className="btn btn-outline-dark w-100 btn-sm rounded-pill"
                       onClick={handleImprimirTicket}
                     >
                       <Printer size={16} /> Ticket
