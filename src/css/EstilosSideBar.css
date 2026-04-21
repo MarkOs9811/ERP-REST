@@ -195,6 +195,125 @@
     padding-bottom: 5px;
     padding-top: 5px;
 }
+/* ========== RESPONSIVE ========== */
+/* ========================================= */
+/* RESPONSIVE MÓVIL (PANTALLAS CELULAR)      */
+/* ========================================= */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 240px !important;
+        /* Le di 240px para que los textos largos entren cómodos */
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        z-index: 10000 !important;
+        transform: translateX(-100%) !important;
+        background-color: white !important;
+        text-align: left !important;
+        overflow: visible !important;
+        transition: transform 0.3s ease;
+        /* Para que se abra suavemente */
+    }
+
+    /* Mostrar sidebar cuando está activo */
+    .sidebar.sidebar-mobile-active {
+        transform: translateX(0%) !important;
+    }
+
+    .sidebar-header {
+        padding: 15px 0 !important;
+        justify-content: center !important;
+    }
+
+    .sidebar-header img {
+        margin: 0 !important;
+    }
+
+    .btn-close-sudeBar-mobile.btnClose-mobile-active {
+        position: absolute;
+        left: 90%;
+        top: 15px;
+        margin-left: 15px;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #181818;
+        color: white;
+        border-radius: 50%;
+        border: none;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        z-index: 10002;
+    }
+
+    .btn-close-sudeBar-mobile.btnClose-mobile-hidden {
+        display: none;
+    }
+
+    .menu-list {
+        padding-left: 0 !important;
+        /* Reseteado para evitar que empuje los iconos */
+        text-align: left !important;
+        margin-top: 10px;
+    }
+
+    .menu-item {
+        padding: 10px 15px !important;
+        width: 100% !important;
+        /* En lugar de 50px, toma todo el ancho disponible */
+        max-width: none !important;
+        height: auto !important;
+        /* En lugar de 50px */
+        aspect-ratio: auto !important;
+        /* Quitamos la proporción cuadrada */
+        display: flex;
+        align-items: center;
+        justify-content: flex-start !important;
+        /* Alineado a la izquierda */
+    }
+
+    .menu-item .d-flex {
+        justify-content: flex-start !important;
+        /* Ícono y texto pegados a la izquierda */
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+    }
+
+    /* Forzamos a que el texto SIEMPRE se vea en mobile */
+    .sidebar-text-container,
+    .sidebar-text {
+        display: block !important;
+        opacity: 1 !important;
+        margin-left: 10px !important;
+        /* Separación entre el icono y el texto */
+    }
+
+    /* Anular reglas de compresión de desktop para el móvil */
+    .sidebar.sidebar-compressed .sidebar-text-container,
+    .sidebar.sidebar-compressed .sidebar-text,
+    .sidebar.sidebar-compressed:hover .sidebar-text-container,
+    .sidebar.sidebar-compressed:hover .sidebar-text {
+        display: block !important;
+        opacity: 1 !important;
+    }
+
+    /* Arreglo del Footer */
+    .menu-footer {
+        position: absolute;
+        bottom: 20px;
+        width: 100%;
+        padding: 0 10px;
+        /* Margen interno para que no pegue a los bordes */
+    }
+
+    .submenu {
+        display: none !important;
+    }
+}
+
 .menu-item-sub {
     cursor: pointer;
     border-radius: 50px;
@@ -247,36 +366,3 @@ body.dark-theme .active-sub {
     color: #ff8a8a;
 }
 
-/* ========================================= */
-/* RESPONSIVE MÓVIL (PANTALLAS CELULAR)      */
-/* ========================================= */
-@media (max-width: 768px) {
-    .sidebar {
-        width: 60px !important;
-        overflow: hidden;
-    }
-    .sidebar-text-container,
-    .sidebar-text {
-        opacity: 0 !important;
-        display: none !important;
-    }
-    .menu-item .d-flex {
-        justify-content: center !important;
-        padding-left: 0;
-    }
-    
-    /* Hover state for mobile - expands to reveal text */
-    .sidebar:hover {
-        width: 230px !important;
-        box-shadow: 5px 0 15px rgba(0,0,0,0.1) !important;
-    }
-    .sidebar:hover .sidebar-text-container,
-    .sidebar:hover .sidebar-text {
-        opacity: 1 !important;
-        display: block !important;
-    }
-    .sidebar:hover .menu-item .d-flex {
-        justify-content: flex-start !important;
-        padding-left: 10px;
-    }
-}

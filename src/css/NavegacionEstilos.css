@@ -81,6 +81,12 @@
     border-bottom: none !important;
   }
 
+  /* MODO RESPONSIVE NAVEGACIÓN  */
+  @media (max-width: 768px) {
+    .nav-navegacion {
+      margin-left: 1px !important;
+    }
+  }
   /* ========== FIN TEMA OSCURO NAVEGACIÓN ESTILO MODERNO ========== */
   /* ========== BREADCRUMB NAVEGACIÓN DARK MODE ========== */
   body.dark-theme .breadcrumb-nav .fw-semibold,

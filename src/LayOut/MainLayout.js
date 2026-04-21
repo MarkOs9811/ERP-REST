@@ -123,7 +123,7 @@ export const MainLayout = () => {
         }}
       >
         <div
-          className={` contenido flex-column align-items-center justify-content-center overflow-auto p-0
+          className={`contenido flex-column align-items-center justify-content-center overflow-auto p-0 m-0
                 transition-all`}
           style={{
             transition:

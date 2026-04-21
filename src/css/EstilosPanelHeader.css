@@ -1,9 +1,11 @@
 .header-menu{
-    margin-left: 220px!important;
+    margin-left: 210px;
+    margin-right: 0 !important;
     transition: all 0.3s ease;
 }
 .compressedHeader{
     margin-left: 60px!important;
+    margin-right: 0 !important;
 }
 .notificaciones-panel-list {
     background: rgba(241, 241, 241, 0.822)!important;
@@ -62,6 +64,16 @@
 }
 
 /* --- Tus estilos de íconos y perfil (sin cambios) --- */
+
+.menu-ico-header-celular{
+    background-color: transparent;
+    transition: transform 0.3s ease;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #000000!important;
+}
 .ico-header {
     background-color: transparent;
     transition: transform 0.3s ease;
@@ -96,6 +108,209 @@ body.dark-theme .offcanvas-end-custom hr {
 
 body.dark-theme .offcanvas-end-custom .btn {
     color: #f1f1f1;
+}
+
+/* ================================================= */
+/* --- RESPONSIVE - HEADER ADJUSTMENT --- */
+/* ================================================= */
+
+/* DESKTOP - mostrar elementos normales */
+.navbar-desktop {
+    display: flex !important;
+}
+
+.navbar-mobile-more {
+    display: none !important;
+}
+
+/* DESKTOP - padding normal */
+.navbar-right {
+    padding-right: 16px !important;
+}
+
+/* MOBILE - ocultar elementos y mostrar dropdown */
+@media (max-width: 768px) {
+    .header-menu {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        width: 90% !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        overflow: hidden !important;
+    }
+
+    .compressedHeader {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        width: 100% !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+    }
+
+    .header-menu nav {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 8px 0 !important;
+        justify-content: flex-start !important;
+        gap: 0 !important;
+    }
+
+    /* Div izquierdo del header */
+    .header-menu nav > div:first-child {
+        margin-left: 8px !important;
+        margin-right: 8px !important;
+        gap: 4px !important;
+    }
+
+    .navbar-right {
+        padding-left: 0 !important;
+        padding-right: 8px !important;
+        margin-right: 0 !important;
+        margin-left: auto !important;
+        gap: 4px !important;
+    }
+
+    /* FORZAR OCULTAMIENTO EN MOBILE */
+    .navbar-desktop {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        overflow: hidden !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .navbar-mobile-more {
+        display: flex !important;
+        visibility: visible !important;
+    }
+}
+
+/* Estilos del dropdown menu */
+.dropdown-menu-header {
+    background: var(--bg-card, white);
+    border: 1px solid var(--border-color, #e0e0e0);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    min-width: 200px;
+    z-index: 1050;
+    animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dropdown-item-header {
+    display: flex !important;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: var(--text-main, #222);
+    font-size: 14px;
+    white-space: nowrap;
+    transition: background-color 0.2s ease;
+}
+
+.dropdown-item-header:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.dropdown-item-header:not(:last-child) {
+    border-bottom: 1px solid var(--border-color, #f0f0f0);
+}
+
+/* Tema oscuro */
+body.dark-theme .dropdown-menu-header {
+    background: #23272f !important;
+    border-color: #444 !important;
+}
+
+body.dark-theme .dropdown-item-header {
+    color: #f1f1f1 !important;
+}
+
+body.dark-theme .dropdown-item-header:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* En pantallas muy pequeñas (teléfonos) */
+@media (max-width: 480px) {
+    .header-menu {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        width: 100% !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+    .ico-header{
+        display: none;
+    }
+    .menu-ico-header-celular{
+        display: flex;
+    }
+    .compressedHeader {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        width: 100% !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    .header-menu nav {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 6px 0 !important;
+        justify-content: flex-start !important;
+        gap: 0 !important;
+    }
+
+    /* Div izquierdo del header */
+    .header-menu nav > div:first-child {
+        margin-left: 6px !important;
+        margin-right: 6px !important;
+        gap: 4px !important;
+    }
+
+    .navbar-right {
+        padding-left: 0 !important;
+        padding-right: 6px !important;
+        margin-right: 0 !important;
+        margin-left: auto !important;
+        gap: 4px !important;
+    }
+
+    .navbar-desktop {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        overflow: hidden !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .navbar-mobile-more {
+        display: flex !important;
+        visibility: visible !important;
+    }
+
+    .dropdown-menu-header {
+        min-width: 160px;
+    }
 }
 
 /* --- Tus estilos del panel de notificaciones (MODO NOCHE) --- */

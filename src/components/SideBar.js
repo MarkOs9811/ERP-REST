@@ -3,7 +3,6 @@ import axiosInstance from "../api/AxiosInstance";
 import { useDispatch, useSelector } from "react-redux";
 import { subMenuClick } from "../redux/subMenuSlice";
 import "../css/EstilosSideBar.css";
-import { setSidebarCompressed } from "../redux/sideBarSlice";
 import {
   Building2,
   Calendar,
@@ -16,19 +15,22 @@ import {
   TrendingUp,
   Truck,
   Users,
-  ChevronDown,
-  ChevronRight,
   Warehouse,
   UsersRound,
   BikeIcon,
   LucideActivity,
+  X,
 } from "lucide-react";
 import { useAuth } from "../AuthContext";
 import { capitalizeFirstLetter } from "../hooks/FirstLetterUp";
 import { useEffect, useState } from "react";
+import { toggleSidebarMobile } from "../redux/sideBarMobilSlice";
 
 export function SideBar() {
-  const isCompressed = useSelector((state) => state.sidebar.isCompressed);
+  const isCompressed = useSelector((state) => state.sidebar.isCompressed); // Desktop
+  const isCompressedMobile = useSelector(
+    (state) => state.sidebarMobile.isCompressedMobile,
+  );
   const location = useLocation();
   const navigate = useNavigate();
   const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -148,7 +150,9 @@ export function SideBar() {
   }, []);
   return (
     <div
-      className={`sidebar justify-content-between border-none m-auto ${isCompressed ? "sidebar-compressed" : ""}`}
+      className={`sidebar justify-content-between border-none m-auto 
+    ${isCompressed ? "sidebar-compressed" : ""} 
+    ${isCompressedMobile ? "sidebar-mobile-active" : "sidebar-mobile-hidden"}`}
       style={{
         background: "var(--glass-bg)",
         backdropFilter: "var(--glass-blur)",
@@ -175,6 +179,13 @@ export function SideBar() {
           >
             {miEmpresa.nombre}
           </p>
+          <button
+            className={`p-2 m-0 d-md-none btn-close-sudeBar-mobile 
+            ${isCompressedMobile ? "btnClose-mobile-active" : "btnClose-mobile-hidden"}`}
+            onClick={() => dispatch(toggleSidebarMobile())}
+          >
+            <X />
+          </button>
         </div>
       </div>
 

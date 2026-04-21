@@ -260,6 +260,32 @@ body.dark-theme .contenido > div > div:last-child {
   width: calc(100% - 80px) !important;
 }
 
+/* ========== RESPONSIVE - CONTENT FIX ========== */
+@media (max-width: 768px) {
+  .content:not(.open) {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+
+  .content.with-sidebar {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+
+  .content.content-compressed {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+
+  .header-with-sidebar {
+    width: 100% !important;
+  }
+
+  .header-compressed {
+    width: 100% !important;
+  }
+}
+
 
 .icon {
   font-size: 15px;
