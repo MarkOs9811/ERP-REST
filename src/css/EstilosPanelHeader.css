@@ -127,18 +127,19 @@ body.dark-theme .offcanvas-end-custom .btn {
 .navbar-right {
     padding-right: 16px !important;
 }
-
+.icono_ver_web {
+    margin-right: 5px !important;
+}
 /* MOBILE - ocultar elementos y mostrar dropdown */
 @media (max-width: 768px) {
     .header-menu {
         margin-left: 0 !important;
         margin-right: 0 !important;
-        width: 90% !important;
         padding-left: 0 !important;
         padding-right: 0 !important;
         left: 0 !important;
         right: 0 !important;
-        overflow: hidden !important;
+        overflow: visible !important;
     }
 
     .compressedHeader {
@@ -154,9 +155,22 @@ body.dark-theme .offcanvas-end-custom .btn {
     .header-menu nav {
         width: 100% !important;
         margin: 0 !important;
-        padding: 8px 0 !important;
         justify-content: flex-start !important;
         gap: 0 !important;
+    }
+   
+    /* ocultar texto del boton para ir a la web */
+    .btn-web-site {
+        width: auto!important;
+        height: 30px!important;
+        padding: auto;
+        text-align: center!important;
+    }
+    .icono_ver_web{
+        margin: 0px!important;
+    }
+    .btn-web-site span{
+        display: none !important;
     }
 
     /* Div izquierdo del header */

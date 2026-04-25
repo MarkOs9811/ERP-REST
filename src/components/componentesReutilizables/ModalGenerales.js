@@ -84,7 +84,7 @@ function ModalGenerales({
         )}
       </div>
     </div>,
-    document.body
+    document.body,
   );
 }
 

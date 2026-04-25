@@ -14,6 +14,7 @@ import { useRef, useState } from "react";
 import React from "react";
 import { useReactToPrint } from "react-to-print";
 import { TicketPedidosWeb } from "./TiketsType/TicketPedidosWeb";
+import ModalGenerales from "../componentesReutilizables/ModalGenerales";
 
 const PedidoCard = ({ pedido, onOpenModal }) => {
   const { procesarPago } = useProcesarPagoWeb();
@@ -133,6 +134,9 @@ const PedidoCard = ({ pedido, onOpenModal }) => {
 
   const estadoActual = estadoClases[pedido.estado_pedido] || estadoClases[3];
 
+  const [verModalRider, setVerModalRider] = useState(false);
+  const [dataIdPedido, setDataIdPedido] = useState(null);
+
   return (
     <div
       className={`mb-2 rounded position-relative overflow-hidden shadow-sm`}
@@ -170,11 +174,7 @@ const PedidoCard = ({ pedido, onOpenModal }) => {
         </div>
 
         {/* Columna Derecha (Precios) */}
-        <div
-          className="col-3 col-md-4 p-3 d-flex flex-column justify-content-center align-items-end"
-          onClick={onOpenModal}
-          style={{ cursor: "pointer" }}
-        >
+        <div className="col-3 col-md-4 p-3 d-flex flex-column justify-content-center align-items-end">
           <span className="fw-bold fs-5 mb-1">
             S/.{" "}
             {pedido?.detalles_pedido
@@ -195,6 +195,22 @@ const PedidoCard = ({ pedido, onOpenModal }) => {
           >
             {pedido.estado_pago === "pagado" ? "Pagado" : "Por Pagar"}
           </span>
+          {/* PONER BOTON DE ASIGNAR RIDER CUANDO ELE STADO SEA IGUAL A 5 */}
+          {pedido.estado_pedido === 5 && (
+            <span
+              className="btn-ver rounded-pill mt-2"
+              style={{ padding: "0.4rem 0.8rem", fontSize: "0.75rem" }}
+              onClick={() => {
+                setVerModalRider(true);
+                setDataIdPedido(pedido.id);
+              }}
+            >
+              {pedido.idDeliveryRider == null
+                ? "Asignar Rider"
+                : "Asigando a Rider"}
+            </span>
+          )}
+          {}
         </div>
 
         {/* Columna Lateral (Botones) */}
@@ -205,6 +221,19 @@ const PedidoCard = ({ pedido, onOpenModal }) => {
           {estadoActual.botones}
         </div>
       </div>
+      <ModalGenerales
+        show={verModalRider}
+        idProceso={dataIdPedido}
+        handleCloseModal={() => setVerModalRider(false)}
+        width="400px"
+        textConfirm="Asignar"
+      >
+        <div className="card">
+          <div className="card-body">
+            <h3>Asignar Rider motorizado</h3>
+          </div>
+        </div>
+      </ModalGenerales>
     </div>
   );
 };

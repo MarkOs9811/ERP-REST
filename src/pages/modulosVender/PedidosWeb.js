@@ -7,13 +7,13 @@ import PedidoCard from "../../components/componenteVender/CardPedidosPendientes"
 import { Cargando } from "../../components/componentesReutilizables/Cargando";
 import axiosInstance from "../../api/AxiosInstance";
 import { getPedidosEnProceso } from "../../service/GetPedidosProceso";
-import { getPedidosListos } from "../../service/GetPedidosListos";
 
 import ModalRight from "../../components/componentesReutilizables/ModalRight";
 import { ModalFooter } from "../../components/componenteVender/cuerpoModalRight/ModalFooter";
 import { ModalCabecera } from "../../components/componenteVender/cuerpoModalRight/ModalCabecera";
 import { ModalCuerpo } from "../../components/componenteVender/cuerpoModalRight/ModalCuerpo";
 import { CheckCheck, CookingPot, Hourglass } from "lucide-react";
+import { getPedidosListos } from "../../service/GetPedidosListos";
 
 export function PedidosWeb() {
   const queryClient = useQueryClient();

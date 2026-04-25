@@ -135,163 +135,70 @@ export function Header() {
         {/* Icono de usuario */}
         {/* Contenedor del usuario en la barra de navegación */}
         <div className="navbar-right d-flex align-items-center ms-auto gap-2 p-0 m-0">
-          {/* DESKTOP - elementos visibles */}
-          <div className="navbar-desktop d-flex align-items-center gap-2">
-            <button
-              onClick={() =>
-                window.open(
-                  "https://lustrous-cupcake-b9cf4a.netlify.app/",
-                  "_blank",
-                )
-              }
-              className="btn-web-site rounded-pill d-flex align-items-center justify-content-center"
-            >
-              <Globe size={16} className="me-2" />
-              Ver Web
-            </button>
-            {fotoPerfilLocal && (
-              <RippleWrapper>
-                <BadgeComponent
-                  label={capitalizeFirstLetter(fotoPerfilLocal?.sede?.nombre)}
-                  variant="danger"
-                  className="cursos-pointer"
-                />
-              </RippleWrapper>
-            )}
-            {["administrador", "atencion al cliente", "cocinero"].includes(
-              cargo?.empleado?.cargo?.nombre,
-            ) &&
-              cajaDetalles && (
-                <RippleWrapper>
-                  <BadgeComponent
-                    label={cajaDetalles.nombre}
-                    variant="success"
-                    className="cursos-pointer"
-                  />
-                </RippleWrapper>
-              )}
-
-            <button
-              className="ico-header border-0 rounded-pill d-flex align-items-center justify-content-center"
-              title="Cambiar tema"
-              style={{
-                width: 44,
-                height: 44,
-                padding: 0,
-                transition: "transform var(--transition-bounce)",
-              }}
-              onMouseOver={(e) =>
-                (e.currentTarget.style.transform = "scale(1.1)")
-              }
-              onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
-              onClick={toggleTheme}
-            >
-              {darkMode ? (
-                <Moon
-                  className="text-auto"
-                  height="22px"
-                  width="22px"
-                  style={{ verticalAlign: "middle" }}
-                />
-              ) : (
-                <SunMediumIcon
-                  className="text-auto"
-                  height="22px"
-                  width="22px"
-                  style={{ verticalAlign: "middle" }}
-                />
-              )}
-            </button>
-          </div>
-
-          {/* MOBILE - botón dropdown "Más" */}
-          <div className="navbar-mobile-more position-relative">
-            <button
-              className="ico-header border-0 rounded-pill d-flex align-items-center justify-content-center"
-              title="Más opciones"
-              style={{
-                width: 44,
-                height: 44,
-                padding: 0,
-                transition: "transform var(--transition-bounce)",
-              }}
-              onMouseOver={(e) =>
-                (e.currentTarget.style.transform = "scale(1.1)")
-              }
-              onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
-              onClick={() => setShowMoreMenu(!showMoreMenu)}
-            >
-              <MoreVertical
+          <button
+            onClick={() =>
+              window.open(
+                "https://lustrous-cupcake-b9cf4a.netlify.app/",
+                "_blank",
+              )
+            }
+            className="btn-web-site rounded-pill d-flex align-items-center justify-content-center"
+          >
+            <Globe size={16} className="icono_ver_web  text-center" />
+            <span>Ver Web</span>
+          </button>
+          {fotoPerfilLocal && (
+            <RippleWrapper>
+              <BadgeComponent
+                label={capitalizeFirstLetter(fotoPerfilLocal?.sede?.nombre)}
+                variant="danger"
+                className="cursos-pointer"
+              />
+            </RippleWrapper>
+          )}
+          {["administrador", "atencion al cliente", "cocinero"].includes(
+            cargo?.empleado?.cargo?.nombre,
+          ) && Boolean(cajaDetalles?.nombre) ? (
+            <RippleWrapper>
+              <BadgeComponent
+                label={cajaDetalles.nombre}
+                variant="success"
+                className="cursos-pointer"
+              />
+            </RippleWrapper>
+          ) : null}
+          {/* BOTON PARA CAMBIAR DE TEMA - SIEMPRE VISIBLE */}
+          <button
+            className="ico-header border-0 rounded-pill d-flex align-items-center justify-content-center"
+            title="Cambiar tema"
+            style={{
+              width: 44,
+              height: 44,
+              padding: 0,
+              transition: "transform var(--transition-bounce)",
+            }}
+            onMouseOver={(e) =>
+              (e.currentTarget.style.transform = "scale(1.1)")
+            }
+            onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
+            onClick={toggleTheme}
+          >
+            {darkMode ? (
+              <Moon
                 className="text-auto"
                 height="22px"
                 width="22px"
                 style={{ verticalAlign: "middle" }}
               />
-            </button>
-
-            {/* Dropdown menu */}
-            {showMoreMenu && (
-              <div className="dropdown-menu-header position-absolute end-0 mt-2">
-                <button
-                  onClick={() => {
-                    window.open(
-                      "https://lustrous-cupcake-b9cf4a.netlify.app/",
-                      "_blank",
-                    );
-                    setShowMoreMenu(false);
-                  }}
-                  className="dropdown-item-header d-flex align-items-center gap-2"
-                >
-                  <Globe size={16} />
-                  <span>Ver Web</span>
-                </button>
-
-                {fotoPerfilLocal && (
-                  <div className="dropdown-item-header">
-                    <BadgeComponent
-                      label={capitalizeFirstLetter(
-                        fotoPerfilLocal?.sede?.nombre,
-                      )}
-                      variant="danger"
-                    />
-                  </div>
-                )}
-
-                {["administrador", "atencion al cliente", "cocinero"].includes(
-                  cargo?.empleado?.cargo?.nombre,
-                ) &&
-                  cajaDetalles && (
-                    <div className="dropdown-item-header">
-                      <BadgeComponent
-                        label={cajaDetalles.nombre}
-                        variant="success"
-                      />
-                    </div>
-                  )}
-
-                <button
-                  className="dropdown-item-header d-flex align-items-center gap-2"
-                  onClick={() => {
-                    toggleTheme();
-                    setShowMoreMenu(false);
-                  }}
-                >
-                  {darkMode ? (
-                    <>
-                      <SunMediumIcon size={16} />
-                      <span>Tema claro</span>
-                    </>
-                  ) : (
-                    <>
-                      <Moon size={16} />
-                      <span>Tema oscuro</span>
-                    </>
-                  )}
-                </button>
-              </div>
+            ) : (
+              <SunMediumIcon
+                className="text-auto"
+                height="22px"
+                width="22px"
+                style={{ verticalAlign: "middle" }}
+              />
             )}
-          </div>
-
+          </button>
           {/* Botón de Notificaciones - SIEMPRE VISIBLE */}
           <button
             className="ico-header border-0 rounded-pill d-flex align-items-center justify-content-center position-relative"
@@ -362,7 +269,6 @@ export function Header() {
               />
             )}
           </button>
-
           <ModalRight
             isOpen={showNotificaciones}
             onClose={() => setShowNotificaciones(false)}

@@ -142,7 +142,7 @@ export function PedidosDelivery() {
           }`}
           style={{
             backgroundColor:
-              activeTab === "recoger" ? "#ff3a3a" : "transparent",
+              activeTab === "recoger" ? "#0c0c0c" : "transparent",
             color: activeTab === "recoger" ? "white" : "#6c757d",
             padding: "10px 0",
           }}
@@ -185,9 +185,7 @@ export function PedidosDelivery() {
               <div className="text-center mt-5 pt-5 opacity-50">
                 <CheckCircle2 size={60} className="mb-3 text-secondary" />
                 <h5 className="fw-bold text-dark">Área Despejada</h5>
-                <p className="text-muted">
-                  No hay pedidos esperando en cocina.
-                </p>
+                <p className="text-muted">No hay pedidos asiganos.</p>
               </div>
             ) : (
               listaRecoger.map((pedido) => (
@@ -201,13 +199,7 @@ export function PedidosDelivery() {
                   />
                   <div className="p-3 bg-white border-top border-light">
                     <button
-                      className="btn w-100 fw-bold rounded-pill py-2 shadow-sm d-flex justify-content-center align-items-center gap-2"
-                      style={{
-                        background:
-                          "linear-gradient(135deg, #ff3a3a 0%, #ff5252 100%)",
-                        color: "white",
-                        border: "none",
-                      }}
+                      className="btn-ver w-100 fw-bold rounded-pill py-2 shadow-sm d-flex justify-content-center align-items-center gap-2"
                       onClick={() => solicitarCambioEstado(pedido.id, 55)}
                     >
                       <Bike size={20} />
