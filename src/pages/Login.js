@@ -57,7 +57,8 @@ export const Login = () => {
   const onSubmitLogin = async (data) => {
     setLoading(true); // Bloqueamos el botón y mostramos el spinner
     try {
-      const response = await axios.post("http://erp-api.test/api/login", {
+      // const response = await axios.post("http://erp-api.test/api/login", {
+      const response = await axios.post("http://127.0.0.1:8000/api/login", {
         email: data.email,
         password: data.password,
       });

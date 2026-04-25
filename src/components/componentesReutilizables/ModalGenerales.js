@@ -1,6 +1,7 @@
 import React from "react";
 import "../../css/ModalAlertQuestion.css";
 import ReactDOM from "react-dom";
+import { X } from "lucide-react";
 
 function ModalGenerales({
   show,
@@ -10,7 +11,7 @@ function ModalGenerales({
   mensaje,
   cuerpo,
   children,
-  width = "400px", // Un poco más angosto hace que las alertas se vean mejor
+  width = "400px",
   height = "auto",
   showButtons = true,
   textConfirm = "Confirmar",
@@ -20,16 +21,21 @@ function ModalGenerales({
   const handleConfirm = async () => {
     try {
       if (handleAccion) {
-        idProceso ? await handleAccion(idProceso) : await handleAccion();
+        const exito = idProceso
+          ? await handleAccion(idProceso)
+          : await handleAccion();
+
+        if (exito === true) {
+          handleCloseModal();
+        }
+      } else {
+        // Si el modal no tiene handleAccion (es solo un aviso), lo cerramos directo
+        handleCloseModal();
       }
-      handleCloseModal();
     } catch (error) {
       console.error("Error en modal:", error);
-      handleCloseModal();
     }
   };
-
-  if (!show) return null;
 
   if (!show) return null;
 
@@ -39,18 +45,31 @@ function ModalGenerales({
       style={{ zIndex: 1050 }}
     >
       <div
-        className="bg-white rounded-4 shadow-lg d-flex flex-column overflow-hidden"
+        // ATENCIÓN AQUÍ: Agregué 'position-relative' para poder anclar la X
+        className="bg-white rounded-4 shadow-lg d-flex flex-column overflow-hidden position-relative"
         style={{
           width: width,
           height: height,
           maxWidth: "95vw",
           maxHeight: "95vh",
-          animation: "fadeIn 0.2s ease-in-out", // Si tienes esta animación en tu CSS
+          animation: "fadeIn 0.2s ease-in-out",
         }}
       >
+        {/* --- BOTÓN CERRAR "X" ELEGANTE --- */}
+        <button
+          onClick={handleCloseModal}
+          // Añadí 'text-dark' por si tienes esa clase de Bootstrap, pero el style lo asegura.
+          className="position-absolute top-0 bg-light rounded-pill border-0 end-0 m-2 z-1 p-2 shadow-md text-dark d-flex justify-content-center align-items-center"
+          aria-label="Cerrar"
+        >
+          {/* Ahora sí, Lucide debería verse perfecto */}
+          <X size={20} />
+        </button>
+        {/* --------------------------------- */}
+
         {/* Título más limpio sin el fondo gris duro */}
         {mensaje && (
-          <div className="pt-4 pb-2 px-4 text-center">
+          <div className="pt-4 pb-2 px-4 text-center mt-2">
             <h4 className="fw-bold text-dark m-0">{mensaje}</h4>
           </div>
         )}

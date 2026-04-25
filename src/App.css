@@ -771,6 +771,7 @@ button:disabled {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  z-index: 100;
   font-weight: 500;
   transition: all 0.2s ease-in-out;
 }
@@ -786,15 +787,7 @@ button:disabled {
   color: #212529;
   transform: scale(0.98);
 }
-.btn {
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
+
 
 .btn:active {
   background-color: #004080;

@@ -15,6 +15,7 @@ import React from "react";
 import { useReactToPrint } from "react-to-print";
 import { TicketPedidosWeb } from "./TiketsType/TicketPedidosWeb";
 import ModalGenerales from "../componentesReutilizables/ModalGenerales";
+import { FormAsignarRider } from "../componenteDelivery/FormAsignarider";
 
 const PedidoCard = ({ pedido, onOpenModal }) => {
   const { procesarPago } = useProcesarPagoWeb();
@@ -228,11 +229,10 @@ const PedidoCard = ({ pedido, onOpenModal }) => {
         width="400px"
         textConfirm="Asignar"
       >
-        <div className="card">
-          <div className="card-body">
-            <h3>Asignar Rider motorizado</h3>
-          </div>
-        </div>
+        <FormAsignarRider
+          idPedido={dataIdPedido}
+          handleCloseModal={() => setVerModalRider(false)}
+        />
       </ModalGenerales>
     </div>
   );
