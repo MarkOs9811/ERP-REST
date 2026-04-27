@@ -6,23 +6,18 @@ import RippleWrapper from "./componentesReutilizables/RippleWrapper";
 import { PerfilPanel } from "./componentesHeader/PerfilPanel";
 import { NotificacionesPanel } from "./componentesHeader/NotificacionesPanel";
 import { capitalizeFirstLetter } from "../hooks/FirstLetterUp";
-import {
-  Bell,
-  Globe,
-  Menu,
-  Moon,
-  SunMediumIcon,
-  MoreVertical,
-} from "lucide-react";
+import { Bell, Globe, Menu, Moon, SunMediumIcon } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleSidebar } from "../redux/sideBarSlice";
 import ModalRight from "./componentesReutilizables/ModalRight";
 import { BadgeComponent } from "./componentesReutilizables/BadgeComponent";
-import { useQuery } from "@tanstack/react-query";
-import { GetNotificaciones } from "../service/accionesGenerales/GetNotificaciones";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toggleSidebarMobile } from "../redux/sideBarMobilSlice";
+import { GetNotificacionesPrivadas } from "../service/accionesGenerales/GetNotificacionesPrivada";
+import { PutData } from "../service/CRUD/PutData";
 export function Header() {
   const dispatch = useDispatch();
+  const queryClient = useQueryClient();
   const BASE_URL = process.env.REACT_APP_BASE_URL;
   const empresa = JSON.parse(localStorage.getItem("empresa")) || {};
   const fotoEmpresa = empresa.logo
@@ -38,14 +33,30 @@ export function Header() {
   // PARA MOSTRAR LOS PANELES
   const [showPerfilPanel, setShowPerfilPanel] = useState(false);
   const [showNotificaciones, setShowNotificaciones] = useState(false);
-  const [showMoreMenu, setShowMoreMenu] = useState(false);
 
   // Obtener notificaciones globalmente (usando caché de react-query)
-  const { data: todasNotificaciones = [] } = useQuery({
-    queryKey: ["notificaciones"],
-    queryFn: GetNotificaciones,
-    staleTime: 1000 * 60 * 5,
+  const {
+    data: todasNotificaciones = [],
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["notificacionesPrivadas"],
+    queryFn: GetNotificacionesPrivadas,
   });
+  // Preparamos la mutación (la petición PUT)
+  const mutacionMarcarLeidas = useMutation({
+    mutationFn: () =>
+      PutData("notificaciones/cambiarEstado", null, { estado: 1 }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["notificacionesPrivadas"] });
+    },
+    onError: (error) => {
+      console.error("Error al actualizar las notificaciones", error);
+    },
+  });
+  const verNoticificaciones = () => {
+    mutacionMarcarLeidas.mutate();
+  };
   const notificacionesCount = todasNotificaciones.filter(
     (n) => n.estado == 0,
   ).length;
@@ -72,6 +83,13 @@ export function Header() {
     }
   }, [darkMode]);
 
+  const obtenerTextoNotificacion = () => {
+    if (isLoading) return "...";
+    if (isError) return "!";
+    if (notificacionesCount > 99) return "99+";
+
+    return notificacionesCount;
+  };
   return (
     <div className={"header-menu " + (isCompressed ? " compressedHeader" : "")}>
       <nav className=" d-flex flex-nowrap align-items-center justify-content-between p-2 m-0">
@@ -212,7 +230,10 @@ export function Header() {
               (e.currentTarget.style.transform = "scale(1.1)")
             }
             onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
-            onClick={() => setShowNotificaciones(true)}
+            onClick={() => {
+              setShowNotificaciones(true);
+              verNoticificaciones();
+            }}
           >
             <Bell
               className="text-auto"
@@ -237,7 +258,7 @@ export function Header() {
                   zIndex: 2,
                 }}
               >
-                {notificacionesCount}
+                {obtenerTextoNotificacion()}
               </span>
             )}
           </button>

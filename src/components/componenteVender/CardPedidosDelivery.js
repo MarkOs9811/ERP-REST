@@ -17,7 +17,8 @@ import { TicketPedidosWeb } from "./TiketsType/TicketPedidosWeb";
 import ModalGenerales from "../componentesReutilizables/ModalGenerales";
 import { FormAsignarRider } from "../componenteDelivery/FormAsignarider";
 
-const PedidoCard = ({ pedido, onOpenModal }) => {
+const CardPedidoDelivery = ({ pedido, onOpenModal }) => {
+  const formRiderRef = useRef(null);
   const { procesarPago } = useProcesarPagoWeb();
 
   const handleRealizarPago = (e) => {
@@ -225,11 +226,13 @@ const PedidoCard = ({ pedido, onOpenModal }) => {
       <ModalGenerales
         show={verModalRider}
         idProceso={dataIdPedido}
+        handleAccion={() => formRiderRef.current?.submitForm()}
         handleCloseModal={() => setVerModalRider(false)}
         width="400px"
         textConfirm="Asignar"
       >
         <FormAsignarRider
+          ref={formRiderRef}
           idPedido={dataIdPedido}
           handleCloseModal={() => setVerModalRider(false)}
         />
@@ -238,4 +241,4 @@ const PedidoCard = ({ pedido, onOpenModal }) => {
   );
 };
 
-export default PedidoCard;
+export default CardPedidoDelivery;

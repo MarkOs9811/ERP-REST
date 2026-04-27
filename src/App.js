@@ -42,6 +42,7 @@ import { LoginAdmin } from "./pageAdmin/LoginAdmin";
 import { LayOutAdmin } from "./LayOut/LayOutAdmin";
 import { AuthProviderAdmin } from "./AuthContextAdmin";
 import { RestablecerPassword } from "./pages/RestablecerPassword";
+import { UseEventosGlobales } from "./hooks/UseEventosGlobal";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 function App() {
@@ -55,6 +56,9 @@ function App() {
       favicon.href = logoUrl;
     }
   }, []);
+  // obtener id de mi localStorage para suscribirme a eventos globales
+  const idCliente = JSON.parse(localStorage.getItem("user"))?.id;
+  UseEventosGlobales(idCliente);
 
   return (
     // AuthProvider envuelve todo

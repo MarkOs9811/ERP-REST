@@ -12,6 +12,7 @@ import {
   Settings,
   Settings2,
   ChartArea,
+  BikeIcon,
 } from "lucide-react";
 
 const subMenuGroups = {
@@ -171,6 +172,11 @@ const subMenuGroups = {
       label: "Pedidos",
       path: "/delivery/pedidos",
       icon: <ShoppingCart size={16} />,
+    },
+    {
+      label: "Asignados",
+      path: "/delivery/pedidosAsignados",
+      icon: <BikeIcon size={16} />,
     },
     {
       label: "Repartidores",

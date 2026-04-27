@@ -3,7 +3,6 @@ import Pusher from "pusher-js";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getPedidosPendientes } from "../../service/GetPedidosPendientes";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import PedidoCard from "../../components/componenteVender/CardPedidosPendientes";
 import { Cargando } from "../../components/componentesReutilizables/Cargando";
 import axiosInstance from "../../api/AxiosInstance";
 import { getPedidosEnProceso } from "../../service/GetPedidosProceso";
@@ -14,6 +13,7 @@ import { ModalCabecera } from "../../components/componenteVender/cuerpoModalRigh
 import { ModalCuerpo } from "../../components/componenteVender/cuerpoModalRight/ModalCuerpo";
 import { CheckCheck, CookingPot, Hourglass } from "lucide-react";
 import { getPedidosListos } from "../../service/GetPedidosListos";
+import CardPedidoDelivery from "../../components/componenteVender/CardPedidosDelivery";
 
 export function PedidosWeb() {
   const queryClient = useQueryClient();
@@ -51,38 +51,11 @@ export function PedidosWeb() {
     refetchOnWindowFocus: false,
   });
 
-  const [pedidos, setPedidos] = useState({
-    pendientes: [],
-    proceso: [],
-    listos: [],
-  });
-
-  // PEDIDOS PENDIENTES
-  useEffect(() => {
-    if (listaPedidos.length > 0 && pedidos.pendientes !== listaPedidos) {
-      setPedidos((prev) => ({ ...prev, pendientes: listaPedidos }));
-    }
-  }, [listaPedidos]);
-
-  // PEDIDOS EN PROCESO
-  useEffect(() => {
-    if (
-      listaPedidosProceso.length > 0 &&
-      pedidos.proceso !== listaPedidosProceso
-    ) {
-      setPedidos((prev) => ({ ...prev, proceso: listaPedidosProceso }));
-    }
-  }, [listaPedidosProceso]);
-
-  // PEDIDOS LISTOS
-  useEffect(() => {
-    if (
-      listaPedidosListos.length > 0 &&
-      pedidos.listos !== listaPedidosListos
-    ) {
-      setPedidos((prev) => ({ ...prev, listos: listaPedidosListos }));
-    }
-  }, [listaPedidosListos]);
+  const pedidos = {
+    pendientes: listaPedidos,
+    proceso: listaPedidosProceso,
+    listos: listaPedidosListos,
+  };
 
   useEffect(() => {
     const pusher = new Pusher("3a474e6680223eaa4e3f", {
@@ -107,7 +80,11 @@ export function PedidosWeb() {
     proceso: 4,
     listos: 5,
   };
-
+  const queryKeyMap = {
+    pendientes: ["pedidosPendientes"],
+    proceso: ["listaPedidosProceso"],
+    listos: ["listaPedidosListos"],
+  };
   const onDragEnd = async (result) => {
     const { source, destination } = result;
     if (!destination) return; // Si se suelta fuera de un droppable, no hacer nada.
@@ -117,7 +94,6 @@ export function PedidosWeb() {
 
     if (sourceColumn === destColumn) return; // Si se suelta en la misma columna, no hacer nada.
 
-    // Convertir el identificador de la columna destino a su número de estado correspondiente
     const nuevoEstado = estadoMap[destColumn];
 
     if (!nuevoEstado) {
@@ -125,35 +101,45 @@ export function PedidosWeb() {
       return;
     }
 
+    // Identificar las llaves exactas de React Query
+    const sourceQueryKey = queryKeyMap[sourceColumn];
+    const destQueryKey = queryKeyMap[destColumn];
+
+    // 2. Obtener los datos actuales directamente de la caché de React Query
+    const sourceItems = queryClient.getQueryData(sourceQueryKey) || [];
+    const destItems = queryClient.getQueryData(destQueryKey) || [];
+
     // Clonar listas antes de modificarlas
-    const copiedSourceItems = [...pedidos[sourceColumn]];
+    const copiedSourceItems = [...sourceItems];
     const [movedItem] = copiedSourceItems.splice(source.index, 1);
 
-    const copiedDestItems = [...pedidos[destColumn]];
-    movedItem.estado_pedido = nuevoEstado; // 🔹 Actualizar el estado del pedido
+    const copiedDestItems = [...destItems];
+    movedItem.estado_pedido = nuevoEstado; // Actualizar el estado del pedido
     copiedDestItems.splice(destination.index, 0, movedItem);
 
-    // Actualizar estado localmente
-    setPedidos((prev) => ({
-      ...prev,
-      [sourceColumn]: copiedSourceItems,
-      [destColumn]: copiedDestItems,
-    }));
+    // 3. ACTUALIZACIÓN OPTIMISTA: Reemplazamos el setPedidos por setQueryData
+    // Esto hace que la UI reaccione al instante sin esperar a Laravel
+    queryClient.setQueryData(sourceQueryKey, copiedSourceItems);
+    queryClient.setQueryData(destQueryKey, copiedDestItems);
 
     try {
+      // 4. Hacer la petición real de fondo
       await axiosInstance.put("/pedidosPendientes/cambiarEstado", {
         idPedido: movedItem.id,
-        nuevoEstado: nuevoEstado, // Ahora es un número
+        nuevoEstado: nuevoEstado,
       });
+
+      // (Opcional) Puedes hacer un invalidateQueries aquí si quieres estar
+      // 100% seguro de que nadie más modificó la BD en ese mismo segundo.
+      queryClient.invalidateQueries({ queryKey: sourceQueryKey });
+      queryClient.invalidateQueries({ queryKey: destQueryKey });
     } catch (error) {
-      // Opcional: Revertir el estado si la actualización falla
-      setPedidos((prev) => ({
-        ...prev,
-        [sourceColumn]: [...copiedSourceItems, movedItem],
-        [destColumn]: copiedDestItems.filter(
-          (item) => item.id !== movedItem.id,
-        ),
-      }));
+      console.error("Error al mover el pedido:", error);
+
+      // 5. ROLLBACK: Si el backend falla, devolvemos la tarjeta a su lugar original
+      queryClient.setQueryData(sourceQueryKey, sourceItems);
+      queryClient.setQueryData(destQueryKey, destItems);
+      // Aquí podrías agregar un ToastAlert("error", "No se pudo mover el pedido")
     }
   };
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -261,7 +247,7 @@ export function PedidosWeb() {
                               {...provided.dragHandleProps}
                               className="mb-3"
                             >
-                              <PedidoCard
+                              <CardPedidoDelivery
                                 pedido={pedido}
                                 onOpenModal={() => {
                                   setSelectedPedido(pedido);

@@ -14,17 +14,18 @@ import { getPedidosListos } from "../../service/GetPedidosListos";
 import axiosInstance from "../../api/AxiosInstance";
 import ToastAlert from "../../components/componenteToast/ToastAlert";
 import { Cargando } from "../../components/componentesReutilizables/Cargando";
-import PedidoCard from "../../components/componenteVender/CardPedidosPendientes";
+import PedidoCard from "../../components/componenteVender/CardPedidosDelivery";
 import ModalRight from "../../components/componentesReutilizables/ModalRight";
 import { ModalCabecera } from "../../components/componenteVender/cuerpoModalRight/ModalCabecera";
 import { ModalCuerpo } from "../../components/componenteVender/cuerpoModalRight/ModalCuerpo";
 import { ModalFooter } from "../../components/componenteVender/cuerpoModalRight/ModalFooter";
 import { GetPedidosEnCamino } from "../../service/GetPedidosEnCamino";
 import ModalGenerales from "../../components/componentesReutilizables/ModalGenerales";
+import { GetPedidosAsignados } from "../../service/GetPedidosAsignados";
 
 // Importación del Modal General
 
-export function PedidosDelivery() {
+export function PedidosRider() {
   const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState("recoger");
 
@@ -41,8 +42,8 @@ export function PedidosDelivery() {
 
   // --- QUERIES ---
   const { data: listaRecoger = [], isLoading: loadRecoger } = useQuery({
-    queryKey: ["listaPedidosListos"],
-    queryFn: getPedidosListos,
+    queryKey: ["listaPedidosAsiganados"],
+    queryFn: GetPedidosAsignados,
     retry: 1,
     refetchOnWindowFocus: false,
   });
@@ -149,7 +150,7 @@ export function PedidosDelivery() {
           onClick={() => setActiveTab("recoger")}
         >
           <Package className="me-2" size={18} style={{ marginBottom: "2px" }} />
-          Por Recoger
+          Asignados
           <span className="badge bg-white text-dark ms-2 rounded-pill px-2">
             {listaRecoger.length}
           </span>

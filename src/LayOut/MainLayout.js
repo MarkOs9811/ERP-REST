@@ -64,7 +64,7 @@ import { StepPlatosProductos } from "../components/componentesFirstSteps/StepPla
 import { StepUsuario } from "../components/componentesFirstSteps/StepUsuario";
 import { Usuarios } from "../pages/moduloPlanilla/Usuarios";
 import { LayOutDelivery } from "./LayOutDelivery";
-import { PedidosDelivery } from "../pages/moduloDelivery/PedidosDelivery";
+import { PedidosRider } from "../pages/moduloDelivery/PedidosRider";
 import { Despacho } from "../pages/moduloDelivery/Despacho";
 import { Repartidores } from "../pages/moduloDelivery/Repartidores";
 import { ZonaTarifa } from "../pages/moduloDelivery/ZonaTarifa";
@@ -75,6 +75,7 @@ import { IAMoodle } from "../pages/moduloIAmoodle/IAMoodle";
 import { DetallesVentas } from "../pages/moduloVentas/DetallesVentas";
 import { ReporteDelivery } from "../pages/moduloDelivery/ReporteDelivery";
 import { Compras } from "../pages/moduloAlmacen/Compras";
+import { PedidosAsignados } from "../pages/moduloDelivery/PedidosAsignados";
 
 export const MainLayout = () => {
   const isCompressed = useSelector(
@@ -165,7 +166,7 @@ export const MainLayout = () => {
                   path="/pedidosDelivery"
                   element={
                     <PrivateRoute allowedRoles={["delivery", "administrador"]}>
-                      <PedidosDelivery />
+                      <PedidosRider />
                     </PrivateRoute>
                   }
                 />
@@ -464,6 +465,16 @@ export const MainLayout = () => {
                         allowedRoles={["delivery", "administrador"]}
                       >
                         <Despacho />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="pedidosAsignados"
+                    element={
+                      <PrivateRoute
+                        allowedRoles={["delivery", "administrador"]}
+                      >
+                        <PedidosAsignados />
                       </PrivateRoute>
                     }
                   />

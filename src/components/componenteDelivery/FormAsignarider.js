@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { GetUsuarios } from "../../service/GetUsuarios";
 import { UserPlus, ChevronDown, AlertCircle, Loader2 } from "lucide-react";
 import axiosInstance from "../../api/AxiosInstance";
+import ToastAlert from "../componenteToast/ToastAlert";
 
 export const FormAsignarRider = forwardRef(
   ({ idPedido, handleCloseModal }, ref) => {
@@ -35,20 +36,25 @@ export const FormAsignarRider = forwardRef(
     // 3. Mutación para asignar el rider
     const asignarRiderMutation = useMutation({
       mutationFn: async (data) => {
-        // AJUSTA ESTE ENDPOINT A TU API REAL
+        // CORREGIDO: Ruta sin parámetro en la URL y enviando el payload exacto que espera Laravel
         const response = await axiosInstance.post(
-          `/pedidosWeb/asignarRepartidor/${idPedido}`,
-          data,
+          `/pedidosWeb/asignarRepartidor`,
+          {
+            idPedido: idPedido, // Viene de las props del componente
+            idDeliveryRider: data.id_repartidor, // Viene del React Hook Form
+          },
         );
-        return response.data.data;
+        return response.data;
       },
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["pedidos"] });
+        queryClient.invalidateQueries({ queryKey: ["listaPedidosListos"] });
+        queryClient.invalidateQueries({ queryKey: ["listaPedidosEnCamino"] });
+        queryClient.invalidateQueries({ queryKey: ["listaPedidosProceso"] });
+        ToastAlert("success", "Rider asignado exitosamente");
         handleCloseModal();
       },
       onError: (error) => {
         console.error("Error al asignar rider:", error);
-        // Aquí podrías manejar el error visualmente
       },
     });
 

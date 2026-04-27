@@ -78,34 +78,7 @@ button {
 
 /* ======================== */
 /* BOTONES NEUTROS Y DE ACCIÓN */
-.btn-ver {
-  min-width: 35px;
-  width: auto;
-  height: 35px;
-  border-radius: 6px;
-  padding: 0.5rem 1rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--color-btn-primary);
-  color: var(--color-btn-primary-text);
-  border: 1px solid var(--color-border);
-  font-weight: 500;
-  font-size: 13px;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s, border 0.2s;
-}
-.btn-ver:hover {
-  background-color: var(--color-hover);
-  color: var(--color-btn-primary);
-  border-color: var(--color-btn-primary);
-}
-.btn-ver:active {
-  background-color: var(--color-btn-primary);
-  color: var(--color-btn-primary-text);
-  border-color: var(--color-btn-primary);
-  filter: brightness(0.95);
-}
+
 
 .btn-editar {
   min-width: 35px;
@@ -533,7 +506,7 @@ button:disabled {
   min-width: 35px;
   width: auto;
   height: 35px;
-  border-radius: 6px;
+  border-radius: 20px;
   padding: 0.5rem 1rem;
   display: inline-flex;
   align-items: center;
@@ -604,12 +577,12 @@ button:disabled {
 }
 
 .btn-principal:hover {
-  background-color: #d14141;
+  background-color: #3a3a3a;
   box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
 }
 
 .btn-principal:active {
-  background-color: #b32b2b !important;
+  background-color: #202020 !important;
   box-shadow: none;
 }
 
