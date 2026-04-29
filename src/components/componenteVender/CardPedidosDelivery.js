@@ -228,12 +228,13 @@ const CardPedidoDelivery = ({ pedido, onOpenModal }) => {
         idProceso={dataIdPedido}
         handleAccion={() => formRiderRef.current?.submitForm()}
         handleCloseModal={() => setVerModalRider(false)}
-        width="400px"
+        width="600px"
         textConfirm="Asignar"
       >
         <FormAsignarRider
           ref={formRiderRef}
           idPedido={dataIdPedido}
+          dataPedido={pedido}
           handleCloseModal={() => setVerModalRider(false)}
         />
       </ModalGenerales>

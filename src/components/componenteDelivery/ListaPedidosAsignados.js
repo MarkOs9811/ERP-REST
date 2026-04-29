@@ -1,10 +1,22 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { GetPedidosAsignadosRider } from "../../service/accionesDelivery/GetPedidosAsignadosRider";
 import { TablasGenerales } from "../componentesReutilizables/TablasGenerales";
 import { BadgeComponent } from "../componentesReutilizables/BadgeComponent";
-import { AudioWaveformIcon } from "lucide-react";
+import { Bike, UserCheck } from "lucide-react";
+import { useRef, useState } from "react";
+import ModalGenerales from "../componentesReutilizables/ModalGenerales";
+import { FormAsignarRider } from "./FormAsignarider";
+import ModalAlertQuestion from "../componenteToast/ModalAlertQuestion";
+import { PutData } from "../../service/CRUD/PutData";
 
 export function ListaPedidosAsignados() {
+  const formRiderRef = useRef(null);
+  const [modalQuestion, setModalQuestion] = useState();
+
+  const [modalAsignarRider, setModalAsignarRider] = useState(false);
+  const [dataPedido, setDataPedido] = useState([]);
+
+  const queryClient = useQueryClient();
   const {
     data: pedidosAsignados,
     isLoading,
@@ -13,16 +25,12 @@ export function ListaPedidosAsignados() {
     queryKey: ["pedidosAsignadosRider"],
     queryFn: GetPedidosAsignadosRider,
   });
-  console.log("Pedidos Asignados:", pedidosAsignados);
-  // Funciones para manejar las acciones (Aquí pondrás tus llamadas a la API/Axios o abrir un Modal)
-  const handleReasignar = (idPedido) => {
-    console.log("Abrir modal para reasignar el pedido ID:", idPedido);
-    // Lógica para cambiar de repartidor...
-  };
 
-  const handleQuitarAsignacion = (idPedido) => {
-    console.log("Eliminar asignación del pedido ID:", idPedido);
-    // Lógica para quitar al repartidor actual (Ej. mandarlo de vuelta a pendientes)...
+  const handleQuitarRider = async (idEliminar) => {
+    const response = await PutData("delivery/quitarRider", idEliminar);
+    if (response) {
+      queryClient.invalidateQueries(["pedidosAsignadosRider"]);
+    }
   };
 
   const dataListaAsignados = [
@@ -46,8 +54,6 @@ export function ListaPedidosAsignados() {
     // --- NUEVAS COLUMNAS DEL RIDER ---
     {
       name: "Repartidor",
-      // OJO: Asumo que desde Laravel (en tu ->with()) estás mandando los datos del rider.
-      // Si solo llega el ID, usa row.idDeliveryRider. Si mandas la relación, sería algo como row.rider.nombre
       selector: (row) => row.idDeliveryRider,
       cell: (row) => (
         <span
@@ -69,23 +75,19 @@ export function ListaPedidosAsignados() {
       name: "Estado Pedido",
       selector: (row) => row.estado_pedido,
       cell: (row) => {
-        // Mapeo del estado
-        const estadoTexto =
-          row.estado_pedido === 54 ? "En Camino" : "Otro estado";
+        // 1. Evaluamos en qué estado está
+        const isAsignado = row.estado_pedido === 54;
 
-        // Si no es 54, le puedes cambiar el color dinámicamente
-        const colorVariante =
-          row.estado_pedido === 54 ? "success" : "secondary";
+        // 2. Asignamos Texto, Color e Icono dinámicamente
+        const estadoTexto = isAsignado ? "Asignado" : "En ruta";
+        const colorVariante = isAsignado ? "warning" : "success";
+        const IconoBadge = isAsignado ? <UserCheck /> : <Bike />;
 
         return (
           <BadgeComponent
             label={estadoTexto}
-            variant={colorVariante} // Pasamos "success" para que sea verde
-            // OPCIÓN 1: Si usas Font Awesome en tu proyecto
-            icon={<AudioWaveformIcon />}
-
-            // OPCIÓN 2: Si usas react-icons (descomenta el import de arriba)
-            // icon={<FaMotorcycle />}
+            variant={colorVariante} // Forzamos la variante para no depender del mapa de texto
+            icon={IconoBadge}
           />
         );
       },
@@ -117,18 +119,34 @@ export function ListaPedidosAsignados() {
       name: "Acciones",
       cell: (row) => (
         <div>
-          <button
-            className="btn-principal"
-            onClick={() => handleReasignar(row.id)}
-          >
-            Cambiar
-          </button>
-          <button
-            className="btn-ver"
-            onClick={() => handleQuitarAsignacion(row.id)}
-          >
-            Quitar
-          </button>
+          {/* Condición: Solo renderiza los botones si el estado no es 55 */}
+          {row.estado_pedido !== 55 && (
+            <>
+              <button
+                className="btn-principal my-2"
+                onClick={() => {
+                  setDataPedido(row);
+                  setModalAsignarRider(true);
+                }}
+              >
+                Cambiar
+              </button>
+              <button
+                className="btn-ver my-2"
+                onClick={() => {
+                  setModalQuestion(true);
+                  setDataPedido(row);
+                }}
+              >
+                Quitar
+              </button>
+            </>
+          )}
+
+          {/* Opcional: Si quieres mostrar un mensaje cuando es 55, descomenta lo siguiente */}
+          {row.estado_pedido === 55 && (
+            <span className="text-muted">No disponible</span>
+          )}
         </div>
       ),
       button: true, // Propiedad de react-data-table para evitar que el clic en el botón seleccione la fila
@@ -148,6 +166,31 @@ export function ListaPedidosAsignados() {
           datos={pedidosAsignados ?? []}
         />
       )}
+      <ModalGenerales
+        show={modalAsignarRider}
+        handleCloseModal={() => setModalAsignarRider(false)}
+        handleAccion={() => formRiderRef.current?.submitForm()}
+        title="Cambiar Repartidor"
+        width="600px"
+      >
+        {/* Aquí iría el componente FormAsignarRider, pasándole dataPedido como prop */}
+        <FormAsignarRider
+          ref={formRiderRef}
+          idPedido={dataPedido.id}
+          dataPedido={dataPedido}
+          handleCloseModal={() => setModalAsignarRider(false)}
+        />
+      </ModalGenerales>
+
+      <ModalAlertQuestion
+        show={modalQuestion}
+        idEliminar={dataPedido.id}
+        nombre={dataPedido.id}
+        handleEliminar={() => handleQuitarRider(dataPedido.id)}
+        handleCloseModal={() => setModalQuestion(false)}
+        tipo={"Pedido"}
+        pregunta={"¿Estás seguro de quitar al rider del "}
+      />
     </div>
   );
 }

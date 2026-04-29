@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "../../css/ModalAlertQuestion.css";
 import ReactDOM from "react-dom";
 import { X } from "lucide-react";
@@ -18,9 +18,14 @@ function ModalGenerales({
   textCancel = "Cancelar",
   btnConfirmColor = "btn-danger",
 }) {
+  // --- NUEVO: Estado para controlar la carga ---
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleConfirm = async () => {
     try {
       if (handleAccion) {
+        setIsLoading(true); // Encendemos el loader
+
         const exito = idProceso
           ? await handleAccion(idProceso)
           : await handleAccion();
@@ -34,6 +39,8 @@ function ModalGenerales({
       }
     } catch (error) {
       console.error("Error en modal:", error);
+    } finally {
+      setIsLoading(false); // Apagamos el loader pase lo que pase (éxito o error)
     }
   };
 
@@ -45,7 +52,6 @@ function ModalGenerales({
       style={{ zIndex: 1050 }}
     >
       <div
-        // ATENCIÓN AQUÍ: Agregué 'position-relative' para poder anclar la X
         className="bg-white rounded-4 shadow-lg d-flex flex-column overflow-hidden position-relative"
         style={{
           width: width,
@@ -58,16 +64,14 @@ function ModalGenerales({
         {/* --- BOTÓN CERRAR "X" ELEGANTE --- */}
         <button
           onClick={handleCloseModal}
-          // Añadí 'text-dark' por si tienes esa clase de Bootstrap, pero el style lo asegura.
           className="position-absolute top-0 bg-light rounded-pill border-0 end-0 m-2 z-1 p-2 shadow-md text-dark d-flex justify-content-center align-items-center"
           aria-label="Cerrar"
+          disabled={isLoading} // Bloqueamos la X si está cargando
         >
-          {/* Ahora sí, Lucide debería verse perfecto */}
           <X size={20} />
         </button>
         {/* --------------------------------- */}
 
-        {/* Título más limpio sin el fondo gris duro */}
         {mensaje && (
           <div className="pt-4 pb-2 px-4 text-center mt-2">
             <h4 className="fw-bold text-dark m-0">{mensaje}</h4>
@@ -75,7 +79,7 @@ function ModalGenerales({
         )}
 
         {/* Contenido centrado */}
-        <div className="modal-body px-4 py-3 text-center">
+        <div className="modal-body px-4 py-3">
           {children
             ? children
             : cuerpo &&
@@ -90,14 +94,29 @@ function ModalGenerales({
             <button
               onClick={handleCloseModal}
               className="btn btn-light fw-bold rounded-pill px-4 py-2 text-muted border"
+              // Deshabilitamos si no hay acción o si está cargando
+              disabled={!handleAccion || isLoading}
             >
               {textCancel}
             </button>
             <button
               onClick={handleConfirm}
-              className={`btn ${btnConfirmColor} fw-bold rounded-pill px-4 py-2 shadow-sm`}
+              className={`btn ${btnConfirmColor} fw-bold rounded-pill px-4 py-2 shadow-sm d-flex align-items-center gap-2`}
+              disabled={isLoading}
             >
-              {textConfirm}
+              {isLoading ? (
+                <>
+                  {/* Gusanito nativo de Bootstrap */}
+                  <span
+                    className="spinner-border spinner-border-sm"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                  Procesando...
+                </>
+              ) : (
+                textConfirm
+              )}
             </button>
           </div>
         )}
