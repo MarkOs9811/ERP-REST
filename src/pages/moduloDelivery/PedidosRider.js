@@ -22,10 +22,12 @@ import { ModalFooter } from "../../components/componenteVender/cuerpoModalRight/
 import { GetPedidosEnCamino } from "../../service/GetPedidosEnCamino";
 import ModalGenerales from "../../components/componentesReutilizables/ModalGenerales";
 import { GetPedidosAsignados } from "../../service/GetPedidosAsignados";
+import { useGeolocalizacion } from "../../hooks/useGeolocalizacion";
 
 // Importación del Modal General
 
 export function PedidosRider() {
+  const { obtenerUbicacion } = useGeolocalizacion();
   const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState("recoger");
 
@@ -100,10 +102,31 @@ export function PedidosRider() {
     if (!idPedido || !nuevoEstado) return;
 
     try {
-      await axiosInstance.put("/pedidosPendientes/cambiarEstado", {
+      const payload = {
         idPedido: idPedido,
         nuevoEstado: nuevoEstado,
-      });
+      };
+
+      if (nuevoEstado === 55 || nuevoEstado === "55") {
+        try {
+          const ubicacion = await obtenerUbicacion();
+
+          payload.latitud = ubicacion.latitud;
+          payload.longitud = ubicacion.longitud;
+        } catch (geoError) {
+          console.warn("No se pudo obtener el GPS:", geoError);
+          // Avisamos el error y DETENEMOS el proceso
+          ToastAlert(
+            "error",
+            "No se pudo obtener tu ubicación. Verifica que el GPS esté encendido.",
+          );
+          cerrarConfirmacion();
+          return false; // <-- Esto evita que la petición llegue al backend sin coordenadas
+        }
+      }
+
+      // IMPORTANTE: Enviamos la variable 'payload' que contiene la latitud y longitud
+      await axiosInstance.put("/pedidosPendientes/cambiarEstado", payload);
 
       ToastAlert("success", "Ruta actualizada exitosamente");
 

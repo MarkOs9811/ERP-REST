@@ -2,7 +2,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { GetPedidosAsignadosRider } from "../../service/accionesDelivery/GetPedidosAsignadosRider";
 import { TablasGenerales } from "../componentesReutilizables/TablasGenerales";
 import { BadgeComponent } from "../componentesReutilizables/BadgeComponent";
-import { Bike, UserCheck } from "lucide-react";
+import { Bike, CheckCircle, Eye, UserCheck } from "lucide-react";
 import { useRef, useState } from "react";
 import ModalGenerales from "../componentesReutilizables/ModalGenerales";
 import { FormAsignarRider } from "./FormAsignarider";
@@ -75,18 +75,30 @@ export function ListaPedidosAsignados() {
       name: "Estado Pedido",
       selector: (row) => row.estado_pedido,
       cell: (row) => {
-        // 1. Evaluamos en qué estado está
-        const isAsignado = row.estado_pedido === 54;
+        // 1. Definimos las variables vacías
+        let estadoTexto = "";
+        let colorVariante = "";
+        let IconoBadge = null;
 
-        // 2. Asignamos Texto, Color e Icono dinámicamente
-        const estadoTexto = isAsignado ? "Asignado" : "En ruta";
-        const colorVariante = isAsignado ? "warning" : "success";
-        const IconoBadge = isAsignado ? <UserCheck /> : <Bike />;
+        // 2. Evaluamos los 3 estados posibles
+        if (row.estado_pedido === 54) {
+          estadoTexto = "Asignado";
+          colorVariante = "warning";
+          IconoBadge = <UserCheck size={16} />;
+        } else if (row.estado_pedido === 55) {
+          estadoTexto = "En ruta";
+          colorVariante = "primary"; // Sugiero primary para en ruta y success para entregado
+          IconoBadge = <Bike size={16} />;
+        } else if (row.estado_pedido === 6) {
+          estadoTexto = "Entregado";
+          colorVariante = "success";
+          IconoBadge = <CheckCircle size={16} />;
+        }
 
         return (
           <BadgeComponent
             label={estadoTexto}
-            variant={colorVariante} // Forzamos la variante para no depender del mapa de texto
+            variant={colorVariante}
             icon={IconoBadge}
           />
         );
@@ -119,11 +131,11 @@ export function ListaPedidosAsignados() {
       name: "Acciones",
       cell: (row) => (
         <div>
-          {/* Condición: Solo renderiza los botones si el estado no es 55 */}
-          {row.estado_pedido !== 55 && (
+          {/* Condición 1: Estado 54 (Asignado) -> Muestra Cambiar y Quitar */}
+          {row.estado_pedido === 54 && (
             <>
               <button
-                className="btn-principal my-2"
+                className="btn-principal my-2 me-2" // Añadí 'me-2' para separar los botones si están en la misma línea
                 onClick={() => {
                   setDataPedido(row);
                   setModalAsignarRider(true);
@@ -143,13 +155,27 @@ export function ListaPedidosAsignados() {
             </>
           )}
 
-          {/* Opcional: Si quieres mostrar un mensaje cuando es 55, descomenta lo siguiente */}
+          {/* Condición 2: Estado 55 (En ruta) -> Bloqueado */}
           {row.estado_pedido === 55 && (
             <span className="text-muted">No disponible</span>
           )}
+
+          {/* Condición 3: Estado 6 (Entregado) -> Ver detalles */}
+          {row.estado_pedido === 6 && (
+            <button
+              className="btn-ver my-2 d-flex align-items-center gap-1"
+              onClick={() => {
+                setDataPedido(row);
+                // Llama aquí a la función/estado que abre tu modal de detalles
+                // setModalDetalles(true);
+              }}
+            >
+              <Eye size={16} /> Detalles
+            </button>
+          )}
         </div>
       ),
-      button: true, // Propiedad de react-data-table para evitar que el clic en el botón seleccione la fila
+      button: true,
       width: "180px",
     },
   ];
