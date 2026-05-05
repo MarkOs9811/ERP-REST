@@ -20,6 +20,7 @@ import {
   BikeIcon,
   LucideActivity,
   X,
+  PackageCheckIcon,
 } from "lucide-react";
 import { useAuth } from "../AuthContext";
 import { capitalizeFirstLetter } from "../hooks/FirstLetterUp";
@@ -35,6 +36,7 @@ export function SideBar() {
   const navigate = useNavigate();
   const BASE_URL = process.env.REACT_APP_BASE_URL;
   const miEmpresa = JSON.parse(localStorage.getItem("empresa")) || {};
+
   const formatLogoUrl = (path) => {
     if (!path) return null;
     if (path.startsWith("http")) return path;
@@ -65,12 +67,15 @@ export function SideBar() {
     finanzas: TrendingUp,
     "areas-y-cargos": Building2,
     configuracion: Settings,
+    "mis-entregas": PackageCheckIcon,
     delivery: BikeIcon,
   };
 
+  // ESTO SE BASA EN LOS ROLES RGISTRADOS EN LA BASE DEDATOS
   const customOrder = [
     "ventas",
     "delivery",
+    "mis-entregas",
     "platos",
     "vender",
     "almacen",
@@ -235,32 +240,67 @@ export function SideBar() {
 
             // Roles ahora son items de nivel superior directos sin submenus en el sidebar
             return (
-              <Link
-                key={role.id}
-                to={`/${roleUrl}`}
-                className="link-opcion text-decoration-none"
-                title={role.nombre}
-                onClick={(e) => handleModuloSeleccionado(roleUrl, e)}
-              >
-                <li
-                  className={`menu-item px-3 py-2 mx-2 my-1 ${
-                    isActive ? "active" : ""
-                  }`}
+              <>
+                <Link
+                  key={role.id}
+                  to={`/${roleUrl}`}
+                  className="link-opcion text-decoration-none"
+                  title={role.nombre}
+                  onClick={(e) => handleModuloSeleccionado(roleUrl, e)}
                 >
-                  <div className="d-flex w-100 gap-2 align-items-center justify-content-md-start m-auto px-2">
-                    <IconComponent
-                      className="icon-lucide flex-shrink-0"
-                      size={20}
-                    />
-                    <small
-                      className="small sidebar-text"
-                      style={{ fontSize: "14px", transition: "opacity 0.2s" }}
+                  <li
+                    className={`menu-item px-3 py-2 mx-2 my-1 ${
+                      isActive ? "active" : ""
+                    }`}
+                  >
+                    <div className="d-flex w-100 gap-2 align-items-center justify-content-md-start m-auto px-2">
+                      <IconComponent
+                        className="icon-lucide flex-shrink-0"
+                        size={20}
+                      />
+                      <small
+                        className="small sidebar-text"
+                        style={{ fontSize: "14px", transition: "opacity 0.2s" }}
+                      >
+                        {capitalizeFirstLetter(role.nombre)}
+                      </small>
+                    </div>
+                  </li>
+                </Link>
+
+                {roleName === "mis-entregas" ? (
+                  <Link
+                    to={`/${roleUrl}`}
+                    className="link-opcion text-decoration-none"
+                    title={role.nombre}
+                    onClick={(e) => handleModuloSeleccionado(roleUrl, e)}
+                  >
+                    <li
+                      className={`menu-item px-3 py-2 mx-2 my-1 ${
+                        isActive ? "active" : ""
+                      }`}
                     >
-                      {capitalizeFirstLetter(role.nombre)}
-                    </small>
-                  </div>
-                </li>
-              </Link>
+                      <div className="d-flex w-100 gap-2 align-items-center justify-content-md-start m-auto px-2">
+                        <IconComponent
+                          className="icon-lucide flex-shrink-0"
+                          size={20}
+                        />
+                        <small
+                          className="small sidebar-text"
+                          style={{
+                            fontSize: "14px",
+                            transition: "opacity 0.2s",
+                          }}
+                        >
+                          Mis entregas
+                        </small>
+                      </div>
+                    </li>
+                  </Link>
+                ) : (
+                  <div></div>
+                )}
+              </>
             );
           })}
         </ul>

@@ -19,7 +19,10 @@ export function ModalDetallesVentas({ dataVentas }) {
   } = dataVentas;
 
   const detallePedidos =
-    pedido?.detalle_pedidos || dataVentas?.pedido_web?.detalles_pedido || [];
+    pedido?.detalle_pedidos ||
+    dataVentas?.pedido_web?.detalles_pedido ||
+    dataVentas?.detalle_pedidos_web ||
+    [];
 
   const documento = boleta
     ? `Boleta B001-${boleta.numero}`

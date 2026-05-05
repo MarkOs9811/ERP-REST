@@ -76,48 +76,80 @@ import { DetallesVentas } from "../pages/moduloVentas/DetallesVentas";
 import { ReporteDelivery } from "../pages/moduloDelivery/ReporteDelivery";
 import { Compras } from "../pages/moduloAlmacen/Compras";
 import { PedidosAsignados } from "../pages/moduloDelivery/PedidosAsignados";
+import { MisEntregas } from "../pages/moduloDelivery/MisEntregas";
 
 export const MainLayout = () => {
+  // 1. OBTENCIÓN DE ESTADOS Y DATOS LOCALES
+  // Revisamos en Redux si la barra lateral (SideBar) está minimizada o abierta.
   const isCompressed = useSelector(
     (state) => state.sidebar?.isCompressed || false,
   );
+
+  // Rescatamos los datos del usuario logueado y de la empresa desde el LocalStorage.
   const user = JSON.parse(localStorage.getItem("user"));
   const empresa = JSON.parse(localStorage.getItem("empresa")) || {};
 
-  const cargoUsuario = user?.empleado?.cargo?.nombre?.toLowerCase(); // Pasamos a minúscula por seguridad  const showFullLayout = cargoUsuario != "atencion al cliente";
-  const esRolEspecial =
-    cargoUsuario === "atencion al cliente" || cargoUsuario === "delivery";
+  // 2. IDENTIFICACIÓN DEL ROL (CARGO)
+  // Sacamos el nombre del cargo del usuario y lo pasamos a minúsculas para evitar errores al comparar (ej: "Delivery" vs "delivery").
+  const cargoUsuario = user?.empleado?.cargo?.nombre?.toLowerCase(); // Pasamos a minúscula por seguridad
+
+  // Luego agrupaste los roles que tienen vistas especiales en una variable:
+  const esRolEspecial = cargoUsuario === "atencion al cliente";
+
+  // Si NO es un rol especial (es decir, es admin, ventas, etc), mostramos el layout completo.
   const showFullLayout = !esRolEspecial;
+
+  // Si NO es rol especial, también mostramos el header tradicional.
   const showHeader = !esRolEspecial;
 
-  const [step, setStep] = useState((empresa?.setup_steps || 0) < 5);
-  const [showWelcome, setShowWelcome] = useState(empresa?.setup_steps == 0);
+  // 3. BARRA DE PROGRESO DE CONFIGURACIÓN DE LA EMPRESA
+  // Esto maneja un pequeño "tutorial" o "pasos de configuración inicial" de 5 pasos para la empresa.
+  const [step, setStep] = useState((empresa?.setup_steps || 0) < 5); // ¿Aún le faltan pasos?
+  const [showWelcome, setShowWelcome] = useState(empresa?.setup_steps == 0); // ¿Está en el paso cero?
+
   // 1. Definimos constantes para el cálculo
   const currentStep = Number(empresa.setup_steps) || 0;
   const totalSteps = 5;
   const rawPercentage = ((currentStep + 1) / totalSteps) * 100;
   const progressPercentage = Math.min(100, rawPercentage);
+
   const renderHomePorRol = () => {
     if (cargoUsuario === "atencion al cliente") return <LayOutAtencion />;
-    if (cargoUsuario === "delivery") return <LayOutDelivery />;
-    return <Home />; // Por defecto para admin, finanzas, etc.
+    if (cargoUsuario === "delivery" || cargoUsuario === "conductor")
+      return <LayOutDelivery />;
+    return <Home />;
   };
+
   return (
     <div className="main-container p-0 m-0 h-screen flex">
+      {/* Si NO es rol especial (Delivery/Atención), le mostramos el menú lateral */}
       {showFullLayout && <SideBar />}
-      {!showHeader && <Header />}
-      {showFullLayout && <Header />}
-      {/* Tu PrivateRoute original para Navegacion está perfecto */}
+      {/* ⚠️ CUIDADO AQUÍ: Lógica redundante */}
+      {/* Estás diciendo: "Si NO es showHeader, muestra el Header" y luego "Si ES showFullLayout, muestra el Header". */}
+      {/* En la práctica, esto está haciendo que el <Header /> se muestre SIEMPRE, sin importar el rol. */}
+      {!showHeader && <Header tipoHeader={esRolEspecial} />}
+      {showFullLayout && <Header tipoHeader={esRolEspecial} />}
+      {/* Ruteo privado para los menús de navegación administrativos */}
+      {/* Solo los roles fuertes ven la Navegación envuelta en validación de seguridad */}
       {showFullLayout && (
         <PrivateRoute
-          allowedRoles={["ventas", "finanzas", "cocinero", "administrador"]}
+          allowedRoles={[
+            "ventas",
+            "finanzas",
+            "delivery",
+            "conductor",
+            "cocinero",
+            "administrador",
+          ]}
         >
-          <Navegacion />
+          <Navegacion tipoNavegacion={esRolEspecial} />
         </PrivateRoute>
       )}
-      {!showHeader && <Navegacion />}
+      {/* Si es un rol especial (Atención al cliente), le muestras la navegación SIN la seguridad del PrivateRoute */}
+      {!showHeader && <Navegacion tipoNavegacion={esRolEspecial} />}
+      {/* =============================================================================== */}
       <div
-        className={`content  p-0 ${showFullLayout ? "with-sidebar" : ""} ${isCompressed ? "content-compressed" : ""}`}
+        className={`content  p-0 ${showFullLayout ? "with-sidebar" : ""}  ${isCompressed ? "content-compressed" : ""}`}
         style={{
           transition:
             "margin-left var(--transition-smooth), width var(--transition-smooth)",
@@ -165,12 +197,23 @@ export const MainLayout = () => {
                 <Route
                   path="/pedidosDelivery"
                   element={
-                    <PrivateRoute allowedRoles={["delivery", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={["delivery", "conductor", "administrador"]}
+                    >
                       <PedidosRider />
                     </PrivateRoute>
                   }
                 />
-                {/* --- PEGADO DE TODAS TUS RUTAS --- */}
+                <Route
+                  path="/mis-entregas"
+                  element={
+                    <PrivateRoute
+                      allowedRoles={["delivery", "conductor", "administrador"]}
+                    >
+                      <MisEntregas />
+                    </PrivateRoute>
+                  }
+                />
 
                 {/* RUTAS PARA MODULO ALMACEN */}
                 <Route path="/almacen">

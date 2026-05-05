@@ -15,7 +15,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toggleSidebarMobile } from "../redux/sideBarMobilSlice";
 import { GetNotificacionesPrivadas } from "../service/accionesGenerales/GetNotificacionesPrivada";
 import { PutData } from "../service/CRUD/PutData";
-export function Header() {
+export function Header({ tipoHeader = null }) {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
   const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -23,7 +23,7 @@ export function Header() {
   const fotoEmpresa = empresa.logo
     ? `${BASE_URL}/storage/${empresa.logo}`
     : null;
-
+  const anchuraHeader = tipoHeader;
   const fotoPerfilLocal = JSON.parse(localStorage.getItem("user"));
   const user = JSON.parse(localStorage.getItem("user"));
   const cajaDetalles = JSON.parse(localStorage.getItem("caja"));
@@ -91,12 +91,15 @@ export function Header() {
     return notificacionesCount;
   };
   return (
-    <div className={"header-menu " + (isCompressed ? " compressedHeader" : "")}>
+    <div
+      className={`header-menu ${anchuraHeader ? "m-0" : ""} ${isCompressed ? "compressedHeader" : ""}`}
+    >
+      {" "}
       <nav className=" d-flex flex-nowrap align-items-center justify-content-between p-2 m-0">
         <div className="d-flex align-items-center justify-content-center gap-2 mx-3 ">
           {/* Botón para comprimir/expandir Sidebar */}
           <button
-            className="ico-header border-0 rounded-pill align-items-center justify-content-center bg-transparent"
+            className={`ico-header  border-0 ${anchuraHeader ? "d-none" : ""} rounded-pill align-items-center justify-content-center bg-transparent`}
             title="Contraer Menú"
             onClick={() => dispatch(toggleSidebar())}
             style={{
@@ -110,10 +113,10 @@ export function Header() {
             }
             onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
           >
-            <Menu className="text-muted" height="24px" width="24px" />
+            <Menu className={`text-muted `} height="24px" width="24px" />
           </button>
           <button
-            className="menu-ico-header-celular  border-0  align-items-center justify-content-center "
+            className={`${anchuraHeader ? "d-none" : ""} menu-ico-header-celular  border-0  align-items-center justify-content-center `}
             title="Contraer Menú"
             onClick={() => dispatch(toggleSidebarMobile())}
           >

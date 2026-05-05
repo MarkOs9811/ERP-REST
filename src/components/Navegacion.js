@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 
-export function Navegacion() {
+export function Navegacion({ tipoNavegacion = null }) {
   const location = useLocation();
   const pathnames = location.pathname.split("/").filter((x) => x);
   const navigate = useNavigate();
@@ -21,7 +21,7 @@ export function Navegacion() {
   const rolesLocalStorage = JSON.parse(localStorage.getItem("roles")) || [];
   const userStr = localStorage.getItem("user");
   const rol = userStr ? JSON.parse(userStr) : null;
-
+  const navegacionAnchura = tipoNavegacion;
   const routeNames = {
     "": "Inicio",
     productos: "Productos",
@@ -87,10 +87,11 @@ export function Navegacion() {
 
   return (
     <div
-      className={
-        "nav-navegacion  border-none " +
-        (isCompressed ? " compressedNavegacion" : "")
-      }
+      className={`
+        nav-navegacion  border-none ${navegacionAnchura ? "mx-3" : ""} ${
+          isCompressed ? "compressedNavegacion" : ""
+        }
+      `}
     >
       <nav
         aria-label="breadcrumb"
@@ -259,7 +260,7 @@ export function Navegacion() {
           )}
 
           {/* 3. Pedidos Delivery (NUEVO - Solo visible para delivery y administradores) */}
-          {["delivery", "administrador"].includes(
+          {["delivery", "conductor", "administrador"].includes(
             rol?.empleado?.cargo?.nombre,
           ) && (
             <button
