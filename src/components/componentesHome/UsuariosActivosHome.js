@@ -3,8 +3,8 @@ import { GetAsistencia } from "../../service/GetAsistencia";
 import { useNavigate } from "react-router-dom"; // Importa useNavigate
 
 import { capitalizeFirstLetter } from "../../hooks/FirstLetterUp";
-import { UserRound } from "lucide-react";
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
+import { UserRound } from "lucide-react";
 
 export function UsuariosActivosHome() {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -25,10 +25,13 @@ export function UsuariosActivosHome() {
 
   return (
     <CondicionCarga isLoading={isLoadingUsuarios} isError={isErrorUsuarios}>
-      <div className="h-100 p-0">
-        <div className="mb-3 d-flex gap-2 align-middle justify-content-left p-3 border-bottom card-header bg-light">
-          <span className="p-2 mb-0 rounded-circle bg-danger bg-opacity-10" style={{ color: "#ea4848" }}>
-            <UserRound size={25} />
+      <div className="card h-100 p-0 overflow-auto">
+        <div className="card-header d-flex m-0 align-middle justify-content-left p-3 border-bottom">
+          <span
+            className="p-2 mb-0 rounded-circle bg-opacity-10 text-white"
+            style={{ background: "var(--fw-strawberry)" }}
+          >
+            <UserRound />
           </span>
           <h6 className="mb-1 d-flex flex-column gap-1">
             <span className="fw-bold text-dark">Usuarios activos</span>
@@ -48,7 +51,7 @@ export function UsuariosActivosHome() {
                     key={usuario.id}
                     className="list-group-item d-flex align-items-center"
                     style={{
-                      textAlign: "left", // Asegura que el contenido esté alineado a la izquierda
+                      textAlign: "left",
                       padding: "10px",
                       border: "none",
                     }}
@@ -61,16 +64,16 @@ export function UsuariosActivosHome() {
                         height: "50px",
                         borderRadius: "50%",
                         border: "2px solid silver",
-                        marginRight: "15px", // Espacio entre la imagen y el texto
+                        marginRight: "15px",
                       }}
                     />
                     <div style={{ flex: 1 }}>
                       <p className="fw-bold mb-0 text-dark">
                         {capitalizeFirstLetter(
-                          usuario?.empleado?.nombre.toLowerCase()
+                          usuario?.empleado?.nombre.toLowerCase(),
                         )}{" "}
                         {capitalizeFirstLetter(
-                          usuario?.empleado?.apellidos.toLowerCase()
+                          usuario?.empleado?.apellidos.toLowerCase(),
                         )}
                       </p>
                     </div>

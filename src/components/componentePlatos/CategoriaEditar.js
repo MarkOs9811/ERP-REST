@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axiosInstance from "../../api/AxiosInstance";
 import ToastAlert from "../componenteToast/ToastAlert";
+import { X } from "lucide-react";
 
 export function CategoriaEditar({
   handleCloseModal,
@@ -27,7 +28,7 @@ export function CategoriaEditar({
       // Enviar los datos como JSON
       const response = await axiosInstance.put(
         `/gestionPlatos/updateCategoria/${dataCategoria.id}`,
-        dataForm
+        dataForm,
       );
 
       if (response.data.success) {
@@ -65,7 +66,7 @@ export function CategoriaEditar({
           className="btn-cerrar-modal btn-cerrar me-2"
           onClick={handleCloseModal}
         >
-          <i className="fas fa-times"></i> Cerrar
+          <X /> Cerrar
         </button>
         <button type="submit" className="btn-guardar">
           <i className="fas fa-save"></i> Guardar Cambios

@@ -1,13 +1,48 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Bar } from "react-chartjs-2"; // Cambia Line por Bar
+import { Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
 import { getVentas } from "../service/ObtenerVentasDetalle";
 import { Cargando } from "../components/componentesReutilizables/Cargando";
 import { CalendarDays } from "lucide-react";
 
+// Registrar módulos necesarios para ChartJS
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+);
+
 const GraficoBarEjemplo = () => {
   const chartRef = useRef(null);
-  const [smooth, setSmooth] = useState(false);
+
+  // 1. Detección de Modo Oscuro para adaptar el gráfico
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    const checkDarkMode = () => {
+      setIsDarkMode(document.body.classList.contains("dark-theme"));
+    };
+    checkDarkMode();
+
+    const observer = new MutationObserver(checkDarkMode);
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+    return () => observer.disconnect();
+  }, []);
 
   const {
     data: ventas,
@@ -18,14 +53,12 @@ const GraficoBarEjemplo = () => {
     queryFn: getVentas,
   });
 
-  // Función para obtener la cantidad de días en un mes específico
-  const getDiasDelMes = (año, mes) => {
-    return new Date(año, mes + 1, 0).getDate();
-  };
+  // --- LÓGICA DE PROCESAMIENTO (Optimizada con useMemo) ---
+  const ventasProcesadas = useMemo(() => {
+    if (!ventas || !Array.isArray(ventas)) return null;
 
-  let ventasProcesadas = null;
+    const getDiasDelMes = (año, mes) => new Date(año, mes + 1, 0).getDate();
 
-  if (ventas) {
     const hoy = new Date();
     const mesActual = hoy.getMonth();
     const añoActual = hoy.getFullYear();
@@ -38,77 +71,164 @@ const GraficoBarEjemplo = () => {
     const ventasPorMes = {
       actual: Array(diasMesActual).fill(0),
       pasado: Array(diasMesPasado).fill(0),
+      maxDias: Math.max(diasMesActual, diasMesPasado),
     };
 
     ventas.forEach((venta) => {
+      if (!venta.fechaVenta && !venta.created_at) return;
+
       const fechaStr = venta.fechaVenta || venta.created_at;
-      // Extrae año, mes y día del string ISO
       const [anio, mes, dia] = fechaStr.split("T")[0].split("-").map(Number);
 
-      // Mes en JS es base 0, pero aquí el string es base 1, así que comparamos directo
+      // Mes Actual
       if (anio === añoActual && mes === mesActual + 1) {
         if (dia >= 1 && dia <= diasMesActual) {
-          ventasPorMes.actual[dia - 1] += Number(venta.total);
+          ventasPorMes.actual[dia - 1] += Number(venta.total || 0);
         }
-      } else if (anio === añoPasado && mes === mesPasado + 1) {
+      }
+      // Mes Pasado
+      else if (anio === añoPasado && mes === mesPasado + 1) {
         if (dia >= 1 && dia <= diasMesPasado) {
-          ventasPorMes.pasado[dia - 1] += Number(venta.total);
+          ventasPorMes.pasado[dia - 1] += Number(venta.total || 0);
         }
       }
     });
 
-    ventasProcesadas = ventasPorMes;
-  }
+    // Redondear a 2 decimales para evitar números largos en el tooltip
+    ventasPorMes.actual = ventasPorMes.actual.map((v) =>
+      parseFloat(v.toFixed(2)),
+    );
+    ventasPorMes.pasado = ventasPorMes.pasado.map((v) =>
+      parseFloat(v.toFixed(2)),
+    );
+
+    return ventasPorMes;
+  }, [ventas]);
 
   if (isLoading) return <Cargando />;
-  if (isError) return <p>Error al cargar datos. Intente nuevamente.</p>;
-  if (!ventasProcesadas) return <p>No hay datos disponibles.</p>;
+  if (isError) return <p className="text-danger p-3">Error al cargar datos.</p>;
+  if (!ventasProcesadas)
+    return <p className="text-muted p-3">No hay datos disponibles.</p>;
 
-  const maxDias = Math.max(
-    ventasProcesadas.actual.length,
-    ventasProcesadas.pasado.length
-  );
-
+  // --- CONFIGURACIÓN DEL GRÁFICO (Fire Wok Palette) ---
   const datosGrafico = {
-    labels: Array.from({ length: maxDias }, (_, i) => i + 1),
+    labels: Array.from({ length: ventasProcesadas.maxDias }, (_, i) => i + 1),
     datasets: [
       {
-        label: "Ventas Mes Actual S/.",
+        label: "Mes Actual (S/)",
         data: ventasProcesadas.actual,
-        backgroundColor: "rgba(54, 162, 235, 0.7)",
+        // Emerald
+        backgroundColor: isDarkMode
+          ? "rgba(23, 198, 104, 0.7)"
+          : "rgba(23, 198, 104, 0.5)",
+        borderColor: "#17C668",
+        borderWidth: 1,
+        borderRadius: 4,
+        hoverBackgroundColor: "#17C668",
       },
       {
-        label: "Ventas Mes Pasado",
+        label: "Mes Pasado (S/)",
         data: ventasProcesadas.pasado,
-        backgroundColor: "rgba(255, 99, 132, 0.7)",
+        // Deep Saffron (con un poco más de transparencia para que sea secundario)
+        backgroundColor: isDarkMode
+          ? "rgba(255, 153, 44, 0.4)"
+          : "rgba(255, 153, 44, 0.3)",
+        borderColor: "#FF992C",
+        borderWidth: 1,
+        borderRadius: 4,
+        hoverBackgroundColor: "#FF992C",
       },
     ],
   };
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
-      title: {
-        display: false,
-        text: "Ventas Mensuales",
+      legend: {
+        position: "top",
+        labels: {
+          color: isDarkMode ? "#9CA3AF" : "#6B7280",
+          font: { family: "'Inter', sans-serif", weight: "500" },
+        },
+      },
+      tooltip: {
+        backgroundColor: isDarkMode ? "#111213" : "#FFFFFF",
+        titleColor: isDarkMode ? "#FFFFFF" : "#111213",
+        bodyColor: isDarkMode ? "#E5E7EB" : "#4B5563",
+        borderColor: isDarkMode ? "#313A46" : "#E5E7EB",
+        borderWidth: 1,
+        padding: 10,
+        cornerRadius: 8,
+      },
+    },
+    scales: {
+      x: {
+        grid: { display: false },
+        ticks: {
+          color: isDarkMode ? "#9CA3AF" : "#6B7280",
+          font: { family: "'Inter', sans-serif" },
+        },
+      },
+      y: {
+        beginAtZero: true,
+        grid: {
+          color: isDarkMode
+            ? "rgba(255, 255, 255, 0.05)"
+            : "rgba(0, 0, 0, 0.05)",
+          drawBorder: false,
+        },
+        ticks: {
+          color: isDarkMode ? "#9CA3AF" : "#6B7280",
+          font: { family: "'Inter', sans-serif" },
+          callback: function (value) {
+            return `S/ ${value}`;
+          },
+        },
       },
     },
   };
 
   return (
-    <div style={{ width: "100%", maxWidth: "800px", margin: "0 auto" }}>
-      <div className="mb-3 d-flex gap-2 align-middle justify-content-left">
-        <span className="alert border-0 alert-danger text-danger p-2 mb-0">
-          <CalendarDays size={25} className="text-auto" />
+    <div className="d-flex flex-column h-100">
+      {/* Cabecera Limpia (Estilo Fire Wok) */}
+      <div className="mb-4 d-flex gap-3 align-items-center">
+        <span
+          className="rounded-circle p-2 d-flex justify-content-center align-items-center"
+          style={{
+            backgroundColor: "var(--bg-emerald-soft)",
+            color: "var(--fw-emerald)",
+            minWidth: "48px",
+            minHeight: "48px",
+          }}
+        >
+          <CalendarDays size={24} />
         </span>
-        <h6 className="mb-1 d-flex flex-column gap-1">
-          <span className="fw-bold">Ventas del mes</span>
-          <p className="text-muted small mb-0">
-            ventas del mes actual y del anterior
-          </p>
-        </h6>
+
+        <div className="d-flex flex-column flex-grow-1">
+          <span
+            className="fw-bold"
+            style={{ color: "var(--text-main)", fontSize: "1.1rem" }}
+          >
+            Tendencia Mensual
+          </span>
+          <span style={{ color: "var(--text-muted)", fontSize: "0.85rem" }}>
+            Comparativa diaria: Mes actual vs. Mes anterior
+          </span>
+        </div>
       </div>
-      <Bar ref={chartRef} data={datosGrafico} options={options} />
+
+      {/* Contenedor del Gráfico */}
+      <div
+        style={{
+          position: "relative",
+          minHeight: "300px",
+          width: "100%",
+          flexGrow: 1,
+        }}
+      >
+        <Bar ref={chartRef} data={datosGrafico} options={options} />
+      </div>
     </div>
   );
 };

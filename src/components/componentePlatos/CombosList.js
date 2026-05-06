@@ -31,6 +31,7 @@ export function CombosList() {
 
   const [modalEditCombo, setModalEditCombo] = useState(false);
   const [dataCombo, setDataCombo] = useState(false);
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
 
   const {
     data: platosList = [],
@@ -124,7 +125,7 @@ export function CombosList() {
   if (isErrorOpen) return <p>Error: {error.message}</p>;
 
   return (
-    <div className="card shadow-sm h-100">
+    <div className="card  h-100">
       <div className="card-header border-bottom d-flex justify-content-between align-items-center mb-2">
         <h5 className="mb-0">Combos</h5>
         <div className="d-flex align-items-center gap-2">
@@ -142,7 +143,7 @@ export function CombosList() {
           </div>
           <div className="d-flex align-items-center ">
             <button
-              className=" btn btn-outline-dark btn-sm rounded-pill "
+              className=" btn btn-dark btn-sm rounded-pill "
               onClick={() => {
                 setIsModalOpen(true);
                 refetchSunat();
@@ -167,20 +168,10 @@ export function CombosList() {
         ) : filteredCombos.length === 0 ? (
           <p>No se encontraron combos.</p>
         ) : (
-          <div className="row">
+          <div className="row d-flex">
             {visibleCombos.map((combo) => (
               <div className="col-md-3 mb-3" key={combo.id}>
-                <div
-                  className="card h-100 shadow-sm border position-relative"
-                  style={{
-                    backgroundImage: `url("/utilitarios/comboFondo.jpg")`,
-                    backgroundSize: "50%",
-                    backgroundPosition: "bottom left",
-                    backgroundRepeat: "no-repeat",
-                    borderRadius: "12px",
-                    overflow: "visible", // aseguramos que no haya recortes
-                  }}
-                >
+                <div className="card h-100 p-0 m-0 border position-relative overflow-hidden">
                   {/* Overlay bloqueado si combo está inactivo */}
                   {combo.estado == 0 && (
                     <div
@@ -209,16 +200,18 @@ export function CombosList() {
                       </button>
                     </div>
                   )}
-
-                  <div className="card-body position-relative d-flex">
-                    <div>
-                      <p className="card-title h6 fw-bold">
-                        {capitalizeFirstLetter(combo.nombre)}
-                      </p>
-                      <small className="card-text">{combo.descripcion}</small>
-                    </div>
-
-                    <div className="dropdown position-relative ">
+                  <div className="card-header m-0 p-0">
+                    <img
+                      src={
+                        combo.foto
+                          ? `${BASE_URL}/storage/${combo.foto}`
+                          : "/images/img-default.jpg"
+                      }
+                      alt="Foto del Plato"
+                      width={"100%"}
+                      height={"auto"}
+                    />
+                    <div className="dropdown position-absolute top-0  left-100">
                       <button
                         className="btn p-0 m-0"
                         type="button"
@@ -260,17 +253,22 @@ export function CombosList() {
                       </ul>
                     </div>
                   </div>
+                  <div className="card-body position-relative d-flex p-3">
+                    <div>
+                      <p className="card-title h6 fw-bold">
+                        {capitalizeFirstLetter(combo.nombre)}
+                      </p>
+                      <small className="card-text">{combo.descripcion}</small>
+                    </div>
+                  </div>
 
                   <div
                     className="card-footer d-flex justify-content-between align-items-center flex-column position-relative"
                     style={{ zIndex: 2, backgroundColor: "rgba(0, 0, 0, 0.1)" }}
                   >
-                    <span className="badge badge-ok mb-2">
+                    <span className="badge badge-ok mb-2 fs-5">
                       S/ {combo.precio}
                     </span>
-                    <button className="btn btn-outline-dark btn-sm ms-auto">
-                      Ver más
-                    </button>
                   </div>
                 </div>
               </div>

@@ -8,13 +8,15 @@ import { getVentas } from "../service/ObtenerVentasDetalle";
 import { UsuariosActivosHome } from "../components/componentesHome/UsuariosActivosHome";
 import { PlatoMasVendido } from "../components/componentesHome/PlatosMasVendidos";
 import { VentasTipo } from "../components/componentesHome/VentasTipo";
-import { Flame, PieChart, TrendingUp } from "lucide-react";
+
+// Nota: Quité las importaciones de "lucide-react" porque no se estaban utilizando en este archivo.
+// Esto ayuda a mantener el código limpio.
 
 export function Home() {
   const {
     data: ventasList = [],
-    onLoading: loadingVentas,
-    onError: errorVentas,
+    isLoading: loadingVentas, // Corregido: en React Query suele ser isLoading
+    isError: errorVentas, // Corregido: en React Query suele ser isError
   } = useQuery({
     queryKey: ["ventas"],
     queryFn: getVentas,
@@ -23,97 +25,57 @@ export function Home() {
   });
 
   return (
-    <div className="dashboard-container">
+    /* Cambiamos a container-fluid si prefieres que el dashboard ocupe todo el ancho, 
+       o déjalo en 'container' si prefieres márgenes laterales fijos. El 'py-4' da un respiro visual. */
+    <div className="container-fluid py-4">
       {/* Header */}
-      <div className="dashboard-header">
-        <h1>Dashboard</h1>
-        <p>Resumen general de tu negocio</p>
+      <div className="row mb-4">
+        <div className="col-12">
+          <h1 className="texto-principal fw-bold mb-1">Dashboard</h1>
+          <p className="text-muted">Resumen general de tu negocio</p>
+        </div>
       </div>
 
-      {/* Métricas Rápidas */}
-      <div className="dashboard-grid">
-        <InformacionRapidaHome />
-      </div>
-
-      {/* Grid Principal */}
-      <div className="dashboard-grid grid-2col">
-        {/* Gráfico Principal - Toma 2 columnas en desktop */}
-        <div style={{ gridColumn: "span 2" }} className="dashboard-card">
-          <div className="card-header-modern">
-            <div className="card-header-icon">
-              <TrendingUp size={20} color="#5a5a5a" />
-            </div>
-            <div className="card-header-title">
-              <h3>Tendencias</h3>
-              <p>Análisis de comportamiento</p>
-            </div>
-          </div>
-          <div className="card-body-modern">
-            <GraficoIAhome />
-          </div>
+      {/* 
+        Usamos una sola fila (row) principal con 'g-4' (gap) para que todos los elementos 
+        tengan la misma separación exacta de forma automática, sin necesidad de anidar más rows.
+      */}
+      <div className="row g-4">
+        {/* Métricas Rápidas: Ocupan el 100% del ancho siempre */}
+        <div className="col-12">
+          <InformacionRapidaHome />
         </div>
 
-        {/* Resumen de Ventas */}
-        <div className="dashboard-card">
-          <div className="card-body-modern">
-            <CabeceraHome
-              ventasList={ventasList}
-              load={loadingVentas}
-              errorLoad={errorVentas}
-            />
-          </div>
+        {/* 
+          Usuarios Activos y Platos Top: 
+          - Móvil: 100% del ancho (col-12)
+          - Escritorio: 50% del ancho cada uno (col-lg-6)
+        */}
+        <div className="col-12 col-lg-6">
+          <UsuariosActivosHome />
+        </div>
+        <div className="col-12 col-lg-6">
+          <PlatoMasVendido />
         </div>
 
-        {/* Usuarios Activos */}
-        <div className="dashboard-card">
-          <div className="card-header-modern">
-            <div className="card-header-icon">
-              <Flame size={20} color="#5a5a5a" />
-            </div>
-            <div className="card-header-title">
-              <h3>Actividad</h3>
-              <p>Usuarios conectados</p>
-            </div>
-          </div>
-          <div className="card-body-modern">
-            <UsuariosActivosHome />
-          </div>
+        <div className="col-12 col-lg-4">
+          <VentasTipo
+            ventasList={ventasList}
+            load={loadingVentas}
+            errorLoad={errorVentas}
+          />
+        </div>
+        <div className="col-12 col-lg-8">
+          <CabeceraHome
+            ventasList={ventasList}
+            load={loadingVentas}
+            errorLoad={errorVentas}
+          />
         </div>
 
-        {/* Platos Top */}
-        <div className="dashboard-card">
-          <div className="card-header-modern">
-            <div className="card-header-icon">
-              <Flame size={20} color="#5a5a5a" />
-            </div>
-            <div className="card-header-title">
-              <h3>Platos Top</h3>
-              <p>Más vendidos</p>
-            </div>
-          </div>
-          <div className="card-body-modern">
-            <PlatoMasVendido />
-          </div>
-        </div>
-
-        {/* Tipo de Ventas */}
-        <div className="dashboard-card">
-          <div className="card-header-modern">
-            <div className="card-header-icon">
-              <PieChart size={20} color="#5a5a5a" />
-            </div>
-            <div className="card-header-title">
-              <h3>Métodos de Venta</h3>
-              <p>Distribución</p>
-            </div>
-          </div>
-          <div className="card-body-modern">
-            <VentasTipo
-              ventasList={ventasList}
-              load={loadingVentas}
-              errorLoad={errorVentas}
-            />
-          </div>
+        {/* Gráfico IA: Ancho completo al final para destacar la información predictiva */}
+        <div className="col-12">
+          <GraficoIAhome />
         </div>
       </div>
     </div>

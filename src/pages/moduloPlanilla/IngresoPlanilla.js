@@ -10,10 +10,8 @@ import {
   FileText,
   Briefcase,
   Clock,
-  DollarSign,
   Upload,
   UserCircle,
-  FileDown,
   Save,
 } from "lucide-react"; // 1. Importamos los iconos
 
@@ -142,7 +140,15 @@ export function IngresoPlanilla() {
         reset();
         setPreview(null); // Limpiar la vista previa de la imagen
         setLoading(false);
-        ToastAlert("success", "Registro de Trabajador correcto");
+
+        // Actualizamos el mensaje para confirmar ambas acciones
+        ToastAlert("success", "Trabajador registrado y contrato generado");
+
+        // === NUEVA LÓGICA: ABRIR EL PDF ===
+        // Si la respuesta incluye la URL del PDF, lo abrimos en una nueva pestaña
+        if (response.data.pdf_url) {
+          window.open(response.data.pdf_url, "_blank");
+        }
       } else {
         setLoading(false);
         ToastAlert("error", response.data.message);
@@ -183,20 +189,19 @@ export function IngresoPlanilla() {
     const file = e.target.files[0];
     if (file) {
       setPreview(URL.createObjectURL(file));
-      setValue("fotoPerfil", file, { shouldValidate: true }); // ✅ Registra el archivo en RHF
-      setError("fotoPerfil", null); // Limpia el error si existía
+      setValue("fotoPerfil", file, { shouldValidate: true });
+      setError("fotoPerfil", null);
     }
   };
 
-  // --- TU JSX (REDISEÑADO) ---
   return (
     <div>
       <div className="col-md-12">
-        <div className="card shadow-sm border-0 p-3">
+        <div className="card">
           <div className="card-header p-3">
             <h4>Datos del empleado</h4>
           </div>
-          <div className="card-body">
+          <div className="card-body px-4 m-0">
             <form
               onSubmit={handleSubmit(onSubmit)}
               encType="multipart/form-data"
@@ -673,7 +678,7 @@ export function IngresoPlanilla() {
                     <div className="row">
                       <div className="col-6">
                         <label className="form-label small fw-semi-bold text-muted">
-                          <DollarSign size={16} className="me-1" /> Salario base
+                          S/. Salario base
                         </label>
                         <input
                           className="form-control"
@@ -684,8 +689,7 @@ export function IngresoPlanilla() {
                       </div>
                       <div className="col-6">
                         <label className="form-label small fw-semi-bold text-muted">
-                          <DollarSign size={16} className="me-1" /> Pago por
-                          Hora
+                          S/. Pago por Hora
                         </label>
                         <input
                           className="form-control"
@@ -694,15 +698,6 @@ export function IngresoPlanilla() {
                           readOnly
                         />
                       </div>
-                    </div>
-
-                    <div>
-                      <button
-                        type="button"
-                        className="btn btn-outline-dark mt-3 ms-auto"
-                      >
-                        <FileDown size={18} className="me-2" /> Generar Contrato
-                      </button>
                     </div>
                   </div>
 
@@ -731,7 +726,7 @@ export function IngresoPlanilla() {
                                   onChange={(e) => {
                                     const checkboxes =
                                       document.querySelectorAll(
-                                        'input.form-check-input[type="checkbox"][data-group="deducciones"]'
+                                        'input.form-check-input[type="checkbox"][data-group="deducciones"]',
                                       );
                                     if (!isEssalud) {
                                       checkboxes.forEach((cb) => {
@@ -787,16 +782,15 @@ export function IngresoPlanilla() {
                   </div>
                 </div>
 
-                {/* === BOTÓN DE ENVÍO FINAL === */}
-                <div className="col-md-12 d-flex mt-4">
+                {/* === BOTONES DE ACCIÓN FINAL === */}
+                <div className="col-md-12 d-flex justify-content-end align-items-center gap-3 mt-4">
                   <BotonMotionGeneral
-                    type="submit" // ¡Importante! Debe ser type="submit"
-                    text="Registrar Empleado"
+                    type="submit"
+                    text="Registrar y Generar contrato"
                     loading={loading}
                     icon={<Save size={18} />}
-                    classDefault=" text-center align-items-center gap-1 p-2 w-auto rounded-3 border shadow-sm ms-auto"
-                    // Tu componente BotonAnimado se llama ahora BotonMotionGeneral
-                    // 'error' no es un prop estándar de BotonMotionGeneral
+                    // Quité el "ms-auto" de aquí para que no empuje a los demás elementos
+                    classDefault="d-flex text-center align-items-center gap-1 p-2 w-auto rounded-3 border shadow-sm"
                   />
                 </div>
               </div>

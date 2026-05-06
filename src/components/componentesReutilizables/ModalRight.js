@@ -25,8 +25,15 @@ const ModalRight = ({
     if (isOpen) {
       setShouldRender(true);
       setIsClosing(false);
+    } else if (shouldRender) {
+      // Si isOpen es false pero el modal sigue renderizado, iniciamos el cierre
+      setIsClosing(true);
+      const timer = setTimeout(() => {
+        setShouldRender(false);
+      }, 300);
+      return () => clearTimeout(timer);
     }
-  }, [isOpen]);
+  }, [isOpen, shouldRender]); // Agregamos shouldRender a las dependencias
 
   const handleClose = () => {
     setIsClosing(true);
@@ -104,7 +111,7 @@ const ModalRight = ({
         )}
       </div>
     </div>,
-    document.body
+    document.body,
   );
 };
 

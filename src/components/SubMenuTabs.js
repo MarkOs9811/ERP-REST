@@ -222,8 +222,6 @@ export function SubMenuTabs() {
     >
       <ul className="nav nav-tabs border-0 " style={{ gap: "4px" }}>
         {tabs.map((tab, idx) => {
-          // Ajuste fino para la ruta base ("/" de cada módulo)
-          // Se considera activo si el currentPath corresponde exactamente, o si es la base
           const isActive =
             currentPath === tab.path ||
             (`${currentPath}/` === `${tab.path}/` &&

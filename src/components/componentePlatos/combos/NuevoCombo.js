@@ -87,7 +87,7 @@ export function NuevoCombo({ onClose, onSuccess, estadoOpenAi }) {
     if (
       valor &&
       !selectedItems.some((item) =>
-        typeof item === "string" ? item === valor : item.nombre === valor
+        typeof item === "string" ? item === valor : item.nombre === valor,
       )
     ) {
       setSelectedItems((prev) => [...prev, valor]); // Guarda el string directamente
@@ -100,8 +100,8 @@ export function NuevoCombo({ onClose, onSuccess, estadoOpenAi }) {
       prev.filter((item) =>
         typeof item === "string"
           ? item !== itemToRemove
-          : item.nombre !== itemToRemove.nombre
-      )
+          : item.nombre !== itemToRemove.nombre,
+      ),
     );
   };
 
@@ -322,7 +322,11 @@ export function NuevoCombo({ onClose, onSuccess, estadoOpenAi }) {
 
       {/* Botón de envío */}
       <div className="text-end d-flex gap-3">
-        <button type="submit" className="btn-cerrar-modal">
+        <button
+          type="button"
+          className="btn-cerrar-modal"
+          onClick={() => onClose()}
+        >
           Cerrar
         </button>
         <button type="submit" className="btn-guardar">

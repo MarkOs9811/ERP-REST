@@ -46,10 +46,13 @@ export function VentasTipo({ load, error, ventasList }) {
 
   return (
     <CondicionCarga isLoading={load} isError={error}>
-      <div className="d-flex flex-column gap-3">
+      <div className="d-flex flex-column gap-4 h-100">
         {/* Pedidos Web */}
-        <div className="d-flex align-items-center p-3 rounded-3 bg-light border border-light">
-          <div className="p-2 bg-primary bg-opacity-10 text-primary rounded-circle me-3 d-flex align-items-center justify-content-center" style={{ width: "48px", height: "48px" }}>
+        <div className="border d-flex align-items-center p-3 rounded-3 bg-light border ">
+          <div
+            className="p-2 bg-white text-dark rounded-circle me-3 d-flex align-items-center justify-content-center"
+            style={{ width: "48px", height: "48px" }}
+          >
             <Globe size={24} />
           </div>
           <div className="flex-grow-1">
@@ -60,8 +63,11 @@ export function VentasTipo({ load, error, ventasList }) {
         </div>
 
         {/* Pedidos Llevar */}
-        <div className="d-flex align-items-center p-3 rounded-3 bg-light border border-light">
-          <div className="p-2 bg-warning bg-opacity-10 text-warning rounded-circle me-3 d-flex align-items-center justify-content-center" style={{ width: "48px", height: "48px" }}>
+        <div className="border d-flex align-items-center p-3 rounded-3 bg-light border ">
+          <div
+            className="p-2 bg-white text-dark rounded-circle me-3 d-flex align-items-center justify-content-center"
+            style={{ width: "48px", height: "48px" }}
+          >
             <ShoppingBag size={24} />
           </div>
           <div className="flex-grow-1">
@@ -72,8 +78,11 @@ export function VentasTipo({ load, error, ventasList }) {
         </div>
 
         {/* Pedidos Mesa */}
-        <div className="d-flex align-items-center p-3 rounded-3 bg-light border border-light">
-          <div className="p-2 bg-success bg-opacity-10 text-success rounded-circle me-3 d-flex align-items-center justify-content-center" style={{ width: "48px", height: "48px" }}>
+        <div className="border d-flex align-items-center p-3 rounded-3 bg-light border ">
+          <div
+            className="p-2 bg-white text-dark rounded-circle me-3 d-flex align-items-center justify-content-center"
+            style={{ width: "48px", height: "48px" }}
+          >
             <Utensils size={24} />
           </div>
           <div className="flex-grow-1">

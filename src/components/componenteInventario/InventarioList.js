@@ -173,7 +173,7 @@ export function InventarioList({ search }) {
                 />
 
                 <button
-                  className=" btn-desactivar ms-2"
+                  className=" btn-desactivar"
                   onClick={() => {
                     setQuestionEliminar(true);
                     setdataProducto(row);
@@ -185,7 +185,7 @@ export function InventarioList({ search }) {
               </>
             ) : (
               <button
-                className="btn btn-outline-success"
+                className="btn btn-activar"
                 title="Activar el producto"
                 onClick={() => {
                   setQuestionActivar(true);

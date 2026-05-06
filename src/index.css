@@ -1,15 +1,42 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
 
 :root {
-  /* 2026 Modern Liquid/Glassmorphism Aesthetic */
-  --brand-primary: #161616;
-  --brand-secondary: #444444; /* Removed any blue presence */
-  --bg-main: #f0f1f3;
-  --bg-sidebar-header: #f0f1f3;
-  --bg-card: #ffffff;
-  --text-main: #000000;
-  --text-muted: #000000;
+  /* =========================================
+     🔥 PALETA BASE FIRE WOK
+     ========================================= */
+  --fw-onyx: #111213;
+  --fw-emerald: #17C668;
+  --fw-saffron: #FF992C;
+  --fw-strawberry: #E44949;
+  --fw-white: #FFFFFF;
 
+  /* =========================================
+     🎨 FONDOS SUAVES (Para auras y badges)
+     ========================================= */
+  --bg-emerald-soft: #E8F9F0;
+  --bg-saffron-soft: #FFF5E9;
+  --bg-strawberry-soft: #FCECEC;
+
+  /* =========================================
+     ☀️ MODO CLARO (Light Theme - Estructura)
+     ========================================= */
+  /* Tu Onyx es tan elegante que funciona como color primario de marca */
+  --brand-primary: var(--fw-onyx);
+  --brand-secondary: #4B5563;
+
+  --bg-main: #F3F4F6;
+  /* Gris ultra claro para descansar la vista */
+  --bg-sidebar-header: var(--fw-white);
+  /* Limpieza total */
+  --bg-card: var(--fw-white);
+  /* Tarjetas puras */
+
+  --text-main: var(--fw-onyx);
+  /* Contraste perfecto para leer */
+  --text-muted: #6B7280;
+  /* Gris neutro para textos secundarios */
+
+  /* (Mantenemos intactos tus efectos y dimensiones) */
   --glass-bg: transparent;
   --glass-border: transparent;
   --glass-shadow: none;
@@ -28,18 +55,34 @@
 }
 
 body.dark-theme {
-  --brand-primary: #ff6b6b;
-  --brand-secondary: #ff9b9b; /* Removed any blue presence */
-  --bg-main: #2a2d31;
-  --bg-sidebar-header: #2a2d31;
-  --bg-card: #3a3f47;
-  --text-main: #ffffff;
-  --text-muted: #9ca3af;
+  /* =========================================
+     🌙 MODO OSCURO (Dark Theme - Estructura)
+     ========================================= */
+  /* El Deep Saffron (naranja) es el rey del modo oscuro por su contraste */
+  --brand-primary: var(--fw-saffron);
+  --brand-secondary: var(--fw-strawberry);
 
-  --glass-bg: transparent;
-  --glass-border: transparent;
-  --glass-shadow: none;
-  --glass-blur: blur(0px);
+  /* Usamos tu Onyx como el fondo maestro de la aplicación */
+  --bg-main: var(--fw-onyx);
+  --bg-sidebar-header: #1A1C1E;
+  /* Un tono levísimamente más claro que el Onyx */
+  --bg-card: #1E2022;
+  /* Gris profundo para elevar las tarjetas */
+
+  --text-main: #FBFCFF;
+  /* Tu blanco azulado original (perfecto para oscuros) */
+  --text-muted: #9CA3AF;
+
+  /* Transformamos los fondos suaves a RGBA para que se mezclen con el fondo oscuro */
+  --bg-emerald-soft: rgba(23, 198, 104, 0.15);
+  --bg-saffron-soft: rgba(255, 153, 44, 0.15);
+  --bg-strawberry-soft: rgba(228, 73, 73, 0.15);
+
+  /* Opcional: Le damos un ligero toque de Glassmorphism al modo oscuro */
+  --glass-bg: rgba(30, 32, 34, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.05);
+  --glass-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+  --glass-blur: blur(10px);
 }
 
 html {
@@ -62,11 +105,6 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
-}
-
-/* colores principales */
-.bg-success {
-  background-color: #10b981 !important;
 }
 
 /* ========== BOOTSTRAP DARK THEME GLOBAL OVERRIDES ========== */

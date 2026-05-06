@@ -6,7 +6,7 @@ const variantes = {
   warning: "badge-soft-warning",
   danger: "badge-soft-danger",
   info: "badge-soft-info",
-  primary: "badge-soft-info",
+  primary: "badge-soft-primary",
   secondary: "badge-soft-secondary",
 };
 
@@ -43,7 +43,7 @@ export const BadgeComponent = ({
 }) => {
   let claseColor = variantes.secondary;
 
-  // 1. Lógica para determinar el COLOR (Usa Mayúsculas para buscar en el mapa)
+  // 1. Lógica para determinar el COLOR
   if (variant && variantes[variant]) {
     claseColor = variantes[variant];
   } else if (label) {
@@ -56,7 +56,7 @@ export const BadgeComponent = ({
 
   if (!label) return null;
 
-  // 2. Lógica para el TEXTO VISIBLE (Primera Mayúscula, resto minúscula)
+  // 2. Lógica para el TEXTO VISIBLE (Primera Mayúscula)
   const textoOriginal = String(label);
   const textoFormateado =
     textoOriginal.charAt(0).toUpperCase() +
@@ -64,14 +64,15 @@ export const BadgeComponent = ({
 
   return (
     <span
-      className={`badge-custom ${claseColor} ${className} d-inline-flex align-items-center gap-2`}
+      className={`badge-custom ${claseColor} ${className} d-inline-flex align-items-center gap-1`}
     >
+      {/* Ícono dinámico */}
       {isValidElement(icon)
         ? cloneElement(icon, { size: 14, strokeWidth: 2.5 })
         : icon}
 
-      {/* Aquí mostramos el texto ya formateado (Ej: "Pagado") */}
-      <span style={{ position: "relative", top: "1px" }}>
+      {/* Texto centrado */}
+      <span style={{ position: "relative", top: "0.5px" }}>
         {textoFormateado}
       </span>
     </span>

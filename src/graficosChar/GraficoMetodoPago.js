@@ -1,16 +1,8 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getVentas } from "../service/ObtenerVentasDetalle";
 import { Cargando } from "../components/componentesReutilizables/Cargando";
 import { Crown, PieChart } from "lucide-react";
-
-// Función para calcular el color según el porcentaje
-function getBarColor(percent) {
-  if (percent >= 90) return "#2e7d32"; // verde fuerte
-  if (percent >= 70) return "#66bb6a"; // verde medio
-  if (percent >= 40) return "#a5d6a7"; // verde claro
-  return "#e0f2f1"; // muy claro
-}
 
 const GraficoMetodoPago = () => {
   const {
@@ -22,12 +14,14 @@ const GraficoMetodoPago = () => {
     queryFn: getVentas,
   });
 
-  // Procesar ventas por método de pago
-  function procesarMetodosPago(ventas) {
+  // Procesar ventas por método de pago (Optimizado con useMemo)
+  const metodos = useMemo(() => {
+    if (!listVentas.length) return [];
+
     const resumen = {};
     let total = 0;
 
-    ventas.forEach((venta) => {
+    listVentas.forEach((venta) => {
       const metodo = venta?.metodo_pago?.nombre || "Sin método";
       resumen[metodo] = (resumen[metodo] || 0) + 1;
       total += 1;
@@ -41,82 +35,130 @@ const GraficoMetodoPago = () => {
         percent: total ? Math.round((cantidad / total) * 100) : 0,
       }))
       .sort((a, b) => b.cantidad - a.cantidad);
-  }
+  }, [listVentas]);
 
   if (isLoading) return <Cargando />;
-  if (isError) return <p>Error al cargar datos</p>;
+  if (isError) return <p className="text-danger p-3">Error al cargar datos</p>;
 
-  const metodos = procesarMetodosPago(listVentas);
   const metodoTop = metodos[0];
 
   return (
-    <div className="p-2" style={{ maxWidth: 400 }}>
-      <div className="mb-3 d-flex gap-2 align-middle justify-content-left p-3">
-        <span className="alert border-0 alert-success text-success p-2 mb-0">
-          <PieChart size={25} />
-        </span>
-        <h6 className="mb-1 d-flex flex-column gap-1">
-          <span className="fw-bold">Métodos de Pago</span>
-          <p className="text-muted small mb-0">Porcentaje de uso en ventas</p>
-        </h6>
-      </div>
-      {metodos.map(({ metodo, cantidad, percent }) => (
-        <div
-          key={metodo}
-          className="d-flex align-items-center mb-2"
-          style={{ fontSize: "1rem" }}
+    <div className="d-flex flex-column h-100">
+      {/* Cabecera Limpia (Estilo Fire Wok) */}
+      <div className="mb-4 d-flex gap-3 align-items-center">
+        <span
+          className="rounded-circle p-2 d-flex justify-content-center align-items-center"
+          style={{
+            backgroundColor: "var(--bg-emerald-soft)",
+            color: "var(--fw-emerald)",
+            minWidth: "48px",
+            minHeight: "48px",
+          }}
         >
-          <div style={{ width: 120, textAlign: "right", marginRight: 8 }}>
-            {metodo}
-          </div>
-          <div
-            style={{
-              flex: 1,
-              background: "#f5f5f5",
-              borderRadius: 20,
-              height: 28,
-              position: "relative",
-              overflow: "hidden",
-              marginRight: 8,
-            }}
+          <PieChart size={24} />
+        </span>
+
+        <div className="d-flex flex-column flex-grow-1">
+          <span
+            className="fw-bold"
+            style={{ color: "var(--text-main)", fontSize: "1.1rem" }}
           >
+            Métodos de Pago
+          </span>
+          <span style={{ color: "var(--text-muted)", fontSize: "0.85rem" }}>
+            Porcentaje de uso en ventas
+          </span>
+        </div>
+      </div>
+
+      {/* Lista de Barras */}
+      <div className="flex-grow-1">
+        {metodos.map(({ metodo, cantidad, percent }) => (
+          <div
+            key={metodo}
+            className="d-flex align-items-center mb-3"
+            style={{ fontSize: "0.95rem" }}
+          >
+            {/* Nombre del método */}
             <div
               style={{
-                width: `${percent}%`,
-                background: getBarColor(percent),
-                height: "100%",
-                borderRadius: 20,
-                transition: "width 0.5s",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "flex-end",
-                paddingRight: 10,
-                fontWeight: "bold",
-                color: "#fff",
-                fontSize: "1rem",
+                width: 80,
+                textAlign: "right",
+                marginRight: 12,
+                color: "var(--text-main)",
+                fontWeight: "500",
               }}
             >
-              {cantidad}
+              {metodo}
+            </div>
+
+            {/* Contenedor de la barra (Fondo dinámico claro/oscuro) */}
+            <div
+              style={{
+                flex: 1,
+                backgroundColor: "var(--bg-main)", // En modo oscuro se pone oscuro automáticamente
+                borderRadius: 20,
+                height: 28,
+                position: "relative",
+                overflow: "hidden",
+                marginRight: 12,
+              }}
+            >
+              {/* Relleno de la barra (Emerald) */}
+              <div
+                style={{
+                  width: `${percent}%`,
+                  backgroundColor: "var(--fw-emerald)",
+                  height: "100%",
+                  borderRadius: 20,
+                  transition: "width 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "flex-end",
+                  paddingRight: 10,
+                  fontWeight: "bold",
+                  color: "#FFFFFF",
+                  fontSize: "0.85rem",
+                }}
+              >
+                {cantidad > 0 ? cantidad : ""}
+              </div>
+            </div>
+
+            {/* Porcentaje numérico */}
+            <div
+              style={{
+                width: 45,
+                textAlign: "left",
+                fontWeight: "bold",
+                color: "var(--text-main)", // Antes era verde fijo, ahora es neutro y elegante
+              }}
+            >
+              {percent}%
             </div>
           </div>
-          <div
-            style={{
-              width: 40,
-              textAlign: "left",
-              fontWeight: "bold",
-              color: "#2e7d32",
-            }}
-          >
-            {percent}%
-          </div>
-        </div>
-      ))}
-      <div className="text-left mt-4 p-3">
-        <span className="text-muted small">
-          <Crown className="mb-1" /> Método más usado:{" "}
-          <span className="fw-bold text-success">{metodoTop?.metodo}</span>
-        </span>
+        ))}
       </div>
+
+      {/* Footer del componente (El Método Top) */}
+      {metodoTop && (
+        <div
+          className="mt-auto pt-3 border-top"
+          style={{ borderColor: "var(--bg-main) !important" }}
+        >
+          <span
+            className="d-flex align-items-center gap-2"
+            style={{ color: "var(--text-muted)", fontSize: "0.9rem" }}
+          >
+            <Crown size={20} style={{ color: "var(--fw-saffron)" }} />{" "}
+            {/* Coronita Naranja Premium */}
+            Método más usado:{" "}
+            <span className="fw-bold" style={{ color: "var(--fw-emerald)" }}>
+              {metodoTop.metodo}
+            </span>
+          </span>
+        </div>
+      )}
     </div>
   );
 };

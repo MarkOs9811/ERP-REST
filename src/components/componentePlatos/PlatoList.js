@@ -22,7 +22,7 @@ import {
   BtnEliminar,
 } from "../componentesReutilizables/BotonesAccion";
 
-export function PlatoList({ search }) {
+export function PlatoList({ search, categoriaActual = null }) {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
 
   const queryClient = useQueryClient();
@@ -52,21 +52,34 @@ export function PlatoList({ search }) {
     queryClient.invalidateQueries({ queryKey: ["platos"] });
   };
 
-  // 🔍 Filtrar según búsqueda
+  // Filtrar según búsqueda y categoría
   useEffect(() => {
     const result = platosList.filter((plato) => {
+      const matchCategoria =
+        !categoriaActual || categoriaActual.toLowerCase() === "todo"
+          ? true
+          : plato.categoria?.nombre?.toLowerCase() ===
+            categoriaActual.toLowerCase();
+
+      // 2. Condición de Búsqueda (Tu lógica original)
       const { nombre, categoria, descripcion, precio } = plato;
       const searchLower = search.toLowerCase();
-      return (
-        (nombre && nombre.toLowerCase().includes(searchLower)) ||
-        (categoria?.nombre &&
-          categoria.nombre.toLowerCase().includes(searchLower)) ||
-        (descripcion && descripcion.toLowerCase().includes(searchLower)) ||
-        (precio && precio.toString().includes(searchLower))
-      );
+
+      // Si el search está vacío, matchSearch es true. Si no, busca las coincidencias.
+      const matchSearch = !search
+        ? true
+        : (nombre && nombre.toLowerCase().includes(searchLower)) ||
+          (categoria?.nombre &&
+            categoria.nombre.toLowerCase().includes(searchLower)) ||
+          (descripcion && descripcion.toLowerCase().includes(searchLower)) ||
+          (precio && precio.toString().includes(searchLower));
+
+      // El plato debe cumplir AMBAS condiciones para mostrarse en la tabla
+      return matchCategoria && matchSearch;
     });
+
     setFilterPlatos(result);
-  }, [search, platosList]);
+  }, [search, platosList, categoriaActual]);
 
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [modalActivar, setModalActivar] = useState(false);
@@ -109,6 +122,33 @@ export function PlatoList({ search }) {
       }
     } catch (error) {
       ToastAlert("error", "Error de conexion", error);
+    }
+  };
+
+  const handleBanderEnWeb = async (id, estadoActual) => {
+    try {
+      const estadoEnviar = estadoActual === 1 ? 0 : 1;
+
+      const response = await axiosInstance.put(
+        `/gestionPlatos/updateEstadoWebPlato/${id}/${estadoEnviar}`,
+      );
+
+      if (response.data.success) {
+        const mensaje =
+          estadoEnviar === 1
+            ? "Activo para delivery"
+            : "Oculto en la web de delivery";
+
+        ToastAlert("success", mensaje);
+        queryClient.invalidateQueries({ queryKey: ["platos"] });
+      } else {
+        ToastAlert("error", "Ocurrió un error al cambiar el estado");
+      }
+    } catch (error) {
+      const errorMensaje =
+        error.response?.data?.message || "Error de conexión con el servidor";
+
+      ToastAlert("error", errorMensaje);
     }
   };
 
@@ -176,6 +216,24 @@ export function PlatoList({ search }) {
       cell: (row) => (
         // Formateamos el precio y lo ponemos en negrita
         <strong>S/. {Number(row.precio).toFixed(2)}</strong>
+      ),
+    },
+    {
+      name: "Activo en Web",
+      selector: (row) => row.enWeb,
+      sortable: true,
+      center: true, // Para que el switch quede bien centrado
+      cell: (row) => (
+        <div className="form-check form-switch d-flex justify-content-center mb-0">
+          <input
+            className="form-check-input"
+            type="checkbox"
+            role="switch"
+            style={{ cursor: "pointer" }}
+            checked={row.enWeb === 1}
+            onChange={() => handleBanderEnWeb(row.id, row.enWeb)}
+          />
+        </div>
       ),
     },
     {

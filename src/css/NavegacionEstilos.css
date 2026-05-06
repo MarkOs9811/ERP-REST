@@ -1,158 +1,163 @@
+.nav-navegacion {
+  border-bottom: none !important;
+  z-index: 100;
+  margin-left: 240px;
+  transition: all 0.3s ease;
+}
+
+.compressedNavegacion {
+  margin-left: 80px;
+}
+
+.breadcrumb {
+  background-color: transparent;
+  /* Fondo transparente para el breadcrumb */
+  padding: 0;
+  /* Quitar el padding extra */
+}
+
+.breadcrumb-item a {
+  color: #2b2323;
+  /* Color oscuro para los enlaces */
+  font-weight: bold;
+}
+
+.breadcrumb-item.active {
+  color: #6c757d;
+  /* Color gris para el item activo */
+}
+
+.breadcrumb-item+.breadcrumb-item::before {
+  content: '>';
+  /* Cambiar el separador */
+  color: #6c757d;
+  padding: 0 8px;
+}
+
+.card-shadow {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card.rounded {
+  border-radius: 10px;
+  /* Bordes redondeados suaves */
+}
+
+/* ========== TEMA OSCURO NAVEGACIÓN ESTILO MODERNO ========== */
+body.dark-theme .card {
+  background: #3a3f47 !important;
+  color: #e8eaed !important;
+  border: none !important;
+}
+
+body.dark-theme .card-shadow {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+}
+
+body.dark-theme .card.rounded {
+  border-radius: 8px !important;
+}
+
+body.dark-theme .breadcrumb {
+  background-color: transparent !important;
+}
+
+body.dark-theme .breadcrumb-item a {
+  color: #000000 !important;
+  font-weight: bold;
+}
+
+body.dark-theme .breadcrumb-item.active {
+  color: #e8eaed !important;
+}
+
+body.dark-theme .breadcrumb-item+.breadcrumb-item::before {
+  color: #6c757d !important;
+  padding: 0 8px;
+}
+
+body.dark-theme .nav-navegacion {
+  background-color: transparent !important;
+  border-bottom: none !important;
+}
+
+/* MODO RESPONSIVE NAVEGACIÓN  */
+@media (max-width: 768px) {
   .nav-navegacion {
-    background-color: var(--bg-sidebar-header) !important;
-    border-bottom: none !important;
-    z-index: 100;
-    margin-left: 240px;
-    transition: all 0.3s ease;
+    margin-left: 1px !important;
   }
-  .compressedNavegacion {
-    margin-left: 80px;
-  }
-  .breadcrumb {
-    background-color: transparent;
-    /* Fondo transparente para el breadcrumb */
-    padding: 0;
-    /* Quitar el padding extra */
-  }
+}
 
-  .breadcrumb-item a {
-    color: #2b2323;
-    /* Color azul para los enlaces */
-    font-weight: bold;
-  }
+/* ========== FIN TEMA OSCURO NAVEGACIÓN ESTILO MODERNO ========== */
 
-  .breadcrumb-item.active {
-    color: #6c757d;
-    /* Color gris para el item activo */
-  }
+/* ========== BREADCRUMB NAVEGACIÓN DARK MODE ========== */
+body.dark-theme .breadcrumb-nav .fw-semibold,
+body.dark-theme .breadcrumb-nav .text-decoration-none.fw-semibold {
+  color: #cfd8dc !important;
+}
 
-  .breadcrumb-item+.breadcrumb-item::before {
-    content: '>';
-    /* Cambiar el separador */
-    color: #6c757d;
-    padding: 0 8px;
-  }
+body.dark-theme .breadcrumb-nav a.text-decoration-none.fw-semibold:hover {
+  color: #000000 !important;
+  text-decoration: underline;
+}
 
-  .card-shadow {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  
-  }
+body.dark-theme .breadcrumb-nav .small span {
+  color: #888 !important;
+}
 
-  .card.rounded {
-    border-radius: 10px;
-    /* Bordes redondeados suaves */
-  }
+body.dark-theme .breadcrumb-nav .fw-semibold[style*="opacity: 0.7"] {
+  color: #888 !important;
+  opacity: 1 !important;
+}
 
-  /* ========== TEMA OSCURO NAVEGACIÓN ESTILO MODERNO ========== */
-  body.dark-theme .card {
-    background: #3a3f47 !important;
-    color: #e8eaed !important;
-    border: none !important;
-  }
+/* ========== SUBMENU TABS (MÓDULOS) ========== */
+.submenu-tabs-container {
+  background-color: white !important;
+  border-bottom: none !important;
+  transition: background-color 0.3s ease;
+}
 
-  body.dark-theme .card-shadow {
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
-  }
+.submenu-tab-link {
+  background-color: transparent;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  border-bottom: none;
+  transition: background-color 0.2s, color 0.2s;
+}
 
-  body.dark-theme .card.rounded {
-    border-radius: 8px !important;
-  }
+.submenu-tab-link:hover {
+  background-color: var(--bs-light) !important;
+}
 
-  body.dark-theme .breadcrumb {
-    background-color: transparent !important;
-  }
+.submenu-tab-link.active {
+  color: #ffffff !important;
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  border-bottom: none !important;
+  background-color: #000000 !important;
+}
 
-  body.dark-theme .breadcrumb-item a {
-    color: #000000 !important;
-    font-weight: bold;
-  }
+/* ========== TEMA OSCURO SUBMENU TABS ========== */
+body.dark-theme .submenu-tabs-container {
+  background-color: transparent !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
 
-  body.dark-theme .breadcrumb-item.active {
-    color: #e8eaed !important;
-  }
+body.dark-theme .submenu-tab-link {
+  color: #9ca3af !important;
+  transition: all 0.3s ease;
+}
 
-  body.dark-theme .breadcrumb-item+.breadcrumb-item::before {
-    color: #6c757d !important;
-    padding: 0 8px;
-  }
+body.dark-theme .submenu-tab-link:hover {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  color: #ffffff !important;
+}
 
-  body.dark-theme .nav-navegacion {
-    background-color: var(--bg-sidebar-header) !important;
-    border-bottom: none !important;
-  }
-
-  /* MODO RESPONSIVE NAVEGACIÓN  */
-  @media (max-width: 768px) {
-    .nav-navegacion {
-      margin-left: 1px !important;
-    }
-  }
-  /* ========== FIN TEMA OSCURO NAVEGACIÓN ESTILO MODERNO ========== */
-  /* ========== BREADCRUMB NAVEGACIÓN DARK MODE ========== */
-  body.dark-theme .breadcrumb-nav .fw-semibold,
-  body.dark-theme .breadcrumb-nav .text-decoration-none.fw-semibold {
-    color: #cfd8dc !important;
-  }
-
-  body.dark-theme .breadcrumb-nav a.text-decoration-none.fw-semibold:hover {
-    color: #000000 !important;
-    text-decoration: underline;
-  }
-
-  body.dark-theme .breadcrumb-nav .small span {
-    color: #888 !important;
-  }
-
-  body.dark-theme .breadcrumb-nav .fw-semibold[style*="opacity: 0.7"] {
-    color: #888 !important;
-    opacity: 1 !important;
-  }
-
-  /* ========== SUBMENU TABS (MÓDULOS) ========== */
-  .submenu-tabs-container {
-    background-color: white !important;
-    border-bottom: none !important;
-    transition: background-color 0.3s ease;
-  }
-
-  .submenu-tab-link {
-    background-color: transparent;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    border-bottom: none;
-    transition: background-color 0.2s, color 0.2s;
-  }
-
-  .submenu-tab-link:hover {
-    background-color: var(--bs-light) !important;
-  }
-
-  .submenu-tab-link.active {
-    color: #ffffff !important;
-    border-top: none !important;
-    border-left: none !important;
-    border-right: none !important;
-    border-bottom: none !important;
-    background-color: #000000 !important;
-  }
-
-  /* ========== TEMA OSCURO SUBMENU TABS ========== */
-  body.dark-theme .submenu-tabs-container {
-    background-color: #3a3f47 !important;
-    border-bottom-color: transparent !important;
-  }
-
-  body.dark-theme .submenu-tab-link {
-    color: #9ca3af !important;
-  }
-
-  body.dark-theme .submenu-tab-link:hover {
-    background-color: rgba(255, 255, 255, 0.05) !important;
-    color: #ffffff !important;
-  }
-
-  body.dark-theme .submenu-tab-link.active {
-    background-color: transparent !important;
-    border-bottom: 2px solid var(--color-brand, #d33c3c) !important;
-    color: var(--color-brand, #d33c3c) !important;
-  }
+body.dark-theme .submenu-tab-link.active {
+  /* Fondo sutil con el color de la marca (brand) */
+  background-color: rgba(211, 60, 60, 0.15) !important;
+  color: #d33c3c!important;
+  border-bottom: 2px solid  #d33c3c !important;
+  font-weight: 600;
+}

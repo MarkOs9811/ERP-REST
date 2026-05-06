@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { getVentas } from "../../service/ObtenerVentasDetalle";
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
+import { Cookie } from "lucide-react";
 
 export function PlatoMasVendido() {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -71,53 +72,82 @@ export function PlatoMasVendido() {
   const topPlatos = Object.entries(platosVendidos)
     .sort((a, b) => b[1].cantidad - a[1].cantidad) // Ordenar por cantidad descendente
     .slice(0, 3); // Tomar los 3 primeros
-    
+
   return (
     <CondicionCarga isLoading={isLoadingVentas} isError={isErrorVentas}>
-      <div className="h-100 p-0">
-        <ul className="list-group list-group-flush w-100">
-          {topPlatos.length === 0 && (
-            <div className="text-muted text-center py-4 small">No hay órdenes este mes.</div>
-          )}
-          {topPlatos.map(([plato, { cantidad, foto }], index) => (
-            <li
-              key={index}
-              className={`list-group-item d-flex align-items-center justify-content-between px-0 py-3 bg-transparent ${index === topPlatos.length - 1 ? 'border-bottom-0' : 'border-bottom border-light'}`}
-            >
-              <div className="d-flex align-items-center w-100 overflow-hidden">
-                <img
-                  src={foto ? `${BASE_URL}/storage/${foto}` : 'https://placehold.co/100x100?text=Plato'}
-                  alt={plato}
-                  className="shadow-sm flex-shrink-0"
-                  style={{
-                    width: "48px",
-                    height: "48px",
-                    borderRadius: "12px",
-                    objectFit: "cover",
-                    marginRight: "12px",
-                  }}
-                />
-                <div className="d-flex flex-column text-truncate">
-                  <span className="fw-bold text-dark text-truncate" style={{ fontSize: "0.95rem" }}>{plato}</span>
-                  <span className="text-muted" style={{ fontSize: "0.85rem" }}>
-                    {cantidad} {cantidad === 1 ? 'orden' : 'órdenes'}
+      <div className="card h-100 p-0 overflow-auto">
+        <div className="card-header d-flex m-0 align-middle justify-content-left p-3 border-bottom ">
+          <span
+            className="p-2 mb-0 rounded-circle  "
+            style={{ background: "var(--fw-emerald)" }}
+          >
+            <Cookie />
+          </span>
+          <h6 className="mb-1 d-flex flex-column gap-1">
+            <span className="fw-bold text-dark">Platos mas vendidos</span>
+          </h6>
+        </div>
+        <div className="card-body">
+          <ul className="list-group list-group-flush w-100">
+            {topPlatos.length === 0 && (
+              <div className="text-muted text-center py-4 small">
+                No hay órdenes este mes.
+              </div>
+            )}
+            {topPlatos.map(([plato, { cantidad, foto }], index) => (
+              <li
+                key={index}
+                className={`list-group-item d-flex align-items-center justify-content-between px-0 py-3 bg-transparent ${index === topPlatos.length - 1 ? "border-bottom-0" : "border-bottom border-light"}`}
+              >
+                <div className="d-flex align-items-center w-100 overflow-hidden">
+                  <img
+                    src={
+                      foto
+                        ? `${BASE_URL}/storage/${foto}`
+                        : "https://placehold.co/100x100?text=Plato"
+                    }
+                    alt={plato}
+                    className="shadow-sm flex-shrink-0"
+                    style={{
+                      width: "48px",
+                      height: "48px",
+                      borderRadius: "12px",
+                      objectFit: "cover",
+                      marginRight: "12px",
+                    }}
+                  />
+                  <div className="d-flex flex-column text-truncate">
+                    <span
+                      className="fw-bold text-dark text-truncate"
+                      style={{ fontSize: "0.95rem" }}
+                    >
+                      {plato}
+                    </span>
+                    <span
+                      className="text-muted"
+                      style={{ fontSize: "0.85rem" }}
+                    >
+                      {cantidad} {cantidad === 1 ? "orden" : "órdenes"}
+                    </span>
+                  </div>
+                </div>
+                <div className="ms-2 flex-shrink-0">
+                  <span
+                    className={`badge rounded-pill fw-bold p-2 px-3 shadow-sm ${
+                      index === 0
+                        ? "bg-danger"
+                        : index === 1
+                          ? "bg-warning text-dark"
+                          : "bg-secondary"
+                    }`}
+                  >
+                    #{index + 1}
                   </span>
                 </div>
-              </div>
-              <div className="ms-2 flex-shrink-0">
-                <span 
-                  className={`badge rounded-pill fw-bold p-2 px-3 shadow-sm ${
-                    index === 0 ? 'bg-danger' : 
-                    index === 1 ? 'bg-warning text-dark' : 
-                    'bg-secondary'
-                  }`}
-                >
-                  #{index + 1}
-                </span>
-              </div>
-            </li>
-          ))}
-        </ul>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </CondicionCarga>
   );

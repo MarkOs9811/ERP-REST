@@ -8,7 +8,7 @@ import { GetCategoriasPlatosTrue } from "../../../service/accionesVender/GetCate
 export function CategoriaPlatos() {
   const dispatch = useDispatch();
   const estadoCategoria = useSelector(
-    (state) => state.categoriaFiltroPlatos.estado
+    (state) => state.categoriaFiltroPlatos.estado,
   );
 
   const {

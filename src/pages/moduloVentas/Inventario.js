@@ -86,7 +86,7 @@ export function Inventario() {
       </div>
 
       <div className="col-lg-12">
-        <div className="card shadow-sm py-2">
+        <div className="card  ">
           <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
             <div className="d-flex align-items-center">
               <h4 className="card-title mb-0 titulo-card-especial">
@@ -94,7 +94,7 @@ export function Inventario() {
               </h4>
               <span className="badge-header">Productos</span>
             </div>
-            
+
             <div className="d-flex align-items-center flex-wrap gap-2 mt-3 mt-md-0">
               <div className="header-search-container">
                 <Search className="search-icon" />
@@ -106,7 +106,7 @@ export function Inventario() {
                   onChange={(e) => setSearch(e.target.value)}
                 />
               </div>
-              
+
               <button
                 type="button"
                 className="btn btn-outline-dark px-3"
@@ -147,7 +147,7 @@ function MetricCard({
   return (
     <div className="col-sm-12 col-md-3 col-lg-3">
       <CondicionCarga isLoading={loading} isError={error} mode="single-card">
-        <div className="card shadow-sm p-3">
+        <div className="card  p-3">
           <div>
             <span className="position-absolute opacity-90">{icon}</span>
           </div>

@@ -54,7 +54,7 @@ export function CabeceraHome({ ventasList, load, error }) {
     navigate("/vender");
   };
   return (
-    <div className="row mb-3 g-3">
+    <div className="row mb-3 g-3 h-100">
       <div className="col-md-12 col-sm-12">
         {/* Header Bienvenida */}
         <CondicionCarga isLoading={load} isError={error}>

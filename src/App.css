@@ -1,29 +1,72 @@
 /* ========== FUENTES Y BASE ========== */
 
-/* ======================== */
-/* PALETA DE COLORES NEUTROS Y ACCIONES */
+/* =========================================
+   🔥 PALETA BASE FIRE WOK (SISTEMA DE DISEÑO)
+   ========================================= */
 :root {
-  /* Fondo y texto */
-  --color-bg: #F5F5F7;
-  --color-bg-card: #FFFFFF;
-  --color-text: #222222;
-  --color-border: #E0E0E0;
+  /* Colores de Marca */
+  --fw-onyx: #111213;
+  --fw-emerald: #17C668;
+  --fw-saffron: #FF992C;
+  --fw-muetd:rgb(187, 187, 187);
+  --fw-strawberry: #E44949;
+  --fw-white: #FFFFFF;
 
-  /* Botones y acciones */
-  --color-btn-primary: #2563EB; /* Ver */
-  --color-btn-primary-text: #FFFFFF;
-  --color-btn-edit: #F59E42;
-  --color-btn-edit-text: #FFFFFF;
-  --color-btn-delete: #EF4444;
-  --color-btn-delete-text: #FFFFFF;
-  --color-btn-secondary: #6B7280;
-  --color-btn-secondary-text: #FFFFFF;
+  /* Fondos Suaves (Para auras y badges) */
+  --bg-emerald-soft: #E8F9F0;
+  --bg-saffron-soft: #FFF5E9;
+  --bg-strawberry-soft: #FCECEC;
 
-  /* Estados */
-  --color-success: #22C55E;
-  --color-warning: #FACC15;
-  --color-hover: #E5E7EB;
+  /* Estructura Tema Claro */
+  --brand-primary: var(--fw-onyx);
+  --brand-secondary: #4B5563;
+
+  --fw-muetd: #F3F4F6;
+  --bg-sidebar-header: var(--fw-white);
+  --bg-card: var(--fw-white);
+
+  --text-main: var(--fw-onyx);
+  --text-muted: #6B7280;
+
+  /* Glassmorphism y Sombras */
+  --glass-bg: transparent;
+  --glass-border: transparent;
+  --glass-shadow: none;
+  --glass-blur: blur(0px);
+
+  --shadow-soft: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  /* Radios y Transiciones */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-pill: 9999px;
+
+  --transition-bounce: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+body.dark-theme {
+  /* Estructura Tema Oscuro (Fire Wok Dark) */
+  --brand-primary: var(--fw-saffron);
+  /* El Naranja resalta increíble en oscuro */
+  --brand-secondary: var(--fw-strawberry);
+
+  --fw-muetd: var(--fw-onyx);
+  /* Fondo negro puro institucional */
+  --bg-sidebar-header: #1A1C1E;
+  --bg-card: #1E2022;
+
+  --text-main: #FBFCFF;
+  --text-muted: #9CA3AF;
+
+  --glass-bg: transparent;
+  --glass-border: transparent;
+  --glass-shadow: none;
+  --glass-blur: blur(0px);
+}
+
 
 @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
 
@@ -36,7 +79,7 @@ h6 {
 
 body {
   overflow: hidden !important;
-  background-color: var(--bg-main) !important;
+  background-color: var(--fw-muetd) !important;
   color: var(--text-main) !important;
 }
 
@@ -56,159 +99,60 @@ h4 {
 }
 
 /* ======================== */
-.texto-principal{
-  color: #d14141 !important;
+/* TEXTOS Y UTILIDADES */
+.texto-principal {
+  color: var(--fw-onyx) !important;
   font-weight: 500;
-  border-left: 3px solid #d14141;
   padding-left: 10px;
- margin: 10px;
+  margin: 10px;
 }
 
-.text-success{
-  color: #004080!important ;
+.text-success {
+  color: var(--fw-emerald) !important;
 }
 
 .tituloCard {
-  color: #171b1f !important;
+  color: var(--text-main) !important;
 }
 
 button {
-  font-family: "Poppins", serif;
+  font-family: "Inter", sans-serif;
+  /* Cambiado de Poppins a Inter para mantener consistencia de fuentes */
 }
 
 /* ======================== */
-/* BOTONES NEUTROS Y DE ACCIÓN */
-
-
-.btn-editar {
-  min-width: 35px;
-  width: auto;
-  height: 35px;
-  color: var(--color-btn-edit-text);
-  background-color: var(--color-btn-edit);
-  border: 1px solid var(--color-btn-edit);
-  border-radius: 6px;
-  padding: 0.5rem 1rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 500;
-  font-size: 13px;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s, border 0.2s;
-}
-.btn-editar:hover {
-  background-color: var(--color-hover);
-  color: var(--color-btn-edit);
-  border-color: var(--color-btn-edit);
-}
-.btn-editar:active {
-  background-color: var(--color-btn-edit);
-  color: var(--color-btn-edit-text);
-  border-color: var(--color-btn-edit);
-  filter: brightness(0.95);
-}
-
-.btn-eliminar {
-  min-width: 35px;
-  width: auto;
-  height: 35px;
-  color: var(--color-btn-delete-text);
-  background-color: var(--color-btn-delete);
-  border: 1px solid var(--color-btn-delete);
-  border-radius: 6px;
-  padding: 0.5rem 1rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 500;
-  font-size: 13px;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s, border 0.2s;
-}
-.btn-eliminar:hover {
-  background-color: var(--color-hover);
-  color: var(--color-btn-delete);
-  border-color: var(--color-btn-delete);
-}
-.btn-eliminar:active {
-  background-color: var(--color-btn-delete);
-  color: var(--color-btn-delete-text);
-  border-color: var(--color-btn-delete);
-  filter: brightness(0.95);
-}
-
-.btn-secondary {
-  min-width: 35px;
-  width: auto;
-  height: 35px;
-  color: var(--color-btn-secondary-text);
-  background-color: var(--color-btn-secondary);
-  border: 1px solid var(--color-btn-secondary);
-  border-radius: 6px;
-  padding: 0.5rem 1rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 500;
-  font-size: 13px;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s, border 0.2s;
-}
-.btn-secondary:hover {
-  background-color: var(--color-hover);
-  color: var(--color-btn-secondary);
-  border-color: var(--color-btn-secondary);
-}
-.btn-secondary:active {
-  background-color: var(--color-btn-secondary);
-  color: var(--color-btn-secondary-text);
-  border-color: var(--color-btn-secondary);
-  filter: brightness(0.95);
-}
-
-/* Estados */
-.alert-success {
-  background: var(--color-success);
-  color: #fff;
-}
-.alert-warning {
-  background: var(--color-warning);
-  color: #222;
-}
-
-
+/* ESTRUCTURA PRINCIPAL */
 
 .contenido {
-  background: var(--bg-main) !important;
+  background: var(--fw-muetd) !important;
   position: relative;
   overflow: visible;
   transition: background-color var(--transition-smooth);
   padding: 20px;
 }
 
-.contenido > div {
+.contenido>div {
   background: transparent !important;
 }
 
-.contenido > div > div:last-child {
-  background: white !important;
+.contenido>div>div:last-child {
+  background: var(--bg-card) !important;
   border-radius: 20px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
   border: none !important;
   overflow: auto;
 }
 
-body.dark-theme .contenido > div > div:last-child {
-  background: #3a3f47 !important;
-  color: #e8eaed;
+body.dark-theme .contenido>div>div:last-child {
+  background: var(--bg-card) !important;
+  color: var(--text-main);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35) !important;
 }
 
 .row-cuerpo {
   display: flex;
   align-items: stretch;
 }
-
 
 .content:not(.open) {
   margin-left: 0;
@@ -235,102 +179,54 @@ body.dark-theme .contenido > div > div:last-child {
 
 /* ========== RESPONSIVE - CONTENT FIX ========== */
 @media (max-width: 768px) {
-  .content:not(.open) {
-    margin-left: 0 !important;
-    width: 100% !important;
-  }
 
-  .content.with-sidebar {
-    margin-left: 0 !important;
-    width: 100% !important;
-  }
-
+  .content:not(.open),
+  .content.with-sidebar,
   .content.content-compressed {
     margin-left: 0 !important;
     width: 100% !important;
   }
 
-  .header-with-sidebar {
-    width: 100% !important;
-  }
-
+  .header-with-sidebar,
   .header-compressed {
     width: 100% !important;
   }
+
+  .sidebar {
+    width: 60px;
+    border-radius: 0;
+    z-index: 1040;
+  }
+
+  .sidebar.open {
+    width: 200px;
+  }
+
+  .content.open {
+    margin-left: 200px;
+    width: calc(100% - 200px);
+  }
+
+  h1 {
+    font-size: 1.75rem !important;
+  }
+
+  h2 {
+    font-size: 1.5rem !important;
+  }
+
+  h3 {
+    font-size: 1.25rem !important;
+  }
+
+  .stats-card .icon {
+    font-size: 2rem;
+  }
+
+  .stats-card .card-text {
+    font-size: 1.5rem;
+  }
 }
-
-
-.icon {
-  font-size: 15px;
-  flex-shrink: 0;
-  color: #ffffff;
-  transition: transform 0.3s ease;
-}
-
-
-.submenu {
-  background: var(--glass-bg) !important;
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  color: var(--text-muted) !important;
-  border-radius: var(--radius-sm) !important;
-  box-shadow: var(--shadow-soft) !important;
-
-}
-
-.subMenu ul {
-  margin-bottom: 0;
-  width: 100%;
-  margin: auto;
-  padding: 8px;
-}
-
-.subMenu li {
-  width: auto !important;
-  padding: 6px 0 6px 8px;
-  text-align: center;
-  transition: color 0.2s ease-out;
-}
-
-.subMenu li a {
-  display: block;
-  width: 100% !important;
-  text-decoration: none;
-  color: grey;
-  transition: color 0.2s ease-out;
-  position: relative;
-  /* necesario para centrar la rayita */
-}
-
-/* Hover o activo */
-.subMenu li.active a,
-.subMenu li a.active {
-  color: #dc3545 !important;
-  font-weight: 500;
-}
-
-/* Hover */
-.subMenu li:hover a {
-  color: #dc3545 !important;
-}
-
-/* La rayita debajo cuando está activo */
-.subMenu li.active a::after,
-.subMenu li a.active::after {
-  content: "";
-  position: absolute;
-  bottom: 0px;
-  /* un poquito más abajo del texto */
-  left: 50%;
-  transform: translateX(-50%);
-  width:15px;
-  height: 3px;
-  background-color: #dc3545;
-  border-radius: 2px;
-}
-
-
 
 
 /* ========== CARDS Y ESTADÍSTICAS ========== */
@@ -338,22 +234,19 @@ body.dark-theme .contenido > div > div:last-child {
   overflow: visible !important;
   background-color: var(--bg-card) !important;
   border-radius: var(--radius-md) !important;
-  backdrop-filter: none;
-  border:1px solid rgb(231, 231, 231)!important;
-  box-shadow: none  !important;
+  border: 1px solid #eeeeee !important;
+  box-shadow: none !important;
   overflow-x: hidden;
 }
 
 body.dark-theme .card {
-  background-color: #3a3f47 !important;
-  color: #e8eaed;
+  border-color: #313a46 !important;
 }
 
 .kanban-column {
   border: none !important;
   overflow: visible !important;
   background-color: transparent !important;
-  border-radius: var(--radius-md) !important;
   box-shadow: none !important;
 }
 
@@ -362,27 +255,23 @@ body.dark-theme .card {
 }
 
 .card-platos:active {
-  transform: scale(1.1, 1.1);
+  transform: scale(1.05);
 }
 
-
-
 .card-header {
- margin: 10px;
+  margin: 10px;
   border: none !important;
- 
 }
 
 .titulo-card-especial {
-  color: #1d3549 !important;
+  color: var(--text-main) !important;
 }
 
 .stats-card {
   box-shadow: var(--shadow-soft);
   border-radius: var(--radius-md);
   background-color: var(--bg-card);
-  border: none !important;
-  backdrop-filter: none;
+  border: 1px solid #eeeeee !important;
   transition: transform var(--transition-bounce), box-shadow var(--transition-bounce);
   display: flex;
   align-items: center;
@@ -390,7 +279,7 @@ body.dark-theme .card {
 }
 
 body.dark-theme .stats-card {
-  background-color: #3a3f47 !important;
+  border-color: #313a46 !important;
 }
 
 .stats-card:hover {
@@ -404,34 +293,37 @@ body.dark-theme .stats-card {
 
 .stats-card .icon {
   font-size: 2.5rem;
-  color: #007be098;
+  color: var(--fw-onyx);
   margin-right: 5px;
   position: absolute;
   top: 25%;
   left: 20px;
 }
 
+body.dark-theme .stats-card .icon {
+  color: var(--text-main);
+}
+
 .stats-card .card-title {
   font-size: 1.3rem;
   font-weight: 600;
-  color: #777777;
+  color: var(--text-muted);
 }
 
 .stats-card .card-text {
   font-size: 1.8rem;
   font-weight: bold;
-  color: #007be0;
+  color: var(--text-main);
 }
 
-/* ========== BADGES ========== */
+/* ========== BADGES FIRE WOK ========== */
 .nombreUsuarioTabla {
   text-transform: capitalize;
 }
 
 .badge-user {
-  display: inline-block;
-  background-color: #edf6ff;
-  color: rgb(86, 121, 161);
+  background-color: var(--fw-muetd);
+  color: var(--text-muted);
   padding: 2px 8px;
   border-radius: 5px;
   font-size: 0.7rem;
@@ -440,450 +332,264 @@ body.dark-theme .stats-card {
 }
 
 .badge-ok {
-  background-color: #4CAF50;
+  background-color: var(--fw-emerald);
   color: #fff;
   font-size: 0.85rem;
   border-radius: 12px;
   font-weight: 600;
   display: inline-block;
+  padding: 3px 8px;
 }
 
 .badge-fail {
-  background-color: #e74c3c;
+  background-color: var(--fw-strawberry);
   color: #fff;
   font-size: 0.85rem;
   border-radius: 12px;
   font-weight: 600;
   display: inline-block;
+  padding: 3px 8px;
 }
 
 .badge-alert {
-  background-color: #f39c12;
-  color: #212529;
+  background-color: var(--fw-saffron);
+  color: #111213;
   font-size: 0.85rem;
   border-radius: 12px;
   font-weight: 600;
   display: inline-block;
+  padding: 3px 8px;
 }
 
 .badge-aviso {
-  background-color: #95a5a6;
+  background-color: var(--text-muted);
   color: #fff;
   font-size: 0.85rem;
   border-radius: 12px;
   font-weight: 600;
   display: inline-block;
+  padding: 3px 8px;
 }
 
 /* ========== TABLAS ========== */
 .tablaGeneral .rdt_TableBody .rdt_TableRow {
-  background-color: #fbfdff !important;
+  background-color: transparent !important;
   transition: background-color 0.2s ease;
 }
 
 .tablaGeneral .rdt_TableBody .rdt_TableRow:hover {
-  background-color: #eef2f8 !important;
+  background-color: #f8fafc !important;
   cursor: pointer;
 }
 
-.tablaGeneral .rdt_TableBody .rdt_TableCell {
-  background-color: transparent !important;
-}
-
+.tablaGeneral .rdt_TableBody .rdt_TableCell,
 .cuerpo-tabla {
   background-color: transparent !important;
 }
 
-/* ========== BOTONES ========== */
+/* ========== BOTONES FIRE WOK ========== */
 button:disabled {
   opacity: 0.6;
-  /* Hace el botón más transparente/atenuado, dándole el aspecto "oscuro" */
   cursor: not-allowed;
-  /* Cambia el cursor para indicar que no es clickeable */
-}
-/* --- Botón Ver (Gris Neutro) --- */
-.btn-ver {
-  min-width: 35px;
-  width: auto;
-  height: 35px;
-  border-radius: 20px;
-  padding: 0.5rem 1rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #f5f5f5;
-  color: #5a5a5a;
-  border: 1px solid #d4d4d4;
-  font-weight: 500;
-  font-size: 13px;
-  cursor: pointer;
 }
 
-.btn-ver:hover {
-  background-color: #e8e8e8;
-  color: #2d3748;
-  border-color: #8b8b8b;
-}
-
-.btn-ver:active {
-  background-color: #d4d4d4;
-  border-color: #636363;
-}
-
-/* --- Botón Activar (Gris Neutro) --- */
-.btn-activar {
-  min-width: 35px;
-  width: auto;
-  height: 35px;
-  background-color: #f5f5f5;
-  color: #5a5a5a;
-  border: 1px solid #d4d4d4;
-  border-radius: 6px;
-  padding: 0.5rem 1rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 500;
-  font-size: 13px;
-  cursor: pointer;
-}
-
-.btn-activar:hover {
-  background-color: #e8e8e8;
-  color: #2d3748;
-  border-color: #8b8b8b;
-}
-
-.btn-activar:active {
-  background-color: #d4d4d4;
-  border-color: #636363;
-}
-
-/* --- Botón Principal (Brand) --- */
-.btn-principal {
-  min-width: 35px;
-  width: auto;
-  height: 35px;
+.btn-principal,
+.btn-guardar {
   background-color: var(--brand-primary);
   color: #ffffff;
   border: none;
   border-radius: var(--radius-pill);
-  padding: 0.5rem 1rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  padding: 0.5rem 1.5rem;
   font-weight: 500;
   transition: all 0.2s ease-in-out;
 }
 
-.btn-principal:hover {
-  background-color: #3a3a3a;
-  box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+.btn-principal:hover,
+.btn-guardar:hover {
+  filter: brightness(1.2);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.btn-principal:active {
-  background-color: #202020 !important;
+.btn-principal:active,
+.btn-guardar:active {
+  filter: brightness(0.9);
+  transform: translateY(0);
   box-shadow: none;
 }
 
-/* --- Botones de Acción (Minimalistas y Neutros para Cards) --- */
+body.dark-theme .btn-principal,
+body.dark-theme .btn-guardar {
+  color: var(--fw-onyx);
+  /* Para que el texto sea oscuro sobre el botón Naranja */
+  font-weight: 600;
+}
+
+/* Botones Secundarios y de Acción (Gris Neutro) */
+/* =========================================
+   BOTONES DE ACCIÓN (SEMÁNTICA FIRE WOK)
+   ========================================= */
+
+/* 1. Base compartida para todos los botones de acción */
+.btn-ver,
+.btn-activar,
+.btn-desactivar,
+.btn-editar,
+.btn-eliminar,
+.btn-cerrar-modal,
+.btn-accion-card {
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  transition: all var(--transition-smooth);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid transparent;
+  /* Borde base para evitar saltos visuales */
+}
+
 .btn-accion-card {
   width: 36px;
   height: 36px;
-  background-color: #f8fafc;
-  color: #64748b;
-  border: 1px solid #e2e8f0;
-  border-radius: var(--radius-sm); /* Menos redondo, 10px */
-  padding: 0; /* Padding quitado porque width/height lo controlan */
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease-in-out;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-  cursor: pointer;
+  padding: 0;
 }
 
+/* 🔵 NEUTROS: Ver, Cerrar, Acciones genéricas */
+.btn-ver,
+.btn-cerrar-modal,
+.btn-accion-card {
+  background-color: var(--fw-muetd);
+  color: var(--text-muted);
+  border-color: #e2e8f0;
+}
+.btn-cerrar-modal{
+  border-radius: var(--radius-pill);
+}
+
+.btn-ver:hover,
+.btn-cerrar-modal:hover,
 .btn-accion-card:hover {
-  background-color: #f1f5f9;
-  color: #0f172a;
-  border-color: #cbd5e1;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-}
-
-.btn-accion-card:active {
   background-color: #e2e8f0;
-  transform: translateY(0);
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  color: var(--fw-onyx);
+  border-color: #cbd5e1;
 }
 
-/* --- Botón Editar (Gris Neutro) --- */
+/* 🟢 POSITIVO: Activar */
+.btn-activar {
+  background-color: var(--bg-emerald-soft);
+  color: var(--fw-emerald);
+  border-color: rgba(23, 198, 105, 0.842);
+}
+
+.btn-activar:hover {
+  background-color: var(--fw-emerald);
+  color: var(--fw-white);
+  border-color: var(--fw-emerald);
+}
+
+/* 🟠 PRECAUCIÓN / MODIFICACIÓN: Editar */
 .btn-editar {
-  min-width: 35px;
-  width: auto;
-  height: 35px;
-  color: #5a5a5a;
-  background-color: transparent;
-  border: 1px solid #d4d4d4;
-  border-radius: 6px;
-  padding: 0.5rem 1rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 500;
-  font-size: 13px;
-  cursor: pointer;
+  background-color: var(--bg-saffron-soft);
+  color: var(--fw-saffron);
+  border-color: rgb(255, 153, 44);
 }
 
 .btn-editar:hover {
-  background-color: #f5f5f5;
-  border-color: #b4b4b4;
-  color: #2d3748;
+  background-color: var(--fw-saffron);
+  color: var(--fw-white);
+  border-color: var(--fw-saffron);
 }
 
-.btn-editar:active {
-  background-color: #e8e8e8 !important;
-  border-color: #8b8b8b;
-}
-
-/* --- Botón Eliminar (Gris Oscuro) --- */
+/* 🔴 PELIGRO: Eliminar, Desactivar */
 .btn-eliminar {
-  min-width: 35px;
-  width: auto;
-  height: 35px;
-  color: #636363;
-  background-color: transparent;
-  border: 1px solid #d4d4d4;
-  border-radius: 6px;
-  padding: 0.5rem 1rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 500;
-  font-size: 13px;
-  cursor: pointer;
+  background-color: var(--bg-strawberry-soft);
+  color: var(--fw-strawberry);
+  border-color: rgba(228, 73, 73, 0.911);
 }
 
 .btn-eliminar:hover {
-  background-color: #f5f5f5;
-  border-color: #8b8b8b;
-  color: #2d3748;
+  background-color: var(--fw-strawberry);
+  color: var(--fw-white);
+  border-color: var(--fw-strawberry);
 }
 
-.btn-eliminar:active {
-  background-color: #e8e8e8;
-  border-color: #636363;
-}
-
-/* --- Botón Desactivar (Gris Neutro) --- */
+/* 🌑 ACCIÓN REVERSIBLE: Desactivar / Apagar (Gris Neutro Oscuro) */
 .btn-desactivar {
-  min-width: 35px;
-  width: auto;
-  height: 35px;
-  color: #5a5a5a;
-  background-color: #f5f5f5;
-  border: 1px solid #d4d4d4;
-  border-radius: 6px;
-  padding: 0.5rem 1rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 500;
-  font-size: 13px;
-  cursor: pointer;
+  background-color: var(--fw-muetd);
+  color: var(--text-muted);
+  border-color: #cbd5e1;
 }
 
 .btn-desactivar:hover {
-  background-color: #e8e8e8;
-  color: #2d3748;
-  border-color: #8b8b8b;
+  background-color: #64748b;
+  /* Un gris pizarra sólido y elegante */
+  color: var(--fw-white);
+  border-color: #64748b;
 }
 
-.btn-desactivar:active {
-  background-color: #d4d4d4;
-  border-color: #636363;
-}
-
-/* --- Botón Guardar (Grande) --- */
-.btn-guardar {
-  min-width: 35px;
-  width: 200px;
-  border-radius: var(--radius-pill)!important;
-  height: 40px;
-  background-color: var(--brand-primary);
-  color: #ffffff;
-  border: none;
-  padding: 0.4rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 500;
-  transition: all 0.2s ease-in-out;
-}
-
-.btn-guardar:hover {
-  background-color: #d14141;
-  box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
-}
-
-.btn-guardar:active {
-  background-color: #b32b2b;
-  box-shadow: none;
-}
-
-/* --- Botón Cerrar Modal (Gris Claro) --- */
-.btn-cerrar-modal {
-  min-width: 35px;
-  width: 100px;
-  height: 40px;
-  background-color: #f1f3f5;
-  color: #495057;
-  border: 1px solid #ced4da;
-  border-radius: 30px !important;
-  padding: 0.5rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 100;
-  font-weight: 500;
-  transition: all 0.2s ease-in-out;
-}
-
-.btn-cerrar-modal:hover {
-  background-color: #e9ecef;
-  color: #212529;
-  border-color: #adb5bd;
-}
-
-.btn-cerrar-modal:active {
-  background-color: #d1d5db;
-  color: #212529;
-  transform: scale(0.98);
-}
-
-
-.btn:active {
-  background-color: #004080;
-  transform: scale(0.95);
-}
-
-/* ========== MODALES ========== */
-.modal-sin-borde .modal-content {
-  border: none;
-  box-shadow: none;
-}
-
-/* ========== BOTÓN PRINCIPAL DE VENTA ========== */
-
+/* Botón Principal de Venta (POS) */
 .boton-venta {
-  background-color: #ffffff;
+  background-color: var(--fw-white);
   border: none;
   padding: 8px 12px;
   height: 50px;
   font-weight: bold;
-  transition: background-color 0.3s;
+  transition: all 0.2s;
   display: flex;
   align-items: center;
   gap: 8px;
+  color: var(--text-main);
 }
 
 .boton-venta.activo {
-  border-bottom: 4px solid #152a49;
-  background-color: #f0f6ff;
-}
-
-.boton-venta svg,
-.boton-venta img {
-  display: block;
+  border-bottom: 4px solid var(--fw-saffron);
+  background-color: var(--bg-saffron-soft);
 }
 
 .boton-venta:hover {
-  background-color: #f2f2f2;
-  transform: scale(1.02);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #f8fafc;
 }
 
 .boton-venta:active {
   transform: scale(0.98);
-  opacity: 0.9;
 }
 
 /* ========== SWITCHES Y CHECKBOXES ========== */
-.form-switch .form-check-input:checked {
-  background-color: #ee5252 !important;
-  border-color: #ee5252 !important;
-}
-
-.form-switch .form-check-input {
-  accent-color: #ee5252;
+.form-switch .form-check-input,
+.form-check-input {
+  accent-color: var(--brand-primary);
   cursor: pointer;
-    width: 30px !important;
-    height: 18px !important;
 }
 
-
-
+.form-switch .form-check-input:checked,
 .form-check-input:checked {
-  background-color: #ee5252 !important;
-  border-color: #ee5252 !important;
+  background-color: var(--brand-primary) !important;
+  border-color: var(--brand-primary) !important;
 }
 
 /* ========== DROPDOWN Y LISTAS ========== */
 .dropdown-menu {
   z-index: 9999 !important;
-  box-shadow: 1px 3px 10px 0px rgba(0, 0, 0, 0.2) !important;
-  border: none !important;
+  box-shadow: var(--shadow-hover) !important;
+  border: 1px solid #e2e8f0 !important;
 }
 
 .list-group-item.active {
-  border-bottom: 4px solid #ee5252 !important;
-  background: #eae1e1 !important;
-  color: #222 !important;
+  border-bottom: 4px solid var(--brand-primary) !important;
+  background: var(--fw-muetd) !important;
+  color: var(--text-main) !important;
 }
 
-/* ========== RESPONSIVO ========== */
-@media (max-width: 768px) {
-  .sidebar {
-    width: 60px;
-    border-radius: 0;
-    z-index: 1040;
-  }
-
-  .content.with-sidebar {
-    margin-left: 60px;
-    width: calc(100% - 60px);
-  }
-
-  .header-with-sidebar {
-    width: calc(100% - 60px);
-  }
-
-  .sidebar.open {
-    width: 200px;
-  }
-
-  .content.open {
-    margin-left: 200px;
-    width: calc(100% - 200px);
-  }
-
-  /* Typography Optimization for Mobile */
-  h1 { font-size: 1.75rem !important; }
-  h2 { font-size: 1.5rem !important; }
-  h3 { font-size: 1.25rem !important; }
-  .stats-card .icon { font-size: 2rem; }
-  .stats-card .card-text { font-size: 1.5rem; }
-}
-
+/* ========== IMAGEN PREVIEW ========== */
 .image-preview {
   width: 100px;
   height: 100px;
   overflow: hidden;
-  /* Recorta lo que se salga */
-  border: 1px solid #ccc;
-  /* Marco opcional */
+  border: 1px solid #e2e8f0;
   border-radius: 6px;
-  /* Esquinas redondeadas opcionales */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -893,425 +599,175 @@ button:disabled {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* Recorta la imagen para llenar el marco */
   object-position: center;
-  /* Centra la imagen dentro del marco */
 }
 
-/* ========== TEMA OSCURO ESTILO MODERNO CON ROJO CORPORATIVO ========== */
-body.dark-theme {
-  background: var(--bg-main) !important;
-  color: var(--text-main) !important;
-}
-
-.body.dark-them .contenido_cuerpo {
-  background: var(--bg-main) !important;
-  color: var(--text-main) !important;
-}
-
-body.dark-theme h1,
-body.dark-theme h2,
-body.dark-theme h3,
-body.dark-theme h4,
-body.dark-theme h5 {
-  color: var(--text-main) !important;
-  text-shadow: none;
-}
-
-body.dark-theme .contenido {
-  background: var(--bg-main) !important;
-  color: var(--text-main) !important;
-}
-
+/* =======================================================
+   DARK THEME RE-OVERRIDES (Específicos para UI Fire Wok)
+========================================================== */
 body.dark-theme .header-contenido,
 body.dark-theme .navbar {
-  background-color: var(--glass-bg) !important;
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border: none !important;
-  color: var(--text-main) !important;
-}
-
-body.dark-theme .sidebar {
-  background-color: transparent !important;
-  color: var(--text-main) !important;
-  box-shadow: none !important;
-}
-
-body.dark-theme .sidebar-header {
-  background-color: transparent !important;
-  color: var(--text-main) !important;
+  background-color: var(--fw-muetd) !important;
+  border-bottom: 1px solid #313a46 !important;
 }
 
 body.dark-theme .navegacion {
-  background-color: #20252b !important;
+  background-color: #1E2022 !important;
 }
 
 body.dark-theme .menu-item,
 body.dark-theme .menu-item span {
-  color: #cfd8dc !important;
+  color: var(--fw-onyx) !important;
 }
 
 body.dark-theme .menu-item.active {
-  background: #ee5252 !important;
-  color: #fff !important;
+  background: var(--brand-primary) !important;
 }
 
 body.dark-theme .menu-item.active span {
-  color: #fff !important;
+  color: var(--fw-onyx) !important;
+  font-weight: 600;
 }
 
 body.dark-theme .form-control,
 body.dark-theme input,
 body.dark-theme textarea,
 body.dark-theme select {
-  background: #151a20 !important;
-  color: #cfd8dc !important;
-  border-color: #313a46 !important;
-  /* Gris oscuro, NO rojo */
+  background: #151A20 !important;
+  color: var(--text-main) !important;
+  border-color: #313A46 !important;
 }
 
 body.dark-theme .form-control:focus,
-body.dark-theme input:focus,
-body.dark-theme textarea:focus,
-body.dark-theme select:focus {
-  border-color: #2196f3 !important;
-  /* Azul de acento */
-  outline: none !important;
+body.dark-theme input:focus {
+  border-color: var(--brand-primary) !important;
+  box-shadow: 0 0 0 2px rgba(255, 153, 44, 0.2) !important;
+}
+/* =========================================
+   🌙 ADAPTACIÓN MODO OSCURO (DARK THEME)
+   ========================================= */
+
+/* Los botones de color (Emerald, Saffron, Strawberry) ya tienen el fondo 
+   --bg-*-soft que se adapta solo gracias a tu app.css.
+   Solo necesitamos ajustar el color de los textos en hover para el contraste 
+   y los botones neutros. */
+
+body.dark-theme .btn-ver,
+body.dark-theme .btn-cerrar-modal,
+body.dark-theme .btn-accion-card {
+  background-color: transparent;
+  border-color: #313a46;
+  color: #cbd5e1;
 }
 
-body.dark-theme .form-control:disabled,
-body.dark-theme input:disabled {
-  background: #212b36 !important;
-  color: #888 !important;
+body.dark-theme .btn-ver:hover,
+body.dark-theme .btn-cerrar-modal:hover,
+body.dark-theme .btn-accion-card:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--fw-white);
+  border-color: #475569;
 }
 
-body.dark-theme .btn,
-body.dark-theme .btn-guardar,
-body.dark-theme .btn-editar,
-body.dark-theme .btn-eliminar,
-body.dark-theme .btn-cerrar-modal {
-  background-color: transparent !important;
-  color: #cbd5e1 !important;
-  border-color: #475569 !important;
-}
-
-body.dark-theme .btn:hover,
-body.dark-theme .btn-guardar:hover,
-body.dark-theme .btn-editar:hover,
-body.dark-theme .btn-eliminar:hover,
-body.dark-theme .btn-cerrar-modal:hover {
-  background-color: rgba(203, 213, 225, 0.1) !important;
-  color: #e2e8f0 !important;
-  border-color: #64748b !important;
-}
-
-body.dark-theme .tablaGeneral .rdt_TableBody .rdt_TableRow {
-  background-color: #212b36 !important;
-  color: #cfd8dc !important;
-}
-
-body.dark-theme .tablaGeneral .rdt_TableBody .rdt_TableRow:hover {
-  background-color: #313a46 !important;
-}
-
-body.dark-theme .tablaGeneral .rdt_TableBody .rdt_TableCell {
-  background-color: transparent !important;
-  color: #cfd8dc !important;
-}
-
-body.dark-theme .badge-user,
-body.dark-theme .badge-ok,
-body.dark-theme .badge-fail,
-body.dark-theme .badge-alert,
-body.dark-theme .badge-aviso {
-  color: #151a20 !important;
-  background: #ee5252 !important;
-}
-
-body.dark-theme .accordion-button,
-body.dark-theme .accordion-button:not(.collapsed) {
-  background-color: #212b36 !important;
-  color: #cfd8dc !important;
-}
-
-body.dark-theme .dropdown-menu {
-  background: #212b36 !important;
-  color: #cfd8dc !important;
-  border: 1px solid #ee5252 !important;
-}
-
-body.dark-theme .list-group-item {
-  background-color: #181f27 !important;
-  color: white;
-}
-
-body.dark-theme .list-group-item.active {
-  background: #313a46 !important;
-  color: #ee5252 !important;
-  border-bottom: 4px solid #ee5252 !important;
-}
-
-body.dark-theme ::-webkit-scrollbar {
-  background: #232b36;
-}
-
-body.dark-theme ::-webkit-scrollbar-thumb {
-  background: #ee5252;
-}
-
-body.dark-theme ::-webkit-scrollbar-thumb:hover {
-  background: #ee5252;
-}
-
-body.dark-theme .submenu {
-  background: var(--glass-bg) !important;
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  color: var(--text-main) !important;
-  border-radius: var(--radius-sm) !important;
-  box-shadow: var(--shadow-glass-dark) !important;
-
-}
-
-body.dark-theme .subMenu ul {
-  margin-bottom: 0;
-}
-
-body.dark-theme .subMenu li {
-  width: 100% !important;
-  padding: 6px 0 6px 8px;
-  border-radius: 6px;
-  transition: background 0.18s;
-  margin-bottom: 10px;
-}
-
-
-/* ========== BOTÓN PRINCIPAL DE VENTA - DARK MODE ========== */
-body.dark-theme .boton-venta {
-  background-color: #232b36 !important;
-  color: #cfd8dc !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18) !important;
-  border: none !important;
-}
-
-body.dark-theme .boton-venta.activo {
-  border-bottom: 4px solid #ee5252 !important;
-  background-color: #313a46 !important;
-  color: #ee5252 !important;
-}
-
-body.dark-theme .boton-venta:hover {
-  background-color: #313a46 !important;
-  color: #ee5252 !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.22) !important;
-}
-
-body.dark-theme .boton-venta:active {
-  background-color: #232b36 !important;
-  color: #ee5252 !important;
-  opacity: 0.9;
-}
-
-/* ========== BOTONES DARK MODE DIFERENCIADOS Y MODERNOS (SIN DEGRADADO) ========== */
-
-/* Botón guardar (primario - tema oscuro) */
-body.dark-theme .btn-guardar {
-  background: #2d3748 !important;
-  color: #e2e8f0 !important;
-  border: 1px solid #475569 !important;
-  box-shadow: none;
-  font-weight: 600;
-  letter-spacing: 0.25px;
-  border-radius: 6px !important;
-}
-
-body.dark-theme .btn-guardar:hover {
-  background: #3a4454 !important;
-  color: #e2e8f0 !important;
-  border-color: #64748b !important;
-  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.3), 0 1px 3px 1px rgba(0,0,0,0.15);
-}
-
-/* Botón editar (outline gris - tema oscuro) */
-body.dark-theme .btn-editar {
-  background: transparent !important;
-  color: #cbd5e1 !important;
-  border: 1px solid #475569 !important;
-  box-shadow: none;
-  font-weight: 600;
-  border-radius: 6px !important;
-}
-
+/* Mejor contraste de texto al hacer hover sobre colores vibrantes en Dark Mode */
+body.dark-theme .btn-activar:hover,
 body.dark-theme .btn-editar:hover {
-  background: rgba(203, 213, 225, 0.1) !important;
-  color: #e2e8f0 !important;
-  border-color: #64748b !important;
+  color: var(--fw-onyx) !important;
+  /* Texto negro sobre el fondo brillante */
+  font-weight: 700;
+}
+body.dark-theme .btn-desactivar {
+  background-color: transparent;
+  color: var(----fw-muetd);
+  border-color: #475569;
 }
 
-/* Botón eliminar (gris neutral - tema oscuro) */
-body.dark-theme .btn-eliminar {
-  background: transparent !important;
-  color: #cbd5e1 !important;
-  border: 1px solid #475569 !important;
-  box-shadow: none;
-  font-weight: 600;
-  border-radius: 6px !important;
+body.dark-theme .btn-desactivar:hover {
+  background-color: #94a3b8;
+  /* Gris más claro para que resalte en fondo oscuro */
+  color: var(--fw-onyx) !important;
+  /* Texto oscuro sobre el gris claro */
+  border-color: #94a3b8;
+  font-weight: 700;
 }
 
 body.dark-theme .btn-eliminar:hover {
-  background: rgba(203, 213, 225, 0.1) !important;
-  color: #e2e8f0 !important;
-  border-color: #64748b !important;
+  color: var(--fw-onyx) !important;
+  font-weight: 700;
 }
 
-/* Botón cerrar/cancelar (gris neutral - tema oscuro) */
-body.dark-theme .btn-cerrar-modal {
-  background: #2d3748 !important;
-  color: #cbd5e1 !important;
-  border: 1px solid #475569 !important;
-  box-shadow: none;
-  font-weight: 600;
-  border-radius: 6px !important;
+body.dark-theme .tablaGeneral .rdt_TableBody .rdt_TableRow {
+  background-color: var(--bg-card) !important;
+  color: var(--text-main) !important;
 }
 
-body.dark-theme .btn-cerrar-modal:hover {
-  background: #3a4454 !important;
-  color: #e2e8f0 !important;
-  border-color: #64748b !important;
+body.dark-theme .tablaGeneral .rdt_TableBody .rdt_TableRow:hover {
+  background-color: #2D3748 !important;
 }
 
-/* Botón genérico (gris azulado, para otros casos) */
-body.dark-theme .btn:not(.btn-guardar):not(.btn-editar):not(.btn-eliminar):not(.btn-cerrar-modal) {
-  background: rgba(255, 255, 255, 0.04) !important;
-  color: #e8eaed !important;
-  border: 1px solid #5f6368 !important;
-  box-shadow: none;
-  font-weight: 500;
-  border-radius: var(--radius-pill)!important;
+body.dark-theme .dropdown-menu {
+  background: var(--bg-card) !important;
+  color: var(--text-main) !important;
+  border: 1px solid #313A46 !important;
 }
 
-body.dark-theme .btn:not(.btn-guardar):not(.btn-editar):not(.btn-eliminar):not(.btn-cerrar-modal):hover {
-  background: rgba(255, 255, 255, 0.08) !important;
+body.dark-theme .list-group-item {
+  background-color: var(--bg-card) !important;
+  color: var(--text-main);
+  border-color: #313A46;
 }
 
-/* ========== SCROLLBAR DARK MODE DISCRETO ========== */
+body.dark-theme .list-group-item.active {
+  background: #2D3748 !important;
+  color: var(--brand-primary) !important;
+  border-bottom: 4px solid var(--brand-primary) !important;
+}
+
+/* Scrollbar en oscuro */
 body.dark-theme ::-webkit-scrollbar {
   width: 10px;
-  background: #232b36;
-  /* Fondo gris oscuro */
+  background: var(--fw-onyx);
 }
 
 body.dark-theme ::-webkit-scrollbar-thumb {
-  background: #444b5a;
-  /* Gris más claro, discreto */
+  background: #313A46;
   border-radius: 6px;
 }
 
 body.dark-theme ::-webkit-scrollbar-thumb:hover {
-  background: #666e7a;
-  /* Un poco más claro al pasar el mouse */
+  background: #475569;
 }
 
-body.dark-theme ::-webkit-scrollbar-corner {
-  background: #232b36;
+/* Botón POS oscuro */
+body.dark-theme .boton-venta {
+  background-color: var(--bg-card) !important;
+  border: 1px solid #313A46 !important;
 }
 
-/* Firefox */
-body.dark-theme {
-  scrollbar-color: #444b5a #232b36;
-  scrollbar-width: thin;
+body.dark-theme .boton-venta.activo {
+  border-bottom: 4px solid var(--brand-primary) !important;
+  background-color: #2D3748 !important;
+  color: var(--brand-primary) !important;
 }
 
-body.dark-theme .border-bottom {
-  border-bottom: 1px solid #313a46 !important;
-}
-
-
-
-/* Sombra más notoria para cards en dark mode */
-body.dark-theme .card,
-body.dark-theme .modal-content {
-  background-color: #1c252e;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35) !important;
-  overflow: visible !important;
-}
-
-/* Botón genérico: un poco más claro si lo ves muy oscuro */
-body.dark-theme .btn:not(.btn-guardar):not(.btn-editar):not(.btn-eliminar):not(.btn-cerrar-modal) {
-  background: #283040 !important;
-  color: #cfd8dc !important;
-}
-
-/* ========== COLORES BOOTSTRAP ADAPTADOS A DARK MODE ========== */
-body.dark-theme .bg-light {
-  background: #191b20 !important;
-}
-
+/* Textos adaptados para Dark Mode */
 body.dark-theme .text-primary {
-  color: #6ec1fa !important;
-  /* Azul claro vibrante */
-}
-
-body.dark-theme .text-secondary {
-  color: #b0b8c1 !important;
-  /* Gris claro */
+  color: var(--brand-primary) !important;
 }
 
 body.dark-theme .text-success {
-  color: #27ae60 !important;
-  /* Verde vibrante */
+  color: var(--fw-emerald) !important;
 }
 
 body.dark-theme .text-danger {
-  color: #ee5252 !important;
-  /* Rojo corporativo */
+  color: var(--fw-strawberry) !important;
 }
 
 body.dark-theme .text-warning {
-  color: #f7c873 !important;
-  /* Amarillo suave */
-}
-
-body.dark-theme .text-info {
-  color: #3a7ca5 !important;
-  /* Azul info */
-}
-
-body.dark-theme .text-light {
-  color: #f5f6fa !important;
-  /* Casi blanco */
-}
-
-body.dark-theme .text-dark {
-  color: #cfd8dc !important;
-  /* Gris claro */
-}
-
-body.dark-theme .text-muted {
-  color: #888 !important;
-  /* Gris medio */
-}
-
-body.dark-theme .text-white {
-  color: #fff !important;
-}
-
-body.dark-theme .text-black {
-  color: #151a20 !important;
-}
-
-body.dark-theme .text-body {
-  color: #cfd8dc !important;
-}
-
-body.dark-theme .cardbody-pedidosWeb {
-  background-color: #252f38 !important;
+  color: var(--fw-saffron) !important;
 }
 
 /* =======================================================
-   STANDARDIZED VIEW HEADERS (Cabeceras idénticas en vistas)
+   STANDARDIZED VIEW HEADERS
 ========================================================== */
 .card-header {
   background-color: transparent !important;
@@ -1320,50 +776,35 @@ body.dark-theme .cardbody-pedidosWeb {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap; /* En caso de pantallas pequeñas */
+  flex-wrap: wrap;
   gap: 15px;
 }
 
 .titulo-card-especial {
   font-weight: 800 !important;
-  color: #1a202c !important; /* Dark slate standard for modern headers */
+  color: var(--fw-onyx) !important;
   font-size: 1.5rem !important;
   letter-spacing: -0.5px;
-  position: relative;
   margin-bottom: 0;
   display: flex;
   align-items: center;
 }
 
-/* 
-========================================================== 
-   VIEW-LEVEL STRUCTURAL SYNCHRONIZATION (Responsive)
-========================================================== 
-*/
 .card:has(.titulo-card-especial) {
   border-radius: 12px !important;
   margin: 0 !important;
-  background-color: #ffffff;
-  overflow: hidden; 
+  overflow: hidden;
 }
 
-body.dark-theme .card:has(.titulo-card-especial) {
-  background-color: #1a202c !important;
-  border: none !important;
-}
-
-/* Override body padding uniformly for standard views (Tablas Generales inside) 
-   excluding card-bodies that explicitly request padding for internal grids to prevent negative-margin overflows */
-.card:has(.titulo-card-especial) > .card-body:not([class*="p-"]) {
+.card:has(.titulo-card-especial)>.card-body:not([class*="p-"]) {
   padding: 0 !important;
 }
 
-/* Badge junto al título (ej. "0 activos") */
- .badge-header {
+.badge-header {
   font-size: 0.85rem;
   font-weight: 500;
-  background-color: #1a1a1a;
-  color: #ffffff;
+  background-color: var(--fw-onyx);
+  color: var(--fw-white);
   border: 1px solid #e2e8f0;
   border-radius: 8px;
   padding: 0.2rem 0.6rem;
@@ -1372,7 +813,6 @@ body.dark-theme .card:has(.titulo-card-especial) {
   position: relative;
 }
 
-/* Contenedor del buscador con ícono interno */
 .header-search-container {
   position: relative;
   display: flex;
@@ -1390,10 +830,10 @@ body.dark-theme .card:has(.titulo-card-especial) {
 
 .card-header input.form-control {
   border-radius: var(--radius-pill) !important;
-  padding: 0.45rem 1.25rem 0.45rem 2.2rem !important; /* Espacio para el icono a la izquierda */
+  padding: 0.45rem 1.25rem 0.45rem 2.2rem !important;
   min-width: 220px;
-  border: 1px solid transparent !important; /* Borde transparente por defecto */
-  background-color: #f1f5f9 !important; /* Fondo gris claro tipo mockup */
+  border: 1px solid transparent !important;
+  background-color: #f1f5f9 !important;
   color: #2d3748 !important;
   font-size: 0.9rem !important;
   transition: all var(--transition-smooth) !important;
@@ -1402,11 +842,10 @@ body.dark-theme .card:has(.titulo-card-especial) {
 .card-header input.form-control:focus {
   border-color: var(--brand-primary) !important;
   background-color: #ffffff !important;
-  box-shadow: 0 0 0 3px rgba(238, 82, 82, 0.15) !important;
+  box-shadow: 0 0 0 2px var(--bg-saffron-soft) !important;
 }
 
-/* Botones dentro del header de una vista */
-.card-header .btn {
+.btn {
   border-radius: var(--radius-pill) !important;
   height: 38px;
   display: flex;
@@ -1415,80 +854,78 @@ body.dark-theme .card:has(.titulo-card-especial) {
   padding: 0 1rem !important;
   font-weight: 600 !important;
   font-size: 0.9rem !important;
-  transition: all 0.2s ease-in-out !important;
-  gap: 6px; /* Espacio entre icono y texto */
+  gap: 6px;
 }
 
-.card-header .btn-outline-dark {
+.btn-outline-dark {
   border: 1px solid #cbd5e1 !important;
   color: #475569 !important;
   background-color: #ffffff !important;
 }
-.card-header .btn-outline-dark:hover {
+
+.btn-outline-dark:hover {
   background-color: #f8fafc !important;
   color: #0f172a !important;
   border-color: #94a3b8 !important;
 }
 
-.card-header .btn-dark {
+.btn-dark {
   background-color: var(--brand-primary) !important;
   color: white !important;
   border: none !important;
-  box-shadow: 0 2px 4px rgba(238, 82, 82, 0.2) !important;
-}
-.card-header .btn-dark:hover {
-  background-color: var(--brand-secondary) !important;
-  box-shadow: 0 4px 6px rgba(238, 82, 82, 0.3) !important;
-  transform: translateY(-1px);
 }
 
-/* Modo oscuro */
 body.dark-theme .titulo-card-especial {
-  color: #f1f5f9 !important;
+  color: var(--fw-white) !important;
 }
+
 body.dark-theme .titulo-card-especial .badge-header {
   background-color: #1e293b;
   color: #cbd5e1;
   border-color: #334155;
 }
+
 body.dark-theme .card-header input.form-control {
   background-color: #1e293b !important;
-  border-color: transparent !important;
   color: #f8fafc !important;
 }
-body.dark-theme .header-search-container .search-icon {
-  color: #64748b;
-}
+
 body.dark-theme .card-header .btn-outline-dark {
   background-color: transparent !important;
   border-color: #475569 !important;
   color: #e2e8f0 !important;
 }
+
 body.dark-theme .card-header .btn-outline-dark:hover {
   background-color: #1e293b !important;
   color: #f8fafc !important;
 }
 
-/* Responsividad Estricta para las cabeceras */
+body.dark-theme .card-header .btn-dark {
+  color: var(--fw-onyx) !important;
+  font-weight: 700 !important;
+}
+
 @media (max-width: 768px) {
   .card-header {
     flex-direction: column;
     align-items: flex-start !important;
     padding: 1rem !important;
   }
-  .card-header .d-flex.align-items-center {
-    width: 100%;
-  }
+
+  .card-header .d-flex.align-items-center,
   .card-header .d-flex {
     width: 100%;
     flex-wrap: wrap;
     gap: 10px;
   }
+
   .card-header input.form-control {
     width: 100% !important;
     min-width: 100%;
   }
+
   .card-header .btn {
-    flex: 1; /* Los botones comparten el espacio abajo del buscador */
+    flex: 1;
   }
 }

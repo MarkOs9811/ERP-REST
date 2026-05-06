@@ -178,12 +178,12 @@ export function CategoriaList() {
   };
 
   return (
-    <div className="card p-0 shadow-sm h-100">
+    <div className="card p-0  h-100">
       <div className="card-header d-flex justify-content-between align-items-center mb-2">
         <h5 className="mb-0">Categorías</h5>
         <div className="d-flex">
           <button
-            className="btn btn-outline-dark btn-sm rounded-pill px-2 "
+            className="btn btn-dark btn-sm rounded-pill px-2 "
             onClick={() => setModalAddCategoria(true)}
           >
             <FontAwesomeIcon icon={faPlus} />
@@ -264,7 +264,7 @@ export function CategoriaList() {
                     data-bs-toggle="tooltip"
                     data-bs-placement="top"
                     title="Activar Categoría"
-                    className="btn-secondary"
+                    className="btn-activar"
                     onClick={() =>
                       handleActivar(categoria.id, categoria.nombre)
                     }
@@ -285,42 +285,46 @@ export function CategoriaList() {
         hideFooter={true}
         title={"Nueva Categoría"}
       >
-        <form
-          className="card gap-3 border-0 h-100 bg-transparent p-3"
-          onSubmit={handleSubmit(handleRegisterCategoria)}
-        >
-          <div className="modal-body mb-3">
-            <label htmlFor="nombreCategoria" className="form-label">
-              Nombre de la categoría
-            </label>
-            <input
-              type="text"
-              id="nombreCategoria"
-              className={`form-control ${errors.nombre ? "is-invalid" : ""}`}
-              {...register("nombre", { required: "El nombre es obligatorio" })}
-              placeholder="Ej: Bebidas, Postres, etc."
-              autoFocus
-            />
-            {errors.nombre && (
-              <div className="invalid-feedback">{errors.nombre.message}</div>
-            )}
-          </div>
-          <div className="modal-footer gap-2 ">
-            <button
-              type="button"
-              className="btn-cerrar-modal"
-              onClick={() => {
-                reset();
-                setModalAddCategoria(false);
-              }}
-            >
-              Cancelar
-            </button>
-            <button type="submit" className="btn-guardar">
-              Guardar
-            </button>
-          </div>
-        </form>
+        {({ handleClose }) => (
+          <form
+            className="card gap-3 border-0 h-100 bg-transparent p-3"
+            onSubmit={handleSubmit(handleRegisterCategoria)}
+          >
+            <div className="modal-body mb-3">
+              <label htmlFor="nombreCategoria" className="form-label">
+                Nombre de la categoría
+              </label>
+              <input
+                type="text"
+                id="nombreCategoria"
+                className={`form-control ${errors.nombre ? "is-invalid" : ""}`}
+                {...register("nombre", {
+                  required: "El nombre es obligatorio",
+                })}
+                placeholder="Ej: Bebidas, Postres, etc."
+                autoFocus
+              />
+              {errors.nombre && (
+                <div className="invalid-feedback">{errors.nombre.message}</div>
+              )}
+            </div>
+            <div className="modal-footer gap-2">
+              <button
+                type="button"
+                className="btn-cerrar-modal"
+                onClick={() => {
+                  reset();
+                  handleClose();
+                }}
+              >
+                Cancelar
+              </button>
+              <button type="submit" className="btn-guardar">
+                Guardar
+              </button>
+            </div>
+          </form>
+        )}
       </ModalRight>
 
       {/* // modal para editar un CATEGORIA */}

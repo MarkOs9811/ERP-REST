@@ -1,58 +1,90 @@
-/* --- Badges Personalizados "Spectacular" --- */
+/* =========================================
+   BADGES PERSONALIZADOS - FIRE WOK UI 🔥
+   ========================================= */
 
 .badge-custom {
     font-weight: 600;
-    font-size: 0.6rem;
-    padding: 0.5em 0.8em;
-    border-radius: 50rem;
-    /* Pill shape perfecta */
-    transition: all 0.2s ease-in-out;
+    font-size: 0.75rem;
+    /* Ajustado para mejor legibilidad */
+    padding: 0.4em 0.8em;
+    border-radius: var(--radius-pill);
+    /* Usa tu variable global de app.css */
+    transition: all var(--transition-smooth);
     border: 1px solid transparent;
-    /* Para dar profundidad */
     cursor: pointer;
+    line-height: 1.2;
 }
 
-/* Estado: Éxito (Pagado, Activo) - Verde Menta Profesional */
+/* =========================================
+   COLORES BASE (HEREDAN MODO CLARO Y OSCURO DE APP.CSS)
+   ========================================= */
+
+/* Estado: Éxito (Pagado, Activo) - Emerald Fire Wok */
 .badge-soft-success {
-    background-color: #7dfac0;
-    /* Fondo muy suave */
-    color: #006948;
-    /* Texto verde fuerte */
-    border-color: #68d19b;
-    /* Borde sutil */
+    background-color: var(--bg-emerald-soft);
+    color: var(--fw-emerald);
+    border-color: rgba(23, 198, 104, 0.3);
+    /* Borde sutil del mismo tono */
 }
 
-/* Estado: Advertencia (Pendiente, Revisión) - Ámbar Cálido */
+/* Estado: Advertencia (Pendiente, Revisión) - Saffron Fire Wok */
 .badge-soft-warning {
-    background-color: #fffbeb;
-    color: #d97706;
-    border-color: #c0a849;
+    background-color: var(--bg-saffron-soft);
+    color: var(--fw-saffron);
+    border-color: rgba(255, 153, 44, 0.3);
 }
 
-/* Estado: Peligro (Inactivo, Error) - Rojo Rosado Moderno */
+/* Estado: Peligro (Inactivo, Error) - Strawberry Fire Wok */
 .badge-soft-danger {
-    background-color: #fef2f2;
-    color: #dc2626;
-    border-color: #c23f3f;
+    background-color: var(--bg-strawberry-soft);
+    color: var(--fw-strawberry);
+    border-color: rgba(228, 73, 73, 0.3);
 }
 
-/* Estado: Info (Procesando) - Azul Cielo */
-.badge-soft-info {
-    background-color: #eff6ff;
-    color: #2563eb;
-    border-color: #3772b9;
+/* Estado: Info / Primary (Neutro Oscuro Elegante) */
+.badge-soft-info,
+.badge-soft-primary {
+    background-color: #E2E8F0;
+    color: var(--fw-onyx);
+    border-color: #CBD5E1;
 }
 
-/* Estado: Neutral (Borrador) - Gris Elegante */
+/* Estado: Neutral (Borrador, N/A) - Gris Suave */
 .badge-soft-secondary {
-    background-color: #f3f4f6;
-    color: #4b5563;
-    border-color: #6f6f70;
+    background-color: var(--bg-main);
+    color: var(--text-muted);
+    border-color: #E5E7EB;
 }
 
-/* Opcional: Efecto Hover sutil */
+/* =========================================
+   EFECTO HOVER (INTERACTIVIDAD)
+   ========================================= */
 .badge-custom:hover {
-    filter: brightness(0.97);
+    filter: brightness(0.95);
     transform: translateY(-1px);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    box-shadow: var(--shadow-soft);
+}
+
+/* =========================================
+   🌙 MODO OSCURO (DARK THEME OVERRIDES)
+   ========================================= */
+/* Nota: Success, Warning y Danger ya se adaptan solos gracias a 
+   las variables rgba() de tu app.css. Solo ajustamos los neutros. */
+
+body.dark-theme .badge-custom:hover {
+    filter: brightness(1.2);
+    /* En oscuro, el hover debe iluminar, no oscurecer */
+}
+
+body.dark-theme .badge-soft-info,
+body.dark-theme .badge-soft-primary {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--fw-white);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+body.dark-theme .badge-soft-secondary {
+    background-color: rgba(255, 255, 255, 0.03);
+    color: var(--text-muted);
+    border-color: rgba(255, 255, 255, 0.1);
 }

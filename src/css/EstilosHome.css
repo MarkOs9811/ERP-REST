@@ -1,258 +1,6 @@
-/* ================================
-   PALETA DE COLORES NEUTRA - ADOBE CLOUD STYLE
-================================= */
-:root {
-    /* Colores neutros - Solo grises y tonos lineales */
-    --color-white: #ffffff;
-    --color-off-white: #f8f9fa;
-    --color-gray-50: #fafafa;
-    --color-gray-100: #f5f5f5;
-    --color-gray-200: #e8e8e8;
-    --color-gray-300: #d4d4d4;
-    --color-gray-400: #b4b4b4;
-    --color-gray-500: #8b8b8b;
-    --color-gray-600: #6b6b6b;
-    --color-gray-700: #424242;
-    --color-gray-800: #262626;
-    --color-gray-900: #0d0d0d;
-    
-    /* Acentos neutrales muy sutiles */
-    --color-primary: #5a5a5a;
-    --color-primary-light: #7a7a7a;
-    --color-accent: #6a6a6a;
-    
-    /* Estados - Colores en escala de grises */
-    --color-success: #5a5a5a;
-    --color-warning: #7a7a7a;
-    --color-danger: #636363;
-    --color-info: #5a5a5a;
-    
-    /* Sombras sutiles */
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
-    --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.06);
-    --shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.08);
-    --shadow-xl: 0 8px 16px rgba(0, 0, 0, 0.1);
-    
-    /* Espaciado */
-    --spacing-xs: 0.25rem;
-    --spacing-sm: 0.5rem;
-    --spacing-md: 1rem;
-    --spacing-lg: 1.5rem;
-    --spacing-xl: 2rem;
-    --spacing-2xl: 3rem;
-}
 
-/* ================================
-   ESTRUCTURA GENERAL - DASHBOARD
-================================= */
 
-.dashboard-container {
-    width: 100%;
-    padding: var(--spacing-2xl) var(--spacing-xl);
-    min-height: 100vh;
-}
 
-.dashboard-header {
-    margin-bottom: var(--spacing-2xl);
-    padding-bottom: var(--spacing-xl);
-    border-bottom: 1px solid var(--color-gray-200);
-}
-
-.dashboard-header h1 {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: var(--color-gray-900);
-    margin: 0 0 var(--spacing-sm) 0;
-    letter-spacing: -0.025em;
-}
-
-.dashboard-header p {
-    font-size: 1rem;
-    color: var(--color-gray-600);
-    margin: 0;
-    font-weight: 400;
-}
-
-/* Grid System */
-.dashboard-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: var(--spacing-lg);
-    width: 100%;
-    margin-bottom: var(--spacing-2xl);
-}
-
-.dashboard-grid.grid-2col {
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-}
-
-.dashboard-grid.grid-3col {
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-}
-
-/* Card Base - Adobe Cloud Style */
-.dashboard-card {
-    background-color: var(--color-white);
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: var(--shadow-md);
-    border: 1px solid var(--color-gray-200);
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
-/* Card Header - Modern Style */
-.card-header-modern {
-    display: flex;
-    align-items: flex-start;
-    gap: var(--spacing-md);
-    padding: var(--spacing-lg);
-    border-bottom: 1px solid var(--color-gray-100);
-    background-color: var(--color-gray-50);
-}
-
-.card-header-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    background-color: var(--color-gray-100);
-}
-
-.card-header-title h3 {
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: var(--color-gray-900);
-    margin: 0;
-}
-
-.card-header-title p {
-    font-size: 0.875rem;
-    color: var(--color-gray-500);
-    margin: var(--spacing-xs) 0 0 0;
-}
-
-/* Card Body */
-.card-body-modern {
-    padding: var(--spacing-lg);
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.card-body-modern > * {
-    width: 100%;
-}
-
-/* Métricas Rápidas */
-.metrics-quick {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: var(--spacing-md);
-    width: 100%;
-}
-
-.metric-item {
-    background-color: var(--color-white);
-    border: 1px solid var(--color-gray-200);
-    border-radius: 6px;
-    padding: var(--spacing-lg);
-    text-align: left;
-}
-
-.metric-label {
-    font-size: 0.875rem;
-    color: var(--color-gray-500);
-    font-weight: 500;
-    margin-bottom: var(--spacing-sm);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-.metric-value {
-    font-size: 1.875rem;
-    font-weight: 700;
-    color: var(--color-gray-900);
-    margin: 0;
-    display: flex;
-    align-items: baseline;
-    gap: var(--spacing-sm);
-}
-
-.metric-change {
-    font-size: 0.875rem;
-    color: var(--color-success);
-    font-weight: 500;
-}
-
-.metric-change.negative {
-    color: var(--color-danger);
-}
-
-/* Typographic Elements */
-h1, h2, h3, h4, h5, h6 {
-    font-family: "Outfit", sans-serif;
-    color: var(--color-gray-900);
-    font-weight: 600;
-    letter-spacing: -0.01em;
-}
-
-p, span {
-    font-family: "Inter", sans-serif;
-}
-
-.text-muted {
-    color: var(--color-gray-500);
-}
-
-.text-success {
-    color: var(--color-success);
-    font-weight: 500;
-}
-
-.text-danger {
-    color: var(--color-danger);
-    font-weight: 500;
-}
-
-.text-warning {
-    color: var(--color-warning);
-    font-weight: 500;
-}
-
-/* Botones para Dashboard */
-.btn-dashboard {
-    padding: 0.625rem 1rem;
-    border-radius: 6px;
-    border: none;
-    font-weight: 500;
-    font-size: 0.875rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-}
-
-.btn-dashboard-primary {
-    background-color: var(--color-primary);
-    color: white;
-}
-
-.btn-dashboard-secondary {
-    background-color: var(--color-gray-200);
-    color: var(--color-gray-800);
-}
-
-.btn-dashboard-outline {
-    background-color: transparent;
-    border: 1px solid var(--color-gray-300);
-    color: var(--color-gray-700);
-}
 
 /* ================================
    RESPONSIVE DESIGN
@@ -294,185 +42,102 @@ p, span {
     }
 }
 
-/* ================================
-   CARD VARIANTS - NEUTRAL STYLE
-================================= */
 
-.card-pedido-mesa {
-    background-color: var(--color-white);
-    border: 1px solid var(--color-gray-200);
-    border-radius: 8px;
-}
 
-.ico-badge {
-    width: 60px;
-    height: 60px;
-    margin: auto;
-    border-radius: 12px;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--color-gray-100);
-    color: var(--color-gray-700);
-    font-size: 1.5rem;
-    font-weight: 600;
-}
+/* =========================================
+   EFECTO DE OBJETO DIFUMINADO EN TARJETAS
+   ========================================= */
 
-.resumen-mes-pedidos-web {
-    background-color: var(--color-gray-100);
-    color: var(--color-gray-900);
-    border-radius: 8px;
-    padding: var(--spacing-lg);
-}
+/* Preparamos la tarjeta para contener el efecto */
+/* =========================================
+   EFECTO DE AURA "BLEEDING" (ESTILO FIRE WOK)
+   ========================================= */
+/* =========================================
+   PALETA OFICIAL FIRE WOK - FLAT & MINIMALISTA
+   ========================================= */
+/* =========================================
+   BRILLO GAUSIANO CON LA PALETA FIRE WOK
+   ========================================= */
 
-.resumen-mes-pedidos-llevar {
-    background-color: var(--color-gray-100);
-    color: var(--color-gray-900);
-    font-size: 1.25rem;
-    font-weight: 600;
-    border-radius: 8px;
-    padding: var(--spacing-lg);
-}
+/* 1. Preparamos la tarjeta para que el brillo pueda "sangrar" hacia afuera */
+/* =========================================
+   AURA UI - CRITERIO FIRE WOK 🔥
+   ========================================= */
 
-.resumen-mes-pedidos-mesa {
-    background-color: var(--color-gray-100);
-    color: var(--color-gray-900);
-    font-size: 1.25rem;
-    font-weight: 600;
-    border-radius: 8px;
-    padding: var(--spacing-lg);
-}
-
-.badge-ico {
-    padding: var(--spacing-md);
-    border-radius: 8px;
-    background-color: var(--color-gray-100);
-    color: var(--color-gray-700);
-    font-weight: 500;
-}
-
-.badge-ico-pedidos-pendientes {
-    background-color: var(--color-gray-200);
-    color: var(--color-gray-700);
-}
-
-.badge-ico-almacen {
-    background-color: var(--color-gray-200);
-    color: var(--color-gray-700);
-}
-
-/* Card Estados - Sin Gradientes */
-.card-pedidos-pendientes {
-    background-color: var(--color-gray-100);
-    color: var(--color-gray-900);
-    box-shadow: var(--shadow-sm);
-    border-radius: 8px;
-    border: 1px solid var(--color-gray-200);
-    padding: var(--spacing-lg);
-}
-
-.card-alerta-almacen {
-    background-color: var(--color-gray-100);
-    color: var(--color-gray-900);
-    box-shadow: var(--shadow-sm);
-    border-radius: 8px;
-    border: 1px solid var(--color-gray-200);
-    padding: var(--spacing-lg);
-}
-/* ================================
-   DECORATIVE SHAPES REMOVED - CLEAN DESIGN
-================================= */
-/* Formas decorativas removidas para diseño limpio tipo Adobe */
-
-/* Asistente flotante */
-.ai-assistant-floating {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    z-index: 1000;
-}
-
-.ai-assistant-floating button {
-    background-color: var(--color-primary);
-    border: none;
-    padding: 0.75rem 1.25rem;
-    font-size: 0.9rem;
-    border-radius: 50px;
-    box-shadow: var(--shadow-md);
-    color: white;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+.card-difuminada {
     position: relative;
-    overflow: hidden;
+    background-color: var(--bg-emerald-soft);
+        /* Automáticamente se adapta a claro u oscuro */
+    border: 1px solid #EAEAEA;
+    border-radius: 12px;
+    /* La tarjeta en sí no tiene sombra pesada, es flat */
 }
 
-.ai-assistant-floating button::before {
-    content: '';
+.card-difuminada .card-body {
+    position: relative;
+    z-index: 2;
+}
+
+/* Base del orbe de luz */
+.card-difuminada::after {
+    content: "";
     position: absolute;
-    top: -20px;
-    left: -20px;
-    width: 60px;
-    height: 60px;
-    background: rgba(255, 255, 255, 0.2);
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
+    bottom: -30px;
+    right: -30px;
+    filter: blur(30px);
+    z-index: 1;
+    pointer-events: none;
 }
 
-.ai-assistant-card {
-    position: absolute;
-    bottom: 70px;
-    right: 0;
-    width: 320px;
-    display: none;
-    background: white;
-    border-radius: 8px;
-    border: 1px solid var(--color-gray-light);
-    box-shadow: var(--shadow-lg);
-    overflow: hidden;
+/* 1. VENTAS: Positivo (Emerald) */
+.difuminado-ventas::after {
+    background-color: #17C668;
+    opacity: 0.15;
+    /* Sutil, elegante */
 }
 
-.ai-assistant-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 4px;
-    background: var(--color-primary);
+.icono-institucional-ventas {
+    color: #17C668;
 }
 
-.ai-assistant-card .card-header {
-    padding: 1rem;
-    background-color: var(--color-dark);
-    color: white;
-    font-weight: 500;
+/* 2. MESAS: Operativo (Champagne Mist muy suave o transparente) */
+.difuminado-mesas::after {
+    background-color: #111213;
+    opacity: 0.20;
+    /* Da un calorcito tenue a la esquina, sin manchar */
 }
 
-.ai-message {
-    padding: 1rem;
-    font-size: 0.9rem;
+.icono-institucional-mesas {
+    color: #111213;
 }
 
-.ai-response {
-    background-color: var(--color-light);
-    border-left: 3px solid var(--color-primary);
-    margin: 1rem;
-    border-radius: 6px;
+/* Onyx para el contraste */
+
+/* 3. PEDIDOS: Espera (Naranja derivado de tu marca) */
+.difuminado-pedidos::after {
+    background-color: #FF992C;
+    /* Naranja cálido, encaja con Fire Wok */
+    opacity: 0.15;
 }
 
-/* ================================
-   AVATAR Y ELEMENTOS DE USUARIO
-================================= */
-.user-avatar {
-    width: 36px;
-    height: 36px;
-    object-fit: cover;
-    border: 2px solid var(--color-gray-light);
-    border-radius: 50%;
+.icono-institucional-pedidos {
+    color: #FF992C;
 }
 
+/* 4. ALMACÉN: Alerta (Strawberry Red) */
+.difuminado-almacen::after {
+    background-color: #E44949;
+    opacity: 0.20;
+}
+
+.icono-institucional-almacen {
+    color: #E44949;
+}
+
+/* Rojo */
 /* ================================
    MEDIA QUERIES PARA RESPONSIVIDAD
 ================================= */

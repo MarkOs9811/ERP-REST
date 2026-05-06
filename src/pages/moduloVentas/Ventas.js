@@ -1,23 +1,97 @@
+import React, { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import GraficoBarVentas from "../../graficosChar/GraficoBarVentas";
-import GraficoLineaEjemplo from "../../graficosChar/GraficoLineVentas";
-import GraficoLineaDayVentas from "../../graficosChar/GraficoLineDayVentas";
-import "../../css/EstilosVentas.css";
-import { getVentas } from "../../service/ObtenerVentasDetalle";
 import {
   CalendarFold,
   FileText,
-  Search,
   TrendingDown,
   TrendingUp,
   DollarSign,
 } from "lucide-react";
-import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteExcel";
-import GraficoMetodoPago from "../../graficosChar/GraficoMetodoPago";
-import { PlatoMasVendido } from "../../components/componentesHome/PlatosMasVendidos";
-import { CondicionCarga } from "../../components/componentesReutilizables/CondicionCarga";
 
+// Servicios y Componentes
+import { getVentas } from "../../service/ObtenerVentasDetalle";
+import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteExcel";
+import { CondicionCarga } from "../../components/componentesReutilizables/CondicionCarga";
+import { PlatoMasVendido } from "../../components/componentesHome/PlatosMasVendidos";
+
+// Gráficos
+import GraficoBarVentas from "../../graficosChar/GraficoBarVentas";
+import GraficoLineaEjemplo from "../../graficosChar/GraficoLineVentas";
+import GraficoLineaDayVentas from "../../graficosChar/GraficoLineDayVentas";
+import GraficoMetodoPago from "../../graficosChar/GraficoMetodoPago";
+
+// Estilos
+import "../../css/EstilosVentas.css";
+
+/* =================================================================================
+   1. SUB-COMPONENTE REUTILIZABLE: Tarjeta KPI (Evita repetir código HTML)
+================================================================================= */
+const KpiCard = ({
+  titulo,
+  monto,
+  porcentaje,
+  icono: Icon,
+  colorClass,
+  esPositivo,
+}) => {
+  return (
+    <div
+      className="card p-3 d-flex flex-column justify-content-between h-100"
+      style={{ backgroundColor: "var(--bg-card)", minHeight: "140px" }}
+    >
+      <div className="d-flex align-items-center gap-2 mb-3">
+        {/* Ícono Circular */}
+        <span
+          className="rounded-circle p-3"
+          style={{
+            backgroundColor: `var(--bg-${colorClass}-soft)`,
+            color: `var(--fw-${colorClass})`,
+          }}
+        >
+          <Icon size={24} />
+        </span>
+
+        {/* Porcentaje */}
+        <span
+          className="ms-auto fw-bold d-flex align-items-center gap-1"
+          style={{ fontSize: "0.9rem", color: `var(--fw-${colorClass})` }}
+        >
+          {esPositivo ? <TrendingUp size={16} /> : <TrendingDown size={16} />}
+          {esPositivo ? "+" : ""}
+          {porcentaje}%
+        </span>
+      </div>
+
+      {/* Textos */}
+      <div>
+        <span
+          className="text-muted fw-bold"
+          style={{ fontSize: "0.85rem", display: "block", marginBottom: "4px" }}
+        >
+          {titulo}
+        </span>
+        <h3
+          className="fw-bold mb-0"
+          style={{
+            fontSize: "1.3rem",
+            color:
+              colorClass === "emerald" || colorClass === "strawberry"
+                ? `var(--fw-${colorClass})`
+                : "var(--text-main)",
+          }}
+        >
+          S/ {monto}
+        </h3>
+      </div>
+    </div>
+  );
+};
+
+/* =================================================================================
+   2. COMPONENTE PRINCIPAL: Vista de Ventas
+================================================================================= */
 export function Ventas() {
+  // --- A. FETCH DE DATOS ---
   const {
     data: ventasData,
     isLoading,
@@ -27,335 +101,205 @@ export function Ventas() {
     queryFn: getVentas,
   });
 
-  const ventas = Array.isArray(ventasData) ? ventasData : [];
-  const now = new Date();
-  const mesActual = now.getMonth() + 1;
-  const anioActual = now.getFullYear();
-  const mesPasado = mesActual === 1 ? 12 : mesActual - 1;
-  const anioMesPasado = mesActual === 1 ? anioActual - 1 : anioActual;
+  // --- B. PROCESAMIENTO MATEMÁTICO (Optimizado con useMemo) ---
+  const metricas = useMemo(() => {
+    const ventas = Array.isArray(ventasData) ? ventasData : [];
+    const now = new Date();
 
-  const totalVentas = ventas
-    .filter((venta) => {
-      const fecha = new Date(venta.created_at);
-      return (
-        fecha.getMonth() + 1 === mesActual && fecha.getFullYear() === anioActual
-      );
-    })
-    .reduce((sum, venta) => sum + parseFloat(venta.total || 0), 0)
-    .toFixed(2);
+    // Fechas clave
+    const hoy = {
+      dia: now.getDate(),
+      mes: now.getMonth(),
+      anio: now.getFullYear(),
+    };
+    const mesActual = now.getMonth() + 1;
+    const anioActual = now.getFullYear();
+    const mesPasado = mesActual === 1 ? 12 : mesActual - 1;
+    const anioMesPasado = mesActual === 1 ? anioActual - 1 : anioActual;
 
-  const totalVentasMesPasado = ventas
-    .filter((venta) => {
+    let totalMesActual = 0;
+    let totalMesPasado = 0;
+    let totalHoy = 0;
+
+    ventas.forEach((venta) => {
       const fecha = new Date(venta.created_at);
-      return (
+      const monto = parseFloat(venta.total || 0);
+
+      // Sumar Mes Actual
+      if (
+        fecha.getMonth() + 1 === mesActual &&
+        fecha.getFullYear() === anioActual
+      ) {
+        totalMesActual += monto;
+      }
+      // Sumar Mes Pasado
+      if (
         fecha.getMonth() + 1 === mesPasado &&
         fecha.getFullYear() === anioMesPasado
-      );
-    })
-    .reduce((sum, venta) => sum + parseFloat(venta.total || 0), 0)
-    .toFixed(2);
+      ) {
+        totalMesPasado += monto;
+      }
+      // Sumar Hoy
+      if (
+        fecha.getDate() === hoy.dia &&
+        fecha.getMonth() === hoy.mes &&
+        fecha.getFullYear() === hoy.anio
+      ) {
+        totalHoy += monto;
+      }
+    });
 
-  const diferenciaVentas = (
-    parseFloat(totalVentas) - parseFloat(totalVentasMesPasado)
-  ).toFixed(2);
+    const diferencia = totalMesActual - totalMesPasado;
+    const porcentajeCrecimiento =
+      totalMesPasado > 0 ? (diferencia / totalMesPasado) * 100 : 0;
+    const porcentajeMensual =
+      totalMesActual > 0 ? (totalMesPasado / totalMesActual) * 100 : 0;
 
-  const hoy = new Date();
-  const totalVentasHoy = ventas
-    .filter((venta) => {
-      const fecha = new Date(venta.created_at);
-      return (
-        fecha.getDate() === hoy.getDate() &&
-        fecha.getMonth() === hoy.getMonth() &&
-        fecha.getFullYear() === hoy.getFullYear()
-      );
-    })
-    .reduce((sum, venta) => sum + parseFloat(venta.total || 0), 0)
-    .toFixed(2);
+    return {
+      hoy: totalHoy.toFixed(2),
+      mesActual: totalMesActual.toFixed(2),
+      mesPasado: totalMesPasado.toFixed(2),
+      diferencia: diferencia.toFixed(2),
+      crecimientoPct: porcentajeCrecimiento.toFixed(1),
+      mensualPct: porcentajeMensual.toFixed(1),
+      esDiferenciaPositiva: diferencia >= 0,
+    };
+  }, [ventasData]);
 
+  // --- C. RENDERIZADO DE LA INTERFAZ ---
   return (
-    <div className="row g-3 ">
-      {/* Encabezado: Ventas de Hoy y Gráfico por Hora */}
-      <div className="col-12 col-lg-7 h-100 ">
-        <div className="row g-3 ">
-          <div className="col-12">
-            <CondicionCarga isLoading={isLoading} isError={isError}>
-              <div className="card  py-2 h-100">
-                <div className="card-header d-flex p-4 bg-transparent justify-content-between align-items-center">
-                  <div>
-                    <h1 className="m-0 mb-2">¡Buen día!</h1>
-                    <p className="fw-normal text-secondary m-0">
-                      Esto es lo que sucede con tus Ventas Hoy
-                    </p>
-                  </div>
-                  <div className="ms-auto">
-                    <img
-                      src="/images/store.png"
-                      alt="tienda"
-                      className="store-image img-fluid"
-                    />
-                  </div>
-                </div>
-                <div className="card-body">
-                  <div>
-                    <p className="totalVentasTitulo mb-2">
-                      S/.{totalVentasHoy}
-                    </p>
-                    <small className="text-secondary fw-normal">
-                      Ventas Hoy
-                    </small>
-                  </div>
-                </div>
-                <div className="card-footer bg-auto  d-flex p-4">
-                  <div className="d-flex ms-auto">
-                    <button
-                      type="button"
-                      className="btn d-flex btn-outline-dark px-3"
-                      onClick={() => GetReporteExcel("/reporteVentasHOY")}
+    <div className="container-fluid p-0">
+      <div className="row g-4">
+        {/* ================= FILA 1: KPIs PRINCIPALES (General) ================= */}
+        <div className="col-12">
+          <div className="row g-3">
+            {/* Ventas Hoy */}
+            <div className="col-12 col-md-6 col-lg-3">
+              <CondicionCarga isLoading={isLoading} isError={isError}>
+                <div className="card py-2 h-100 ">
+                  <div className="card-body d-flex flex-column justify-content-center">
+                    <div className="d-flex justify-content-between align-items-start mb-2">
+                      <p className="fw-bold m-0">Ventas Hoy</p>
+                      <button
+                        type="button"
+                        className="btn btn-sm btn-outline-dark px-2 py-1"
+                        onClick={() => GetReporteExcel("/reporteVentasHOY")}
+                        title="Descargar Reporte"
+                      >
+                        <FileText size={14} />
+                      </button>
+                    </div>
+                    <p
+                      className="totalVentasTitulo mb-0"
+                      style={{ fontSize: "2rem" }}
                     >
-                      <FileText size={18} />
-                      Reporte Hoy
-                    </button>
+                      S/ {metricas.hoy}
+                    </p>
                   </div>
                 </div>
-              </div>
-            </CondicionCarga>
-          </div>
-          {/* Gráficos Row 1 */}
-          <div className="col-md-4 ">
-            <CondicionCarga isLoading={isLoading} isError={isError}>
-              <div className="card p-3  h-100 w-100 m-0">
-                <h6
-                  className="fw-bold mb-3"
-                  style={{ fontSize: "0.95rem", color: "#374151" }}
-                >
-                  Ventas por Hora
-                </h6>
-                <GraficoLineaDayVentas />
-              </div>
-            </CondicionCarga>
-          </div>
-          <div className="col-md-4 ">
-            <CondicionCarga isLoading={isLoading} isError={isError}>
-              <div className="card p-3  h-100 w-100 m-0">
-                <h6
-                  className="fw-bold mb-3"
-                  style={{ fontSize: "0.95rem", color: "#374151" }}
-                >
-                  Métodos de Pago
-                </h6>
-                <GraficoMetodoPago />
-              </div>
-            </CondicionCarga>
-          </div>
-          <div className="col-md-4 ">
-            <CondicionCarga isLoading={isLoading} isError={isError}>
-              <div className="card p-3  h-100 w-100 m-0">
-                <h6
-                  className="fw-bold mb-3"
-                  style={{ fontSize: "0.95rem", color: "#374151" }}
-                >
-                  Top Ventas
-                </h6>
-                <PlatoMasVendido />
-              </div>
-            </CondicionCarga>
-          </div>
-        </div>
-      </div>
+              </CondicionCarga>
+            </div>
 
-      {/* Resumen mensual y gráfico mensual */}
-      <div className="col-12 col-lg-5 h-100">
-        <div className="row g-3">
-          {/* Tarjetas resumen tipo dashboard */}
-          <div className="col-12">
-            <div className="row g-3">
-              <div className="col-4">
-                <CondicionCarga
-                  isLoading={isLoading}
-                  isError={isError}
-                  mode="single-card"
-                >
-                  <div
-                    className="card   p-3 d-flex flex-column justify-content-between"
-                    style={{ background: "white", minHeight: 140 }}
-                  >
-                    <div className="d-flex align-items-center gap-2 mb-3">
-                      <span className="bg-success bg-opacity-10 rounded-circle p-3">
-                        <DollarSign size={24} className="text-success" />
-                      </span>
-                      <span
-                        className="ms-auto text-success fw-bold d-flex align-items-center gap-1"
-                        style={{ fontSize: "0.9rem" }}
-                      >
-                        <TrendingUp size={16} /> +
-                        {(
-                          (diferenciaVentas / totalVentasMesPasado) *
-                          100
-                        ).toFixed(1)}
-                        %
-                      </span>
-                    </div>
-                    <div>
-                      <span
-                        className="text-muted fw-600"
-                        style={{
-                          fontSize: "0.85rem",
-                          display: "block",
-                          marginBottom: "4px",
-                        }}
-                      >
-                        Este Mes
-                      </span>
-                      <h3
-                        className="fw-bold text-dark mb-0"
-                        style={{ fontSize: "1.3rem" }}
-                      >
-                        S/ {totalVentas}
-                      </h3>
-                    </div>
-                  </div>
-                </CondicionCarga>
-              </div>
-              <div className="col-4">
-                <CondicionCarga
-                  isLoading={isLoading}
-                  isError={isError}
-                  mode="single-card"
-                >
-                  <div
-                    className="card   p-3 d-flex flex-column justify-content-between"
-                    style={{ background: "white", minHeight: 140 }}
-                  >
-                    <div className="d-flex align-items-center gap-2 mb-3">
-                      <span className="bg-warning bg-opacity-10 rounded-circle p-3">
-                        <CalendarFold size={24} className="text-warning" />
-                      </span>
-                      <span
-                        className="ms-auto text-warning fw-bold d-flex align-items-center gap-1"
-                        style={{ fontSize: "0.9rem" }}
-                      >
-                        <TrendingUp size={16} /> +
-                        {((totalVentasMesPasado / totalVentas) * 100).toFixed(
-                          1,
-                        )}
-                        %
-                      </span>
-                    </div>
-                    <div>
-                      <span
-                        className="text-muted fw-600"
-                        style={{
-                          fontSize: "0.85rem",
-                          display: "block",
-                          marginBottom: "4px",
-                        }}
-                      >
-                        Mes Pasado
-                      </span>
-                      <h3
-                        className="fw-bold text-dark mb-0"
-                        style={{ fontSize: "1.3rem" }}
-                      >
-                        S/ {totalVentasMesPasado}
-                      </h3>
-                    </div>
-                  </div>
-                </CondicionCarga>
-              </div>
-              <div className="col-4">
-                <CondicionCarga
-                  isLoading={isLoading}
-                  isError={isError}
-                  mode="single-card"
-                >
-                  <div
-                    className="card   p-3 d-flex flex-column justify-content-between"
-                    style={{
-                      background: "white",
-                      minHeight: 140,
-                    }}
-                  >
-                    <div className="d-flex align-items-center gap-2 mb-3">
-                      <span
-                        className={`rounded-circle p-3 ${
-                          diferenciaVentas > 0
-                            ? "bg-success bg-opacity-10"
-                            : "bg-danger bg-opacity-10"
-                        }`}
-                      >
-                        {diferenciaVentas > 0 ? (
-                          <TrendingUp size={28} className="text-success" />
-                        ) : (
-                          <TrendingDown size={28} className="text-danger" />
-                        )}
-                      </span>
-                      <span
-                        className={`ms-auto fw-bold text-sm ${
-                          diferenciaVentas > 0 ? "text-success" : "text-danger"
-                        }`}
-                        style={{ fontSize: "0.9rem" }}
-                      >
-                        {diferenciaVentas > 0 ? "+" : ""}
-                        {(
-                          (diferenciaVentas / totalVentasMesPasado) *
-                          100
-                        ).toFixed(1)}
-                        %
-                      </span>
-                    </div>
-                    <div>
-                      <span
-                        className="text-muted fw-600"
-                        style={{
-                          fontSize: "0.85rem",
-                          display: "block",
-                          marginBottom: "4px",
-                        }}
-                      >
-                        Diferencia
-                      </span>
-                      <h3
-                        className={`fw-bold mb-0 ${
-                          diferenciaVentas > 0 ? "text-success" : "text-danger"
-                        }`}
-                        style={{ fontSize: "1.3rem" }}
-                      >
-                        S/ {diferenciaVentas}
-                      </h3>
-                    </div>
-                  </div>
-                </CondicionCarga>
-              </div>
+            {/* Este Mes */}
+            <div className="col-12 col-md-6 col-lg-3">
+              <CondicionCarga
+                isLoading={isLoading}
+                isError={isError}
+                mode="single-card"
+              >
+                <KpiCard
+                  titulo="Este Mes"
+                  monto={metricas.mesActual}
+                  porcentaje={metricas.crecimientoPct}
+                  icono={DollarSign}
+                  colorClass="emerald"
+                  esPositivo={true}
+                />
+              </CondicionCarga>
+            </div>
+
+            {/* Mes Pasado */}
+            <div className="col-12 col-md-6 col-lg-3">
+              <CondicionCarga
+                isLoading={isLoading}
+                isError={isError}
+                mode="single-card"
+              >
+                <KpiCard
+                  titulo="Mes Pasado"
+                  monto={metricas.mesPasado}
+                  porcentaje={metricas.mensualPct}
+                  icono={CalendarFold}
+                  colorClass="saffron"
+                  esPositivo={true}
+                />
+              </CondicionCarga>
+            </div>
+
+            {/* Diferencia */}
+            <div className="col-12 col-md-6 col-lg-3">
+              <CondicionCarga
+                isLoading={isLoading}
+                isError={isError}
+                mode="single-card"
+              >
+                <KpiCard
+                  titulo="Diferencia"
+                  monto={metricas.diferencia}
+                  porcentaje={metricas.crecimientoPct}
+                  icono={
+                    metricas.esDiferenciaPositiva ? TrendingUp : TrendingDown
+                  }
+                  colorClass={
+                    metricas.esDiferenciaPositiva ? "emerald" : "strawberry"
+                  }
+                  esPositivo={metricas.esDiferenciaPositiva}
+                />
+              </CondicionCarga>
             </div>
           </div>
-          {/* Gráfico mensual de todas las ventas */}
-          <div className="col-12">
-            <CondicionCarga isLoading={isLoading} isError={isError}>
-              <div className="card p-4  h-100">
-                <h6
-                  className="fw-bold mb-3"
-                  style={{ fontSize: "0.95rem", color: "#374151" }}
-                >
-                  Ventas Acumuladas
-                </h6>
-                <GraficoBarVentas />
-              </div>
-            </CondicionCarga>
-          </div>
-          {/* Gráfico ventas solo del ultimo mes*/}
-          <div className="col-12">
-            <CondicionCarga isLoading={isLoading} isError={isError}>
-              <div className="card p-4 shadow-sm h-100">
-                <h6
-                  className="fw-bold mb-3"
-                  style={{ fontSize: "0.95rem", color: "#374151" }}
-                >
-                  Tendencia Mensual
-                </h6>
-                <GraficoLineaEjemplo />
-              </div>
-            </CondicionCarga>
-          </div>
+        </div>
+
+        {/* ================= FILA 2: PROTAGONISTAS (Gráfico Ancho + Ranking) ================= */}
+        <div className="col-12 col-lg-8">
+          <CondicionCarga isLoading={isLoading} isError={isError}>
+            <div className="card p-4 h-100">
+              {/* Al darle 8 columnas, este gráfico al fin podrá mostrar los meses de Enero a Diciembre sin aplastarse */}
+              <GraficoBarVentas />
+            </div>
+          </CondicionCarga>
+        </div>
+
+        <div className="col-12 col-lg-4">
+          <CondicionCarga isLoading={isLoading} isError={isError}>
+            {/* El Plato Más Vendido encaja perfecto como barra lateral derecha */}
+            <PlatoMasVendido />
+          </CondicionCarga>
+        </div>
+
+        {/* ================= FILA 3: ANÁLISIS DETALLADO (Tercios) ================= */}
+        <div className="col-12 col-lg-6">
+          <CondicionCarga isLoading={isLoading} isError={isError}>
+            <div className="card p-4 h-100 m-0">
+              <GraficoLineaEjemplo />
+            </div>
+          </CondicionCarga>
+        </div>
+
+        <div className="col-12 col-lg-3">
+          <CondicionCarga isLoading={isLoading} isError={isError}>
+            <div className="card p-4 h-100 m-0">
+              <GraficoLineaDayVentas />
+            </div>
+          </CondicionCarga>
+        </div>
+
+        <div className="col-12 col-lg-3">
+          <CondicionCarga isLoading={isLoading} isError={isError}>
+            <div className="card h-100 p-4">
+              <GraficoMetodoPago />
+            </div>
+          </CondicionCarga>
         </div>
       </div>
     </div>

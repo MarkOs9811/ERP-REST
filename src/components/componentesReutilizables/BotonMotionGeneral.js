@@ -31,7 +31,7 @@ export function BotonMotionGeneral({
         // 1. classDefault (estilos bootstrap básicos)
         // 2. btn-motion-theme (nuestros colores y lógica de texto)
         // 3. w-100 (si fullWidth es true)
-        className={`${classDefault} btn-motion-theme ${
+        className={`${classDefault} rounded-pill btn-principal d-flex ${
           fullWidth ? "w-100" : ""
         } ${loading ? "opacity-75" : ""}`}
       >
@@ -51,7 +51,7 @@ export function BotonMotionGeneral({
           <>
             {/* Icono: flex-shrink-0 evita que se aplaste */}
             {icon && (
-              <span className="d-flex align-items-center flex-shrink-0">
+              <span className="d-flex align-items-center flex-shrink-0 mx-2">
                 {icon}
               </span>
             )}

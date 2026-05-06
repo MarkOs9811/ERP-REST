@@ -151,7 +151,7 @@
 }
 .menu-item {
     text-align: center;
-    color: var(--text-muted) !important;
+    color: var(--fw-onyx);
     transition: all 0.2s ease-in-out;
     border-radius: 10px; /* Material 3 Pill shape */
 }
@@ -271,7 +271,7 @@
         display: flex;
         align-items: center;
         justify-content: flex-start !important;
-        /* Alineado a la izquierda */
+        color: var(--fw-onyx)
     }
 
     .menu-item .d-flex {

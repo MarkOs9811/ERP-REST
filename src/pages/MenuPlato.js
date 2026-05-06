@@ -3,23 +3,26 @@ import { CategoriaList } from "../components/componentePlatos/CategoriaList";
 import { PlatoList } from "../components/componentePlatos/PlatoList";
 import { PlatoAdd } from "../components/componentePlatos/PlatoAdd";
 import { CombosList } from "../components/componentePlatos/CombosList";
-import { useQueryClient } from "@tanstack/react-query";
 import { GetReporteExcel } from "../service/accionesReutilizables/GetReporteExcel";
 import { FileText, Plus, Search } from "lucide-react";
 import { CondicionCarga } from "../components/componentesReutilizables/CondicionCarga";
 import ModalRight from "../components/componentesReutilizables/ModalRight";
+import { CategoriaPlatos } from "../components/componenteVender/tareasVender/CategoriaPlatos";
+import { useSelector } from "react-redux";
 
 export function MenuPlato() {
   const [search, setSearch] = useState("");
   const [upDateList, setUpDateList] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const queryClient = useQueryClient();
+  const categoriaActual = useSelector(
+    (state) => state.categoriaFiltroPlatos.estado,
+  );
 
   return (
     <div className="row g-3 ">
       <div className="col-md-12 col-lg-12">
         <CondicionCarga isLoading={upDateList} isError={null}>
-          <div className="card shadow-sm h-100">
+          <div className="card  h-100">
             <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center mb-2">
               <div className="d-flex align-items-center">
                 <h4 className="card-title mb-0 titulo-card-especial">
@@ -27,7 +30,7 @@ export function MenuPlato() {
                 </h4>
                 <span className="badge-header">Platos</span>
               </div>
-              
+              <CategoriaPlatos />
               <div className="d-flex align-items-center flex-wrap gap-2 mt-3 mt-md-0">
                 <div className="header-search-container">
                   <Search className="search-icon" />
@@ -39,7 +42,7 @@ export function MenuPlato() {
                     onChange={(e) => setSearch(e.target.value)}
                   />
                 </div>
-                
+
                 <button
                   type="button"
                   className="btn btn-outline-dark px-3"
@@ -60,7 +63,11 @@ export function MenuPlato() {
               </div>
             </div>
             <div className="card-body p-0">
-              <PlatoList search={search} upDateList={upDateList} />
+              <PlatoList
+                search={search}
+                upDateList={upDateList}
+                categoriaActual={categoriaActual}
+              />
             </div>
           </div>
         </CondicionCarga>

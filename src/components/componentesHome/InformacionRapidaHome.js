@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-
 import { getVentas } from "../../service/ObtenerVentasDetalle";
 import { GetMesas } from "../../service/GetMesas";
 import { GetAlmacen } from "../../service/serviceAlmacen/GetAlmacen";
@@ -18,6 +17,7 @@ export function InformacionRapidaHome({}) {
     refetchOnWindowFocus: false,
     retry: 1,
   });
+
   const {
     data: mesas = [],
     isLoading: isLoadingMesas,
@@ -51,37 +51,26 @@ export function InformacionRapidaHome({}) {
     retry: 1,
   });
 
-  // Obtener la fecha de hoy en formato YYYY-MM-DD
   const hoy = new Date().toISOString().split("T")[0];
 
-  // Calcular ventasHoy
   const ventasHoy = ventas
-    .filter((venta) => venta.fechaVenta === hoy) // Filtrar ventas del día de hoy
-    .reduce((total, venta) => total + Number(venta.total || 0), 0); // Convertir 'total' a número y sumar
+    .filter((venta) => venta.fechaVenta === hoy)
+    .reduce((total, venta) => total + Number(venta.total || 0), 0);
 
-  const ventasHoyFormatted = ventasHoy.toFixed(2); // Formatear a 2 decimales
+  const ventasHoyFormatted = ventasHoy.toFixed(2);
 
-  // Calcular mesas ocupadas
-  console.log("mesas  ocupadas", mesas);
-  // Verificar si mesas es un objeto que contiene un array
   const mesasArray = Array.isArray(mesas.data) ? mesas.data : [];
-
-  // Calcular mesas ocupadas
   const mesasOcupadas = mesasArray.filter((mesa) => mesa.estado == 0).length;
-
-  // Calcular total de mesas
   const totalMesas = mesasArray.length;
 
-  // Calcular productos con bajo stock
   const productosBajoStock = Array.isArray(almacen)
     ? almacen.filter((producto) => producto.cantidad <= 5).length
     : 0;
 
-  // Calcular pedidos pendientes
   const pedidosPendientes = pedidosWeb.length;
 
   return (
-    <div className="row  g-3">
+    <div className="row g-3">
       {/* Ventas Hoy */}
       <div className="col-md-3">
         <CondicionCarga
@@ -89,19 +78,19 @@ export function InformacionRapidaHome({}) {
           isError={isErrorVentas}
           mode="single-card"
         >
-          <div className="card h-100 shadow-sm">
+          <div className="card h-100 card-difuminada difuminado-ventas overflow-hidden">
             <div className="card-body d-flex justify-content-left align-items-center">
               <div className="text-center">
-                <p className=" mb-3" style={{ fontSize: "1.1rem" }}>
+                <p className="mb-3" style={{ fontSize: "1.1rem" }}>
                   Ventas Hoy
                 </p>
                 <p className="mb-0 text-dark h2 fw-bold">
                   S/ {ventasHoyFormatted}
                 </p>
               </div>
-
               <div className="ms-auto">
-                <Store size={60} />
+                {/* Ícono restaurado sin mis colores de Bootstrap */}
+                <Store size={40} className="icono-institucional-ventas" />
               </div>
             </div>
           </div>
@@ -115,10 +104,10 @@ export function InformacionRapidaHome({}) {
           isError={isErrorMesas}
           mode="single-card"
         >
-          <div className="card h-100 shadow-sm">
+          <div className="card h-100 card-difuminada difuminado-mesas overflow-hidden">
             <div className="card-body d-flex justify-content-left align-items-center">
-              <div className="text-left">
-                <p className=" mb-2" style={{ fontSize: "1.1rem" }}>
+              <div className="text-left w-100">
+                <p className="mb-2" style={{ fontSize: "1.1rem" }}>
                   Mesas Ocupadas
                 </p>
                 <p
@@ -132,59 +121,67 @@ export function InformacionRapidaHome({}) {
                   style={{ height: "5px", width: "100%" }}
                 >
                   <div
-                    className="progress-bar bg-danger"
+                    className="progress-bar barra-institucional-mesas"
                     style={{
-                      width: `${
-                        totalMesas > 0 ? (mesasOcupadas / totalMesas) * 100 : 0
-                      }%`,
+                      width: `${totalMesas > 0 ? (mesasOcupadas / totalMesas) * 100 : 0}%`,
                     }}
                   ></div>
                 </div>
               </div>
-              <div className="ms-auto">
-                <Table size={60} />
+              <div className="ms-auto ps-3">
+                {/* Ícono restaurado */}
+                <Table size={40} className="icono-institucional-mesas" />
               </div>
             </div>
           </div>
         </CondicionCarga>
       </div>
+
+      {/* Pedidos Pendientes */}
       <div className="col-md-3">
         <CondicionCarga
           isLoading={isLoadingPedidosWeb}
           isError={isErrorPedidos}
           mode="single-card"
         >
-          <div className="card h-100 shadow-sm ">
-            <div className="card-body d-flex align-items-center ">
+          <div className="card h-100 card-difuminada difuminado-pedidos overflow-hidden">
+            <div className="card-body d-flex align-items-center p-3">
               <div>
-                <p className="h6">Pedidos Pendientes</p>
-                <p className="mb-0  fw-semibold">
+                <p className="h6 mb-2">Pedidos Pendientes</p>
+                <p className="mb-0 small text-muted">
                   {pedidosPendientes} Pedidos en estado pendiente
                 </p>
               </div>
-              <div className="badge-ico badge-ico-pedidos-pendientes ms-auto">
-                <Clock9 className="text-auto" size={40} />
+              <div className="ms-auto ps-2">
+                {/* Ícono restaurado */}
+                <Clock9 size={40} className="icono-institucional-pedidos" />
               </div>
             </div>
           </div>
         </CondicionCarga>
       </div>
+
+      {/* Alertas Almacén */}
       <div className="col-md-3">
         <CondicionCarga
           isLoading={isLoadingAlmacen}
           isError={isErrorAlmacen}
           mode="single-card"
         >
-          <div className="card h-100 shadow-sm card-alerta-almacen">
-            <div className="card-body d-flex align-items-center">
+          <div className="card h-100 card-alerta-almacen card-difuminada difuminado-almacen overflow-hidden">
+            <div className="card-body d-flex align-items-center p-3">
               <div>
-                <p className="h6">Alertas Almacen</p>
-                <p className="mb-0 fw-semibold">
+                <p className="h6 mb-2">Alertas Almacen</p>
+                <p className="mb-0 small text-muted">
                   {productosBajoStock} productos en bajo stock
                 </p>
               </div>
-              <div className="badge-ico badge-ico-almacen ms-auto">
-                <CircleAlert className="text-auto" size={40} />
+              <div className="ms-auto ps-2">
+                {/* Ícono restaurado */}
+                <CircleAlert
+                  size={40}
+                  className="icono-institucional-almacen"
+                />
               </div>
             </div>
           </div>

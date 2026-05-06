@@ -25,7 +25,7 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  CategoryScale
+  CategoryScale,
 );
 
 export function GraficoIAhome() {
@@ -77,7 +77,7 @@ export function GraficoIAhome() {
     return acc;
   }, {});
   const dataPredicciones = labels.map(
-    (fecha) => prediccionesPorFecha[fecha] || 0
+    (fecha) => prediccionesPorFecha[fecha] || 0,
   );
 
   const chartRef = useRef(null);
@@ -114,7 +114,7 @@ export function GraficoIAhome() {
       0,
       chartArea.top,
       0,
-      chartArea.bottom
+      chartArea.bottom,
     );
     gradientReales.addColorStop(0, "rgba(249, 115, 22, 0.5)");
     gradientReales.addColorStop(1, "rgba(249, 115, 22, 0)");
@@ -123,7 +123,7 @@ export function GraficoIAhome() {
       0,
       chartArea.top,
       0,
-      chartArea.bottom
+      chartArea.bottom,
     );
     gradientIA.addColorStop(0, "rgba(255, 64, 64, 0.5)");
     gradientIA.addColorStop(1, "rgba(255, 159, 64, 0)");
@@ -222,41 +222,37 @@ export function GraficoIAhome() {
   const hasError = isErrorVentas || isErrorVentasIA;
 
   return (
-    <div className="w-100">
+    <div className="card w-100 p-0 overflow-auto">
       <CondicionCarga isLoading={isLoadingVentasIA} isError={isErrorVentasIA}>
-        <div className="h-100">
-          <div className="d-flex gap-2 align-middle justify-content-left p-3 border-bottom card-header bg-light">
-            <span
-              className="p-2 mb-0 rounded-circle"
-              style={{ backgroundColor: "#e2e8f0", color: "#475569" }}
-            >
-              <ChartNoAxesCombined size={25} />
+        <div className="card-header d-flex  m-0 align-middle justify-content-left border-bottom ">
+          <span
+            className="p-2 mb-0 rounded-circle text-white"
+            style={{ background: "var(--fw-strawberry)" }}
+          >
+            <ChartNoAxesCombined size={25} />
+          </span>
+          <h6 className="mb-1 d-flex flex-column gap-1">
+            <span className="fw-bold text-dark" style={{ fontSize: "1.1rem" }}>
+              Ventas Históricas y Predicciones
             </span>
-            <h6 className="mb-1 d-flex flex-column gap-1">
-              <span className="fw-bold text-dark" style={{ fontSize: "1.1rem" }}>
-                Ventas Históricas y Predicciones
-              </span>
-              <p className="text-muted small mb-0">
-                Últimos 7 días y pronóstico
-              </p>
-            </h6>
-          </div>
+            <p className="text-muted small mb-0">Últimos 7 días y pronóstico</p>
+          </h6>
+        </div>
 
-          <div className="p-3">
-              <div className="" style={{ height: "300px" }}>
-                {hasError ? (
-                  <p className="text-danger text-center">
-                    Error al cargar los datos del gráfico.
-                  </p>
-                ) : !dataReady ? (
-                  <p className="text-muted text-center">
-                    Cargando datos del gráfico...
-                  </p>
-                ) : (
-                  <Line ref={chartRef} data={chartData} options={options} />
-                )}
-              </div>
-            </div>
+        <div className="card-body ">
+          <div className="" style={{ height: "400px" }}>
+            {hasError ? (
+              <p className="text-danger text-center">
+                Error al cargar los datos del gráfico.
+              </p>
+            ) : !dataReady ? (
+              <p className="text-muted text-center">
+                Cargando datos del gráfico...
+              </p>
+            ) : (
+              <Line ref={chartRef} data={chartData} options={options} />
+            )}
+          </div>
         </div>
       </CondicionCarga>
     </div>

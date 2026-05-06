@@ -8,10 +8,10 @@
   margin-bottom: 20px !important;
 }
 .btn-realizarPedido{
-  background-color: rgb(6, 214, 93);
-  border-color: #28a745;
+  background-color: var(--fw-emerald);
+  border: none;
   color: #fff;
-  border-radius: 15px;
+  border-radius: 10px;
   text-decoration: none;
   font-size: 20px;
   transition: all ease-out 0.2s;
