@@ -8,11 +8,14 @@ import ModalGenerales from "../componentesReutilizables/ModalGenerales";
 import { FormAsignarRider } from "./FormAsignarider";
 import ModalAlertQuestion from "../componenteToast/ModalAlertQuestion";
 import { PutData } from "../../service/CRUD/PutData";
+import ModalRight from "../componentesReutilizables/ModalRight";
+import { DetallesEntregas } from "./entregas/DetallesEntregas";
 
 export function ListaPedidosAsignados() {
   const formRiderRef = useRef(null);
   const [modalQuestion, setModalQuestion] = useState();
 
+  const [modalDetallesVenta, setModalDetallesVenta] = useState();
   const [modalAsignarRider, setModalAsignarRider] = useState(false);
   const [dataPedido, setDataPedido] = useState([]);
 
@@ -166,8 +169,7 @@ export function ListaPedidosAsignados() {
               className="btn-ver my-2 d-flex align-items-center gap-1"
               onClick={() => {
                 setDataPedido(row);
-                // Llama aquí a la función/estado que abre tu modal de detalles
-                // setModalDetalles(true);
+                setModalDetallesVenta(true);
               }}
             >
               <Eye size={16} /> Detalles
@@ -207,7 +209,16 @@ export function ListaPedidosAsignados() {
           handleCloseModal={() => setModalAsignarRider(false)}
         />
       </ModalGenerales>
-
+      <ModalRight
+        isOpen={modalDetallesVenta}
+        onClose={() => setModalDetallesVenta(false)}
+        title="Detalles de la Venta"
+        submitText="Imprimir"
+        cancelText="Cerrar"
+        hideFooter={true}
+      >
+        <DetallesEntregas dataVentas={dataPedido} />
+      </ModalRight>
       <ModalAlertQuestion
         show={modalQuestion}
         idEliminar={dataPedido.id}

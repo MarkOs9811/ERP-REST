@@ -4,11 +4,9 @@ import {
   Bike,
   MapPin,
   CreditCard,
-  DollarSign,
   Package,
   UserCheck,
   CheckCircle,
-  DnaIcon,
   Zap,
   Truck,
   Coins,
@@ -87,8 +85,9 @@ export function DetallesEntregas({ dataVentas }) {
             <div className="d-flex align-items-start text-muted">
               <MapPin size={18} className="me-2 mt-1 flex-shrink-0" />
               <span style={{ fontSize: "0.95rem" }}>
-                {dataVentas.direccion ||
-                  "Dirección no especificada por el cliente"}
+                {dataVentas.direccion
+                  ? `${dataVentas.direccion.calle} #${dataVentas.direccion.numero} ${dataVentas.direccion.detalles || ""}`
+                  : "Dirección no especificada por el cliente"}
               </span>
             </div>
           </div>
