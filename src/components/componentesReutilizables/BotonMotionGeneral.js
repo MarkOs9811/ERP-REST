@@ -8,7 +8,7 @@ export function BotonMotionGeneral({
   loading = false,
   loadingText = "Cargando...",
   // Volvemos a un default que funcione bien en general, pero permitimos override
-  classDefault = "btn shadow-sm rounded-3 py-2 px-3",
+  classDefault = "btn btn-outline-dark shadow-sm rounded-3 py-2 px-3",
   fullWidth = false, // Prop para controlar si ocupa el 100%
 }) {
   const whileHover = loading

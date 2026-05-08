@@ -119,7 +119,7 @@ export default function FormularioReporte({
                     type="button"
                     loading={isLoadingGoogle}
                     disabled={isAnyLoading}
-                    className="btn-realizarPedido rounded-none btn-sm px-3 h6 py-2"
+                    className="btn-realizarPedido rounded-none btn-sm  h6"
                     icon={
                       !isLoadingGoogle ? (
                         <FileTextIcon className="me-1" />

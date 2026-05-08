@@ -1,21 +1,9 @@
 import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
-import {
-  User,
-  Mail,
-  Phone,
-  Calendar,
-  MapPin,
-  FileText,
-  Briefcase,
-  Clock,
-  Upload,
-  UserCircle,
-  Save,
-} from "lucide-react"; // 1. Importamos los iconos
+import { Save, ArrowRight, ArrowLeft } from "lucide-react";
 
-// --- Tus Imports de Servicios (sin cambios) ---
+// Importa tus servicios (Mantenemos los tuyos intactos)
 import { GetCargos } from "../../service/GetCargos";
 import { GetAreas } from "../../service/GetAreas";
 import { GetTipoContrato } from "../../service/GetTipoContrato";
@@ -28,34 +16,44 @@ import { GetDistrito } from "../../service/GetDistrito";
 import ToastAlert from "../../components/componenteToast/ToastAlert";
 import axiosInstance from "../../api/AxiosInstance";
 import { BotonMotionGeneral } from "../../components/componentesReutilizables/BotonMotionGeneral";
-import { CondicionCarga } from "../../components/componentesReutilizables/CondicionCarga";
-// (No incluiste 'ContenedorPrincipal' en tu JSX, así que lo omití)
+
+// Importa tus nuevos componentes
+import { Paso1Personales } from "../../components/componentePlanillas/componentesIngresarNomina/Paso1Personales";
+import { Paso2Laborales } from "../../components/componentePlanillas/componentesIngresarNomina/Paso2Laborales";
+import { Paso3Aportes } from "../../components/componentePlanillas/componentesIngresarNomina/Paso3Aportes";
 
 export function IngresoPlanilla() {
-  // --- Toda tu lógica de Hooks (useForm, useQuery, state) sin cambios ---
+  // Extraemos 'trigger' para validar campos manualmente
   const {
     register,
     handleSubmit,
-    watch,
     reset,
     setValue,
     setError,
+    trigger,
+    watch,
     formState: { errors },
   } = useForm();
 
+  // ESTADOS DEL STEPPER Y FORMULARIO
+  const [pasoActual, setPasoActual] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [error, setErrors] = useState(false);
+  const [preview, setPreview] = useState(null);
+  const fileInputRef = useRef(null);
 
+  // ESTADOS DE UBICACIÓN
+  const [selectedDepartamento, setSelectedDepartamento] = useState("");
+  const [selectedProvincia, setSelectedProvincia] = useState("");
+
+  // TUS USE-QUERYS (Reducidos para la vista, mantén tu lógica original si lo prefieres)
   const { data: cargosList } = useQuery({
     queryKey: ["cargos"],
     queryFn: GetCargos,
   });
-
   const { data: areasList = [] } = useQuery({
     queryKey: ["areas"],
     queryFn: GetAreas,
   });
-
   const { data: contratoList } = useQuery({
     queryKey: ["contratos"],
     queryFn: GetTipoContrato,
@@ -64,41 +62,27 @@ export function IngresoPlanilla() {
     queryKey: ["horarios"],
     queryFn: GetHorarios,
   });
-
   const {
     data: deduccionesList,
     isLoading: loadingDeducciones,
     isError: errorDeducciones,
-  } = useQuery({
-    queryKey: ["deducciones"],
-    queryFn: GetDeducciones,
-  });
-
+  } = useQuery({ queryKey: ["deducciones"], queryFn: GetDeducciones });
   const {
     data: bonificacionesList,
     isLoading: loadingDBonificaciones,
     isError: errorBonificaciones,
-  } = useQuery({
-    queryKey: ["bonificacion"],
-    queryFn: GetBonificacion,
-  });
-
-  const [selectedDepartamento, setSelectedDepartamento] = useState("");
-  const [selectedProvincia, setSelectedProvincia] = useState("");
-
+  } = useQuery({ queryKey: ["bonificacion"], queryFn: GetBonificacion });
   const { data: departamentoList } = useQuery({
     queryKey: ["departamentos"],
     queryFn: GetDepartamento,
     staleTime: 1000 * 60 * 60,
   });
-
   const { data: provinciaList } = useQuery({
     queryKey: ["provincias", selectedDepartamento],
     queryFn: () => GetProvincia(selectedDepartamento),
     enabled: !!selectedDepartamento,
     staleTime: 1000 * 60 * 60,
   });
-
   const { data: distritoList } = useQuery({
     queryKey: ["distritos", selectedProvincia],
     queryFn: () => GetDistrito(selectedProvincia),
@@ -106,29 +90,63 @@ export function IngresoPlanilla() {
     staleTime: 1000 * 60 * 60,
   });
 
-  // --- Tu lógica de onSubmit (sin cambios) ---
+  // === LÓGICA DE NAVEGACIÓN Y VALIDACIÓN ===
+  const camposPorPaso = {
+    1: [
+      "fotoPerfil",
+      "tipo_documento",
+      "num_documento",
+      "nombre",
+      "apellidos",
+      "fecha_nacimiento",
+      "telefono",
+      "departamento",
+      "provincia",
+      "distrito",
+      "direccion",
+      "correo",
+    ],
+    2: [
+      "contrato",
+      "fecha_contrato",
+      "fecha_fin_contrato",
+      "area",
+      "cargo",
+      "horario",
+      "salario",
+    ],
+    3: [], // Aportes suelen ser opcionales, no requieren validación estricta
+  };
+
+  const avanzarPaso = async () => {
+    // Valida solo los campos de la pantalla actual antes de avanzar
+    const esValido = await trigger(camposPorPaso[pasoActual]);
+    if (esValido) {
+      setPasoActual((prev) => prev + 1);
+    } else {
+      ToastAlert(
+        "error",
+        "Por favor, completa los campos obligatorios en rojo.",
+      );
+    }
+  };
+
+  const retrocederPaso = () => {
+    setPasoActual((prev) => prev - 1);
+  };
+
+  // === ENVÍO FINAL ===
   const onSubmit = async (data) => {
     setLoading(true);
-    setErrors(null);
     try {
-      if (!data.fotoPerfil || data.fotoPerfil.length === 0) {
-        // Corrección: Asegúrate de que RHF reciba el error
-        setError("fotoPerfil", {
-          type: "manual",
-          message: "No se ha seleccionado ninguna imagen",
-        });
-        throw new Error("No se ha seleccionado ninguna imagen");
-      }
-
       const formData = new FormData();
-
       Object.keys(data).forEach((key) => {
-        if (key === "fotoPerfil") {
-          formData.append("fotoPerfil", data.fotoPerfil); // El archivo ya está guardado
-        } else if (key === "deducciones" || key === "bonificaciones") {
-          data[key].forEach((item, index) => {
-            formData.append(`${key}[${index}]`, item);
-          });
+        if (key === "fotoPerfil")
+          formData.append("fotoPerfil", data.fotoPerfil);
+        else if (key === "deducciones" || key === "bonificaciones") {
+          data[key]?.forEach((item, index) =>
+            formData.append(`${key}[${index}]`, item),
+          );
         } else {
           formData.append(key, data[key]);
         }
@@ -138,665 +156,112 @@ export function IngresoPlanilla() {
 
       if (response.data.success) {
         reset();
-        setPreview(null); // Limpiar la vista previa de la imagen
-        setLoading(false);
-
-        // Actualizamos el mensaje para confirmar ambas acciones
+        setPreview(null);
+        setPasoActual(1); // Volvemos al inicio al terminar
         ToastAlert("success", "Trabajador registrado y contrato generado");
-
-        // === NUEVA LÓGICA: ABRIR EL PDF ===
-        // Si la respuesta incluye la URL del PDF, lo abrimos en una nueva pestaña
-        if (response.data.pdf_url) {
-          window.open(response.data.pdf_url, "_blank");
-        }
+        if (response.data.pdf_url) window.open(response.data.pdf_url, "_blank");
       } else {
-        setLoading(false);
         ToastAlert("error", response.data.message);
       }
     } catch (error) {
-      console.error("Error al enviar:", error);
-      setLoading(false);
-
       if (error.response?.status === 422) {
         const errors = error.response.data.errors;
-        Object.keys(errors).forEach((key) => {
-          setError(key, {
-            type: "manual",
-            message: errors[key][0],
-          });
-        });
-      } else if (error.message !== "No se ha seleccionado ninguna imagen") {
-        // No mostrar Toast si el error fue la imagen
-        ToastAlert("error", error.message || "Error en el servidor");
+        Object.keys(errors).forEach((key) =>
+          setError(key, { type: "manual", message: errors[key][0] }),
+        );
+      } else {
+        ToastAlert("error", "Error en el servidor");
       }
-    }
-  };
-
-  // --- Tu lógica de handleCargoChange (sin cambios) ---
-  const handleCargoChange = (event) => {
-    const selected = event.target.selectedOptions[0];
-    const salario = selected.dataset.salario;
-    const pagoPorHora = (parseFloat(salario) / 30 / 8).toFixed(2);
-    setValue("salario", salario);
-    setValue("pagoPorHora", pagoPorHora);
-  };
-
-  // --- Tu lógica de Imagen (con un pequeño ajuste en 'handleImageChange') ---
-  const [preview, setPreview] = useState(null);
-  const fileInputRef = useRef(null);
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setPreview(URL.createObjectURL(file));
-      setValue("fotoPerfil", file, { shouldValidate: true });
-      setError("fotoPerfil", null);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div>
-      <div className="col-md-12">
-        <div className="card">
-          <div className="card-header p-3">
-            <h4>Datos del empleado</h4>
-          </div>
-          <div className="card-body px-4 m-0">
-            <form
-              onSubmit={handleSubmit(onSubmit)}
-              encType="multipart/form-data"
+    <div className="card container">
+      <div className="card-header p-3 d-flex justify-content-between align-items-center">
+        <h4>Registro de Nuevo Empleado</h4>
+        <span className="badge bg-primary px-3 py-2">
+          Paso {pasoActual} de 3
+        </span>
+      </div>
+
+      <div className="card-body px-4 m-0 mt-3">
+        <form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
+          {/* RENDERIZADO CONDICIONAL DE PASOS */}
+          {pasoActual === 1 && (
+            <Paso1Personales
+              register={register}
+              errors={errors}
+              setValue={setValue}
+              watch={watch}
+              departamentoList={departamentoList}
+              provinciaList={provinciaList}
+              distritoList={distritoList}
+              selectedDepartamento={selectedDepartamento}
+              setSelectedDepartamento={setSelectedDepartamento}
+              selectedProvincia={selectedProvincia}
+              setSelectedProvincia={setSelectedProvincia}
+              preview={preview}
+              setPreview={setPreview}
+              fileInputRef={fileInputRef}
+            />
+          )}
+
+          {pasoActual === 2 && (
+            <Paso2Laborales
+              register={register}
+              errors={errors}
+              setValue={setValue}
+              contratoList={contratoList}
+              areasList={areasList}
+              cargosList={cargosList}
+              horariosList={horariosList}
+            />
+          )}
+
+          {pasoActual === 3 && (
+            <Paso3Aportes
+              register={register}
+              deduccionesList={deduccionesList}
+              loadingDeducciones={loadingDeducciones}
+              errorDeducciones={errorDeducciones}
+              bonificacionesList={bonificacionesList}
+              loadingDBonificaciones={loadingDBonificaciones}
+              errorBonificaciones={errorBonificaciones}
+            />
+          )}
+
+          {/* CONTROLES DE NAVEGACIÓN */}
+          <div className="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
+            <button
+              type="button"
+              className="btn btn-outline-secondary d-flex align-items-center"
+              onClick={retrocederPaso}
+              disabled={pasoActual === 1}
             >
-              <div className="row g-3">
-                {/* === COLUMNA IZQUIERDA: DATOS PERSONALES === */}
-                <div className="col-md-6 col-sm-12">
-                  <div className="card border p-3">
-                    <div className="d-flex flex-column align-items-center text-center mb-3">
-                      <input
-                        type="file"
-                        accept="image/*"
-                        ref={fileInputRef}
-                        style={{ display: "none" }}
-                        onChange={handleImageChange}
-                      />
-                      {preview ? (
-                        <img
-                          src={preview}
-                          alt="Vista previa"
-                          className="mb-3"
-                          style={{
-                            width: "150px",
-                            height: "150px",
-                            borderRadius: "50%",
-                            objectFit: "cover",
-                            border: "3px solid #eee",
-                          }}
-                        />
-                      ) : (
-                        <UserCircle
-                          size={150}
-                          className="mb-3 text-muted"
-                          strokeWidth={1}
-                        />
-                      )}
-                      <button
-                        type="button"
-                        className="btn btn-outline-primary btn-sm"
-                        onClick={() => fileInputRef.current.click()}
-                      >
-                        <Upload size={16} className="me-2" />
-                        Seleccionar Imagen
-                      </button>
-                      <input type="hidden" {...register("fotoPerfil")} />
-                      {errors.fotoPerfil && (
-                        <div className="text-danger mt-2 small">
-                          {errors.fotoPerfil.message}
-                        </div>
-                      )}
-                    </div>
-                    {/* === DATOS PERSONALES (Nuevo Diseño) === */}
-                    <div className="row">
-                      <div className="col-md-5 mb-3">
-                        <label className="form-label small fw-semi-bold text-muted">
-                          <FileText size={16} className="me-1" /> Tipo Documento
-                        </label>
-                        <select
-                          className={`form-select ${
-                            errors.tipo_documento ? "is-invalid" : ""
-                          }`}
-                          {...register("tipo_documento", {
-                            required: "Este campo es obligatorio",
-                          })}
-                        >
-                          <option value="">Seleccione...</option>
-                          <option value="DNI">DNI</option>
-                          <option value="Carnet De Extranjeria">
-                            CARNET DE EXTRANJERIA
-                          </option>
-                        </select>
-                        {errors.tipo_documento && (
-                          <div className="invalid-feedback">
-                            {errors.tipo_documento.message}
-                          </div>
-                        )}
-                      </div>
+              <ArrowLeft size={18} className="me-2" /> Atrás
+            </button>
 
-                      <div className="col-md-7 mb-3">
-                        <label className="form-label small fw-semi-bold text-muted">
-                          Número de Documento
-                        </label>
-                        <input
-                          className={`form-control ${
-                            errors.num_documento ? "is-invalid" : ""
-                          }`}
-                          type="text"
-                          maxLength="8"
-                          placeholder="Número de Documento"
-                          {...register("num_documento", {
-                            required: "El N° de documento es obligatorio",
-                            pattern: {
-                              value: /^[0-9]+$/,
-                              message: "Solo se admiten números",
-                            },
-                          })}
-                        />
-                        {errors.num_documento && (
-                          <div className="invalid-feedback">
-                            {errors.num_documento.message}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="mb-3">
-                      <label className="form-label small fw-semi-bold text-muted">
-                        <User size={16} className="me-1" /> Nombre
-                      </label>
-                      <input
-                        className={`form-control ${
-                          errors.nombre ? "is-invalid" : ""
-                        }`}
-                        {...register("nombre", {
-                          required: "El nombre es obligatorio",
-                        })}
-                        placeholder="Nombre del empleado"
-                      />
-                      {errors.nombre && (
-                        <div className="invalid-feedback">
-                          {errors.nombre.message}
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="mb-3">
-                      <label className="form-label small fw-semi-bold text-muted">
-                        <User size={16} className="me-1" /> Apellidos
-                      </label>
-                      <input
-                        className={`form-control ${
-                          errors.apellidos ? "is-invalid" : ""
-                        }`}
-                        {...register("apellidos", {
-                          required: "El apellido es obligatorio",
-                        })}
-                        placeholder="Apellidos del empleado"
-                      />
-                      {errors.apellidos && (
-                        <div className="invalid-feedback">
-                          {errors.apellidos.message}
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="row">
-                      <div className="col-6 mb-3">
-                        <label className="form-label small fw-semi-bold text-muted">
-                          <Calendar size={16} className="me-1" /> Fecha de
-                          Nacimiento
-                        </label>
-                        <input
-                          className={`form-control ${
-                            errors.fecha_nacimiento ? "is-invalid" : ""
-                          }`}
-                          type="date"
-                          {...register("fecha_nacimiento", {
-                            required: "La fecha es obligatoria",
-                          })}
-                        />
-                        {errors.fecha_nacimiento && (
-                          <div className="invalid-feedback">
-                            {errors.fecha_nacimiento.message}
-                          </div>
-                        )}
-                      </div>
-                      <div className="col-6 mb-3">
-                        <label className="form-label small fw-semi-bold text-muted">
-                          <Phone size={16} className="me-1" /> Nº de contacto
-                        </label>
-                        <input
-                          className={`form-control ${
-                            errors.telefono ? "is-invalid" : ""
-                          }`}
-                          type="number"
-                          placeholder="Nº de contacto"
-                          {...register("telefono", {
-                            required: "El teléfono es obligatorio",
-                          })}
-                        />
-                        {errors.telefono && (
-                          <div className="invalid-feedback">
-                            {errors.telefono.message}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* === UBICACIÓN (Nuevo Diseño) === */}
-                    <div className="row">
-                      <div className="col-4 mb-3">
-                        <label className="form-label small fw-semi-bold text-muted">
-                          <MapPin size={16} className="me-1" /> Depto.
-                        </label>
-                        <select
-                          className={`form-select ${
-                            errors.departamento ? "is-invalid" : ""
-                          }`}
-                          {...register("departamento", {
-                            required: "Requerido",
-                            onChange: (e) => {
-                              setSelectedDepartamento(e.target.value);
-                              setSelectedProvincia("");
-                              setValue("provincia", "");
-                              setValue("distrito", "");
-                            },
-                          })}
-                        >
-                          <option value="">Seleccione...</option>
-                          {departamentoList?.map((dep) => (
-                            <option key={dep.id} value={dep.id}>
-                              {dep.nombre.toUpperCase()}
-                            </option>
-                          ))}
-                        </select>
-                        {errors.departamento && (
-                          <div className="invalid-feedback">
-                            {errors.departamento.message}
-                          </div>
-                        )}
-                      </div>
-                      <div className="col-4 mb-3">
-                        <label className="form-label small fw-semi-bold text-muted">
-                          <MapPin size={16} className="me-1" /> Provincia
-                        </label>
-                        <select
-                          className={`form-select ${
-                            errors.provincia ? "is-invalid" : ""
-                          }`}
-                          {...register("provincia", {
-                            required: "Requerido",
-                            onChange: (e) => {
-                              setSelectedProvincia(e.target.value);
-                              setValue("distrito", "");
-                            },
-                          })}
-                          disabled={!selectedDepartamento}
-                        >
-                          <option value="">Seleccione...</option>
-                          {provinciaList?.map((prov) => (
-                            <option key={prov.id} value={prov.id}>
-                              {prov.nombre}
-                            </option>
-                          ))}
-                        </select>
-                        {errors.provincia && (
-                          <div className="invalid-feedback">
-                            {errors.provincia.message}
-                          </div>
-                        )}
-                      </div>
-                      <div className="col-4 mb-3">
-                        <label className="form-label small fw-semi-bold text-muted">
-                          <MapPin size={16} className="me-1" /> Distrito
-                        </label>
-                        <select
-                          className={`form-select ${
-                            errors.distrito ? "is-invalid" : ""
-                          }`}
-                          {...register("distrito", {
-                            required: "Requerido",
-                            disabled: !selectedProvincia,
-                          })}
-                        >
-                          <option value="">Seleccione...</option>
-                          {distritoList?.map((dist) => (
-                            <option key={dist.id} value={dist.id}>
-                              {dist.nombre}
-                            </option>
-                          ))}
-                        </select>
-                        {errors.distrito && (
-                          <div className="invalid-feedback">
-                            {errors.distrito.message}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="mb-3">
-                      <label className="form-label small fw-semi-bold text-muted">
-                        <MapPin size={16} className="me-1" /> Dirección
-                      </label>
-                      <input
-                        className={`form-control ${
-                          errors.direccion ? "is-invalid" : ""
-                        }`}
-                        {...register("direccion", {
-                          required: "La dirección es obligatoria",
-                        })}
-                        placeholder="Dirección"
-                      />
-                      {errors.direccion && (
-                        <div className="invalid-feedback">
-                          {errors.direccion.message}
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="mb-3">
-                      <label className="form-label small fw-semi-bold text-muted">
-                        <Mail size={16} className="me-1" /> Correo Electrónico
-                      </label>
-                      <input
-                        type="email"
-                        className={`form-control ${
-                          errors.correo ? "is-invalid" : ""
-                        }`}
-                        {...register("correo", {
-                          required: "El correo es obligatorio",
-                        })}
-                        placeholder="Correo Electrónico"
-                      />
-                      {errors.correo && (
-                        <div className="invalid-feedback">
-                          {errors.correo.message}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {/* === COLUMNA DERECHA: DATOS LABORALES === */}
-                <div className="col-md-6 col-sm-12">
-                  <div className="card p-3 mb-3 border">
-                    <h5 className="mb-3" style={{ color: "#15669c" }}>
-                      Detalles del contrato
-                    </h5>
-
-                    <div className="mb-3">
-                      <label className="form-label small fw-semi-bold text-muted">
-                        <Briefcase size={16} className="me-1" /> Tipo Contrato
-                      </label>
-                      <select
-                        className={`form-select ${
-                          errors.contrato ? "is-invalid" : ""
-                        }`}
-                        {...register("contrato", { required: "Requerido" })}
-                      >
-                        <option value="">Seleccione...</option>
-                        {contratoList?.map((c) => (
-                          <option key={c.id} value={c.id}>
-                            {c.nombre}
-                          </option>
-                        ))}
-                      </select>
-                      {errors.contrato && (
-                        <div className="invalid-feedback">
-                          {errors.contrato.message}
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="row">
-                      <div className="col-6 mb-3">
-                        <label className="form-label small fw-semi-bold text-muted">
-                          <Calendar size={16} className="me-1" /> Inicio
-                          Contrato
-                        </label>
-                        <input
-                          className={`form-control ${
-                            errors.fecha_contrato ? "is-invalid" : ""
-                          }`}
-                          type="date"
-                          {...register("fecha_contrato", {
-                            required: "Requerido",
-                          })}
-                        />
-                        {errors.fecha_contrato && (
-                          <div className="invalid-feedback">
-                            {errors.fecha_contrato.message}
-                          </div>
-                        )}
-                      </div>
-                      <div className="col-6 mb-3">
-                        <label className="form-label small fw-semi-bold text-muted">
-                          <Calendar size={16} className="me-1" /> Fin Contrato
-                        </label>
-                        <input
-                          className={`form-control ${
-                            errors.fecha_fin_contrato ? "is-invalid" : ""
-                          }`}
-                          type="date"
-                          {...register("fecha_fin_contrato", {
-                            required: "Requerido",
-                          })}
-                        />
-                        {errors.fecha_fin_contrato && (
-                          <div className="invalid-feedback">
-                            {errors.fecha_fin_contrato.message}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="mb-3">
-                      <label className="form-label small fw-semi-bold text-muted">
-                        <Briefcase size={16} className="me-1" /> Área
-                      </label>
-                      <select
-                        className={`form-select ${
-                          errors.area ? "is-invalid" : ""
-                        }`}
-                        {...register("area", { required: "Requerido" })}
-                      >
-                        <option value="">Seleccione...</option>
-                        {areasList?.map((a) => (
-                          <option key={a.id} value={a.id}>
-                            {a.nombre}
-                          </option>
-                        ))}
-                      </select>
-                      {errors.area && (
-                        <div className="invalid-feedback">
-                          {errors.area.message}
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="row">
-                      <div className="col-6 mb-3">
-                        <label className="form-label small fw-semi-bold text-muted">
-                          <Briefcase size={16} className="me-1" /> Cargo
-                        </label>
-                        <select
-                          className={`form-select ${
-                            errors.cargo ? "is-invalid" : ""
-                          }`}
-                          {...register("cargo", { required: "Requerido" })}
-                          onChange={handleCargoChange}
-                        >
-                          <option value="">Seleccione...</option>
-                          {cargosList?.map((c) => (
-                            <option
-                              key={c.id}
-                              value={c.id}
-                              data-salario={c.salario}
-                            >
-                              {c.nombre}
-                            </option>
-                          ))}
-                        </select>
-                        {errors.cargo && (
-                          <div className="invalid-feedback">
-                            {errors.cargo.message}
-                          </div>
-                        )}
-                      </div>
-                      <div className="col-6 mb-3">
-                        <label className="form-label small fw-semi-bold text-muted">
-                          <Clock size={16} className="me-1" /> Horario
-                        </label>
-                        <select
-                          className={`form-select ${
-                            errors.horario ? "is-invalid" : ""
-                          }`}
-                          {...register("horario", { required: "Requerido" })}
-                        >
-                          <option value="">Seleccione...</option>
-                          {horariosList?.map((h) => (
-                            <option key={h.id} value={h.id}>
-                              {h.horaEntrada} - {h.horaSalida}
-                            </option>
-                          ))}
-                        </select>
-                        {errors.horario && (
-                          <div className="invalid-feedback">
-                            {errors.horario.message}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="row">
-                      <div className="col-6">
-                        <label className="form-label small fw-semi-bold text-muted">
-                          S/. Salario base
-                        </label>
-                        <input
-                          className="form-control"
-                          placeholder="Salario base"
-                          {...register("salario")}
-                          readOnly
-                        />
-                      </div>
-                      <div className="col-6">
-                        <label className="form-label small fw-semi-bold text-muted">
-                          S/. Pago por Hora
-                        </label>
-                        <input
-                          className="form-control"
-                          placeholder="Pago por Hora"
-                          {...register("pagoPorHora")}
-                          readOnly
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* === DEDUCCIONES Y BONIFICACIONES (Sin cambios de diseño) === */}
-                  <div className="card p-3 border">
-                    <h5 style={{ color: "#15669c" }}>
-                      Aportes, Deducciones y Bonificaciones
-                    </h5>
-                    <div className="row">
-                      <CondicionCarga
-                        isLoading={loadingDeducciones}
-                        isError={errorDeducciones}
-                      >
-                        <div className="col-md-6">
-                          <label className="fw-bold mb-2">Deducciones</label>
-                          {deduccionesList?.map((d) => {
-                            const isEssalud = d.nombre === "ESSALUD";
-                            return (
-                              <div className="form-check" key={d.id}>
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  value={d.id}
-                                  {...register("deducciones")}
-                                  id={`deduccion_${d.id}`}
-                                  onChange={(e) => {
-                                    const checkboxes =
-                                      document.querySelectorAll(
-                                        'input.form-check-input[type="checkbox"][data-group="deducciones"]',
-                                      );
-                                    if (!isEssalud) {
-                                      checkboxes.forEach((cb) => {
-                                        if (
-                                          cb !== e.target &&
-                                          cb.dataset.nombre !== "ESSALUD"
-                                        ) {
-                                          cb.checked = false;
-                                        }
-                                      });
-                                    }
-                                  }}
-                                  data-group="deducciones"
-                                  data-nombre={d.nombre}
-                                />
-                                <label
-                                  className="form-check-label"
-                                  htmlFor={`deduccion_${d.id}`}
-                                >
-                                  {d.nombre}
-                                </label>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </CondicionCarga>
-                      <CondicionCarga
-                        isLoading={loadingDBonificaciones}
-                        isError={errorBonificaciones}
-                      >
-                        <div className="col-md-6">
-                          <label className="fw-bold mb-2">Bonificación</label>
-                          {bonificacionesList?.map((d) => (
-                            <div className="form-check" key={d.id}>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                value={d.id}
-                                {...register("bonificaciones")}
-                                id={`bonificaciones${d.id}`}
-                              />
-                              <label
-                                className="form-check-label"
-                                htmlFor={`bonificaciones${d.id}`}
-                              >
-                                {d.nombre}
-                              </label>
-                            </div>
-                          ))}
-                        </div>
-                      </CondicionCarga>
-                    </div>
-                  </div>
-                </div>
-
-                {/* === BOTONES DE ACCIÓN FINAL === */}
-                <div className="col-md-12 d-flex justify-content-end align-items-center gap-3 mt-4">
-                  <BotonMotionGeneral
-                    type="submit"
-                    text="Registrar y Generar contrato"
-                    loading={loading}
-                    icon={<Save size={18} />}
-                    // Quité el "ms-auto" de aquí para que no empuje a los demás elementos
-                    classDefault="d-flex text-center align-items-center gap-1 p-2 w-auto rounded-3 border shadow-sm"
-                  />
-                </div>
-              </div>
-            </form>
+            {pasoActual < 3 ? (
+              <button
+                type="button"
+                className="btn btn-primary d-flex align-items-center px-4"
+                onClick={avanzarPaso}
+              >
+                Siguiente <ArrowRight size={18} className="ms-2" />
+              </button>
+            ) : (
+              <BotonMotionGeneral
+                type="submit"
+                text="Registrar y Generar contrato"
+                loading={loading}
+                icon={<Save size={18} />}
+                classDefault="btn btn-success d-flex align-items-center px-4"
+              />
+            )}
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );

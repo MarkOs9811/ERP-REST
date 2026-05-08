@@ -167,8 +167,8 @@ body.dark-theme .shadow-lg {
   --bs-primary-rgb: 238, 82, 82;
 }
 
-.text-primary { color: var(--brand-primary) !important; }
-.bg-primary { background-color: var(--brand-primary) !important; }
+.text-primary { color: var( --fw-strawberry) !important; }
+.bg-primary { background-color: var( --fw-strawberry) !important; }
 
 .btn-primary {
   background-color: var(--brand-primary) !important;

@@ -85,7 +85,7 @@ export function Cargos() {
       <div className="card-header  d-flex align-items-center justify-content-between">
         <div className="d-flex gap-2 align-items-center">
           <div className="p-2 alert alert-primary rounded-lg mb-0">
-            <LayoutGrid className="text-primary" size={20} />
+            <LayoutGrid className="text-danger" size={20} />
           </div>
           <div className="d-flex flex-column">
             <h4 className="fw-bold m-0">Cargos</h4>

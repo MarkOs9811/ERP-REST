@@ -74,7 +74,7 @@ export function Areas() {
       <div className="card-header  d-flex align-items-center justify-content-between">
         <div className="d-flex gap-2 align-items-center">
           <div className="p-2 alert alert-primary rounded-lg mb-0">
-            <LayoutGrid className="text-primary" size={20} />
+            <LayoutGrid className="text-danger" size={20} />
           </div>
           <div className="d-flex flex-column">
             <h4 className="fw-bold m-0">Áreas</h4>
@@ -93,39 +93,53 @@ export function Areas() {
         <div className="row g-4">
           <div className="col-md-4">
             <div className="h-100 p-3 bg-light rounded shadow-sm border">
-               <h6 className="fw-bold mb-3 text-center border-bottom pb-2">Distribución de Personal</h6>
-               {isloading && <Cargando />}
-               {isError && (
-                 <div className="text-danger">Error al cargar gráfico.</div>
-               )}
-               {!isloading &&
-                 !isError &&
-                 labels.length > 0 &&
-                 empleadosCount.length > 0 && (
-                   <GraficoAreas labels={labels} data={empleadosCount} />
-                 )}
+              <h6 className="fw-bold mb-3 text-center border-bottom pb-2">
+                Distribución de Personal
+              </h6>
+              {isloading && <Cargando />}
+              {isError && (
+                <div className="text-danger">Error al cargar gráfico.</div>
+              )}
+              {!isloading &&
+                !isError &&
+                labels.length > 0 &&
+                empleadosCount.length > 0 && (
+                  <GraficoAreas labels={labels} data={empleadosCount} />
+                )}
             </div>
           </div>
           <div className="col-md-8">
             <div className="list-group shadow-sm">
               {isLoadingList && <Cargando />}
-              {isErrorList && <div className="text-danger">Error al cargar la lista de áreas.</div>}
+              {isErrorList && (
+                <div className="text-danger">
+                  Error al cargar la lista de áreas.
+                </div>
+              )}
               {!isLoadingList && listAreas.length === 0 && (
-                 <div className="text-muted text-center p-4">No hay áreas registradas.</div>
+                <div className="text-muted text-center p-4">
+                  No hay áreas registradas.
+                </div>
               )}
               {listAreas.map((area) => (
-                <div key={area.id} className="list-group-item list-group-item-action d-flex align-items-center justify-content-between p-3">
-                   <div className="d-flex flex-column">
-                     <span className="fw-bold fs-5 text-dark">{area.nombre || 'Sin Nombre'}</span>
-                     <span className="text-muted small mt-1 d-flex align-items-center gap-1">
-                        Sede: {area.sede?.nombre || 'General'} | Código: {area.codigo || '-'}
-                     </span>
-                   </div>
-                   <div className="d-flex align-items-center gap-2">
-                     <span className="badge bg-primary-subtle text-primary border rounded-pill px-3 py-2">
-                        {area.empleados_count || 0} Empleados
-                     </span>
-                   </div>
+                <div
+                  key={area.id}
+                  className="list-group-item list-group-item-action d-flex align-items-center justify-content-between p-3"
+                >
+                  <div className="d-flex flex-column">
+                    <span className="fw-bold fs-5 text-dark">
+                      {area.nombre || "Sin Nombre"}
+                    </span>
+                    <span className="text-muted small mt-1 d-flex align-items-center gap-1">
+                      Sede: {area.sede?.nombre || "General"} | Código:{" "}
+                      {area.codigo || "-"}
+                    </span>
+                  </div>
+                  <div className="d-flex align-items-center gap-2">
+                    <span className="badge bg-danger-subtle text-danger  rounded-pill px-3 py-2 shadow-none">
+                      {area.empleados_count || 0} Empleados
+                    </span>
+                  </div>
                 </div>
               ))}
             </div>

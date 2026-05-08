@@ -5,7 +5,8 @@
     overflow: hidden;
     border: 1px solid #eaeaea;
     background-color: #ffffff;
-    transition: all 0.3s ease;
+    /* Hemos cambiado "all" por propiedades específicas para que no interfiera con la animación de entrada */
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 .promo-card:hover {
@@ -69,6 +70,25 @@
 }
 
 .promo-card.inactiva .price-new {
-    color: #6b7280; /* Gris apagado cuando está inactiva */
+    color: #6b7280;
+    /* Gris apagado cuando está inactiva */
 }
 
+/* ANIMACIÓN EN CASCADA */
+.animacion-cascada {
+    /* Usamos 'both' para que mantenga el estado inicial (opacity: 0 y translateY) durante el tiempo de espera (delay) */
+    animation: fade-in-up 0.5s ease-out both;
+}
+
+/* Definimos el movimiento de la animación */
+@keyframes fade-in-up {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

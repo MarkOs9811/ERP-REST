@@ -847,7 +847,7 @@ body.dark-theme .text-warning {
 
 .btn {
   border-radius: var(--radius-pill) !important;
-  height: 38px;
+
   display: flex;
   align-items: center;
   justify-content: center;

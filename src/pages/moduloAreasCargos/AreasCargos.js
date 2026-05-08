@@ -7,12 +7,12 @@ export function AreasCargo() {
   const [activeTab, setActiveTab] = useState("areas");
 
   return (
-    <div className="bg-white rounded shadow-sm p-4">
+    <div className="bg-white rounded border p-4">
       <ul className="nav nav-pills mb-4" id="pills-tab" role="tablist">
         <li className="nav-item" role="presentation">
           <button
-            className={`nav-link ${activeTab === 'areas' ? 'active fw-bold' : 'text-muted'}`}
-            onClick={() => setActiveTab('areas')}
+            className={`nav-link ${activeTab === "areas" ? "active fw-bold" : "text-muted"}`}
+            onClick={() => setActiveTab("areas")}
             type="button"
           >
             Áreas
@@ -20,8 +20,8 @@ export function AreasCargo() {
         </li>
         <li className="nav-item" role="presentation">
           <button
-            className={`nav-link ${activeTab === 'cargos' ? 'active fw-bold' : 'text-muted'}`}
-            onClick={() => setActiveTab('cargos')}
+            className={`nav-link ${activeTab === "cargos" ? "active fw-bold" : "text-muted"}`}
+            onClick={() => setActiveTab("cargos")}
             type="button"
           >
             Cargos
@@ -29,8 +29,8 @@ export function AreasCargo() {
         </li>
         <li className="nav-item" role="presentation">
           <button
-            className={`nav-link ${activeTab === 'sedes' ? 'active fw-bold' : 'text-muted'}`}
-            onClick={() => setActiveTab('sedes')}
+            className={`nav-link ${activeTab === "sedes" ? "active fw-bold" : "text-muted"}`}
+            onClick={() => setActiveTab("sedes")}
             type="button"
           >
             Sedes
@@ -39,12 +39,12 @@ export function AreasCargo() {
       </ul>
 
       <div className="tab-content">
-        {activeTab === 'areas' && (
+        {activeTab === "areas" && (
           <div className="animation-fade-in">
             <Areas />
           </div>
         )}
-        {activeTab === 'cargos' && (
+        {activeTab === "cargos" && (
           <div className="animation-fade-in">
             <div className="row">
               <div className="col-md-10 offset-md-1">
@@ -53,7 +53,7 @@ export function AreasCargo() {
             </div>
           </div>
         )}
-        {activeTab === 'sedes' && (
+        {activeTab === "sedes" && (
           <div className="animation-fade-in">
             <Sedes />
           </div>

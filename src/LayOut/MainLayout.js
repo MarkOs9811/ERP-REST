@@ -65,7 +65,7 @@ import { StepUsuario } from "../components/componentesFirstSteps/StepUsuario";
 import { Usuarios } from "../pages/moduloPlanilla/Usuarios";
 import { LayOutDelivery } from "./LayOutDelivery";
 import { PedidosRider } from "../pages/moduloDelivery/PedidosRider";
-import { Despacho } from "../pages/moduloDelivery/Despacho";
+import { DashboardDelivery } from "../pages/moduloDelivery/DashboardDelivery";
 import { Repartidores } from "../pages/moduloDelivery/Repartidores";
 import { ZonaTarifa } from "../pages/moduloDelivery/ZonaTarifa";
 import { Promociones } from "../pages/moduloDelivery/Promociones";
@@ -77,6 +77,7 @@ import { ReporteDelivery } from "../pages/moduloDelivery/ReporteDelivery";
 import { Compras } from "../pages/moduloAlmacen/Compras";
 import { PedidosAsignados } from "../pages/moduloDelivery/PedidosAsignados";
 import { MisEntregas } from "../pages/moduloDelivery/MisEntregas";
+import { PedidosDelivery } from "../pages/moduloDelivery/PedidosDelivery";
 
 export const MainLayout = () => {
   // 1. OBTENCIÓN DE ESTADOS Y DATOS LOCALES
@@ -497,7 +498,7 @@ export const MainLayout = () => {
                       <PrivateRoute
                         allowedRoles={["delivery", "administrador"]}
                       >
-                        <Despacho />
+                        <DashboardDelivery />
                       </PrivateRoute>
                     }
                   />
@@ -507,7 +508,7 @@ export const MainLayout = () => {
                       <PrivateRoute
                         allowedRoles={["delivery", "administrador"]}
                       >
-                        <Despacho />
+                        <PedidosDelivery />
                       </PrivateRoute>
                     }
                   />

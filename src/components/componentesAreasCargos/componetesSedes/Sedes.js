@@ -123,8 +123,6 @@ export function Sedes() {
               setSedeActual(null);
               setShowModal(true);
             }}
-            // Ajustamos padding para que quepa bien en el espacio pequeño
-            classDefault="btn shadow-sm rounded-3 py-2 px-2"
           />
         </div>
         <div className="card-body">

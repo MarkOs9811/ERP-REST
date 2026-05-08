@@ -29,14 +29,14 @@ export function AdelantoSueldo() {
   const [isModalOpenQuestion, setIsModalOpenQuestion] = useState(false);
   const [adelantoSueldoId, setAdelantoSueldoId] = useState(null);
 
-  const { data: usuarios, isLoading: isLoadingUsuarios } = useQuery({
+  const { data: usuarios = [], isLoading: isLoadingUsuarios } = useQuery({
     queryFn: GetUsuarios,
     queryKey: ["usuarios"],
     refetchOnWindowFocus: false,
   });
   const handleUsuarioSelect = (event) => {
     const usuarioId = parseInt(event.target.value);
-    const usuario = usuarios.find((u) => u.id === usuarioId);
+    const usuario = usuarios?.find((u) => u.id === usuarioId);
 
     // Verificar si el usuario ya está en la lista
     if (!empleadosSeleccionados.some((u) => u.id === usuarioId)) {
@@ -66,7 +66,7 @@ export function AdelantoSueldo() {
     console.log("Antes de eliminar:", empleadosSeleccionados);
     setValue(
       "empleados",
-      empleadosSeleccionados.filter((usuario) => usuario.id !== usuarioId)
+      empleadosSeleccionados.filter((usuario) => usuario.id !== usuarioId),
     );
   };
 
@@ -114,7 +114,7 @@ export function AdelantoSueldo() {
           response.data.errors.forEach((error) => {
             ToastAlert(
               "error",
-              `Usuario ${error.usuario_id}: ${error.message}`
+              `Usuario ${error.usuario_id}: ${error.message}`,
             );
           });
         } else {
@@ -132,7 +132,7 @@ export function AdelantoSueldo() {
         } else {
           ToastAlert(
             "error",
-            error.response.data.message || "Error de validación."
+            error.response.data.message || "Error de validación.",
           );
         }
       } else {
@@ -162,9 +162,9 @@ export function AdelantoSueldo() {
     setIsModalOpenQuestion(true);
   };
 
-  const verDetalles = (id) => { };
-  const eliminarAdelantoSueldo = (id) => { };
-  const getEditAdelantoSueldo = (id) => { };
+  const verDetalles = (id) => {};
+  const eliminarAdelantoSueldo = (id) => {};
+  const getEditAdelantoSueldo = (id) => {};
   const columnas = [
     { name: "ID", selector: (row) => row.id, sortable: true, grow: true },
     {
@@ -173,11 +173,11 @@ export function AdelantoSueldo() {
         <div className="d-flex flex-column align-items-start text-center">
           <div>
             {capitalizeFirstLetter(
-              row.usuario?.empleado?.persona?.nombre.toLowerCase()
+              row.usuario?.empleado?.persona?.nombre.toLowerCase(),
             ) +
               " " +
               capitalizeFirstLetter(
-                row.usuario?.empleado?.persona?.apellidos.toLowerCase()
+                row.usuario?.empleado?.persona?.apellidos.toLowerCase(),
               ) || ""}
           </div>
           <span
@@ -216,8 +216,9 @@ export function AdelantoSueldo() {
             style={{ textAlign: "center" }}
           >
             <p
-              className={`badge ${row.estado == 1 ? "bg-success" : "bg-warning text-dark"
-                }`}
+              className={`badge ${
+                row.estado == 1 ? "bg-success" : "bg-warning text-dark"
+              }`}
               style={{ margin: 0 }}
             >
               {row.estado == 1 ? "Aprobado" : "Pendiente"}
@@ -288,7 +289,7 @@ export function AdelantoSueldo() {
 
   return (
     <div>
-      <div className="card py-2" >
+      <div className="card py-2">
         <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-3">
           <div className="d-flex align-items-center">
             <h4 className="card-title mb-0 titulo-card-especial">
@@ -305,10 +306,7 @@ export function AdelantoSueldo() {
                 className="form-control"
               />
             </div>
-            <button
-              className="btn btn-outline-dark px-3"
-              title="Reporte"
-            >
+            <button className="btn btn-outline-dark px-3" title="Reporte">
               <FileText size={18} />
               Reporte
             </button>

@@ -11,7 +11,14 @@ import { FormularioVacaciones } from "../../components/componentePlanillas/compo
 import { GetUsuarios } from "../../service/GetUsuarios";
 import axiosInstance from "../../api/AxiosInstance";
 import ToastAlert from "../../components/componenteToast/ToastAlert";
-import { FileText, Pencil, Plus, ShoppingBag, Trash2, Search } from "lucide-react";
+import {
+  FileText,
+  Pencil,
+  Plus,
+  ShoppingBag,
+  Trash2,
+  Search,
+} from "lucide-react";
 import { FormularioVenderDias } from "../../components/componentePlanillas/componenteVacaciones/FormularioVenderDias";
 import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteExcel";
 
@@ -24,7 +31,7 @@ export function Vacaciones() {
   const [modalVender, setModalVender] = useState(false);
   const [vacacionesId, setVacacionesId] = useState([]); // Estado para almacenar el ID de las vacaciones seleccionadas
   const {
-    data: vacacionesList,
+    data: vacacionesList = [],
     onLoading,
     onError,
   } = useQuery({
@@ -118,7 +125,7 @@ export function Vacaciones() {
     console.log("Antes de eliminar:", empleadosSeleccionados);
     setValueAgregar(
       "empleados",
-      empleadosSeleccionados.filter((usuario) => usuario.id !== usuarioId)
+      empleadosSeleccionados.filter((usuario) => usuario.id !== usuarioId),
     );
   };
 
@@ -128,7 +135,7 @@ export function Vacaciones() {
 
     if (fechaInicio && fechaFin && fechaFin >= fechaInicio) {
       const diferencia = Math.ceil(
-        (fechaFin - fechaInicio) / (1000 * 60 * 60 * 24)
+        (fechaFin - fechaInicio) / (1000 * 60 * 60 * 24),
       );
       setValueAgregar("diasTotales", diferencia + 1); // Incluye el día de inicio
     } else {
@@ -159,8 +166,8 @@ export function Vacaciones() {
       ToastAlert(
         "error",
         error.response?.data?.message || // Mensaje de la API (ej. "Errores de validación")
-        error.message || // Mensaje de red (ej. "Network Error")
-        "Ocurrió un error inesperado" // Mensaje por defecto
+          error.message || // Mensaje de red (ej. "Network Error")
+          "Ocurrió un error inesperado", // Mensaje por defecto
       );
     }
   };
@@ -173,7 +180,7 @@ export function Vacaciones() {
       };
       const response = await axiosInstance.post(
         "/vacaciones/venderDias",
-        payload
+        payload,
       );
 
       if (response.data.success) {
@@ -220,11 +227,11 @@ export function Vacaciones() {
         <div className="d-flex flex-column align-items-start text-left py-2">
           <div>
             {capitalizeFirstLetter(
-              row.usuario?.empleado?.persona?.nombre.toLowerCase()
+              row.usuario?.empleado?.persona?.nombre.toLowerCase(),
             ) +
               " " +
               capitalizeFirstLetter(
-                row.usuario?.empleado?.persona?.apellidos.toLowerCase()
+                row.usuario?.empleado?.persona?.apellidos.toLowerCase(),
               ) || ""}
           </div>
           <span
@@ -286,8 +293,9 @@ export function Vacaciones() {
       name: "Estado",
       cell: (row) => (
         <span
-          className={`badge rounded-pill text-bg-${row.estado === 1 ? "success" : "danger"
-            }`}
+          className={`badge rounded-pill text-bg-${
+            row.estado === 1 ? "success" : "danger"
+          }`}
         >
           {row.estado === 1 ? "Completado" : "Pendiente"}
         </span>

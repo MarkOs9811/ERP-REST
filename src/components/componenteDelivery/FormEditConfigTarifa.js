@@ -31,7 +31,7 @@ export function FormEditConfigTarifa({ onClose, configuracion }) {
           typeof configuracion.propinas_sugeridas === "string"
             ? JSON.parse(configuracion.propinas_sugeridas)
             : configuracion.propinas_sugeridas || [];
-            
+
         propinasStr = Array.isArray(propinas) ? propinas.join(", ") : "";
       } catch (e) {
         propinasStr = "";
@@ -58,7 +58,7 @@ export function FormEditConfigTarifa({ onClose, configuracion }) {
     }
 
     const payload = {
-      sede_id: configuracion.sede_id,
+      sede_id: configuracion.idSede,
       costo_base_delivery: parseFloat(data.costo_base_delivery),
       costo_prioridad: parseFloat(data.costo_prioridad || 0),
       tiempo_min: parseInt(data.tiempo_min, 10),
@@ -67,7 +67,11 @@ export function FormEditConfigTarifa({ onClose, configuracion }) {
     };
 
     // Usamos PutData apuntando a delivery/zona-tarifa/{id}
-    const exito = await PutData("delivery/zona-tarifa", configuracion.id, payload);
+    const exito = await PutData(
+      "delivery/zona-tarifa",
+      configuracion.id,
+      payload,
+    );
 
     if (exito) {
       queryClient.invalidateQueries(["sedesConfiguracion"]);
@@ -76,14 +80,24 @@ export function FormEditConfigTarifa({ onClose, configuracion }) {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="d-flex flex-column h-100 p-4">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="d-flex flex-column h-100 p-4"
+    >
       {/* TARIFAS */}
-      <h6 className="fw-bold mb-3 mt-2 text-dark border-bottom pb-2">Tarifas de Delivery</h6>
+      <h6 className="fw-bold mb-3 mt-2 text-dark border-bottom pb-2">
+        Tarifas de Delivery
+      </h6>
       <div className="row g-3 mb-4">
         <div className="col-6">
-          <label className="form-label fw-medium text-dark small">Costo Base (S/)</label>
+          <label className="form-label fw-medium text-dark small">
+            Costo Base (S/)
+          </label>
           <div className="input-group shadow-sm">
-            <span className="input-group-text bg-white text-muted fw-bold" style={{ fontSize: "0.9rem" }}>
+            <span
+              className="input-group-text bg-white text-muted fw-bold"
+              style={{ fontSize: "0.9rem" }}
+            >
               S/
             </span>
             <input
@@ -97,13 +111,22 @@ export function FormEditConfigTarifa({ onClose, configuracion }) {
               })}
             />
           </div>
-          {errors.costo_base_delivery && <span className="text-danger small">{errors.costo_base_delivery.message}</span>}
+          {errors.costo_base_delivery && (
+            <span className="text-danger small">
+              {errors.costo_base_delivery.message}
+            </span>
+          )}
         </div>
 
         <div className="col-6">
-          <label className="form-label fw-medium text-dark small">Costo Prioridad (S/)</label>
+          <label className="form-label fw-medium text-dark small">
+            Costo Prioridad (S/)
+          </label>
           <div className="input-group shadow-sm">
-            <span className="input-group-text bg-white text-muted fw-bold" style={{ fontSize: "0.9rem" }}>
+            <span
+              className="input-group-text bg-white text-muted fw-bold"
+              style={{ fontSize: "0.9rem" }}
+            >
               S/
             </span>
             <input
@@ -116,15 +139,23 @@ export function FormEditConfigTarifa({ onClose, configuracion }) {
               })}
             />
           </div>
-          {errors.costo_prioridad && <span className="text-danger small">{errors.costo_prioridad.message}</span>}
+          {errors.costo_prioridad && (
+            <span className="text-danger small">
+              {errors.costo_prioridad.message}
+            </span>
+          )}
         </div>
       </div>
 
       {/* TIEMPOS ESTIMADOS (ETA) */}
-      <h6 className="fw-bold mb-3 text-dark border-bottom pb-2">Tiempo de Entrega Estimado</h6>
+      <h6 className="fw-bold mb-3 text-dark border-bottom pb-2">
+        Tiempo de Entrega Estimado
+      </h6>
       <div className="row g-3 mb-4">
         <div className="col-6">
-          <label className="form-label fw-medium text-dark small">Minutos Min</label>
+          <label className="form-label fw-medium text-dark small">
+            Minutos Min
+          </label>
           <div className="input-group shadow-sm">
             <span className="input-group-text bg-white">
               <Clock size={16} className="text-muted" />
@@ -139,11 +170,17 @@ export function FormEditConfigTarifa({ onClose, configuracion }) {
               })}
             />
           </div>
-          {errors.tiempo_min && <span className="text-danger small">{errors.tiempo_min.message}</span>}
+          {errors.tiempo_min && (
+            <span className="text-danger small">
+              {errors.tiempo_min.message}
+            </span>
+          )}
         </div>
 
         <div className="col-6">
-          <label className="form-label fw-medium text-dark small">Minutos Max</label>
+          <label className="form-label fw-medium text-dark small">
+            Minutos Max
+          </label>
           <div className="input-group shadow-sm">
             <span className="input-group-text bg-white">
               <Clock size={16} className="text-muted" />
@@ -160,14 +197,22 @@ export function FormEditConfigTarifa({ onClose, configuracion }) {
               })}
             />
           </div>
-          {errors.tiempo_max && <span className="text-danger small">{errors.tiempo_max.message}</span>}
+          {errors.tiempo_max && (
+            <span className="text-danger small">
+              {errors.tiempo_max.message}
+            </span>
+          )}
         </div>
       </div>
 
       {/* PROPINAS SUGERIDAS */}
-      <h6 className="fw-bold mb-3 text-dark border-bottom pb-2">Propinas Sugeridas (Opcional)</h6>
+      <h6 className="fw-bold mb-3 text-dark border-bottom pb-2">
+        Propinas Sugeridas (Opcional)
+      </h6>
       <div className="mb-4">
-        <label className="form-label fw-medium text-dark small">Lista de montos (S/)</label>
+        <label className="form-label fw-medium text-dark small">
+          Lista de montos (S/)
+        </label>
         <div className="input-group shadow-sm mb-1">
           <span className="input-group-text bg-white">
             <HeartHandshake size={16} className="text-muted" />
@@ -180,7 +225,8 @@ export function FormEditConfigTarifa({ onClose, configuracion }) {
           />
         </div>
         <small className="text-muted d-block" style={{ fontSize: "0.80rem" }}>
-          Ingresa los montos separados por comas. Déjalo en blanco para ocultar módulos de propinas.
+          Ingresa los montos separados por comas. Déjalo en blanco para ocultar
+          módulos de propinas.
         </small>
       </div>
 

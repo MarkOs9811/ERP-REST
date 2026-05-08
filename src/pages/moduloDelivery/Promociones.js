@@ -122,10 +122,13 @@ export function Promociones() {
           <CondicionCarga isLoading={isLoading} error={error} mode="cards">
             <div className="row g-4">
               {Array.isArray(promociones) &&
-                promociones.map((promo) => (
+                promociones.map((promo, index) => (
                   <div className="col-12 col-md-6 col-xl-3" key={promo.id}>
                     <div
-                      className={`card h-100 promo-card shadow-sm border-secondary overflow-hidden ${promo.estado === 1 ? "" : "inactiva"}`}
+                      className={`card h-100 promo-card shadow-sm border-secondary overflow-hidden animacion-cascada ${
+                        promo.estado === 1 ? "" : "inactiva"
+                      }`}
+                      style={{ animationDelay: `${index * 0.1}s` }}
                     >
                       {/* Banner Image */}
                       <div className="promo-banner-container">
@@ -135,7 +138,9 @@ export function Promociones() {
                           className="promo-banner"
                         />
                         <span
-                          className={`badge border rounded-pill px-3 py-2 promo-badge-status fw-medium ${getBadgeClass(promo.estado)}`}
+                          className={`badge border rounded-pill px-3 py-2 promo-badge-status fw-medium ${getBadgeClass(
+                            promo.estado,
+                          )}`}
                         >
                           {promo.estado === 1 ? "Activa" : "Inactiva"}
                         </span>
@@ -278,7 +283,9 @@ export function Promociones() {
         handleEliminar={handleToggleEstado}
         idEliminar={promoAccion?.id}
         nombre={promoAccion?.titulo}
-        pregunta={`¿Estás seguro de ${promoAccion?.estado === 1 ? "desactivar" : "activar"}`}
+        pregunta={`¿Estás seguro de ${
+          promoAccion?.estado === 1 ? "desactivar" : "activar"
+        }`}
         tipo="esta promoción"
       />
 

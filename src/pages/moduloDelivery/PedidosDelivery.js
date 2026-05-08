@@ -1,6 +1,6 @@
 import { PedidosWeb } from "../modulosVender/PedidosWeb";
 
-export function Despacho() {
+export function PedidosDelivery() {
   return (
     <div>
       <PedidosWeb />

@@ -9,9 +9,11 @@
 }
 .btn-realizarPedido{
   background-color: var(--fw-emerald);
-  border: none;
+  padding: 10px;
+  padding-inline: 20px;
+  border: 1px solid rgb(0, 167, 69);
   color: #fff;
-  border-radius: 10px;
+  border-radius: var(--radius-pill);
   text-decoration: none;
   font-size: 20px;
   transition: all ease-out 0.2s;
