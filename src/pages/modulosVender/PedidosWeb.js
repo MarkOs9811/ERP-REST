@@ -215,14 +215,6 @@ export function PedidosWeb() {
                         <div style={{ animation: "spin 1s linear infinite" }}>
                           <Cargando />
                         </div>
-
-                        {/* Opción 2: Si el de arriba sigue sin girar, comenta el de arriba 
-                          y descomenta este spinner nativo de Bootstrap garantizado al 100%:
-                        
-                          <div className="spinner-border text-primary" role="status">
-                            <span className="visually-hidden">Cargando...</span>
-                          </div>
-                        */}
                       </div>
                     )}
 

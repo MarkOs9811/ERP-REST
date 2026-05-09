@@ -194,6 +194,11 @@ const subMenuGroups = {
       icon: <Box size={16} />,
     },
     {
+      label: "Banners Eventos",
+      path: "/delivery/banners",
+      icon: <Box size={16} />,
+    },
+    {
       label: "Reportes",
       path: "/delivery/reportes",
       icon: <PieChart size={16} />,

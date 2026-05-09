@@ -17,10 +17,19 @@ export function ModalCuerpo({ selectedPedido }) {
                   className="d-flex flex-column mx-2 text-start"
                   style={{ flex: 2 }}
                 >
-                  <span>{capitalizeFirstLetter(detalle?.plato?.nombre)}</span>
+                  <span>
+                    {capitalizeFirstLetter(
+                      detalle?.plato?.nombre ||
+                        detalle?.promociones?.plato?.nombre,
+                    )}
+                  </span>
                   <small className="text-muted">
-                    Precio Unit. S/
-                    {parseFloat(detalle?.plato?.precio).toFixed(2)}
+                    Precio Unit. S/{" "}
+                    {parseFloat(
+                      detalle?.plato?.precio ||
+                        detalle?.promociones?.precio_promocional ||
+                        0,
+                    ).toFixed(2)}
                   </small>
                 </div>
 

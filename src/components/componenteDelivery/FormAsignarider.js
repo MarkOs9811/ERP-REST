@@ -35,7 +35,7 @@ export const FormAsignarRider = forwardRef(
 
     const usuariosRepartidores = repartidores
       ? repartidores.filter(
-          (usuario) => usuario?.empleado?.cargo?.nombre === "delivery",
+          (usuario) => usuario?.empleado?.cargo?.nombre === "conductor",
         )
       : [];
 

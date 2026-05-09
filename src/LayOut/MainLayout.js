@@ -78,6 +78,7 @@ import { Compras } from "../pages/moduloAlmacen/Compras";
 import { PedidosAsignados } from "../pages/moduloDelivery/PedidosAsignados";
 import { MisEntregas } from "../pages/moduloDelivery/MisEntregas";
 import { PedidosDelivery } from "../pages/moduloDelivery/PedidosDelivery";
+import Banner, { Banners } from "../pages/moduloDelivery/Banners";
 
 export const MainLayout = () => {
   // 1. OBTENCIÓN DE ESTADOS Y DATOS LOCALES
@@ -549,6 +550,16 @@ export const MainLayout = () => {
                         allowedRoles={["delivery", "administrador"]}
                       >
                         <Promociones />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="banners"
+                    element={
+                      <PrivateRoute
+                        allowedRoles={["delivery", "administrador"]}
+                      >
+                        <Banner />
                       </PrivateRoute>
                     }
                   />

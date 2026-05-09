@@ -16,7 +16,11 @@ export function DashboardDelivery() {
   });
   return (
     <div className="card">
-      <GraficoVentasDelivery />
+      <GraficoVentasDelivery
+        ventasList={ventasList}
+        load={loadingVentas}
+        errorLoad={errorVentas}
+      />
     </div>
   );
 }

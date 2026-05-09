@@ -1,0 +1,21 @@
+.banner-generator-container {
+    padding: 2rem;
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+.generator-title {
+    font-weight: 900;
+    margin-bottom: 0.5rem;
+    color: #212529;
+}
+
+.generator-subtitle {
+    font-size: 0.875rem;
+    color: #6c757d;
+    margin-bottom: 2rem;
+}
+
+.sticky-top {
+    top: 2rem;
+}

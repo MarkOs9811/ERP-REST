@@ -1,0 +1,48 @@
+.banner-list-card {
+    background: white;
+    border-radius: 1.5rem;
+    border: 1px solid #e9ecef;
+    padding: 1.5rem;
+    margin-top: 2rem;
+}
+
+.banner-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    border-bottom: 1px solid #f8f9fa;
+}
+
+.banner-item:last-child {
+    border-bottom: none;
+}
+
+.banner-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.banner-mini-preview {
+    width: 60px;
+    height: 30px;
+    border-radius: 4px;
+}
+
+.banner-name {
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.banner-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.form-check-input:checked {
+    background-color: #198754;
+    border-color: #198754;
+}

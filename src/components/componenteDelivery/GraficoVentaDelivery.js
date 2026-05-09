@@ -13,7 +13,7 @@ import { Bar } from "react-chartjs-2";
 import { TrendingUp } from "lucide-react";
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
 
-// 2. Registramos los módulos de Chart.js para poder usarlos en React
+// 2. Registramos los módulos de Chart.js
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -24,23 +24,28 @@ ChartJS.register(
 );
 
 export function GraficoVentasDelivery({ ventasList, load, errorLoad }) {
-  // 3. Procesamos los datos igual que antes, usando useMemo para optimizar
+  // 3. Procesamos los datos
   const procesarDatos = useMemo(() => {
     if (!ventasList || ventasList.length === 0) {
       return { labels: [], datasetWeb: [], datasetLocal: [] };
     }
 
-    // Generar últimos 7 días
+    // [CORRECCIÓN 1]: Generar últimos 7 días con la zona horaria local correcta
     const ultimos7Dias = [...Array(7)]
       .map((_, i) => {
         const d = new Date();
         d.setDate(d.getDate() - i);
-        return d.toISOString().split("T")[0];
+        // Construimos YYYY-MM-DD manualmente para evitar desfases de UTC
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, "0");
+        const day = String(d.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
       })
       .reverse();
 
     // Inicializar contadores
     const agrupado = ultimos7Dias.map((fecha) => {
+      // Al agregar T00:00:00 forzamos a JS a leerlo en hora local
       const fechaObjeto = new Date(fecha + "T00:00:00");
       return {
         fechaOriginal: fecha,
@@ -56,13 +61,18 @@ export function GraficoVentasDelivery({ ventasList, load, errorLoad }) {
     // Contar ventas
     ventasList.forEach((venta) => {
       if (!venta.fechaVenta) return;
-      const fechaVentaDate = venta.fechaVenta.split("T")[0];
+
+      // [CORRECCIÓN 2]: Usar substring para garantizar que siempre obtenemos "YYYY-MM-DD"
+      // sin importar si hay una "T", un espacio, o nada extra.
+      const fechaVentaDate = venta.fechaVenta.substring(0, 10);
+
       const diaEnGrafico = agrupado.find(
         (d) => d.fechaOriginal === fechaVentaDate,
       );
 
       if (diaEnGrafico) {
-        if (venta.idPedidoWeb !== null) {
+        // [NOTA]: Asegúrate de que el backend manda esta propiedad exactamente como "idPedidoWeb"
+        if (venta.idPedidoWeb !== null && venta.idPedidoWeb !== undefined) {
           diaEnGrafico.ventasWeb += 1;
         } else {
           diaEnGrafico.ventasLocal += 1;
@@ -70,7 +80,6 @@ export function GraficoVentasDelivery({ ventasList, load, errorLoad }) {
       }
     });
 
-    // Chart.js necesita arreglos separados para las etiquetas y los datos
     return {
       labels: agrupado.map((d) => d.fechaFormateada),
       datasetWeb: agrupado.map((d) => d.ventasWeb),
@@ -78,20 +87,20 @@ export function GraficoVentasDelivery({ ventasList, load, errorLoad }) {
     };
   }, [ventasList]);
 
-  // 4. Construimos el objeto "data" que requiere Chart.js
+  // 4. Construimos el objeto "data"
   const data = {
     labels: procesarDatos.labels,
     datasets: [
       {
         label: "Delivery (Web)",
         data: procesarDatos.datasetWeb,
-        backgroundColor: "#FF992C", // Tu color --fw-saffron
-        borderRadius: 4, // Bordes redondeados superiores
+        backgroundColor: "#FF992C",
+        borderRadius: 4,
       },
       {
         label: "Local (Mesa/Llevar)",
         data: procesarDatos.datasetLocal,
-        backgroundColor: "#17C668", // Tu color --fw-emerald
+        backgroundColor: "#17C668",
         borderRadius: 4,
       },
     ],
@@ -100,37 +109,33 @@ export function GraficoVentasDelivery({ ventasList, load, errorLoad }) {
   // 5. Configuramos las opciones visuales del gráfico
   const options = {
     responsive: true,
-    maintainAspectRatio: false, // Permite que el gráfico llene el alto del contenedor padre
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         position: "top",
         labels: {
-          color: "#6B7280", // Color sutil para la leyenda (--text-muted)
-          usePointStyle: true, // Usa círculos en la leyenda en lugar de rectángulos
+          color: "#6B7280",
+          usePointStyle: true,
         },
       },
       tooltip: {
         mode: "index",
-        intersect: false, // Muestra el tooltip de ambas barras al pasar el mouse por la columna
+        intersect: false,
       },
     },
     scales: {
       x: {
-        grid: {
-          display: false, // Oculta la cuadrícula vertical
-        },
-        ticks: {
-          color: "#6B7280",
-        },
+        grid: { display: false },
+        ticks: { color: "#6B7280" },
       },
       y: {
         grid: {
-          color: "#F3F4F6", // Líneas horizontales muy suaves (--fw-muetd)
+          color: "#F3F4F6",
           drawBorder: false,
         },
         ticks: {
           color: "#6B7280",
-          stepSize: 1, // Evita decimales en el recuento de ventas
+          stepSize: 1, // Evita decimales (no puedes vender 1.5 pedidos)
         },
       },
     },
@@ -142,7 +147,6 @@ export function GraficoVentasDelivery({ ventasList, load, errorLoad }) {
         className="card shadow-sm border-0 rounded-4 p-4 h-100 w-100"
         style={{ backgroundColor: "var(--bg-card)" }}
       >
-        {/* Encabezado del Gráfico */}
         <div className="d-flex align-items-center mb-4">
           <div
             className="p-2 rounded-circle me-3 d-flex align-items-center justify-content-center"
@@ -163,7 +167,6 @@ export function GraficoVentasDelivery({ ventasList, load, errorLoad }) {
           </div>
         </div>
 
-        {/* Contenedor del Gráfico (Debe tener una altura definida para Chart.js) */}
         <div style={{ position: "relative", width: "100%", height: "300px" }}>
           <Bar data={data} options={options} />
         </div>
