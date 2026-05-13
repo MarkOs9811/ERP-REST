@@ -1,13 +1,17 @@
 .banner-preview-phone {
     width: 320px;
-    height: 650px;
-    background-color: #18181b;
-    border-radius: 50px;
-    border: 8px solid #3f3f46;
+    /* Un poco más estrecho para proporciones reales de smartphone moderno */
+    height: 660px;
+    background-color: #ffffff;
+    /* El fondo base del teléfono */
+    border-radius: 45px;
+    border: 12px solid #1f2023;
+    /* Borde oscuro simulando el bisel del hardware */
     position: relative;
     overflow: hidden;
     margin: 0 auto;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    /* Doble sombra para un efecto 3D realista */
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4), inset 0 0 0 4px #000000;
 }
 
 .phone-notch {
@@ -15,89 +19,81 @@
     top: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 128px;
-    height: 24px;
-    background-color: #3f3f46;
-    border-bottom-left-radius: 1rem;
-    border-bottom-right-radius: 1rem;
+    width: 110px;
+    height: 28px;
+    background-color: #1f2023;
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
     z-index: 20;
 }
 
 .phone-screen {
+    width: 100%;
     height: 100%;
-    background-color: white;
+    background-color: #f8f9fa;
+    /* Un gris muy sutil para contraste con tarjetas blancas */
     overflow-y: auto;
     position: relative;
+    /* Ocultamos el scrollbar para mayor realismo */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.phone-screen::-webkit-scrollbar {
+    display: none;
 }
 
 .banner-content-box {
     position: relative;
     width: 100%;
-    aspect-ratio: 2/1;
+    aspect-ratio: 16/9;
+    /* Proporción estándar cinemática, mejor que 2/1 */
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     overflow: hidden;
+    transition: all 0.3s ease;
 }
 
 .aura-effect {
     position: absolute;
-    inset: 0;
+    inset: -50px;
+    /* Extendemos el inset para que el blur no se corte en los bordes */
     pointer-events: none;
-    opacity: 0.4;
-    filter: blur(80px);
+    opacity: 0.6;
+    filter: blur(40px);
+    /* Blur optimizado */
 }
 
 .banner-tag {
-    font-size: 10px;
-    font-weight: 700;
+    font-size: 11px;
+    font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.15em;
     opacity: 0.9;
 }
 
 .banner-title {
-    font-size: 1.25rem;
-    font-weight: 700;
-    line-height: 1.2;
+    font-size: 1.35rem;
+    font-weight: 800;
+    line-height: 1.1;
     margin-top: 0.25rem;
+    margin-bottom: 0;
+    letter-spacing: -0.02em;
 }
 
 .banner-subtitle {
-    font-size: 10px;
-    opacity: 0.8;
+    font-size: 12px;
+    opacity: 0.85;
     font-weight: 500;
+    margin-top: 0.15rem;
 }
 
 .banner-offer {
-    font-size: 3rem;
+    font-size: 2.8rem;
     font-weight: 900;
     letter-spacing: -0.05em;
-    line-height: 1;
+    line-height: 0.9;
     text-transform: uppercase;
-}
-
-.banner-coupon {
-    padding: 0.5rem 0.75rem;
-    border-radius: 0.5rem;
-    border: 2px dashed rgba(255, 255, 255, 0.4);
-    background: rgba(255, 255, 255, 0.1);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.coupon-label {
-    font-size: 8px;
-    font-weight: 700;
-    text-transform: uppercase;
-    opacity: 0.6;
-}
-
-.coupon-code {
-    font-size: 10px;
-    font-weight: 900;
-    white-space: nowrap;
 }

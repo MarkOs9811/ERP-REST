@@ -6,14 +6,14 @@
 :root {
   /* Colores de Marca */
   --fw-onyx: #111213;
-  --fw-emerald: #17C668;
+  --fw-emerald: #198f50;
   --fw-saffron: #FF992C;
   --fw-muetd:rgb(187, 187, 187);
   --fw-strawberry: #E44949;
   --fw-white: #FFFFFF;
 
   /* Fondos Suaves (Para auras y badges) */
-  --bg-emerald-soft: #E8F9F0;
+  --bg-emerald-soft: #b6f8d5;
   --bg-saffron-soft: #FFF5E9;
   --bg-strawberry-soft: #FCECEC;
 
@@ -477,7 +477,7 @@ body.dark-theme .btn-guardar {
   border-color: #cbd5e1;
 }
 
-/* 🟢 POSITIVO: Activar */
+/* 🟢 POSITIVO: Activar o actualizar */
 .btn-activar {
   background-color: var(--bg-emerald-soft);
   color: var(--fw-emerald);

@@ -241,9 +241,6 @@ export function CategoriaList() {
                       categoria.nombre.slice(1)}
                   </span>
                 </div>
-                <span className="badge bg-light text-dark rounded-pill mt-1">
-                  5 platos
-                </span>
               </div>
 
               <div className="ms-auto">

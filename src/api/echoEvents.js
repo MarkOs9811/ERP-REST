@@ -10,8 +10,8 @@ const echoEvents = new Echo({
   cluster: "eu", // 👉 Tu cluster de siempre
   forceTLS: true,
 
-  // authEndpoint: "http://erp-api.test/api/broadcasting/auth",
-  authEndpoint: "http://127.0.0.1:8000/api/broadcasting/auth",
+  authEndpoint: "http://erp-api.test/api/broadcasting/auth",
+  // authEndpoint: "http://127.0.0.1:8000/api/broadcasting/auth",
   auth: {
     headers: {
       // El token para que Laravel sepa quién está escuchando

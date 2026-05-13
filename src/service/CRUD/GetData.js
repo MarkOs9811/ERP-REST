@@ -8,7 +8,7 @@ export const GetData = async (tabla) => {
     if (response.data.success) {
       return response.data.data;
     }
-    return false;
+    throw new Error(response.data.message || "Error al obtener los datos");
   } catch (error) {
     const errorMessage = error.response?.data?.message || error.message;
     ToastAlert("error", errorMessage);

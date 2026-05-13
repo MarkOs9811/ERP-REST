@@ -1,27 +1,48 @@
-import React from "react";
+import React, { useEffect } from "react";
 import * as LucideIcons from "lucide-react";
+import { useForm } from "react-hook-form";
 import "../../css/estilosDelivery/EstilosBannerEditro.css";
 
-const BannerEditor = ({ config, onChange, onSave, isEditing, onCancel }) => {
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    onChange({
-      ...config,
-      [name]: type === "checkbox" ? checked : value,
+const BannerEditor = ({
+  initialData,
+  onSave,
+  isEditing,
+  onCancel,
+  onLiveChange,
+}) => {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    reset,
+    formState: { errors },
+  } = useForm({
+    defaultValues: initialData,
+  });
+
+  // Observamos TODOS los campos para la previsualización
+  const formData = watch();
+
+  // EFECTO CRÍTICO: Envía los cambios al padre conforme el usuario escribe
+  useEffect(() => {
+    const subscription = watch((value) => {
+      onLiveChange(value);
     });
-  };
+    return () => subscription.unsubscribe();
+  }, [watch, onLiveChange]);
 
   const presets = [
     {
       name: "Fire Glow",
       config: {
         theme: "custom",
-        bgColor: "#9F1239",
+        bg_color: "#9F1239",
         gradient: true,
-        gradientColor: "#E11D48",
-        hasAura: true,
-        auraColor: "#F87171",
-        textColor: "#ffffff",
+        gradient_color: "#E11D48",
+        has_aura: true,
+        aura_color: "#F87171",
+        text_color: "#ffffff",
       },
       color: "#9F1239",
     },
@@ -29,12 +50,12 @@ const BannerEditor = ({ config, onChange, onSave, isEditing, onCancel }) => {
       name: "Cyber Night",
       config: {
         theme: "custom",
-        bgColor: "#09090b",
+        bg_color: "#09090b",
         gradient: true,
-        gradientColor: "#27272a",
-        hasAura: true,
-        auraColor: "#3b82f6",
-        textColor: "#ffffff",
+        gradient_color: "#27272a",
+        has_aura: true,
+        aura_color: "#3b82f6",
+        text_color: "#ffffff",
       },
       color: "#09090b",
     },
@@ -42,110 +63,47 @@ const BannerEditor = ({ config, onChange, onSave, isEditing, onCancel }) => {
       name: "Sunset Glass",
       config: {
         theme: "glass",
-        bgColor: "#f97316",
+        bg_color: "#f97316",
         gradient: true,
-        gradientColor: "#fb923c",
-        hasAura: true,
-        auraColor: "#ffffff",
-        textColor: "#ffffff",
+        gradient_color: "#fb923c",
+        has_aura: true,
+        aura_color: "#ffffff",
+        text_color: "#ffffff",
       },
       color: "#f97316",
     },
     {
-      name: "Electric Purple",
+      name: "Green oferta",
       config: {
-        theme: "custom",
-        bgColor: "#4c1d95",
+        theme: "glass",
+        bg_color: "#37bd6a",
         gradient: true,
-        gradientColor: "#7c3aed",
-        hasAura: true,
-        auraColor: "#a78bfa",
-        textColor: "#ffffff",
+        gradient_color: "#12aa33",
+        has_aura: true,
+        aura_color: "#ffffff",
+        text_color: "#ffffff",
       },
-      color: "#7c3aed",
-    },
-    {
-      name: "Clean Emerald",
-      config: {
-        theme: "custom",
-        bgColor: "#064e3b",
-        gradient: true,
-        gradientColor: "#059669",
-        hasAura: true,
-        auraColor: "#34d399",
-        textColor: "#ffffff",
-      },
-      color: "#059669",
-    },
-    {
-      name: "Golden Luxury",
-      config: {
-        theme: "custom",
-        bgColor: "#78350f",
-        gradient: true,
-        gradientColor: "#d97706",
-        hasAura: true,
-        auraColor: "#fef3c7",
-        textColor: "#ffffff",
-      },
-      color: "#d97706",
-    },
-    {
-      name: "Midnight Bloom",
-      config: {
-        theme: "custom",
-        bgColor: "#1e1b4b",
-        gradient: true,
-        gradientColor: "#4338ca",
-        hasAura: true,
-        auraColor: "#818cf8",
-        textColor: "#ffffff",
-      },
-      color: "#1e1b4b",
-    },
-    {
-      name: "Pastel Dream",
-      config: {
-        theme: "custom",
-        bgColor: "#fdf2f8",
-        gradient: true,
-        gradientColor: "#fae8ff",
-        hasAura: true,
-        auraColor: "#f472b6",
-        textColor: "#be185d",
-      },
-      color: "#fae8ff",
-    },
-    {
-      name: "Ocean breeze",
-      config: {
-        theme: "custom",
-        bgColor: "#0c4a6e",
-        gradient: true,
-        gradientColor: "#0ea5e9",
-        hasAura: true,
-        auraColor: "#7dd3fc",
-        textColor: "#ffffff",
-      },
-      color: "#0ea5e9",
-    },
-    {
-      name: "Neon Night",
-      config: {
-        theme: "custom",
-        bgColor: "#000000",
-        gradient: true,
-        gradientColor: "#1a1a1a",
-        hasAura: true,
-        auraColor: "#39ff14",
-        textColor: "#39ff14",
-      },
-      color: "#39ff14",
+      color: "#12d171",
     },
   ];
 
+  // Reemplaza tu función applyPreset con esta:
+  const applyPreset = (presetConfig) => {
+    Object.entries(presetConfig).forEach(([key, value]) => {
+      setValue(key, value, {
+        shouldValidate: true,
+        shouldDirty: true,
+        shouldTouch: true,
+      });
+    });
+  };
+
+  const onSubmit = (data) => {
+    onSave(data);
+  };
+
   return (
-    <div className="banner-editor-card">
+    <form className="card p-3 rounded-5" onSubmit={handleSubmit(onSubmit)}>
       <div className="editor-header">
         <h3 className="editor-title">
           {isEditing ? "Editando Banner" : "Editor de Diseño"}
@@ -155,8 +113,13 @@ const BannerEditor = ({ config, onChange, onSave, isEditing, onCancel }) => {
             <div
               key={p.name}
               className="preset-dot"
-              style={{ backgroundColor: p.color }}
-              onClick={() => onChange({ ...config, ...p.config })}
+              style={{
+                backgroundColor: p.color,
+                cursor: "pointer",
+                border: "2px solid white",
+                boxShadow: "0 0 5px rgba(0,0,0,0.2)",
+              }}
+              onClick={() => applyPreset(p.config)}
               title={p.name}
             />
           ))}
@@ -164,223 +127,188 @@ const BannerEditor = ({ config, onChange, onSave, isEditing, onCancel }) => {
       </div>
 
       <div className="row g-3">
+        {/* Información de Contenido */}
         <div className="col-md-6">
           <label className="form-label">Etiqueta (Tag)</label>
-          <input
-            type="text"
-            name="tag"
-            className="form-control"
-            value={config.tag}
-            onChange={handleChange}
-          />
+          <input type="text" className="form-control" {...register("tag")} />
         </div>
+
         <div className="col-md-6">
-          <label className="form-label">Título</label>
+          <label className="form-label">
+            Título <span className="text-danger">*</span>
+          </label>
           <input
             type="text"
-            name="title"
-            className="form-control"
-            value={config.title}
-            onChange={handleChange}
+            className={`form-control ${errors.title ? "is-invalid" : ""}`}
+            {...register("title", { required: "El título es obligatorio" })}
           />
         </div>
+
         <div className="col-md-6">
           <label className="form-label">Subtítulo</label>
           <input
             type="text"
-            name="subtitle"
             className="form-control"
-            value={config.subtitle}
-            onChange={handleChange}
+            {...register("subtitle")}
           />
         </div>
+
         <div className="col-md-6">
-          <label className="form-label">Oferta Principal</label>
+          <label className="form-label">Oferta (Ej: 50% OFF)</label>
           <input
             type="text"
-            name="offer"
             className="form-control fw-bold"
-            value={config.offer}
-            onChange={handleChange}
+            {...register("offer")}
           />
         </div>
-        <div className="col-md-6">
-          <label className="form-label">Código Cupón</label>
-          <input
-            type="text"
-            name="code"
-            className="form-control"
-            value={config.code}
-            onChange={handleChange}
-          />
-        </div>
+
+        {/* Estilización */}
         <div className="col-md-6">
           <label className="form-label">Tema Base</label>
-          <select
-            name="theme"
-            className="form-select"
-            value={config.theme}
-            onChange={handleChange}
-          >
+          <select className="form-select" {...register("theme")}>
             <option value="red">Fire Red</option>
             <option value="black">Night Black</option>
-            <option value="white">Clean White</option>
             <option value="glass">Glass Morphism</option>
             <option value="custom">Personalizado</option>
           </select>
         </div>
 
         <div className="col-md-6">
+          <label className="form-label">
+            Redondez ({formData.border_radius}rem)
+          </label>
+          <input
+            type="range"
+            className="form-range"
+            min="0"
+            max="3"
+            step="0.25"
+            {...register("border_radius")}
+          />
+        </div>
+
+        <div className="col-md-6">
           <label className="form-label">Icono</label>
-          <div className="d-flex gap-2 align-items-center">
-            <div className="form-check form-switch m-0">
+          <div className="d-flex gap-2">
+            <div className="form-check form-switch">
               <input
                 type="checkbox"
-                name="hasIcon"
                 className="form-check-input"
-                checked={config.hasIcon}
-                onChange={handleChange}
+                {...register("has_icon")}
               />
             </div>
-            {config.hasIcon && (
+            {formData.has_icon && (
               <select
-                name="iconName"
                 className="form-select form-select-sm"
-                value={config.iconName}
-                onChange={handleChange}
+                {...register("icon_name")}
               >
                 <option value="Flame">Fuego</option>
                 <option value="Sparkles">Destellos</option>
                 <option value="Gift">Regalo</option>
-                <option value="Star">Estrella</option>
                 <option value="Zap">Rayo</option>
-                <option value="Ticket">Ticket</option>
-                <option value="Clock">Reloj</option>
               </select>
             )}
           </div>
         </div>
 
         <div className="col-md-6">
-          <label className="form-label">Redondez ({config.borderRadius})</label>
-          <input
-            type="range"
-            name="borderRadius"
-            className="form-range"
-            min="0"
-            max="3"
-            step="0.25"
-            value={parseFloat(config.borderRadius)}
-            onChange={(e) =>
-              onChange({ ...config, borderRadius: `${e.target.value}rem` })
-            }
-          />
+          <label className="form-label">Estado</label>
+          <div className="form-check form-switch">
+            <input
+              type="checkbox"
+              className="form-check-input"
+              {...register("is_active")}
+            />
+            <span className="small text-muted">
+              {formData.is_active ? "Activo" : "Inactivo"}
+            </span>
+          </div>
         </div>
 
-        <div className="col-12 pt-2 border-top border-light">
-          <h6 className="form-label text-dark mb-3">
-            Personalización Avanzada
-          </h6>
+        {/* Colores */}
+        <div className="col-12 pt-3 border-top">
           <div className="row g-3">
-            <div className="col-md-6">
-              <label className="form-label">Color Fondo / Base</label>
+            <div className="col-md-3">
+              <label className="form-label small">Fondo</label>
               <input
                 type="color"
-                name="bgColor"
-                className="form-control color-input"
-                value={config.bgColor}
-                onChange={handleChange}
+                className="form-control form-control-color w-100"
+                {...register("bg_color")}
               />
             </div>
-            <div className="col-md-6">
-              <label className="form-label">Color Texto</label>
+            <div className="col-md-3">
+              <label className="form-label small">Texto</label>
               <input
                 type="color"
-                name="textColor"
-                className="form-control color-input"
-                value={config.textColor}
-                onChange={handleChange}
+                className="form-control form-control-color w-100"
+                {...register("text_color")}
               />
             </div>
-
-            <div className="col-md-6">
-              <div className="d-flex align-items-center justify-content-between mb-2">
-                <label className="form-label mb-0">Usar Gradiente</label>
-                <div className="form-check form-switch">
-                  <input
-                    type="checkbox"
-                    name="gradient"
-                    className="form-check-input"
-                    checked={config.gradient}
-                    onChange={handleChange}
-                  />
-                </div>
+            <div className="col-md-3">
+              <label className="form-label small">Gradiente</label>
+              <div className="form-check form-switch mb-1">
+                <input
+                  type="checkbox"
+                  className="form-check-input"
+                  {...register("gradient")}
+                />
               </div>
-              {config.gradient && (
+              {formData.gradient && (
                 <input
                   type="color"
-                  name="gradientColor"
-                  className="form-control color-input"
-                  value={config.gradientColor}
-                  onChange={handleChange}
+                  className="form-control form-control-color w-100"
+                  {...register("gradient_color")}
                 />
               )}
             </div>
-
-            <div className="col-md-6">
-              <div className="d-flex align-items-center justify-content-between mb-2">
-                <label className="form-label mb-0">Resplandor (Aura)</label>
-                <div className="form-check form-switch">
-                  <input
-                    type="checkbox"
-                    name="hasAura"
-                    className="form-check-input"
-                    checked={config.hasAura}
-                    onChange={handleChange}
-                  />
-                </div>
+            <div className="col-md-3">
+              <label className="form-label small">Aura</label>
+              <div className="form-check form-switch mb-1">
+                <input
+                  type="checkbox"
+                  className="form-check-input"
+                  {...register("has_aura")}
+                />
               </div>
-              {config.hasAura && (
+              {formData.has_aura && (
                 <input
                   type="color"
-                  name="auraColor"
-                  className="form-control color-input"
-                  value={config.auraColor}
-                  onChange={handleChange}
+                  className="form-control form-control-color w-100"
+                  {...register("aura_color")}
                 />
               )}
             </div>
           </div>
         </div>
 
-        <div className="col-12 pt-3 d-flex gap-2">
+        {/* Acciones */}
+        <div className="col-12 pt-4 d-flex gap-2">
           {isEditing && (
             <button
-              className="btn btn-outline-secondary w-50 py-3 rounded-4 fw-bold text-uppercase"
+              type="button"
+              className="btn btn-light w-50 py-3 rounded-4"
               onClick={onCancel}
             >
               Cancelar
             </button>
           )}
           <button
-            className={`btn ${isEditing ? "btn-success w-50" : "btn-dark w-100"} py-3 rounded-4 fw-bold fst-italic text-uppercase`}
-            onClick={onSave}
+            type="submit"
+            className={` ${isEditing ? "btn-activar w-50" : "btn-guardar w-100"} py-3 rounded-4 fw-bold`}
           >
             {isEditing ? (
               <>
-                <LucideIcons.Save size={18} className="me-2" />
-                Actualizar
+                <LucideIcons.Save size={18} className="me-2" /> Actualizar
               </>
             ) : (
               <>
-                <LucideIcons.Plus size={18} className="me-2" />
-                Guardar Banner
+                <LucideIcons.Plus size={18} className="me-2" /> Guardar Banner
               </>
             )}
           </button>
         </div>
       </div>
-    </div>
+    </form>
   );
 };
 
