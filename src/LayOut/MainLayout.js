@@ -79,6 +79,7 @@ import { PedidosAsignados } from "../pages/moduloDelivery/PedidosAsignados";
 import { MisEntregas } from "../pages/moduloDelivery/MisEntregas";
 import { PedidosDelivery } from "../pages/moduloDelivery/PedidosDelivery";
 import Banner, { Banners } from "../pages/moduloDelivery/Banners";
+import { DashboardCliente } from "../pages/moduloClientes/DashboardCliente";
 
 export const MainLayout = () => {
   // 1. OBTENCIÓN DE ESTADOS Y DATOS LOCALES
@@ -406,8 +407,29 @@ export const MainLayout = () => {
                   />
                 </Route>
 
-                {/* RUTAS PARA MODULO COMPRAS ANTERIORMENTE AQUI - AHORA DENTRO DE ALMACEN */}
-
+                {/* RUTAS PARA CLIENTES */}
+                <Route path="/clientes">
+                  <Route
+                    index
+                    element={
+                      <PrivateRoute
+                        allowedRoles={["clientes", "administrador"]}
+                      >
+                        <DashboardCliente />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="dashboard"
+                    element={
+                      <PrivateRoute
+                        allowedRoles={["clientes", "administrador"]}
+                      >
+                        <DashboardCliente />
+                      </PrivateRoute>
+                    }
+                  />
+                </Route>
                 {/* RUTAS PARA MODULO VENTAS */}
                 <Route path="/ventas">
                   <Route

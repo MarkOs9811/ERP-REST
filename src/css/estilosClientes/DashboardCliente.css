@@ -1,0 +1,64 @@
+/* =========================================
+   INTEGRACIÓN SISTEMA DE DISEÑO FIRE WOK
+   ========================================= */
+
+/* Utilidades de Tarjetas */
+.fw-card {
+    background-color: var(--bg-card);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    /* Borde ultra sutil para modo claro */
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-soft);
+    transition: box-shadow var(--transition-smooth);
+}
+
+.fw-card:hover {
+    box-shadow: var(--shadow-hover);
+}
+
+/* Utilidades de Texto */
+.text-fw-main {
+    color: var(--text-main) !important;
+}
+
+.text-fw-muted {
+    color: var(--text-muted) !important;
+}
+
+.text-fw-emerald {
+    color: var(--fw-emerald) !important;
+}
+
+.text-fw-saffron {
+    color: var(--fw-saffron) !important;
+}
+
+/* Utilidades de Fondos Suaves (Auras) */
+.bg-fw-emerald-soft {
+    background-color: var(--bg-emerald-soft) !important;
+}
+
+.bg-fw-saffron-soft {
+    background-color: var(--bg-saffron-soft) !important;
+}
+
+/* Tabla Custom Flat */
+.table-custom-flat {
+    border-collapse: separate;
+    border-spacing: 0 8px;
+}
+
+.row-hover-flat {
+    background-color: var(--bg-card);
+    transition: all var(--transition-smooth);
+    border-left: 3px solid transparent;
+    border-radius: var(--radius-sm);
+}
+
+.row-hover-flat:hover {
+    background-color: var(--fw-muetd);
+    /* Utiliza tu gris tenue para hover */
+    border-left: 3px solid var(--fw-saffron);
+    /* Acento naranja al hacer hover */
+    transform: translateX(4px);
+}

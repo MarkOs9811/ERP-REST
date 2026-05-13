@@ -26,7 +26,7 @@
   --bg-card: var(--fw-white);
 
   --text-main: var(--fw-onyx);
-  --text-muted: #6B7280;
+  --text-muted: #242424;
 
   /* Glassmorphism y Sombras */
   --glass-bg: transparent;
@@ -59,7 +59,7 @@ body.dark-theme {
   --bg-card: #1E2022;
 
   --text-main: #FBFCFF;
-  --text-muted: #9CA3AF;
+  --text-muted: #bdbdbd;
 
   --glass-bg: transparent;
   --glass-border: transparent;
@@ -463,7 +463,7 @@ body.dark-theme .btn-guardar {
 .btn-accion-card {
   background-color: var(--fw-muetd);
   color: var(--text-muted);
-  border-color: #e2e8f0;
+  border-color: #808080;
 }
 .btn-cerrar-modal{
   border-radius: var(--radius-pill);

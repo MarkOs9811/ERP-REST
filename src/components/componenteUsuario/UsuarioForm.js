@@ -24,6 +24,9 @@ import axiosInstance from "../../api/AxiosInstance";
 import {
   handleInputChange,
   handleSelectChange,
+  limitDocumentoInput,
+  validateDNI,
+  validateDocumento,
 } from "../../hooks/InputHandlers";
 
 export function UsuarioForm({ handleCloseModal }) {
@@ -67,6 +70,7 @@ export function UsuarioForm({ handleCloseModal }) {
     handleSubmit,
     setValue,
     formState: { errors },
+    watch,
   } = useForm();
 
   // --- 3. LÓGICA DE NEGOCIO ---
@@ -78,7 +82,7 @@ export function UsuarioForm({ handleCloseModal }) {
     if (selectedCargoId) {
       try {
         const response = await axiosInstance.get(
-          `/getSalarioCargo/${selectedCargoId}`
+          `/getSalarioCargo/${selectedCargoId}`,
         );
         const salario = response.data.salario;
         setFormData({ ...formData, cargo: selectedCargoId, salario });
@@ -106,7 +110,7 @@ export function UsuarioForm({ handleCloseModal }) {
     try {
       const response = await axiosInstance.post(
         "/storeUsuario",
-        formDataToSend
+        formDataToSend,
       );
       if (response.data.success) {
         ToastAlert("success", response.data.success);
@@ -122,7 +126,7 @@ export function UsuarioForm({ handleCloseModal }) {
       } else {
         ToastAlert(
           "error",
-          error.response?.data?.error || "Error al registrar"
+          error.response?.data?.error || "Error al registrar",
         );
       }
     }
@@ -227,13 +231,16 @@ export function UsuarioForm({ handleCloseModal }) {
                   className={`form-select border-start-0 ${
                     errors.tipo_documento ? "is-invalid" : ""
                   }`}
-                  {...register("tipo_documento", { required: "Requerido" })}
-                  onChange={handleSelectChange(
-                    setTipoDocumento,
-                    setValue,
-                    "tipo_documento",
-                    [{ name: "numero_documento", setter: setNumeroDocumento }]
-                  )}
+                  {...register("tipo_documento", {
+                    required: "Requerido",
+                    onChange: (e) => {
+                      // Cuando cambia el tipo de documento, limpiamos el campo del número
+                      // para evitar que un DNI se quede guardado como Carnet y pase validaciones falsas.
+                      setValue("numero_documento", "", {
+                        shouldValidate: true,
+                      });
+                    },
+                  })}
                 >
                   <option value="DNI">DNI</option>
                   <option value="extranjeria">Carnet Ext.</option>
@@ -252,29 +259,16 @@ export function UsuarioForm({ handleCloseModal }) {
                 </span>
                 <input
                   type="text"
+                  inputMode="numeric"
                   className={`form-control border-start-0 ${
                     errors.numero_documento ? "is-invalid" : ""
                   }`}
                   placeholder="Ingrese número"
-                  value={numeroDocumento}
                   {...register("numero_documento", {
-                    required: "Requerido",
-                    minLength: {
-                      value: tipoDocumento === "DNI" ? 8 : 10,
-                      message: "Longitud incorrecta",
-                    },
-                    maxLength: {
-                      value: tipoDocumento === "DNI" ? 8 : 10,
-                      message: "Longitud incorrecta",
-                    },
+                    validate: validateDocumento,
                   })}
-                  onChange={handleInputChange(
-                    setNumeroDocumento,
-                    setValue,
-                    "numero_documento",
-                    /^\d*$/,
-                    tipoDocumento === "DNI" ? 8 : 10
-                  )}
+                  // Pasamos el watch o el estado actual del tipo de documento para limitar el DOM
+                  onInput={limitDocumentoInput(watch("tipo_documento"))}
                 />
               </div>
               {errors.numero_documento && (
@@ -350,6 +344,7 @@ export function UsuarioForm({ handleCloseModal }) {
                 </span>
                 <input
                   type="email"
+                  inputMode="email"
                   className={`form-control border-start-0 ${
                     errors.correo ? "is-invalid" : ""
                   }`}

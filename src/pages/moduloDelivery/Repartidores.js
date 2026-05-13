@@ -215,7 +215,7 @@ export function Repartidores() {
                       {/* 3. Acciones alineadas a la derecha */}
                       <div className="d-flex justify-content-center align-items-center flex-shrink-0 gap-2">
                         <button
-                          className="btn btn-sm btn-outline-primary p-2"
+                          className="btn-editar p-2"
                           title="Editar Repartidor"
                           onClick={() => {
                             setRepartidorSelected(repartidor);
@@ -225,7 +225,7 @@ export function Repartidores() {
                           <Edit2 size={18} />
                         </button>
                         <button
-                          className={`btn btn-sm  p-2 ${repartidor.estado == 1 ? "btn-outline-danger" : "btn-outline-success"}`}
+                          className={` btn-sm  p-2 ${repartidor.estado == 1 ? "btn-eliminar" : "btn-activar"}`}
                           title={
                             repartidor.estado == 1
                               ? "Desactivar Repartidor"

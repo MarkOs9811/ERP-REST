@@ -3,6 +3,12 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { User, Phone, Mail, Hash, Car } from "lucide-react";
 import { PutData } from "../../service/CRUD/PutData";
+import {
+  limitDNIInput,
+  limitTelefonoInput,
+  validateDNI,
+  validateTelefono,
+} from "../../hooks/InputHandlers";
 
 export function FormEditRepartidor({ onClose, repartidor }) {
   const queryClient = useQueryClient();
@@ -120,10 +126,15 @@ export function FormEditRepartidor({ onClose, repartidor }) {
               <Hash size={16} className="text-muted" />
             </span>
             <input
-              type="number"
+              type="text"
+              inputMode="numeric"
               className={`form-control ${errors.dni ? "is-invalid" : ""}`}
               placeholder="N° de doc."
-              {...register("dni", { required: "Campo obligatorio" })}
+              {...register("dni", {
+                required: "Campo obligatorio",
+                validate: validateDNI,
+              })}
+              onInput={limitDNIInput}
             />
           </div>
           {errors.dni && (
@@ -141,9 +152,14 @@ export function FormEditRepartidor({ onClose, repartidor }) {
             </span>
             <input
               type="text"
+              inputMode="numeric"
               className={`form-control ${errors.telefono ? "is-invalid" : ""}`}
               placeholder="ej: 987654321"
-              {...register("telefono", { required: "Campo obligatorio" })}
+              {...register("telefono", {
+                required: "Campo obligatorio",
+                validate: validateTelefono,
+              })}
+              onInput={limitTelefonoInput}
             />
           </div>
           {errors.telefono && (

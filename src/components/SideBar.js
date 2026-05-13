@@ -21,10 +21,11 @@ import {
   LucideActivity,
   X,
   PackageCheckIcon,
+  UserCheck2,
 } from "lucide-react";
 import { useAuth } from "../AuthContext";
 import { capitalizeFirstLetter } from "../hooks/FirstLetterUp";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { toggleSidebarMobile } from "../redux/sideBarMobilSlice";
 
 export function SideBar() {
@@ -63,6 +64,7 @@ export function SideBar() {
     proveedores: Truck,
     compras: Calendar,
     platos: Hamburger,
+    clientes: UserCheck2,
     rrhh: UsersRound,
     finanzas: TrendingUp,
     "areas-y-cargos": Building2,
@@ -86,6 +88,7 @@ export function SideBar() {
     "rr-hh",
     "areas-y-cargos",
     "configuracion",
+    "clientes",
   ];
 
   const getIconForRole = (roleName) => {
@@ -97,21 +100,21 @@ export function SideBar() {
     return icons[roleKey] || Home;
   };
 
-  const cerrarSession = async () => {
-    try {
-      await axiosInstance.post(
-        "/logout",
-        {},
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        },
-      );
-      logout();
-      navigate("/login");
-    } catch (error) {
-      console.error("Error al cerrar sesión:", error);
-    }
-  };
+  // const cerrarSession = async () => {
+  //   try {
+  //     await axiosInstance.post(
+  //       "/logout",
+  //       {},
+  //       {
+  //         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  //       },
+  //     );
+  //     logout();
+  //     navigate("/login");
+  //   } catch (error) {
+  //     console.error("Error al cerrar sesión:", error);
+  //   }
+  // };
 
   const formatRoleToUrl = (roleName) => {
     return roleName.toLowerCase().replace(/\s+/g, "-").replace(/\./g, "-");

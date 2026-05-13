@@ -12,6 +12,7 @@ import {
   CircleAlert,
   CircleX,
   CloudDownload,
+  Globe,
 } from "lucide-react";
 import ModalRight from "../componentesReutilizables/ModalRight";
 import { ModalDetallesVentas } from "./ModalDetallesVentas";
@@ -146,33 +147,65 @@ export function ListVentas({ search }) {
     },
     {
       name: "Vendedor",
-      selector: (row) => (
-        <span className="d-flex align-items-center gap-2">
-          <img
-            src={`${BASE_URL}/storage/${row.usuario?.fotoPerfil}`}
-            alt="Foto de perfil"
-            style={{
-              width: "30px",
-              height: "30px",
-              borderRadius: "50%",
-              border: "2px solid silver",
-            }}
-          />
-          <div className="d-flex flex-column">
-            <span>{row.usuario?.email}</span>
-            <small className="text-muted">
-              {capitalizeFirstLetter(
-                row.usuario?.empleado?.persona?.nombre.toLowerCase(),
-              )}{" "}
-              {capitalizeFirstLetter(
-                row.usuario?.empleado?.persona?.apellidos.toLowerCase(),
-              )}
-            </small>
+      selector: (row) => {
+        const usuario = row.usuario;
+
+        // Caso 1: Venta por web
+        if (!usuario?.email) {
+          return (
+            <span className="text-muted fw-medium small">
+              Se vendió por web
+            </span>
+          );
+        }
+
+        const persona = usuario.empleado?.persona;
+
+        const nombre = persona?.nombre
+          ? capitalizeFirstLetter(persona.nombre.toLowerCase())
+          : "";
+
+        const apellidos = persona?.apellidos
+          ? capitalizeFirstLetter(persona.apellidos.toLowerCase())
+          : "";
+
+        return (
+          <div className="d-flex align-items-center gap-3">
+            <img
+              src={`${BASE_URL}/storage/${usuario.fotoPerfil}`}
+              alt="Perfil"
+              className="rounded-circle shadow-sm"
+              style={{
+                width: "32px",
+                height: "32px",
+                objectFit: "cover",
+                border: "1px solid #e2e8f0", // Borde más fino y minimalista
+              }}
+              // Fallback en caso de que la imagen se rompa o no exista
+              onError={(e) => {
+                e.target.src = "/images/default-avatar.png";
+              }}
+            />
+
+            <div
+              className="d-flex flex-column text-start"
+              style={{ minWidth: 0 }}
+            >
+              <span
+                className="fw-medium text-dark text-truncate"
+                title={usuario.email}
+              >
+                {usuario.email}
+              </span>
+              <small className="text-muted text-truncate">
+                {`${nombre} ${apellidos}`.trim() || "Usuario sin nombre"}
+              </small>
+            </div>
           </div>
-        </span>
-      ),
+        );
+      },
       sortable: true,
-      center: true,
+      center: false, // Cambiado a false (o elimínalo) para alinear a la izquierda y mejorar la lectura del diseño
     },
     {
       name: "Fecha",

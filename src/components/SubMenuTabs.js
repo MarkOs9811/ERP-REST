@@ -13,6 +13,8 @@ import {
   Settings2,
   ChartArea,
   BikeIcon,
+  TargetIcon,
+  GiftIcon,
 } from "lucide-react";
 
 const subMenuGroups = {
@@ -52,6 +54,29 @@ const subMenuGroups = {
     },
     { label: "Reportes", path: "/rrhh/reportes", icon: <PieChart size={16} /> },
     { label: "Ajustes", path: "/rrhh/ajustes", icon: <Settings2 size={16} /> },
+  ],
+  "/clientes": [
+    {
+      label: "Dashboard",
+      path: "/clientes",
+      icon: <PieChart size={16} />,
+    },
+
+    {
+      label: "Lista de Clientes",
+      path: "/clientes/lista",
+      icon: <Users size={16} />,
+    },
+    {
+      label: "Segmentación",
+      path: "/clientes/segmentacion",
+      icon: <TargetIcon size={16} />,
+    },
+    {
+      label: "Fidelización",
+      path: "/clientes/fidelizacion",
+      icon: <GiftIcon size={16} />,
+    },
   ],
   "/finanzas": [
     {
