@@ -22,6 +22,8 @@ import {
   X,
   PackageCheckIcon,
   UserCheck2,
+  Landmark,
+  UserRoundCogIcon,
 } from "lucide-react";
 import { useAuth } from "../AuthContext";
 import { capitalizeFirstLetter } from "../hooks/FirstLetterUp";
@@ -64,9 +66,9 @@ export function SideBar() {
     proveedores: Truck,
     compras: Calendar,
     platos: Hamburger,
-    clientes: UserCheck2,
-    rrhh: UsersRound,
-    finanzas: TrendingUp,
+    clientes: UsersRound,
+    rrhh: UserRoundCogIcon,
+    finanzas: Landmark,
     "areas-y-cargos": Building2,
     configuracion: Settings,
     "mis-entregas": PackageCheckIcon,

@@ -1,11 +1,18 @@
 import React, { useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { GetClientesDashboard } from "../../service/accionesClientes/GetClientes";
-import { Users, ShoppingCart, TrendingUp } from "lucide-react"; // Se removió DollarSign
+import {
+  Users,
+  ShoppingCart,
+  TrendingUp,
+  MessageSquareHeartIcon,
+  UsersRoundIcon,
+} from "lucide-react"; // Se removió DollarSign
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
 import { TablasGenerales } from "../componentesReutilizables/TablasGenerales";
 import "../../css/estilosClientes/DashboardCliente.css";
 import { useNavigate } from "react-router-dom";
+import { ListaFeedBacks } from "./ListaFeedBacks";
 
 // 1. Utilidades
 const formatSoles = (monto) => {
@@ -194,33 +201,50 @@ export function DashboardGrafic() {
             />
           </div>
         </CondicionCarga>
-      </div>
 
-      {/* SECCIÓN 2: Tabla Top Clientes */}
-      <CondicionCarga
-        isLoading={isLoading}
-        isError={isError}
-        mode="single-card"
-      >
-        <div className="border rounded-4">
-          <div className="card-header">
-            <h6 className="fw-bold mb-4 text-fw-main">
-              Distribución de Mejores Clientes
-            </h6>
-            <div className="ms-auto">
-              <button
-                className="btn-principal"
-                onClick={() => navegacion("/clientes/lista")}
-              >
-                Ver todos
-              </button>
+        {/* SECCIÓN 2: Tabla Top Clientes */}
+        <CondicionCarga
+          isLoading={isLoading}
+          isError={isError}
+          mode="single-card"
+        >
+          <div className="col-md-8">
+            <div className="card">
+              <div className="card-header p-2 align-baseline d-flex justify-content-center">
+                <h6 className="fw-bold text-fw-main">
+                  {" "}
+                  <UsersRoundIcon className="me-2" />
+                  Clientes frecuentes
+                </h6>
+
+                <div className="ms-auto">
+                  <button
+                    className="btn-principal"
+                    onClick={() => navegacion("/clientes/lista")}
+                  >
+                    Ver todos
+                  </button>
+                </div>
+              </div>
+              <div className="card-body p-0">
+                <TablasGenerales columnas={columnas} datos={top_clientes} />
+              </div>
             </div>
           </div>
-          <div className="card-body p-0">
-            <TablasGenerales columnas={columnas} datos={top_clientes} />
+          <div className="col-md-4">
+            <div className="card rounded-3">
+              <div className="card-header p-2 justify-content-left d-flex align-baseline">
+                <h6 className="fw-bold  text-fw-main">
+                  <MessageSquareHeartIcon /> Comentarios Recientes
+                </h6>
+              </div>
+              <div className="card-body p-0 overflow-hidden py-2">
+                <ListaFeedBacks />
+              </div>
+            </div>
           </div>
-        </div>
-      </CondicionCarga>
+        </CondicionCarga>
+      </div>
     </div>
   );
 }

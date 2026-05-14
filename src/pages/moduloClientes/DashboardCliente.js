@@ -1,4 +1,5 @@
 import { DashboardGrafic } from "../../components/componenteCliente/DashboardGrafic";
+import { ListaFeedBacks } from "../../components/componenteCliente/ListaFeedBacks";
 
 export function DashboardCliente() {
   return (

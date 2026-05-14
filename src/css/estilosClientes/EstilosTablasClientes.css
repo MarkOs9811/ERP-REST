@@ -1,0 +1,164 @@
+/* Utilizando las variables globales del Sistema de Diseño Fire Wok */
+
+.fw-contenedor-tabla {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  padding: 20px;
+}
+
+.fw-cell-nombre {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.fw-avatar {
+  background-color: var(--fw-muetd);
+  color: var(--text-main);
+  font-weight: bold;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+}
+
+.fw-nombre-texto {
+  color: var(--text-main);
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.fw-cell-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.fw-email {
+  color: var(--brand-secondary);
+  font-size: 14px;
+}
+
+.fw-telefono {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.fw-cell-compra {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--brand-primary);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* ===== ESTILOS PARA BUSCADOR Y FILTROS ===== */
+
+.header-search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 350px;
+}
+
+.header-search-container .search-icon {
+  position: absolute;
+  left: 12px;
+  color: var(--text-muted);
+  pointer-events: none;
+  width: 18px;
+  height: 18px;
+}
+
+.header-search-container .form-control {
+  padding-left: 40px;
+  padding-right: 36px;
+  height: 40px;
+  font-size: 14px;
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: var(--radius-md);
+  transition: all 0.3s ease;
+}
+
+.header-search-container .form-control:focus {
+  border-color: var(--brand-primary);
+  box-shadow: 0 0 0 3px rgba(var(--brand-primary-rgb, 59, 130, 246), 0.1);
+}
+
+.btn-limpiar-search {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  transition: color 0.2s ease;
+}
+
+.btn-limpiar-search:hover {
+  color: var(--text-main);
+}
+
+/* Filtros avanzados */
+.card-header {
+  transition: all 0.3s ease;
+}
+
+.btn-outline-primary {
+  color: var(--brand-primary);
+  border-color: var(--brand-primary);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--brand-primary);
+  border-color: var(--brand-primary);
+}
+
+.form-select-sm,
+.form-control-sm {
+  height: 36px;
+  font-size: 13px;
+  padding: 6px 12px;
+}
+
+.form-label {
+  color: var(--text-main);
+  margin-bottom: 8px;
+}
+
+/* Alert para resultados de búsqueda */
+.alert-info {
+  background-color: rgba(var(--brand-primary-rgb, 59, 130, 246), 0.1);
+  border-color: rgba(var(--brand-primary-rgb, 59, 130, 246), 0.3);
+  color: var(--brand-primary);
+  border-radius: var(--radius-md);
+}
+
+.alert-info strong {
+  font-weight: 700;
+  color: var(--brand-primary);
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .header-search-container {
+    max-width: 100%;
+  }
+
+  .btn-outline-dark,
+  .btn-outline-primary,
+  .btn-principal {
+    font-size: 13px;
+  }
+}

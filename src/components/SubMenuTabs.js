@@ -15,6 +15,7 @@ import {
   BikeIcon,
   TargetIcon,
   GiftIcon,
+  MessageCircleHeart,
 } from "lucide-react";
 
 const subMenuGroups = {
@@ -68,9 +69,9 @@ const subMenuGroups = {
       icon: <Users size={16} />,
     },
     {
-      label: "Segmentación",
-      path: "/clientes/segmentacion",
-      icon: <TargetIcon size={16} />,
+      label: "FeedBacks",
+      path: "/clientes/comentarios",
+      icon: <MessageCircleHeart size={16} />,
     },
     {
       label: "Fidelización",

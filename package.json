@@ -25,6 +25,7 @@
     "axios-retry": "^4.5.0",
     "bootstrap": "^5.3.7",
     "chart.js": "^4.5.0",
+    "dayjs": "^1.11.20",
     "framer-motion": "^12.23.9",
     "html2canvas": "^1.4.1",
     "jspdf": "^3.0.3",

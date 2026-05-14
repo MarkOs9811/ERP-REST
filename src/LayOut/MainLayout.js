@@ -80,6 +80,10 @@ import { MisEntregas } from "../pages/moduloDelivery/MisEntregas";
 import { PedidosDelivery } from "../pages/moduloDelivery/PedidosDelivery";
 import Banner, { Banners } from "../pages/moduloDelivery/Banners";
 import { DashboardCliente } from "../pages/moduloClientes/DashboardCliente";
+import { ListaClientes } from "../components/componenteCliente/ListaClientes";
+import { Clientes } from "../pages/moduloClientes/Clientes";
+import { FeedBack } from "../pages/moduloClientes/FeedBacks";
+import { Fidelizacion } from "../pages/moduloClientes/Fidelización";
 
 export const MainLayout = () => {
   // 1. OBTENCIÓN DE ESTADOS Y DATOS LOCALES
@@ -426,6 +430,37 @@ export const MainLayout = () => {
                         allowedRoles={["clientes", "administrador"]}
                       >
                         <DashboardCliente />
+                      </PrivateRoute>
+                    }
+                  />
+
+                  <Route
+                    path="lista"
+                    element={
+                      <PrivateRoute
+                        allowedRoles={["clientes", "administrador"]}
+                      >
+                        <Clientes />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="comentarios"
+                    element={
+                      <PrivateRoute
+                        allowedRoles={["clientes", "administrador"]}
+                      >
+                        <FeedBack />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="fidelizacion"
+                    element={
+                      <PrivateRoute
+                        allowedRoles={["clientes", "administrador"]}
+                      >
+                        <Fidelizacion />
                       </PrivateRoute>
                     }
                   />
