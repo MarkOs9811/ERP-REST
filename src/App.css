@@ -601,7 +601,71 @@ body.dark-theme .btn-guardar {
   object-fit: cover;
   object-position: center;
 }
+/* ESTILOS PARA LOS INPUTS DE TODOS LOS FORMULARIOS DE FIRE WOK */
+/* =========================================
+   ESTILOS GLOBALES DE FORMULARIOS FIRE WOK
+   ========================================= */
 
+/* 1. Estilos para los Labels (Etiquetas) */
+.form-label,
+label.small.fw-bold,
+form label {
+  font-size: 0.85rem !important;
+  font-weight: 700 !important;
+  color: #333333 !important;
+  /* Tono oscuro elegante (Slate 700) */
+  margin-bottom: 0.4rem;
+  letter-spacing: 0.2px;
+}
+
+/* 2. Estilos para Inputs, Selects y Textareas */
+.form-control,
+.form-select {
+  border: 1px solid #cbd5e1 !important;
+  /* Borde gris claro (Slate 300) */
+  border-radius: 13px !important;
+  /* Curvatura limpia como en tu captura */
+  padding: 0.65rem 1rem !important;
+  /* Espaciado interno cómodo */
+  font-size: 0.95rem !important;
+  color: #1e293b !important;
+  background-color: #ffffff !important;
+  box-shadow: none !important;
+  /* Quitamos sombras por defecto */
+  transition: all 0.2s ease-in-out !important;
+}
+
+/* Placeholder (El texto de ejemplo) */
+.form-control::placeholder {
+  color: #94a3b8 !important;
+  /* Gris suave */
+  opacity: 0.8;
+}
+
+/* 3. Estado Focus (Cuando el usuario hace clic para escribir) */
+.form-control:focus,
+.form-select:focus {
+  border:2px solid #e24444 !important;
+  /* Borde se oscurece un poco */
+  box-shadow: 0 0 0 3px rgba(153, 153, 153, 0.1) !important;
+  /* Anillo sutil */
+  outline: none !important;
+}
+
+/* 4. Estado de Error (El input rojo de tu imagen) */
+.form-control.is-invalid,
+.form-select.is-invalid {
+  border-color: #dc2626 !important;
+  /* Rojo intenso */
+  background-image: none !important;
+  /* Limpiamos el ícono por defecto de Bootstrap si quieres que sea minimalista */
+}
+
+.form-control.is-invalid:focus,
+.form-select.is-invalid:focus {
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15) !important;
+  /* Anillo rojo sutil al hacer clic */
+}
 /* =======================================================
    DARK THEME RE-OVERRIDES (Específicos para UI Fire Wok)
 ========================================================== */
@@ -646,7 +710,17 @@ body.dark-theme input:focus {
 /* =========================================
    🌙 ADAPTACIÓN MODO OSCURO (DARK THEME)
    ========================================= */
-
+/* 1. Estilos para los Labels (Etiquetas) dark */
+body.dark-them .form-label,
+body.dark-them label.small.fw-bold,
+body.dark-them form label {
+  font-size: 0.85rem !important;
+  font-weight: 700 !important;
+  color: #cecece !important;
+  /* Tono oscuro elegante (Slate 700) */
+  margin-bottom: 0.4rem;
+  letter-spacing: 0.2px;
+}
 /* Los botones de color (Emerald, Saffron, Strawberry) ya tienen el fondo 
    --bg-*-soft que se adapta solo gracias a tu app.css.
    Solo necesitamos ajustar el color de los textos en hover para el contraste 

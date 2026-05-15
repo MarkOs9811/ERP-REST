@@ -45,6 +45,12 @@ export function Navegacion({ tipoNavegacion = null }) {
     { label: "Dashboard (Inicio)", path: "/" },
     { label: "POS / Vender", path: "/vender/mesas" },
     { label: "Delivery", path: "/delivery" },
+    { label: "Delivery asignados", path: "/delivery/pedidosAsignados" },
+    { label: "Repartidores", path: "/delivery/repartidores" },
+    { label: "Zonas y tarifas", path: "/delivery/zonas-y-tarifas" },
+    { label: "Promociones", path: "/delivery/promociones-app" },
+    { label: "Banner", path: "/delivery/banners" },
+    { label: "Reporte Delivery", path: "/delivery/reportes" },
     { label: "Cocina", path: "/cocina" },
     { label: "Usuarios (RRHH)", path: "/rrhh" },
     { label: "Nómina (RRHH)", path: "/rrhh/nomina" },
@@ -64,6 +70,10 @@ export function Navegacion({ tipoNavegacion = null }) {
     { label: "Mesas", path: "/ventas/mesas" },
     { label: "Platos", path: "/platos" },
     { label: "Configuración", path: "/configuracion" },
+    { label: "Clientes", path: "/clientes" },
+    { label: "Lista Clientes", path: "/clientes/lista" },
+    { label: "Feedbacks", path: "/clientes/comentarios" },
+    { label: "Campañas", path: "/clientes/fidelizacion" },
   ];
   const isCompressed = useSelector((state) => state.sidebar.isCompressed);
   const [searchTerm, setSearchTerm] = useState("");
