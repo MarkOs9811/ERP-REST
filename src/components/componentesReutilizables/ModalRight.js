@@ -17,6 +17,7 @@ const ModalRight = ({
   icono = null,
   width = "500px",
   hideFooter = false,
+  isLoading = false,
 }) => {
   const [isClosing, setIsClosing] = useState(false);
   const [shouldRender, setShouldRender] = useState(isOpen);
@@ -26,16 +27,18 @@ const ModalRight = ({
       setShouldRender(true);
       setIsClosing(false);
     } else if (shouldRender) {
-      // Si isOpen es false pero el modal sigue renderizado, iniciamos el cierre
       setIsClosing(true);
       const timer = setTimeout(() => {
         setShouldRender(false);
       }, 300);
       return () => clearTimeout(timer);
     }
-  }, [isOpen, shouldRender]); // Agregamos shouldRender a las dependencias
+  }, [isOpen, shouldRender]);
 
   const handleClose = () => {
+    // Si está cargando, bloqueamos que el usuario pueda cerrar el modal accidentalmente
+    if (isLoading) return;
+
     setIsClosing(true);
     setTimeout(() => {
       setShouldRender(false);
@@ -64,6 +67,7 @@ const ModalRight = ({
               aria-label="Close"
               onClick={handleClose}
               title="Cerrar Modal"
+              disabled={isLoading} // 🔥 Bloqueamos la X si está cargando
             >
               <X size={20} />
             </button>
@@ -81,10 +85,7 @@ const ModalRight = ({
           <span className="ms-auto me-1">{icono}</span>
         </div>
 
-        {/* ============================================================ */}
-        {/* CUERPO DEL MODAL (Aquí está la corrección del Scroll)        */}
-        {/* Usamos overflow-y-auto para permitir deslizar verticalmente  */}
-        {/* ============================================================ */}
+        {/* CUERPO DEL MODAL */}
         <div
           className={`modal-right-body m-0 p-0 overflow-y-auto flex-grow-1 ${
             hideFooter ? "full-height" : "with-footer"
@@ -101,11 +102,28 @@ const ModalRight = ({
             <button
               className="btn-cerrar-modal ms-2"
               onClick={onCancel || handleClose}
+              disabled={isLoading} // 🔥 Bloqueamos botón Cancelar
             >
               {cancelText}
             </button>
-            <button className="btn-guardar ms-2" onClick={onSubmit}>
-              {submitText}
+            <button
+              className="btn-guardar ms-2"
+              onClick={onSubmit}
+              disabled={isLoading} // 🔥 Bloqueamos botón Guardar
+            >
+              {/* 🔥 2. Lógica del Spinner idéntica a tu ModalAlertQuestion */}
+              {isLoading ? (
+                <>
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                  Guardando...
+                </>
+              ) : (
+                submitText
+              )}
             </button>
           </div>
         )}

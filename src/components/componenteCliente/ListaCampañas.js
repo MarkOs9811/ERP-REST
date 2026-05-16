@@ -1,5 +1,5 @@
 import { GetCampañaPromos } from "../../service/accionesClientes/GetCampañaPromos";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   MoreHorizontal,
   Users,
@@ -15,8 +15,24 @@ import {
 import "../../css/estilosClientes/EstiloCampanas.css";
 import { formatearFecha } from "../../utils/formatearFechas";
 import { BadgeComponent } from "../componentesReutilizables/BadgeComponent";
+import { useState } from "react";
+import ModalAlertQuestion from "../componenteToast/ModalAlertQuestion";
+import { DeleteData } from "../../service/CRUD/DeleteData";
+import { PutData } from "../../service/CRUD/PutData";
+import ToastAlert from "../componenteToast/ToastAlert";
+import ModalRight from "../componentesReutilizables/ModalRight";
+import { FormEditarCampañas } from "./FormEditarCampañas";
+import { EstadisticasCampana } from "./EstadisticasCampana";
 
 export function ListaCampañas() {
+  const [campanaSeleccionada, setCampanaSeleccionada] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [campanaEditando, setCampanaEditando] = useState(null);
+  const [showStatsModal, setShowStatsModal] = useState(false);
+  const [campanaStats, setCampanaStats] = useState(null);
+  const queryClient = useQueryClient();
+  const [isSaving, setIsSaving] = useState(false);
   const {
     data: listaCampañas = [],
     isLoading,
@@ -28,13 +44,44 @@ export function ListaCampañas() {
 
   // Funciones manejadoras para las acciones del dropdown
   const handleEdit = (campana) => {
-    console.log("Editar campaña:", campana);
-    // TODO: Abrir el modal pasándole los datos de la campaña seleccionada
+    setCampanaEditando(campana);
+    setShowEditModal(true);
   };
 
-  const handleDelete = (idCampaña) => {
-    console.log("Eliminar campaña con ID:", idCampaña);
-    // TODO: Mostrar SweetAlert de confirmación y ejecutar mutation de eliminación
+  const handleVerEstadisticas = (campana) => {
+    setCampanaStats(campana);
+    setShowStatsModal(true);
+  };
+
+  const handleEliminarCampana = async (dataId) => {
+    try {
+      await DeleteData("campanasPromos", dataId);
+
+      queryClient.invalidateQueries(["campanasPromos"]); // Refresca la lista de campañas
+      setShowDeleteModal(false); // Cerramos el modal
+    } catch (error) {
+      const errorBak = error.response?.data?.message || error.message;
+      ToastAlert("error", errorBak);
+      console.error("Error al eliminar la campaña:", error);
+    }
+  };
+
+  const onSubmitEdit = async (data) => {
+    setIsSaving(true);
+    try {
+      const success = await PutData("campanasPromos", campanaEditando.id, data);
+      if (success) {
+        queryClient.invalidateQueries(["campanasPromos"]); // Refresca la lista de campañas
+        setShowEditModal(false); // Cierra el modal
+        setCampanaEditando(null); // Limpia el estado
+        setIsSaving(false);
+      }
+    } catch (error) {
+      setIsSaving(false);
+      const errorBak = error.response?.data?.message || error.message;
+      ToastAlert("error", errorBak);
+      console.error("Error al actualizar la campaña:", error);
+    }
   };
 
   if (isLoading)
@@ -99,7 +146,10 @@ export function ListaCampañas() {
                         <li>
                           <button
                             className="dropdown-item d-flex align-items-center gap-2 text-danger"
-                            onClick={() => handleDelete(campana.id)}
+                            onClick={() => {
+                              setShowDeleteModal(true);
+                              setCampanaSeleccionada(campana);
+                            }}
                           >
                             <Trash2 size={16} />
                             Eliminar
@@ -220,7 +270,10 @@ export function ListaCampañas() {
                   })()}
 
                   {/* Botón Acción */}
-                  <button className="btn btn-outline-dark w-100 fw-bold d-flex align-items-center justify-content-center gap-2 campana-btn-action">
+                  <button
+                    className="btn btn-outline-dark w-100 fw-bold d-flex align-items-center justify-content-center gap-2 campana-btn-action"
+                    onClick={() => handleVerEstadisticas(campana)}
+                  >
                     Ver Estadísticas <ChevronRight size={16} />
                   </button>
                 </div>
@@ -229,6 +282,55 @@ export function ListaCampañas() {
           })
         )}
       </div>
+
+      <ModalAlertQuestion
+        show={showDeleteModal}
+        handleCloseModal={() => setShowDeleteModal(false)}
+        handleEliminar={handleEliminarCampana}
+        idEliminar={campanaSeleccionada?.id}
+        tipo="Campaña"
+        nombre={campanaSeleccionada?.nombre}
+      />
+
+      <ModalRight
+        isOpen={showEditModal}
+        onClose={() => {
+          setShowEditModal(false);
+          setCampanaEditando(null);
+        }}
+        title="Editar Campaña"
+        subtitulo={campanaEditando?.nombre}
+        submitText="Actualizar"
+        onSubmit={() => {
+          document
+            .getElementById("formEditarCampana")
+            .dispatchEvent(new Event("submit", { bubbles: true }));
+        }}
+        width="600px"
+        isLoading={isSaving}
+      >
+        <div className="p-4">
+          <FormEditarCampañas
+            formId="formEditarCampana"
+            dataCampaña={campanaEditando}
+            onSubmitHandler={onSubmitEdit}
+          />
+        </div>
+      </ModalRight>
+
+      <ModalRight
+        isOpen={showStatsModal}
+        onClose={() => {
+          setShowStatsModal(false);
+          setCampanaStats(null);
+        }}
+        title="Estadísticas"
+        subtitulo={campanaStats?.nombre}
+        hideFooter={true}
+        width="600px"
+      >
+        <EstadisticasCampana campana={campanaStats} />
+      </ModalRight>
     </div>
   );
 }
