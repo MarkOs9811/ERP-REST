@@ -9,11 +9,13 @@ import {
 } from "chart.js";
 import { useQuery } from "@tanstack/react-query";
 import { GetInformesFinancieros } from "../service/serviceFinanzas/GetInformesFinancieros";
+import { getThemeColors, toRgba } from "../utils/ThemeColors";
 
 // Registrar componentes de Chart.js
 Chart.register(BarElement, CategoryScale, LinearScale, Legend, Tooltip);
 
 export function GraficoIngresosEgresos() {
+  const colors = getThemeColors();
   const {
     data: dataFinanzas = {},
     isLoading,
@@ -41,15 +43,15 @@ export function GraficoIngresosEgresos() {
       {
         label: "Ingresos",
         data: ingresos,
-        backgroundColor: "rgba(9, 113, 172, 0.3)",
-        borderColor: "#0971AC",
+        backgroundColor: toRgba(colors.emerald, 0.3),
+        borderColor: colors.emerald,
         borderWidth: 1,
       },
       {
         label: "Egresos",
         data: egresos,
-        backgroundColor: "rgba(216, 0, 0, 0.3)",
-        borderColor: "rgba(107, 1, 1, 0.92)",
+        backgroundColor: toRgba(colors.strawberry, 0.3),
+        borderColor: colors.strawberry,
         borderWidth: 1,
       },
     ],

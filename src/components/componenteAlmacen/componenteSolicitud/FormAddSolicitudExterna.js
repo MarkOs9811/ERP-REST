@@ -42,7 +42,7 @@ export function FormAddSolicitudExterna({ onClose }) {
       const response = await axiosInstance.post(
         "/misSolicitudes/solicitudAddExterna",
         formData,
-        { headers: { "Content-Type": "multipart/form-data" } }
+        { headers: { "Content-Type": "multipart/form-data" } },
       );
 
       // ✅ Si devuelve PDF, abrirlo
@@ -73,7 +73,7 @@ export function FormAddSolicitudExterna({ onClose }) {
         } else {
           ToastAlert(
             "error",
-            `Error ${status}: ${data?.message || "Error del servidor"}`
+            `Error ${status}: ${data?.message || "Error del servidor"}`,
           );
         }
       }
@@ -81,7 +81,7 @@ export function FormAddSolicitudExterna({ onClose }) {
       else if (error.request) {
         ToastAlert(
           "error",
-          "No se recibió respuesta del servidor. Verifica tu conexión."
+          "No se recibió respuesta del servidor. Verifica tu conexión.",
         );
       }
       // ❗ Error de configuración

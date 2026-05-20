@@ -10,7 +10,7 @@ export function FirmasSolicitud() {
         <div className="col-md-12">
           <div className="card  py-2">
             <div className="card-header p-3 d-flex align-items-center">
-              <Mail color={"#ea4f4f"} height="45px" width="45px" />
+              <Mail color={"var(--fw-strawberry)"} height="45px" width="45px" />
               <div>
                 <p className="h4 card-title ms-2 mb-0">Firmar solicitud</p>
                 <small

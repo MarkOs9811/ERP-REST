@@ -57,8 +57,8 @@ export function CardResultadoEjercicio({ registroEjercicio, resultado }) {
               className="btn btn-primary p-2 d-flex align-items-center gap-2"
               style={{
                 fontSize: "1rem",
-                backgroundColor: "#0e8ee9",
-                borderColor: "#0e8ee9",
+                backgroundColor: "var(--fw-emerald)",
+                borderColor: "var(--fw-emerald)",
               }}
               title="Realizar Balance"
             >
@@ -135,8 +135,8 @@ export function CardResultadoEjercicio({ registroEjercicio, resultado }) {
             resultado > 0
               ? "alert-primary"
               : resultado < 0
-              ? "alert-danger"
-              : "alert-secondary"
+                ? "alert-danger"
+                : "alert-secondary"
           }`}
           role="alert"
         >
@@ -147,8 +147,8 @@ export function CardResultadoEjercicio({ registroEjercicio, resultado }) {
               {resultado > 0
                 ? "(Beneficio)"
                 : resultado < 0
-                ? "(Pérdida)"
-                : "(Equilibrio)"}
+                  ? "(Pérdida)"
+                  : "(Equilibrio)"}
             </span>
           </span>
         </div>

@@ -1,7 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Cargando } from "../../components/componentesReutilizables/Cargando";
 import { GetAdelantoSueldo } from "../../service/GetAdelantoSueldo";
-import { ContenedorPrincipal } from "../../components/componentesReutilizables/ContenedorPrincipal";
 import { TablasGenerales } from "../../components/componentesReutilizables/TablasGenerales";
 import { capitalizeFirstLetter } from "../../hooks/FirstLetterUp";
 

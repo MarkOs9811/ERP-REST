@@ -1,16 +1,19 @@
-/* ========== FUENTES Y BASE ========== */
-
 /* =========================================
-   🔥 PALETA BASE FIRE WOK (SISTEMA DE DISEÑO)
+   🔥 SISTEMA DE DISEÑO: FIRE WOK APP
    ========================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+/* ========== 1. VARIABLES (PALETA BASE) ========== */
 :root {
   /* Colores de Marca */
   --fw-onyx: #111213;
   --fw-emerald: #23aa62;
   --fw-saffron: #FF992C;
-  --fw-muetd:rgb(187, 187, 187);
   --fw-strawberry: #E44949;
   --fw-white: #FFFFFF;
+  --fw-muetd: #F3F4F6;
+  /* Unificado */
 
   /* Fondos Suaves (Para auras y badges) */
   --bg-emerald-soft: #b6f8d5;
@@ -20,20 +23,12 @@
   /* Estructura Tema Claro */
   --brand-primary: var(--fw-onyx);
   --brand-secondary: #4B5563;
-
-  --fw-muetd: #F3F4F6;
   --bg-sidebar-header: var(--fw-white);
   --bg-card: var(--fw-white);
-
   --text-main: var(--fw-onyx);
-  --text-muted: #242424;
+  --text-muted: #4B5563;
 
-  /* Glassmorphism y Sombras */
-  --glass-bg: transparent;
-  --glass-border: transparent;
-  --glass-shadow: none;
-  --glass-blur: blur(0px);
-
+  /* Sombras */
   --shadow-soft: 0 1px 3px rgba(0, 0, 0, 0.05);
   --shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.1);
 
@@ -50,42 +45,31 @@
 body.dark-theme {
   /* Estructura Tema Oscuro (Fire Wok Dark) */
   --brand-primary: var(--fw-saffron);
-  /* El Naranja resalta increíble en oscuro */
   --brand-secondary: var(--fw-strawberry);
-
   --fw-muetd: var(--fw-onyx);
-  /* Fondo negro puro institucional */
   --bg-sidebar-header: #1A1C1E;
   --bg-card: #1E2022;
-
   --text-main: #FBFCFF;
-  --text-muted: #bdbdbd;
-
-  --glass-bg: transparent;
-  --glass-border: transparent;
-  --glass-shadow: none;
-  --glass-blur: blur(0px);
+  --text-muted: #9CA3AF;
 }
 
-
-@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
-
-p,
-span,
-text,
-h6 {
-  font-family: "Inter", sans-serif;
-}
-
+/* ========== 2. TIPOGRAFÍA Y BASE ========== */
 body {
   overflow: hidden !important;
   background-color: var(--fw-muetd) !important;
   color: var(--text-main) !important;
 }
 
-h3,
-h2,
+p,
+span,
+h6,
+label {
+  font-family: "Inter", sans-serif;
+}
+
 h1,
+h2,
+h3,
 h4,
 h5 {
   font-family: "Outfit", sans-serif;
@@ -94,35 +78,45 @@ h5 {
   color: var(--text-main) !important;
 }
 
-h4 {
-  color: var(--text-main) !important;
-}
-
-/* ======================== */
-/* TEXTOS Y UTILIDADES */
 .texto-principal {
-  color: var(--fw-onyx) !important;
+  color: var(--text-main) !important;
   font-weight: 500;
   padding-left: 10px;
   margin: 10px;
+}
+
+.text-primary {
+  color: var(--brand-primary) !important;
 }
 
 .text-success {
   color: var(--fw-emerald) !important;
 }
 
-.tituloCard {
-  color: var(--text-main) !important;
+.text-danger {
+  color: var(--fw-strawberry) !important;
 }
 
-button {
-  font-family: "Inter", sans-serif;
-  /* Cambiado de Poppins a Inter para mantener consistencia de fuentes */
+.text-warning {
+  color: var(--fw-saffron) !important;
 }
 
-/* ======================== */
-/* ESTRUCTURA PRINCIPAL */
+/* Scrollbar Personalizado (Modo Oscuro) */
+body.dark-theme ::-webkit-scrollbar {
+  width: 10px;
+  background: var(--fw-onyx);
+}
 
+body.dark-theme ::-webkit-scrollbar-thumb {
+  background: #313A46;
+  border-radius: 6px;
+}
+
+body.dark-theme ::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* ========== 3. ESTRUCTURA Y LAYOUT ========== */
 .contenido {
   background: var(--fw-muetd) !important;
   position: relative;
@@ -144,8 +138,6 @@ button {
 }
 
 body.dark-theme .contenido>div>div:last-child {
-  background: var(--bg-card) !important;
-  color: var(--text-main);
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35) !important;
 }
 
@@ -177,59 +169,31 @@ body.dark-theme .contenido>div>div:last-child {
   width: calc(100% - 80px) !important;
 }
 
-/* ========== RESPONSIVE - CONTENT FIX ========== */
-@media (max-width: 768px) {
-
-  .content:not(.open),
-  .content.with-sidebar,
-  .content.content-compressed {
-    margin-left: 0 !important;
-    width: 100% !important;
-  }
-
-  .header-with-sidebar,
-  .header-compressed {
-    width: 100% !important;
-  }
-
-  .sidebar {
-    width: 60px;
-    border-radius: 0;
-    z-index: 1040;
-  }
-
-  .sidebar.open {
-    width: 200px;
-  }
-
-  .content.open {
-    margin-left: 200px;
-    width: calc(100% - 200px);
-  }
-
-  h1 {
-    font-size: 1.75rem !important;
-  }
-
-  h2 {
-    font-size: 1.5rem !important;
-  }
-
-  h3 {
-    font-size: 1.25rem !important;
-  }
-
-  .stats-card .icon {
-    font-size: 2rem;
-  }
-
-  .stats-card .card-text {
-    font-size: 1.5rem;
-  }
+body.dark-theme .header-contenido,
+body.dark-theme .navbar {
+  background-color: var(--fw-muetd) !important;
+  border-bottom: 1px solid #313a46 !important;
 }
 
+body.dark-theme .navegacion {
+  background-color: #1E2022 !important;
+}
 
-/* ========== CARDS Y ESTADÍSTICAS ========== */
+body.dark-theme .menu-item,
+body.dark-theme .menu-item span {
+  color: var(--text-main) !important;
+}
+
+body.dark-theme .menu-item.active {
+  background: var(--brand-primary) !important;
+}
+
+body.dark-theme .menu-item.active span {
+  color: var(--fw-onyx) !important;
+  font-weight: 600;
+}
+
+/* ========== 4. CARDS Y ESTADÍSTICAS ========== */
 .card {
   overflow: visible !important;
   background-color: var(--bg-card) !important;
@@ -243,13 +207,6 @@ body.dark-theme .card {
   border-color: #313a46 !important;
 }
 
-.kanban-column {
-  border: none !important;
-  overflow: visible !important;
-  background-color: transparent !important;
-  box-shadow: none !important;
-}
-
 .card-platos {
   transition: all ease-out 0.2s;
 }
@@ -258,15 +215,96 @@ body.dark-theme .card {
   transform: scale(1.05);
 }
 
+/* Standardized View Headers */
 .card-header {
-  margin: 10px;
+  background-color: transparent !important;
   border: none !important;
+  padding: 1.25rem 1.5rem !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 15px;
 }
 
 .titulo-card-especial {
+  font-weight: 800 !important;
   color: var(--text-main) !important;
+  font-size: 1.5rem !important;
+  letter-spacing: -0.5px;
+  margin-bottom: 0;
+  display: flex;
+  align-items: center;
 }
 
+.card:has(.titulo-card-especial) {
+  border-radius: 12px !important;
+  margin: 0 !important;
+  overflow: hidden;
+}
+
+.card:has(.titulo-card-especial)>.card-body:not([class*="p-"]) {
+  padding: 0 !important;
+}
+
+.badge-header {
+  font-size: 0.85rem;
+  font-weight: 500;
+  background-color: var(--fw-onyx);
+  color: var(--fw-white);
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.2rem 0.6rem;
+  margin-left: 10px;
+  top: -2px;
+  position: relative;
+}
+
+body.dark-theme .titulo-card-especial .badge-header {
+  background-color: #1e293b;
+  color: #cbd5e1;
+  border-color: #334155;
+}
+
+/* Buscador en Header */
+.header-search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.header-search-container .search-icon {
+  position: absolute;
+  left: 12px;
+  color: #a0aec0;
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+}
+
+.card-header input.form-control {
+  border-radius: var(--radius-pill) !important;
+  padding: 0.45rem 1.25rem 0.45rem 2.2rem !important;
+  min-width: 220px;
+  border: 1px solid transparent !important;
+  background-color: #f1f5f9 !important;
+  color: #2d3748 !important;
+  font-size: 0.9rem !important;
+  transition: all var(--transition-smooth) !important;
+}
+
+.card-header input.form-control:focus {
+  border-color: var(--brand-primary) !important;
+  background-color: #ffffff !important;
+  box-shadow: 0 0 0 2px var(--bg-saffron-soft) !important;
+}
+
+body.dark-theme .card-header input.form-control {
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
+}
+
+/* Tarjetas de Estadísticas */
 .stats-card {
   box-shadow: var(--shadow-soft);
   border-radius: var(--radius-md);
@@ -293,15 +331,11 @@ body.dark-theme .stats-card {
 
 .stats-card .icon {
   font-size: 2.5rem;
-  color: var(--fw-onyx);
+  color: var(--text-main);
   margin-right: 5px;
   position: absolute;
   top: 25%;
   left: 20px;
-}
-
-body.dark-theme .stats-card .icon {
-  color: var(--text-main);
 }
 
 .stats-card .card-title {
@@ -316,7 +350,365 @@ body.dark-theme .stats-card .icon {
   color: var(--text-main);
 }
 
-/* ========== BADGES FIRE WOK ========== */
+/* ========== 5. FORMULARIOS E INPUTS ========== */
+.form-label,
+label.small.fw-bold,
+form label {
+  font-size: 0.85rem !important;
+  font-weight: 700 !important;
+  color: #333333 !important;
+  margin-bottom: 0.4rem;
+  letter-spacing: 0.2px;
+}
+
+body.dark-theme .form-label,
+body.dark-theme label.small.fw-bold,
+body.dark-theme form label {
+  color: #cecece !important;
+}
+
+.form-control,
+.form-select {
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 13px !important;
+  padding: 0.65rem 1rem !important;
+  font-size: 0.95rem !important;
+  color: #1e293b !important;
+  background-color: #ffffff !important;
+  box-shadow: none !important;
+  transition: all 0.2s ease-in-out !important;
+}
+
+.form-control::placeholder {
+  color: #94a3b8 !important;
+  opacity: 0.8;
+}
+
+/* Focus general */
+.form-control:focus,
+.form-select:focus {
+  border: 1px solid var(--brand-primary) !important;
+  box-shadow: inset 0 0 0 1px var(--brand-primary), 0 0 0 3px rgba(153, 153, 153, 0.1) !important;
+  outline: none !important;
+}
+
+/* Modo oscuro general inputs */
+body.dark-theme .form-control,
+body.dark-theme input,
+body.dark-theme textarea,
+body.dark-theme select {
+  background: #151A20 !important;
+  color: var(--text-main) !important;
+  border-color: #313A46 !important;
+}
+
+body.dark-theme .form-control:focus,
+body.dark-theme input:focus,
+body.dark-theme select:focus {
+  border-color: var(--brand-primary) !important;
+  box-shadow: inset 0 0 0 1px var(--brand-primary), 0 0 0 2px rgba(255, 153, 44, 0.15) !important;
+}
+
+/* Estado de Error */
+.form-control.is-invalid,
+.form-select.is-invalid {
+  border-color: #dc2626 !important;
+  background-image: none !important;
+}
+
+.form-control.is-invalid:focus,
+.form-select.is-invalid:focus {
+  border-color: #dc2626 !important;
+  box-shadow: inset 0 0 0 1px #dc2626, 0 0 0 3px rgba(220, 38, 38, 0.15) !important;
+}
+
+/* Switches y Checkboxes */
+.form-switch .form-check-input,
+.form-check-input {
+  accent-color: var(--brand-primary);
+  cursor: pointer;
+}
+
+.form-switch .form-check-input:checked,
+.form-check-input:checked {
+  background-color: var(--brand-primary) !important;
+  border-color: var(--brand-primary) !important;
+}
+/* ========== 6. BOTONES FIRE WOK ========== */
+
+/* Base estructural para todos los botones del sistema (Reemplaza a .btn) */
+.btn-principal,
+.btn-guardar,
+.btn-dark,
+.btn-ver,
+.btn-cerrar-modal,
+.btn-accion-card,
+.btn-agregar,
+.btn-activar,
+.btn-editar,
+.btn-eliminar,
+.btn-desactivar,
+.btn-outline-dark {
+  border-radius: var(--radius-pill) !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1.2rem;
+  /* El !important se quita para permitir overrides como en accion-card */
+  font-weight: 600 !important;
+  font-size: 0.9rem !important;
+  gap: 6px;
+  font-family: "Inter", sans-serif;
+  transition: all var(--transition-smooth);
+  cursor: pointer;
+  border: 1px solid transparent;
+  /* Evita saltos visuales al hacer hover */
+}
+
+/* Excepciones de forma/tamaño */
+.btn-accion-card {
+  width: 36px;
+  height: 36px;
+  padding: 0 !important;
+  /* Sobrescribe el padding base para que sea un círculo perfecto */
+}
+
+button:disabled,
+.btn-principal:disabled,
+.btn-guardar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* -----------------------------------------
+   Estilos Específicos por Botón
+----------------------------------------- */
+
+/* Botón Principal */
+.btn-principal,
+.btn-guardar,
+.btn-dark {
+  background-color: var(--brand-primary) !important;
+  color: #ffffff !important;
+  border: none !important;
+}
+
+.btn-principal:hover,
+.btn-guardar:hover {
+  filter: brightness(1.2);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.btn-principal:active,
+.btn-guardar:active {
+  filter: brightness(0.9);
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+body.dark-theme .btn-principal,
+body.dark-theme .btn-guardar,
+body.dark-theme .card-header .btn-dark {
+  color: var(--fw-onyx) !important;
+  font-weight: 700 !important;
+}
+
+/* Acciones Genéricas (Ver, Cerrar) */
+.btn-ver,
+.btn-cerrar-modal,
+.btn-accion-card {
+  background-color: var(--fw-muetd);
+  color: var(--text-muted);
+  border-color: #cbd5e1;
+}
+
+.btn-ver:hover,
+.btn-cerrar-modal:hover,
+.btn-accion-card:hover {
+  background-color: #e2e8f0;
+  color: var(--fw-onyx);
+  border-color: #94a3b8;
+}
+
+body.dark-theme .btn-ver,
+body.dark-theme .btn-cerrar-modal,
+body.dark-theme .btn-accion-card {
+  background-color: transparent;
+  border-color: #313a46;
+  color: #cbd5e1;
+}
+
+body.dark-theme .btn-ver:hover,
+body.dark-theme .btn-cerrar-modal:hover,
+body.dark-theme .btn-accion-card:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--fw-white);
+  border-color: #475569;
+}
+
+/* Acciones Semánticas (Agregar, Activar, Editar, Eliminar, Desactivar) */
+
+/* Agregar (Neutro claro -> Oscuro) */
+.btn-agregar {
+  background-color: #f5f6f8;
+  color: var(--fw-onyx);
+  border-color: #cbd5e1;
+}
+
+.btn-agregar:hover {
+  background-color: #e4e7eb;
+  border-color: #818891;
+}
+
+body.dark-theme .btn-agregar {
+  background-color: #2b2e32;
+  color: var(--text-main);
+  border-color: #3f444a;
+}
+
+body.dark-theme .btn-agregar:hover {
+  background-color: #383c42;
+  border-color: #525860;
+}
+
+/* Activar (Verde) */
+.btn-activar {
+  background-color: var(--bg-emerald-soft);
+  color: var(--fw-emerald);
+  border-color: rgba(35, 170, 98, 0.4);
+}
+
+.btn-activar:hover {
+  background-color: var(--fw-emerald);
+  color: var(--fw-white);
+  border-color: var(--fw-emerald);
+}
+
+/* Editar (Naranja) */
+.btn-editar {
+  background-color: var(--bg-saffron-soft);
+  color: var(--fw-saffron);
+  border-color: rgba(255, 153, 44, 0.4);
+}
+
+.btn-editar:hover {
+  background-color: var(--fw-saffron);
+  color: var(--fw-white);
+  border-color: var(--fw-saffron);
+}
+
+/* Eliminar (Rojo) */
+.btn-eliminar {
+  background-color: var(--bg-strawberry-soft);
+  color: var(--fw-strawberry);
+  border-color: rgba(228, 73, 73, 0.4);
+}
+
+.btn-eliminar:hover {
+  background-color: var(--fw-strawberry);
+  color: var(--fw-white);
+  border-color: var(--fw-strawberry);
+}
+
+/* Ajuste texto hover oscuro para semánticos vibrantes */
+body.dark-theme .btn-activar:hover,
+body.dark-theme .btn-editar:hover,
+body.dark-theme .btn-eliminar:hover {
+  color: var(--fw-onyx) !important;
+  font-weight: 700;
+}
+
+/* Desactivar (Gris pizarra) */
+.btn-desactivar {
+  background-color: var(--fw-muetd);
+  color: var(--text-muted);
+  border-color: #cbd5e1;
+}
+
+.btn-desactivar:hover {
+  background-color: #64748b;
+  color: var(--fw-white);
+  border-color: #64748b;
+}
+
+body.dark-theme .btn-desactivar {
+  background-color: transparent;
+  color: var(--text-muted);
+  border-color: #475569;
+}
+
+body.dark-theme .btn-desactivar:hover {
+  background-color: #94a3b8;
+  color: var(--fw-onyx) !important;
+  border-color: #94a3b8;
+}
+
+/* Outline Dark (Buscador/Filtros) */
+.btn-outline-dark {
+  border: 1px solid #cbd5e1 !important;
+  color: #475569 !important;
+  background-color: #ffffff !important;
+}
+
+.btn-outline-dark:hover {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+  border-color: #94a3b8 !important;
+}
+
+body.dark-theme .card-header .btn-outline-dark {
+  background-color: transparent !important;
+  border-color: #475569 !important;
+  color: #e2e8f0 !important;
+}
+
+body.dark-theme .card-header .btn-outline-dark:hover {
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
+}
+
+/* Botón POS Venta (Mantiene su forma rectangular por diseño de caja) */
+.boton-venta {
+  background-color: var(--fw-white);
+  border: none;
+  padding: 8px 12px;
+  height: 50px;
+  font-weight: bold;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--text-main);
+  cursor: pointer;
+}
+
+.boton-venta.activo {
+  border-bottom: 4px solid var(--fw-saffron);
+  background-color: var(--bg-saffron-soft);
+}
+
+.boton-venta:hover {
+  background-color: #f8fafc;
+}
+
+.boton-venta:active {
+  transform: scale(0.98);
+}
+
+body.dark-theme .boton-venta {
+  background-color: var(--bg-card) !important;
+  border: 1px solid #313A46 !important;
+}
+
+body.dark-theme .boton-venta.activo {
+  border-bottom: 4px solid var(--brand-primary) !important;
+  background-color: #2D3748 !important;
+  color: var(--brand-primary) !important;
+}
+/* ========== 7. BADGES, DROPDOWNS Y LISTAS ========== */
 .nombreUsuarioTabla {
   text-transform: capitalize;
 }
@@ -371,7 +763,36 @@ body.dark-theme .stats-card .icon {
   padding: 3px 8px;
 }
 
-/* ========== TABLAS ========== */
+/* Dropdowns y Listas */
+.dropdown-menu {
+  z-index: 9999 !important;
+  box-shadow: var(--shadow-hover) !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+.list-group-item.active {
+  border-bottom: 4px solid var(--brand-primary) !important;
+  background: var(--fw-muetd) !important;
+  color: var(--text-main) !important;
+}
+
+body.dark-theme .dropdown-menu {
+  background: var(--bg-card) !important;
+  border: 1px solid #313A46 !important;
+}
+
+body.dark-theme .list-group-item {
+  background-color: var(--bg-card) !important;
+  color: var(--text-main);
+  border-color: #313A46;
+}
+
+body.dark-theme .list-group-item.active {
+  background: #2D3748 !important;
+  color: var(--brand-primary) !important;
+}
+
+/* ========== 8. TABLAS Y COMPONENTES EXTRAS ========== */
 .tablaGeneral .rdt_TableBody .rdt_TableRow {
   background-color: transparent !important;
   transition: background-color 0.2s ease;
@@ -387,203 +808,23 @@ body.dark-theme .stats-card .icon {
   background-color: transparent !important;
 }
 
-/* ========== BOTONES FIRE WOK ========== */
-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.btn-principal,
-.btn-guardar {
-  background-color: var(--brand-primary);
-  color: #ffffff;
-  border: none;
-  border-radius: var(--radius-pill);
-  padding: 0.5rem 1.5rem;
-  font-weight: 500;
-  transition: all 0.2s ease-in-out;
-}
-
-.btn-principal:hover,
-.btn-guardar:hover {
-  filter: brightness(1.2);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.btn-principal:active,
-.btn-guardar:active {
-  filter: brightness(0.9);
-  transform: translateY(0);
-  box-shadow: none;
-}
-
-body.dark-theme .btn-principal,
-body.dark-theme .btn-guardar {
-  color: var(--fw-onyx);
-  /* Para que el texto sea oscuro sobre el botón Naranja */
-  font-weight: 600;
-}
-
-/* Botones Secundarios y de Acción (Gris Neutro) */
-/* =========================================
-   BOTONES DE ACCIÓN (SEMÁNTICA FIRE WOK)
-   ========================================= */
-
-/* 1. Base compartida para todos los botones de acción */
-.btn-ver,
-.btn-activar,
-.btn-desactivar,
-.btn-editar,
-.btn-eliminar,
-.btn-cerrar-modal,
-.btn-accion-card {
-  border-radius: var(--radius-sm);
-  padding: 0.5rem 1rem;
-  font-weight: 600;
-  transition: all var(--transition-smooth);
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  border: 1px solid transparent;
-  /* Borde base para evitar saltos visuales */
-}
-
-.btn-accion-card {
-  width: 36px;
-  height: 36px;
-  padding: 0;
-}
-
-/* 🔵 NEUTROS: Ver, Cerrar, Acciones genéricas */
-.btn-ver,
-.btn-cerrar-modal,
-.btn-accion-card {
-  background-color: var(--fw-muetd);
-  color: var(--text-muted);
-  border-color: #808080;
-}
-.btn-cerrar-modal{
-  border-radius: var(--radius-pill);
-}
-
-.btn-ver:hover,
-.btn-cerrar-modal:hover,
-.btn-accion-card:hover {
-  background-color: #e2e8f0;
-  color: var(--fw-onyx);
-  border-color: #cbd5e1;
-}
-
-/* 🟢 POSITIVO: Activar o actualizar */
-.btn-activar {
-  background-color: var(--bg-emerald-soft);
-  color: var(--fw-emerald);
-  border-color: rgba(23, 198, 105, 0.842);
-}
-
-.btn-activar:hover {
-  background-color: var(--fw-emerald);
-  color: var(--fw-white);
-  border-color: var(--fw-emerald);
-}
-
-/* 🟠 PRECAUCIÓN / MODIFICACIÓN: Editar */
-.btn-editar {
-  background-color: var(--bg-saffron-soft);
-  color: var(--fw-saffron);
-  border-color: rgb(255, 153, 44);
-}
-
-.btn-editar:hover {
-  background-color: var(--fw-saffron);
-  color: var(--fw-white);
-  border-color: var(--fw-saffron);
-}
-
-/* 🔴 PELIGRO: Eliminar, Desactivar */
-.btn-eliminar {
-  background-color: var(--bg-strawberry-soft);
-  color: var(--fw-strawberry);
-  border-color: rgba(228, 73, 73, 0.911);
-}
-
-.btn-eliminar:hover {
-  background-color: var(--fw-strawberry);
-  color: var(--fw-white);
-  border-color: var(--fw-strawberry);
-}
-
-/* 🌑 ACCIÓN REVERSIBLE: Desactivar / Apagar (Gris Neutro Oscuro) */
-.btn-desactivar {
-  background-color: var(--fw-muetd);
-  color: var(--text-muted);
-  border-color: #cbd5e1;
-}
-
-.btn-desactivar:hover {
-  background-color: #64748b;
-  /* Un gris pizarra sólido y elegante */
-  color: var(--fw-white);
-  border-color: #64748b;
-}
-
-/* Botón Principal de Venta (POS) */
-.boton-venta {
-  background-color: var(--fw-white);
-  border: none;
-  padding: 8px 12px;
-  height: 50px;
-  font-weight: bold;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--text-main);
-}
-
-.boton-venta.activo {
-  border-bottom: 4px solid var(--fw-saffron);
-  background-color: var(--bg-saffron-soft);
-}
-
-.boton-venta:hover {
-  background-color: #f8fafc;
-}
-
-.boton-venta:active {
-  transform: scale(0.98);
-}
-
-/* ========== SWITCHES Y CHECKBOXES ========== */
-.form-switch .form-check-input,
-.form-check-input {
-  accent-color: var(--brand-primary);
-  cursor: pointer;
-}
-
-.form-switch .form-check-input:checked,
-.form-check-input:checked {
-  background-color: var(--brand-primary) !important;
-  border-color: var(--brand-primary) !important;
-}
-
-/* ========== DROPDOWN Y LISTAS ========== */
-.dropdown-menu {
-  z-index: 9999 !important;
-  box-shadow: var(--shadow-hover) !important;
-  border: 1px solid #e2e8f0 !important;
-}
-
-.list-group-item.active {
-  border-bottom: 4px solid var(--brand-primary) !important;
-  background: var(--fw-muetd) !important;
+body.dark-theme .tablaGeneral .rdt_TableBody .rdt_TableRow {
+  background-color: var(--bg-card) !important;
   color: var(--text-main) !important;
 }
 
-/* ========== IMAGEN PREVIEW ========== */
+body.dark-theme .tablaGeneral .rdt_TableBody .rdt_TableRow:hover {
+  background-color: #2D3748 !important;
+}
+
+.kanban-column {
+  border: none !important;
+  overflow: visible !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Imagen Preview */
 .image-preview {
   width: 100px;
   height: 100px;
@@ -601,386 +842,58 @@ body.dark-theme .btn-guardar {
   object-fit: cover;
   object-position: center;
 }
-/* ESTILOS PARA LOS INPUTS DE TODOS LOS FORMULARIOS DE FIRE WOK */
-/* =========================================
-   ESTILOS GLOBALES DE FORMULARIOS FIRE WOK
-   ========================================= */
 
-/* 1. Estilos para los Labels (Etiquetas) */
-.form-label,
-label.small.fw-bold,
-form label {
-  font-size: 0.85rem !important;
-  font-weight: 700 !important;
-  color: #333333 !important;
-  /* Tono oscuro elegante (Slate 700) */
-  margin-bottom: 0.4rem;
-  letter-spacing: 0.2px;
-}
-
-/* 2. Estilos para Inputs, Selects y Textareas */
-.form-control,
-.form-select {
-  border: 1px solid #cbd5e1 !important;
-  /* Borde gris claro (Slate 300) */
-  border-radius: 13px !important;
-  /* Curvatura limpia como en tu captura */
-  padding: 0.65rem 1rem !important;
-  /* Espaciado interno cómodo */
-  font-size: 0.95rem !important;
-  color: #1e293b !important;
-  background-color: #ffffff !important;
-  box-shadow: none !important;
-  /* Quitamos sombras por defecto */
-  transition: all 0.2s ease-in-out !important;
-}
-
-/* Placeholder (El texto de ejemplo) */
-.form-control::placeholder {
-  color: #94a3b8 !important;
-  /* Gris suave */
-  opacity: 0.8;
-}
-
-/* 3. Estado Focus (Cuando el usuario hace clic para escribir) */
-.form-control:focus,
-.form-select:focus {
-  border:2px solid #e24444 !important;
-  /* Borde se oscurece un poco */
-  box-shadow: 0 0 0 3px rgba(153, 153, 153, 0.1) !important;
-  /* Anillo sutil */
-  outline: none !important;
-}
-
-/* 4. Estado de Error (El input rojo de tu imagen) */
-.form-control.is-invalid,
-.form-select.is-invalid {
-  border-color: #dc2626 !important;
-  /* Rojo intenso */
-  background-image: none !important;
-  /* Limpiamos el ícono por defecto de Bootstrap si quieres que sea minimalista */
-}
-
-.form-control.is-invalid:focus,
-.form-select.is-invalid:focus {
-  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15) !important;
-  /* Anillo rojo sutil al hacer clic */
-}
-/* =======================================================
-   DARK THEME RE-OVERRIDES (Específicos para UI Fire Wok)
-========================================================== */
-body.dark-theme .header-contenido,
-body.dark-theme .navbar {
-  background-color: var(--fw-muetd) !important;
-  border-bottom: 1px solid #313a46 !important;
-}
-
-body.dark-theme .navegacion {
-  background-color: #1E2022 !important;
-}
-
-body.dark-theme .menu-item,
-body.dark-theme .menu-item span {
-  color: var(--fw-onyx) !important;
-}
-
-body.dark-theme .menu-item.active {
-  background: var(--brand-primary) !important;
-}
-
-body.dark-theme .menu-item.active span {
-  color: var(--fw-onyx) !important;
-  font-weight: 600;
-}
-
-body.dark-theme .form-control,
-body.dark-theme input,
-body.dark-theme textarea,
-body.dark-theme select {
-  background: #151A20 !important;
-  color: var(--text-main) !important;
-  border-color: #313A46 !important;
-}
-
-body.dark-theme .form-control:focus,
-body.dark-theme input:focus {
-  border-color: var(--brand-primary) !important;
-  box-shadow: 0 0 0 2px rgba(255, 153, 44, 0.2) !important;
-}
-/* =========================================
-   🌙 ADAPTACIÓN MODO OSCURO (DARK THEME)
-   ========================================= */
-/* 1. Estilos para los Labels (Etiquetas) dark */
-body.dark-them .form-label,
-body.dark-them label.small.fw-bold,
-body.dark-them form label {
-  font-size: 0.85rem !important;
-  font-weight: 700 !important;
-  color: #cecece !important;
-  /* Tono oscuro elegante (Slate 700) */
-  margin-bottom: 0.4rem;
-  letter-spacing: 0.2px;
-}
-/* Los botones de color (Emerald, Saffron, Strawberry) ya tienen el fondo 
-   --bg-*-soft que se adapta solo gracias a tu app.css.
-   Solo necesitamos ajustar el color de los textos en hover para el contraste 
-   y los botones neutros. */
-
-body.dark-theme .btn-ver,
-body.dark-theme .btn-cerrar-modal,
-body.dark-theme .btn-accion-card {
-  background-color: transparent;
-  border-color: #313a46;
-  color: #cbd5e1;
-}
-
-body.dark-theme .btn-ver:hover,
-body.dark-theme .btn-cerrar-modal:hover,
-body.dark-theme .btn-accion-card:hover {
-  background-color: rgba(255, 255, 255, 0.05);
-  color: var(--fw-white);
-  border-color: #475569;
-}
-
-/* Mejor contraste de texto al hacer hover sobre colores vibrantes en Dark Mode */
-body.dark-theme .btn-activar:hover,
-body.dark-theme .btn-editar:hover {
-  color: var(--fw-onyx) !important;
-  /* Texto negro sobre el fondo brillante */
-  font-weight: 700;
-}
-body.dark-theme .btn-desactivar {
-  background-color: transparent;
-  color: var(----fw-muetd);
-  border-color: #475569;
-}
-
-body.dark-theme .btn-desactivar:hover {
-  background-color: #94a3b8;
-  /* Gris más claro para que resalte en fondo oscuro */
-  color: var(--fw-onyx) !important;
-  /* Texto oscuro sobre el gris claro */
-  border-color: #94a3b8;
-  font-weight: 700;
-}
-
-body.dark-theme .btn-eliminar:hover {
-  color: var(--fw-onyx) !important;
-  font-weight: 700;
-}
-
-body.dark-theme .tablaGeneral .rdt_TableBody .rdt_TableRow {
-  background-color: var(--bg-card) !important;
-  color: var(--text-main) !important;
-}
-
-body.dark-theme .tablaGeneral .rdt_TableBody .rdt_TableRow:hover {
-  background-color: #2D3748 !important;
-}
-
-body.dark-theme .dropdown-menu {
-  background: var(--bg-card) !important;
-  color: var(--text-main) !important;
-  border: 1px solid #313A46 !important;
-}
-
-body.dark-theme .list-group-item {
-  background-color: var(--bg-card) !important;
-  color: var(--text-main);
-  border-color: #313A46;
-}
-
-body.dark-theme .list-group-item.active {
-  background: #2D3748 !important;
-  color: var(--brand-primary) !important;
-  border-bottom: 4px solid var(--brand-primary) !important;
-}
-
-/* Scrollbar en oscuro */
-body.dark-theme ::-webkit-scrollbar {
-  width: 10px;
-  background: var(--fw-onyx);
-}
-
-body.dark-theme ::-webkit-scrollbar-thumb {
-  background: #313A46;
-  border-radius: 6px;
-}
-
-body.dark-theme ::-webkit-scrollbar-thumb:hover {
-  background: #475569;
-}
-
-/* Botón POS oscuro */
-body.dark-theme .boton-venta {
-  background-color: var(--bg-card) !important;
-  border: 1px solid #313A46 !important;
-}
-
-body.dark-theme .boton-venta.activo {
-  border-bottom: 4px solid var(--brand-primary) !important;
-  background-color: #2D3748 !important;
-  color: var(--brand-primary) !important;
-}
-
-/* Textos adaptados para Dark Mode */
-body.dark-theme .text-primary {
-  color: var(--brand-primary) !important;
-}
-
-body.dark-theme .text-success {
-  color: var(--fw-emerald) !important;
-}
-
-body.dark-theme .text-danger {
-  color: var(--fw-strawberry) !important;
-}
-
-body.dark-theme .text-warning {
-  color: var(--fw-saffron) !important;
-}
-
-/* =======================================================
-   STANDARDIZED VIEW HEADERS
-========================================================== */
-.card-header {
-  background-color: transparent !important;
-  border: none !important;
-  padding: 1.25rem 1.5rem !important;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 15px;
-}
-
-.titulo-card-especial {
-  font-weight: 800 !important;
-  color: var(--fw-onyx) !important;
-  font-size: 1.5rem !important;
-  letter-spacing: -0.5px;
-  margin-bottom: 0;
-  display: flex;
-  align-items: center;
-}
-
-.card:has(.titulo-card-especial) {
-  border-radius: 12px !important;
-  margin: 0 !important;
-  overflow: hidden;
-}
-
-.card:has(.titulo-card-especial)>.card-body:not([class*="p-"]) {
-  padding: 0 !important;
-}
-
-.badge-header {
-  font-size: 0.85rem;
-  font-weight: 500;
-  background-color: var(--fw-onyx);
-  color: var(--fw-white);
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  padding: 0.2rem 0.6rem;
-  margin-left: 10px;
-  top: -2px;
-  position: relative;
-}
-
-.header-search-container {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.header-search-container .search-icon {
-  position: absolute;
-  left: 12px;
-  color: #a0aec0;
-  width: 16px;
-  height: 16px;
-  pointer-events: none;
-}
-
-.card-header input.form-control {
-  border-radius: var(--radius-pill) !important;
-  padding: 0.45rem 1.25rem 0.45rem 2.2rem !important;
-  min-width: 220px;
-  border: 1px solid transparent !important;
-  background-color: #f1f5f9 !important;
-  color: #2d3748 !important;
-  font-size: 0.9rem !important;
-  transition: all var(--transition-smooth) !important;
-}
-
-.card-header input.form-control:focus {
-  border-color: var(--brand-primary) !important;
-  background-color: #ffffff !important;
-  box-shadow: 0 0 0 2px var(--bg-saffron-soft) !important;
-}
-
-.btn {
-  border-radius: var(--radius-pill) !important;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 1rem !important;
-  font-weight: 600 !important;
-  font-size: 0.9rem !important;
-  gap: 6px;
-}
-
-.btn-outline-dark {
-  border: 1px solid #cbd5e1 !important;
-  color: #475569 !important;
-  background-color: #ffffff !important;
-}
-
-.btn-outline-dark:hover {
-  background-color: #f8fafc !important;
-  color: #0f172a !important;
-  border-color: #94a3b8 !important;
-}
-
-.btn-dark {
-  background-color: var(--brand-primary) !important;
-  color: white !important;
-  border: none !important;
-}
-
-body.dark-theme .titulo-card-especial {
-  color: var(--fw-white) !important;
-}
-
-body.dark-theme .titulo-card-especial .badge-header {
-  background-color: #1e293b;
-  color: #cbd5e1;
-  border-color: #334155;
-}
-
-body.dark-theme .card-header input.form-control {
-  background-color: #1e293b !important;
-  color: #f8fafc !important;
-}
-
-body.dark-theme .card-header .btn-outline-dark {
-  background-color: transparent !important;
-  border-color: #475569 !important;
-  color: #e2e8f0 !important;
-}
-
-body.dark-theme .card-header .btn-outline-dark:hover {
-  background-color: #1e293b !important;
-  color: #f8fafc !important;
-}
-
-body.dark-theme .card-header .btn-dark {
-  color: var(--fw-onyx) !important;
-  font-weight: 700 !important;
-}
-
+/* ========== 9. MEDIA QUERIES (RESPONSIVE) ========== */
 @media (max-width: 768px) {
+
+  .content:not(.open),
+  .content.with-sidebar,
+  .content.content-compressed {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+
+  .header-with-sidebar,
+  .header-compressed {
+    width: 100% !important;
+  }
+
+  .sidebar {
+    width: 60px;
+    border-radius: 0;
+    z-index: 1040;
+  }
+
+  .sidebar.open {
+    width: 200px;
+  }
+
+  .content.open {
+    margin-left: 200px;
+    width: calc(100% - 200px);
+  }
+
+  h1 {
+    font-size: 1.75rem !important;
+  }
+
+  h2 {
+    font-size: 1.5rem !important;
+  }
+
+  h3 {
+    font-size: 1.25rem !important;
+  }
+
+  .stats-card .icon {
+    font-size: 2rem;
+  }
+
+  .stats-card .card-text {
+    font-size: 1.5rem;
+  }
+
+  /* Adaptación Header Cards */
   .card-header {
     flex-direction: column;
     align-items: flex-start !important;

@@ -14,7 +14,6 @@ import {
 export function KardexList({ search }) {
   const [kardex, setKardex] = useState([]);
   const [filterKardexList, setFilterKardexList] = useState();
-  const BASE_URL = process.env.REACT_APP_BASE_URL;
 
   const fetchKardex = useCallback(async () => {
     try {
@@ -214,7 +213,7 @@ export function KardexList({ search }) {
             style={{ textAlign: "center" }}
           >
             <a
-              href={`${BASE_URL}${row.documento}`}
+              href={row.kardex_url}
               target="_blank"
               rel="noopener noreferrer"
               className=" btn btn-ver mx-2 mb-0 p-2 py-1 "

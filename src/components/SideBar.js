@@ -40,16 +40,7 @@ export function SideBar() {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
   const miEmpresa = JSON.parse(localStorage.getItem("empresa")) || {};
 
-  const formatLogoUrl = (path) => {
-    if (!path) return null;
-    if (path.startsWith("http")) return path;
-    let p = path.startsWith("/") ? path.substring(1) : path;
-    if (!p.startsWith("storage/")) {
-      p = "storage/" + p;
-    }
-    return `${BASE_URL}/${p}`;
-  };
-  const fotoEmpresa = formatLogoUrl(miEmpresa.logo);
+  const fotoEmpresa = miEmpresa.logo_url;
 
   const roles = JSON.parse(localStorage.getItem("roles")) || [];
   const dispatch = useDispatch();
@@ -314,7 +305,7 @@ export function SideBar() {
         className="menu-footer d-flex flex-column align-items-center w-100"
         style={{ margin: "15px 0" }}
       >
-        <Link
+        {/* <Link
           to="/iaMoodle"
           className="text-decoration-none w-90"
           style={{ width: "85%" }} // deja un margen lateral bonito
@@ -351,7 +342,7 @@ export function SideBar() {
               IA Moodle
             </small>
           </button>
-        </Link>
+        </Link> */}
         <Link
           to="/configuracion"
           className="text-decoration-none w-90"
@@ -359,11 +350,10 @@ export function SideBar() {
           onClick={(e) => handleModuloSeleccionado("", e)}
         >
           <button
-            className={`menu-item btn border-0 w-100 d-flex align-items-center justify-content-start ${
+            className={`menu-item p-2 border-0 w-100 d-flex align-items-center justify-content-start ${
               location.pathname.includes("/configuracion") ? "active" : ""
             }`}
             style={{
-              padding: "15px 10px",
               borderRadius: "var(--radius-md)",
               transition:
                 "transform var(--transition-bounce), background-color var(--transition-smooth)",
@@ -382,7 +372,6 @@ export function SideBar() {
               style={{
                 fontSize: "14px",
                 textAlign: "left",
-                color: "var(--text-main)",
                 transition: "opacity 0.2s",
               }}
             >

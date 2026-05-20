@@ -23,8 +23,6 @@ import {
 } from "../componentesReutilizables/BotonesAccion";
 
 export function PlatoList({ search, categoriaActual = null }) {
-  const BASE_URL = process.env.REACT_APP_BASE_URL;
-
   const queryClient = useQueryClient();
   const {
     data: platosList = [],
@@ -155,13 +153,11 @@ export function PlatoList({ search, categoriaActual = null }) {
   const columns = [
     {
       name: "Foto",
-      cell: (
-        row, // 'cell' es mejor para JSX que 'selector'
-      ) => (
+      cell: (row) => (
         <img
           src={
-            row.foto
-              ? `${BASE_URL}/storage/${row.foto}`
+            row.foto_url // <-- AHORA USAMOS EL NUEVO CAMPO QUE MANDA LARAVEL
+              ? row.foto_url
               : "/images/img-default.jpg"
           }
           alt="Foto del Plato"
@@ -174,12 +170,12 @@ export function PlatoList({ search, categoriaActual = null }) {
             width: "50px",
             height: "50px",
             objectFit: "cover",
-            borderRadius: "50%", // <-- CAMBIO: Círculo en lugar de cuadrado
+            borderRadius: "50%",
           }}
         />
       ),
-      grow: 0, // No necesita crecer
-      width: "80px", // Ancho fijo
+      grow: 0,
+      width: "80px",
     },
     {
       name: "Plato",

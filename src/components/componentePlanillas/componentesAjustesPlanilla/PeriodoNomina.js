@@ -185,11 +185,11 @@ export function PeriodoNomina() {
 
   return (
     <CondicionCarga isLoading={isLoading} isError={isError}>
-      <div className="card shadow-sm py-2">
+      <div className="card  py-2">
         <div className="card-header d-flex justify-content-between align-items-center">
           <h5>Configuración de Periodos de Planilla</h5>
           <div className="d-flex ms-auto gap-2">
-            <button className="btn btn-sm btn-success"> + Nuevo Periodo</button>
+            {/* <button className="btn btn-sm btn-success"> + Nuevo Periodo</button> */}
             <button
               className="btn btn-sm btn-dark"
               onClick={() => setModalGenerarPeriodo(true)}

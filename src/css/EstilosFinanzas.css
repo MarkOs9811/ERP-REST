@@ -12,7 +12,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    color: #9dbada;
+    color: var(--text-muted);
     opacity: 0.7;
     transform: rotate(10deg);
 }
@@ -27,12 +27,12 @@
 .reportes-header h1 {
     font-size: 2.5rem;
     font-weight: 700;
-    color: #1f2937;
+    color: var(--text-main);
     margin-bottom: 0.5rem;
 }
 
 .reportes-header p {
-    color: #6b7280;
+    color: var(--text-muted);
     font-size: 1.1rem;
 }
 
@@ -45,7 +45,7 @@
 
 /* Tarjetas */
 .reporte-card {
-    background: #fff;
+    background: var(--fw-white);
     border-radius: 1.2rem;
     padding: 1.5rem;
     text-align: center;
@@ -65,40 +65,40 @@
 }
 
 .icon-blue {
-    color: #3b82f6;
+    color: var(--fw-emerald);
 }
 
 .icon-red {
-    color: #ef4444;
+    color: var(--fw-strawberry);
 }
 
 .icon-green {
-    color: #10b981;
+    color: var(--fw-emerald);
 }
 
 .icon-emerald {
-    color: #059669;
+    color: var(--fw-emerald);
 }
 
 .icon-indigo {
-    color: #6366f1;
+    color: var(--brand-secondary);
 }
 
 .icon-orange {
-    color: #f97316;
+    color: var(--fw-saffron);
 }
 
 .icon-teal {
-    color: #14b8a6;
+    color: var(--fw-emerald);
 }
 
 .reporte-card p {
     font-size: 0.9rem;
-    color: #6b7280;
+    color: var(--text-muted);
 }
 
 
 body.dark-theme .reporte-card {
-    background-color: #1f2937;
-    border: 1px solid  #4e5c6e;
+    background-color: var(--bg-card);
+    border: 1px solid  var(--brand-secondary);
 }

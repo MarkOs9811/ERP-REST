@@ -13,7 +13,7 @@ export function Presupuestos() {
             <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-3">
               <div className="d-flex align-items-center">
                 <Calculator
-                  color={"#ea4f4f"}
+                  color={"var(--fw-strawberry)"}
                   height="45px"
                   width="45px"
                   className="me-2"
@@ -51,7 +51,7 @@ export function Presupuestos() {
             <div className="card-header d-flex align-items-center justify-content-between p-3 text-primary">
               <div className="d-flex align-items-center">
                 <ChartColumnBig
-                  color="#0971AC"
+                  color="var(--fw-emerald)"
                   height="32px"
                   width="32px"
                   className="me-3"

@@ -15,7 +15,10 @@ export function FormularioAddHorasExtras({
   return (
     <form id="agregarHorasExtrasForm" onSubmit={onSubmit}>
       <small className="text-info">Selecciona uno o mas empleados</small>
-      <div className="form-floating mb-3">
+      <div className="mb-3">
+        <label htmlFor="empleado" className="form-label">
+          Empleado
+        </label>
         <select
           className={`form-select ${errors.empleados ? "is-invalid" : ""}`}
           id="empleado"
@@ -31,18 +34,16 @@ export function FormularioAddHorasExtras({
             usuarios?.map((usuario) => (
               <option key={usuario.id} value={usuario.id}>
                 {capitalizeFirstLetter(
-                  usuario.empleado.persona.nombre.toLowerCase()
+                  usuario.empleado.persona.nombre.toLowerCase(),
                 )}{" "}
                 {capitalizeFirstLetter(
-                  usuario.empleado.persona.apellidos.toLowerCase()
+                  usuario.empleado.persona.apellidos.toLowerCase(),
                 )}
               </option>
             ))
           )}
         </select>
-        <label htmlFor="empleado" className="form-label">
-          Empleado
-        </label>
+
         {errors.empleados && (
           <div className="invalid-feedback">
             Debe seleccionar al menos un empleado.
@@ -73,10 +74,10 @@ export function FormularioAddHorasExtras({
               />
               <span className="me-2">
                 {capitalizeFirstLetter(
-                  usuario.empleado.persona.nombre.toLowerCase()
+                  usuario.empleado.persona.nombre.toLowerCase(),
                 )}{" "}
                 {capitalizeFirstLetter(
-                  usuario.empleado.persona.apellidos.toLowerCase()
+                  usuario.empleado.persona.apellidos.toLowerCase(),
                 )}
               </span>
               <button
@@ -92,7 +93,10 @@ export function FormularioAddHorasExtras({
       )}
 
       <div className="mb-3">
-        <div className="form-floating mb-3">
+        <label htmlFor="fecha" className="form-label">
+          Fecha
+        </label>
+        <div className="mb-3">
           <Controller
             name="fecha"
             control={control}
@@ -106,14 +110,15 @@ export function FormularioAddHorasExtras({
               />
             )}
           />
-          <label htmlFor="fecha" className="form-label">
-            Fecha
-          </label>
+
           {errors.fecha && (
             <div className="invalid-feedback">{errors.fecha.message}</div>
           )}
         </div>
-        <div className="form-floating mb-3">
+        <div className=" mb-3">
+          <label htmlFor="horas_trabajadas" className="form-label">
+            Horas por Trabajar
+          </label>
           <Controller
             name="horas_trabajadas"
             control={control}
@@ -132,9 +137,7 @@ export function FormularioAddHorasExtras({
               />
             )}
           />
-          <label htmlFor="horas_trabajadas" className="form-label">
-            Horas por Trabajar
-          </label>
+
           {errors.horas_trabajadas && (
             <div className="invalid-feedback">
               {errors.horas_trabajadas.message}
@@ -143,7 +146,7 @@ export function FormularioAddHorasExtras({
         </div>
       </div>
 
-      <button type="submit" className="btn-guardar p-3">
+      <button type="submit" className="btn-guardar ">
         Registrar
       </button>
     </form>

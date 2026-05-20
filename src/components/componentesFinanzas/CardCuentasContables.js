@@ -16,7 +16,10 @@ export function CardCuentaContable({ nombreCuenta, items }) {
           <div className="card-header d-flex justify-content-between align-items-center rounded-0 card-cuenta-libro">
             <div
               className="d-flex align-items-center"
-              style={{ fontSize: 12, borderLeft: "2px solid rgb(0, 112, 216)" }}
+              style={{
+                fontSize: 12,
+                borderLeft: "2px solid var(--fw-emerald)",
+              }}
             >
               <span className="text-primary fw-bold mx-2">
                 {grupoCuenta.codigo}
@@ -33,7 +36,7 @@ export function CardCuentaContable({ nombreCuenta, items }) {
             <div className="row">
               <div
                 className="col-md-6"
-                style={{ borderRight: "2px solid #063855" }}
+                style={{ borderRight: "2px solid var(--text-main)" }}
               >
                 <h6>DEBE</h6>
                 {items.map((item, idx) => (
@@ -75,7 +78,7 @@ export function CardCuentaContable({ nombreCuenta, items }) {
             <div className="text-center cuenta-cerrada-mensaje">
               <span
                 className="material-symbols-outlined"
-                style={{ fontSize: 48, color: "rgb(63, 63, 63)" }}
+                style={{ fontSize: 48, color: "var(--text-main)" }}
               >
                 lock
               </span>

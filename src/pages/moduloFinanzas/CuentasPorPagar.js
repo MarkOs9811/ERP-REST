@@ -66,7 +66,10 @@ export function CuentasPorPagar() {
         row.estado === "pendiente" ? (
           <span
             className="badge p-2"
-            style={{ color: "#a07417", background: "#f5d888" }}
+            style={{
+              color: "var(--fw-saffron)",
+              background: "var(--bg-saffron-soft)",
+            }}
           >
             <small>
               {row.estado.charAt(0).toUpperCase() + row.estado.slice(1)}
@@ -75,7 +78,10 @@ export function CuentasPorPagar() {
         ) : (
           <span
             className="badge p-2"
-            style={{ color: "#1f6e43", background: "#87e7a7" }}
+            style={{
+              color: "var(--fw-emerald)",
+              background: "var(--bg-emerald-soft)",
+            }}
           >
             <small>
               {row.estado.charAt(0).toUpperCase() + row.estado.slice(1)}
@@ -134,7 +140,7 @@ export function CuentasPorPagar() {
             <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-3">
               <div className="d-flex align-items-center">
                 <Coins
-                  color={"#ea4f4f"}
+                  color={"var(--fw-strawberry)"}
                   height="45px"
                   width="45px"
                   className="me-2"

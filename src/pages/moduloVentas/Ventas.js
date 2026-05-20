@@ -6,6 +6,7 @@ import {
   TrendingDown,
   TrendingUp,
   DollarSign,
+  Store,
 } from "lucide-react";
 
 // Servicios y Componentes
@@ -211,7 +212,7 @@ export function Ventas() {
                   titulo="Este Mes"
                   monto={metricas.mesActual}
                   porcentaje={metricas.crecimientoPct}
-                  icono={DollarSign}
+                  icono={Store}
                   colorClass="emerald"
                   esPositivo={true}
                 />

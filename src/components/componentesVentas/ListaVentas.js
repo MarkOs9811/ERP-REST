@@ -12,14 +12,13 @@ import {
   CircleAlert,
   CircleX,
   CloudDownload,
-  Globe,
+  Eye,
 } from "lucide-react";
 import ModalRight from "../componentesReutilizables/ModalRight";
 import { ModalDetallesVentas } from "./ModalDetallesVentas";
 import { BtnVer } from "../componentesReutilizables/BotonesAccion";
 
 export function ListVentas({ search }) {
-  const BASE_URL = process.env.REACT_APP_BASE_URL;
   const [modalDetallesVenta, setModalDetallesVenta] = useState(false);
   const [dataVentas, setDataVentas] = useState([]);
 
@@ -80,10 +79,10 @@ export function ListVentas({ search }) {
     setFilteredVentas(result);
   }, [search, listVentas]);
 
-  const handleDescargarComprobante = (id) => {
-    const url = `${BASE_URL}/storage/comprobantes/${id}.pdf`;
-    window.open(url, "_blank");
-  };
+  // const handleDescargarComprobante = (id) => {
+  //   const url = `${BASE_URL}/storage/comprobantes/${id}.pdf`;
+  //   window.open(url, "_blank");
+  // };
 
   const columns = [
     {
@@ -172,18 +171,24 @@ export function ListVentas({ search }) {
         return (
           <div className="d-flex align-items-center gap-3">
             <img
-              src={`${BASE_URL}/storage/${usuario.fotoPerfil}`}
+              // AHORA USAMOS foto_url DIRECTAMENTE
+              src={
+                usuario.foto_url
+                  ? usuario.foto_url
+                  : "/images/default-avatar.png"
+              }
               alt="Perfil"
               className="rounded-circle shadow-sm"
               style={{
                 width: "32px",
                 height: "32px",
                 objectFit: "cover",
-                border: "1px solid #e2e8f0", // Borde más fino y minimalista
+                border: "1px solid #e2e8f0",
               }}
-              // Fallback en caso de que la imagen se rompa o no exista
               onError={(e) => {
-                e.target.src = "/images/default-avatar.png";
+                if (!e.target.src.includes("default-avatar.png")) {
+                  e.target.src = "/images/default-avatar.png";
+                }
               }}
             />
 
@@ -270,42 +275,47 @@ export function ListVentas({ search }) {
     {
       name: "Descargas",
       cell: (row) => {
-        const rutaXml =
+        // Extraemos las URLs virtuales en lugar de las rutas cortas
+        const xmlUrl =
           row.documento === "B"
-            ? row.boleta?.rutaXml
+            ? row.boleta?.xml_url
             : row.documento === "F"
-              ? row.factura?.rutaXml
+              ? row.factura?.xml_url
               : null;
 
-        const rutaCdr =
+        const cdrUrl =
           row.documento === "B"
-            ? row.boleta?.rutaCdr
+            ? row.boleta?.cdr_url
             : row.documento === "F"
-              ? row.factura?.rutaCdr
+              ? row.factura?.cdr_url
               : null;
 
         return (
           <div className="d-flex align-items-center gap-2 p-2">
-            {rutaXml ? (
+            {xmlUrl ? (
               <a
-                href={`${BASE_URL}/storage/${rutaXml}`}
-                className="btn btn-sm btn-outline-primary d-flex align-items-center gap-1"
-                target="_blank"
+                href={xmlUrl} // <-- Usamos el enlace limpio de Cloudflare
+                className="btn-ver d-flex align-items-center gap-1 btn-sm"
+                target="_blank" // Agregado para que abra en nueva pestaña
                 rel="noopener noreferrer"
               >
-                <CloudDownload className="text-auto" /> XML
+                <Eye className="text-auto" size={15} />{" "}
+                <span className="small">XML</span>{" "}
+                {/* Corregí el typo 'spam' a 'span' 😉 */}
               </a>
             ) : (
               <span className="text-muted small">XML no disponible</span>
             )}
-            {rutaCdr ? (
+
+            {cdrUrl ? (
               <a
-                href={`${BASE_URL}/storage/${rutaCdr}`}
-                className="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1"
-                target="_blank"
+                href={cdrUrl} // <-- Usamos el enlace limpio de Cloudflare
+                className="btn-ver d-flex align-items-center gap-1 btn-sm"
+                target="_blank" // Agregado para que abra en nueva pestaña
                 rel="noopener noreferrer"
               >
-                <CloudDownload className="text-auto" /> CDR
+                <CloudDownload className="text-auto" size={15} />{" "}
+                <span className="small"> CDR</span>
               </a>
             ) : (
               <span className="text-muted small">CDR no disponible</span>

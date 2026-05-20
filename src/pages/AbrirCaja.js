@@ -46,7 +46,7 @@ export function AbrirCaja() {
       setIsLoading(true);
       const response = await axiosInstance.post(
         "/cajas/storeCajaApertura",
-        data
+        data,
       );
       if (response.data.success) {
         ToastAlert("success", "Caja abierta correctamente");
@@ -82,7 +82,10 @@ export function AbrirCaja() {
             Caja Cerrada, Porfavor apertura una.
           </div>
           <form onSubmit={handleSubmit(onSubmit)} className="form-abrir-caja">
-            <div className="form-floating mb-3">
+            <div className="mb-3">
+              <label htmlFor="caja">
+                <FontAwesomeIcon icon={faCashRegister} /> Seleccionar Caja
+              </label>
               <select
                 id="caja"
                 className={`form-select ${errors.caja ? "is-invalid" : ""}`}
@@ -97,15 +100,14 @@ export function AbrirCaja() {
                     </option>
                   ))}
               </select>
-              <label htmlFor="caja">
-                <FontAwesomeIcon icon={faCashRegister} /> Seleccionar Caja
-              </label>
+
               {errors.caja && (
                 <div className="invalid-feedback">{errors.caja.message}</div>
               )}
             </div>
 
-            <div className="form-floating mb-3">
+            <div className="mb-3">
+              <label htmlFor="monto">Monto de Apertura S/.</label>
               <input
                 type="text"
                 id="monto"
@@ -117,7 +119,7 @@ export function AbrirCaja() {
                   required: "Ingrese el monto de apertura",
                 })}
               />
-              <label htmlFor="monto">Monto de Apertura S/.</label>
+
               {errors.montoApertura && (
                 <div className="invalid-feedback">
                   {errors.montoApertura.message}

@@ -24,7 +24,7 @@ export function PlatoEditar({ dataPlato, handleCloseModal }) {
     const getCategoria = async () => {
       try {
         const response = await axiosInstance.get(
-          "/gestionPlatos/getCategoriaTrue"
+          "/gestionPlatos/getCategoriaTrue",
         );
         if (response.data.success) {
           setCategorias(response.data.data);
@@ -99,10 +99,10 @@ export function PlatoEditar({ dataPlato, handleCloseModal }) {
       }
 
       formDataToSend.append("_method", "PUT");
-      console.log(dataPlato.id);
+
       const response = await axiosInstance.post(
         `/gestionPlatos/updatePlato/${dataPlato.id}`,
-        formDataToSend
+        formDataToSend,
       );
 
       if (response.data.success) {
@@ -114,7 +114,7 @@ export function PlatoEditar({ dataPlato, handleCloseModal }) {
       console.error("Error completo:", error);
       ToastAlert(
         "error",
-        error.response?.data?.message || "Error al actualizar"
+        error.response?.data?.message || "Error al actualizar",
       );
     } finally {
       setIsSubmitting(false);

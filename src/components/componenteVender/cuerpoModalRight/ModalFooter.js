@@ -189,13 +189,6 @@ export function ModalFooter({ selectedPedido }) {
               <NotificacionBtn pedido={selectedPedido} />
             </>
           )}
-
-          {/* ESTADO PAGADO: Solo confirmación del comprobante */}
-          {estaPagado && (
-            <button className="btn btn-sm btn-warning p-1 text-dark fw-bold">
-              <CheckCheck className="me-1" size={18} /> Confirmar Comprobante
-            </button>
-          )}
         </div>
       </div>
 

@@ -10,6 +10,7 @@ import {
 } from "chart.js";
 import { useQuery } from "@tanstack/react-query";
 import { GetInformesFinancieros } from "../service/serviceFinanzas/GetInformesFinancieros";
+import { getThemeColors, hexToRgb, toRgba } from "../utils/ThemeColors";
 import { useRef } from "react";
 
 Chart.register(
@@ -18,11 +19,12 @@ Chart.register(
   CategoryScale,
   LinearScale,
   Tooltip,
-  Legend
+  Legend,
 );
 
 export function GraficoVentasContado() {
   const chartRef = useRef(null);
+  const colors = getThemeColors();
 
   const {
     data: dataInformes = {},
@@ -43,16 +45,16 @@ export function GraficoVentasContado() {
   const labels = ventasPorMesData.labels || [];
   const dataVentas = ventasPorMesData.data || [];
 
-  // Función para crear el degradado dinámicamente
+  // Función para crear el degradado dinámicamente con colores del tema
   const getGradient = (ctx, chartArea) => {
     const gradient = ctx.createLinearGradient(
       0,
       chartArea.top,
       0,
-      chartArea.bottom
+      chartArea.bottom,
     );
-    gradient.addColorStop(0, "rgba(0, 123, 255, 0.25)");
-    gradient.addColorStop(0.3, "rgba(0, 123, 255, 0.01)");
+    gradient.addColorStop(0, toRgba(colors.emerald, 0.25));
+    gradient.addColorStop(0.3, toRgba(colors.emerald, 0.01));
     return gradient;
   };
 
@@ -63,7 +65,7 @@ export function GraficoVentasContado() {
       {
         label: "Ventas por Mes",
         data: dataVentas,
-        borderColor: "#3e95d8",
+        borderColor: colors.emerald,
         backgroundColor: function (context) {
           const chart = context.chart;
           const { ctx, chartArea } = chart;
@@ -76,7 +78,7 @@ export function GraficoVentasContado() {
         fill: true,
         borderWidth: 2,
         pointRadius: 5,
-        pointBackgroundColor: "#ffffff",
+        pointBackgroundColor: colors.white,
         pointHoverRadius: 6,
       },
     ],

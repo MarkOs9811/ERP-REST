@@ -17,7 +17,10 @@ export function FormularioAdelantoSueldo({
   return (
     <form id="agregarAdelantoSueldoForm" onSubmit={onSubmit}>
       <small className="text-info">Selecciona uno o más empleados</small>
-      <div className="form-floating mb-3">
+      <div className=" mb-3">
+        <label htmlFor="empleado" className="form-label">
+          Empleado
+        </label>
         <select
           className={`form-select ${errors.empleados ? "is-invalid" : ""}`}
           id="empleado"
@@ -33,18 +36,16 @@ export function FormularioAdelantoSueldo({
             usuarios?.map((usuario) => (
               <option key={usuario.id} value={usuario.id}>
                 {capitalizeFirstLetter(
-                  usuario.empleado.persona.nombre.toLowerCase()
+                  usuario.empleado.persona.nombre.toLowerCase(),
                 )}{" "}
                 {capitalizeFirstLetter(
-                  usuario.empleado.persona.apellidos.toLowerCase()
+                  usuario.empleado.persona.apellidos.toLowerCase(),
                 )}
               </option>
             ))
           )}
         </select>
-        <label htmlFor="empleado" className="form-label">
-          Empleado
-        </label>
+
         {errors.empleados && (
           <div className="invalid-feedback">
             Debe seleccionar al menos un empleado.
@@ -75,10 +76,10 @@ export function FormularioAdelantoSueldo({
               />
               <span className="me-2">
                 {capitalizeFirstLetter(
-                  usuario.empleado.persona.nombre.toLowerCase()
+                  usuario.empleado.persona.nombre.toLowerCase(),
                 )}{" "}
                 {capitalizeFirstLetter(
-                  usuario.empleado.persona.apellidos.toLowerCase()
+                  usuario.empleado.persona.apellidos.toLowerCase(),
                 )}
               </span>
               <button
@@ -95,7 +96,10 @@ export function FormularioAdelantoSueldo({
 
       <div className="row g-2">
         <div className="col-md-6 col-sm-12">
-          <div className="form-floating mb-3">
+          <div className=" mb-3">
+            <label htmlFor="fecha" className="form-label">
+              Fecha
+            </label>
             <Controller
               name="fecha"
               control={control}
@@ -109,16 +113,17 @@ export function FormularioAdelantoSueldo({
                 />
               )}
             />
-            <label htmlFor="fecha" className="form-label">
-              Fecha
-            </label>
+
             {errors.fecha && (
               <div className="invalid-feedback">{errors.fecha.message}</div>
             )}
           </div>
         </div>
         <div className="col-md-6 col-sm-12">
-          <div className="form-floating mb-3">
+          <div className=" mb-3">
+            <label htmlFor="monto" className="form-label">
+              Monto
+            </label>
             <Controller
               name="monto"
               control={control}
@@ -141,9 +146,7 @@ export function FormularioAdelantoSueldo({
                 />
               )}
             />
-            <label htmlFor="monto" className="form-label">
-              Monto
-            </label>
+
             {errors.monto && (
               <div className="invalid-feedback">{errors.monto.message}</div>
             )}
@@ -151,7 +154,10 @@ export function FormularioAdelantoSueldo({
         </div>
       </div>
       <div className="mb-3">
-        <div className="form-floating mb-3">
+        <div className=" mb-3">
+          <label htmlFor="descripcion" className="form-label">
+            Descripción
+          </label>
           <Controller
             name="descripcion"
             control={control}
@@ -167,15 +173,16 @@ export function FormularioAdelantoSueldo({
               ></textarea>
             )}
           />
-          <label htmlFor="descripcion" className="form-label">
-            Descripción
-          </label>
+
           {errors.descripcion && (
             <div className="invalid-feedback">{errors.descripcion.message}</div>
           )}
         </div>
 
-        <div className="form-floating mb-3">
+        <div className=" mb-3">
+          <label htmlFor="documento" className="form-label">
+            Documento (opcional)
+          </label>
           <Controller
             name="documento"
             control={control}
@@ -191,16 +198,13 @@ export function FormularioAdelantoSueldo({
               />
             )}
           />
-          <label htmlFor="documento" className="form-label">
-            Documento (opcional)
-          </label>
         </div>
       </div>
       <div className="d-flex  border-top p-3 gap-2">
         <button type="button" className="btn-cerrar-modal" onClick={onClose}>
           Cancelar
         </button>
-        <button type="submit" className="btn-guardar ">
+        <button type="submit" className="btn-guardar">
           Registrar
         </button>
       </div>

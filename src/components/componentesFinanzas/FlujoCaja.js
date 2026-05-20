@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { GetPresupuestos } from "../../service/serviceFinanzas/GetPresupuestos";
 
-
 export function FlujoCaja() {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["presupuestos"],
@@ -29,8 +28,8 @@ export function FlujoCaja() {
         <thead>
           <tr>
             <th className="p-2">Tipo</th>
-            <th style={{ color: "#0971AC" }}>Entrada (S/)</th>
-            <th style={{ color: "#ee5252" }}>Salida (S/)</th>
+            <th style={{ color: "var(--fw-emerald)" }}>Entrada (S/)</th>
+            <th style={{ color: "var(--fw-strawberry)" }}>Salida (S/)</th>
             <th className="text-center">Total (S/)</th>
           </tr>
         </thead>

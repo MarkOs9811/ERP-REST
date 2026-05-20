@@ -32,8 +32,8 @@ export function CardIngresoEgresos({ sumaIngresos, sumaEgresos }) {
     datasets: [
       {
         data: dataIngresos,
-        borderColor: "rgba(46,133,204,0.9)",
-        backgroundColor: "rgba(46,133,204,0.1)",
+        borderColor: "rgba(35, 170, 98, 0.9)",
+        backgroundColor: "rgba(35, 170, 98, 0.1)",
         fill: true,
       },
     ],
@@ -44,8 +44,8 @@ export function CardIngresoEgresos({ sumaIngresos, sumaEgresos }) {
     datasets: [
       {
         data: dataEgresos,
-        borderColor: "rgba(245,88,88,0.9)",
-        backgroundColor: "rgba(245,88,88,0.1)",
+        borderColor: "rgba(228, 73, 73, 0.9)",
+        backgroundColor: "rgba(228, 73, 73, 0.1)",
         fill: true,
       },
     ],
@@ -60,8 +60,8 @@ export function CardIngresoEgresos({ sumaIngresos, sumaEgresos }) {
             className="card shadow-sm py-2 h-100 position-relative overflow-hidden"
             style={{
               background:
-                "linear-gradient(165deg, rgba(46,133,204,0.05), rgba(46, 133, 204, 0.77))",
-              border: "1px solid rgba(46,133,204,0.2)",
+                "linear-gradient(165deg, rgba(35, 170, 98, 0.05), rgba(35, 170, 98, 0.77))",
+              border: "1px solid rgba(35, 170, 98, 0.2)",
             }}
           >
             {/* gráfico de fondo */}
@@ -82,7 +82,7 @@ export function CardIngresoEgresos({ sumaIngresos, sumaEgresos }) {
             <div className="card-body p-3 position-relative">
               <p
                 className="h1 text-left ms-3 fw-bold"
-                style={{ color: "#2e85ccff" }}
+                style={{ color: "var(--fw-emerald)" }}
               >
                 S/. {sumaIngresos.toFixed(2)}
               </p>
@@ -96,8 +96,8 @@ export function CardIngresoEgresos({ sumaIngresos, sumaEgresos }) {
             className="card shadow-sm py-2 h-100 position-relative overflow-hidden"
             style={{
               background:
-                "linear-gradient(175deg, rgba(245,88,88,0.05), rgba(201, 10, 10, 0.51))",
-              border: "1px solid rgba(245,88,88,0.3)",
+                "linear-gradient(175deg, rgba(228, 73, 73, 0.05), rgba(228, 73, 73, 0.51))",
+              border: "1px solid rgba(228, 73, 73, 0.3)",
             }}
           >
             {/* gráfico de fondo */}
@@ -118,7 +118,7 @@ export function CardIngresoEgresos({ sumaIngresos, sumaEgresos }) {
             <div className="card-body p-3 position-relative">
               <p
                 className="h1 text-left ms-3 fw-bold"
-                style={{ color: "#d12222ff" }}
+                style={{ color: "var(--fw-strawberry)" }}
               >
                 S/. {sumaEgresos.toFixed(2)}
               </p>

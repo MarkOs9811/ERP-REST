@@ -65,7 +65,11 @@ export function LibroMayor() {
         <div className="col-md-12">
           <div className="card  py-2">
             <div className="card-header p-3 d-flex align-items-center">
-              <BookText color={"#ea4f4f"} height="45px" width="45px" />
+              <BookText
+                color={"var(--fw-strawberry)"}
+                height="45px"
+                width="45px"
+              />
               <p className="h4 card-title ms-2 mb-0">Libro Mayor</p>
               <div className="d-flex ms-auto">
                 <button className="btn btn-outline-secondary ms-auto mx-2 d-flex align-items-center p-2">

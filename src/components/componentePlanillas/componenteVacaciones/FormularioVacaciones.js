@@ -18,7 +18,10 @@ export function FormularioVacaciones({
   return (
     <form id="agregarVacacionesForm" onSubmit={onSubmitVaca}>
       <small className="text-info">Selecciona un empleado</small>
-      <div className="form-floating mb-3">
+      <div className=" mb-3">
+        <label htmlFor="empleado" className="form-label">
+          Empleado
+        </label>
         <select
           className={`form-select ${errors.empleados ? "is-invalid" : ""}`}
           id="empleado"
@@ -34,18 +37,16 @@ export function FormularioVacaciones({
             usuarios?.map((usuario) => (
               <option key={usuario.id} value={usuario.id}>
                 {capitalizeFirstLetter(
-                  usuario.empleado.persona.nombre.toLowerCase()
+                  usuario.empleado.persona.nombre.toLowerCase(),
                 )}{" "}
                 {capitalizeFirstLetter(
-                  usuario.empleado.persona.apellidos.toLowerCase()
+                  usuario.empleado.persona.apellidos.toLowerCase(),
                 )}
               </option>
             ))
           )}
         </select>
-        <label htmlFor="empleado" className="form-label">
-          Empleado
-        </label>
+
         {errors.empleados && (
           <div className="invalid-feedback">
             Debe seleccionar al menos un empleado.
@@ -76,10 +77,10 @@ export function FormularioVacaciones({
               />
               <span className="me-2">
                 {capitalizeFirstLetter(
-                  usuario.empleado.persona.nombre.toLowerCase()
+                  usuario.empleado.persona.nombre.toLowerCase(),
                 )}{" "}
                 {capitalizeFirstLetter(
-                  usuario.empleado.persona.apellidos.toLowerCase()
+                  usuario.empleado.persona.apellidos.toLowerCase(),
                 )}
               </span>
               <button
@@ -96,7 +97,10 @@ export function FormularioVacaciones({
 
       <div className="mb-3">
         {/* Fecha Inicio */}
-        <div className="form-floating mb-3">
+        <div className=" mb-3">
+          <label htmlFor="fechaInicio" className="form-label">
+            Fecha Inicio
+          </label>
           <Controller
             name="fechaInicio"
             control={control}
@@ -112,16 +116,17 @@ export function FormularioVacaciones({
               />
             )}
           />
-          <label htmlFor="fechaInicio" className="form-label">
-            Fecha Inicio
-          </label>
+
           {errors.fechaInicio && (
             <div className="invalid-feedback">{errors.fechaInicio.message}</div>
           )}
         </div>
 
         {/* Fecha Fin */}
-        <div className="form-floating mb-3">
+        <div className=" mb-3">
+          <label htmlFor="fechaFin" className="form-label">
+            Fecha Fin
+          </label>
           <Controller
             name="fechaFin"
             control={control}
@@ -141,16 +146,17 @@ export function FormularioVacaciones({
               />
             )}
           />
-          <label htmlFor="fechaFin" className="form-label">
-            Fecha Fin
-          </label>
+
           {errors.fechaFin && (
             <div className="invalid-feedback">{errors.fechaFin.message}</div>
           )}
         </div>
 
         {/* Días Totales */}
-        <div className="form-floating mb-3">
+        <div className=" mb-3">
+          <label htmlFor="diasTotales" className="form-label">
+            Días Totales
+          </label>
           <Controller
             name="diasTotales"
             control={control}
@@ -164,13 +170,13 @@ export function FormularioVacaciones({
               />
             )}
           />
-          <label htmlFor="diasTotales" className="form-label">
-            Días Totales
-          </label>
         </div>
 
         {/* Observaciones */}
-        <div className="form-floating mb-3">
+        <div className=" mb-3">
+          <label htmlFor="observaciones" className="form-label">
+            Observaciones
+          </label>
           <Controller
             name="observaciones"
             control={control}
@@ -186,9 +192,7 @@ export function FormularioVacaciones({
               ></textarea>
             )}
           />
-          <label htmlFor="observaciones" className="form-label">
-            Observaciones
-          </label>
+
           {errors.observaciones && (
             <div className="invalid-feedback">
               {errors.observaciones.message}

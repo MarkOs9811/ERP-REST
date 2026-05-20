@@ -26,18 +26,17 @@ export function MiEmpresa() {
   });
 
   const configuracionEmpresa = configEmpresa.filter(
-    (item) => item.tipo?.toLowerCase() === "empresa"
+    (item) => item.tipo?.toLowerCase() === "empresa",
   );
 
   useEffect(() => {
     const fetchDatosEmpresa = async () => {
       try {
         const response = await axiosInstance.get("/configuracion/getMiEmpresa");
-        console.log("BASE_URL:", BASE_URL);
-        console.log("Dato crudo backend:", response.data.logo);
+        console.log("Respuesta de la API:", response.data);
         if (response.data) {
           setDatosEmpresa(response.data);
-          setLogoActual(`${BASE_URL}${response.data.logo}`);
+          setLogoActual(response.data.logo_url);
           reset({
             nombre: response.data.nombre,
             ruc: response.data.ruc,
@@ -76,7 +75,7 @@ export function MiEmpresa() {
 
       const response = await axiosInstance.post(
         "/configuracion/updateMiempresa",
-        formData
+        formData,
       );
 
       if (response.status === 200) {
@@ -88,7 +87,7 @@ export function MiEmpresa() {
       if (error.response) {
         ToastAlert(
           "error",
-          `Error: ${error.response.data.message || "Algo salió mal."}`
+          `Error: ${error.response.data.message || "Algo salió mal."}`,
         );
       } else {
         ToastAlert("error", `Error:${error}`);

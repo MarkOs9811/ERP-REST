@@ -12,6 +12,7 @@ import {
   Filler,
 } from "chart.js";
 import { Cargando } from "../components/componentesReutilizables/Cargando";
+import { getThemeColors, toRgba } from "../utils/ThemeColors";
 
 Chart.register(
   LineElement,
@@ -20,7 +21,7 @@ Chart.register(
   LinearScale,
   Tooltip,
   Legend,
-  Filler
+  Filler,
 );
 
 const mesesES = [
@@ -39,6 +40,7 @@ const mesesES = [
 ];
 
 export function GraficoEgresoTodo() {
+  const colors = getThemeColors();
   const {
     data: dataCompras = [],
     isLoading,
@@ -63,8 +65,8 @@ export function GraficoEgresoTodo() {
   const comprasArray = Array.isArray(dataCompras)
     ? dataCompras
     : Array.isArray(dataCompras.compras)
-    ? dataCompras.compras
-    : [];
+      ? dataCompras.compras
+      : [];
 
   comprasArray.forEach((compra) => {
     const [anio, mes] = compra.fecha_compra.split("-");
@@ -88,9 +90,9 @@ export function GraficoEgresoTodo() {
         label: "Egresos por Compras (S/.)",
         data: mesesOrdenados.map((mes) => egresosPorMes[mes]),
         fill: true,
-        backgroundColor: "rgba(243, 150, 5, 0.2)",
-        borderColor: "#F39605",
-        pointBackgroundColor: "#F39605",
+        backgroundColor: toRgba(colors.saffron, 0.2),
+        borderColor: colors.saffron,
+        pointBackgroundColor: colors.saffron,
         tension: 0.4,
       },
     ],

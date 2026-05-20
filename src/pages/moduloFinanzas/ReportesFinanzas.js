@@ -77,7 +77,7 @@ export function ReportesFinanzas() {
             <div className="card-body">
               <h4 className="text-left">
                 <ChartNoAxesCombined
-                  color={"#ea4f4f"}
+                  color={"var(--fw-strawberry)"}
                   className="text-auto"
                   size={"30px"}
                 />{" "}

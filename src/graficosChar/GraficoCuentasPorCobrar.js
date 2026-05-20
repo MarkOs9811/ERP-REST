@@ -3,10 +3,12 @@ import { Chart, ArcElement, Tooltip, Legend } from "chart.js";
 import { useQuery } from "@tanstack/react-query";
 import { GetInformesFinancieros } from "../service/serviceFinanzas/GetInformesFinancieros";
 import { CreditCard } from "lucide-react";
+import { getThemeColors, toRgba } from "../utils/ThemeColors";
 
 Chart.register(ArcElement, Tooltip, Legend);
 
 export function GraficoCuentasPorCobrar() {
+  const colors = getThemeColors();
   const {
     data: dataInformes = {},
     isLoading,
@@ -32,7 +34,7 @@ export function GraficoCuentasPorCobrar() {
     datasets: [
       {
         data: [montoPagado, montoRestante],
-        backgroundColor: ["rgb(54, 162, 235)", "rgba(0, 0, 0, 0.1)"],
+        backgroundColor: [colors.emerald, toRgba(colors.emerald, 0.1)],
         borderWidth: 1,
       },
     ],

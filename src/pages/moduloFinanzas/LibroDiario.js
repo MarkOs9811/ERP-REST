@@ -86,7 +86,7 @@ export function LibroDiario() {
             <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-3">
               <div className="d-flex align-items-center">
                 <BookText
-                  color={"#ea4f4f"}
+                  color={"var(--fw-strawberry)"}
                   height="45px"
                   width="45px"
                   className="me-2"

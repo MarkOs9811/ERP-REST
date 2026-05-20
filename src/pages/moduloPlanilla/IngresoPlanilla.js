@@ -178,7 +178,7 @@ export function IngresoPlanilla() {
   };
 
   return (
-    <div className="card container">
+    <div className="card container border-0">
       <div className="card-header p-3 d-flex justify-content-between align-items-center">
         <h4>Registro de Nuevo Empleado</h4>
         <span className="badge bg-primary px-3 py-2">

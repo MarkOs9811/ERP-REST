@@ -21,8 +21,6 @@ import {
 
 // LOS PROPS SON PARAMETROS QUE SE ESTA RECIEBIENDO EN ESTA FUNCTION COMO "SEARCH" Y "UPDATELIST"
 export function UsuariosList({ search, updateList }) {
-  const BASE_URL = process.env.REACT_APP_BASE_URL;
-
   const [filteredUsuarios, setFilteredUsuarios] = useState([]);
 
   // PARA VER DETALLES DEL EMPLEADO
@@ -175,7 +173,11 @@ export function UsuariosList({ search, updateList }) {
         <div style={{ padding: "5px" }}>
           {row.fotoPerfil ? (
             <img
-              src={`${BASE_URL}/storage/${row.fotoPerfil}`}
+              src={
+                row.foto_url // <-- AHORA USAMOS EL NUEVO CAMPO QUE MANDA LARAVEL
+                  ? row.foto_url
+                  : "/images/img-default.jpg"
+              }
               alt="avatar"
               style={{
                 width: "45px",
@@ -256,6 +258,23 @@ export function UsuariosList({ search, updateList }) {
           <small className="text-muted">
             Tel: {row.empleado?.persona?.telefono || "---"}
           </small>
+        </div>
+      ),
+    },
+    {
+      name: "Doc Contrato",
+      selector: (row) => row.empleado?.docContratoUrl,
+      wrap: true,
+      cell: (row) => (
+        <div className="d-flex flex-column">
+          <a
+            href={row.empleado?.docContratoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-outline-primary btn-sm p-1"
+          >
+            Ver Contrato
+          </a>
         </div>
       ),
     },

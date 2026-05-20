@@ -53,14 +53,20 @@ export function CuentasPorCobrar() {
           return (
             <div>
               <span
-                style={{ borderLeft: "3px solid #1665a2", paddingLeft: 10 }}
+                style={{
+                  borderLeft: "3px solid var(--fw-emerald)",
+                  paddingLeft: 10,
+                }}
               >
                 {`${row.cliente.persona.nombre} ${row.cliente.persona.apellidos}`}
               </span>
               <br />
               <small
                 className="badge"
-                style={{ color: "#696969", background: "#e0e0e0" }}
+                style={{
+                  color: "var(--text-muted)",
+                  background: "var(--fw-muetd)",
+                }}
               >
                 {row.cliente.persona.documento_identidad}
               </small>
@@ -70,14 +76,20 @@ export function CuentasPorCobrar() {
           return (
             <div>
               <span
-                style={{ borderLeft: "3px solid #a1d323", paddingLeft: 10 }}
+                style={{
+                  borderLeft: "3px solid var(--fw-emerald)",
+                  paddingLeft: 10,
+                }}
               >
                 {row.cliente.empresa.nombre}
               </span>
               <br />
               <small
                 className="badge"
-                style={{ color: "#696969", background: "#e7e7e7" }}
+                style={{
+                  color: "var(--text-muted)",
+                  background: "var(--fw-muetd)",
+                }}
               >
                 {row.cliente.empresa.ruc}
               </small>
@@ -128,7 +140,10 @@ export function CuentasPorCobrar() {
         row.estado === "pendiente" ? (
           <span
             className="badge p-2"
-            style={{ color: "#a07417", background: "#f5d888" }}
+            style={{
+              color: "var(--fw-saffron)",
+              background: "var(--bg-saffron-soft)",
+            }}
           >
             <small>
               {row.estado.charAt(0).toUpperCase() + row.estado.slice(1)}
@@ -137,7 +152,10 @@ export function CuentasPorCobrar() {
         ) : (
           <span
             className="badge p-2"
-            style={{ color: "#1f6e43", background: "#87e7a7" }}
+            style={{
+              color: "var(--fw-emerald)",
+              background: "var(--bg-emerald-soft)",
+            }}
           >
             <small>
               {row.estado.charAt(0).toUpperCase() + row.estado.slice(1)}
@@ -201,7 +219,7 @@ export function CuentasPorCobrar() {
             <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-3">
               <div className="d-flex align-items-center">
                 <Coins
-                  color={"#ea4f4f"}
+                  color={"var(--fw-strawberry)"}
                   height="45px"
                   width="45px"
                   className="me-2"

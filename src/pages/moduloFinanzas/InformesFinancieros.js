@@ -7,12 +7,7 @@ import { GraficoCuentasPorCobrar } from "../../graficosChar/GraficoCuentasPorCob
 import { GraficoPagoEmpleados } from "../../graficosChar/GraficoPagoEmpleados";
 import GraficoVentasContado from "../../graficosChar/GraficoVentasContado";
 import GraficoEgresosMensuales from "../../graficosChar/GraficoEgresosMensuales";
-import {
-  ChartColumnBig,
-  ChartColumnBigIcon,
-  TrendingDown,
-  TrendingUp,
-} from "lucide-react";
+import { ChartColumnBigIcon } from "lucide-react";
 import { CardIngresoEgresos } from "../../components/componentesFinanzas/CardIngresoEgresos";
 
 export function InformesFinancieros() {

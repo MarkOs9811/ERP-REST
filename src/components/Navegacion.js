@@ -178,7 +178,7 @@ export function Navegacion({ tipoNavegacion = null }) {
               className="text-muted position-absolute"
               style={{
                 top: "50%",
-                left: "12px",
+                left: "85%",
                 transform: "translateY(-50%)",
               }}
             />
@@ -192,14 +192,6 @@ export function Navegacion({ tipoNavegacion = null }) {
                 setShowSearchDropdown(true);
               }}
               onFocus={() => setShowSearchDropdown(true)}
-              style={{
-                borderRadius: "20px",
-                paddingLeft: "34px",
-                fontSize: "0.85rem",
-                backgroundColor: "rgba(0,0,0,0.03)",
-                border: "1px solid rgba(0,0,0,0.08)",
-                transition: "all 0.2s ease",
-              }}
             />
             {showSearchDropdown && searchTerm.trim() !== "" && (
               <div

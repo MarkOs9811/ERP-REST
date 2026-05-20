@@ -42,21 +42,21 @@ export function FormularioVenderDias({
           <h5 className="mb-1">
             {vacacionesId.usuario?.empleado?.persona?.nombre
               ? capitalizeFirstLetter(
-                  vacacionesId.usuario.empleado.persona.nombre.toLowerCase()
+                  vacacionesId.usuario.empleado.persona.nombre.toLowerCase(),
                 )
               : "Nombre no disponible"}
           </h5>
           <h6 className="text-muted">
             {vacacionesId.usuario?.empleado?.persona?.apellidos
               ? capitalizeFirstLetter(
-                  vacacionesId.usuario.empleado.persona.apellidos.toLowerCase()
+                  vacacionesId.usuario.empleado.persona.apellidos.toLowerCase(),
                 )
               : "Apellidos no disponibles"}
           </h6>
           <small className="text-primary fw-bold">
             {vacacionesId.usuario?.empleado?.cargo?.nombre
               ? capitalizeFirstLetter(
-                  vacacionesId.usuario.empleado.cargo.nombre.toLowerCase()
+                  vacacionesId.usuario.empleado.cargo.nombre.toLowerCase(),
                 )
               : "Cargo no disponible"}
           </small>

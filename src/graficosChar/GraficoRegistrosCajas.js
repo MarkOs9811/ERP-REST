@@ -10,10 +10,12 @@ import {
   Legend,
 } from "chart.js";
 import { Cargando } from "../components/componentesReutilizables/Cargando";
+import { getThemeColors, toRgba } from "../utils/ThemeColors";
 
 Chart.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
 export function GraficoRegistrosCajas() {
+  const colors = getThemeColors();
   const {
     data: registrosCajasData = [],
     isLoading: loadingRegistrosCajas,
@@ -49,8 +51,8 @@ export function GraficoRegistrosCajas() {
       {
         label: "Ventas por Caja (S/.)",
         data: dataVentas,
-        backgroundColor: "rgba(52, 152, 219, 0.5)",
-        borderColor: "#3498db",
+        backgroundColor: toRgba(colors.emerald, 0.5),
+        borderColor: colors.emerald,
         borderWidth: 2,
       },
     ],

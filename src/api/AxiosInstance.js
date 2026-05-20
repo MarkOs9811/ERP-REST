@@ -26,6 +26,7 @@ axiosRetry(axiosInstance, {
 });
 
 // Interceptor de solicitudes para agregar el token de autorización
+// Interceptor de solicitudes para agregar el token de autorización
 axiosInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token"); // Obtiene el token del almacenamiento local
@@ -33,10 +34,7 @@ axiosInstance.interceptors.request.use(
       config.headers["Authorization"] = `Bearer ${token}`; // Añade el token al header
     }
 
-    // Ajusta el Content-Type según sea necesario
-    if (config.data && config.data instanceof FormData) {
-      config.headers["Content-Type"] = "multipart/form-data";
-    } else {
+    if (!(config.data instanceof FormData)) {
       config.headers["Content-Type"] = "application/json";
     }
 
