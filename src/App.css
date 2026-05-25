@@ -8,7 +8,7 @@
 :root {
   /* Colores de Marca */
   --fw-onyx: #111213;
-  --fw-emerald: #23aa62;
+  --fw-emerald: #28b469;
   --fw-saffron: #FF992C;
   --fw-strawberry: #E44949;
   --fw-white: #FFFFFF;
@@ -435,7 +435,29 @@ body.dark-theme select:focus {
   border-color: var(--brand-primary) !important;
 }
 /* ========== 6. BOTONES FIRE WOK ========== */
+.btn-realizarPedido {
+  background-color: var(--fw-emerald);
+  padding: 10px;
+  padding-inline: 20px;
+  border: 1px solid rgb(8, 104, 48);
+  color: #fff;
+  border-radius: var(--radius-pill);
+  text-decoration: none;
+  font-size: 20px;
+  transition: all ease-out 0.2s;
+  color: #204729;
+}
 
+.btn-realizarPedido:hover {
+  background-color: rgb(2, 223, 94);
+  color: #181818;
+
+}
+
+.btn-realizarPedido:active {
+  background-color: rgb(0, 167, 69);
+  color: #ffffff;
+}
 /* Base estructural para todos los botones del sistema (Reemplaza a .btn) */
 .btn-principal,
 .btn-guardar,

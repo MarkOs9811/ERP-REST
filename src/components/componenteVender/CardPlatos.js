@@ -16,7 +16,7 @@ export const CardPlatos = ({
       }`}
     >
       <img
-        src={`${BASE_URL}/storage/${item.foto}`}
+        src={item.foto_url}
         alt={item.nombre}
         className="card-img-top"
         onError={(e) => {

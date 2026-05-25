@@ -56,7 +56,7 @@ export function Nomina() {
     nominaData?.detalles?.filter(
       (item) =>
         item.nombre_completo &&
-        item.nombre_completo.toLowerCase().includes(filterText.toLowerCase())
+        item.nombre_completo.toLowerCase().includes(filterText.toLowerCase()),
     ) || [];
 
   const generarPago = async () => {
@@ -160,7 +160,7 @@ export function Nomina() {
   ];
   return (
     <div>
-      <div className="card shadow-sm">
+      <div className="card py-2">
         {/* HEADER UNIFICADO */}
         <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-3 bg-white">
           <div className="d-flex align-items-center">
@@ -240,7 +240,14 @@ export function Nomina() {
                     <div className="card-body d-flex align-items-center p-3">
                       <div className="p-3 rounded-circle me-3 bg-white bg-opacity-50">
                         {nominaData?.resumen?.estado === "PAGADO" ? (
-                          <CheckCircle size={24} className={nominaData?.resumen?.estado === "PAGADO" ? "text-success" : "text-dark"} />
+                          <CheckCircle
+                            size={24}
+                            className={
+                              nominaData?.resumen?.estado === "PAGADO"
+                                ? "text-success"
+                                : "text-dark"
+                            }
+                          />
                         ) : (
                           <AlertCircle size={24} className="text-warning" />
                         )}
@@ -270,11 +277,13 @@ export function Nomina() {
                 onChange={(e) => setFilterText(e.target.value)}
               />
             </div>
-            
+
             <div className="d-flex flex-wrap gap-2">
               <button
                 className="btn btn-outline-dark px-3"
-                onClick={() => GetReporteExcel(`/reporteNomina?periodo=${periodo}`)}
+                onClick={() =>
+                  GetReporteExcel(`/reporteNomina?periodo=${periodo}`)
+                }
               >
                 <FileChartColumnIncreasing size={18} className="me-1" />
                 Reporte

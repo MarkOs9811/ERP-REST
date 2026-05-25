@@ -41,8 +41,10 @@ export function RealizarPago({
       >
         <div className="card-body">
           {/* NUEVO CAMPO: Nombre del Cliente */}
-          <div className="form-floating mb-3">
+          <div className="mb-3">
+            <label for="nombreReferencia">Cliente</label>
             <input
+              id="nombreReferencia"
               type="text"
               className="form-control"
               placeholder="Nombre del cliente"
@@ -50,28 +52,29 @@ export function RealizarPago({
                 required: "El nombre es obligatorio",
               })}
             />
-            <label>Cliente</label>
           </div>
 
-          <div className="form-floating mb-3">
+          <div className="mb-3">
+            <label for="pagoCon">Pagar con: S/.</label>
             <input
+              id="pagoCon"
               type="number"
               step="0.1"
               className="form-control"
               placeholder=" "
               {...register("pagoCon")}
             />
-            <label>Pagar con: S/.</label>
           </div>
 
-          <div className="form-floating mb-4">
+          <div className="mb-4">
+            <label for="vuelto">Cambio S/.</label>
             <input
+              id="vuelto"
               type="text"
               className="form-control bg-light"
               readOnly
               value={vuelto}
             />
-            <label>Cambio S/.</label>
           </div>
 
           {/* SECCIÓN DE DESGLOSE DE PRECIOS ESTRUCTURADA */}

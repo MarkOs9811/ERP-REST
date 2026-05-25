@@ -95,8 +95,12 @@ export function ProveedorEdit({
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="row">
           <div className="col-4">
-            <div className="form-floating mb-3">
+            <div className=" mb-3">
+              <label for="tipo_documento">
+                <FontAwesomeIcon icon={faIdCard} /> Tipo de Documento
+              </label>
               <select
+                id="tipo_documento"
                 className={`form-select ${
                   errors.tipo_documento ? "is-invalid" : ""
                 }`}
@@ -114,9 +118,7 @@ export function ProveedorEdit({
                 <option value="DNI">DNI</option>
                 <option value="RUC">RUC</option>
               </select>
-              <label>
-                <FontAwesomeIcon icon={faIdCard} /> Tipo de Documento
-              </label>
+
               {errors.tipo_documento && (
                 <div className="invalid-feedback">
                   {errors.tipo_documento.message}
@@ -125,13 +127,17 @@ export function ProveedorEdit({
             </div>
           </div>
           <div className="col-4">
-            <div className="form-floating mb-3">
+            <div className=" mb-3">
+              <label for="numero_documento">
+                <FontAwesomeIcon icon={faIdCard} /> Número de Documento
+              </label>
               <input
                 type="text"
                 className={`form-control ${
                   errors.numero_documento ? "is-invalid" : ""
                 }`}
                 placeholder="Número de Documento"
+                id="numero_documento"
                 {...register("numero_documento", {
                   required: "Este campo es obligatorio",
                   minLength: {
@@ -147,9 +153,7 @@ export function ProveedorEdit({
                   tipoDocumento === "DNI" ? 8 : 11,
                 )}
               />
-              <label>
-                <FontAwesomeIcon icon={faIdCard} /> Número de Documento
-              </label>
+
               {errors.numero_documento && (
                 <div className="invalid-feedback">
                   {errors.numero_documento.message}
@@ -158,22 +162,24 @@ export function ProveedorEdit({
             </div>
           </div>
           <div className="col-4">
-            <div className="form-floating mb-3">
+            <div className=" mb-3">
+              <label for="telefono">
+                <FontAwesomeIcon icon={faPhone} /> Telefono
+              </label>
               <input
                 type="text"
                 className={`form-control ${
                   errors.telefono ? "is-invalid" : ""
                 }`}
                 placeholder="Telefono"
+                id="telefono"
                 {...register("telefono", {
                   required: "Este campo es obligatorio",
                   validate: validateTelefono,
                 })}
                 onInput={limitTelefonoInput}
               />
-              <label>
-                <FontAwesomeIcon icon={faPhone} /> Telefono
-              </label>
+
               {errors.telefono && (
                 <div className="invalid-feedback">
                   {errors.telefono.message}
@@ -183,55 +189,65 @@ export function ProveedorEdit({
           </div>
         </div>
 
-        <div className="form-floating mb-3">
+        <div className=" mb-3">
+          <label for="nombre">
+            <FontAwesomeIcon icon={faUser} /> Nombre
+          </label>
           <input
             type="text"
             className={`form-control ${errors.nombre ? "is-invalid" : ""}`}
             placeholder="Nombre"
+            id="nombre"
             {...register("nombre", { required: "Este campo es obligatorio" })}
           />
-          <label>
-            <FontAwesomeIcon icon={faUser} /> Nombre
-          </label>
+
           {errors.nombre && (
             <div className="invalid-feedback">{errors.nombre.message}</div>
           )}
         </div>
 
-        <div className="form-floating mb-3">
+        <div className=" mb-3">
+          <label for="contacto">
+            <FontAwesomeIcon icon={faPhone} /> Contacto
+          </label>
           <input
             type="text"
             className={`form-control ${errors.contacto ? "is-invalid" : ""}`}
             placeholder="Contacto"
+            id="contacto"
             {...register("contacto", { required: "Este campo es obligatorio" })}
           />
-          <label>
-            <FontAwesomeIcon icon={faPhone} /> Contacto
-          </label>
+
           {errors.contacto && (
             <div className="invalid-feedback">{errors.contacto.message}</div>
           )}
         </div>
 
-        <div className="form-floating mb-3">
+        <div className=" mb-3">
+          <label for="direccion">
+            <FontAwesomeIcon icon={faMapMarkedAlt} /> Dirección
+          </label>
           <input
             type="text"
+            id="direccion"
             className={`form-control ${errors.direccion ? "is-invalid" : ""}`}
             placeholder="Dirección"
             {...register("direccion", {
               required: "Este campo es obligatorio",
             })}
           />
-          <label>
-            <FontAwesomeIcon icon={faMapMarkedAlt} /> Dirección
-          </label>
+
           {errors.direccion && (
             <div className="invalid-feedback">{errors.direccion.message}</div>
           )}
         </div>
 
-        <div className="form-floating mb-3">
+        <div className=" mb-3">
+          <label for="correo">
+            <FontAwesomeIcon icon={faEnvelope} /> Correo Electrónico
+          </label>
           <input
+            id="correo"
             type="email"
             className={`form-control ${errors.correo ? "is-invalid" : ""}`}
             placeholder="Correo Electrónico"
@@ -243,9 +259,7 @@ export function ProveedorEdit({
               },
             })}
           />
-          <label>
-            <FontAwesomeIcon icon={faEnvelope} /> Correo Electrónico
-          </label>
+
           {errors.correo && (
             <div className="invalid-feedback">{errors.correo.message}</div>
           )}

@@ -85,7 +85,7 @@ export function PerfilPanel({ user, fotoPerfil }) {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-        }
+        },
       );
       logout();
       navigate("/login");
@@ -126,7 +126,12 @@ export function PerfilPanel({ user, fotoPerfil }) {
             className="btn w-100 text-start d-flex align-items-center fw-medium pb-2 border-bottom border-light"
             onClick={() => navigate("/")}
           >
-            <House style={{ color: "var(--brand-primary)" }} className="me-3" height="20px" width="20px" />
+            <House
+              style={{ color: "var(--brand-primary)" }}
+              className="me-3"
+              height="20px"
+              width="20px"
+            />
             Panel Principal
           </button>
         </li>
@@ -135,16 +140,26 @@ export function PerfilPanel({ user, fotoPerfil }) {
             className="btn w-100 text-start d-flex align-items-center fw-medium pb-2 border-bottom border-light"
             onClick={() => navigate("/configuracion/MiPerfil")}
           >
-            <User style={{ color: "var(--brand-primary)" }} className="me-3" height="20px" width="20px" />
+            <User
+              style={{ color: "var(--brand-primary)" }}
+              className="me-3"
+              height="20px"
+              width="20px"
+            />
             Mi Perfil
           </button>
         </li>
         <li className="mb-3">
-          <button 
+          <button
             className="btn w-100 text-start d-flex align-items-center fw-medium pb-2 border-bottom border-light"
             onClick={() => navigate("/rr.hh/asistencia")}
           >
-            <ShieldCheck style={{ color: "var(--brand-primary)" }} className="me-3" height="20px" width="20px" />
+            <ShieldCheck
+              style={{ color: "var(--brand-primary)" }}
+              className="me-3"
+              height="20px"
+              width="20px"
+            />
             Mis Asistencias
           </button>
         </li>
@@ -153,7 +168,12 @@ export function PerfilPanel({ user, fotoPerfil }) {
             className="btn w-100 text-start d-flex align-items-center fw-medium pb-2 border-bottom border-light"
             onClick={() => navigate("/configuracion")}
           >
-            <UserRoundCog style={{ color: "var(--brand-primary)" }} className="me-3" height="20px" width="20px" />
+            <UserRoundCog
+              style={{ color: "var(--brand-primary)" }}
+              className="me-3"
+              height="20px"
+              width="20px"
+            />
             Configuración Global
           </button>
         </li>
@@ -164,13 +184,20 @@ export function PerfilPanel({ user, fotoPerfil }) {
         <div className="px-4 pb-2">
           <div className="rounded-3 p-3 mb-3 shadow-sm border bg-light">
             <div className="d-flex align-items-center mb-2">
-              <i className="fa-solid fa-building fa-lg me-2" style={{ color: "var(--brand-primary)" }}></i>
+              <i
+                className="fa-solid fa-building fa-lg me-2"
+                style={{ color: "var(--brand-primary)" }}
+              ></i>
               <h6 className="mb-0 fw-semibold text-dark">Cambiar de Sede</h6>
             </div>
 
             {isLoading ? (
               <div className="text-center py-3">
-                <div className="spinner-border" style={{ color: "var(--brand-primary)" }} role="status">
+                <div
+                  className="spinner-border"
+                  style={{ color: "var(--brand-primary)" }}
+                  role="status"
+                >
                   <span className="visually-hidden">Cargando...</span>
                 </div>
               </div>
@@ -179,7 +206,7 @@ export function PerfilPanel({ user, fotoPerfil }) {
                 Error al cargar las sedes
               </div>
             ) : (
-              <div className="form-floating mt-2">
+              <div className=" mt-2">
                 <select
                   id="selectSede"
                   className="form-select border-light shadow-sm bg-body text-body"
@@ -196,10 +223,6 @@ export function PerfilPanel({ user, fotoPerfil }) {
                       </option>
                     ))}
                 </select>
-                <label htmlFor="selectSede">
-                  <i className="fa-solid fa-map-marker-alt me-2" style={{ color: "var(--brand-primary)" }}></i>
-                  Sede
-                </label>
               </div>
             )}
 

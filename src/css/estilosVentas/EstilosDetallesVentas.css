@@ -1,0 +1,211 @@
+/* =========================================
+   🔥 ESTILOS ESPECÍFICOS - MODAL VENTAS
+   Basado en el Sistema de Diseño FIRE WOK
+   ========================================= */
+
+.fw-modal-wrapper {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    color: var(--text-main);
+}
+
+.fw-loading {
+    text-align: center;
+    padding: 2rem;
+    color: var(--brand-secondary);
+    font-weight: 500;
+}
+
+/* --- Encabezado --- */
+.fw-header-section {
+    border-bottom: 1px solid var(--fw-muetd);
+    padding-bottom: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.fw-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--brand-primary);
+    margin: 0 0 0.5rem 0;
+}
+
+.fw-badge-doc {
+    display: inline-block;
+    background-color: var(--bg-saffron-soft);
+    color: var(--fw-saffron);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-pill);
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* --- Grid de Información --- */
+.fw-info-grid {
+    margin-bottom: 2rem;
+    row-gap: 1rem;
+    /* Espaciado entre filas en móvil */
+}
+
+.fw-info-col {
+    gap: 0.25rem;
+}
+
+.fw-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.fw-value {
+    font-size: 1rem;
+    color: var(--text-main);
+    font-weight: 600;
+}
+
+/* --- Tabla de Productos --- */
+.fw-table-section {
+    margin-bottom: 2rem;
+}
+
+.fw-subtitle {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--brand-secondary);
+    margin-bottom: 1rem;
+}
+
+.fw-table-container {
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-soft);
+    overflow: hidden;
+    border: 1px solid var(--fw-muetd);
+    background-color: var(--glass-bg);
+}
+
+.fw-custom-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.fw-custom-table thead {
+    background-color: var(--bg-sidebar-header);
+    border-bottom: 2px solid var(--fw-muetd);
+}
+
+.fw-custom-table th {
+    padding: 1rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.fw-custom-table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--fw-muetd);
+    color: var(--text-main);
+    vertical-align: middle;
+}
+
+.fw-custom-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.fw-custom-table tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+/* Alineaciones utilitarias para la tabla */
+.fw-align-left {
+    text-align: left;
+}
+
+.fw-align-center {
+    text-align: center;
+}
+
+.fw-align-right {
+    text-align: right;
+}
+
+.fw-product-name {
+    font-weight: 600;
+}
+
+.fw-product-qty {
+    font-weight: 600;
+    color: var(--brand-secondary);
+}
+
+.fw-product-sub {
+    font-weight: 700;
+}
+
+/* --- Totales --- */
+.fw-totals-section {
+    border-top: 1px solid var(--fw-muetd);
+    padding-top: 1.5rem;
+}
+
+.fw-totals-box {
+    width: 100%;
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.fw-total-row {
+    align-items: center;
+}
+
+.fw-total-final {
+    margin-top: 0.5rem;
+    padding: 1rem;
+    background-color: var(--bg-emerald-soft);
+    color: var(--fw-emerald);
+    border-radius: var(--radius-sm);
+    font-size: 1.25rem;
+    font-weight: 800;
+    align-items: center;
+}
+
+/* --- Botones --- */
+.fw-actions-section {
+    margin-top: 2rem;
+}
+
+.fw-btn-print {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.2rem;
+    background-color: var(--brand-primary);
+    color: var(--fw-white);
+    border: none;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all var(--transition-smooth);
+    box-shadow: var(--shadow-soft);
+}
+
+.fw-btn-print:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+    background-color: var(--fw-saffron);
+}
+
+/* --- Soporte Dark Theme Automático --- */
+body.dark-theme .fw-custom-table tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-theme .fw-badge-doc {
+    background-color: rgba(255, 153, 44, 0.15);
+    /* Saffron con opacidad */
+}

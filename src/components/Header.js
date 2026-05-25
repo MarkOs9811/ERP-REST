@@ -20,15 +20,13 @@ export function Header({ tipoHeader = null }) {
   const queryClient = useQueryClient();
   const BASE_URL = process.env.REACT_APP_BASE_URL;
   const empresa = JSON.parse(localStorage.getItem("empresa")) || {};
-  const fotoEmpresa = empresa.logo
-    ? `${BASE_URL}/storage/${empresa.logo}`
-    : null;
+  const fotoEmpresa = empresa.logo_url ? `${empresa.logo_url}` : null;
   const anchuraHeader = tipoHeader;
   const fotoPerfilLocal = JSON.parse(localStorage.getItem("user"));
   const user = JSON.parse(localStorage.getItem("user"));
   const cajaDetalles = JSON.parse(localStorage.getItem("caja"));
   const cargo = JSON.parse(localStorage.getItem("user")) || {};
-  const fotoPerfil = `${BASE_URL}/storage/${fotoPerfilLocal.fotoPerfil}`;
+  const fotoPerfil = `${fotoPerfilLocal.foto_url}`;
 
   // PARA MOSTRAR LOS PANELES
   const [showPerfilPanel, setShowPerfilPanel] = useState(false);

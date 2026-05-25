@@ -5,7 +5,6 @@ import { GetMiPerfil } from "../../service/accionesConfiguracion/GetMiPerfil";
 import { PostData } from "../../service/CRUD/PostData";
 
 export const MiPerfil = () => {
-  const BASE_URL = process.env.REACT_APP_BASE_URL; // O tu URL base
   const queryClient = useQueryClient();
   const [editable, setEditable] = useState(false);
   const [previewImage, setPreviewImage] = useState(null); // Estado para previsualizar foto nueva
@@ -80,8 +79,8 @@ export const MiPerfil = () => {
     formData.append("direccion", data.direccion || "");
 
     // Agregamos la foto solo si existe una nueva seleccionada
-    if (data.foto) {
-      formData.append("foto", data.foto);
+    if (data.foto_url) {
+      formData.append("foto", data.foto_url);
     }
 
     const success = await PostData("miPerfilUpdate", formData);
@@ -96,9 +95,9 @@ export const MiPerfil = () => {
   // Determinar qué imagen mostrar (Nueva > Backend > Default)
   const currentImageSrc = previewImage
     ? previewImage
-    : perfil.fotoPerfil
-    ? `${BASE_URL}/storage/${perfil.fotoPerfil}`
-    : "/images/avatar_default.png";
+    : perfil.foto_url
+      ? `${perfil.foto_url}`
+      : "/images/avatar_default.png";
 
   return (
     <div className="w-100 p-3">
