@@ -5,7 +5,6 @@ import {
   FileText,
   TrendingDown,
   TrendingUp,
-  DollarSign,
   Store,
 } from "lucide-react";
 

@@ -136,7 +136,11 @@
 .icono-institucional-almacen {
     color: #E44949;
 }
-
+/* ESTILOS PARA ELC ARD DE CUPONES */
+.card-cuponer-home{
+    background: #0eafb5;
+    background: linear-gradient(90deg, rgba(14, 175, 181, 1) 0%, rgba(87, 186, 199, 1) 50%, rgba(83, 237, 104, 1) 100%);
+}
 /* Rojo */
 /* ================================
    MEDIA QUERIES PARA RESPONSIVIDAD
@@ -257,9 +261,6 @@ body.dark-theme .ai-response {
     border-left: 3px solid var(--color-primary);
     color: var(--color-primary);
 }
-
-/* ========== FIN DARK THEME ========== */
-
 /* ================================
    ADDITIONAL COMPONENT STYLES
 ================================= */

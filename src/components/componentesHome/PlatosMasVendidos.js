@@ -4,8 +4,6 @@ import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
 import { Cookie } from "lucide-react";
 
 export function PlatoMasVendido() {
-  const BASE_URL = process.env.REACT_APP_BASE_URL;
-
   const {
     data: ventas = [],
     isLoading: isLoadingVentas,
@@ -36,7 +34,7 @@ export function PlatoMasVendido() {
       ) {
         detalle_pedidos.forEach((detalle) => {
           const plato = detalle.producto?.nombre || "Desconocido";
-          const foto = detalle.producto?.foto || null;
+          const foto = detalle.producto?.foto_url || null;
 
           if (!platosVendidos[plato]) {
             platosVendidos[plato] = { cantidad: 0, foto };
@@ -57,7 +55,7 @@ export function PlatoMasVendido() {
       ) {
         detalles_pedido.forEach((detalle) => {
           const plato = detalle.plato?.nombre || "Desconocido";
-          const foto = detalle.plato?.foto || null;
+          const foto = detalle.plato?.foto_url || null;
 
           if (!platosVendidos[plato]) {
             platosVendidos[plato] = { cantidad: 0, foto };
@@ -103,7 +101,7 @@ export function PlatoMasVendido() {
                   <img
                     src={
                       foto
-                        ? `${BASE_URL}/storage/${foto}`
+                        ? `${foto}`
                         : "https://placehold.co/100x100?text=Plato"
                     }
                     alt={plato}

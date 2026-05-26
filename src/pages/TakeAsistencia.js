@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import axiosInstance from "../api/AxiosInstance";
 import { toast, ToastContainer } from "react-toastify";
 import ToastAlert from "../components/componenteToast/ToastAlert";
-import { DoorOpenIcon, LogOut } from "lucide-react";
+import { ClockPlus, DoorOpenIcon, LogOut } from "lucide-react";
 
 export function TakeAsistencia() {
   const [currentTime, setCurrentTime] = useState("");
@@ -112,11 +112,11 @@ export function TakeAsistencia() {
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center ">
-      <div className="card  border-0 p-4 rounded-4 justify-content-center h-100">
-        <div className="card-header bg-white border-0 text-center mb-3">
-          <h4 className="fw-bold text-primary mb-1">
-            <i className="fas fa-user-clock me-2"></i> Registro de Asistencia
+    <div className="d-flex justify-content-center align-items-center  ">
+      <div className="card  my-3 p-4 rounded-4 justify-content-center ">
+        <div className="card-header bg-white border-0 text-center mb-3 d-flex flex-column justify-content-between align-items-center gap-2 p-3">
+          <h4 className="fw-bold text-dark mb-1">
+            <ClockPlus /> Registro de Asistencia
           </h4>
           <div className="d-flex justify-content-center align-items-center text-secondary">
             <i className="fa-regular fa-clock me-2"></i>
@@ -155,33 +155,24 @@ export function TakeAsistencia() {
           <div className="d-flex justify-content-between gap-2">
             <button
               type="button"
-              className="btn btn-success flex-fill py-3 fw-semibold shadow-sm d-flex align-items-center justify-content-center"
+              className="btn-guardar flex-fill py-3 fw-semibold shadow-sm d-flex align-items-center justify-content-center"
               onClick={registrarEntrada}
             >
-              <DoorOpenIcon
-                color="white"
-                height="20px"
-                width="20px"
-                className="me-2"
-              />
+              <DoorOpenIcon height="20px" width="20px" className="me-2" />
               Entrada
             </button>
             <button
               type="button"
-              className="btn btn-danger flex-fill py-3 fw-semibold shadow-sm d-flex align-items-center justify-content-center"
+              className="btn-cancelar flex-fill py-3 fw-semibold shadow-sm d-flex align-items-center justify-content-center"
               onClick={registrarSalida}
             >
-              <LogOut
-                color="white"
-                height="20px"
-                width="20px"
-                className="me-2"
-              />
+              <LogOut height="20px" width="20px" className="me-2" />
               Salida
             </button>
           </div>
         </div>
       </div>
+
       <ToastContainer />
     </div>
   );

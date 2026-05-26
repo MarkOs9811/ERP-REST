@@ -18,12 +18,7 @@ import { useGenerarReporte } from "../../../hooks/GenerarPdfReporte";
 export function ReporteIngresoVentas() {
   const navigate = useNavigate();
   const reporteRef = useRef();
-  const {
-    data: dataInformes = [],
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
+  const { data: dataInformes = [] } = useQuery({
     queryKey: ["finanzas"],
     queryFn: GetInformesFinancieros,
     retry: 1,

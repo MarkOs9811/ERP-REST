@@ -23,13 +23,8 @@ import { BotonMotionGeneral } from "../componentesReutilizables/BotonMotionGener
 import { useRef, useState } from "react";
 import { useGenerarReporte } from "../../hooks/GenerarPdfReporte";
 export function PerfilGeneralNomina({ idEmpleado }) {
-  const BASE_URL = process.env.REACT_APP_BASE_URL;
   const reporteRef = useRef();
-  const {
-    data: perfil = [],
-    isLoading,
-    isError,
-  } = useQuery({
+  const { data: perfil = [], isLoading } = useQuery({
     queryKey: ["perfilEmpleado", idEmpleado],
     queryFn: () => GetEmpleadoId(idEmpleado),
     enabled: !!idEmpleado, // Solo ejecuta si hay idEmpleado
@@ -66,8 +61,8 @@ export function PerfilGeneralNomina({ idEmpleado }) {
                   <div className="col-md-2 p-4 d-flex">
                     <img
                       src={
-                        perfil?.usuario?.fotoPerfil
-                          ? `${BASE_URL}/storage/${perfil?.usuario?.fotoPerfil}`
+                        perfil?.usuario?.foto_url
+                          ? `${perfil.usuario.foto_url}`
                           : "https://via.placeholder.com/120"
                       }
                       alt="Foto perfil"
@@ -237,7 +232,7 @@ export function PerfilGeneralNomina({ idEmpleado }) {
         <div className="col-md-8">
           <div className="card   p-3">
             <div className="card-header d-flex gap-2 align-middle justify-content-left">
-              <span className="alert  alert-primary text-danger p-2 mb-0">
+              <span className="alert  alert-danger text-danger p-2 mb-0">
                 <User size={25} className="text-auto" />
               </span>
               <h6 className="mb-1 d-flex flex-column gap-1">
@@ -298,7 +293,7 @@ export function PerfilGeneralNomina({ idEmpleado }) {
         <div className="col-md-4">
           <div className="card   p-3 h-100">
             <div className="card-header d-flex gap-2 align-middle justify-content-left">
-              <span className="alert  alert-success text-primary p-2 mb-0">
+              <span className="alert  alert-success text-danger p-2 mb-0">
                 <TrendingUp className="me-1 text-success" size={25} />
               </span>
               <h6 className="mb-1 d-flex flex-column gap-1">
@@ -340,7 +335,7 @@ export function PerfilGeneralNomina({ idEmpleado }) {
         <div className="col-md-8">
           <div className="card   p-3">
             <div className="card-header d-flex gap-2 align-middle justify-content-left">
-              <span className="alert  alert-primary text-primary p-2 mb-0">
+              <span className="alert  alert-danger text-danger p-2 mb-0">
                 <BriefcaseBusiness size={25} className="text-auto" />
               </span>
               <h6 className="mb-1 d-flex flex-column gap-1">
@@ -394,7 +389,7 @@ export function PerfilGeneralNomina({ idEmpleado }) {
         <div className="col-md-4">
           <div className="card   p-3 h-100">
             <div className="card-header d-flex gap-2 align-middle justify-content-left">
-              <span className="alert  alert-danger text-primary p-2 mb-0">
+              <span className="alert  alert-danger text-danger p-2 mb-0">
                 <TrendingDown className="me-1 text-danger" size={25} />
               </span>
               <h6 className="mb-1 d-flex flex-column gap-1">
@@ -429,7 +424,7 @@ export function PerfilGeneralNomina({ idEmpleado }) {
         <div className="col-md-8">
           <div className="card   p-3">
             <div className="card-header d-flex gap-2 align-middle justify-content-left">
-              <span className="alert  alert-primary text-primary p-2 mb-0">
+              <span className="alert  alert-danger text-danger p-2 mb-0">
                 <CreditCardIcon size={25} className="text-auto" />
               </span>
               <h6 className="mb-1 d-flex flex-column gap-1">

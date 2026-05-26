@@ -47,7 +47,6 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 function App() {
   useEffect(() => {
-    // ... (Tu lógica de favicon/título está perfecta) ...
     const miEmpresa = JSON.parse(localStorage.getItem("empresa"));
     if (miEmpresa) {
       document.title = miEmpresa.nombre;

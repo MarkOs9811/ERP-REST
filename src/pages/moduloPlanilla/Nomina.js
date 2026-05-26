@@ -218,7 +218,7 @@ export function Nomina() {
                   <div className="card border-0 shadow-sm h-100 bg-white">
                     <div className="card-body d-flex align-items-center p-3">
                       <div className="bg-light p-3 rounded-circle text-dark me-3">
-                        <DollarSign size={24} />
+                        <span className="fw-bold h5">S/.</span>
                       </div>
                       <div>
                         <h6 className="text-muted small mb-0">Total Nómina</h6>

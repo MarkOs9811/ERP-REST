@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import ToastAlert from "../../components/componenteToast/ToastAlert";
 import axiosInstance from "../../api/AxiosInstance";
 import { handlePrecioInput, validatePrecio } from "../../hooks/InputHandlers";
-import { ContenedorPrincipal } from "../../components/componentesReutilizables/ContenedorPrincipal";
 
 export function RealizarSolicitud() {
   const navigate = useNavigate();
@@ -33,7 +32,7 @@ export function RealizarSolicitud() {
       } else {
         console.log(
           "Error al obtener las unidadMedida:",
-          response.data.message
+          response.data.message,
         );
       }
     } catch (error) {

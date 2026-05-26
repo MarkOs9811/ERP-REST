@@ -241,7 +241,7 @@ export function UsuariosList({ search, updateList }) {
           </span>
           <small className="text-muted">
             <i className="fas fa-map-marker-alt me-1"></i>
-            {row.sede?.nombre || "Sin Sede"}
+            Sede: {row.sede?.nombre || "Sin Sede"}
           </small>
         </div>
       ),

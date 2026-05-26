@@ -6,21 +6,15 @@ import {
   FileText,
   Loader2,
   User,
-  Clock,
   ArrowDownCircle,
   ArrowUpCircle,
-  DollarSign,
 } from "lucide-react";
 import { useRef, useState } from "react";
 import { useGenerarReporte } from "../../../hooks/GenerarPdfReporte";
 import { GraficoRegistrosCajas } from "../../../graficosChar/GraficoRegistrosCajas";
 
 export function ReporteCaja() {
-  const {
-    data: registrosCajasData = [],
-    isLoading: loadingRegistrosCajas,
-    error: errorRegistrosCajas,
-  } = useQuery({
+  const { data: registrosCajasData = [] } = useQuery({
     queryKey: ["registrosCajas"],
     queryFn: GetRegistrosCajas,
     refetchOnWindowFocus: false,

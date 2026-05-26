@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { GetPresupuestos } from "../../service/serviceFinanzas/GetPresupuestos";
 
 export function FlujoCaja() {
-  const { data, isLoading, isError, error } = useQuery({
+  const { data, isError, error } = useQuery({
     queryKey: ["presupuestos"],
     queryFn: GetPresupuestos,
     refetchOnWindowFocus: false,

@@ -1,8 +1,6 @@
 import { SolicitudesList } from "../../components/componentesModuloVentas/SolicitudesList";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-import { ContenedorPrincipal } from "../../components/componentesReutilizables/ContenedorPrincipal";
 import { Plus } from "lucide-react";
 
 export function Solicitud() {
@@ -22,15 +20,15 @@ export function Solicitud() {
                 <span className="badge-header">Almacén</span>
               </h4>
             </div>
-            
+
             <div className="d-flex flex-wrap gap-2 mt-3 mt-md-0 align-items-center ms-auto">
               <div className="header-search-container">
-                 <input
-                   className="form-control"
-                   placeholder="Buscar..."
-                   value={search}
-                   onChange={(e) => setSearch(e.target.value)}
-                 />
+                <input
+                  className="form-control"
+                  placeholder="Buscar..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
               </div>
               <button
                 className="btn btn-dark px-3"

@@ -8,6 +8,7 @@ import { getVentas } from "../service/ObtenerVentasDetalle";
 import { UsuariosActivosHome } from "../components/componentesHome/UsuariosActivosHome";
 import { PlatoMasVendido } from "../components/componentesHome/PlatosMasVendidos";
 import { VentasTipo } from "../components/componentesHome/VentasTipo";
+import { CarouselMarketingHome } from "../components/componentesHome/CarouselMarketingHome";
 
 // Nota: Quité las importaciones de "lucide-react" porque no se estaban utilizando en este archivo.
 // Esto ayuda a mantener el código limpio.
@@ -51,11 +52,15 @@ export function Home() {
           - Móvil: 100% del ancho (col-12)
           - Escritorio: 50% del ancho cada uno (col-lg-6)
         */}
-        <div className="col-12 col-lg-6">
+        <div className="col-12 col-lg-4">
           <UsuariosActivosHome />
         </div>
-        <div className="col-12 col-lg-6">
+        <div className="col-12 col-lg-4">
           <PlatoMasVendido />
+        </div>
+        {/* REEMPLAZO AQUI: Componente limpio y encapsulado */}
+        <div className="col-12 col-lg-4">
+          <CarouselMarketingHome />
         </div>
 
         <div className="col-12 col-lg-4">

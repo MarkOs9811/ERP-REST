@@ -13,7 +13,7 @@ import { PutData } from "../../service/CRUD/PutData";
 export function StepCaja({ onFinish }) {
   const navigate = useNavigate();
 
-  const [loading, setLoading] = useState(false);
+  const [setLoading] = useState(false);
   const cambiarEstado = async (estado) => {
     setLoading(true); // Bloqueamos el botón para que no den doble click
     navigate("/ventas/cajas");

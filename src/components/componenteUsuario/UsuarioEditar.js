@@ -12,12 +12,15 @@ import {
   LayoutGrid,
   Save,
   X,
-  Building2, // Para Sede
+  Building2,
+  ImagePlus,
+  Trash2Icon, // Para Sede
 } from "lucide-react";
 
 import ToastAlert from "../componenteToast/ToastAlert";
 import axiosInstance from "../../api/AxiosInstance";
 import { useQueryClient } from "@tanstack/react-query";
+import { useDropzone } from "react-dropzone";
 
 export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
   const [formData, setFormData] = useState({
@@ -41,8 +44,9 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
   const [sedes, setSedes] = useState([]);
   const [horarios, setHorarios] = useState([]);
 
+  const [fotoPreview, setFotoPreview] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [errors, setError] = useState("");
 
   // Carga de datos auxiliares
   const cargasCargosAreasHorarios = async () => {
@@ -93,7 +97,7 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
     if (selectedCargoId) {
       try {
         const response = await axiosInstance.get(
-          `/getSalarioCargo/${selectedCargoId}`
+          `/getSalarioCargo/${selectedCargoId}`,
         );
         setFormData({
           ...formData,
@@ -110,14 +114,39 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (loading) return;
     setError("");
     setLoading(true);
 
     try {
-      const response = await axiosInstance.put(
+      const payload = new FormData();
+
+      // Aseguramos que todo sea un String limpio (Igual que en Platos)
+      payload.append("tipo_documento", String(formData.tipo_documento));
+      payload.append("numero_documento", String(formData.numero_documento));
+      payload.append("nombres", String(formData.nombres));
+      payload.append("apellidos", String(formData.apellidos));
+      payload.append("correo_electronico", String(formData.correo_electronico));
+      payload.append("sede", String(formData.sede));
+      payload.append("area", String(formData.area));
+      payload.append("cargo", String(formData.cargo));
+      payload.append("salario", String(formData.salario));
+      payload.append("horario", String(formData.horario));
+
+      // Si existe el archivo de la foto, lo agregamos
+      if (formData.fotoPerfil) {
+        payload.append("foto_perfil", formData.fotoPerfil);
+      }
+
+      // Engaño a Laravel (Igual que en Platos)
+      payload.append("_method", "POST");
+
+      // Mandamos la petición SIN headers manuales
+      const response = await axiosInstance.post(
         `/updateUsuario/${data.id}`,
-        formData
+        payload,
       );
+
       if (response.data.success) {
         ToastAlert("success", "Usuario actualizado con éxito");
         queryClient.invalidateQueries({ queryKey: ["usuarios"] });
@@ -125,30 +154,102 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
         setTimeout(() => {
           onUsuarioUpdated();
         }, 3000);
-      } else {
-        ToastAlert("error", "Error al actualizar. Intente nuevamente.");
       }
     } catch (error) {
-      // Manejo básico de errores
-      const msg = error.response?.data?.message || "Error al guardar cambios";
+      console.error("Error completo:", error);
+      const msg =
+        error.response?.data?.message ||
+        "Error al actualizar. Intente nuevamente.";
       ToastAlert("error", msg);
     } finally {
       setLoading(false);
     }
   };
-
   // Estilos comunes para etiquetas y contenedores
   const labelStyle = "form-label fw-bold small text-secondary mb-1";
   const sectionTitleStyle =
     "text-danger fw-bold small text-uppercase mb-3 mt-2 border-bottom pb-1";
+  // Dropzone
+  const { getRootProps, getInputProps } = useDropzone({
+    accept: { "image/*": [] }, // Sintaxis moderna de dropzone
+    maxFiles: 1,
+    onDrop: (acceptedFiles, fileRejections) => {
+      if (fileRejections.length > 0)
+        return ToastAlert("error", "Solo imágenes.");
+      const file = acceptedFiles[0];
+      if (file) {
+        setFotoPreview(URL.createObjectURL(file));
+        setFormData({ ...formData, fotoPerfil: file });
+      }
+    },
+  });
 
+  const removePhoto = (e) => {
+    e.stopPropagation();
+    setFotoPreview(null);
+    setFormData({ ...formData, fotoPerfil: null });
+  };
   return (
     <form onSubmit={handleSubmit} className="p-3">
       {loading && !formData.nombres ? (
         <div className="text-center p-4">Cargando...</div>
       ) : (
         <>
-          {/* SECCIÓN 1: INFORMACIÓN PERSONAL */}
+          {/* SECCIÓN 1: FOTO DE PERFIL (Diseño Horizontal Compacto) */}
+          <div className="d-flex align-items-center gap-3 mb-4 p-3  rounded-3 border border-dashed">
+            <div
+              {...getRootProps()}
+              className="position-relative d-flex align-items-center justify-content-center bg-white rounded-circle shadow-sm"
+              style={{
+                width: "80px",
+                height: "80px",
+                cursor: "pointer",
+                overflow: "hidden",
+                border: errors.fotoPerfil
+                  ? "2px solid var(--bs-danger)"
+                  : "2px solid #e2e8f0",
+              }}
+            >
+              <input {...getInputProps()} id="fotoPerfil" />
+              {fotoPreview ? (
+                <img
+                  src={fotoPreview}
+                  alt="Preview"
+                  className="w-100 h-100 object-fit-cover"
+                />
+              ) : (
+                <ImagePlus size={28} className="text-muted opacity-50" />
+              )}
+            </div>
+
+            <div className="flex-grow-1">
+              <h6
+                className="m-0 fw-bold text-secondary"
+                style={{ fontSize: "0.9rem" }}
+              >
+                Foto de Perfil
+              </h6>
+              <p className="m-0 text-muted small lh-sm mb-2">
+                Haz clic en el círculo para subir una imagen.
+              </p>
+              {fotoPreview && (
+                <button
+                  type="button"
+                  onClick={removePhoto}
+                  className="btn btn-sm btn-outline-danger py-0 px-2"
+                  style={{ fontSize: "0.75rem" }}
+                >
+                  <Trash2Icon size={12} className="me-1" /> Quitar foto
+                </button>
+              )}
+              {errors.fotoPerfil && (
+                <div className="text-danger small mt-1">
+                  {errors.fotoPerfil.message}
+                </div>
+              )}
+            </div>
+          </div>
+          {/* SECCIÓN : INFORMACIÓN PERSONAL */}
           <h6 className={sectionTitleStyle}>Información Personal</h6>
 
           <div className="row g-3 mb-3">

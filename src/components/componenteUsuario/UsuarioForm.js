@@ -30,8 +30,6 @@ import {
 } from "../../hooks/InputHandlers";
 
 export function UsuarioForm({ handleCloseModal }) {
-  const [tipoDocumento, setTipoDocumento] = useState("DNI");
-  const [numeroDocumento, setNumeroDocumento] = useState("");
   const queryClient = useQueryClient();
 
   // Estado local para datos auxiliares

@@ -23,7 +23,6 @@ export function DetallesVentas() {
     const shortYear = year.slice(2); // "2025" -> "25"
     return `${parseInt(day)}/${parseInt(month)}/${shortYear}`;
   };
-  const ventas = Array.isArray(ventasData) ? ventasData : [];
   return (
     <div>
       {/* Lista de ventas */}
