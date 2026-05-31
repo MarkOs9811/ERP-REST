@@ -1,11 +1,11 @@
 import React from "react";
-import { Ticket, Megaphone, AlertCircle, ArrowRight } from "lucide-react";
+import { Tag, AlertCircle, ArrowRight, Circle } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom"; // Importamos para la navegación
+import { useNavigate } from "react-router-dom";
 import { GetCampañaPromos } from "../../service/accionesClientes/GetCampañaPromos";
 
 export function CuponActivoHome() {
-  const navigate = useNavigate(); // Inicializamos la navegación
+  const navigate = useNavigate();
 
   const {
     data: listaCampañas = [],
@@ -17,114 +17,110 @@ export function CuponActivoHome() {
     refetchOnWindowFocus: false,
   });
 
-  // ESTADOS DE CARGA/ERROR (Diseño Minimal)
+  const formatearFecha = (fechaString) => {
+    if (!fechaString) return "Sin fecha";
+    const fecha = new Date(fechaString);
+    return fecha.toLocaleDateString("es-PE", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+  };
+
   if (isLoading) {
     return (
-      <div className="fw-main-promo-card d-flex flex-column align-items-center justify-content-center p-4 text-muted">
-        <div
-          className="spinner-border spinner-border-sm text-secondary mb-2"
-          role="status"
-        ></div>
-        <span className="small">Cargando...</span>
+      <div className="fw-solid-card h-100 d-flex flex-column align-items-center justify-content-center p-4">
+        <div className="spinner-border text-light mb-2" role="status"></div>
+        <span>Cargando promociones...</span>
       </div>
     );
   }
 
   if (isError) {
     return (
-      <div className="fw-main-promo-card d-flex flex-column align-items-center justify-content-center p-4 text-danger">
-        <AlertCircle size={24} className="mb-2" />
-        <span className="small text-center">
-          Error al conectar con promociones.
-        </span>
+      <div className="fw-solid-card h-100 d-flex flex-column align-items-center justify-content-center p-4">
+        <AlertCircle size={32} className="text-danger mb-2" />
+        <span className="text-center">Error al conectar con promociones.</span>
       </div>
     );
   }
 
   const campanaActiva = listaCampañas.length > 0 ? listaCampañas[0] : null;
 
-  // ESTADO VACÍO (Diseño Minimal)
   if (!campanaActiva) {
     return (
-      <div className="fw-main-promo-card d-flex flex-column align-items-center justify-content-center p-4">
-        <div className="bg-light rounded-circle p-3 mb-3">
-          <Ticket size={28} className="text-secondary opacity-50" />
-        </div>
-        <h6 className="fw-bold text-dark mb-3">Sin Campañas Activas</h6>
+      <div className="fw-solid-card h-100 d-flex flex-column align-items-center justify-content-center p-4 text-center">
+        <Tag size={40} className="mb-3 opacity-50" />
+        <h4 className="fw-bold mb-2">Sin Campañas Activas</h4>
+        <p className="small mb-4 opacity-75">
+          Crea una promoción para premiar a tus clientes.
+        </p>
         <button
           onClick={() => navigate("/clientes/fidelizacion")}
-          className="btn btn-outline-dark btn-sm fw-medium d-flex align-items-center gap-2"
+          className="fw-solid-btn w-100"
         >
-          Ir a Fidelización <ArrowRight size={14} />
+          + Lanzar Nueva Campaña
         </button>
       </div>
     );
   }
 
-  // ESTADO 4: Mapeo exacto de Image 7 (¡Ahora sí!)
   return (
-    <div className="card card-cuponer-home border h-100 w-100 p-4">
-      {/* 1. Header Area (Crema) */}
-      <div className="fw-promo-header-area">
-        <div className="d-flex align-items-center justify-content-between mb-3">
-          <div className="d-flex align-items-center gap-2">
-            <Megaphone size={18} style={{ color: "#ff992c" }} />
-            <h6
-              className="m-0 fw-bold text-dark"
-              style={{ letterSpacing: "-0.3px" }}
-            >
-              Campaña Activa
-            </h6>
-          </div>
+    <div className="fw-solid-card h-100 d-flex flex-column p-4">
+      {/* Cabecera (Badge) */}
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <span className="fw-solid-badge d-flex align-items-center gap-2">
+          <Tag size={14} /> CAMPAÑA ACTIVA
+        </span>
+        <span className="fw-solid-counter">
+          {listaCampañas.length} disponibles
+        </span>
+      </div>
 
-          <button
-            onClick={() => navigate("/clientes/fidelizacion")}
-            className="btn btn-link text-decoration-none p-0 d-flex align-items-center gap-1"
-            style={{ color: "#777", fontSize: "0.8rem", fontWeight: "500" }}
-          >
-            Ver Todas <ArrowRight size={14} />
-          </button>
-        </div>
+      {/* Info Principal */}
+      <div className="mb-4">
+        <h2 className="fw-solid-title mb-2">
+          {campanaActiva.nombre || "PROMOCIÓN"}
+        </h2>
+        <p className="fw-solid-subtitle mb-3">
+          {campanaActiva.descuento
+            ? `${campanaActiva.descuento}% de descuento aplicado en sistema`
+            : "Promoción especial para clientes"}
+        </p>
 
-        <div className="mb-2">
-          <h4
-            className="fw-bold text-dark mb-1"
-            style={{ letterSpacing: "-0.5px" }}
-          >
-            {campanaActiva.nombre || "FELICES FIESTAS"}
-          </h4>
-          <p className="small text-muted mb-0">
-            Válido hasta el {campanaActiva.fecha_fin || "2026-06-30"}
-          </p>
+        <div className="d-flex align-items-center gap-2">
+          <span className="fw-solid-label">Código cupón:</span>
+          <span className="fw-solid-code">
+            {campanaActiva.codigo_cupon || "CUPON"}
+          </span>
         </div>
       </div>
 
-      {/* 2. Dotted Promo Box */}
-      <div className="fw-dotted-promo-box d-flex align-items-center justify-content-between">
-        <div className="d-flex align-items-center gap-3">
-          <Ticket size={26} style={{ color: "#ff992c" }} />
-          <div>
-            <h4
-              className="m-0 fw-bold text-dark mb-1"
-              style={{ letterSpacing: "1px" }}
-            >
-              {campanaActiva.codigo_cupon || "FELIZ28"}
-            </h4>
-            <span
-              className="small fw-semibold"
-              style={{ color: "var(--fw-emerald, #10b981)" }}
-            >
-              {campanaActiva.descuento
-                ? `${campanaActiva.descuento}% Dcto.`
-                : "Promoción"}
-            </span>
-          </div>
-        </div>
+      <hr className="fw-solid-divider" />
 
+      {/* Detalles y Estado */}
+      <div className="d-flex justify-content-between align-items-center mb-auto mt-2">
         <div>
-          <span className="fw-badge-activo">Activo</span>
+          <span className="fw-solid-label d-block mb-1">Validez hasta:</span>
+          <span className="fw-solid-value fw-bold">
+            {formatearFecha(campanaActiva.fecha_fin)}
+          </span>
+        </div>
+        <div className="text-end">
+          <span className="fw-solid-label d-block mb-1">Estado:</span>
+          <span className="fw-solid-status d-flex align-items-center gap-1 justify-content-end">
+            <Circle size={10} fill="currentColor" /> Activo
+          </span>
         </div>
       </div>
+
+      {/* Botón Acción (Fijado al fondo gracias al mb-auto de arriba) */}
+      <button
+        onClick={() => navigate("/clientes/fidelizacion")}
+        className="fw-solid-btn w-100 mt-4"
+      >
+        + Lanzar Nueva Campaña
+      </button>
     </div>
   );
 }

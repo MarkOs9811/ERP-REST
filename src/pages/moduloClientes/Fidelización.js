@@ -1,5 +1,4 @@
 import { StarHalfIcon } from "lucide-react";
-import "../../css/estilosClientes/EstiloFidelizacion.css";
 import ModalRight from "../../components/componentesReutilizables/ModalRight";
 import { useState } from "react";
 import { FormAddPromo } from "../../components/componenteCliente/FormAddPromo";

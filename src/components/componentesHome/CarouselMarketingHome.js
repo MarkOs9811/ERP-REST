@@ -2,6 +2,8 @@ import React from "react";
 import { BannerFidelizacion } from "../componenteCliente/BannerFidelización";
 import { CuponActivoHome } from "../componenteCliente/CuponActivo";
 
+import "../../css/estilosHome/EstiloFidelizacion.css";
+
 export function CarouselMarketingHome() {
   return (
     <div className="fw-carousel-marketing h-100">

@@ -1,6 +1,5 @@
 import { StarHalfIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
 export function BannerFidelizacion({
   botonAction,
   modalAddCampaña = false,

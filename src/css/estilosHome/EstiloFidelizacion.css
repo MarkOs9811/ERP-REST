@@ -1,0 +1,153 @@
+/* =========================================
+   TU BANNER ORIGINAL (No se toca)
+========================================= */
+.bannerFidelizacion {
+    background: linear-gradient(135deg, var(--fw-strawberry) 35%, var(--fw-saffron) 100%);
+    color: var(--text-main);
+}
+
+/* =========================================
+   FORZAR ALTURA ÚNICA PARA TODO EL CARRUSEL
+========================================= */
+.fw-carousel-marketing {
+    height: 300px;
+    /* Ajusta si lo quieres más alto o más chato */
+    min-height: 300px;
+}
+
+.fw-carousel-marketing .carousel,
+.fw-carousel-marketing .carousel-inner,
+.fw-carousel-marketing .carousel-item {
+    height: 100% !important;
+}
+
+.fw-carousel-marketing .carousel-item>div {
+    height: 100% !important;
+    display: flex;
+    flex-direction: column;
+}
+
+/* =========================================
+   TARJETA PLANA CUPÓN (Degradado Pink/Rojo)
+========================================= */
+.fw-solid-card {
+    background: linear-gradient(135deg, #167a43 0%, #10e78e 100%) !important;
+    color: var(--fw-white);
+    border-radius: var(--radius-lg);
+    border: none;
+    overflow: hidden;
+    min-height: 100%;
+}
+
+/* =========================================
+   TEXTOS Y ETIQUETAS
+========================================= */
+.fw-solid-badge {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--fw-white);
+    padding: 6px 12px;
+    border-radius: var(--radius-pill);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.fw-solid-counter {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.fw-solid-title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin: 0;
+    color: white!important;
+}
+
+.fw-solid-subtitle {
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.fw-solid-label {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.fw-solid-value {
+    font-size: 0.95rem;
+    color: var(--fw-white);
+}
+
+/* =========================================
+   CÓDIGO DE CUPÓN (Acento plano)
+========================================= */
+.fw-solid-code {
+    background-color: var(--fw-saffron);
+    color: var(--fw-onyx);
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-family: monospace;
+    font-size: 1rem;
+    letter-spacing: 1px;
+}
+
+/* =========================================
+   DIVISOR Y ESTADO
+========================================= */
+.fw-solid-divider {
+    border-color: rgba(255, 255, 255, 0.15);
+    margin: 0;
+}
+
+.fw-solid-status {
+    background-color: rgba(18, 104, 58, 0.2);
+    /* Fondo esmeralda transparente */
+    color: var(white);
+    padding: 4px 10px;
+    border-radius: var(--radius-pill);
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+/* =========================================
+   BOTÓN INFERIOR PLANO
+========================================= */
+.fw-solid-btn {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--fw-white);
+    padding: 12px;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.fw-solid-btn:hover {
+    background-color: var(--fw-white);
+    color: var(--fw-onyx);
+}
+/* CONGELA LA ALTURA DEL CARRUSEL (MÁS ALTO PARA QUE ENTRE EL BOTÓN) */
+.fw-carousel-marketing,
+.fw-carousel-marketing .carousel-inner {
+    height: 380px !important;
+    /* <-- Aumentado de 320px a 380px */
+}
+
+.fw-carousel-marketing .carousel-item {
+    height: 100% !important;
+}
+
+/* OBLIGA A AMBAS TARJETAS A MEDIR EXACTAMENTE LO MISMO */
+.bannerFidelizacion,
+.fw-solid-card {
+    height: 100% !important;
+    min-height: 100% !important;
+    max-height: 100% !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+}

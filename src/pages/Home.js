@@ -9,6 +9,7 @@ import { UsuariosActivosHome } from "../components/componentesHome/UsuariosActiv
 import { PlatoMasVendido } from "../components/componentesHome/PlatosMasVendidos";
 import { VentasTipo } from "../components/componentesHome/VentasTipo";
 import { CarouselMarketingHome } from "../components/componentesHome/CarouselMarketingHome";
+import { DashboardMesas } from "../components/componentesHome/DashboardMesas";
 
 // Nota: Quité las importaciones de "lucide-react" porque no se estaban utilizando en este archivo.
 // Esto ayuda a mantener el código limpio.
@@ -47,41 +48,45 @@ export function Home() {
           <InformacionRapidaHome />
         </div>
 
-        {/* 
-          Usuarios Activos y Platos Top: 
-          - Móvil: 100% del ancho (col-12)
-          - Escritorio: 50% del ancho cada uno (col-lg-6)
-        */}
-        <div className="col-12 col-lg-4">
-          <UsuariosActivosHome />
-        </div>
-        <div className="col-12 col-lg-4">
-          <PlatoMasVendido />
-        </div>
-        {/* REEMPLAZO AQUI: Componente limpio y encapsulado */}
-        <div className="col-12 col-lg-4">
-          <CarouselMarketingHome />
-        </div>
-
-        <div className="col-12 col-lg-4">
-          <VentasTipo
-            ventasList={ventasList}
-            load={loadingVentas}
-            errorLoad={errorVentas}
-          />
-        </div>
         <div className="col-12 col-lg-8">
-          <CabeceraHome
-            ventasList={ventasList}
-            load={loadingVentas}
-            errorLoad={errorVentas}
-          />
+          <div className="row gap-3 ">
+            <div className="col-md-12">
+              <CabeceraHome
+                ventasList={ventasList}
+                load={loadingVentas}
+                errorLoad={errorVentas}
+              />
+            </div>
+            <div className="col-md-12">
+              <DashboardMesas />
+            </div>
+            <div className="col-md-12">
+              <PlatoMasVendido />
+            </div>
+            <div className="col-md-12">
+              <GraficoIAhome />
+            </div>
+          </div>
+        </div>
+        <div className="col-12 col-lg-4">
+          <div className="row gap-3">
+            <div className="col-md-12">
+              <CarouselMarketingHome />
+            </div>
+            <div className="col-12 col-lg-12">
+              <VentasTipo
+                ventasList={ventasList}
+                load={loadingVentas}
+                errorLoad={errorVentas}
+              />
+              <div className="col-md-12">
+                <UsuariosActivosHome />
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Gráfico IA: Ancho completo al final para destacar la información predictiva */}
-        <div className="col-12">
-          <GraficoIAhome />
-        </div>
+        <div className="col-12 col-lg-8"></div>
       </div>
     </div>
   );

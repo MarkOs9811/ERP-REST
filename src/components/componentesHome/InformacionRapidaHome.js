@@ -88,7 +88,7 @@ export function InformacionRapidaHome({}) {
                   S/ {ventasHoyFormatted}
                 </p>
               </div>
-              <div className="ms-auto">
+              <div className="ms-auto p-2 rounded-pill alert alert-success">
                 {/* Ícono restaurado sin mis colores de Bootstrap */}
                 <Store size={40} className="icono-institucional-ventas" />
               </div>
@@ -128,7 +128,7 @@ export function InformacionRapidaHome({}) {
                   ></div>
                 </div>
               </div>
-              <div className="ms-auto ps-3">
+              <div className="ms-auto p-2 rounded-pill alert alert-dark">
                 {/* Ícono restaurado */}
                 <Table size={40} className="icono-institucional-mesas" />
               </div>
@@ -152,7 +152,7 @@ export function InformacionRapidaHome({}) {
                   {pedidosPendientes} Pedidos en estado pendiente
                 </p>
               </div>
-              <div className="ms-auto ps-2">
+              <div className="ms-auto p-2 rounded-pill alert alert-warning">
                 {/* Ícono restaurado */}
                 <Clock9 size={40} className="icono-institucional-pedidos" />
               </div>
@@ -176,7 +176,7 @@ export function InformacionRapidaHome({}) {
                   {productosBajoStock} productos en bajo stock
                 </p>
               </div>
-              <div className="ms-auto ps-2">
+              <div className="ms-auto p-2 rounded-pill alert alert-danger">
                 {/* Ícono restaurado */}
                 <CircleAlert
                   size={40}

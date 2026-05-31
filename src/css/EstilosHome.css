@@ -136,12 +136,168 @@
 .icono-institucional-almacen {
     color: #E44949;
 }
-/* ESTILOS PARA ELC ARD DE CUPONES */
-.card-cuponer-home{
-    background: #0eafb5;
-    background: linear-gradient(90deg, rgba(14, 175, 181, 1) 0%, rgba(87, 186, 199, 1) 50%, rgba(83, 237, 104, 1) 100%);
-}
+
+
 /* Rojo */
+
+/* Contenedor Principal */
+.salon-container {
+    background-color: var(--bg-card);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem 2rem;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid #F3F4F6;
+    /* Borde muy sutil para delimitar en fondos blancos */
+}
+
+/* Tipografía de Cabecera */
+.salon-title {
+    color: var(--text-main);
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 0.25rem 0;
+    gap: 0.5rem;
+}
+
+.icon-shop {
+    width: 24px;
+    height: 24px;
+    color: var(--fw-emerald);
+}
+
+.salon-subtitle {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+}
+
+/* Leyenda de Estados (Badges) */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: var(--radius-pill);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.badge-libre {
+    background-color: var(--bg-emerald-soft);
+    color: var(--fw-emerald);
+}
+
+.badge-ocupado {
+    background-color: var(--bg-strawberry-soft);
+    color: var(--fw-strawberry);
+}
+
+.badge-reservado {
+    background-color: var(--bg-saffron-soft);
+    color: var(--fw-saffron);
+}
+
+/* Puntos de Estado (Dots) */
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.dot-libre {
+    background-color: var(--fw-emerald);
+}
+
+.dot-ocupado {
+    background-color: var(--fw-strawberry);
+}
+
+.dot-reservado {
+    background-color: var(--fw-saffron);
+}
+
+/* Tarjetas de Mesa */
+.mesa-card {
+    display: flex;
+    flex-direction: column;
+    padding: 1.25rem;
+    border-radius: var(--radius-md);
+    height: 100%;
+    cursor: pointer;
+    transition: transform var(--transition-smooth);
+}
+
+.mesa-card:hover {
+    transform: translateY(-2px);
+}
+
+/* Variantes de Tarjetas (Fondos planos y bordes sutiles, SIN degradados) */
+.card-libre {
+    background-color: #f0fffb!important;
+    border: 1px solid #65ce88!important;
+    /* Borde gris muy claro */
+}
+
+.card-ocupado {
+    background-color: var(--bg-strawberry-soft);
+    border: 1px solid #FCD4D4!important;
+    /* Tono derivado del rojo para el borde */
+}
+
+.card-reservado {
+    background-color: var(--bg-saffron-soft);
+    border: 1px solid #FFE4C4!important;
+    /* Tono derivado del amarillo para el borde */
+}
+
+/* Contenido de la Tarjeta */
+.mesa-capacidad {
+    color: #9CA3AF;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.mesa-numero {
+    color: var(--text-main);
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0.25rem 0 1rem 0;
+}
+
+.mesa-footer {
+    display: flex;
+    flex-direction: column;
+}
+
+.consumo-label {
+    color: #9CA3AF;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.consumo-monto {
+    color: var(--fw-strawberry);
+    font-size: 1.125rem;
+    font-weight: 700;
+    margin-top: 0.125rem;
+}
+
+.mensaje-estado {
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.msj-libre {
+    color: var(--fw-emerald);
+}
+
+.msj-reservado {
+    color: #D97706;
+    /* Un tono naranja ligeramente más oscuro para legibilidad */
+}
 /* ================================
    MEDIA QUERIES PARA RESPONSIVIDAD
 ================================= */
