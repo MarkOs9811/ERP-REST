@@ -7,11 +7,13 @@ import {
   Settings,
   Users,
 } from "lucide-react";
-import { ContenedorPrincipal } from "../../components/componentesReutilizables/ContenedorPrincipal";
+
 import { Outlet, Link, useLocation } from "react-router-dom";
 
 // Simulación: obtén el rol desde tu contexto, redux, o props
-const cargo = JSON.parse(localStorage.getItem("user")) || {};
+const cargo =
+  JSON.parse(localStorage.getItem("user") || sessionStorage.getItem("user")) ||
+  {};
 const userRol = cargo?.empleado?.cargo?.nombre.toLowerCase();
 
 export function Configuracion() {

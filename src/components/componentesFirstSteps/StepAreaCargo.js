@@ -12,9 +12,16 @@ export function StepAreaCargo({ onFinish }) {
     const success = await PutData("empresasSteps", estado);
 
     if (success) {
-      const empresa = JSON.parse(localStorage.getItem("empresa")) || {};
+      const empresa =
+        JSON.parse(
+          localStorage.getItem("empresa") || sessionStorage.getItem("empresa"),
+        ) || {};
       empresa.setup_steps = estado;
-      localStorage.setItem("empresa", JSON.stringify(empresa));
+      localStorage.setItem(
+        "empresa",
+        JSON.stringify(empresa) ||
+          sessionStorage.setItem("empresa", JSON.stringify(empresa)),
+      );
 
       // 2. Cerramos el modal
       if (onFinish) onFinish();

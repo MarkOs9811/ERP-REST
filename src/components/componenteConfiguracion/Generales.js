@@ -80,13 +80,19 @@ export function Generales() {
       document.documentElement.style.setProperty("--color-brand", data.color);
 
       const estilosArray =
-        JSON.parse(localStorage.getItem("estiloEmpresa")) || [];
+        JSON.parse(
+          localStorage.getItem("estiloEmpresa") ||
+            sessionStorage.getItem("estiloEmpresa"),
+        ) || [];
 
       if (estilosArray.length > 0) {
         estilosArray[0].clave = data.color;
       }
 
-      localStorage.setItem("estiloEmpresa", JSON.stringify(estilosArray));
+      localStorage.setItem(
+        "estiloEmpresa",
+        JSON.stringify(estilosArray) || sessionStorage.getItem("estiloEmpresa"),
+      );
     }
 
     setLoading(false);
@@ -118,74 +124,11 @@ export function Generales() {
 
       <div className="row g-4">
         {/* Card de Configuración de Color */}
-        <div className="col-md-6">
-          <form onSubmit={handleSubmit(onSubmitColor)}>
-            <div
-              className="card shadow-sm border-0 h-100 p-3"
-              style={{ borderRadius: 12 }}
-            >
-              <div className="mb-3 d-flex gap-2 align-middle">
-                <span
-                  className="alert border-0 fw-bold p-3 mb-0"
-                  style={{
-                    backgroundColor: `${colorSeleccionado}20`, // Transparencia al 20%
-                    color: colorSeleccionado,
-                    transition: "all 0.3s ease",
-                  }}
-                >
-                  <Sun size={22} />
-                </span>
-                <div className="d-flex flex-column gap-1">
-                  <span className="fw-bold">Tema y Color</span>
-                  <p className="text-muted small mb-0">
-                    Elige el color principal de tu marca
-                  </p>
-                </div>
-              </div>
-
-              <div className="d-flex gap-3 mt-3 align-items-center mb-4">
-                {/* Input Color */}
-                <input
-                  type="color"
-                  className="form-control form-control-color border-0 shadow-sm"
-                  id="colorInput"
-                  title="Elige tu color"
-                  {...register("color", { required: true })}
-                />
-
-                <div className="form-control bg-light text-muted">
-                  {colorSeleccionado?.toUpperCase()}
-                </div>
-              </div>
-
-              {/* Botón Guardar */}
-              <div className="d-flex justify-content-end">
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="btn text-white d-flex align-items-center gap-2"
-                  style={{ backgroundColor: colorSeleccionado || "#ee5252" }}
-                >
-                  {loading ? (
-                    "Guardando..."
-                  ) : (
-                    <>
-                      <Save size={18} /> Guardar Color
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-          </form>
-        </div>
 
         {/* Card de Configuración de IGV */}
         <div className="col-md-6">
           <form onSubmit={handleSubmitIgv(onSubmitIgv)}>
-            <div
-              className="card shadow-sm border-0 h-100 p-3"
-              style={{ borderRadius: 12 }}
-            >
+            <div className="card border h-100 p-3" style={{ borderRadius: 12 }}>
               <div className="mb-3 d-flex gap-2 align-middle">
                 <span className="alert border-0 fw-bold p-3 mb-0 alert-dark">
                   <Percent size={22} />

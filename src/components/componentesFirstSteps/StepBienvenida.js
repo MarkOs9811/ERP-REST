@@ -2,7 +2,10 @@ import React from "react";
 import { Rocket, Sparkles, CheckCircle2, ArrowRight } from "lucide-react";
 
 export function StepBienvenida({ onStart }) {
-  const empresa = JSON.parse(localStorage.getItem("empresa")) || {};
+  const empresa =
+    JSON.parse(
+      localStorage.getItem("empresa") || sessionStorage.getItem("empresa"),
+    ) || {};
 
   return (
     // Agregamos overflow-hidden para que la imagen respete los bordes redondeados
@@ -85,7 +88,7 @@ export function StepBienvenida({ onStart }) {
                   <span className="fw-bold text-secondary small">{item}</span>
                 </div>
               </div>
-            )
+            ),
           )}
         </div>
 

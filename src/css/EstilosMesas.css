@@ -2,12 +2,12 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: left;
-  padding: 16px;
+  padding: 0px;
 }
 
 .mesa-card {
   position: relative;
-  height: 200px;
+  max-height: 200px;
   background-color: #fff;
   border-radius: 12px;
   padding: 16px;

@@ -7,7 +7,7 @@ export function AreasCargo() {
   const [activeTab, setActiveTab] = useState("areas");
 
   return (
-    <div className="bg-white rounded border p-4">
+    <div className="bg-white rounded border-none p-4">
       <ul className="nav nav-pills mb-4" id="pills-tab" role="tablist">
         <li className="nav-item" role="presentation">
           <button
@@ -46,11 +46,7 @@ export function AreasCargo() {
         )}
         {activeTab === "cargos" && (
           <div className="animation-fade-in">
-            <div className="row">
-              <div className="col-md-10 offset-md-1">
-                <Cargos />
-              </div>
-            </div>
+            <Cargos />
           </div>
         )}
         {activeTab === "sedes" && (

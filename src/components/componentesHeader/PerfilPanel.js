@@ -24,13 +24,17 @@ export function PerfilPanel({ user, fotoPerfil }) {
 
   // 🔹 Cargar usuario desde localStorage
   useEffect(() => {
-    const usuario = JSON.parse(localStorage.getItem("user"));
+    const usuario = JSON.parse(
+      localStorage.getItem("user") || sessionStorage.getItem("user"),
+    );
     if (usuario?.idSede) {
       setSelectedSede(usuario.idSede);
       setNombreSedeActual(usuario?.sede?.nombre || "No seleccionada");
     }
   }, []);
-  const rol = JSON.parse(localStorage.getItem("user"));
+  const rol = JSON.parse(
+    localStorage.getItem("user") || sessionStorage.getItem("user"),
+  );
   const rolUsuario = rol?.empleado?.cargo?.nombre;
 
   // 🔹 Obtener lista de sedes
@@ -75,22 +79,30 @@ export function PerfilPanel({ user, fotoPerfil }) {
     }
   };
 
-  // 🔹 Cerrar sesión
+  // Cerrar sesión
   const cerrarSession = async () => {
     try {
+      // 1. Buscamos el token en cualquiera de las dos bóvedas
+      const token =
+        localStorage.getItem("token") || sessionStorage.getItem("token");
+
       await axiosInstance.post(
         "/logout",
         {},
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${token}`, // Usamos la variable dinámica
           },
         },
       );
-      logout();
+
+      logout(); // Esto ya limpia ambos storages gracias a la corrección anterior
       navigate("/login");
     } catch (error) {
       console.error("Error al cerrar sesión:", error);
+      // Incluso si el backend falla, forzamos la limpieza local para que no se quede pegado
+      logout();
+      navigate("/login");
     }
   };
 

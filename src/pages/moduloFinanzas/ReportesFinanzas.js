@@ -53,20 +53,20 @@ export function ReportesFinanzas() {
         "Revisa los movimientos de caja, ingresos y salidas por turno o usuario responsable.",
       icono: <Box className="icon icon-emerald" />,
     },
-    {
-      titulo: "Pagos y Planilla",
-      dataModal: "pagosPlanilla",
-      descripcion:
-        "Consulta los sueldos, bonos, descuentos y horas extras del personal.",
-      icono: <Users className="icon icon-indigo" />,
-    },
-    {
-      titulo: "Balance General",
-      dataModal: "reporteGeneral",
-      descripcion:
-        "Obtén un resumen financiero general con activos, pasivos y patrimonio actualizado.",
-      icono: <Calculator className="icon icon-orange" />,
-    },
+    // {
+    //   titulo: "Pagos y Planilla",
+    //   dataModal: "pagosPlanilla",
+    //   descripcion:
+    //     "Consulta los sueldos, bonos, descuentos y horas extras del personal.",
+    //   icono: <Users className="icon icon-indigo" />,
+    // },
+    // {
+    //   titulo: "Balance General",
+    //   dataModal: "reporteGeneral",
+    //   descripcion:
+    //     "Obtén un resumen financiero general con activos, pasivos y patrimonio actualizado.",
+    //   icono: <Calculator className="icon icon-orange" />,
+    // },
   ];
 
   return (
@@ -127,8 +127,8 @@ export function ReportesFinanzas() {
           {reporteModal === "egresoCompras" ? <ReporteEgresoCompras /> : ""}
           {reporteModal === "utilidadNeta" ? <ReporteUtilidadNeta /> : ""}
           {reporteModal === "reporteCaja" ? <ReporteCaja /> : ""}
-          {reporteModal === "pagosPlanilla" ? <ReportePagosPlanilla /> : ""}
-          {reporteModal === "reporteGeneral" ? <ReporteGeneralFinanzas /> : ""}
+          {/* {reporteModal === "pagosPlanilla" ? <ReportePagosPlanilla /> : ""}
+          {reporteModal === "reporteGeneral" ? <ReporteGeneralFinanzas /> : ""} */}
         </ModalRight>
       </div>
     </div>

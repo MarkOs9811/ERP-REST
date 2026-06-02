@@ -6,6 +6,7 @@ import { UsuariosActivosHome } from "../components/componentesHome/UsuariosActiv
 import { VentasTipo } from "../components/componentesHome/VentasTipo";
 import { useQuery } from "@tanstack/react-query";
 import { getVentas } from "../service/ObtenerVentasDetalle";
+import { DashboardMesas } from "../components/componentesHome/DashboardMesas";
 
 export function LayOutAtencion() {
   useEffect(() => {
@@ -38,7 +39,7 @@ export function LayOutAtencion() {
           <InformacionRapidaHome />
         </div>
         <div className="col-md-10">
-          <div className="row ">
+          <div className="row gap-3">
             <div className="col-md-12">
               <CabeceraHome
                 ventasList={ventasList}
@@ -47,9 +48,10 @@ export function LayOutAtencion() {
               />
             </div>
             <div className="col-md-12">
-              <div className="card p-2 shadow-sm h-100">
-                <PlatoMasVendido />
-              </div>
+              <DashboardMesas />
+            </div>
+            <div className="col-md-12">
+              <PlatoMasVendido />
             </div>
           </div>
         </div>

@@ -91,10 +91,6 @@ export function Clientes() {
             <FileText size={18} />
             <span className="d-none d-sm-inline">Reporte</span>
           </button>
-          <button className="btn-principal px-3" title="Agregar Nuevo Cliente">
-            <Plus size={18} />
-            <span className="d-none d-sm-inline">Agregar</span>
-          </button>
         </div>
       </div>
 

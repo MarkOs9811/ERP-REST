@@ -18,8 +18,12 @@ export function Navegacion({ tipoNavegacion = null }) {
   const pathnames = location.pathname.split("/").filter((x) => x);
   const navigate = useNavigate();
 
-  const rolesLocalStorage = JSON.parse(localStorage.getItem("roles")) || [];
-  const userStr = localStorage.getItem("user");
+  const rolesLocalStorage =
+    JSON.parse(
+      localStorage.getItem("roles") || sessionStorage.getItem("roles"),
+    ) || [];
+  const userStr =
+    localStorage.getItem("user") || sessionStorage.getItem("user");
   const rol = userStr ? JSON.parse(userStr) : null;
   const navegacionAnchura = tipoNavegacion;
   const routeNames = {

@@ -12,7 +12,6 @@ export function MiEmpresa() {
   const [logoPreview, setLogoPreview] = useState(null);
   const [datosEmpresa, setDatosEmpresa] = useState(null);
   const [logoFile, setLogoFile] = useState(null);
-  const BASE_URL = process.env.REACT_APP_BASE_URL;
 
   const {
     data: configEmpresa = [],
@@ -33,7 +32,6 @@ export function MiEmpresa() {
     const fetchDatosEmpresa = async () => {
       try {
         const response = await axiosInstance.get("/configuracion/getMiEmpresa");
-        console.log("Respuesta de la API:", response.data);
         if (response.data) {
           setDatosEmpresa(response.data);
           setLogoActual(response.data.logo_url);

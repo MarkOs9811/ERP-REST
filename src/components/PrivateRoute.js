@@ -1,8 +1,10 @@
 import { Navigate } from "react-router-dom";
 
 export const PrivateRoute = ({ children, allowedRoles }) => {
-  const token = localStorage.getItem("token");
-  const userString = localStorage.getItem("user");
+  const token =
+    localStorage.getItem("token") || sessionStorage.getItem("token");
+  const userString =
+    localStorage.getItem("user") || sessionStorage.getItem("user");
   const user = userString ? JSON.parse(userString) : null;
 
   // 1. Extraer los roles (módulos) normales

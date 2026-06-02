@@ -80,7 +80,6 @@ import { MisEntregas } from "../pages/moduloDelivery/MisEntregas";
 import { PedidosDelivery } from "../pages/moduloDelivery/PedidosDelivery";
 import Banner, { Banners } from "../pages/moduloDelivery/Banners";
 import { DashboardCliente } from "../pages/moduloClientes/DashboardCliente";
-import { ListaClientes } from "../components/componenteCliente/ListaClientes";
 import { Clientes } from "../pages/moduloClientes/Clientes";
 import { FeedBack } from "../pages/moduloClientes/FeedBacks";
 import { Fidelizacion } from "../pages/moduloClientes/Fidelización";
@@ -93,8 +92,16 @@ export const MainLayout = () => {
   );
 
   // Rescatamos los datos del usuario logueado y de la empresa desde el LocalStorage.
-  const user = JSON.parse(localStorage.getItem("user"));
-  const empresa = JSON.parse(localStorage.getItem("empresa")) || {};
+  const user =
+    JSON.parse(
+      localStorage.getItem("user") || sessionStorage.getItem("user"),
+    ) || {};
+  const empresa =
+    JSON.parse(
+      localStorage.getItem("empresa") || sessionStorage.getItem("empresa"),
+    ) ||
+    {} ||
+    {};
 
   // 2. IDENTIFICACIÓN DEL ROL (CARGO)
   // Sacamos el nombre del cargo del usuario y lo pasamos a minúsculas para evitar errores al comparar (ej: "Delivery" vs "delivery").

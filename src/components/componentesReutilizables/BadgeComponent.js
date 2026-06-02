@@ -64,7 +64,7 @@ export const BadgeComponent = ({
 
   return (
     <span
-      className={`badge-custom ${claseColor} ${className} d-inline-flex align-items-center gap-1`}
+      className={`badge-custom ${claseColor} ${className} d-inline-flex align-items-center gap-1 small`}
     >
       {/* Ícono dinámico */}
       {isValidElement(icon)

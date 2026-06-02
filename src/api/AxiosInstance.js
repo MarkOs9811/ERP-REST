@@ -2,19 +2,12 @@ import axios from "axios";
 import axiosRetry from "axios-retry";
 import ToastAlert from "../components/componenteToast/ToastAlert";
 
-// const axiosInstance = axios.create({
-
-//   baseURL: "http://127.0.0.1:8000/api",
-//   Authorization: `Bearer ${localStorage.getItem("token")}`,
-//   withCredentials: true,
-// });
 const axiosInstance = axios.create({
   // baseURL: "https://vv1g8thv-8000.brs.devtunnels.ms/api",
-  // baseURL: "http://erp-api.test/api",
-  baseURL: "https://erp-api-production-c7d4.up.railway.app/api",
+  baseURL: "http://erp-api.test/api",
+  // baseURL: "https://erp-api-production-c7d4.up.railway.app/api",
   // baseURL: "http://192.168.1.12:8000/api",
   // baseURL: "https://fe27-38-43-130-95.ngrok-free.app/api",
-
   withCredentials: true,
 });
 
@@ -26,12 +19,14 @@ axiosRetry(axiosInstance, {
 });
 
 // Interceptor de solicitudes para agregar el token de autorización
-// Interceptor de solicitudes para agregar el token de autorización
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("token"); // Obtiene el token del almacenamiento local
+    // 🔥 CORRECCIÓN 1: Buscar el token en ambas bóvedas
+    const token =
+      localStorage.getItem("token") || sessionStorage.getItem("token");
+
     if (token) {
-      config.headers["Authorization"] = `Bearer ${token}`; // Añade el token al header
+      config.headers["Authorization"] = `Bearer ${token}`;
     }
 
     if (!(config.data instanceof FormData)) {
@@ -60,11 +55,17 @@ axiosInstance.interceptors.response.use(
 
     // Manejo de error 401: sesión expirada
     if (error.response && error.response.status === 401) {
+      // 🔥 CORRECCIÓN 2: Limpiar rastro para evitar bucles
+      localStorage.clear();
+      sessionStorage.clear();
+
       ToastAlert(
         "error",
-        "Sesión expirada. Por favor, inicia sesión nuevamente.",
+        "Sesión expirada o inválida. Por favor, inicia sesión nuevamente.",
       );
-      window.location.href = "/"; // Redirigir al login si es necesario
+
+      // 🔥 CORRECCIÓN 3: Mandar a "/login", no a "/"
+      window.location.href = "/login";
     }
 
     return Promise.reject(error);

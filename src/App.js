@@ -43,20 +43,23 @@ import { LayOutAdmin } from "./LayOut/LayOutAdmin";
 import { AuthProviderAdmin } from "./AuthContextAdmin";
 import { RestablecerPassword } from "./pages/RestablecerPassword";
 import { UseEventosGlobales } from "./hooks/UseEventosGlobal";
-const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 function App() {
   useEffect(() => {
-    const miEmpresa = JSON.parse(localStorage.getItem("empresa"));
+    const miEmpresa = JSON.parse(
+      localStorage.getItem("empresa") || sessionStorage.getItem("empresa"),
+    );
     if (miEmpresa) {
       document.title = miEmpresa.nombre;
       const favicon = document.getElementById("favicon");
-      const logoUrl = `${BASE_URL}/storage/${miEmpresa.logo}`;
-      favicon.href = logoUrl;
+
+      favicon.href = miEmpresa.logo_url || "/favicon.ico"; // Ruta al logo de la empresa o favicon por defecto
     }
   }, []);
   // obtener id de mi localStorage para suscribirme a eventos globales
-  const idCliente = JSON.parse(localStorage.getItem("user"))?.id;
+  const idCliente = JSON.parse(
+    localStorage.getItem("user") || sessionStorage.getItem("user"),
+  )?.id;
   UseEventosGlobales(idCliente);
 
   return (

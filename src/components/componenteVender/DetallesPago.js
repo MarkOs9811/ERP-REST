@@ -29,7 +29,10 @@ export function DetallesPago() {
   const idMesa = useSelector((state) => state.mesa.idPreventaMesa);
   const caja = useSelector((state) => state.caja.caja);
   const estadoTipoVenta = useSelector((state) => state.tipoVenta.estado);
-  const usuarioLogeado = JSON.parse(localStorage.getItem("user"));
+  const usuarioLogeado =
+    JSON.parse(
+      localStorage.getItem("user") || sessionStorage.getItem("user"),
+    ) || {};
   const pedidoLlevar = useSelector((state) => state.pedidoLlevar);
   const pedidoWeb = useSelector((state) => state.pedidoWeb);
 

@@ -155,11 +155,8 @@ export function ToMesa() {
                 <FontAwesomeIcon icon={faArrowLeft} />
               </button>
               <div className="text-center">
-                <h6 className="m-0 fw-bold text-uppercase">
-                  Mesa {numeroMesa}
-                </h6>
                 <select
-                  className="form-select form-select-sm "
+                  className="form-select "
                   value={id}
                   onChange={(e) =>
                     dispatch(setIdPreventaMesa(Number(e.target.value)))
@@ -293,12 +290,8 @@ export function ToMesa() {
                   <Notebook /> Cliente / Notas del Pedido:
                 </label>
                 <div className="input-group">
-                  <span className="input-group-text bg-light border-end-0">
-                    <FileText size={16} className="text-secondary" />
-                  </span>
-
                   <textarea
-                    className="form-control border-start-0 bg-light"
+                    className="form-control  bg-light"
                     rows="2"
                     placeholder="Ej: Sin sal, término medio, etc."
                     value={notaPedido}

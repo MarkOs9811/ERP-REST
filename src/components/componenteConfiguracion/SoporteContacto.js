@@ -17,7 +17,7 @@ export function SoporteContacto() {
   return (
     <div className="w-100 p-3">
       <div
-        className="card border-0 shadow-sm p-4"
+        className="card border p-4"
         style={{ maxWidth: 600, margin: "0 auto", borderRadius: 18 }}
       >
         <h3 className="fw-bold mb-3" style={{ color: "#5a7a98" }}>

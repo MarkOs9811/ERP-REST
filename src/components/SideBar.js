@@ -37,14 +37,19 @@ export function SideBar() {
   );
   const location = useLocation();
   const navigate = useNavigate();
-  const BASE_URL = process.env.REACT_APP_BASE_URL;
-  const miEmpresa = JSON.parse(localStorage.getItem("empresa")) || {};
-
-  const fotoEmpresa = miEmpresa.logo_url;
-
-  const roles = JSON.parse(localStorage.getItem("roles")) || [];
   const dispatch = useDispatch();
   const { logout } = useAuth();
+
+  // --- CORRECCIÓN: Buscamos la empresa en ambas bóvedas ---
+  const empresaString =
+    localStorage.getItem("empresa") || sessionStorage.getItem("empresa");
+  const miEmpresa = empresaString ? JSON.parse(empresaString) : {};
+  const fotoEmpresa = miEmpresa.logo_url;
+
+  // --- CORRECCIÓN: Buscamos los roles en ambas bóvedas ---
+  const rolesString =
+    localStorage.getItem("roles") || sessionStorage.getItem("roles");
+  const roles = rolesString ? JSON.parse(rolesString) : [];
 
   const icons = {
     inicio: Home,

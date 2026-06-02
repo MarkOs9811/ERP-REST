@@ -105,7 +105,7 @@ export const MiPerfil = () => {
         {/* Perfil lateral */}
         <div className="col-md-4 ">
           <div
-            className="card border-0 shadow-sm p-4 h-100"
+            className="card border  p-4 h-100"
             style={{
               borderRadius: 20,
               background: "#fff",
@@ -116,6 +116,34 @@ export const MiPerfil = () => {
               minHeight: 450,
             }}
           >
+            {" "}
+            <div className="d-flex justify-content-end mb-2 align-items-center">
+              <label
+                htmlFor="switch-editar"
+                className="text-muted me-2 mb-0"
+                style={{ cursor: "pointer" }}
+              >
+                Editar
+              </label>
+              <div className="form-switch d-flex">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  id="switch-editar"
+                  checked={editable}
+                  onChange={() => {
+                    setEditable((e) => !e);
+                    if (editable) reset(); // Si cancela edición, resetear cambios
+                  }}
+                  style={{
+                    accentColor: "#ee5252",
+                    width: 45,
+                    height: 22,
+                    cursor: "pointer",
+                  }}
+                />
+              </div>
+            </div>
             <div className="mb-3">
               <div
                 style={{
@@ -148,7 +176,6 @@ export const MiPerfil = () => {
                 Tamaño máximo de 3 Mb
               </div>
             </div>
-
             {/* Input oculto para el archivo */}
             <input
               type="file"
@@ -157,7 +184,6 @@ export const MiPerfil = () => {
               ref={fileInputRef}
               onChange={onFileChange}
             />
-
             <button
               className="btn w-50 mx-auto"
               type="button"
@@ -179,39 +205,11 @@ export const MiPerfil = () => {
         <div className="col-md-8">
           <form
             onSubmit={handleSubmit(onSubmit)} // Conectamos handleSubmit
-            className="card border-0 shadow-sm p-4 h-100"
+            className="card border  p-4 h-100"
             style={{ borderRadius: 20, background: "#fff" }}
           >
             <div className="d-flex justify-content-between align-items-center border-bottom mb-3">
               <p className="">Mi Información</p>
-
-              <div className="d-flex justify-content-end mb-2 align-items-center">
-                <label
-                  htmlFor="switch-editar"
-                  className="text-muted me-2 mb-0"
-                  style={{ cursor: "pointer" }}
-                >
-                  Editar
-                </label>
-                <div className="form-switch d-flex">
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    id="switch-editar"
-                    checked={editable}
-                    onChange={() => {
-                      setEditable((e) => !e);
-                      if (editable) reset(); // Si cancela edición, resetear cambios
-                    }}
-                    style={{
-                      accentColor: "#ee5252",
-                      width: 45,
-                      height: 22,
-                      cursor: "pointer",
-                    }}
-                  />
-                </div>
-              </div>
             </div>
 
             <div className="row g-3">

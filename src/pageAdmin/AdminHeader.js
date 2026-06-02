@@ -15,8 +15,6 @@ export const AdminHeader = () => {
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
-    // Aquí puedes añadir lógica para buscar en tiempo real
-    console.log("Buscando:", e.target.value);
   };
 
   return (

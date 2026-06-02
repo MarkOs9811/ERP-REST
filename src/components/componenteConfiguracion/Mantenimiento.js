@@ -1,3 +1,4 @@
+import { Settings } from "lucide-react";
 import { useState } from "react";
 
 const OPCIONES_BACKUP = [
@@ -65,7 +66,7 @@ export function Mantenimiento() {
         <h3>Backups y mantenimiento</h3>
 
         <div className="row g-4">
-          {OPCIONES_BACKUP.map((op) => (
+          {/* {OPCIONES_BACKUP.map((op) => (
             <div className="col-md-6" key={op.key}>
               <div
                 className="card border shadow-sm p-4 h-100"
@@ -94,12 +95,16 @@ export function Mantenimiento() {
                 <div className="text-muted small">{op.descripcion}</div>
               </div>
             </div>
-          ))}
+          ))} */}
+          <span className="text-muted text-center">
+            <Settings className="me-2" />
+            Módulo en construcción
+          </span>
         </div>
         <div className="d-flex justify-content-end mt-4">
-          <button className="btn-guardar btn-sm" onClick={handleBackup}>
+          {/* <button className="btn-guardar btn-sm" onClick={handleBackup}>
             Realizar Backup
-          </button>
+          </button> */}
         </div>
         {mensaje && (
           <div className="alert alert-info mt-3 py-2 px-3">{mensaje}</div>

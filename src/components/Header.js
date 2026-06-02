@@ -18,15 +18,26 @@ import { PutData } from "../service/CRUD/PutData";
 export function Header({ tipoHeader = null }) {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
-  const BASE_URL = process.env.REACT_APP_BASE_URL;
-  const empresa = JSON.parse(localStorage.getItem("empresa")) || {};
+  const empresa =
+    JSON.parse(
+      localStorage.getItem("empresa") || sessionStorage.getItem("empresa"),
+    ) || {};
   const fotoEmpresa = empresa.logo_url ? `${empresa.logo_url}` : null;
   const anchuraHeader = tipoHeader;
-  const fotoPerfilLocal = JSON.parse(localStorage.getItem("user"));
-  const user = JSON.parse(localStorage.getItem("user"));
-  const cajaDetalles = JSON.parse(localStorage.getItem("caja"));
-  const cargo = JSON.parse(localStorage.getItem("user")) || {};
-  const fotoPerfil = `${fotoPerfilLocal.foto_url}`;
+  const fotoPerfilLocal = JSON.parse(
+    localStorage.getItem("user") || sessionStorage.getItem("user"),
+  );
+  const user = JSON.parse(
+    localStorage.getItem("user") || sessionStorage.getItem("user"),
+  );
+  const cajaDetalles = JSON.parse(
+    localStorage.getItem("caja") || sessionStorage.getItem("caja"),
+  );
+  const cargo =
+    JSON.parse(
+      localStorage.getItem("user") || sessionStorage.getItem("user"),
+    ) || {};
+  const fotoPerfil = `${fotoPerfilLocal?.foto_url}`;
 
   // PARA MOSTRAR LOS PANELES
   const [showPerfilPanel, setShowPerfilPanel] = useState(false);

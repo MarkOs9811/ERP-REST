@@ -100,7 +100,7 @@ export function Sedes() {
 
   return (
     <>
-      <div className="card shadow-sm">
+      <div className="card ">
         <div className="card-header d-flex justify-content-between align-items-center">
           <div className="d-flex gap-2 align-items-center">
             <div className="p-2 alert alert-danger rounded-lg mb-0">
@@ -265,7 +265,6 @@ function SedeCard({
     </div>
   );
 }
-// ...existing code...
 
 function SedeActionsMenu({
   sede,

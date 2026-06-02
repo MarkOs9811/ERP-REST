@@ -59,7 +59,9 @@ export function CerrarCaja() {
   const [idCaja, setIdCaja] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const caja = JSON.parse(localStorage.getItem("caja"));
+  const caja = JSON.parse(
+    localStorage.getItem("caja") || sessionStorage.getItem("caja"),
+  );
 
   // Consulta con React Query para obtener los datos de la caja
   const {
@@ -131,6 +133,7 @@ export function CerrarCaja() {
 
       if (response.data.success) {
         localStorage.removeItem("caja");
+        sessionStorage.removeItem("caja");
         dispatch(cerrarCaja());
         ToastAlert("success", response.data.message);
         navigate("/abrirCaja");
@@ -196,8 +199,8 @@ export function CerrarCaja() {
   if (isError) return <div>Error: {error.message}</div>;
 
   return (
-    <div className="container d-flex align-items-center justify-content-center h-100">
-      <div className="card shadow-sm h-100">
+    <div className="container d-flex align-items-center justify-content-center">
+      <div className="card h-100 overflow-auto ">
         <div className="card-header p-3 border-bottom d-flex align-content-center align-items-center">
           <h5 className="titulo-card-especial">Resumen Venta del día</h5>
           <div className="badge  px-3 p-0 ms-auto bg-dark pt-2">
@@ -205,13 +208,13 @@ export function CerrarCaja() {
           </div>
         </div>
 
-        <div className="card-body p-3 h-100">
+        <div className="card-body p-3  h-100">
           <div className="row g-3  h-100">
             <div className="col-md-8 h-100">
               <div className="row g-3">
                 <div className="col-md-4">
                   <div
-                    className="card border-0 shadow-sm"
+                    className="card border-0 "
                     style={{
                       background:
                         "linear-gradient(135deg, #d14e6fff 0%, #ffe2e7ff 100%)",
@@ -241,7 +244,7 @@ export function CerrarCaja() {
                 {/* --- TARJETA 2 (Monto Inicial) --- */}
                 <div className="col-md-4">
                   <div
-                    className="card border-0 shadow-sm"
+                    className="card border-0 "
                     style={{
                       background:
                         "linear-gradient(135deg, #C2E9FB 0%, #A1C4FD 100%)",
@@ -271,7 +274,7 @@ export function CerrarCaja() {
                 {/* --- ¡CORRECCIÓN #4: TARJETA 3 (Monto Vendido)! --- */}
                 <div className="col-md-4">
                   <div
-                    className="card border-0 shadow-sm"
+                    className="card border-0 "
                     style={{
                       background:
                         "linear-gradient(135deg, #D4FC79 0%, #96E6A1 100%)",
@@ -316,11 +319,11 @@ export function CerrarCaja() {
             </div>
 
             <div className="col-md-4 h-100">
-              <div className="card border h-100">
-                <div className="card-header bg-white border-0 pb-0">
+              <div className="card border overflow-auto ">
+                <div className="card-header  border-0 rounded  pb-0">
                   <div className="d-flex align-items-center">
-                    <div className="alert alert-primary rounded p-2 me-3">
-                      <CreditCard className="text-primary" size={24} />
+                    <div className="alert alert-danger rounded p-2 me-3">
+                      <CreditCard className="text-danger" size={24} />
                     </div>
                     <div>
                       <h5 className="fw-bold  mb-0">Detalles de Caja</h5>
@@ -379,7 +382,7 @@ export function CerrarCaja() {
 
                   {/* Montos */}
                   <div className="bg-white rounded-3 p-3 border">
-                    <div className="form-floating mb-3">
+                    <div className=" mb-3">
                       <input
                         type="text"
                         className="form-control border bg-light fs-5 fw-bold text-success"
@@ -390,10 +393,12 @@ export function CerrarCaja() {
                           validate: validatePrecio,
                         })}
                       />
-                      <label className="text-muted">Monto Vendido S/.</label>
+                      <label className="text-muted small">
+                        Monto Vendido S/.
+                      </label>
                     </div>
 
-                    <div className="form-floating">
+                    <div className="">
                       <input
                         type="text"
                         className="form-control border bg-light fs-5 fw-bold text-primary"
@@ -405,7 +410,7 @@ export function CerrarCaja() {
                         })}
                         onInput={handlePrecioInput}
                       />
-                      <label className="text-muted">
+                      <label className="text-muted small">
                         <Wallet className="me-2" size={16} />
                         Monto a Dejar
                       </label>

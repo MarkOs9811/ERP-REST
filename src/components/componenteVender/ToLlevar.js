@@ -209,11 +209,8 @@ export function ToLlevar() {
                   <Notebook /> Cliente / Notas del Pedido:
                 </label>
                 <div className="input-group">
-                  <span className="input-group-text bg-light border-end-0">
-                    <FileText size={16} className="text-secondary" />
-                  </span>
                   <textarea
-                    className="form-control border-start-0 bg-light"
+                    className="form-control  bg-light"
                     rows="2"
                     placeholder="Ej: Juan Perez - Sin cremas, cubiertos extra..."
                     style={{ resize: "none", fontSize: "0.9rem" }}

@@ -483,51 +483,6 @@ export function PreventaMesa() {
   return (
     <div className="h-100 bg-transparent">
       <div className="row g-3 h-100">
-        <div
-          className={`col-lg-8 h-100 ${isSplitMode ? "opacity-50 pe-none" : ""}`}
-        >
-          <div className="card shadow-sm h-100 d-flex flex-column overflow-auto">
-            <div className="card-header bg-white border-bottom px-4 m-0 ">
-              <h6 className="m-0 text-dark fw-bold d-flex align-items-center gap-2 ">
-                <Hamburger size={28} /> Menú de Platos
-              </h6>
-              <div className="d-flex  gap-2 ">
-                <BuscadorPlatos
-                  searchTerm={searchTerm}
-                  setSearchTerm={setSearchTerm}
-                />
-                <CategoriaPlatos />
-              </div>
-            </div>
-            <CondicionCarga
-              isLoading={loadinPlatos}
-              isError={errorPlatos}
-              mode="cards"
-            >
-              <div className="card-body overflow-auto contenedor-platos p-2 ">
-                {productos
-                  .filter(
-                    (p) =>
-                      (categoriaFiltroPlatos === "todo" ||
-                        p.categoria.nombre === categoriaFiltroPlatos) &&
-                      p.nombre.toLowerCase().includes(searchTerm.toLowerCase()),
-                  )
-                  .map((p) => (
-                    <CardPlatos
-                      key={p.id}
-                      item={p}
-                      isSelected={itemsCarrito.some((i) => i.id === p.id)}
-                      handleAdd={handleAddPlatoPreventa}
-                      handleRemove={handleDecrementNewItem}
-                      BASE_URL={BASE_URL}
-                      capitalizeFirstLetter={capitalizeFirstLetter}
-                    />
-                  ))}
-              </div>
-            </CondicionCarga>
-          </div>
-        </div>
-
         <div className="col-lg-4 h-100">
           <div
             className={`card shadow border-0 h-100 d-flex flex-column overflow-hidden ${isSplitMode ? "border-primary border-2" : ""}`}
@@ -682,7 +637,7 @@ export function PreventaMesa() {
                     </BotonAnimado>
                   ) : (
                     <BotonAnimado
-                      className="btn-realizarPedido w-100 p-3 mb-2 fw-bold fs-5 shadow-sm"
+                      className="btn-realizarPedido w-100  mb-2 fw-bold fs-5 shadow-sm"
                       onClick={handleRealizarPago}
                       disabled={granTotal === 0}
                     >
@@ -695,7 +650,7 @@ export function PreventaMesa() {
               {!isSplitMode && itemsCarrito.length === 0 && (
                 <div className="col-12 mb-2">
                   <button
-                    className="btn-principal w-100 fw-bold shadow-sm rounded-pill py-2"
+                    className="btn-principal w-100 fw-bold shadow-sm rounded-pill p-3"
                     onClick={toggleSplitMode}
                     disabled={granTotal === 0}
                   >
@@ -780,6 +735,50 @@ export function PreventaMesa() {
                 </div>
               )}
             </div>
+          </div>
+        </div>
+        <div
+          className={`col-lg-8 h-100 ${isSplitMode ? "opacity-50 pe-none" : ""}`}
+        >
+          <div className="card shadow-sm h-100 d-flex flex-column overflow-auto">
+            <div className="card-header bg-white border-bottom px-4 m-0 ">
+              <h6 className="m-0 text-dark fw-bold d-flex align-items-center gap-2 ">
+                <Hamburger size={28} /> Menú de Platos
+              </h6>
+              <div className="d-flex  gap-2 ">
+                <BuscadorPlatos
+                  searchTerm={searchTerm}
+                  setSearchTerm={setSearchTerm}
+                />
+                <CategoriaPlatos />
+              </div>
+            </div>
+            <CondicionCarga
+              isLoading={loadinPlatos}
+              isError={errorPlatos}
+              mode="cards"
+            >
+              <div className="card-body overflow-auto contenedor-platos p-2 ">
+                {productos
+                  .filter(
+                    (p) =>
+                      (categoriaFiltroPlatos === "todo" ||
+                        p.categoria.nombre === categoriaFiltroPlatos) &&
+                      p.nombre.toLowerCase().includes(searchTerm.toLowerCase()),
+                  )
+                  .map((p) => (
+                    <CardPlatos
+                      key={p.id}
+                      item={p}
+                      isSelected={itemsCarrito.some((i) => i.id === p.id)}
+                      handleAdd={handleAddPlatoPreventa}
+                      handleRemove={handleDecrementNewItem}
+                      BASE_URL={BASE_URL}
+                      capitalizeFirstLetter={capitalizeFirstLetter}
+                    />
+                  ))}
+              </div>
+            </CondicionCarga>
           </div>
         </div>
       </div>

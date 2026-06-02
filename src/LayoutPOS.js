@@ -11,13 +11,33 @@ import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faKitchenSet } from "@fortawesome/free-solid-svg-icons";
 import "./css/EstilosPOS.css";
+import { fetchCajaClose } from "./pages/CerrarCaja";
+import { useQuery } from "@tanstack/react-query";
 
 export default function LayoutPOS({ children }) {
   const navigate = useNavigate();
   const location = useLocation();
   const caja = useSelector((state) => state.caja.caja);
-  const cargo = JSON.parse(localStorage.getItem("user") || "{}") || {};
+  const cargo =
+    JSON.parse(
+      localStorage.getItem("user") || sessionStorage.getItem("user"),
+    ) || {};
 
+  const cajaDatos = JSON.parse(
+    localStorage.getItem("caja") || sessionStorage.getItem("caja"),
+  );
+
+  // Consulta con React Query para obtener los datos de la caja
+  const {
+    data: cajaData,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["cajaClose", cajaDatos?.id],
+    queryFn: () => fetchCajaClose(cajaDatos?.id),
+    enabled: !!cajaDatos?.id,
+  });
   return (
     <div className="card w-full h-screen p-0 m-0 overflow-hidden">
       {/* Barra de botones POS */}
@@ -106,7 +126,14 @@ export default function LayoutPOS({ children }) {
         </div>
 
         {/* Lado Derecho: Acciones de Caja (Se mantienen a la derecha y no se encojen) */}
-        <div className="ms-auto d-flex gap-1 gap-md-2 flex-shrink-0">
+        <div className="ms-auto d-flex gap-1 gap-md-2 flex-shrink-0 justify-content-around align-items-center">
+          <span>
+            <span className="text-muted">Cajero: </span>
+            {cajaData?.datosRegistroCaja?.usuario?.empleado?.persona?.nombre +
+              " " +
+              cajaData?.datosRegistroCaja?.usuario?.empleado?.persona
+                ?.apellidos}
+          </span>
           {/* Botón Cerrar Caja */}
           {["atencion al cliente", "administrador"].includes(
             cargo?.empleado?.cargo?.nombre,
@@ -129,7 +156,7 @@ export default function LayoutPOS({ children }) {
           {/* Botón Salir */}
           <button
             type="button"
-            className="btn btn-danger btn-pos-action d-flex align-items-center justify-content-center"
+            className=" btn-eliminar d-flex align-items-center justify-content-center"
             onClick={() => navigate("/")}
           >
             {/* Ícono nuevo para que no quede un cuadro rojo vacío en celular */}

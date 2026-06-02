@@ -29,10 +29,17 @@ export const CardPlatos = ({
         }}
       />
       <div className="card-body">
+        <span
+          className=" text-danger mb-1 d-block opacity-75"
+          style={{ fontSize: "0.73rem" }}
+        >
+          {capitalizeFirstLetter(item.categoria?.nombre || "Sin categoría")}
+        </span>
+
         <p className="nombre-plato mb-3 fw-bold">
           {capitalizeFirstLetter(item.nombre)}
         </p>
-        <span className="rounded-pill  px-2 fw-bold precioCard  ">
+        <span className="rounded-pill  px-2 fw-bold precioCard ">
           S/. {item.precio}
         </span>
       </div>

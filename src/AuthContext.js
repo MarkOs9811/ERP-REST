@@ -8,24 +8,31 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
   const dispatch = useDispatch();
+
+  // Verificamos si hay token en cualquiera de los dos storages al iniciar
   const [isAuthenticated, setIsAuthenticated] = useState(
-    !!localStorage.getItem("token")
+    !!(localStorage.getItem("token") || sessionStorage.getItem("token")),
   );
 
-  const login = (token, user) => {
-    localStorage.setItem("token", token);
-    localStorage.setItem("user", JSON.stringify(user));
+  // Recibe 'rememberMe' para saber dónde guardar
+  const login = (token, user, rememberMe) => {
+    const storage = rememberMe ? localStorage : sessionStorage;
+
+    storage.setItem("token", token);
+    storage.setItem("user", JSON.stringify(user));
     setIsAuthenticated(true);
   };
 
   const logout = () => {
-    localStorage.clear(); // ya borra todo
-    dispatch(cerrarCaja()); // actualiza Redux
+    localStorage.clear();
+    sessionStorage.clear(); // Limpiamos AMBOS por seguridad
+    dispatch(cerrarCaja());
     setIsAuthenticated(false);
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token =
+      localStorage.getItem("token") || sessionStorage.getItem("token");
     setIsAuthenticated(!!token);
   }, []);
 

@@ -30,7 +30,6 @@ export const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // Extraemos 'reset' y 'clearErrors' para limpiar el formulario al cambiar de vista
   const {
     register,
     handleSubmit,
@@ -45,47 +44,50 @@ export const Login = () => {
     setShowPassword(!showPassword);
   };
 
-  // Función para cambiar de vista limpiando los errores y mensajes previos
   const toggleView = (showForgot) => {
     setIsForgotPassword(showForgot);
     setBadgeMessage({ type: "", text: "" });
-    reset(); // Limpia los inputs
-    clearErrors(); // Limpia las validaciones visuales
+    reset();
+    clearErrors();
   };
 
-  // --- Lógica original de Login ---
+  // --- Lógica de Login con Control de Sesión ---
   const onSubmitLogin = async (data) => {
-    setLoading(true); // Bloqueamos el botón y mostramos el spinner
+    setLoading(true);
     try {
-      // const response = await axios.post("http://erp-api.test/api/login", {
-      const response = await axios.post(
-        "https://erp-api-production-c7d4.up.railway.app/api/login",
-        {
-          email: data.email,
-          password: data.password,
-        },
-      );
+      const response = await axios.post("http://erp-api.test/api/login", {
+        email: data.email,
+        password: data.password,
+      });
 
       if (response.data.token) {
-        login(response.data.token, response.data.user);
+        // 1. Enviamos el valor del checkbox a tu AuthContext
+        login(response.data.token, response.data.user, data.rememberMe);
+
+        // 2. Definimos dónde vamos a guardar el resto de la info (Local o Session)
+        const storage = data.rememberMe ? localStorage : sessionStorage;
+
         const cajaData = {
           nombre: response.data?.caja?.caja?.nombreCaja ?? "",
           id: response.data?.caja?.caja?.id ?? null,
           estado:
             response.data?.caja?.caja?.estadoCaja == 1 ? "abierto" : "cerrado",
         };
-        localStorage.setItem("roles", JSON.stringify(response.data.roles));
-        localStorage.setItem("caja", JSON.stringify(cajaData));
-        dispatch(abrirCaja(cajaData));
-        localStorage.setItem(
+
+        // 3. Guardamos TODO en la bóveda elegida
+        storage.setItem("roles", JSON.stringify(response.data.roles));
+        storage.setItem("caja", JSON.stringify(cajaData));
+        storage.setItem(
           "fotoPerfil",
           JSON.stringify(response.data?.user?.fotoPerfil),
         );
-        localStorage.setItem("empresa", JSON.stringify(response.data?.empresa));
-        localStorage.setItem(
+        storage.setItem("empresa", JSON.stringify(response.data?.empresa));
+        storage.setItem(
           "estiloEmpresa",
           JSON.stringify(response.data?.estiloEmpresa),
         );
+
+        dispatch(abrirCaja(cajaData));
 
         ToastAlert("success", "Inicio de sesión exitoso");
 
@@ -94,7 +96,7 @@ export const Login = () => {
         }, 2000);
       } else {
         ToastAlert("error", "Credenciales incorrectas");
-        setLoading(false); // Solo apagamos el loading si fallan las credenciales
+        setLoading(false);
       }
     } catch (err) {
       ToastAlert(
@@ -103,30 +105,28 @@ export const Login = () => {
           ? err.response.data.message
           : "Error al conectar con el servidor",
       );
-      setLoading(false); // Apagamos el loading si el servidor explota o devuelve error
+      setLoading(false);
     }
   };
 
-  // --- Lógica de Recuperación con React Hook Form ---
   const onForgotSubmit = async (data) => {
     setLoading(true);
-    setBadgeMessage({ type: "", text: "" }); // Limpiamos el badge antes de enviar
+    setBadgeMessage({ type: "", text: "" });
 
     try {
       const response = await axiosInstance.post(
         "http://127.0.0.1:8000/api/forgot-password",
         {
-          email: data.resetEmail, // Usamos el input registrado en react-hook-form
+          email: data.resetEmail,
         },
       );
 
       ToastAlert("success", "Enlace enviado exitosamente.");
-      // Mostramos el badge de éxito
       setBadgeMessage({
         type: "success",
         text: "¡Listo! Hemos enviado un enlace de recuperación. Por favor, revisa tu bandeja de entrada (y la carpeta de spam).",
       });
-      reset(); // Limpiamos el input después del éxito
+      reset();
     } catch (err) {
       let errorMsg =
         "No se pudo conectar con el servidor. Verifica tu conexión.";
@@ -138,7 +138,6 @@ export const Login = () => {
       }
 
       ToastAlert("error", errorMsg);
-      // Mostramos el badge de error
       setBadgeMessage({ type: "error", text: errorMsg });
     } finally {
       setLoading(false);
@@ -159,7 +158,6 @@ export const Login = () => {
 
         {/* === COLUMNA DERECHA (FORMULARIOS) === */}
         <div className="login-right-panel">
-          {/* VISTA DE INICIO DE SESIÓN NORMAL */}
           {!isForgotPassword ? (
             <form onSubmit={handleSubmit(onSubmitLogin)} className="login-form">
               <h2 className="login-title">Iniciar Sesión</h2>
@@ -191,7 +189,7 @@ export const Login = () => {
               </div>
 
               {/* Input de Contraseña */}
-              <div className="input-group-custom">
+              <div className="input-group-custom mb-3">
                 <FontAwesomeIcon
                   icon={faUnlockKeyhole}
                   className="input-icon"
@@ -226,17 +224,40 @@ export const Login = () => {
                 )}
               </div>
 
-              {/* Botón de Olvidé mi Contraseña */}
-              <div className="text-end mt-2">
+              {/* Controles Inferiores */}
+              <div className="d-flex justify-content-between align-items-center mb-3 px-1">
+                {/* Checkbox Recordar Sesión */}
+                <div className="form-check d-flex align-items-center gap-2 m-0 p-0">
+                  <input
+                    className="form-check-input m-0 shadow-none"
+                    type="checkbox"
+                    id="rememberMe"
+                    style={{ cursor: "pointer" }}
+                    {...register("rememberMe")}
+                  />
+                  <label
+                    className="form-check-label text-muted"
+                    htmlFor="rememberMe"
+                    style={{
+                      cursor: "pointer",
+                      fontSize: "0.85rem",
+                      fontWeight: "500",
+                    }}
+                  >
+                    Recordar sesión
+                  </label>
+                </div>
+
+                {/* Enlace Olvidar Contraseña */}
                 <span
                   onClick={() => toggleView(true)}
                   style={{
                     color: "#1a1a1a",
                     cursor: "pointer",
-                    fontSize: "0.9rem",
+                    fontSize: "0.85rem",
                     fontWeight: "500",
                   }}
-                  className="forgot-password-link"
+                  className="forgot-password-link m-0"
                 >
                   ¿Olvidaste tu contraseña?
                 </span>
@@ -291,7 +312,6 @@ export const Login = () => {
                 restablecer tu contraseña.
               </p>
 
-              {/* Input de Correo con React Hook Form */}
               <div className="input-group-custom">
                 <FontAwesomeIcon icon={faUser} className="input-icon" />
                 <input
@@ -318,7 +338,6 @@ export const Login = () => {
                 )}
               </div>
 
-              {/* --- Badge Dinámico para Respuestas --- */}
               {badgeMessage.text && (
                 <div
                   className={`alert mt-3 p-3 text-center ${badgeMessage.type === "success" ? "alert-success" : "alert-danger"}`}

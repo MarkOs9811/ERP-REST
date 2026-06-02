@@ -81,7 +81,7 @@ export function Cargos() {
     reset();
   };
   return (
-    <div className="card shadow-sm p-3">
+    <div className="card  p-3">
       <div className="card-header  d-flex align-items-center justify-content-between">
         <div className="d-flex gap-2 align-items-center">
           <div className="p-2 alert alert-primary rounded-lg mb-0">
