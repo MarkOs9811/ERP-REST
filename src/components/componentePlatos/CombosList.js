@@ -31,7 +31,6 @@ export function CombosList() {
 
   const [modalEditCombo, setModalEditCombo] = useState(false);
   const [dataCombo, setDataCombo] = useState(false);
-  const BASE_URL = process.env.REACT_APP_BASE_URL;
 
   const {
     data: platosList = [],
@@ -203,8 +202,8 @@ export function CombosList() {
                   <div className="card-header m-0 p-0">
                     <img
                       src={
-                        combo.foto
-                          ? `${BASE_URL}/storage/${combo.foto}`
+                        combo.foto_url
+                          ? combo.foto_url
                           : "/images/img-default.jpg"
                       }
                       alt="Foto del Plato"
