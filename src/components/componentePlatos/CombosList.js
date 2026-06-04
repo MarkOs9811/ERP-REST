@@ -51,7 +51,7 @@ export function CombosList() {
   const filteredCombos = useMemo(() => {
     const lowerSearch = search.toLowerCase();
     return platosList
-      .filter((plato) => plato.categoria?.nombre?.toLowerCase() === "combos")
+      .filter((plato) => plato.categoria?.nombre?.toLowerCase() === "combo")
       .filter((combo) => {
         const { nombre, descripcion, precio } = combo;
         return (
