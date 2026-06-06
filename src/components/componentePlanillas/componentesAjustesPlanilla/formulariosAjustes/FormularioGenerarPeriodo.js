@@ -58,143 +58,114 @@ export function FormularioGenerarPeriodo({ onClose, ultimoCorteReal = null }) {
     setError("");
     setPeriodosPreview([]);
 
-    // 1. Validaciones
     if (diaCorte < 1 || diaCorte > 31) {
-      setError("El día de corte debe estar entre 1 y 31.");
-      return;
+      return setError("El día de corte debe estar entre 1 y 31.");
     }
     if (!fechaInicio) {
-      setError("Debe especificar la 'Fecha de Inicio del Primer Periodo'.");
-      return;
+      return setError("Debe especificar la 'Fecha de Inicio del Primer Periodo'.");
     }
 
-    const periodosGenerados = [];
-    let fechaInicioPeriodo;
-
+    let actualInicio;
     try {
-      // Usamos T12:00:00Z (mediodía UTC) para la seguridad de la zona horaria
-      fechaInicioPeriodo = new Date(fechaInicio + "T12:00:00Z");
+      actualInicio = new Date(fechaInicio + "T12:00:00Z");
     } catch (err) {
-      setError("La fecha de inicio no es válida.");
-      return;
+      return setError("La fecha de inicio no es válida.");
     }
 
-    const anioAGenerar = anio; // El año seleccionado en el dropdown
-    let mesDeCorte = fechaInicioPeriodo.getMonth(); // 0-11
-    let anioDeCorte = fechaInicioPeriodo.getFullYear();
+    const anioLimite = anio; // Año seleccionado en el input
+    const periodosGenerados = [];
+    let safeguard = 0; // Evita bucles infinitos por seguridad
 
-    // 2. Ajustar el primer mes de corte (lógica de transición)
-    // Si el día de inicio (ej. 28) es MAYOR que el nuevo día de corte (ej. 20)...
-    // el primer corte debe ser en el mes SIGUIENTE.
-    if (fechaInicioPeriodo.getDate() > diaCorte) {
-      mesDeCorte += 1;
-      if (mesDeCorte > 11) {
-        mesDeCorte = 0;
-        anioDeCorte += 1;
-      }
-    }
+    // Iteramos HASTA que el año de inicio supere el año límite seleccionado
+    while (actualInicio.getFullYear() <= anioLimite && safeguard < 24) {
+      safeguard++;
+      
+      let mesCorte = actualInicio.getMonth();
+      let anioCorte = actualInicio.getFullYear();
 
-    // 3. Bucle de generación
-    // Continuar mientras el año de corte sea menor o igual al año a generar
-    while (anioDeCorte <= anioAGenerar) {
-      const fechaFinPeriodo = new Date(anioDeCorte, mesDeCorte, diaCorte);
-
-      // Ajustar para meses cortos (ej. 30 en Feb)
-      const ultimoDiaDelMes = new Date(
-        anioDeCorte,
-        mesDeCorte + 1,
-        0
-      ).getDate();
-      if (diaCorte > ultimoDiaDelMes) {
-        fechaFinPeriodo.setDate(ultimoDiaDelMes);
+      // REGLA CLAVE: Si el día de inicio ya es mayor o igual al día de corte, 
+      // el fin de periodo pasa obligatoriamente al siguiente mes.
+      if (actualInicio.getDate() >= diaCorte) {
+        mesCorte += 1;
+        if (mesCorte > 11) {
+          mesCorte = 0;
+          anioCorte += 1;
+        }
       }
 
-      // Solo agregamos si el periodo generado todavía está dentro del año objetivo
-      if (
-        anioDeCorte < anioAGenerar ||
-        (anioDeCorte === anioAGenerar && mesDeCorte <= 11)
-      ) {
+      const actualFin = new Date(anioCorte, mesCorte, diaCorte);
+
+      // Ajuste para meses cortos (Ej: si el corte es 31 y estamos en Febrero, se ajusta al 28/29)
+      const ultimoDiaMes = new Date(anioCorte, mesCorte + 1, 0).getDate();
+      if (diaCorte > ultimoDiaMes) {
+        actualFin.setDate(ultimoDiaMes);
+      }
+
+      // Solo guardamos el periodo si toca el año que el usuario quiere generar
+      if (actualInicio.getFullYear() === anioLimite || actualFin.getFullYear() === anioLimite) {
         periodosGenerados.push({
-          nombrePeriodo: `${getMesNombre(mesDeCorte)} ${anioDeCorte}`,
-          fecha_inicio: formatearFecha(fechaInicioPeriodo),
-          fecha_fin: formatearFecha(fechaFinPeriodo),
+          nombrePeriodo: `${getMesNombre(actualFin.getMonth())} ${actualFin.getFullYear()}`,
+          fecha_inicio: formatearFecha(actualInicio),
+          fecha_fin: formatearFecha(actualFin),
           estado: 0, // Pendiente
         });
       }
 
-      // 4. Preparar el siguiente ciclo
-      fechaInicioPeriodo = new Date(fechaFinPeriodo);
-      fechaInicioPeriodo.setDate(fechaFinPeriodo.getDate() + 1);
-
-      mesDeCorte += 1;
-      if (mesDeCorte > 11) {
-        mesDeCorte = 0;
-        anioDeCorte += 1;
-      }
+      // El inicio del siguiente periodo es exactamente 1 día después del fin actual
+      actualInicio = new Date(actualFin);
+      actualInicio.setDate(actualFin.getDate() + 1);
     }
 
     if (periodosGenerados.length === 0) {
-      setError(
-        "No se generaron periodos. Verifique que la fecha de inicio no sea posterior al último corte del año seleccionado."
-      );
+      setError("No se generaron periodos. La fecha seleccionada ya supera el año a generar.");
+      return;
     }
 
     setPeriodosPreview(periodosGenerados);
   };
 
-  /**
-   * Simula el guardado de los periodos generados.
-   */
-  // Tu función (ahora con manejo de errores robusto)
-
   const handleGuardarPeriodos = async () => {
-    // Opcional: Poner un estado de 'cargando' aquí
     setLoading(true);
 
     try {
-      const response = await axiosInstance.post("/periodoNomina", {
-        periodosPreview, // Esto envía un objeto: { periodosPreview: [...] }
-      });
+      const response = await axiosInstance.post("/periodoNomina", { periodosPreview });
 
-      // Éxito (Código 200 o 201)
       if (response.data.success) {
-        ToastAlert(
-          "success",
-          response.data.message || "Se registró correctamente"
-        );
+        ToastAlert("success", response.data.message || "Se registró correctamente");
         queryClient.invalidateQueries(["listaPeriodosNomina"]);
-        setLoading(false);
         onClose(); // Cierra el modal
       }
     } catch (error) {
       if (error.response) {
         const data = error.response.data;
 
+        // Si Laravel devuelve el 422 nativo
         if (error.response.status === 422 && data.errors) {
           try {
-            const errores = data.errors;
-            const primerErrorKey = Object.keys(errores)[0];
-            const mensajeError = errores[primerErrorKey][0];
-
-            ToastAlert("error", `Error de validación: ${mensajeError}`);
+            const primerErrorKey = Object.keys(data.errors)[0];
+            const mensajeError = data.errors[primerErrorKey][0];
+            return ToastAlert("error", `Validación: ${mensajeError}`);
           } catch (e) {
-            ToastAlert("error", "Error de validación. Revise los datos.");
+            return ToastAlert("error", "Error de validación. Revise los datos.");
           }
-        } else if (data.message) {
-          ToastAlert("error", `Error: ${data.message}`);
-        } else {
-          // Error genérico si el formato no es el esperado
-          ToastAlert("error", "Ocurrió un error inesperado en el servidor.");
+        } 
+        
+        // Excepción de tu Catch genérico
+        if (data.error && typeof data.error === 'string') {
+          return ToastAlert("error", data.error);
+        } 
+        
+        if (data.message) {
+          return ToastAlert("error", data.message);
         }
+
+        ToastAlert("error", "Ocurrió un error inesperado en el servidor.");
       } else if (error.request) {
-        // La petición se hizo pero no hubo respuesta (ej. sin internet)
         ToastAlert("error", "No se pudo conectar con el servidor.");
       } else {
-        // Error al configurar la petición
         ToastAlert("error", "Error al preparar la solicitud.");
       }
     } finally {
-      // Opcional: Quitar el estado de 'cargando'
       setLoading(false);
     }
   };
