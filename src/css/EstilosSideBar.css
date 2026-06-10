@@ -333,19 +333,23 @@
     color: var(--brand-primary);
 }
 
+/* ======================================== */
+/* TEMAS DARK DEL SIDEBAR */
+/* ========================================= */
 /* Dark Theme Overrides */
+body.dark-theme .sidebar {
+    background-color: transparent !important;
+    box-shadow: 5px 0 15px rgba(0, 0, 0, 0) !important;
+}
 body.dark-theme .menu-item {
     color: var(--text-muted) !important;
 }
 
 body.dark-theme .menu-item:hover {
-    background-color: rgba(255, 255, 255, 0.05) !important;
+    background-color: rgba(0, 0, 0, 0.05) !important;
     color: #eaeaea !important;
 }
 
-body.dark-theme .submenu {
-    border-left: 1px solid rgba(255,255,255,0.06);
-}
 
 body.dark-theme .menu-item.active {
     background-color: rgba(238, 82, 82, 0.15) !important;

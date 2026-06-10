@@ -42,17 +42,6 @@
   --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-body.dark-theme {
-  /* Estructura Tema Oscuro (Fire Wok Dark) */
-  --brand-primary: var(--fw-saffron);
-  --brand-secondary: var(--fw-strawberry);
-  --fw-muetd: var(--fw-onyx);
-  --bg-sidebar-header: #1A1C1E;
-  --bg-card: #1E2022;
-  --text-main: #FBFCFF;
-  --text-muted: #9CA3AF;
-}
-
 /* ========== 2. TIPOGRAFÍA Y BASE ========== */
 body {
   overflow: hidden !important;
@@ -101,21 +90,6 @@ h5 {
   color: var(--fw-saffron) !important;
 }
 
-/* Scrollbar Personalizado (Modo Oscuro) */
-body.dark-theme ::-webkit-scrollbar {
-  width: 10px;
-  background: var(--fw-onyx);
-}
-
-body.dark-theme ::-webkit-scrollbar-thumb {
-  background: #313A46;
-  border-radius: 6px;
-}
-
-body.dark-theme ::-webkit-scrollbar-thumb:hover {
-  background: #475569;
-}
-
 /* ========== 3. ESTRUCTURA Y LAYOUT ========== */
 .contenido {
   background: var(--fw-muetd) !important;
@@ -135,10 +109,6 @@ body.dark-theme ::-webkit-scrollbar-thumb:hover {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
   border: none !important;
   overflow: auto;
-}
-
-body.dark-theme .contenido>div>div:last-child {
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35) !important;
 }
 
 .row-cuerpo {
@@ -169,30 +139,6 @@ body.dark-theme .contenido>div>div:last-child {
   width: calc(100% - 80px) !important;
 }
 
-body.dark-theme .header-contenido,
-body.dark-theme .navbar {
-  background-color: var(--fw-muetd) !important;
-  border-bottom: 1px solid #313a46 !important;
-}
-
-body.dark-theme .navegacion {
-  background-color: #1E2022 !important;
-}
-
-body.dark-theme .menu-item,
-body.dark-theme .menu-item span {
-  color: var(--text-main) !important;
-}
-
-body.dark-theme .menu-item.active {
-  background: var(--brand-primary) !important;
-}
-
-body.dark-theme .menu-item.active span {
-  color: var(--fw-onyx) !important;
-  font-weight: 600;
-}
-
 /* ========== 4. CARDS Y ESTADÍSTICAS ========== */
 .card {
   overflow: visible !important;
@@ -201,10 +147,6 @@ body.dark-theme .menu-item.active span {
   border: 1px solid #eeeeee !important;
   box-shadow: none !important;
   overflow-x: hidden;
-}
-
-body.dark-theme .card {
-  border-color: #313a46 !important;
 }
 
 .card-platos {
@@ -260,12 +202,6 @@ body.dark-theme .card {
   position: relative;
 }
 
-body.dark-theme .titulo-card-especial .badge-header {
-  background-color: #1e293b;
-  color: #cbd5e1;
-  border-color: #334155;
-}
-
 /* Buscador en Header */
 .header-search-container {
   position: relative;
@@ -299,11 +235,6 @@ body.dark-theme .titulo-card-especial .badge-header {
   box-shadow: 0 0 0 2px var(--bg-saffron-soft) !important;
 }
 
-body.dark-theme .card-header input.form-control {
-  background-color: #1e293b !important;
-  color: #f8fafc !important;
-}
-
 /* Tarjetas de Estadísticas */
 .stats-card {
   box-shadow: var(--shadow-soft);
@@ -314,10 +245,6 @@ body.dark-theme .card-header input.form-control {
   display: flex;
   align-items: center;
   padding: 5px;
-}
-
-body.dark-theme .stats-card {
-  border-color: #313a46 !important;
 }
 
 .stats-card:hover {
@@ -361,12 +288,6 @@ form label {
   letter-spacing: 0.2px;
 }
 
-body.dark-theme .form-label,
-body.dark-theme label.small.fw-bold,
-body.dark-theme form label {
-  color: #cecece !important;
-}
-
 .form-control,
 .form-select {
   border: 1px solid #cbd5e1 !important;
@@ -390,23 +311,6 @@ body.dark-theme form label {
   border: 1px solid var(--brand-primary) !important;
   box-shadow: inset 0 0 0 1px var(--brand-primary), 0 0 0 3px rgba(153, 153, 153, 0.1) !important;
   outline: none !important;
-}
-
-/* Modo oscuro general inputs */
-body.dark-theme .form-control,
-body.dark-theme input,
-body.dark-theme textarea,
-body.dark-theme select {
-  background: #151A20 !important;
-  color: var(--text-main) !important;
-  border-color: #313A46 !important;
-}
-
-body.dark-theme .form-control:focus,
-body.dark-theme input:focus,
-body.dark-theme select:focus {
-  border-color: var(--brand-primary) !important;
-  box-shadow: inset 0 0 0 1px var(--brand-primary), 0 0 0 2px rgba(255, 153, 44, 0.15) !important;
 }
 
 /* Estado de Error */
@@ -434,6 +338,7 @@ body.dark-theme select:focus {
   background-color: var(--brand-primary) !important;
   border-color: var(--brand-primary) !important;
 }
+
 /* ========== 6. BOTONES FIRE WOK ========== */
 .btn-realizarPedido {
   background-color: var(--fw-emerald);
@@ -451,13 +356,13 @@ body.dark-theme select:focus {
 .btn-realizarPedido:hover {
   background-color: rgb(2, 223, 94);
   color: #181818;
-
 }
 
 .btn-realizarPedido:active {
   background-color: rgb(0, 167, 69);
   color: #ffffff;
 }
+
 /* Base estructural para todos los botones del sistema (Reemplaza a .btn) */
 .btn-principal,
 .btn-guardar,
@@ -476,7 +381,6 @@ body.dark-theme select:focus {
   align-items: center;
   justify-content: center;
   padding: 0.5rem 1.2rem;
-  /* El !important se quita para permitir overrides como en accion-card */
   font-weight: 600 !important;
   font-size: 0.9rem !important;
   gap: 6px;
@@ -484,7 +388,6 @@ body.dark-theme select:focus {
   transition: all var(--transition-smooth);
   cursor: pointer;
   border: 1px solid transparent;
-  /* Evita saltos visuales al hacer hover */
 }
 
 /* Excepciones de forma/tamaño */
@@ -492,7 +395,6 @@ body.dark-theme select:focus {
   width: 36px;
   height: 36px;
   padding: 0 !important;
-  /* Sobrescribe el padding base para que sea un círculo perfecto */
 }
 
 button:disabled,
@@ -530,13 +432,6 @@ button:disabled,
   box-shadow: none;
 }
 
-body.dark-theme .btn-principal,
-body.dark-theme .btn-guardar,
-body.dark-theme .card-header .btn-dark {
-  color: var(--fw-onyx) !important;
-  font-weight: 700 !important;
-}
-
 /* Acciones Genéricas (Ver, Cerrar) */
 .btn-ver,
 .btn-cerrar-modal,
@@ -554,22 +449,6 @@ body.dark-theme .card-header .btn-dark {
   border-color: #94a3b8;
 }
 
-body.dark-theme .btn-ver,
-body.dark-theme .btn-cerrar-modal,
-body.dark-theme .btn-accion-card {
-  background-color: transparent;
-  border-color: #313a46;
-  color: #cbd5e1;
-}
-
-body.dark-theme .btn-ver:hover,
-body.dark-theme .btn-cerrar-modal:hover,
-body.dark-theme .btn-accion-card:hover {
-  background-color: rgba(255, 255, 255, 0.05);
-  color: var(--fw-white);
-  border-color: #475569;
-}
-
 /* Acciones Semánticas (Agregar, Activar, Editar, Eliminar, Desactivar) */
 
 /* Agregar (Neutro claro -> Oscuro) */
@@ -582,17 +461,6 @@ body.dark-theme .btn-accion-card:hover {
 .btn-agregar:hover {
   background-color: #e4e7eb;
   border-color: #818891;
-}
-
-body.dark-theme .btn-agregar {
-  background-color: #2b2e32;
-  color: var(--text-main);
-  border-color: #3f444a;
-}
-
-body.dark-theme .btn-agregar:hover {
-  background-color: #383c42;
-  border-color: #525860;
 }
 
 /* Activar (Verde) */
@@ -634,14 +502,6 @@ body.dark-theme .btn-agregar:hover {
   border-color: var(--fw-strawberry);
 }
 
-/* Ajuste texto hover oscuro para semánticos vibrantes */
-body.dark-theme .btn-activar:hover,
-body.dark-theme .btn-editar:hover,
-body.dark-theme .btn-eliminar:hover {
-  color: var(--fw-onyx) !important;
-  font-weight: 700;
-}
-
 /* Desactivar (Gris pizarra) */
 .btn-desactivar {
   background-color: var(--fw-muetd);
@@ -653,18 +513,6 @@ body.dark-theme .btn-eliminar:hover {
   background-color: #64748b;
   color: var(--fw-white);
   border-color: #64748b;
-}
-
-body.dark-theme .btn-desactivar {
-  background-color: transparent;
-  color: var(--text-muted);
-  border-color: #475569;
-}
-
-body.dark-theme .btn-desactivar:hover {
-  background-color: #94a3b8;
-  color: var(--fw-onyx) !important;
-  border-color: #94a3b8;
 }
 
 /* Outline Dark (Buscador/Filtros) */
@@ -680,18 +528,7 @@ body.dark-theme .btn-desactivar:hover {
   border-color: #94a3b8 !important;
 }
 
-body.dark-theme .card-header .btn-outline-dark {
-  background-color: transparent !important;
-  border-color: #475569 !important;
-  color: #e2e8f0 !important;
-}
-
-body.dark-theme .card-header .btn-outline-dark:hover {
-  background-color: #1e293b !important;
-  color: #f8fafc !important;
-}
-
-/* Botón POS Venta (Mantiene su forma rectangular por diseño de caja) */
+/* Botón POS Venta */
 .boton-venta {
   background-color: var(--fw-white);
   border: none;
@@ -720,16 +557,6 @@ body.dark-theme .card-header .btn-outline-dark:hover {
   transform: scale(0.98);
 }
 
-body.dark-theme .boton-venta {
-  background-color: var(--bg-card) !important;
-  border: 1px solid #313A46 !important;
-}
-
-body.dark-theme .boton-venta.activo {
-  border-bottom: 4px solid var(--brand-primary) !important;
-  background-color: #2D3748 !important;
-  color: var(--brand-primary) !important;
-}
 /* ========== 7. BADGES, DROPDOWNS Y LISTAS ========== */
 .nombreUsuarioTabla {
   text-transform: capitalize;
@@ -798,22 +625,6 @@ body.dark-theme .boton-venta.activo {
   color: var(--text-main) !important;
 }
 
-body.dark-theme .dropdown-menu {
-  background: var(--bg-card) !important;
-  border: 1px solid #313A46 !important;
-}
-
-body.dark-theme .list-group-item {
-  background-color: var(--bg-card) !important;
-  color: var(--text-main);
-  border-color: #313A46;
-}
-
-body.dark-theme .list-group-item.active {
-  background: #2D3748 !important;
-  color: var(--brand-primary) !important;
-}
-
 /* ========== 8. TABLAS Y COMPONENTES EXTRAS ========== */
 .tablaGeneral .rdt_TableBody .rdt_TableRow {
   background-color: transparent !important;
@@ -828,15 +639,6 @@ body.dark-theme .list-group-item.active {
 .tablaGeneral .rdt_TableBody .rdt_TableCell,
 .cuerpo-tabla {
   background-color: transparent !important;
-}
-
-body.dark-theme .tablaGeneral .rdt_TableBody .rdt_TableRow {
-  background-color: var(--bg-card) !important;
-  color: var(--text-main) !important;
-}
-
-body.dark-theme .tablaGeneral .rdt_TableBody .rdt_TableRow:hover {
-  background-color: #2D3748 !important;
 }
 
 .kanban-column {
@@ -937,4 +739,207 @@ body.dark-theme .tablaGeneral .rdt_TableBody .rdt_TableRow:hover {
   .card-header .btn {
     flex: 1;
   }
+}
+
+/* =========================================================
+   🌙 10. TEMA OSCURO (DARK THEME FIRE WOK) - CENTRALIZADO
+   ========================================================= */
+
+/* 10.1 Variables y Tipografía */
+body.dark-theme {
+  --brand-primary: var(--fw-saffron);
+  --brand-secondary: var(--fw-strawberry);
+  --fw-muetd: var(--fw-onyx);
+  --bg-sidebar-header: #1A1C1E;
+  --bg-card: #1E2022;
+  --text-main: #FBFCFF;
+  --text-muted: #9CA3AF;
+}
+
+body.dark-theme ::-webkit-scrollbar {
+  width: 10px;
+  background: var(--fw-onyx);
+}
+
+body.dark-theme ::-webkit-scrollbar-thumb {
+  background: #313A46;
+  border-radius: 6px;
+}
+
+body.dark-theme ::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* 10.2 Estructura y Layout */
+body.dark-theme .contenido>div>div:last-child {
+  box-shadow: 0 6px 10px rgba(22, 22, 22, 0.35) !important;
+}
+
+body.dark-theme .header-contenido,
+body.dark-theme .navbar {
+  background-color: var(--fw-muetd) !important;
+  border-bottom: 1px solid #161b20 !important;
+}
+
+body.dark-theme .navegacion {
+  background-color: #1E2022 !important;
+}
+
+body.dark-theme .menu-item,
+body.dark-theme .menu-item span {
+  color: var(--text-main) !important;
+}
+
+body.dark-theme .menu-item.active {
+  background: var(--brand-primary) !important;
+}
+
+body.dark-theme .menu-item.active span {
+  color: var(--fw-onyx) !important;
+  font-weight: 600;
+}
+
+/* 10.3 Cards y Estadísticas */
+body.dark-theme .card {
+  border-color:1px solid #2c2c2c !important;
+}
+
+body.dark-theme .titulo-card-especial .badge-header {
+  background-color: #1e293b;
+  color: #cbd5e1;
+  border-color: #334155;
+}
+
+body.dark-theme .card-header input.form-control {
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
+}
+
+body.dark-theme .stats-card {
+  border-color: #313a46 !important;
+}
+
+/* 10.4 Formularios e Inputs */
+body.dark-theme .form-label,
+body.dark-theme label.small.fw-bold,
+body.dark-theme form label {
+  color: #cecece !important;
+}
+
+body.dark-theme .form-control,
+body.dark-theme input,
+body.dark-theme textarea,
+body.dark-theme select {
+  background: #151A20 !important;
+  color: var(--text-main) !important;
+  border-color: #313A46 !important;
+}
+
+body.dark-theme .form-control:focus,
+body.dark-theme input:focus,
+body.dark-theme select:focus {
+  border-color: var(--brand-primary) !important;
+  box-shadow: inset 0 0 0 1px var(--brand-primary), 0 0 0 2px rgba(255, 153, 44, 0.15) !important;
+}
+
+/* 10.5 Botones */
+body.dark-theme .btn-principal,
+body.dark-theme .btn-guardar,
+body.dark-theme .card-header .btn-dark {
+  color: var(--fw-onyx) !important;
+  font-weight: 700 !important;
+}
+
+body.dark-theme .btn-ver,
+body.dark-theme .btn-cerrar-modal,
+body.dark-theme .btn-accion-card {
+  background-color: transparent;
+  border-color: #313a46;
+  color: #cbd5e1;
+}
+
+body.dark-theme .btn-ver:hover,
+body.dark-theme .btn-cerrar-modal:hover,
+body.dark-theme .btn-accion-card:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--fw-white);
+  border-color: #475569;
+}
+
+body.dark-theme .btn-agregar {
+  background-color: #2b2e32;
+  color: var(--text-main);
+  border-color: #3f444a;
+}
+
+body.dark-theme .btn-agregar:hover {
+  background-color: #383c42;
+  border-color: #525860;
+}
+
+body.dark-theme .btn-activar:hover,
+body.dark-theme .btn-editar:hover,
+body.dark-theme .btn-eliminar:hover {
+  color: var(--fw-onyx) !important;
+  font-weight: 700;
+}
+
+body.dark-theme .btn-desactivar {
+  background-color: transparent;
+  color: var(--text-muted);
+  border-color: #475569;
+}
+
+body.dark-theme .btn-desactivar:hover {
+  background-color: #94a3b8;
+  color: var(--fw-onyx) !important;
+  border-color: #94a3b8;
+}
+
+body.dark-theme .card-header .btn-outline-dark {
+  background-color: transparent !important;
+  border-color: #475569 !important;
+  color: #e2e8f0 !important;
+}
+
+body.dark-theme .card-header .btn-outline-dark:hover {
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
+}
+
+body.dark-theme .boton-venta {
+  background-color: var(--bg-card) !important;
+  border: 1px solid #313A46 !important;
+}
+
+body.dark-theme .boton-venta.activo {
+  border-bottom: 4px solid var(--brand-primary) !important;
+  background-color: #2D3748 !important;
+  color: var(--brand-primary) !important;
+}
+
+/* 10.6 Dropdowns y Tablas */
+body.dark-theme .dropdown-menu {
+  background: var(--bg-card) !important;
+  border: 1px solid #313A46 !important;
+}
+
+body.dark-theme .list-group-item {
+  background-color: var(--bg-card) !important;
+  color: var(--text-main);
+  border-color: #313A46;
+}
+
+body.dark-theme .list-group-item.active {
+  background: #2D3748 !important;
+  color: var(--brand-primary) !important;
+}
+
+body.dark-theme .tablaGeneral .rdt_TableBody .rdt_TableRow {
+  background-color: var(--bg-card) !important;
+  color: var(--text-main) !important;
+}
+
+body.dark-theme .tablaGeneral .rdt_TableBody .rdt_TableRow:hover {
+  background-color: #2D3748 !important;
 }

@@ -1,5 +1,4 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import axiosInstance from "../api/AxiosInstance";
 import { useDispatch, useSelector } from "react-redux";
 import { subMenuClick } from "../redux/subMenuSlice";
 import "../css/EstilosSideBar.css";
@@ -12,16 +11,13 @@ import {
   Settings,
   ShoppingBag,
   ShoppingCart,
-  TrendingUp,
   Truck,
   Users,
   Warehouse,
   UsersRound,
   BikeIcon,
-  LucideActivity,
   X,
   PackageCheckIcon,
-  UserCheck2,
   Landmark,
   UserRoundCogIcon,
 } from "lucide-react";

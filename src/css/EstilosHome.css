@@ -336,15 +336,6 @@ body.dark-theme .dashboard-header p {
     color: var(--color-gray-600);
 }
 
-body.dark-theme .dashboard-card {
-    background-color: var(--color-gray-100);
-    border-color: var(--color-gray-200);
-}
-
-body.dark-theme .card-header-modern {
-    background-color: var(--color-gray-50);
-    border-bottom-color: var(--color-gray-200);
-}
 
 body.dark-theme .card-header-title h3 {
     color: var(--color-gray-900);

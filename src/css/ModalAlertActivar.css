@@ -116,14 +116,14 @@
 
 /* ========== TEMA OSCURO MODAL ALERT ACTIVAR ESTILO MODERNO ========== */
 body.dark-theme .modal-overlay {
-    background: rgba(15, 23, 42, 0.8) !important;
+    background: rgba(20, 20, 20, 0.8) !important;
 }
 
 body.dark-theme .contenido-model {
-    background: #1e293b !important;
+    background: #242424 !important;
     /* Gris oscuro azulado elegante */
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5) !important;
-    border: 1px solid #334155;
+    border: 1px solid #202020;
 }
 
 body.dark-theme .contenido-model h3 {

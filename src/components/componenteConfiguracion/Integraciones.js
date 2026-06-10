@@ -46,9 +46,11 @@ function getIcon(nombre) {
 }
 
 export function Integraciones() {
+
   const [openModal, setOpenModal] = useState(false);
   const [tituloModal, setTituloModal] = useState("");
   const [data, setData] = useState([]);
+  
   const {
     data: configuracion = [],
     isLoading,
@@ -63,11 +65,13 @@ export function Integraciones() {
 
   // Filtrar solo las de tipo "integracion"
   const integraciones = configuracion.filter(
-    (item) => item.tipo?.toLowerCase() == "integracion"
+    (item) => item.tipo?.toLowerCase() == "integracion",
   );
 
   // Inicializa switches solo si está vacío y hay integraciones
+
   const [switches, setSwitches] = useState({});
+
   if (Object.keys(switches).length === 0 && integraciones.length > 0) {
     const initial = {};
     integraciones.forEach((item) => {
