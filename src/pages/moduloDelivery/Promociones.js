@@ -33,8 +33,6 @@ export function Promociones() {
   const [promoDelete, setPromoDelete] = useState(null);
   const queryClient = useQueryClient();
 
-  const BASE_URL = process.env.REACT_APP_BASE_URL;
-
   const handleToggleEstado = async (id) => {
     const nuevoEstado = promoAccion.estado === 1 ? 0 : 1;
     const exito = await PutData("delivery/promociones", id, {
@@ -133,7 +131,7 @@ export function Promociones() {
                       {/* Banner Image */}
                       <div className="promo-banner-container">
                         <img
-                          src={BASE_URL + "/storage/" + promo.imagen_banner}
+                          src={promo.foto_url}
                           alt={promo.titulo}
                           className="promo-banner"
                         />
