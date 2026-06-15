@@ -4,6 +4,17 @@ import { useForm } from "react-hook-form";
 import { Clock, HeartHandshake } from "lucide-react";
 import { PutData } from "../../service/CRUD/PutData";
 
+// Lista de días para renderizar los checkboxes
+const DIAS_SEMANA = [
+  "Lunes",
+  "Martes",
+  "Miércoles",
+  "Jueves",
+  "Viernes",
+  "Sábado",
+  "Domingo",
+];
+
 export function FormEditConfigTarifa({ onClose, configuracion }) {
   const queryClient = useQueryClient();
 
@@ -19,30 +30,54 @@ export function FormEditConfigTarifa({ onClose, configuracion }) {
       tiempo_min: "",
       tiempo_max: "",
       propinasInput: "",
+      hora_apertura: "", // Nuevo
+      hora_cierre: "", // Nuevo
+      dias_atencion: [], // Nuevo
     },
   });
 
   useEffect(() => {
     if (configuracion) {
-      // Parsear propinas json array " [2,3,5] " a string "2, 3, 5"
+      // 1. Parsear propinas (de "[2,3,5]" a "2, 3, 5")
       let propinasStr = "";
       try {
         const propinas =
           typeof configuracion.propinas_sugeridas === "string"
             ? JSON.parse(configuracion.propinas_sugeridas)
             : configuracion.propinas_sugeridas || [];
-
         propinasStr = Array.isArray(propinas) ? propinas.join(", ") : "";
       } catch (e) {
         propinasStr = "";
       }
 
+      // 2. Parsear días de atención (de '["Lunes","Martes"]' a ["Lunes", "Martes"])
+      let diasArray = [];
+      try {
+        const dias =
+          typeof configuracion.dias_atencion === "string"
+            ? JSON.parse(configuracion.dias_atencion)
+            : configuracion.dias_atencion || [];
+        diasArray = Array.isArray(dias) ? dias : [];
+      } catch (e) {
+        // Si falla o es null, marcamos todos por defecto o lo dejamos vacío
+        diasArray = DIAS_SEMANA;
+      }
+
+      // Resetear el formulario con los datos de la base de datos
       reset({
         costo_base_delivery: configuracion.costo_base_delivery || "",
         costo_prioridad: configuracion.costo_prioridad || "",
         tiempo_min: configuracion.tiempo_min || "",
         tiempo_max: configuracion.tiempo_max || "",
         propinasInput: propinasStr,
+        // Asignar los nuevos campos asegurando que el formato de hora sea "HH:mm"
+        hora_apertura: configuracion.hora_apertura
+          ? configuracion.hora_apertura.substring(0, 5)
+          : "09:00",
+        hora_cierre: configuracion.hora_cierre
+          ? configuracion.hora_cierre.substring(0, 5)
+          : "22:00",
+        dias_atencion: diasArray,
       });
     }
   }, [configuracion, reset]);
@@ -64,6 +99,10 @@ export function FormEditConfigTarifa({ onClose, configuracion }) {
       tiempo_min: parseInt(data.tiempo_min, 10),
       tiempo_max: parseInt(data.tiempo_max, 10),
       propinas_sugeridas: JSON.stringify(propinasArray),
+      // NUEVOS CAMPOS:
+      hora_apertura: data.hora_apertura,
+      hora_cierre: data.hora_cierre,
+      dias_atencion: JSON.stringify(data.dias_atencion),
     };
 
     // Usamos PutData apuntando a delivery/zona-tarifa/{id}
@@ -83,7 +122,91 @@ export function FormEditConfigTarifa({ onClose, configuracion }) {
     <form
       onSubmit={handleSubmit(onSubmit)}
       className="d-flex flex-column h-100 p-4"
+      style={{ overflowY: "auto" }}
     >
+      {/* HORARIOS Y DÍAS DE ATENCIÓN (NUEVO) */}
+      <h6 className="fw-bold mb-3 text-dark border-bottom pb-2">
+        Horario de Atención de la Sede
+      </h6>
+
+      {/* Días de la semana */}
+      <div className="mb-3">
+        <label className="form-label fw-medium text-dark small">
+          Días de Operación
+        </label>
+        <div className="d-flex flex-wrap gap-2">
+          {DIAS_SEMANA.map((dia) => (
+            <div className="form-check form-check-inline m-0" key={dia}>
+              <input
+                className="form-check-input"
+                type="checkbox"
+                id={`edit-dia-${dia}`}
+                value={dia}
+                {...register("dias_atencion", {
+                  required: "Selecciona al menos un día",
+                })}
+              />
+              <label
+                className="form-check-label small"
+                htmlFor={`edit-dia-${dia}`}
+              >
+                {dia.substring(0, 3)}
+              </label>
+            </div>
+          ))}
+        </div>
+        {errors.dias_atencion && (
+          <span className="text-danger small d-block mt-1">
+            {errors.dias_atencion.message}
+          </span>
+        )}
+      </div>
+
+      {/* Horas */}
+      <div className="row g-3 mb-4">
+        <div className="col-6">
+          <label className="form-label fw-medium text-dark small">
+            Hora Apertura
+          </label>
+          <div className="input-group shadow-sm">
+            <span className="input-group-text bg-white">
+              <Clock size={16} className="text-muted" />
+            </span>
+            <input
+              type="time"
+              className={`form-control ${errors.hora_apertura ? "is-invalid" : ""}`}
+              {...register("hora_apertura", { required: "Obligatorio" })}
+            />
+          </div>
+          {errors.hora_apertura && (
+            <span className="text-danger small">
+              {errors.hora_apertura.message}
+            </span>
+          )}
+        </div>
+
+        <div className="col-6">
+          <label className="form-label fw-medium text-dark small">
+            Hora Cierre
+          </label>
+          <div className="input-group shadow-sm">
+            <span className="input-group-text bg-white">
+              <Clock size={16} className="text-muted" />
+            </span>
+            <input
+              type="time"
+              className={`form-control ${errors.hora_cierre ? "is-invalid" : ""}`}
+              {...register("hora_cierre", { required: "Obligatorio" })}
+            />
+          </div>
+          {errors.hora_cierre && (
+            <span className="text-danger small">
+              {errors.hora_cierre.message}
+            </span>
+          )}
+        </div>
+      </div>
+
       {/* TARIFAS */}
       <h6 className="fw-bold mb-3 mt-2 text-dark border-bottom pb-2">
         Tarifas de Delivery

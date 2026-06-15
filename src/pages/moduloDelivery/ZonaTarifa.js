@@ -1,15 +1,14 @@
 import {
   Search,
   FileText,
-  Plus,
   MapPin,
   Settings,
   Clock,
   HeartHandshake,
-  Map,
   AlertCircle,
   PowerOff,
   Trash2,
+  CalendarDays, // <--- NUEVO ICONO IMPORTADO
 } from "lucide-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
@@ -70,7 +69,7 @@ export function ZonaTarifa() {
 
   return (
     <div className="container-fluid p-0">
-      <div className="card  rounded-4">
+      <div className="card rounded-4">
         {/* HEADER DE LA VISTA */}
         <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-3">
           <div className="d-flex align-items-center">
@@ -122,11 +121,10 @@ export function ZonaTarifa() {
               </div>
             ) : (
               sedes.map((sede) => {
-                // Laravel suele devolver las relaciones en snake_case al pasarlas a JSON
                 const config =
                   sede.configuracion_delivery || sede.configuracionDelivery;
 
-                // Procesar propinas (por si vienen como string JSON desde la BD)
+                // 1. Procesar propinas
                 let propinas = [];
                 try {
                   propinas =
@@ -137,12 +135,23 @@ export function ZonaTarifa() {
                   propinas = [];
                 }
 
+                // 2. Procesar días de atención (NUEVO)
+                let diasAtencion = [];
+                try {
+                  diasAtencion =
+                    config && typeof config.dias_atencion == "string"
+                      ? JSON.parse(config.dias_atencion)
+                      : config?.dias_atencion || [];
+                } catch (e) {
+                  diasAtencion = [];
+                }
+
                 return (
                   <div className="col-12 col-xl-6" key={sede.id}>
                     <div
-                      className={`card h-100 sede-config-card  ${config && config.estado !== 1 ? "bg-light" : ""}`}
+                      className={`card h-100 sede-config-card ${config && config.estado !== 1 ? "bg-light" : ""}`}
                     >
-                      {/* Cabecera de la Tarjeta (Datos de la Sede) */}
+                      {/* Cabecera de la Tarjeta */}
                       <div className="card-header bg-transparent border-bottom px-4 py-3 d-flex justify-content-between align-items-center">
                         <div>
                           <h5 className="mb-1 fw-bold text-dark">
@@ -160,10 +169,88 @@ export function ZonaTarifa() {
                         </span>
                       </div>
 
-                      {/* Cuerpo de la Tarjeta (Configuración Delivery) */}
+                      {/* Cuerpo de la Tarjeta */}
                       <div className="card-body px-4 py-2">
                         {config ? (
                           <div className="d-flex flex-column">
+                            {/* NUEVO: HORARIO Y DÍAS DE ATENCIÓN (Diseño sin colores BS) */}
+                            <div
+                              className="config-item mb-2"
+                              style={{
+                                borderBottom: "1px dashed #e5e7eb",
+                                paddingBottom: "12px",
+                              }}
+                            >
+                              <div
+                                className="flex-shrink-0"
+                                style={{
+                                  backgroundColor: "#f3f4f6",
+                                  color: "#374151",
+                                  borderRadius: "10px",
+                                  padding: "10px",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                }}
+                              >
+                                <CalendarDays size={20} strokeWidth={2} />
+                              </div>
+                              <div className="w-100 ms-3 d-flex flex-column justify-content-center">
+                                <div className="d-flex justify-content-between align-items-center mb-1">
+                                  <p
+                                    className="mb-0 fw-bold"
+                                    style={{
+                                      fontSize: "0.9rem",
+                                      color: "#1f2937",
+                                    }}
+                                  >
+                                    Horario de Atención
+                                  </p>
+                                  <span
+                                    style={{
+                                      fontSize: "0.80rem",
+                                      fontWeight: "600",
+                                      color: "#111827",
+                                      backgroundColor: "#e5e7eb",
+                                      padding: "3px 10px",
+                                      borderRadius: "12px",
+                                    }}
+                                  >
+                                    {config.hora_apertura
+                                      ? config.hora_apertura.substring(0, 5)
+                                      : "--:--"}{" "}
+                                    a{" "}
+                                    {config.hora_cierre
+                                      ? config.hora_cierre.substring(0, 5)
+                                      : "--:--"}
+                                  </span>
+                                </div>
+                                <div className="d-flex gap-1 flex-wrap mt-1">
+                                  {diasAtencion.length > 0 ? (
+                                    diasAtencion.map((dia, idx) => (
+                                      <span
+                                        key={idx}
+                                        style={{
+                                          fontSize: "0.70rem",
+                                          border: "1px solid #d1d5db",
+                                          color: "#4b5563",
+                                          padding: "2px 8px",
+                                          borderRadius: "6px",
+                                          backgroundColor: "#ffffff",
+                                        }}
+                                      >
+                                        {dia.substring(0, 3)}
+                                      </span>
+                                    ))
+                                  ) : (
+                                    <small style={{ color: "#9ca3af" }}>
+                                      No configurado
+                                    </small>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+
                             {/* Tarifas Base y Prioridad */}
                             <div className="config-item">
                               <div className="icon-box icon-box-primary flex-shrink-0">
@@ -256,7 +343,6 @@ export function ZonaTarifa() {
                             </div>
                           </div>
                         ) : (
-                          /* Estado Vacio: Si la Sede aún no tiene configuración en la DB */
                           <div className="text-center py-4">
                             <AlertCircle
                               size={32}
@@ -282,10 +368,10 @@ export function ZonaTarifa() {
                         )}
                       </div>
 
-                      {/* Pie de la Tarjeta (Botones de Acción) */}
+                      {/* Pie de la Tarjeta */}
                       <div className="card-footer bg-transparent border-top px-4 py-3 d-flex gap-2">
                         <button
-                          className="btn btn-outline-secondary d-flex justify-content-center align-items-center gap-2  fw-medium "
+                          className="btn btn-outline-secondary d-flex justify-content-center align-items-center gap-2 fw-medium"
                           disabled={!config}
                           onClick={() => {
                             if (config) {
@@ -301,7 +387,7 @@ export function ZonaTarifa() {
                         {config && (
                           <div className="d-flex ms-auto gap-2">
                             <button
-                              className="btn btn-outline-secondary d-flex justify-content-center align-items-center "
+                              className="btn btn-outline-secondary d-flex justify-content-center align-items-center"
                               title={
                                 config.estado == 1
                                   ? "Desactivar Configuración"
@@ -315,7 +401,7 @@ export function ZonaTarifa() {
                               <PowerOff size={16} />
                             </button>
                             <button
-                              className="btn btn-outline-danger d-flex justify-content-center align-items-center "
+                              className="btn btn-outline-danger d-flex justify-content-center align-items-center"
                               title="Eliminar Configuración"
                               onClick={() => {
                                 setConfigDelete(config);
@@ -336,7 +422,7 @@ export function ZonaTarifa() {
         </div>
       </div>
 
-      {/* MODAL PARA CONFIGURAR SEDE (AGREGAR) */}
+      {/* MODAL AGREGAR */}
       <ModalRight
         isOpen={isModalAddOpen}
         onClose={() => {
@@ -353,7 +439,7 @@ export function ZonaTarifa() {
         )}
       </ModalRight>
 
-      {/* MODAL PARA AJUSTES (EDITAR) */}
+      {/* MODAL EDITAR */}
       <ModalRight
         isOpen={isModalEditOpen}
         onClose={() => {
@@ -373,7 +459,7 @@ export function ZonaTarifa() {
         )}
       </ModalRight>
 
-      {/* MODAL PARA CONFIRMAR ACTIVAR/DESACTIVAR */}
+      {/* MODALES DE ALERTA (Mantienes los mismos) */}
       <ModalAlertQuestion
         show={showModalActivar}
         handleCloseModal={() => {
@@ -387,7 +473,6 @@ export function ZonaTarifa() {
         tipo="esta configuración"
       />
 
-      {/* MODAL PARA CONFIRMAR ELIMINAR OPCIÓN DEFINITIVA */}
       <ModalAlertQuestion
         show={showModalEliminar}
         handleCloseModal={() => {

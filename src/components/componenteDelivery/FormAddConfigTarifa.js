@@ -1,7 +1,18 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { Clock, HeartHandshake } from "lucide-react";
+import { Clock, HeartHandshake, CalendarDays } from "lucide-react";
 import { PostData } from "../../service/CRUD/PostData";
+
+// Lista de días para renderizar los checkboxes
+const DIAS_SEMANA = [
+  "Lunes",
+  "Martes",
+  "Miércoles",
+  "Jueves",
+  "Viernes",
+  "Sábado",
+  "Domingo",
+];
 
 export function FormAddConfigTarifa({ onClose, sedeId }) {
   const queryClient = useQueryClient();
@@ -18,11 +29,13 @@ export function FormAddConfigTarifa({ onClose, sedeId }) {
       tiempo_min: "",
       tiempo_max: "",
       propinasInput: "2, 3, 5", // Default
+      hora_apertura: "09:00", // Default
+      hora_cierre: "22:00", // Default
+      dias_atencion: DIAS_SEMANA, // Por defecto marcamos todos
     },
   });
 
   const onSubmit = async (data) => {
-
     let propinasArray = [];
     if (data.propinasInput) {
       propinasArray = data.propinasInput
@@ -38,6 +51,10 @@ export function FormAddConfigTarifa({ onClose, sedeId }) {
       tiempo_min: parseInt(data.tiempo_min, 10),
       tiempo_max: parseInt(data.tiempo_max, 10),
       propinas_sugeridas: JSON.stringify(propinasArray),
+      // NUEVOS CAMPOS:
+      hora_apertura: data.hora_apertura,
+      hora_cierre: data.hora_cierre,
+      dias_atencion: JSON.stringify(data.dias_atencion), // Lo enviamos como string JSON
     };
 
     const exito = await PostData("delivery/zona-tarifa", payload);
@@ -50,14 +67,105 @@ export function FormAddConfigTarifa({ onClose, sedeId }) {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="d-flex flex-column h-100 p-4">
-      {/* TARIFAS */}
-      <h6 className="fw-bold mb-3 mt-2 text-dark border-bottom pb-2">Tarifas de Delivery</h6>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="d-flex flex-column h-100 p-4"
+      style={{ overflowY: "auto" }}
+    >
+      {/* HORARIOS Y DÍAS DE ATENCIÓN (NUEVO) */}
+      <h6 className="fw-bold mb-3 text-dark border-bottom pb-2">
+        Horario de Atención de la Sede
+      </h6>
+
+      {/* Días de la semana */}
+      <div className="mb-3">
+        <label className="form-label fw-medium text-dark small">
+          Días de Operación
+        </label>
+        <div className="d-flex flex-wrap gap-2">
+          {DIAS_SEMANA.map((dia) => (
+            <div className="form-check form-check-inline m-0" key={dia}>
+              <input
+                className="form-check-input"
+                type="checkbox"
+                id={`dia-${dia}`}
+                value={dia}
+                {...register("dias_atencion", {
+                  required: "Selecciona al menos un día",
+                })}
+              />
+              <label className="form-check-label small" htmlFor={`dia-${dia}`}>
+                {dia.substring(0, 3)} {/* Muestra Lun, Mar, Mie, etc. */}
+              </label>
+            </div>
+          ))}
+        </div>
+        {errors.dias_atencion && (
+          <span className="text-danger small d-block mt-1">
+            {errors.dias_atencion.message}
+          </span>
+        )}
+      </div>
+
+      {/* Horas */}
       <div className="row g-3 mb-4">
         <div className="col-6">
-          <label className="form-label fw-medium text-dark small">Costo Base (S/)</label>
+          <label className="form-label fw-medium text-dark small">
+            Hora Apertura
+          </label>
           <div className="input-group shadow-sm">
-            <span className="input-group-text bg-white text-muted fw-bold" style={{ fontSize: "0.9rem" }}>
+            <span className="input-group-text bg-white">
+              <Clock size={16} className="text-muted" />
+            </span>
+            <input
+              type="time"
+              className={`form-control ${errors.hora_apertura ? "is-invalid" : ""}`}
+              {...register("hora_apertura", { required: "Obligatorio" })}
+            />
+          </div>
+          {errors.hora_apertura && (
+            <span className="text-danger small">
+              {errors.hora_apertura.message}
+            </span>
+          )}
+        </div>
+
+        <div className="col-6">
+          <label className="form-label fw-medium text-dark small">
+            Hora Cierre
+          </label>
+          <div className="input-group shadow-sm">
+            <span className="input-group-text bg-white">
+              <Clock size={16} className="text-muted" />
+            </span>
+            <input
+              type="time"
+              className={`form-control ${errors.hora_cierre ? "is-invalid" : ""}`}
+              {...register("hora_cierre", { required: "Obligatorio" })}
+            />
+          </div>
+          {errors.hora_cierre && (
+            <span className="text-danger small">
+              {errors.hora_cierre.message}
+            </span>
+          )}
+        </div>
+      </div>
+
+      {/* TARIFAS */}
+      <h6 className="fw-bold mb-3 mt-2 text-dark border-bottom pb-2">
+        Tarifas de Delivery
+      </h6>
+      <div className="row g-3 mb-4">
+        <div className="col-6">
+          <label className="form-label fw-medium text-dark small">
+            Costo Base (S/)
+          </label>
+          <div className="input-group shadow-sm">
+            <span
+              className="input-group-text bg-white text-muted fw-bold"
+              style={{ fontSize: "0.9rem" }}
+            >
               S/
             </span>
             <input
@@ -71,13 +179,22 @@ export function FormAddConfigTarifa({ onClose, sedeId }) {
               })}
             />
           </div>
-          {errors.costo_base_delivery && <span className="text-danger small">{errors.costo_base_delivery.message}</span>}
+          {errors.costo_base_delivery && (
+            <span className="text-danger small">
+              {errors.costo_base_delivery.message}
+            </span>
+          )}
         </div>
 
         <div className="col-6">
-          <label className="form-label fw-medium text-dark small">Costo Prioridad (S/)</label>
+          <label className="form-label fw-medium text-dark small">
+            Costo Prioridad (S/)
+          </label>
           <div className="input-group shadow-sm">
-            <span className="input-group-text bg-white text-muted fw-bold" style={{ fontSize: "0.9rem" }}>
+            <span
+              className="input-group-text bg-white text-muted fw-bold"
+              style={{ fontSize: "0.9rem" }}
+            >
               S/
             </span>
             <input
@@ -90,15 +207,18 @@ export function FormAddConfigTarifa({ onClose, sedeId }) {
               })}
             />
           </div>
-          {errors.costo_prioridad && <span className="text-danger small">{errors.costo_prioridad.message}</span>}
         </div>
       </div>
 
       {/* TIEMPOS ESTIMADOS (ETA) */}
-      <h6 className="fw-bold mb-3 text-dark border-bottom pb-2">Tiempo de Entrega Estimado</h6>
+      <h6 className="fw-bold mb-3 text-dark border-bottom pb-2">
+        Tiempo de Entrega Estimado
+      </h6>
       <div className="row g-3 mb-4">
         <div className="col-6">
-          <label className="form-label fw-medium text-dark small">Minutos Min</label>
+          <label className="form-label fw-medium text-dark small">
+            Minutos Min
+          </label>
           <div className="input-group shadow-sm">
             <span className="input-group-text bg-white">
               <Clock size={16} className="text-muted" />
@@ -113,11 +233,12 @@ export function FormAddConfigTarifa({ onClose, sedeId }) {
               })}
             />
           </div>
-          {errors.tiempo_min && <span className="text-danger small">{errors.tiempo_min.message}</span>}
         </div>
 
         <div className="col-6">
-          <label className="form-label fw-medium text-dark small">Minutos Max</label>
+          <label className="form-label fw-medium text-dark small">
+            Minutos Max
+          </label>
           <div className="input-group shadow-sm">
             <span className="input-group-text bg-white">
               <Clock size={16} className="text-muted" />
@@ -134,14 +255,22 @@ export function FormAddConfigTarifa({ onClose, sedeId }) {
               })}
             />
           </div>
-          {errors.tiempo_max && <span className="text-danger small">{errors.tiempo_max.message}</span>}
+          {errors.tiempo_max && (
+            <span className="text-danger small">
+              {errors.tiempo_max.message}
+            </span>
+          )}
         </div>
       </div>
 
       {/* PROPINAS SUGERIDAS */}
-      <h6 className="fw-bold mb-3 text-dark border-bottom pb-2">Propinas Sugeridas (Opcional)</h6>
+      <h6 className="fw-bold mb-3 text-dark border-bottom pb-2">
+        Propinas Sugeridas (Opcional)
+      </h6>
       <div className="mb-4">
-        <label className="form-label fw-medium text-dark small">Lista de montos (S/)</label>
+        <label className="form-label fw-medium text-dark small">
+          Lista de montos (S/)
+        </label>
         <div className="input-group shadow-sm mb-1">
           <span className="input-group-text bg-white">
             <HeartHandshake size={16} className="text-muted" />
@@ -154,21 +283,26 @@ export function FormAddConfigTarifa({ onClose, sedeId }) {
           />
         </div>
         <small className="text-muted d-block" style={{ fontSize: "0.80rem" }}>
-          Ingresa los montos separados por comas. Déjalo en blanco para ocultar módulos de propinas.
+          Ingresa los montos separados por comas. Déjalo en blanco para ocultar
+          módulos de propinas.
         </small>
       </div>
 
       {/* Controles del Footer */}
-      <div className="mt-auto d-flex justify-content-end gap-2 border-top p-3">
+      <div className="mt-auto d-flex justify-content-end gap-2 border-top pt-3 pb-1">
         <button
           type="button"
-          className="btn-cerrar-modal"
+          className="btn btn-outline-secondary rounded-pill px-4"
           onClick={onClose}
           disabled={isSubmitting}
         >
           Cancelar
         </button>
-        <button type="submit" className="btn-guardar" disabled={isSubmitting}>
+        <button
+          type="submit"
+          className="btn btn-primary rounded-pill px-4"
+          disabled={isSubmitting}
+        >
           {isSubmitting ? "Guardando..." : "Guardar Configuración"}
         </button>
       </div>
