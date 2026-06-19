@@ -42,7 +42,6 @@ import { LoginAdmin } from "./pageAdmin/LoginAdmin";
 import { LayOutAdmin } from "./LayOut/LayOutAdmin";
 import { AuthProviderAdmin } from "./AuthContextAdmin";
 import { RestablecerPassword } from "./pages/RestablecerPassword";
-import { UseEventosGlobales } from "./hooks/UseEventosGlobal";
 
 function App() {
   useEffect(() => {
@@ -56,11 +55,6 @@ function App() {
       favicon.href = miEmpresa.logo_url || "/favicon.ico"; // Ruta al logo de la empresa o favicon por defecto
     }
   }, []);
-  // obtener id de mi localStorage para suscribirme a eventos globales
-  const idCliente = JSON.parse(
-    localStorage.getItem("user") || sessionStorage.getItem("user"),
-  )?.id;
-  UseEventosGlobales(idCliente);
 
   return (
     // AuthProvider envuelve todo

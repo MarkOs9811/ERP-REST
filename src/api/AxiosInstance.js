@@ -5,7 +5,9 @@ import ToastAlert from "../components/componenteToast/ToastAlert";
 const axiosInstance = axios.create({
   // baseURL: "https://vv1g8thv-8000.brs.devtunnels.ms/api",
   // baseURL: "http://erp-api.test/api",
-  baseURL: "https://erp-api-production-c7d4.up.railway.app/api",
+  baseURL: "http://127.0.0.1:8000/api",
+
+  // baseURL: "https://erp-api-production-c7d4.up.railway.app/api",
   // baseURL: "http://192.168.1.12:8000/api",
   // baseURL: "https://fe27-38-43-130-95.ngrok-free.app/api",
   withCredentials: true,

@@ -56,9 +56,10 @@ export const Login = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        "https://erp-api-production-c7d4.up.railway.app/api/login",
+        // "https://erp-api-production-c7d4.up.railway.app/api/login",
+        "http://127.0.0.1:8000/api/login",
+        // const response = await axios.post("http://erp-api.test/api/login", {
         {
-          // const response = await axios.post("http://erp-api.test/api/login", {
           email: data.email,
           password: data.password,
         },

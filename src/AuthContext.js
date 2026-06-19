@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { cerrarCaja } from "./redux/cajaSlice";
+import { UseEventosGlobales } from "./hooks/UseEventosGlobal";
 
 const AuthContext = createContext();
 
@@ -13,6 +14,13 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(
     !!(localStorage.getItem("token") || sessionStorage.getItem("token")),
   );
+
+  // Obtener id de localStorage o sessionStorage para suscribirse a eventos globales
+  const idCliente = JSON.parse(
+    localStorage.getItem("user") || sessionStorage.getItem("user"),
+  )?.id;
+
+  UseEventosGlobales(idCliente);
 
   // Recibe 'rememberMe' para saber dónde guardar
   const login = (token, user, rememberMe) => {
