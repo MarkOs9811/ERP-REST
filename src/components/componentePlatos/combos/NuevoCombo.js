@@ -130,27 +130,36 @@ export function NuevoCombo({ onClose, onSuccess, estadoOpenAi }) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="px-2">
       {/* Nombre Combo */}
-      <div className="form-floating mb-3">
+      <div className="mb-3">
+        <label htmlFor="nombreCombo" className="form-label">
+          Nombre del Combo
+        </label>
         <input
           type="text"
           className={`form-control ${errors.nombreCombo ? "is-invalid" : ""}`}
           id="nombreCombo"
-          placeholder="Nombre del Combo"
+          placeholder="Ej. Combo Ejecutivo"
           {...register("nombreCombo", { required: "Este campo es requerido" })}
         />
-        <label htmlFor="nombreCombo">Nombre del Combo</label>
         {errors.nombreCombo && (
-          <div className="invalid-feedback">{errors.nombreCombo.message}</div>
+          <div className="invalid-feedback d-block">
+            {errors.nombreCombo.message}
+          </div>
         )}
       </div>
 
       {/* Precio */}
-      <div className="form-floating mb-4">
+      <div className="mb-4">
+        <label htmlFor="precioCombo" className="form-label">
+          Precio del Combo (S/.)
+        </label>
         <input
-          type="text"
+          type="number"
+          min="0"
+          step="0.01"
           className={`form-control ${errors.precioCombo ? "is-invalid" : ""}`}
           id="precioCombo"
-          placeholder="Precio del Combo"
+          placeholder="0.00"
           {...register("precioCombo", {
             required: "Este campo es requerido",
             pattern: {
@@ -158,26 +167,11 @@ export function NuevoCombo({ onClose, onSuccess, estadoOpenAi }) {
               message: "Ingrese un número válido con hasta 2 decimales",
             },
           })}
-          onKeyDown={(e) => {
-            const allowedKeys = [
-              "Backspace",
-              "Tab",
-              "ArrowLeft",
-              "ArrowRight",
-              "Delete",
-            ];
-            if (
-              !allowedKeys.includes(e.key) &&
-              !/^\d$/.test(e.key) &&
-              !(e.key === "." && !e.currentTarget.value.includes("."))
-            ) {
-              e.preventDefault();
-            }
-          }}
         />
-        <label htmlFor="precioCombo">Precio del Combo S/.</label>
         {errors.precioCombo && (
-          <div className="invalid-feedback">{errors.precioCombo.message}</div>
+          <div className="invalid-feedback d-block">
+            {errors.precioCombo.message}
+          </div>
         )}
       </div>
 
@@ -205,7 +199,7 @@ export function NuevoCombo({ onClose, onSuccess, estadoOpenAi }) {
 
       {/* Descripción dinámica */}
       <div className="mb-4 border rounded p-3">
-        <label className="form-label">Descripción del Combo</label>
+        <label className="form-label fw-semibold">Descripción del Combo</label>
         {/* Ítems seleccionados manualmente */}
         <div className="mb-3">
           <h6 className="mb-2">Seleccionados:</h6>

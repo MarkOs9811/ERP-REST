@@ -22,6 +22,7 @@ import { TwilioFromIntegracion } from "./confiIntegraciones/TwilioFromIntegracio
 import { TesseractFormIntegracion } from "./confiIntegraciones/TesseractFormIntegracion";
 
 import "../../css/estilosConfiguracion/EstiloIntegraciones.css";
+import { GeminiFormIntegracion } from "./confiIntegraciones/GeminiFormIntegracion";
 
 // Función para retornar el icono según el nombre
 function getIcon(nombre) {
@@ -32,6 +33,8 @@ function getIcon(nombre) {
     return <FileText color="#5a7a98" height="32px" width="32px" />;
   if (n.includes("openai") || n.includes("chatgpt"))
     return <MessageCircleMore color="#ee5252" height="32px" width="32px" />;
+  if (n.includes("geminiai") || n.includes("gemini"))
+    return <MessageCircleMore color="#525cee" height="32px" width="32px" />;
   if (n.includes("twilio") || n.includes("whatsapp"))
     return <Wheat color="#25d366" height="32px" width="32px" />;
   if (n.includes("pusher") || n.includes("notificacion"))
@@ -46,11 +49,10 @@ function getIcon(nombre) {
 }
 
 export function Integraciones() {
-
   const [openModal, setOpenModal] = useState(false);
   const [tituloModal, setTituloModal] = useState("");
   const [data, setData] = useState([]);
-  
+
   const {
     data: configuracion = [],
     isLoading,
@@ -189,6 +191,9 @@ export function Integraciones() {
         )}
         {tituloModal === "Open AI" && (
           <OpenAiFormIntegracion dataIntegracion={data} />
+        )}
+        {tituloModal === "Gemini AI" && (
+          <GeminiFormIntegracion dataIntegracion={data} />
         )}
         {tituloModal === "Twilio" && (
           <TwilioFromIntegracion dataIntegracion={data} />

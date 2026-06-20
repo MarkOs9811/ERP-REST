@@ -351,7 +351,7 @@ export function SideBar() {
           onClick={(e) => handleModuloSeleccionado("", e)}
         >
           <button
-            className={`menu-item p-2 border-0 w-100 d-flex align-items-center justify-content-start ${
+            className={`btn menu-item p-2 border-0 w-100 d-flex align-items-center justify-content-start ${
               location.pathname.includes("/configuracion") ? "active" : ""
             }`}
             style={{

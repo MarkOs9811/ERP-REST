@@ -1,12 +1,9 @@
 import { useState } from "react";
-import DataTable from "react-data-table-component"; // <--- IMPORTANTE
 import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteExcel";
 import {
   FileChartColumnIncreasing,
-  MessageCircleQuestionMark,
   UserRoundCheck,
   CalendarDays,
-  DollarSign,
   Users,
   AlertCircle,
   FileText, // Icono para ver boleta
@@ -15,7 +12,6 @@ import {
   CheckCircle,
   Clock, // Icono lupa
 } from "lucide-react";
-import { BotonMotionGeneral } from "../../components/componentesReutilizables/BotonMotionGeneral";
 import ModalGeneral from "../../components/componenteToast/ModalGeneral";
 import axiosInstance from "../../api/AxiosInstance";
 import ToastAlert from "../../components/componenteToast/ToastAlert";
@@ -27,8 +23,6 @@ import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { TablasGenerales } from "../../components/componentesReutilizables/TablasGenerales";
 import { BadgeComponent } from "../../components/componentesReutilizables/BadgeComponent";
-
-// ... (Aquí pegas la constante 'columns' que definimos arriba)
 
 export function Nomina() {
   const [modalQuestionPagar, setModalQuestionPagar] = useState(false);

@@ -141,7 +141,7 @@ export default function LayoutPOS({ children }) {
             caja?.estado === "abierto" && (
               <button
                 type="button"
-                className="btn btn-outline-dark btn-pos-action d-flex align-items-center justify-content-center"
+                className="btn-opcional btn-pos-action d-flex align-items-center justify-content-center"
                 onClick={() => navigate("/vender/cerrarCaja")}
               >
                 <LockKeyhole
@@ -156,7 +156,7 @@ export default function LayoutPOS({ children }) {
           {/* Botón Salir */}
           <button
             type="button"
-            className=" btn-eliminar d-flex align-items-center justify-content-center"
+            className="btn-eliminar d-flex align-items-center justify-content-center"
             onClick={() => navigate("/")}
           >
             {/* Ícono nuevo para que no quede un cuadro rojo vacío en celular */}

@@ -34,7 +34,6 @@ export function PlatoList({ search, categoriaActual = null }) {
     retry: 1,
     refetchOnWindowFocus: false,
   });
-  console.log("Lista de platos obtenida:", platosList); // <-- Agrega este console.log para verificar los datos
   const [showModalEditar, setShowModalEditar] = useState(false);
   const [dataPlato, setDataPlato] = useState([]);
   const [filterPlatos, setFilterPlatos] = useState([]);

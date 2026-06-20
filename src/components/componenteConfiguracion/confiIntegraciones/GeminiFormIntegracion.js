@@ -4,13 +4,13 @@ import { useState } from "react";
 import axiosInstance from "../../../api/AxiosInstance";
 import { CheckCircle, XCircle } from "lucide-react";
 
-export function OpenAiFormIntegracion({ dataIntegracion }) {
-  const openAiConfig =
-    dataIntegracion?.nombre === "Open AI" ? dataIntegracion : null;
+export function GeminiFormIntegracion({ dataIntegracion }) {
+  const geminiAiConfig =
+    dataIntegracion?.nombre === "Gemini AI" ? dataIntegracion : null;
 
-  const defaultValues = openAiConfig
+  const defaultValues = geminiAiConfig
     ? {
-        apiKey: openAiConfig?.clave || "",
+        apiKey: geminiAiConfig?.clave || "",
       }
     : {
         apiKey: "",
@@ -31,7 +31,7 @@ export function OpenAiFormIntegracion({ dataIntegracion }) {
     try {
       setLoading(true);
       const response = await axiosInstance.put(
-        `/configuracionesOpenAi/${openAiConfig.id}`,
+        `/configuracionesGeminiAi/${geminiAiConfig.id}`,
         {
           apiKey: data.apiKey.trim(),
         },
@@ -50,11 +50,11 @@ export function OpenAiFormIntegracion({ dataIntegracion }) {
     }
   };
 
-  if (!openAiConfig) {
-    return <p>No se encontró configuración para Open AI</p>;
+  if (!geminiAiConfig) {
+    return <p>No se encontró configuración para Gemini AI</p>;
   }
 
-  const isConfigured = openAiConfig?.clave?.trim() !== "";
+  const isConfigured = geminiAiConfig?.clave?.trim() !== "";
 
   return (
     <div className="container mt-3">
@@ -69,7 +69,7 @@ export function OpenAiFormIntegracion({ dataIntegracion }) {
           {isConfigured ? (
             <span className="small">
               <CheckCircle size={24} className="me-2" />
-              Todo correcto, la integración con <strong>OpenAI</strong> está
+              Todo correcto, la integración con <strong>GeminiAi</strong> está
               configurada.
             </span>
           ) : (
@@ -77,12 +77,12 @@ export function OpenAiFormIntegracion({ dataIntegracion }) {
               <XCircle size={24} className="me-2" />
               Faltan credenciales. Genera tu API Key en{" "}
               <a
-                href="https://platform.openai.com/account/api-keys"
+                href="https://aistudio.google.com/api-keys?projectFilter=gen-lang-client-0078075168"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="fw-bold text-decoration-underline"
               >
-                OpenAI Dashboard
+                GeminiAi Dashboard
               </a>
               .
             </span>
