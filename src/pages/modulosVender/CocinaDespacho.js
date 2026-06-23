@@ -6,15 +6,15 @@ import { useEffect, useMemo, useState } from "react";
 import BotonAnimado from "../../components/componentesReutilizables/BotonAnimado";
 import Pusher from "pusher-js";
 import "../../css/EstilosCocina.css";
-import Masonry from "react-masonry-css";
 import { CheckCheck, PrinterIcon, RotateCcw, AlertCircle } from "lucide-react"; // Importamos AlertCircle
 import { PutData } from "../../service/CRUD/PutData";
 import { CondicionCarga } from "../../components/componentesReutilizables/CondicionCarga";
 import { BadgeComponent } from "../../components/componentesReutilizables/BadgeComponent";
 
 const estados = {
-  0: { texto: "En proceso", variant: "warning" },
-  1: { texto: "Listo", variant: "success" },
+  0: { texto: "En espera", variant: "warning", columna: "espera" },
+  2: { texto: "En preparación", variant: "info", columna: "preparacion" },
+  1: { texto: "Listo", variant: "success", columna: "listo" },
 };
 
 function TarjetaPedido({ pedido }) {
@@ -22,15 +22,37 @@ function TarjetaPedido({ pedido }) {
   const queryClient = useQueryClient();
 
   const esListo = pedido.estado === 1;
+  const esEnPreparacion = pedido.estado === 2;
+
+  const playBeep = () => {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContext) return;
+
+    const audioCtx = new AudioContext();
+    const oscillator = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+
+    oscillator.type = "sine";
+    oscillator.frequency.value = 1000;
+    gain.gain.value = 0.12;
+
+    oscillator.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    oscillator.start();
+    oscillator.stop(audioCtx.currentTime + 0.12);
+    oscillator.onended = () => audioCtx.close();
+  };
 
   const cambiarEstado = async () => {
     setCargando(true);
-    const nuevoEstado = esListo ? 0 : 1;
+    const nuevoEstado = pedido.estado === 0 ? 2 : pedido.estado === 2 ? 1 : 0;
     const success = await PutData("pedidoCocina", pedido.id, {
       estado: nuevoEstado,
     });
     setCargando(false);
     if (success) {
+      playBeep();
       queryClient.invalidateQueries(["pedidosEstado"]);
     }
   };
@@ -60,16 +82,21 @@ function TarjetaPedido({ pedido }) {
   const cardStyle = esListo
     ? {
         backgroundColor: "#f0fdf4",
-        border: "1px solid #0f5a29ff",
-        opacity: 0.85,
+        border: "1px solid rgb(33, 146, 73)",
+        opacity: 0.95,
       }
-    : {
-        backgroundColor: "#fff",
-        borderTop: `4px solid ${borderTopColor}`,
-        borderBottom: "1px solid #e5e7eb",
-        borderLeft: "1px solid #e5e7eb",
-        borderRight: "1px solid #e5e7eb",
-      };
+    : esEnPreparacion
+      ? {
+          backgroundColor: "#eff6ff",
+          border: "1px solid #0c4a6e",
+        }
+      : {
+          backgroundColor: "#fff",
+          borderTop: `4px solid ${borderTopColor}`,
+          borderBottom: "1px solid #e5e7eb",
+          borderLeft: "1px solid #e5e7eb",
+          borderRight: "1px solid #e5e7eb",
+        };
 
   return (
     <div
@@ -83,13 +110,17 @@ function TarjetaPedido({ pedido }) {
       {/* Header */}
       <div
         className={`card-header d-flex justify-content-between align-items-center m-0 ${
-          esListo ? "bg-transparent border-bottom-0" : "bg-light"
+          esListo
+            ? "bg-transparent border-bottom-0"
+            : esEnPreparacion
+              ? "cocina-header-preparacion"
+              : "cocina-header-espera"
         }`}
         style={{ borderTopLeftRadius: "10px", borderTopRightRadius: "10px" }}
       >
-        <span className="fw-bold text-secondary"># {pedido.id}</span>
+        <span className="fw-bold cocina-pedido-id"># {pedido.id}</span>
         <span
-          style={{ fontWeight: "bold", color: esListo ? "#15803d" : "#000" }}
+          className={`cocina-pedido-title ${esListo ? "cocina-title-listo" : ""}`}
         >
           {titulo}
         </span>
@@ -113,7 +144,7 @@ function TarjetaPedido({ pedido }) {
               }}
             >
               <span className={esListo ? "" : "fw-bold"}>{plato.cantidad}</span>
-              <span className="mx-2 text-muted">x</span>
+              <span className="mx-2 cocina-text-muted">x</span>
               <span style={{ whiteSpace: "normal" }}>{plato.nombre}</span>{" "}
               {/* Ajuste para nombres largos */}
             </li>
@@ -125,18 +156,18 @@ function TarjetaPedido({ pedido }) {
           <div className="px-3 pb-2">
             <div
               className={`d-flex align-items-start gap-2 p-2 rounded ${
-                esListo
-                  ? "bg-secondary bg-opacity-10 text-muted"
-                  : "bg-warning bg-opacity-25 text-dark"
+                esListo ? "cocina-nota-listo" : "cocina-nota-espera"
               }`}
               style={{
                 fontSize: "0.85rem",
-                border: esListo ? "1px solid #e5e7eb" : "1px solid #ffc107",
+                border: esListo
+                  ? "1px solid var(--fw-border)"
+                  : "1px solid var(--fw-saffron)",
               }}
             >
               <AlertCircle
                 size={16}
-                className={esListo ? "text-secondary" : "text-dark"}
+                className="cocina-icon-note"
                 style={{ minWidth: "16px", marginTop: "2px" }}
               />
               <div>
@@ -154,8 +185,12 @@ function TarjetaPedido({ pedido }) {
       {/* Footer */}
       <div className="card-footer d-flex bg-transparent border-top-0 pb-3 pt-0 align-items-center mt-2">
         <button
-          className={`btn btn-sm ${
-            esListo ? "btn-light text-muted" : "btn-outline-dark"
+          className={`cocina-btn-imprimir ${
+            esListo
+              ? "cocina-btn-imprimir-listo"
+              : esEnPreparacion
+                ? "cocina-btn-imprimir-preparacion"
+                : "cocina-btn-imprimir-espera"
           }`}
           title="Imprimir Ticket"
         >
@@ -163,20 +198,30 @@ function TarjetaPedido({ pedido }) {
         </button>
 
         <BotonAnimado
-          className={`h6 p-1 ms-auto ${
-            esListo ? "btn btn-outline-dark border-1" : "btn-realizarPedido"
+          className={` p-1 ms-auto cocina-btn-accion ${
+            esListo
+              ? "cocina-btn-accion-listo"
+              : esEnPreparacion
+                ? "cocina-btn-accion-preparacion"
+                : "cocina-btn-accion-espera"
           }`}
           onClick={() => cambiarEstado()}
           loading={cargando}
           icon={
-            esListo ? (
-              <RotateCcw className="text-auto" width="18px" height="18px" />
-            ) : (
+            pedido.estado === 0 ? (
               <CheckCheck className="text-auto" width="20px" height="20px" />
+            ) : pedido.estado === 2 ? (
+              <CheckCheck className="text-auto" width="20px" height="20px" />
+            ) : (
+              <RotateCcw className="text-auto" width="18px" height="18px" />
             )
           }
         >
-          {esListo ? "Deshacer" : "Marcar Listo"}
+          {pedido.estado === 0
+            ? "Mover a preparar"
+            : pedido.estado === 2
+              ? "Marcar Listo"
+              : "Reabrir"}
         </BotonAnimado>
       </div>
     </div>
@@ -185,13 +230,6 @@ function TarjetaPedido({ pedido }) {
 
 export function CocinaDespacho() {
   const queryClient = useQueryClient();
-  const breakpointColumnsObj = {
-    default: 4,
-    1400: 4,
-    1100: 3,
-    768: 2,
-    576: 1,
-  };
   const {
     data: pedidos = [],
     isLoading,
@@ -202,6 +240,36 @@ export function CocinaDespacho() {
     retry: 1,
     refetchOnWindowFocus: false,
   });
+
+  const [filtroTipo, setFiltroTipo] = useState("Todos");
+  const filtroOpciones = [
+    { label: "Todos", value: "Todos" },
+    { label: "Mesa", value: "mesa" },
+    { label: "Llevar", value: "llevar" },
+    { label: "Delivery", value: "web" },
+  ];
+
+  const pedidosFiltrados = useMemo(() => {
+    if (filtroTipo === "Todos") return pedidos;
+    return pedidos.filter((pedido) => pedido.tipo_pedido === filtroTipo);
+  }, [pedidos, filtroTipo]);
+
+  const pedidosEnEspera = pedidosFiltrados.filter(
+    (pedido) => pedido.estado === 0,
+  );
+  const pedidosEnPreparacion = pedidosFiltrados.filter(
+    (pedido) => pedido.estado === 2,
+  );
+  const pedidosListos = pedidosFiltrados.filter(
+    (pedido) => pedido.estado === 1,
+  );
+
+  const filtroLabel =
+    filtroTipo === "Todos"
+      ? "Todos"
+      : filtroTipo === "web"
+        ? "Delivery"
+        : filtroTipo.charAt(0).toUpperCase() + filtroTipo.slice(1);
 
   useEffect(() => {
     const pusher = new Pusher("3a474e6680223eaa4e3f", {
@@ -222,41 +290,85 @@ export function CocinaDespacho() {
 
   return (
     <div className="row g-3 h-100">
-      <div className="col-lg-12 col-sm-12 h-100">
-        <div className="card shadow-sm h-100 border-0 p-0">
-          {" "}
-          {/* Fondo transparente para mejor look en cocina */}
-          <div className="card-header bg-white text-center p-3 m-0 border-bottom rounded-top shadow-sm mb-3">
-            <h5 className="m-0 fw-bold d-flex align-items-center justify-content-center gap-2">
-              Pedidos en Cocina / Despacho
-            </h5>
-          </div>
-          <CondicionCarga isLoading={isLoading} isError={isError}>
-            <div
-              className="card-body overflow-auto p-2 justify-content-start"
-              style={{ height: "calc(100vh - 180px)" }}
-            >
-              {pedidos.length === 0 ? (
-                <div className="d-flex flex-column align-items-center justify-content-center h-100 text-muted opacity-50">
-                  <CheckCheck size={60} className="mb-3" />
-                  <h4>Todo despachado</h4>
-                  <p>Esperando nuevos pedidos...</p>
-                </div>
-              ) : (
-                <Masonry
-                  breakpointCols={breakpointColumnsObj}
-                  className="my-masonry-grid"
-                  columnClassName="my-masonry-grid_column"
+      <CondicionCarga isLoading={isLoading} isError={isError}>
+        <div className="overflow-hidden  justify-content-start cocina-card-body">
+          <div className="cocina-filter-bar mb-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
+            <div className="d-flex flex-wrap gap-2">
+              {filtroOpciones.map((option) => (
+                <button
+                  key={option.value}
+                  type="button"
+                  className={`cocina-filter-btn ${filtroTipo === option.value ? "cocina-filter-btn-active" : ""}`}
+                  onClick={() => setFiltroTipo(option.value)}
                 >
-                  {pedidos.map((pedido, i) => (
-                    <TarjetaPedido key={i} pedido={pedido} />
-                  ))}
-                </Masonry>
-              )}
+                  {option.label}
+                </button>
+              ))}
             </div>
-          </CondicionCarga>
+            <span className="text-muted small">Filtro: {filtroLabel}</span>
+          </div>
+          {pedidosFiltrados.length === 0 ? (
+            <div className="d-flex flex-column align-items-center justify-content-center h-100 text-muted opacity-50">
+              <CheckCheck size={50} className="mb-3" />
+              <h5>No hay pedidos</h5>
+              <p>Intenta otro filtro o espera nuevos pedidos.</p>
+            </div>
+          ) : (
+            <div className="cocina-columnas">
+              <div className="cocina-columna bg-white rounded-4 border h-100">
+                <div className="d-flex  border-bottom   p-3 justify-content-between align-items-center mb-3">
+                  <div>
+                    <h6 className="mb-0">En espera</h6>
+                    <small className="text-muted">Pedidos nuevos</small>
+                  </div>
+                  <span className="cocina-badge-warning">
+                    {pedidosEnEspera.length}
+                  </span>
+                </div>
+                <div className="cocina-col-body d-flex flex-column px-3">
+                  {pedidosEnEspera.map((pedido, i) => (
+                    <TarjetaPedido key={`espera-${i}`} pedido={pedido} />
+                  ))}
+                </div>
+              </div>
+
+              <div className="cocina-columna bg-white rounded-4 border h-100">
+                <div className="d-flex border-bottom   p-3 justify-content-between align-items-center mb-3">
+                  <div>
+                    <h6 className="mb-0">En preparación</h6>
+                    <small className="text-muted">Cocinando ahora</small>
+                  </div>
+                  <span className="cocina-badge-preparacion">
+                    {pedidosEnPreparacion.length}
+                  </span>
+                </div>
+                <div className="cocina-col-body d-flex flex-column px-3">
+                  {pedidosEnPreparacion.map((pedido, i) => (
+                    <TarjetaPedido key={`preparacion-${i}`} pedido={pedido} />
+                  ))}
+                </div>
+              </div>
+
+              <div className="cocina-columna bg-white rounded-4 border h-100">
+                <div className="d-flex border-bottom   p-3 justify-content-between align-items-center mb-3">
+                  <div>
+                    <h6 className="mb-0">Listo</h6>
+                    <small className="text-muted">Para despacho</small>
+                  </div>
+                  <span className="cocina-badge-listo">
+                    {pedidosListos.length}
+                  </span>
+                </div>
+                <div className="cocina-col-body d-flex flex-column px-3">
+                  {pedidosListos.map((pedido, i) => (
+                    <TarjetaPedido key={`listo-${i}`} pedido={pedido} />
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
-      </div>
+      </CondicionCarga>
     </div>
   );
 }

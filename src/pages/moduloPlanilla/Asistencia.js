@@ -1,5 +1,4 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ContenedorPrincipal } from "../../components/componentesReutilizables/ContenedorPrincipal";
 import {
   faClock,
   faIdCard,
@@ -14,7 +13,6 @@ import { GetAsistencia } from "../../service/GetAsistencia";
 import DataTable from "react-data-table-component";
 import customDataTableStyles from "../../css/estilosComponentesTable/DataTableStyles";
 import { capitalizeFirstLetter } from "../../hooks/FirstLetterUp";
-import { wrap } from "framer-motion";
 import { GraficoEstadoAsistencia } from "../../components/componentePlanillas/componentesAsistencia/GraficoEstadoAsistencia";
 import { GraficoAsistenciasMensual } from "../../components/componentePlanillas/componentesAsistencia/GraficoAsistenciasMensual";
 import {
@@ -30,9 +28,9 @@ import { useState } from "react";
 import ModalRight from "../../components/componentesReutilizables/ModalRight";
 import { ListaAsistencia } from "../../components/componentePlanillas/componentesAsistencia/ListaAsistencias";
 import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteExcel";
+import { CondicionCarga } from "../../components/componentesReutilizables/CondicionCarga";
 
 export function Asistencia() {
-  const BASE_URL = process.env.REACT_APP_BASE_URL;
   const rowColors = ["#1dae79", "#d34242", "#4c7d9a", "#ff9800"]; // Colores alternados
   const [listAsistencias, setModalListAsistencias] = useState(false);
 
@@ -55,20 +53,21 @@ export function Asistencia() {
   } = useQuery({
     queryKey: ["usuarios"],
     queryFn: GetAsistencia,
-    retry: (failureCount, error) => {
-      // Solo reintentar si no es error 500
-      return error.response?.status !== 500 && failureCount < 1;
+    retry: (failureCount, err) => {
+      return err.response?.status !== 500 && failureCount < 1;
     },
-    retry: 1,
   });
-
   const totalEmpleados = listUsuario?.totalEmpleados;
   const empleadosAusentes = listUsuario?.empleadosAusentes;
   const empleadosATiempo = listUsuario?.empleadosATiempo;
   const empleadosTardanza = listUsuario?.empleadosTardanza;
-  const listaAsistenciaHoy = listUsuario?.listaAsistenciaHoy;
+  const listaAsistenciaHoy = listUsuario?.listaAsistenciaHoy || [];
   const asistenciaHoy = listUsuario?.asistenciaHoy || [];
   const datosPorMes = listUsuario?.datosPorMes || [];
+  const errorMessage =
+    error?.response?.data?.message ||
+    error?.message ||
+    "No se pudieron cargar los datos de asistencia.";
 
   const columnas = [
     {
@@ -90,7 +89,7 @@ export function Asistencia() {
         <div style={{ textAlign: "center" }}>
           {row.empleado?.empleado?.usuario?.fotoPerfil ? (
             <img
-              src={`${BASE_URL}/storage/${row.empleado?.empleado?.usuario?.fotoPerfil}`} // Aquí colocas la URL completa a la imagen (puede ser en 'public')
+              src={`${row.empleado?.empleado?.usuario?.foto_url}`} // Aquí colocas la URL completa a la imagen (puede ser en 'public')
               alt="Foto de perfil"
               style={{
                 width: "50px",
@@ -116,7 +115,7 @@ export function Asistencia() {
           <div>
             <div style={{ marginBottom: "4px" }}>
               {`${capitalizeFirstLetter(nombre)} ${capitalizeFirstLetter(
-                apellidos
+                apellidos,
               )}`.trim()}
             </div>
           </div>
@@ -179,185 +178,186 @@ export function Asistencia() {
     },
   ];
   return (
-    <div>
-      <div className="row g-3">
-        {/* Card 1: Total de empleados */}
-        <div className="col-md-3 col-sm-6 ">
-          <div className="card card-total shadow-sm h-100">
-            <div className="card-body d-flex justify-content-between align-items-center">
-              <div className="text-white" style={{ fontSize: "2rem" }}>
-                <FontAwesomeIcon icon={faUsers} />
-              </div>
-              <div className="text-end">
-                <h6 className="card-title text-white mb-1">
-                  Total de empleados
-                </h6>
-                <p className="mb-0 h2 text-white">{totalEmpleados}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Card 2: Empleados Ausentes */}
-        <div className="col-md-3 col-sm-6 ">
-          <div className="card card-ausentes shadow-sm h-100">
-            <div className="card-body d-flex justify-content-between align-items-center">
-              <div className="text-white" style={{ fontSize: "2rem" }}>
-                <FontAwesomeIcon icon={faUserSlash} />
-              </div>
-              <div className="text-end">
-                <h6 className="card-title text-white mb-1">
-                  Empleados Ausentes
-                </h6>
-                <p className="mb-0 h2 text-white">{empleadosAusentes}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Card 3: Empleados A tiempo */}
-        <div className="col-md-3 col-sm-6 ">
-          <div className="card card-tiempo shadow-sm h-100">
-            <div className="card-body d-flex justify-content-between align-items-center">
-              <div className="text-white" style={{ fontSize: "2rem" }}>
-                <FontAwesomeIcon icon={faUserCheck} />
-              </div>
-              <div className="text-end">
-                <h6 className="card-title text-white mb-1">
-                  Empleados A tiempo
-                </h6>
-                <p className="mb-0 h2 text-white">{empleadosATiempo}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Card 4: Empleados en tardanza */}
-        <div className="col-md-3 col-sm-6 ">
-          <div className="card card-tardanza shadow-sm h-100">
-            <div className="card-body d-flex justify-content-between align-items-center">
-              <div className="text-white" style={{ fontSize: "2rem" }}>
-                <FontAwesomeIcon icon={faClock} />
-              </div>
-              <div className="text-end">
-                <h6 className="card-title text-white mb-1">
-                  Empleados en tardanza
-                </h6>
-                <p className="mb-0 h2 text-white">{empleadosTardanza}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Resto de tu código... */}
-        <div className="col-md-8 col-sm-12">
-          <div className="card shadow-sm h-100">
-            <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-3">
-              <div className="d-flex align-items-center">
-                <h4 className="card-title mb-0 titulo-card-especial">
-                  Panel de Asistencia
-                </h4>
-                <span className="badge-header">Hoy</span>
-              </div>
-              <div className="d-flex align-items-center flex-wrap gap-2 mt-3 mt-md-0">
-                <div className="header-search-container">
-                  <Search className="search-icon" />
-                  <input
-                    type="text"
-                    placeholder="Buscar asistencia..."
-                    className="form-control"
-                  />
+    <CondicionCarga
+      isLoading={isLoading}
+      isError={isError}
+      errorMessage={errorMessage}
+    >
+      <section className="asistencia-dashboard">
+        <div className="row g-3">
+          {/* Card 1: Total de empleados */}
+          <div className="col-md-3 col-sm-6">
+            <div className="card card-total  h-100">
+              <div className="card-body d-flex justify-content-between align-items-center">
+                <div className="text-white" style={{ fontSize: "2rem" }}>
+                  <FontAwesomeIcon icon={faUsers} />
                 </div>
-                <button
-                  className="btn btn-outline-dark px-3"
-                  onClick={() => GetReporteExcel("/reporteAsistenciaHoy")}
-                >
-                  <FileText size={18} />
-                  Reporte
-                </button>
-              </div>
-            </div>
-            <div className="card-body p-0">
-              <DataTable
-                className="tablaGeneral"
-                columns={columnas}
-                data={listaAsistenciaHoy}
-                pagination
-                responsive
-                dense
-                fixedHeader
-                customStyles={customDataTableStyles}
-                fixedHeaderScrollHeight="100vh"
-                striped={true}
-                conditionalRowStyles={conditionalRowStyles}
-                //selectableRows={true} //con este se activa un check  porc ada fila selccionble
-                //selectableRowsHighlight={true} //resaltar la fila selecionada
-
-                // onRowClicked={(row) => console.log(row)} para ejecutar cuandos e hace click en cada fila
-                paginationComponentOptions={{
-                  rowsPerPageText: "Filas por página:",
-                  rangeSeparatorText: "de",
-                  selectAllRowsItem: true,
-                  selectAllRowsItemText: "Todos",
-                }}
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="col-md-4 col-sm-12">
-          <div className="card shadow-sm h-100">
-            <div className="card-header d-flex justify-content-between align-items-center p-3">
-              <p className="h4 mb-0">
-                <ChartColumnBig className="me-2 color-auto" />
-                Gráfico de Asistencias
-              </p>
-            </div>
-            <div className="card-body h-100">
-              <div style={{ height: "100%" }}>
-                <GraficoEstadoAsistencia asistenciaHoy={asistenciaHoy} />
+                <div className="text-end">
+                  <h6 className="card-title text-white mb-1">
+                    Total de empleados
+                  </h6>
+                  <p className="mb-0 h2 text-white">{totalEmpleados}</p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div className="col-md-12 col-sm-12">
-          <div className="card shadow-sm  h-100" style={{ minHeight: "600px" }}>
-            <div className="card-header p-3">
-              <div className="d-flex justify-content-between align-items-center">
-                <p className="h4 mb-0">
-                  <CalendarCheck className="me-2 color-auto" />
-                  Asistencias Mensual
-                </p>
-                <div className="d-flex align-items-center gap-3">
+          {/* Card 2: Empleados Ausentes */}
+          <div className="col-md-3 col-sm-6">
+            <div className="card card-ausentes  h-100">
+              <div className="card-body d-flex justify-content-between align-items-center">
+                <div className="text-white" style={{ fontSize: "2rem" }}>
+                  <FontAwesomeIcon icon={faUserSlash} />
+                </div>
+                <div className="text-end">
+                  <h6 className="card-title text-white mb-1">
+                    Empleados Ausentes
+                  </h6>
+                  <p className="mb-0 h2 text-white">{empleadosAusentes}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Card 3: Empleados A tiempo */}
+          <div className="col-md-3 col-sm-6">
+            <div className="card card-tiempo  h-100">
+              <div className="card-body d-flex justify-content-between align-items-center">
+                <div className="text-white" style={{ fontSize: "2rem" }}>
+                  <FontAwesomeIcon icon={faUserCheck} />
+                </div>
+                <div className="text-end">
+                  <h6 className="card-title text-white mb-1">
+                    Empleados A tiempo
+                  </h6>
+                  <p className="mb-0 h2 text-white">{empleadosATiempo}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Card 4: Empleados en tardanza */}
+          <div className="col-md-3 col-sm-6">
+            <div className="card card-tardanza  h-100">
+              <div className="card-body d-flex justify-content-between align-items-center">
+                <div className="text-white" style={{ fontSize: "2rem" }}>
+                  <FontAwesomeIcon icon={faClock} />
+                </div>
+                <div className="text-end">
+                  <h6 className="card-title text-white mb-1">
+                    Empleados en tardanza
+                  </h6>
+                  <p className="mb-0 h2 text-white">{empleadosTardanza}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="col-md-8 col-sm-12">
+            <div className="card  h-100">
+              <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-3">
+                <div className="d-flex align-items-center">
+                  <h4 className="card-title mb-0 titulo-card-especial">
+                    Panel de Asistencia
+                  </h4>
+                  <span className="badge-header">Hoy</span>
+                </div>
+                <div className="d-flex align-items-center flex-wrap gap-2 mt-3 mt-md-0">
+                  <div className="header-search-container">
+                    <Search className="search-icon" />
+                    <input
+                      type="text"
+                      placeholder="Buscar asistencia..."
+                      className="form-control"
+                    />
+                  </div>
                   <button
-                    className="btn btn-sm btn-outline-dark"
-                    onClick={() => setModalListAsistencias(true)}
+                    className="btn btn-outline-dark px-3"
+                    onClick={() => GetReporteExcel("/reporteAsistenciaHoy")}
                   >
-                    <Eye className="me-1 text-auto" />
-                    Ver Asistencias
+                    <FileText size={18} />
+                    Reporte
                   </button>
                 </div>
               </div>
+              <div className="card-body p-0">
+                <DataTable
+                  className="tablaGeneral"
+                  columns={columnas}
+                  data={listaAsistenciaHoy}
+                  pagination
+                  responsive
+                  dense
+                  fixedHeader
+                  customStyles={customDataTableStyles}
+                  fixedHeaderScrollHeight="100vh"
+                  striped={true}
+                  conditionalRowStyles={conditionalRowStyles}
+                  paginationComponentOptions={{
+                    rowsPerPageText: "Filas por página:",
+                    rangeSeparatorText: "de",
+                    selectAllRowsItem: true,
+                    selectAllRowsItemText: "Todos",
+                  }}
+                />
+              </div>
             </div>
-            <div className="card-body h-100">
-              <div style={{ height: "100%" }}>
-                <GraficoAsistenciasMensual datosPorMes={datosPorMes} />
+          </div>
+
+          <div className="col-md-4 col-sm-12">
+            <div className="card  h-100">
+              <div className="card-header d-flex justify-content-between align-items-center p-3">
+                <p className="h4 mb-0">
+                  <ChartColumnBig className="me-2 color-auto" />
+                  Gráfico de Asistencias
+                </p>
+              </div>
+              <div className="card-body h-100">
+                <div style={{ height: "100%" }}>
+                  <GraficoEstadoAsistencia asistenciaHoy={asistenciaHoy} />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="col-md-12 col-sm-12">
+            <div className="card  h-100" style={{ minHeight: "600px" }}>
+              <div className="card-header p-3">
+                <div className="d-flex justify-content-between align-items-center">
+                  <p className="h4 mb-0">
+                    <CalendarCheck className="me-2 color-auto" />
+                    Asistencias Mensual
+                  </p>
+                  <div className="d-flex align-items-center gap-3">
+                    <button
+                      className="btn btn-sm btn-outline-dark"
+                      onClick={() => setModalListAsistencias(true)}
+                    >
+                      <Eye className="me-1 text-auto" />
+                      Ver Asistencias
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div className="card-body h-100">
+                <div style={{ height: "100%" }}>
+                  <GraficoAsistenciasMensual datosPorMes={datosPorMes} />
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <ModalRight
-        isOpen={listAsistencias}
-        onClose={() => setModalListAsistencias(false)}
-        title={"Lista de Asistencias"}
-        width="70%"
-        hideFooter={true}
-      >
-        {({ handleClose }) => <ListaAsistencia onClose={handleClose} />}
-      </ModalRight>
-    </div>
+        <ModalRight
+          isOpen={listAsistencias}
+          onClose={() => setModalListAsistencias(false)}
+          title={"Lista de Asistencias"}
+          width="70%"
+          hideFooter={true}
+        >
+          {({ handleClose }) => <ListaAsistencia onClose={handleClose} />}
+        </ModalRight>
+      </section>
+    </CondicionCarga>
   );
 }

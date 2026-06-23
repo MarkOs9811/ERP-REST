@@ -5,6 +5,7 @@ import { getVentas } from "../../service/ObtenerVentasDetalle";
 import { FileText, Search } from "lucide-react";
 import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteExcel";
 import { ListVentas } from "../../components/componentesVentas/ListaVentas";
+import "../../css/estilosVentas/EstilosListaVentas.css";
 
 export function DetallesVentas() {
   const [search, setSearch] = useState("");

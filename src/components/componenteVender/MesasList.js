@@ -82,7 +82,7 @@ export function MesasList() {
       <CondicionCarga isLoading={loading} isError={error} mode="cards">
         <div className="mesas-container card-body overflow-auto  justify-content-center">
           {listaMesas.map((mesa) => (
-            <button
+            <div
               key={mesa.id}
               className={`mesa-card m-3 ${
                 mesa.estado === 1 ? "disponible" : "en-atencion"
@@ -125,7 +125,7 @@ export function MesasList() {
                   </>
                 )}
               </div>
-            </button>
+            </div>
           ))}
         </div>
       </CondicionCarga>

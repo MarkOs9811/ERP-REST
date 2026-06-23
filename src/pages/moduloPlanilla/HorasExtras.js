@@ -13,7 +13,15 @@ import { useForm } from "react-hook-form";
 import { FormularioAddHorasExtras } from "../../components/componentePlanillas/componentesHorasExtras/FormularioAddHorasExtras";
 import axiosInstance from "../../api/AxiosInstance";
 import ToastAlert from "../../components/componenteToast/ToastAlert";
-import { Eye, EyeIcon, FileText, Pencil, Plus, Trash2, Search } from "lucide-react";
+import {
+  Eye,
+  EyeIcon,
+  FileText,
+  Pencil,
+  Plus,
+  Trash2,
+  Search,
+} from "lucide-react";
 import { FormularioEditHorasExtras } from "../../components/componentePlanillas/componentesHorasExtras/FormularioEditHorasExtras";
 import ModalAlertQuestion from "../../components/componenteToast/ModalAlertQuestion";
 import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteExcel";
@@ -67,7 +75,7 @@ export function HorasExtras() {
     console.log("Antes de eliminar:", empleadosSeleccionados);
     setValue(
       "empleados",
-      empleadosSeleccionados.filter((usuario) => usuario?.id !== usuarioId)
+      empleadosSeleccionados.filter((usuario) => usuario?.id !== usuarioId),
     );
   };
 
@@ -79,16 +87,16 @@ export function HorasExtras() {
       if (Array.isArray(response.data.resultados)) {
         // Caso: Múltiples usuarios
         const errores = response.data.resultados.filter(
-          (resultado) => !resultado.success
+          (resultado) => !resultado.success,
         );
         const exitosos = response.data.resultados.filter(
-          (resultado) => resultado.success
+          (resultado) => resultado.success,
         );
 
         if (exitosos.length > 0) {
           ToastAlert(
             "success",
-            `${exitosos.length} usuarios registrados exitosamente.`
+            `${exitosos.length} usuarios registrados exitosamente.`,
           );
         }
 
@@ -96,7 +104,7 @@ export function HorasExtras() {
           errores.forEach((error) => {
             ToastAlert(
               "error",
-              `Error para el usuario ${error.usuario_id}: ${error.message}`
+              `Error para el usuario ${error.usuario_id}: ${error.message}`,
             );
           });
         }
@@ -126,7 +134,7 @@ export function HorasExtras() {
         } else {
           ToastAlert(
             "error",
-            error.response.data.message || "Error de validación."
+            error.response.data.message || "Error de validación.",
           );
         }
       } else {
@@ -191,7 +199,7 @@ export function HorasExtras() {
     } catch (error) {
       ToastAlert(
         "error",
-        error.response?.data?.message || error.message || "Error al eliminar"
+        error.response?.data?.message || error.message || "Error al eliminar",
       );
       // Ya no necesitas setLoading(false) aquí
     } finally {
@@ -291,7 +299,7 @@ export function HorasExtras() {
           {row.estado == 1 ? (
             <>
               <button className="btn-ver btn-sm" title="Ver detalles">
-                <EyeIcon className="text-auto" size={"auto"} />
+                <EyeIcon className="text-auto" />
               </button>
             </>
           ) : (
@@ -305,7 +313,7 @@ export function HorasExtras() {
                     setModalEditHoraExtras(true);
                   }}
                 >
-                  <Pencil className="text-auto" size={"auto"} />
+                  <Pencil className="text-auto" />
                 </button>
                 <button
                   className="btn-eliminar"
@@ -319,7 +327,7 @@ export function HorasExtras() {
                   {loading ? (
                     <span className="loading text-dark"></span>
                   ) : (
-                    <Trash2 className="text-auto" size={"auto"} />
+                    <Trash2 className="text-auto" />
                   )}
                 </button>
               </div>

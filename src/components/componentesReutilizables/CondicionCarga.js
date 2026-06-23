@@ -6,7 +6,8 @@ export function CondicionCarga({
   isLoading,
   isError,
   children,
-  mode = "default", // 'default' | 'cards' | 'single-card' <--- NUEVO
+  mode = "default",
+  errorMessage = "No se pudo cargar la información.",
 }) {
   if (isLoading) {
     // === NUEVO MODO: SINGLE CARD (Para widgets individuales) ===
@@ -56,10 +57,11 @@ export function CondicionCarga({
 
   if (isError) {
     return (
-      <div className="alert alert-danger d-flex align-items-center m-0 p-3 shadow-sm border-0 rounded-3">
-        <AlertTriangle className="me-2 flex-shrink-0" size={20} />
+      <div className="alert alert-danger d-flex align-items-start m-0 p-3 shadow-sm border-0 rounded-3">
+        <AlertTriangle className="me-2 flex-shrink-0 mt-1" size={18} />
         <div>
-          <small className="fw-bold">Error</small>
+          <div className="fw-bold small">No se pudo cargar la información</div>
+          <div className="small mt-1">{errorMessage}</div>
         </div>
       </div>
     );

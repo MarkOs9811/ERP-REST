@@ -6,9 +6,11 @@ import {
   User,
   WalletCards,
 } from "lucide-react";
-import React, { useEffect, useState } from "react"; // Asegúrate de importar lo necesario
+import React from "react"; // Asegúrate de importar lo necesario
 import { useForm } from "react-hook-form";
 import { EstadoIntegraciones } from "../../../hooks/EstadoIntegraciones";
+import { useQuery } from "@tanstack/react-query";
+import { GetMetodosPago } from "../../../service/accionesVentas/GetMetodosPago";
 
 export function OpcionesPago(props) {
   const {
@@ -54,11 +56,51 @@ export function OpcionesPago(props) {
     // error, // Ya no necesitamos mostrar el error en pantalla completa
     refetch: refetchSunat,
   } = EstadoIntegraciones("sunat", { enabled: false });
-
+  const { data: metodosData } = useQuery({
+    queryKey: ["metodosPagos"],
+    queryFn: GetMetodosPago,
+  });
+  console.log("Metodos", metodosData);
   // 2. Eliminamos los IF que retornaban <p>Error...</p>.
   // Ahora calculamos si Sunat está disponible de forma segura.
   // Se considera activo SOLO si no está cargando, no hay error y el estado es 1.
   const sunatActivo = !isLoading && !isError && estadoSunat?.estado === 1;
+
+  // Filtrar métodos de pago activos (estado === 1)
+  const metodosActivos =
+    metodosData?.filter((metodo) => metodo.estado === 1) || [];
+
+  // Función para obtener el icono/imagen según el método
+  const getIconoMetodo = (nombre) => {
+    const nombreLower = nombre?.toLowerCase().trim();
+    if (nombreLower === "yape") {
+      return (
+        <img
+          src="/images/yape-logo.png"
+          alt="Yape"
+          className="img-fluid rounded-pill"
+          style={{ maxHeight: "30px", marginRight: "8px" }}
+        />
+      );
+    }
+    if (nombreLower === "plin") {
+      return (
+        <img
+          src="/images/plin-log.png"
+          alt="Plin"
+          className="img-fluid rounded-pill"
+          style={{ maxHeight: "30px", marginRight: "8px" }}
+        />
+      );
+    }
+    if (nombreLower === "efectivo") {
+      return <Banknote className="text-auto" />;
+    }
+    if (nombreLower === "tarjeta" || nombreLower === "tarjeta credito") {
+      return <CreditCard className="text-auto" />;
+    }
+    return <WalletCards className="text-auto" />;
+  };
 
   return (
     <div className="card shadow-sm flex-grow-1 h-100 d-flex flex-column h-100">
@@ -76,78 +118,33 @@ export function OpcionesPago(props) {
             role="group"
             aria-label="Método de Pago"
           >
-            <button
-              type="button"
-              className={`boton-opcion-pago p-3 w-33 ${
-                metodoSeleccionado === "efectivo"
-                  ? "btn-seleccionado"
-                  : "btn-outline-dark"
-              }`}
-              onClick={() => {
-                handleSelectMetodo("efectivo");
-                handleSelectCardType(false);
-                // El refetch se intenta, pero si falla, no rompe la UI gracias a la lógica nueva
-                refetchSunat();
-              }}
-            >
-              <Banknote className="text-auto" /> Efectivo
-            </button>
-            <button
-              type="button"
-              className={`boton-opcion-pago p-3 w-33 ${
-                metodoSeleccionado === "tarjeta"
-                  ? "btn-seleccionado"
-                  : "btn-outline-dark"
-              }`}
-              onClick={() => {
-                handleSelectMetodo("tarjeta");
-                handleSelectCardType(true);
-              }}
-            >
-              <CreditCard className="text-auto" /> Tarjeta
-            </button>
-            <button
-              type="button"
-              className={`boton-opcion-pago p-3 w-33 ${
-                metodoSeleccionado === "yape"
-                  ? "btn-seleccionado"
-                  : "btn-outline-dark"
-              }`}
-              onClick={() => {
-                handleSelectMetodo("yape");
-                handleSelectCardType(false);
-                refetchSunat();
-              }}
-            >
-              <img
-                src="/images/yape-logo.png"
-                alt="Yape"
-                className="img-fluid rounded-pill"
-                style={{ maxHeight: "30px", marginRight: "8px" }}
-              />
-              Yape
-            </button>
-            <button
-              type="button"
-              className={`boton-opcion-pago p-3 w-33 ${
-                metodoSeleccionado === "plin"
-                  ? "btn-seleccionado"
-                  : "btn-outline-dark"
-              }`}
-              onClick={() => {
-                handleSelectMetodo("plin");
-                handleSelectCardType(false);
-                refetchSunat();
-              }}
-            >
-              <img
-                src="/images/plin-log.png"
-                alt="Plin"
-                className="img-fluid rounded-pill"
-                style={{ maxHeight: "30px", marginRight: "8px" }}
-              />
-              Plin
-            </button>
+            {metodosActivos.map((metodo) => (
+              <button
+                key={metodo.id}
+                type="button"
+                className={`boton-opcion-pago p-3 w-33 ${
+                  metodoSeleccionado === metodo.nombre
+                    ? "btn-seleccionado"
+                    : "btn-outline-dark"
+                }`}
+                onClick={() => {
+                  handleSelectMetodo(metodo.nombre);
+                  const nombreLower = metodo.nombre?.toLowerCase().trim();
+                  if (
+                    nombreLower === "tarjeta" ||
+                    nombreLower === "tarjeta credito"
+                  ) {
+                    handleSelectCardType(true);
+                  } else {
+                    handleSelectCardType(false);
+                    refetchSunat();
+                  }
+                }}
+              >
+                {getIconoMetodo(metodo.nombre)}
+                {metodo.nombre.charAt(0).toUpperCase() + metodo.nombre.slice(1)}
+              </button>
+            ))}
           </div>
         </div>
 

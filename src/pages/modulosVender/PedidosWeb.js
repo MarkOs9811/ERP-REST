@@ -152,8 +152,8 @@ export function PedidosWeb() {
           {
             key: "pendientes",
             title: "Pendientes - Pago",
-            color: "#ebf3fa",
-            border: "#7ab0e0",
+            color: "#e0e0e0",
+            border: "#ffffff",
             icon: (
               <Hourglass className="text-auto" height="35px" width="35px" />
             ),
@@ -165,7 +165,7 @@ export function PedidosWeb() {
             key: "proceso",
             title: "En Proceso",
             color: "#eef4f9",
-            border: "#5a7a98",
+            border: "#ffffff",
             icon: (
               <CookingPot className="text-auto" height="35px" width="35px" />
             ),
@@ -177,7 +177,7 @@ export function PedidosWeb() {
             key: "listos",
             title: "Listo - Para recoger",
             color: "#f6fef9",
-            border: "#28A745",
+            border: "#ffffff",
             icon: (
               <CheckCheck className="text-auto" height="35px" width="35px" />
             ),
@@ -194,7 +194,7 @@ export function PedidosWeb() {
                 borderRadius: "0.5rem",
               }}
             >
-              <div className="d-flex bg-transparent border-bottom p-2 align-items-center">
+              <div className="d-flex bg-transparent border-bottom px-5 py-3 align-items-center">
                 <h3 className="text-dark mb-0 fs-5 fw-bold">{title}</h3>
                 <div className="text-end ms-auto">{icon}</div>
               </div>

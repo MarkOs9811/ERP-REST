@@ -1,14 +1,19 @@
-import { Plus } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import ModalRight from "../../componentesReutilizables/ModalRight";
 import { useForm } from "react-hook-form";
 import ToastAlert from "../../componenteToast/ToastAlert";
 import axiosInstance from "../../../api/AxiosInstance";
 import { useQueryClient } from "@tanstack/react-query";
+import ModalAlertQuestion from "../../componenteToast/ModalAlertQuestion";
 
 const MetodoPago = ({ metodos, onToggle }) => {
   const [modalAddMetodoPago, setModalAddMetodoPago] = useState(false);
   const queryClient = useQueryClient();
+
+  const [metodoQuestion, setModalQuestion] = useState(false);
+  const [dataMetodo, setDataMetodo] = useState([]);
+
   const {
     register,
     handleSubmit,
@@ -32,6 +37,21 @@ const MetodoPago = ({ metodos, onToggle }) => {
     } catch (error) {
       ToastAlert("error", "Error al agregar el método de pago");
       console.error("Error al agregar el método de pago:", error);
+    }
+  };
+
+  // METODO PAR ELIMINAR EL METODO
+
+  const handleEliminarMetodo = async (id) => {
+    try {
+      const response = await axiosInstance.delete(`/metodos-pagos/${id}`);
+      queryClient.invalidateQueries(["metodosPago"]);
+      ToastAlert("success", response.data.message);
+      return true;
+    } catch (error) {
+      const responseError = error.response?.data?.message || error.message;
+      ToastAlert("error", "Error al eliminar el método: " + responseError);
+      return false;
     }
   };
   return (
@@ -58,7 +78,17 @@ const MetodoPago = ({ metodos, onToggle }) => {
                   <h6 className="mb-1">{metodo.nombre}</h6>
                   <small className="text-muted">Nº {metodo.id}</small>
                 </div>
-                <div>
+                <div className="d-flex gap-2">
+                  <button
+                    type="button"
+                    className="btn-eliminar rounded-5 "
+                    onClick={() => {
+                      setModalQuestion(true);
+                      setDataMetodo(metodo);
+                    }}
+                  >
+                    <Trash2 size={18} />
+                  </button>
                   <div
                     className="form-check form-switch m-0"
                     style={{ minWidth: 40 }}
@@ -117,6 +147,16 @@ const MetodoPago = ({ metodos, onToggle }) => {
           </form>
         </div>
       </ModalRight>
+
+      <ModalAlertQuestion
+        show={metodoQuestion}
+        idEliminar={dataMetodo.id}
+        nombre={dataMetodo.nombre}
+        handleEliminar={handleEliminarMetodo}
+        handleCloseModal={() => setModalQuestion(false)}
+        tipo={"Metodo"}
+        pregunta="¿Estás seguro de eliminar este"
+      />
     </div>
   );
 };

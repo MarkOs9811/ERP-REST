@@ -156,7 +156,7 @@ export function Nomina() {
     <div>
       <div className="card py-2">
         {/* HEADER UNIFICADO */}
-        <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-3 bg-white">
+        <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-3 ">
           <div className="d-flex align-items-center">
             <h4 className="card-title mb-0 titulo-card-especial">
               Gestión de Nómina
@@ -165,7 +165,7 @@ export function Nomina() {
           </div>
 
           <div className="d-flex flex-wrap gap-2 mt-3 mt-md-0 align-items-center ms-auto">
-            <div className="d-flex gap-2 align-items-center bg-light px-3 py-1 rounded-pill border">
+            <div className="d-flex gap-2 align-items-center px-3 py-1 rounded-pill border">
               <CalendarDays size={18} className="text-danger" />
               <input
                 type="month"
@@ -190,13 +190,13 @@ export function Nomina() {
 
         <div className="card-body">
           {/* TABLERO DE RESUMEN MACRO */}
-          <div className="border-bottom bg-light px-4 py-3">
+          <div className="border-bottom px-4 py-3">
             <CondicionCarga isLoading={isLoading} isError={isError}>
               <div className="row g-3">
                 <div className="col-md-4">
-                  <div className="card border-0 shadow-sm h-100 bg-white">
+                  <div className="card border-0 shadow-sm h-100 ">
                     <div className="card-body d-flex align-items-center p-3">
-                      <div className="bg-light p-3 rounded-circle text-danger me-3">
+                      <div className="p-3 rounded-circle text-danger me-3">
                         <Users size={24} />
                       </div>
                       <div>
@@ -209,9 +209,9 @@ export function Nomina() {
                   </div>
                 </div>
                 <div className="col-md-4">
-                  <div className="card border-0 shadow-sm h-100 bg-white">
+                  <div className="card border-0 shadow-sm h-100 ">
                     <div className="card-body d-flex align-items-center p-3">
-                      <div className="bg-light p-3 rounded-circle text-dark me-3">
+                      <div className="p-3 rounded-circle me-3">
                         <span className="fw-bold h5">S/.</span>
                       </div>
                       <div>
@@ -232,7 +232,7 @@ export function Nomina() {
                     }`}
                   >
                     <div className="card-body d-flex align-items-center p-3">
-                      <div className="p-3 rounded-circle me-3 bg-white bg-opacity-50">
+                      <div className="p-3 rounded-circle me-3  bg-opacity-50">
                         {nominaData?.resumen?.estado === "PAGADO" ? (
                           <CheckCircle
                             size={24}
@@ -260,7 +260,7 @@ export function Nomina() {
           </div>
 
           {/* BARRA DE HERRAMIENTAS DE TABLA */}
-          <div className="px-4 py-3 border-bottom bg-white d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+          <div className="px-4 py-3 border-bottom  d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
             <div className="header-search-container m-0">
               <Search className="search-icon" />
               <input

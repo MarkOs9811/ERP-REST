@@ -10,7 +10,7 @@ const BotonAnimado = ({
   icon = <CheckCheck className="text-auto" width="20px" height="20px" />,
   ...props
 }) => {
-  const clasesBase = `${className} d-flex align-items-center justify-content-center gap-2 transition-all`;
+  const clasesBase = `${className} boton-generico-empresa p-2 d-flex align-items-center justify-content-center gap-2 transition-all`;
 
   // 🔹 Agrega estilos visuales cuando está cargando o deshabilitado
   const clasesFinal = loading

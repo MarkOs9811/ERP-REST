@@ -93,7 +93,7 @@ export default function FormularioReporte({
           </div>
 
           {/* Footer con los botones */}
-          <div className="card-footer px-3 bg-white border-top d-flex justify-content-end gap-2">
+          <div className="card-footer px-3  bg-white border-top d-flex justify-content-end gap-2">
             {estadoIntegracionGoogle?.estado === 1 ? (
               // VISUALIZACIÓN CUANDO GOOGLE ESTÁ INTEGRADO (Muestra ambas opciones)
               <>
@@ -119,7 +119,7 @@ export default function FormularioReporte({
                     type="button"
                     loading={isLoadingGoogle}
                     disabled={isAnyLoading}
-                    className="btn-realizarPedido rounded-none btn-sm  h6"
+                    className=""
                     icon={
                       !isLoadingGoogle ? (
                         <FileTextIcon className="me-1" />

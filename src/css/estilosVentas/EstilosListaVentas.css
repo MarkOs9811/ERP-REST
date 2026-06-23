@@ -1,0 +1,9 @@
+.badge-ok{
+ background-color: var(--fw-emerald);
+}
+.badge-fail{
+background-color: var(--fw-strawberry);
+}
+.badge-alert{
+background-color: var(--fw-saffron);
+}

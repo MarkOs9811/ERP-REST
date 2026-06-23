@@ -76,7 +76,7 @@ export const Login = () => {
           nombre: response.data?.caja?.caja?.nombreCaja ?? "",
           id: response.data?.caja?.caja?.id ?? null,
           estado:
-            response.data?.caja?.caja?.estadoCaja == 1 ? "abierto" : "cerrado",
+            response.data?.caja?.caja?.estadoCaja === 1 ? "abierto" : "cerrado",
         };
 
         // 3. Guardamos TODO en la bóveda elegida
@@ -119,12 +119,9 @@ export const Login = () => {
     setBadgeMessage({ type: "", text: "" });
 
     try {
-      const response = await axiosInstance.post(
-        "http://127.0.0.1:8000/api/forgot-password",
-        {
-          email: data.resetEmail,
-        },
-      );
+      await axiosInstance.post("http://127.0.0.1:8000/api/forgot-password", {
+        email: data.resetEmail,
+      });
 
       ToastAlert("success", "Enlace enviado exitosamente.");
       setBadgeMessage({
@@ -155,128 +152,147 @@ export const Login = () => {
       <div className="login-container-grid">
         {/* === COLUMNA IZQUIERDA === */}
         <div className="login-left-panel">
-          <h1 className="login-brand-title">Bienvenido</h1>
-          <p className="login-brand-subtitle">
-            Gestiona tu restaurante de forma eficiente.
-          </p>
+          <div className="login-left-panel-content">
+            <div className="login-brand-pill">ERP</div>
+            <h1 className="login-brand-title">Bienvenido</h1>
+            <p className="login-brand-subtitle">
+              Gestiona tu restaurante de forma eficiente.
+            </p>
+            <div className="login-brand-badges">
+              <span>Pedidos</span>
+              <span>Inventario</span>
+              <span>Caja</span>
+            </div>
+          </div>
         </div>
 
         {/* === COLUMNA DERECHA (FORMULARIOS) === */}
         <div className="login-right-panel">
           {!isForgotPassword ? (
             <form onSubmit={handleSubmit(onSubmitLogin)} className="login-form">
-              <h2 className="login-title">Iniciar Sesión</h2>
-
-              {/* Input de Usuario */}
-              <div className="input-group-custom">
-                <FontAwesomeIcon icon={faUser} className="input-icon" />
-                <input
-                  type="text"
-                  className={`form-control-custom ${errors.email ? "is-invalid" : ""}`}
-                  {...register("email", {
-                    required: "El nombre de usuario o email es obligatorio",
-                    minLength: {
-                      value: 3,
-                      message: "Debe tener al menos 3 caracteres",
-                    },
-                  })}
-                  placeholder="Usuario o Email"
-                />
-                {errors.email && (
-                  <div className="invalid-feedback-custom">
-                    <FontAwesomeIcon
-                      icon={faExclamationCircle}
-                      className="me-2"
-                    />
-                    {errors.email.message}
+              <div className="login-form-body">
+                <div className="login-form-header">
+                  <div className="login-brand-pill login-brand-pill--small">
+                    ERP
                   </div>
-                )}
-              </div>
+                  <span className="login-form-eyebrow">
+                    Panel de administración
+                  </span>
+                </div>
+                <h2 className="login-title">Iniciar Sesión</h2>
 
-              {/* Input de Contraseña */}
-              <div className="input-group-custom mb-3">
-                <FontAwesomeIcon
-                  icon={faUnlockKeyhole}
-                  className="input-icon"
-                />
-                <input
-                  type={showPassword ? "text" : "password"}
-                  className={`form-control-custom ${errors.password ? "is-invalid" : ""}`}
-                  {...register("password", {
-                    required: "La contraseña es obligatoria",
-                    minLength: {
-                      value: 3,
-                      message: "La contraseña debe tener al menos 3 caracteres",
-                    },
-                  })}
-                  placeholder="Contraseña"
-                />
-                <span
-                  className="password-toggle-icon"
-                  onClick={togglePasswordVisibility}
-                  style={{ cursor: "pointer" }}
-                >
-                  <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
-                </span>
-                {errors.password && (
-                  <div className="invalid-feedback-custom">
-                    <FontAwesomeIcon
-                      icon={faExclamationCircle}
-                      className="me-2"
-                    />
-                    {errors.password.message}
-                  </div>
-                )}
-              </div>
-
-              {/* Controles Inferiores */}
-              <div className="d-flex justify-content-between align-items-center mb-3 px-1">
-                {/* Checkbox Recordar Sesión */}
-                <div className="form-check d-flex align-items-center gap-2 m-0 p-0">
+                {/* Input de Usuario */}
+                <div className="input-group-custom">
+                  <FontAwesomeIcon icon={faUser} className="input-icon" />
                   <input
-                    className="form-check-input m-0 shadow-none"
-                    type="checkbox"
-                    id="rememberMe"
-                    style={{ cursor: "pointer" }}
-                    {...register("rememberMe")}
+                    type="text"
+                    className={`form-control-custom ${errors.email ? "is-invalid" : ""}`}
+                    {...register("email", {
+                      required: "El nombre de usuario o email es obligatorio",
+                      minLength: {
+                        value: 3,
+                        message: "Debe tener al menos 3 caracteres",
+                      },
+                    })}
+                    placeholder="Usuario o Email"
                   />
-                  <label
-                    className="form-check-label text-muted"
-                    htmlFor="rememberMe"
+                  {errors.email && (
+                    <div className="invalid-feedback-custom">
+                      <FontAwesomeIcon
+                        icon={faExclamationCircle}
+                        className="me-2"
+                      />
+                      {errors.email.message}
+                    </div>
+                  )}
+                </div>
+
+                {/* Input de Contraseña */}
+                <div className="input-group-custom">
+                  <FontAwesomeIcon
+                    icon={faUnlockKeyhole}
+                    className="input-icon"
+                  />
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    className={`form-control-custom ${errors.password ? "is-invalid" : ""}`}
+                    {...register("password", {
+                      required: "La contraseña es obligatoria",
+                      minLength: {
+                        value: 3,
+                        message:
+                          "La contraseña debe tener al menos 3 caracteres",
+                      },
+                    })}
+                    placeholder="Contraseña"
+                  />
+                  <span
+                    className="password-toggle-icon"
+                    onClick={togglePasswordVisibility}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                  </span>
+                  {errors.password && (
+                    <div className="invalid-feedback-custom">
+                      <FontAwesomeIcon
+                        icon={faExclamationCircle}
+                        className="me-2"
+                      />
+                      {errors.password.message}
+                    </div>
+                  )}
+                </div>
+
+                {/* Controles Inferiores */}
+                <div className="login-options-row">
+                  {/* Checkbox Recordar Sesión */}
+                  <div className="form-check d-flex align-items-center gap-2 m-0 p-0">
+                    <input
+                      className="form-check-input m-0 shadow-none"
+                      type="checkbox"
+                      id="rememberMe"
+                      style={{ cursor: "pointer" }}
+                      {...register("rememberMe")}
+                    />
+                    <label
+                      className="form-check-label text-muted"
+                      htmlFor="rememberMe"
+                      style={{
+                        cursor: "pointer",
+                        fontSize: "0.85rem",
+                        fontWeight: "500",
+                      }}
+                    >
+                      Recordar sesión
+                    </label>
+                  </div>
+
+                  {/* Enlace Olvidar Contraseña */}
+                  <span
+                    onClick={() => toggleView(true)}
                     style={{
+                      color: "#1a1a1a",
                       cursor: "pointer",
                       fontSize: "0.85rem",
                       fontWeight: "500",
                     }}
+                    className="forgot-password-link m-0"
                   >
-                    Recordar sesión
-                  </label>
+                    ¿Olvidaste tu contraseña?
+                  </span>
                 </div>
 
-                {/* Enlace Olvidar Contraseña */}
-                <span
-                  onClick={() => toggleView(true)}
-                  style={{
-                    color: "#1a1a1a",
-                    cursor: "pointer",
-                    fontSize: "0.85rem",
-                    fontWeight: "500",
-                  }}
-                  className="forgot-password-link m-0"
-                >
-                  ¿Olvidaste tu contraseña?
-                </span>
-              </div>
-
-              {/* Botón de Ingresar */}
-              <div className="d-grid mt-3">
-                <button
-                  type="submit"
-                  className="btn-login-submit"
-                  disabled={loading}
-                >
-                  {loading ? <Cargando textColor={"white"} /> : "Ingresar"}
-                </button>
+                {/* Botón de Ingresar */}
+                <div className="login-submit-wrapper">
+                  <button
+                    type="submit"
+                    className="btn-login-submit"
+                    disabled={loading}
+                  >
+                    {loading ? <Cargando textColor={"white"} /> : "Ingresar"}
+                  </button>
+                </div>
               </div>
             </form>
           ) : (
@@ -285,94 +301,87 @@ export const Login = () => {
               onSubmit={handleSubmit(onForgotSubmit)}
               className="login-form"
             >
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginBottom: "1rem",
-                }}
-              >
-                <FontAwesomeIcon
-                  icon={faArrowLeft}
-                  style={{
-                    cursor: "pointer",
-                    marginRight: "10px",
-                    color: "#555",
-                  }}
-                  onClick={() => toggleView(false)}
-                />
-                <h2 className="login-title" style={{ margin: 0 }}>
-                  Recuperar Acceso
-                </h2>
-              </div>
+              <div className="login-form-body">
+                <div className="login-form-header login-form-header--back">
+                  <FontAwesomeIcon
+                    icon={faArrowLeft}
+                    className="forgot-back-icon"
+                    onClick={() => toggleView(false)}
+                  />
+                  <div>
+                    <span className="login-form-eyebrow">Recuperación</span>
+                    <h2 className="login-title login-title--compact">
+                      Recuperar Acceso
+                    </h2>
+                  </div>
+                </div>
 
-              <p
-                style={{
-                  color: "#666",
-                  fontSize: "0.9rem",
-                  marginBottom: "1.5rem",
-                }}
-              >
-                Ingresa tu correo electrónico y te enviaremos un enlace para
-                restablecer tu contraseña.
-              </p>
+                <p className="login-help-text">
+                  Ingresa tu correo electrónico y te enviaremos un enlace para
+                  restablecer tu contraseña.
+                </p>
 
-              <div className="input-group-custom">
-                <FontAwesomeIcon icon={faUser} className="input-icon" />
-                <input
-                  type="email"
-                  className={`form-control-custom ${errors.resetEmail ? "is-invalid" : ""}`}
-                  {...register("resetEmail", {
-                    required: "Por favor, ingresa tu correo electrónico.",
-                    pattern: {
-                      value:
-                        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-                      message: "Ingresa un correo electrónico válido",
-                    },
-                  })}
-                  placeholder="Ingresa tu Email"
-                />
-                {errors.resetEmail && (
-                  <div className="invalid-feedback-custom">
+                <div className="input-group-custom">
+                  <FontAwesomeIcon icon={faUser} className="input-icon" />
+                  <input
+                    type="email"
+                    className={`form-control-custom ${errors.resetEmail ? "is-invalid" : ""}`}
+                    {...register("resetEmail", {
+                      required: "Por favor, ingresa tu correo electrónico.",
+                      pattern: {
+                        value:
+                          /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                        message: "Ingresa un correo electrónico válido",
+                      },
+                    })}
+                    placeholder="Ingresa tu Email"
+                  />
+                  {errors.resetEmail && (
+                    <div className="invalid-feedback-custom">
+                      <FontAwesomeIcon
+                        icon={faExclamationCircle}
+                        className="me-2"
+                      />
+                      {errors.resetEmail.message}
+                    </div>
+                  )}
+                </div>
+
+                {badgeMessage.text && (
+                  <div
+                    className={`alert mt-3 p-3 text-center ${badgeMessage.type === "success" ? "alert-success" : "alert-danger"}`}
+                    style={{
+                      borderRadius: "8px",
+                      fontSize: "0.85rem",
+                      fontWeight: "500",
+                      border: "none",
+                    }}
+                  >
                     <FontAwesomeIcon
-                      icon={faExclamationCircle}
+                      icon={
+                        badgeMessage.type === "success"
+                          ? faUnlockKeyhole
+                          : faExclamationCircle
+                      }
                       className="me-2"
                     />
-                    {errors.resetEmail.message}
+                    {badgeMessage.text}
                   </div>
                 )}
-              </div>
 
-              {badgeMessage.text && (
-                <div
-                  className={`alert mt-3 p-3 text-center ${badgeMessage.type === "success" ? "alert-success" : "alert-danger"}`}
-                  style={{
-                    borderRadius: "8px",
-                    fontSize: "0.85rem",
-                    fontWeight: "500",
-                    border: "none",
-                  }}
-                >
-                  <FontAwesomeIcon
-                    icon={
-                      badgeMessage.type === "success"
-                        ? faUnlockKeyhole
-                        : faExclamationCircle
-                    }
-                    className="me-2"
-                  />
-                  {badgeMessage.text}
+                <div className="login-submit-wrapper">
+                  <button
+                    type="submit"
+                    className="btn-login-submit"
+                    disabled={loading}
+                  >
+                    {loading ? (
+                      <Cargando textColor={"white"} />
+                    ) : (
+                      "Enviar Enlace"
+                    )}
+                  </button>
                 </div>
-              )}
-
-              <div className="d-grid mt-4">
-                <button
-                  type="submit"
-                  className="btn-login-submit"
-                  disabled={loading}
-                >
-                  {loading ? <Cargando textColor={"white"} /> : "Enviar Enlace"}
-                </button>
               </div>
             </form>
           )}

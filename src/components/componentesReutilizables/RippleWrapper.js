@@ -27,7 +27,7 @@ const RippleWrapper = ({ children }) => {
 
   return (
     <div
-      className="ripple-wrapper position-relative overflow-hidden d-inline-block "
+      className="ripple-wrapper position-relative py-2 overflow-hidden d-inline-block "
       onClick={handleClick}
     >
       {children}

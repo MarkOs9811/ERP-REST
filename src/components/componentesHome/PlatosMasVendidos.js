@@ -77,7 +77,7 @@ export function PlatoMasVendido() {
 
   return (
     <CondicionCarga isLoading={isLoadingVentas} isError={isErrorVentas}>
-      <div className="card border rounded-4 p-4 h-100">
+      <div className="card  rounded-4 p-4 h-100">
         {/* CABECERA */}
         <div className="d-flex justify-content-between align-items-center mb-2">
           <div>

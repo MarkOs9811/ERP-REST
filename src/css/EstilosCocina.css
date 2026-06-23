@@ -16,3 +16,259 @@
    
     margin-bottom: 2rem;
 }
+
+/* Nuevas columnas para Cocina / Despacho */
+.cocina-columnas {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.9rem;
+    width: 100%;
+    align-items: stretch;
+    flex: 1 1 0;
+    min-height: 0;
+}
+
+.cocina-columna {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 0;
+    min-height: 0;
+    height: 100%;
+    overflow: hidden;
+    width: 100%;
+}
+
+.cocina-card-body {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    height: 100%;
+}
+
+.cocina-columna > .d-flex.flex-column,
+.cocina-col-body {
+    overflow-y: auto;
+    padding-right: 2px;
+    flex: 1 1 auto;
+    gap: 0.75rem;
+}
+
+.cocina-col-body::-webkit-scrollbar,
+.cocina-columna::-webkit-scrollbar {
+    width: 6px;
+}
+
+.cocina-col-body::-webkit-scrollbar-thumb,
+.cocina-columna::-webkit-scrollbar-thumb {
+    background: rgba(107, 114, 128, 0.4);
+    border-radius: 999px;
+}
+
+.cocina-columna ::-webkit-scrollbar-thumb {
+    background: rgba(107, 114, 128, 0.4);
+    border-radius: 999px;
+}
+
+.cocina-columna h6 {
+    font-size: 0.95rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+
+.cocina-columna small {
+    font-size: 0.78rem;
+}
+
+@media (max-width: 1200px) {
+    .cocina-columnas {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 1400px) {
+    .cocina-columna {
+        min-height: calc(100vh - 260px);
+    }
+}
+
+.cocina-pedido-id {
+    color: var(--text-muted);
+}
+
+.cocina-pedido-title {
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.cocina-title-listo {
+    color: var(--fw-emerald);
+}
+
+.cocina-text-muted {
+    color: var(--text-muted);
+}
+
+.cocina-nota-espera {
+    background: var(--fw-saffron);
+    color: var(--fw-white);
+}
+
+.cocina-nota-listo {
+    background: var(--fw-onyx);
+    color: var(--fw-white);
+}
+
+.cocina-icon-note {
+    color: var(--fw-white);
+}
+
+.cocina-header-espera {
+    background: var(--fw-saffron);
+    color: var(--fw-white);
+}
+
+.cocina-header-preparacion {
+    background: var(--fw-emerald);
+    color: var(--fw-white);
+}
+
+.cocina-btn-imprimir {
+    border: 1px solid var(--fw-border);
+    background: var(--bg-surface);
+    color: var(--text-main);
+    padding: 0.55rem 0.75rem;
+    border-radius: var(--radius-pill);
+    transition: all var(--transition-smooth);
+}
+
+.cocina-btn-imprimir:hover {
+    background: var(--bg-muted);
+}
+
+.cocina-btn-imprimir-espera {
+    border-color: var(--fw-saffron);
+    color: var(--fw-saffron);
+}
+
+.cocina-btn-imprimir-preparacion {
+    border-color: var(--fw-emerald);
+    color: var(--fw-emerald);
+}
+
+.cocina-btn-imprimir-listo {
+    border-color: var(--fw-onyx);
+    color: var(--fw-onyx);
+}
+
+.cocina-btn-accion {
+    min-width: 155px;
+    border-radius: var(--radius-pill);
+    padding: 0.55rem 1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    box-shadow: var(--shadow-soft);
+}
+
+.cocina-btn-accion-espera {
+    background: var(--fw-saffron);
+    color: var(--fw-white);
+}
+
+.cocina-btn-accion-preparacion {
+    background: var(--fw-emerald);
+    color: var(--fw-white);
+}
+
+.cocina-btn-accion-listo {
+    background: var(--fw-onyx);
+    color: var(--fw-white);
+}
+
+.cocina-badge-warning {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.35rem 0.7rem;
+    border-radius: var(--radius-pill);
+    background: var(--fw-saffron);
+    color: var(--fw-white);
+    font-weight: 700;
+}
+
+.cocina-badge-preparacion {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.35rem 0.7rem;
+    border-radius: var(--radius-pill);
+    background: var(--fw-emerald);
+    color: var(--fw-white);
+    font-weight: 700;
+}
+
+.cocina-badge-listo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.35rem 0.7rem;
+    border-radius: var(--radius-pill);
+    background: var(--fw-onyx);
+    color: var(--fw-white);
+    font-weight: 700;
+}
+
+.cocina-filter-bar {
+    background: var(--bg-surface);
+    border: 1px solid var(--fw-border);
+    border-radius: 14px;
+    padding: 0.55rem 0.8rem;
+}
+
+.cocina-filter-btn {
+    background: transparent;
+    border: 1px solid var(--fw-border);
+    color: var(--text-main);
+    border-radius: 999px;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.82rem;
+    transition: all 0.18s ease;
+}
+
+.cocina-filter-btn:hover,
+.cocina-filter-btn-active {
+    background: var(--fw-onyx);
+    color: var(--fw-white);
+    border-color: var(--fw-onyx);
+}
+
+.cocina-columna .card-header,
+.cocina-columna .card-footer {
+    padding: 0.7rem 0.8rem;
+}
+
+.cocina-columna .card-footer {
+    gap: 0.4rem;
+}
+
+.cocina-columna .cocina-pedido-id,
+.cocina-columna .cocina-pedido-title {
+    font-size: 0.82rem;
+}
+
+.cocina-columna .list-group-item {
+    padding: 0.45rem 0.75rem;
+}
+
+.cocina-columna .cocina-nota-espera,
+.cocina-columna .cocina-nota-listo {
+    font-size: 0.8rem;
+    padding: 0.65rem 0.75rem;
+}
+
+@media (max-width: 768px) {
+    .cocina-columnas {
+        grid-template-columns: 1fr;
+    }
+}

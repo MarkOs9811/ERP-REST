@@ -3,7 +3,7 @@
 :root {
   --fw-onyx: #111213;
   --fw-emerald: #17C668;
-  --fw-saffron: #FF992C;
+  --fw-saffron: #ec8b23;
   --fw-strawberry: #E44949;
   --fw-white: #ffffff;
 
@@ -36,7 +36,7 @@
 
   --shadow-soft: 0 1px 3px rgba(15, 23, 42, 0.06);
   --shadow-md: 0 10px 30px rgba(15, 23, 42, 0.08);
-  --shadow-hover: 0 16px 40px rgba(15, 23, 42, 0.12);
+  --shadow-hover: 0 16px 20px rgba(48, 48, 48, 0.034)!important;
 
   --radius-sm: 10px;
   --radius-md: 14px;
@@ -131,7 +131,6 @@ a {
   background-color: var(--bg-surface) !important;
   border: 1px solid var(--fw-border) !important;
   color: var(--text-main) !important;
-  box-shadow: var(--shadow-soft) !important;
 }
 
 .form-control,
@@ -177,7 +176,6 @@ input::placeholder {
 textarea:focus,
 input:focus {
   border-color: var(--brand-primary) !important;
-  box-shadow: 0 0 0 3px var(--bg-saffron-soft) !important;
   outline: none;
 }
 

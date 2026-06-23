@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import RippleWrapper from "./components/componentesReutilizables/RippleWrapper";
 import {
   BikeIcon,
@@ -28,33 +28,36 @@ export default function LayoutPOS({ children }) {
   );
 
   // Consulta con React Query para obtener los datos de la caja
-  const {
-    data: cajaData,
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
+  const { data: cajaData } = useQuery({
     queryKey: ["cajaClose", cajaDatos?.id],
     queryFn: () => fetchCajaClose(cajaDatos?.id),
     enabled: !!cajaDatos?.id,
   });
   return (
     <div className="card w-full h-screen p-0 m-0 overflow-hidden">
-      {/* Barra de botones POS */}
-      <div className="card-header p-2 m-0 rounded-0 d-flex gap-2">
-        {/* Lado Izquierdo: Módulos (Agregamos overflow-x-auto por si hay pantallas muy muy pequeñas) */}
-        <div className="d-flex gap-1 gap-md-2 flex-nowrap flex-grow-1 barra-modulos-pos">
+      {/* Barra de módulos POS mejorada */}
+      <div
+        className="card-header p-0 m-0 rounded-0 d-flex align-items-center"
+        style={{
+          height: "58px",
+          borderBottom: "1px solid var(--fw-border, #ddd)",
+        }}
+      >
+        {/* Lado Izquierdo: Módulos sin espacios */}
+        <div
+          className="d-flex flex-nowrap flex-grow-1 barra-modulos-pos"
+          style={{ gap: "0" }}
+        >
           {/* Mesas */}
           {["atencion al cliente", "administrador"].includes(
             cargo?.empleado?.cargo?.nombre,
           ) && (
             <RippleWrapper>
-              <button
-                type="button"
+              <Link
                 className={`boton-venta d-flex align-items-center justify-content-center ${
                   location.pathname === "/vender/mesas" ? "activo" : ""
                 }`}
-                onClick={() => navigate("/vender/mesas")}
+                to="/vender/mesas"
               >
                 <HandPlatter
                   className="text-auto pos-icon"
@@ -62,7 +65,7 @@ export default function LayoutPOS({ children }) {
                   width="22px"
                 />
                 <span className="pos-btn-text ms-1">Mesas</span>
-              </button>
+              </Link>
             </RippleWrapper>
           )}
 
@@ -71,16 +74,15 @@ export default function LayoutPOS({ children }) {
             cargo?.empleado?.cargo?.nombre,
           ) && (
             <RippleWrapper>
-              <button
-                type="button"
+              <Link
                 className={`boton-venta d-flex align-items-center justify-content-center ${
                   location.pathname === "/vender/pedidosWeb" ? "activo" : ""
                 }`}
-                onClick={() => navigate("/vender/pedidosWeb")}
+                to="/vender/pedidosWeb"
               >
                 <BikeIcon className="pos-icon" height="22px" width="22px" />
                 <span className="pos-btn-text ms-1">Delivery</span>
-              </button>
+              </Link>
             </RippleWrapper>
           )}
 
@@ -89,12 +91,11 @@ export default function LayoutPOS({ children }) {
             cargo?.empleado?.cargo?.nombre,
           ) && (
             <RippleWrapper>
-              <button
-                type="button"
+              <Link
                 className={`boton-venta d-flex align-items-center justify-content-center ${
                   location.pathname === "/vender/ventasLlevar" ? "activo" : ""
                 }`}
-                onClick={() => navigate("/vender/ventasLlevar")}
+                to="/vender/ventasLlevar"
               >
                 <Inbox
                   className="text-auto pos-icon"
@@ -102,7 +103,7 @@ export default function LayoutPOS({ children }) {
                   width="22px"
                 />
                 <span className="pos-btn-text ms-1">Llevar</span>
-              </button>
+              </Link>
             </RippleWrapper>
           )}
 
@@ -111,58 +112,75 @@ export default function LayoutPOS({ children }) {
             cargo?.empleado?.cargo?.nombre,
           ) && (
             <RippleWrapper>
-              <button
-                type="button"
+              <Link
                 className={`boton-venta d-flex align-items-center justify-content-center ${
                   location.pathname === "/vender/cocina" ? "activo" : ""
                 }`}
-                onClick={() => navigate("/vender/cocina")}
+                to="/vender/cocina"
               >
                 <FontAwesomeIcon icon={faKitchenSet} className="pos-icon" />
                 <span className="pos-btn-text ms-1">Cocina</span>
-              </button>
+              </Link>
             </RippleWrapper>
           )}
         </div>
 
-        {/* Lado Derecho: Acciones de Caja (Se mantienen a la derecha y no se encojen) */}
-        <div className="ms-auto d-flex gap-1 gap-md-2 flex-shrink-0 justify-content-around align-items-center">
-          <span>
-            <span className="text-muted">Cajero: </span>
-            {cajaData?.datosRegistroCaja?.usuario?.empleado?.persona?.nombre +
-              " " +
-              cajaData?.datosRegistroCaja?.usuario?.empleado?.persona
-                ?.apellidos}
-          </span>
-          {/* Botón Cerrar Caja */}
+        {/* Lado Derecho: Información y Acciones */}
+        <div
+          className="ms-auto d-flex align-items-center"
+          style={{ height: "100%", gap: "0" }}
+        >
+          {/* Información del Cajero */}
+          <div
+            className="d-flex align-items-center px-3 h-100"
+            style={{ borderRight: "1px solid var(--fw-border, #ddd)" }}
+          >
+            <span style={{ fontSize: "0.9rem" }}>
+              <span className="text-muted me-2">Cajero:</span>
+              <strong>
+                {cajaData?.datosRegistroCaja?.usuario?.empleado?.persona
+                  ?.nombre +
+                  " " +
+                  cajaData?.datosRegistroCaja?.usuario?.empleado?.persona
+                    ?.apellidos}
+              </strong>
+            </span>
+          </div>
+
+          {/* Botón Cerrar Caja como Link */}
           {["atencion al cliente", "administrador"].includes(
             cargo?.empleado?.cargo?.nombre,
           ) &&
             caja?.estado === "abierto" && (
-              <button
-                type="button"
-                className="btn-opcional btn-pos-action d-flex align-items-center justify-content-center"
-                onClick={() => navigate("/vender/cerrarCaja")}
+              <a
+                href="#cerrar-caja"
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate("/vender/cerrarCaja");
+                }}
+                className="pos-action-link cerrar-caja d-flex align-items-center justify-content-center"
               >
                 <LockKeyhole
                   className="text-auto pos-icon"
-                  height="20px"
-                  width="20px"
+                  height="18px"
+                  width="18px"
                 />
-                <span className="pos-btn-text ms-1">Cerrar Caja</span>
-              </button>
+                <span className="pos-btn-text">Cerrar Caja</span>
+              </a>
             )}
 
-          {/* Botón Salir */}
-          <button
-            type="button"
-            className="btn-eliminar d-flex align-items-center justify-content-center"
-            onClick={() => navigate("/")}
+          {/* Botón Salir como Link */}
+          <a
+            href="#salir"
+            onClick={(e) => {
+              e.preventDefault();
+              navigate("/");
+            }}
+            className="pos-action-link salir d-flex align-items-center justify-content-center"
           >
-            {/* Ícono nuevo para que no quede un cuadro rojo vacío en celular */}
-            <LogOut className="pos-icon" height="20px" width="20px" />
-            <span className="pos-btn-text ms-1">Salir</span>
-          </button>
+            <LogOut className="pos-icon" height="18px" width="18px" />
+            <span className="pos-btn-text">Salir</span>
+          </a>
         </div>
       </div>
 

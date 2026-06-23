@@ -7,7 +7,6 @@ import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
 import { UserRound } from "lucide-react";
 
 export function UsuariosActivosHome() {
-  const BASE_URL = process.env.REACT_APP_BASE_URL;
   const navigate = useNavigate(); // Inicializa useNavigate
 
   const {
@@ -57,7 +56,7 @@ export function UsuariosActivosHome() {
                     }}
                   >
                     <img
-                      src={`${BASE_URL}/storage/${usuario.empleado?.empleado?.usuario?.fotoPerfil}`}
+                      src={`${usuario.empleado?.empleado?.usuario?.foto_url}`}
                       alt="Foto de perfil"
                       style={{
                         width: "50px",

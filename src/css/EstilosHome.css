@@ -145,8 +145,6 @@
     background-color: var(--bg-card);
     border-radius: var(--radius-lg);
     padding: 1.5rem 2rem;
-    box-shadow: var(--shadow-soft);
-    border: 1px solid #F3F4F6;
     /* Borde muy sutil para delimitar en fondos blancos */
 }
 

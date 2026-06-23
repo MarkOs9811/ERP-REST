@@ -131,8 +131,9 @@ export function Mesas() {
                           </h5>
                           <div>
                             <span
-                              className={`badge w-auto ${mesa?.estado == 1 ? "bg-success" : "bg-danger"
-                                }`}
+                              className={`badge w-auto ${
+                                mesa?.estado == 1 ? "bg-success" : "bg-danger"
+                              }`}
                             >
                               {mesa?.estado == 1 ? "Disponible" : "Ocupada"}
                             </span>
@@ -163,7 +164,7 @@ export function Mesas() {
                               if (mesa?.estado == 0) {
                                 ToastAlert(
                                   "error",
-                                  "No se puede editar una mesa que está en uso."
+                                  "No se puede editar una mesa que está en uso.",
                                 );
                                 return;
                               }
@@ -186,7 +187,7 @@ export function Mesas() {
                               if (mesa?.estado == 0) {
                                 ToastAlert(
                                   "error",
-                                  "No se puede eliminar una mesa que está en uso."
+                                  "No se puede eliminar una mesa que está en uso.",
                                 );
                                 return;
                               }
