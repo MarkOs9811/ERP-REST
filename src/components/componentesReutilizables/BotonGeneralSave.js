@@ -1,10 +1,11 @@
 import { useState } from "react";
+import "../../css/EstiloBotonMotion.css";
 
 export function BotonGeneralSave({
   onClick,
   children,
   loadingText = "Procesando...",
-  className = "btn-outline-dark text-auto",
+  className = "btn btn-motion-theme",
   icon = null,
   disabled = false,
 }) {
@@ -26,20 +27,18 @@ export function BotonGeneralSave({
   return (
     <button
       type="button"
-      className={`btn d-flex align-items-center justify-content-center ${
-        bloqueado ? "btn-secondary disabled" : className
+      className={`fw-btn-base d-inline-flex align-items-center justify-content-center fw-btn-min ${
+        bloqueado ? "btn btn-motion-theme disabled opacity-75" : className
       }`}
       onClick={handleClick}
       disabled={bloqueado || disabled}
-      style={{ minHeight: "38px", minWidth: "180px" }} // asegúrate de que haya espacio para el spinner
     >
       {bloqueado ? (
         <>
           <div
-            className="spinner-border spinner-border-sm me-2 text-light"
+            className="spinner-border spinner-border-sm me-2"
             role="status"
             aria-hidden="true"
-            style={{ width: "1rem", height: "1rem" }}
           ></div>
           <span>{loadingText}</span>
         </>

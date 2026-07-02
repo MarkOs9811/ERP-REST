@@ -168,7 +168,7 @@ export function Ventas() {
 
   // --- C. RENDERIZADO DE LA INTERFAZ ---
   return (
-    <div className="container-fluid p-0">
+    <div className="ventas-root container-fluid p-0">
       <div className="row g-4">
         {/* ================= FILA 1: KPIs PRINCIPALES (General) ================= */}
         <div className="col-12">
@@ -182,11 +182,11 @@ export function Ventas() {
                       <p className="fw-bold m-0">Ventas Hoy</p>
                       <button
                         type="button"
-                        className="btn btn-sm btn-outline-dark px-2 py-1"
+                        className="btn-guardar"
                         onClick={() => GetReporteExcel("/reporteVentasHOY")}
                         title="Descargar Reporte"
                       >
-                        <FileText size={14} />
+                        <FileText size={22} />
                       </button>
                     </div>
                     <p

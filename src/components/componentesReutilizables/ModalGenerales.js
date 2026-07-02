@@ -47,39 +47,32 @@ function ModalGenerales({
   if (!show) return null;
 
   return ReactDOM.createPortal(
-    <div
-      className={`modal-overlay ${show ? "show" : ""} m-0 p-0 d-flex justify-content-center align-items-center`}
-      style={{ zIndex: 1050 }}
-    >
+    <div className={`fw-modal-overlay ${show ? "show" : ""}`}>
       <div
-        className="bg-white rounded-4 shadow-lg d-flex flex-column overflow-hidden position-relative"
+        className="fw-modal-shell d-flex flex-column overflow-hidden position-relative"
         style={{
           width: width,
           height: height,
           maxWidth: "95vw",
           maxHeight: "95vh",
-          animation: "fadeIn 0.2s ease-in-out",
         }}
       >
-        {/* --- BOTÓN CERRAR "X" ELEGANTE --- */}
         <button
           onClick={handleCloseModal}
-          className="position-absolute top-0 bg-light rounded-pill border-0 end-0 m-2 z-1 p-2 shadow-md text-dark d-flex justify-content-center align-items-center"
+          className="fw-modal-close-btn"
           aria-label="Cerrar"
-          disabled={isLoading} // Bloqueamos la X si está cargando
+          disabled={isLoading}
         >
           <X size={20} />
         </button>
-        {/* --------------------------------- */}
 
         {mensaje && (
-          <div className="pt-4 pb-2 px-4 text-center mt-2">
-            <h4 className="fw-bold text-dark m-0">{mensaje}</h4>
+          <div className="fw-modal-header text-center">
+            <h4 className="fw-bold m-0">{mensaje}</h4>
           </div>
         )}
 
-        {/* Contenido centrado */}
-        <div className="modal-body px-4 py-3">
+        <div className="fw-modal-body modal-body">
           {children
             ? children
             : cuerpo &&
@@ -88,25 +81,22 @@ function ModalGenerales({
                 : cuerpo)}
         </div>
 
-        {/* Botones centrados y redondeados */}
         {showButtons && (
-          <div className="d-flex justify-content-center gap-3 px-4 pb-4 pt-2">
+          <div className="fw-modal-actions">
             <button
               onClick={handleCloseModal}
-              className="btn btn-light fw-bold rounded-pill px-4 py-2 text-muted border"
-              // Deshabilitamos si no hay acción o si está cargando
+              className="btn fw-modal-btn fw-modal-btn-cancel"
               disabled={!handleAccion || isLoading}
             >
               {textCancel}
             </button>
             <button
               onClick={handleConfirm}
-              className={`btn ${btnConfirmColor} fw-bold rounded-pill px-4 py-2 shadow-sm d-flex align-items-center gap-2`}
+              className={`btn fw-modal-btn fw-modal-btn-confirm ${btnConfirmColor}`}
               disabled={isLoading}
             >
               {isLoading ? (
                 <>
-                  {/* Gusanito nativo de Bootstrap */}
                   <span
                     className="spinner-border spinner-border-sm"
                     role="status"

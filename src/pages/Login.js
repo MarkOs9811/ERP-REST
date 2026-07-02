@@ -256,13 +256,8 @@ export const Login = () => {
                       {...register("rememberMe")}
                     />
                     <label
-                      className="form-check-label text-muted"
+                      className="form-check-label login-remember-label"
                       htmlFor="rememberMe"
-                      style={{
-                        cursor: "pointer",
-                        fontSize: "0.85rem",
-                        fontWeight: "500",
-                      }}
                     >
                       Recordar sesión
                     </label>
@@ -271,12 +266,6 @@ export const Login = () => {
                   {/* Enlace Olvidar Contraseña */}
                   <span
                     onClick={() => toggleView(true)}
-                    style={{
-                      color: "#1a1a1a",
-                      cursor: "pointer",
-                      fontSize: "0.85rem",
-                      fontWeight: "500",
-                    }}
                     className="forgot-password-link m-0"
                   >
                     ¿Olvidaste tu contraseña?

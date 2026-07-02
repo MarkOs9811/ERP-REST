@@ -7,13 +7,10 @@ export function BotonMotionGeneral({
   onClick = () => {},
   loading = false,
   loadingText = "Cargando...",
-  // Volvemos a un default que funcione bien en general, pero permitimos override
-  classDefault = "btn btn-outline-dark shadow-sm rounded-3 py-2 px-3",
+  classDefault = "btn btn-motion-theme py-2 px-3",
   fullWidth = false, // Prop para controlar si ocupa el 100%
 }) {
-  const whileHover = loading
-    ? {}
-    : { y: -2, boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.15)" };
+  const whileHover = loading ? {} : { y: -1 };
 
   const whileTap = loading ? {} : { scale: 0.97 };
 
@@ -28,10 +25,7 @@ export function BotonMotionGeneral({
         onClick={onClick}
         disabled={loading}
         // Combinamos clases:
-        // 1. classDefault (estilos bootstrap básicos)
-        // 2. btn-motion-theme (nuestros colores y lógica de texto)
-        // 3. w-100 (si fullWidth es true)
-        className={`${classDefault} rounded-pill btn-principal d-flex ${
+        className={`${classDefault} d-inline-flex align-items-center justify-content-center ${
           fullWidth ? "w-100" : ""
         } ${loading ? "opacity-75" : ""}`}
       >

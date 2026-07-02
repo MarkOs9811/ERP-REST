@@ -7,31 +7,31 @@
   width: 200px;
   height: auto;
   border-radius: 12px;
-  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.15));
+  filter: drop-shadow(var(--shadow-soft));
   opacity: 0.85;
   transition: all var(--transition-smooth);
 }
 
-.card-header:hover .store-image {
+.ventas-root .card-header:hover .store-image {
   opacity: 1;
-  transform: scale(1.05);
+  transform: scale(1.02);
 }
 
 /* ===== CARD BODY ===== */
-.card-body {
+.ventas-root .card-body {
   padding: 28px 32px !important;
   position: relative;
   z-index: 1;
 }
 
-.card-body-ventasDahs {
+.ventas-root .card-body-ventasDahs {
   padding: 24px !important;
   background: transparent !important;
   position: relative;
 }
 
 /* ===== TOTAL VENTAS TITULO ===== */
-.totalVentasTitulo {
+.ventas-root .totalVentasTitulo {
   font-size: 3.5rem !important;
   font-weight: 900 !important;
   /* Aplicamos el Emerald de Fire Wok para denotar ingresos */
@@ -41,7 +41,7 @@
   line-height: 1;
 }
 
-.card-body>small {
+.ventas-root .card-body>small {
   font-size: 0.95rem !important;
   font-weight: 600;
   color: var(--text-muted);
@@ -49,8 +49,8 @@
 }
 
 /* ===== CARD FOOTER ===== */
-.card-footer {
-  background: var(--bg-card) !important;
+.ventas-root .card-footer {
+  background: var(--bg-surface) !important;
   border: none !important;
   padding: 20px 32px !important;
   position: relative;
@@ -58,55 +58,55 @@
 }
 
 /* ===== TARJETAS RESUMEN KPI ===== */
-.card[style*="background: #"] {
+.ventas-root .card[style*="background: #"] {
   background: #f8fafc !important;
   /* Un gris hiper sutil genérico por si falla el selector */
   position: relative;
 }
 
 /* Tarjeta de Este Mes (Positivo) */
-.card[style*="#f1faf6"] {
+.ventas-root .card[style*="#f1faf6"] {
   background: var(--bg-emerald-soft) !important;
 }
 
 /* Tarjeta de Mes Pasado (Neutro/Espera) */
-.card[style*="#fff6f6"] {
+.ventas-root .card[style*="#fff6f6"] {
   background: var(--bg-saffron-soft) !important;
 }
 
 /* Tarjeta de Diferencia (Alerta) */
-.card[style*="#e8f5e9"],
-.card[style*="#ffebee"] {
+.ventas-root .card[style*="#e8f5e9"],
+.ventas-root .card[style*="#ffebee"] {
   background: var(--bg-strawberry-soft) !important;
 }
 
 /* ===== ESTILOS PARA BADGES E ICONOS ===== */
-.card span[class*="rounded-circle"] {
-  box-shadow: var(--shadow-soft);
-  backdrop-filter: blur(10px);
+.ventas-root .card span[class*="rounded-circle"] {
+  box-shadow: none;
+  backdrop-filter: none;
 }
 
-.card .bg-success {
+.ventas-root .card .bg-success {
   background: var(--fw-emerald) !important;
 }
 
-.card .bg-warning {
+.ventas-root .card .bg-warning {
   background: var(--fw-saffron) !important;
   color: var(--fw-onyx) !important;
   /* Asegura lectura sobre naranja */
 }
 
-.card .bg-danger {
+.ventas-root .card .bg-danger {
   background: var(--fw-strawberry) !important;
 }
 
 /* ===== BOTONES ===== */
-.btn {
+.ventas-root .btn {
   border-radius: var(--radius-sm);
   font-weight: 600;
   padding: 10px 20px !important;
   transition: all var(--transition-smooth);
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--outline-strong);
   font-size: 0.9rem;
   letter-spacing: 0.3px;
   display: inline-flex;
@@ -114,24 +114,24 @@
   gap: 8px;
 }
 
-.header-search-container .form-control {
+.ventas-root .header-search-container .form-control {
   border: 1px solid #e5e7eb;
   border-radius: 10px;
   padding: 10px 16px 10px 40px;
   font-size: 0.9rem;
   transition: all var(--transition-smooth);
-  background: var(--bg-main);
+  background: var(--bg-input);
   color: var(--text-main);
 }
 
-.header-search-container .form-control:focus {
+.ventas-root .header-search-container .form-control:focus {
   border-color: var(--fw-onyx);
-  background: var(--fw-white);
+  background: var(--bg-input);
   box-shadow: 0 0 0 3px rgba(17, 18, 19, 0.1);
   outline: none;
 }
 
-.search-icon {
+.ventas-root .search-icon {
   position: absolute;
   left: 12px;
   color: var(--text-muted);
@@ -144,44 +144,44 @@
 /* ====================================================
    🌙 TEMA OSCURO VENTAS PREMIUM (FIRE WOK DARK)
    ==================================================== */
-body.dark-theme .card {
-  background: var(--bg-card) !important;
+body.dark-theme .ventas-root .card {
+  background: var(--bg-surface) !important;
   color: var(--text-main) !important;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15) !important;
+  box-shadow: none !important;
 }
 
-body.dark-theme .card:hover {
-  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.3) !important;
+body.dark-theme .ventas-root .card:hover {
+  box-shadow: none !important;
 }
 
-body.dark-theme .card-header {
+body.dark-theme .ventas-root .card-header {
   background: transparent !important;
   border: none !important;
 }
 
-body.dark-theme .card-header h1 {
+body.dark-theme .ventas-root .card-header h1 {
   color: var(--text-main);
 }
 
-body.dark-theme .card-header p {
+body.dark-theme .ventas-root .card-header p {
   color: var(--text-muted);
 }
 
-body.dark-theme .card-body {
+body.dark-theme .ventas-root .card-body {
   background: transparent !important;
 }
 
-body.dark-theme .totalVentasTitulo {
+body.dark-theme .ventas-root .totalVentasTitulo {
   /* Mantenemos el Emerald para ventas incluso en oscuro */
   color: var(--fw-emerald);
 }
 
-body.dark-theme .titulo-card-especial {
+body.dark-theme .ventas-root .titulo-card-especial {
   color: var(--text-main);
 }
 
-body.dark-theme .card-footer {
-  background: rgba(255, 255, 255, 0.02) !important;
+body.dark-theme .ventas-root .card-footer {
+  background: var(--bg-surface) !important;
   border: none !important;
 }
 
@@ -197,114 +197,114 @@ body.dark-theme .btn-outline-dark:hover {
   box-shadow: var(--shadow-hover);
 }
 
-body.dark-theme .header-search-container .form-control {
+body.dark-theme .ventas-root .header-search-container .form-control {
   border-color: #313a46;
-  background: var(--bg-main);
+  background: var(--bg-input);
   color: var(--text-main);
 }
 
-body.dark-theme .header-search-container .form-control:focus {
+body.dark-theme .ventas-root .header-search-container .form-control:focus {
   border-color: var(--brand-primary);
   /* Saffron en Dark Mode */
   box-shadow: 0 0 0 3px rgba(255, 153, 44, 0.15);
 }
 
-body.dark-theme .header-search-container .search-icon {
+body.dark-theme .ventas-root .header-search-container .search-icon {
   color: var(--text-muted);
 }
 
-body.dark-theme .form-control[type="date"] {
+body.dark-theme .ventas-root .form-control[type="date"] {
   border-color: #313a46;
-  background: var(--bg-main);
+  background: var(--bg-input);
   color: var(--text-main);
 }
 
-body.dark-theme .form-control[type="date"]:focus {
+body.dark-theme .ventas-root .form-control[type="date"]:focus {
   border-color: var(--brand-primary);
   box-shadow: 0 0 0 3px rgba(255, 153, 44, 0.15);
 }
 
-body.dark-theme .badge-header {
+body.dark-theme .ventas-root .badge-header {
   background: var(--fw-onyx);
   color: var(--fw-white);
   border: 1px solid #313a46;
 }
 
 /* Tarjetas KPI en Dark Mode (Adaptando los fondos rgba dinámicos) */
-body.dark-theme .card[style*="#f1faf6"] {
+body.dark-theme .ventas-root .card[style*="#f1faf6"] {
   background: var(--bg-emerald-soft) !important;
   border-left: 3px solid var(--fw-emerald) !important;
 }
 
-body.dark-theme .card[style*="#fff6f6"] {
+body.dark-theme .ventas-root .card[style*="#fff6f6"] {
   background: var(--bg-saffron-soft) !important;
   border-left: 3px solid var(--fw-saffron) !important;
 }
 
-body.dark-theme .card[style*="#e8f5e9"],
-body.dark-theme .card[style*="#ffebee"] {
+body.dark-theme .ventas-root .card[style*="#e8f5e9"],
+body.dark-theme .ventas-root .card[style*="#ffebee"] {
   background: var(--bg-strawberry-soft) !important;
   border-left: 3px solid var(--fw-strawberry) !important;
 }
 
-body.dark-theme .store-image {
+body.dark-theme .ventas-root .store-image {
   filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.5));
   opacity: 0.9;
 }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
-  .card-header {
+  .ventas-root .card-header {
     padding: 20px 24px !important;
   }
 
-  .card-header h1 {
+  .ventas-root .card-header h1 {
     font-size: 2rem;
   }
 
-  .card-body {
+  .ventas-root .card-body {
     padding: 20px 24px !important;
   }
 
-  .store-image {
+  .ventas-root .store-image {
     width: 140px;
   }
 
-  .header-search-container .form-control {
+  .ventas-root .header-search-container .form-control {
     padding: 8px 12px 8px 36px;
     font-size: 0.85rem;
   }
 
-  .totalVentasTitulo {
+  .ventas-root .totalVentasTitulo {
     font-size: 2.5rem !important;
   }
 }
 
 /* ===== ESTILOS ANTIGUOS COMPATIBILIDAD (Form Checks) ===== */
-.custom-control-input:checked~.custom-control-label::before {
+.ventas-root .custom-control-input:checked~.custom-control-label::before {
   background-color: var(--fw-onyx);
   border-color: var(--fw-onyx);
 }
 
-.custom-control-input:focus~.custom-control-label::before {
+.ventas-root .custom-control-input:focus~.custom-control-label::before {
   box-shadow: 0 0 0 0.2rem rgba(17, 18, 19, 0.25);
 }
 
-.custom-control-input:not(:checked)~.custom-control-label::before {
+.ventas-root .custom-control-input:not(:checked)~.custom-control-label::before {
   background-color: #e9ecef;
   border-color: #ced4da;
 }
 
-body.dark-theme .custom-control-input:checked~.custom-control-label::before {
+body.dark-theme .ventas-root .custom-control-input:checked~.custom-control-label::before {
   background-color: var(--brand-primary);
   border-color: var(--brand-primary);
 }
 
-body.dark-theme .custom-control-input:not(:checked)~.custom-control-label::before {
+body.dark-theme .ventas-root .custom-control-input:not(:checked)~.custom-control-label::before {
   background-color: #313a46;
   border-color: #232c36;
 }
 
-body.dark-theme .custom-control-input:focus~.custom-control-label::before {
+body.dark-theme .ventas-root .custom-control-input:focus~.custom-control-label::before {
   box-shadow: 0 0 0 0.2rem rgba(255, 153, 44, 0.25);
 }

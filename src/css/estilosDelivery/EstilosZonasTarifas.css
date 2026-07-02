@@ -1,43 +1,43 @@
 /* EstilosZonas.css */
 
 .sede-config-card {
-    transition: all 0.3s ease;
-    border-radius: 12px;
+    transition: border-color var(--transition-smooth), background-color var(--transition-smooth);
+    border-radius: var(--radius-md);
     overflow: hidden;
-    border: 1px solid #eaeaea;
-    background-color: #ffffff;
+    border: 1px solid var(--fw-border);
+    background-color: var(--bg-surface);
 }
 
 .sede-config-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.06) !important;
-    border-color: #d1d5db;
+    transform: none;
+    box-shadow: none !important;
+    border-color: var(--outline-strong);
 }
 
 .icon-box {
     width: 40px;
     height: 40px;
-    border-radius: 10px;
+    border-radius: var(--radius-sm);
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #f8f9fa;
-    color: #4b5563;
+    background-color: var(--bg-muted);
+    color: var(--text-muted);
 }
 
 .icon-box-primary {
-    background-color: rgba(13, 110, 253, 0.1);
-    color: #0d6efd;
+    background-color: var(--bg-informative-soft);
+    color: var(--fw-informative);
 }
 
 .icon-box-success {
-    background-color: rgba(25, 135, 84, 0.1);
-    color: #198754;
+    background-color: var(--bg-emerald-soft);
+    color: var(--fw-emerald);
 }
 
 .icon-box-warning {
-    background-color: rgba(255, 193, 7, 0.15);
-    color: #d97706;
+    background-color: var(--bg-saffron-soft);
+    color: var(--fw-saffron);
 }
 
 .config-item {
@@ -45,7 +45,7 @@
     align-items: center;
     gap: 12px;
     padding: 12px 0;
-    border-bottom: 1px dashed #e5e7eb;
+    border-bottom: 1px dashed var(--fw-border);
 }
 
 .config-item:last-child {
@@ -53,11 +53,11 @@
 }
 
 .propina-badge {
-    background-color: #f3f4f6;
-    color: #374151;
-    border: 1px solid #e5e7eb;
+    background-color: var(--bg-muted);
+    color: var(--text-main);
+    border: 1px solid var(--fw-border);
     padding: 4px 10px;
-    border-radius: 20px;
+    border-radius: var(--radius-pill);
     font-size: 0.75rem;
     font-weight: 600;
 }

@@ -24,7 +24,7 @@ export function BannerFidelizacion({
             ? setModalAddCampaña(true)
             : navigate("/clientes/fidelizacion");
         }}
-        className="btn btn-outline-dark mt-5 text-danger fw-bold fs-6"
+        className="btn btn-outline-dark mt-5 text-white fw-bold fs-6"
       >
         {botonAction === "crear" ? "Crear Campaña" : "Ver Campañas"}
       </button>

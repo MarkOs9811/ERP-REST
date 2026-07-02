@@ -41,10 +41,7 @@ export function TablasGenerales({
           selectAllRowsItemText: "Todos",
         }}
         noDataComponent={
-          // Usando tu paleta Fire Wok
-          <div style={{ padding: "16px", color: "var(--text-muted)" }}>
-            No hay datos para mostrar
-          </div>
+          <div className="fw-table-no-data">No hay datos para mostrar</div>
         }
       />
     </div>

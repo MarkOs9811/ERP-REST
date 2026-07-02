@@ -5,14 +5,18 @@
 .badge-custom {
     font-weight: 600;
     font-size: 0.75rem;
-    /* Ajustado para mejor legibilidad */
     padding: 0.4em 0.8em;
     border-radius: var(--radius-pill);
-    /* Usa tu variable global de app.css */
     transition: all var(--transition-smooth);
     border: 1px solid transparent;
-    cursor: pointer;
+    cursor: default;
     line-height: 1.2;
+    background-clip: padding-box;
+}
+
+.badge-custom-label {
+    position: relative;
+    top: 0.5px;
 }
 
 /* =========================================
@@ -23,46 +27,45 @@
 .badge-soft-success {
     background-color: var(--bg-emerald-soft);
     color: var(--fw-emerald);
-    border-color: rgba(23, 198, 104, 0.3);
-    /* Borde sutil del mismo tono */
+    border-color: rgba(23, 198, 104, 0.42);
 }
 
 /* Estado: Advertencia (Pendiente, Revisión) - Saffron Fire Wok */
 .badge-soft-warning {
     background-color: var(--bg-saffron-soft);
     color: var(--fw-saffron);
-    border-color: rgba(255, 153, 44, 0.3);
+    border-color: rgba(236, 139, 35, 0.42);
 }
 
 /* Estado: Peligro (Inactivo, Error) - Strawberry Fire Wok */
 .badge-soft-danger {
     background-color: var(--bg-strawberry-soft);
     color: var(--fw-strawberry);
-    border-color: rgba(228, 73, 73, 0.3);
+    border-color: rgba(228, 73, 73, 0.42);
 }
 
 /* Estado: Info / Primary (Neutro Oscuro Elegante) */
 .badge-soft-info,
 .badge-soft-primary {
-    background-color: #E2E8F0;
-    color: var(--fw-onyx);
-    border-color: #CBD5E1;
+    background-color: var(--bg-muted);
+    color: var(--text-main);
+    border-color: var(--fw-border-input);
 }
 
 /* Estado: Neutral (Borrador, N/A) - Gris Suave */
 .badge-soft-secondary {
-    background-color: var(--bg-main);
+    background-color: var(--bg-muted);
     color: var(--text-muted);
-    border-color: #E5E7EB;
+    border-color: var(--fw-border-input);
 }
 
 /* =========================================
    EFECTO HOVER (INTERACTIVIDAD)
    ========================================= */
 .badge-custom:hover {
-    filter: brightness(0.95);
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-soft);
+    filter: none;
+    transform: none;
+    box-shadow: none;
 }
 
 /* =========================================
@@ -72,19 +75,18 @@
    las variables rgba() de tu app.css. Solo ajustamos los neutros. */
 
 body.dark-theme .badge-custom:hover {
-    filter: brightness(1.2);
-    /* En oscuro, el hover debe iluminar, no oscurecer */
+    filter: none;
 }
 
 body.dark-theme .badge-soft-info,
 body.dark-theme .badge-soft-primary {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: var(--fw-white);
-    border-color: rgba(255, 255, 255, 0.2);
+    background-color: var(--bg-muted);
+    color: var(--text-main);
+    border-color: var(--fw-border-input);
 }
 
 body.dark-theme .badge-soft-secondary {
-    background-color: rgba(255, 255, 255, 0.03);
+    background-color: var(--bg-muted);
     color: var(--text-muted);
-    border-color: rgba(255, 255, 255, 0.1);
+    border-color: var(--fw-border-input);
 }

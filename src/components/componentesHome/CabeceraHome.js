@@ -1,54 +1,11 @@
-import { faBurger, faTruckFast } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Activity, LayoutPanelTop, User } from "lucide-react";
+import { Activity, User } from "lucide-react";
 
 import { useNavigate } from "react-router-dom";
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
 
-export function CabeceraHome({ ventasList, load, error }) {
+export function CabeceraHome({ load, error }) {
   const user = JSON.parse(localStorage.getItem("user"));
 
-  // Obtener el mes y año actual
-  const currentMonth = new Date().getMonth() + 1; // Los meses en JavaScript son 0-indexados
-  const currentYear = new Date().getFullYear();
-
-  // Contar los pedidos para "llevar" y "mesa" del presente mes
-  let totalPedidosLlevar = 0;
-  let totalPedidosMesa = 0;
-
-  ventasList.forEach((venta) => {
-    if (venta.pedido) {
-      const { tipoVenta, detalle_pedidos, fechaPedido } = venta.pedido;
-
-      // Verificar que el pedido sea del presente mes
-      const fechaPedidoDate = new Date(fechaPedido);
-      const esDelMesActual =
-        fechaPedidoDate.getMonth() + 1 === currentMonth &&
-        fechaPedidoDate.getFullYear() === currentYear;
-
-      if (esDelMesActual) {
-        if (tipoVenta === "llevar" && Array.isArray(detalle_pedidos)) {
-          totalPedidosLlevar += detalle_pedidos.length; // Contar los platos en detalle_pedidos
-        } else if (tipoVenta === "mesa" && Array.isArray(detalle_pedidos)) {
-          totalPedidosMesa += detalle_pedidos.length; // Contar los platos en detalle_pedidos
-        }
-      }
-    }
-  });
-
-  // Filtrar las ventas por web del presente mes
-  const ventasWebMes =
-    ventasList?.filter((venta) => {
-      const fechaVenta = new Date(venta.fechaVenta);
-      return (
-        venta.idPedidoWeb !== null && // idPedidoWeb no es null
-        fechaVenta.getMonth() + 1 === currentMonth && // Mismo mes
-        fechaVenta.getFullYear() === currentYear // Mismo año
-      );
-    }) || []; // Asegúrate de que sea un array
-
-  // Contar las ventas por web
-  const totalVentasWeb = ventasWebMes.length || 0;
   const navigate = useNavigate();
   const goVender = () => {
     navigate("/vender");
@@ -56,51 +13,32 @@ export function CabeceraHome({ ventasList, load, error }) {
   return (
     <div className="row mb-3 g-3 h-100">
       <div className="col-md-12 col-sm-12">
-        {/* Header Bienvenida */}
         <CondicionCarga isLoading={load} isError={error}>
           <div
-            className="position-relative h-100 "
-            style={{
-              backgroundImage: "url('/images/background2.jpg')",
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              borderRadius: "10px",
-              overflow: "hidden",
-            }}
+            className="home-banner-card position-relative h-100"
+            style={{ backgroundImage: "url('/images/background2.jpg')" }}
           >
-            {/* Capa de opacidad */}
-            <div
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: "100%",
-                height: "100%",
-                backgroundColor: "rgba(0, 0, 0, 0.5)",
-                zIndex: 1,
-              }}
-            ></div>
+            <div className="home-banner-overlay"></div>
 
-            {/* Contenido */}
-            <div
-              className="card-body text-auto position-relative p-5"
-              style={{ zIndex: 2, color: "white" }}
-            >
-              <h2 className="mb-1 text-white">
+            <div className="card-body text-auto position-relative p-4 p-lg-5 home-banner-content">
+              <h2 className="mb-1 text-white home-banner-title">
                 <strong>
                   Hola, {user?.empleado?.persona?.nombre || "Usuario"}
                 </strong>
               </h2>
-              <button className="btn btn-danger" onClick={() => goVender()}>
+              <button
+                className="btn home-banner-cta"
+                onClick={() => goVender()}
+              >
                 Iniciar
               </button>
               <User
                 color={"#fff"}
                 height="30px"
                 width="30px"
-                style={{ position: "absolute", right: "20px", top: "20px" }}
+                className="home-banner-user"
               />
-              <div className="d-flex align-items-center mt-2">
+              <div className="d-flex align-items-center mt-3 home-banner-meta">
                 <Activity color={"#fff"} height="18px" width="18px" />
                 <small className="opacity-75 ms-2">
                   Panel de control - {new Date().toLocaleDateString()} | Última

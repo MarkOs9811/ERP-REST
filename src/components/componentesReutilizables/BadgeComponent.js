@@ -56,11 +56,13 @@ export const BadgeComponent = ({
 
   if (!label) return null;
 
-  // 2. Lógica para el TEXTO VISIBLE (Primera Mayúscula)
+  // 2. Lógica para el TEXTO VISIBLE
   const textoOriginal = String(label);
   const textoFormateado =
-    textoOriginal.charAt(0).toUpperCase() +
-    textoOriginal.slice(1).toLowerCase();
+    textoOriginal === textoOriginal.toUpperCase()
+      ? textoOriginal
+      : textoOriginal.charAt(0).toUpperCase() +
+        textoOriginal.slice(1).toLowerCase();
 
   return (
     <span
@@ -71,10 +73,7 @@ export const BadgeComponent = ({
         ? cloneElement(icon, { size: 14, strokeWidth: 2.5 })
         : icon}
 
-      {/* Texto centrado */}
-      <span style={{ position: "relative", top: "0.5px" }}>
-        {textoFormateado}
-      </span>
+      <span className="badge-custom-label">{textoFormateado}</span>
     </span>
   );
 };

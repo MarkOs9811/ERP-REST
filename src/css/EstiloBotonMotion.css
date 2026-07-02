@@ -4,63 +4,111 @@
 
 /* CLASE BASE */
 .btn-motion-theme {
-    /* Flexbox para centrar contenido */
     display: inline-flex !important;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    /* Espacio entre icono y texto */
 
-    /* Transiciones suaves */
     transition: all 0.2s ease-in-out;
 
-    /* MANEJO DE TEXTO LARGO (La clave del arreglo) */
     white-space: nowrap;
-    /* Evita que el texto salte de línea */
     overflow: hidden;
-    /* Oculta lo que no cabe */
     text-overflow: ellipsis;
-    /* Pone "..." si el texto es muy largo */
     max-width: 100%;
-    /* Nunca exceder el ancho del padre */
 
-    /* Reset de bordes y fuentes */
     font-weight: 500;
-    border: 1px solid transparent;
+    border: 1px solid var(--outline-strong);
+    border-radius: var(--radius-pill) !important;
+    background: var(--bg-surface);
+    color: var(--text-main);
+    box-shadow: none;
 }
 
-/* --- MODO CLARO (Default) --- */
+.fw-btn-base {
+    min-height: var(--control-height-md);
+    padding: 0.5rem 1rem;
+}
+
+.fw-btn-min {
+    min-width: 168px;
+}
+
+.fw-btn-sm {
+    min-height: var(--control-height-sm);
+    padding: 0.35rem 0.8rem;
+}
+
+.fw-btn-lg {
+    min-height: var(--control-height-lg);
+    padding: 0.6rem 1.1rem;
+}
+
 .btn-motion-theme {
-    background: linear-gradient(135deg, rgb(233, 233, 233), rgb(243, 247, 255));
-    color: #292929;
-    border-color: #c2c2c2;
+    background: var(--bg-surface);
+    color: var(--text-main);
+    border-color: var(--outline-strong);
 }
 
 .btn-motion-theme:hover {
-    background: linear-gradient(135deg, rgb(245, 245, 245), #ffffff);
-    border-color: #a0a0a0;
+    background: var(--bg-muted);
+    border-color: var(--brand-primary);
 }
 
-/* --- MODO NOCHE (Dark) --- */
 body.dark-theme .btn-motion-theme {
-    background: linear-gradient(135deg, #2b2f36, #1d232c) !important;
-    color: #f1f1f1;
-    border-color: #4a5568;
+    background: var(--bg-surface) !important;
+    color: var(--text-main) !important;
+    border-color: var(--fw-border-input) !important;
 }
 
 body.dark-theme .btn-motion-theme:hover {
-    background: linear-gradient(135deg, #374151, #2d3748) !important;
-    border-color: #718096;
-    color: #ffffff;
+    background: var(--bg-muted) !important;
+    border-color: var(--brand-primary) !important;
 }
 
-/* --- RESPONSIVE OPTIMIZATION --- */
-/* En pantallas pequeñas, reducimos un poco el padding y la fuente para que quepa más */
+.btn-motion-success {
+    border-color: rgba(23, 198, 104, 0.45) !important;
+    color: var(--fw-emerald) !important;
+    background: var(--bg-surface) !important;
+}
+
+.btn-motion-success:hover {
+    background: var(--bg-emerald-soft) !important;
+    border-color: var(--fw-emerald) !important;
+}
+
+.btn-motion-danger {
+    border-color: rgba(228, 73, 73, 0.45) !important;
+    color: var(--fw-strawberry) !important;
+    background: var(--bg-surface) !important;
+}
+
+.btn-motion-danger:hover {
+    background: var(--bg-strawberry-soft) !important;
+    border-color: var(--fw-strawberry) !important;
+}
+
+.fw-close-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50% !important;
+    border: 1px solid var(--fw-border-input);
+    background: var(--bg-surface);
+    color: var(--text-muted);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.fw-close-btn:hover {
+    border-color: var(--brand-primary);
+    color: var(--brand-primary);
+    background: var(--bg-muted);
+}
+
 @media (max-width: 768px) {
     .btn-motion-theme {
         padding: 0.4rem 0.6rem !important;
-        /* Menos relleno */
         font-size: 0.85rem;
-        /* Letra un poco más chica */
     }
 }

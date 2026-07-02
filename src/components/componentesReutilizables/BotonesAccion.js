@@ -2,7 +2,7 @@ import { Eye, Pencil, Trash2 } from "lucide-react";
 
 export const BtnVer = ({ onClick, disabled = false, title = "Ver" }) => (
   <button
-    className="btn-ver mx-1 p-1 my-2"
+    className="btn btn-ver btn-icon-circle mx-1 my-2 d-inline-flex align-items-center justify-content-center"
     onClick={onClick}
     disabled={disabled}
     data-bs-toggle="tooltip"
@@ -14,7 +14,7 @@ export const BtnVer = ({ onClick, disabled = false, title = "Ver" }) => (
 
 export const BtnEditar = ({ onClick, disabled = false, title = "Editar" }) => (
   <button
-    className="btn-editar mx-1 p-1 my-2"
+    className="btn btn-editar btn-icon-circle mx-1 my-2 d-inline-flex align-items-center justify-content-center"
     onClick={onClick}
     disabled={disabled}
     data-bs-toggle="tooltip"
@@ -30,7 +30,7 @@ export const BtnEliminar = ({
   title = "Eliminar",
 }) => (
   <button
-    className="btn-eliminar mx-1 p-1 my-2"
+    className="btn btn-eliminar btn-icon-circle mx-1 my-2 d-inline-flex align-items-center justify-content-center"
     onClick={onClick}
     disabled={disabled}
     data-bs-toggle="tooltip"

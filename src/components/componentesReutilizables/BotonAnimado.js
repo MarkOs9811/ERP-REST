@@ -1,18 +1,17 @@
 import { CheckCheck } from "lucide-react";
+import "../../css/EstiloBotonMotion.css";
 
 const BotonAnimado = ({
   children,
   type = "button",
   loading = false,
-  error = null,
   onClick,
-  className = "w-auto ms-auto",
+  className = "w-auto ms-auto btn btn-motion-theme",
   icon = <CheckCheck className="text-auto" width="20px" height="20px" />,
   ...props
 }) => {
-  const clasesBase = `${className} boton-generico-empresa p-2 d-flex align-items-center justify-content-center gap-2 transition-all`;
+  const clasesBase = `${className} fw-btn-base p-2 d-inline-flex align-items-center justify-content-center gap-2`;
 
-  // 🔹 Agrega estilos visuales cuando está cargando o deshabilitado
   const clasesFinal = loading
     ? `${clasesBase} opacity-75 pointer-events-none`
     : clasesBase;
@@ -24,11 +23,6 @@ const BotonAnimado = ({
       onClick={type === "button" ? onClick : undefined}
       disabled={loading}
       {...props}
-      style={{
-        cursor: loading ? "not-allowed" : "pointer",
-        filter: loading ? "grayscale(60%) brightness(90%)" : "none",
-        transition: "all 0.3s ease",
-      }}
     >
       {loading ? (
         <div className="d-flex align-items-center justify-content-center">

@@ -27,66 +27,75 @@ export function Home() {
   });
 
   return (
-    /* Cambiamos a container-fluid si prefieres que el dashboard ocupe todo el ancho, 
-       o déjalo en 'container' si prefieres márgenes laterales fijos. El 'py-4' da un respiro visual. */
-    <div className="container-fluid py-4">
-      {/* Header */}
-      <div className="row mb-4">
-        <div className="col-12">
-          <h1 className="texto-principal fw-bold mb-1">Dashboard</h1>
-          <p className="text-muted">Resumen general de tu negocio</p>
+    <div className="container-fluid home-shell py-4 py-lg-5">
+      <div className="home-hero mb-4 mb-lg-5">
+        <div className="home-hero-content">
+          <span className="home-hero-kicker">Panel ejecutivo</span>
+          <h1 className="home-hero-title">Dashboard</h1>
+          <p className="home-hero-subtitle">Resumen general de tu negocio</p>
         </div>
+        <div className="home-hero-glow" aria-hidden="true"></div>
       </div>
 
-      {/* 
-        Usamos una sola fila (row) principal con 'g-4' (gap) para que todos los elementos 
-        tengan la misma separación exacta de forma automática, sin necesidad de anidar más rows.
-      */}
       <div className="row g-4">
-        {/* Métricas Rápidas: Ocupan el 100% del ancho siempre */}
         <div className="col-12">
-          <InformacionRapidaHome />
+          <div className="home-section-card home-section-card--metrics">
+            <InformacionRapidaHome />
+          </div>
         </div>
 
         <div className="col-12 col-lg-8">
-          <div className="row gap-3 ">
+          <div className="row g-3">
             <div className="col-md-12">
-              <CabeceraHome
-                ventasList={ventasList}
-                load={loadingVentas}
-                errorLoad={errorVentas}
-              />
+              <div className="home-section-card">
+                <CabeceraHome
+                  ventasList={ventasList}
+                  load={loadingVentas}
+                  error={errorVentas}
+                />
+              </div>
             </div>
             <div className="col-md-12">
-              <DashboardMesas />
+              <div className="home-section-card">
+                <DashboardMesas />
+              </div>
             </div>
             <div className="col-md-12">
-              <PlatoMasVendido />
+              <div className="home-section-card">
+                <PlatoMasVendido />
+              </div>
             </div>
             <div className="col-md-12">
-              <GraficoIAhome />
-            </div>
-          </div>
-        </div>
-        <div className="col-12 col-lg-4">
-          <div className="row gap-3">
-            <div className="col-md-12">
-              <CarouselMarketingHome />
-            </div>
-            <div className="col-12 col-lg-12">
-              <VentasTipo
-                ventasList={ventasList}
-                load={loadingVentas}
-                errorLoad={errorVentas}
-              />
-              <div className="col-md-12">
-                <UsuariosActivosHome />
+              <div className="home-section-card">
+                <GraficoIAhome />
               </div>
             </div>
           </div>
         </div>
 
-        <div className="col-12 col-lg-8"></div>
+        <div className="col-12 col-lg-4">
+          <div className="row g-3">
+            <div className="col-md-12">
+              <div className="home-section-card home-section-card--accent">
+                <CarouselMarketingHome />
+              </div>
+            </div>
+            <div className="col-12 col-lg-12">
+              <div className="home-section-card">
+                <VentasTipo
+                  ventasList={ventasList}
+                  load={loadingVentas}
+                  errorLoad={errorVentas}
+                />
+              </div>
+              <div className="col-md-12">
+                <div className="home-section-card mt-3">
+                  <UsuariosActivosHome />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

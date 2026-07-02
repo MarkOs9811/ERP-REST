@@ -1,18 +1,17 @@
 /* EstilosPromociones.css */
 
 .promo-card {
-    border-radius: 16px;
+    border-radius: var(--radius-md);
     overflow: hidden;
-    border: 1px solid #eaeaea;
-    background-color: #ffffff;
-    /* Hemos cambiado "all" por propiedades específicas para que no interfiera con la animación de entrada */
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    border: 1px solid var(--fw-border);
+    background-color: var(--bg-surface);
+    transition: border-color var(--transition-smooth), background-color var(--transition-smooth);
 }
 
 .promo-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08) !important;
-    border-color: #d1d5db;
+    transform: none;
+    box-shadow: none !important;
+    border-color: var(--outline-strong);
 }
 
 /* El contenedor de la foto para que siempre mantenga proporción */
@@ -21,7 +20,7 @@
     height: 160px;
     position: relative;
     overflow: hidden;
-    background-color: #f3f4f6;
+    background-color: var(--bg-muted);
 }
 
 .promo-banner {
@@ -42,17 +41,18 @@
     top: 12px;
     right: 12px;
     backdrop-filter: blur(4px);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: none;
+    border: 1px solid var(--fw-border);
 }
 
 .price-old {
     text-decoration: line-through;
-    color: #9ca3af;
+    color: var(--text-muted);
     font-size: 0.9rem;
 }
 
 .price-new {
-    color: #dc3545;
+    color: var(--fw-strawberry);
     /* Rojo llamativo para la oferta */
     font-size: 1.3rem;
     font-weight: 800;
@@ -61,7 +61,7 @@
 /* Estado Inactivo */
 .promo-card.inactiva {
     opacity: 0.7;
-    background-color: #f9fafb !important;
+    background-color: var(--bg-muted) !important;
 }
 
 .promo-card.inactiva .promo-banner {
@@ -70,7 +70,7 @@
 }
 
 .promo-card.inactiva .price-new {
-    color: #6b7280;
+    color: var(--text-muted);
     /* Gris apagado cuando está inactiva */
 }
 

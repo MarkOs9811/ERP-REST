@@ -17,10 +17,10 @@
 /* IMAGEN COMPROBANTE MINIATURA */
 .comprobante-thumbnail{
     cursor: pointer;
-    background: rgb(134, 31, 179);
-    color: white;
-    border: none;
-    border-radius: 5px;
+    background: var(--bg-surface);
+    color: var(--text-main);
+    border: 1px solid var(--fw-border-input);
+    border-radius: var(--radius-sm);
 }
 
 .modal-right-backdrop {
@@ -29,8 +29,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(138, 138, 138, 0);
-    /* Removemos la transición de opacidad del backdrop */
+    background-color: rgba(15, 23, 42, 0.22);
 }
 
 /* Eliminamos esta regla también */
@@ -41,22 +40,12 @@
 .modal-right-container {
     position: relative;
     height: 100vh;
-    /* Fondo translúcido con degradado suave */
-    background: linear-gradient(-150deg,
-            rgba(255, 255, 255, 0.75) 0%,
-            rgba(236, 236, 236, 0.65) 25%,
-            rgba(241, 255, 253, 0.6) 80%,
-            rgba(255, 192, 192, 0.295) 100%);
-
-    box-shadow: -10px 0px 40px 0px rgba(156, 156, 156, 0.199);
+    background: var(--bg-surface);
+    border-left: 1px solid var(--fw-border-input);
+    box-shadow: -4px 0 16px rgba(15, 23, 42, 0.07);
     overflow-y: auto;
     z-index: 1051;
     overflow-x: visible!important;
-    /* Difuminado del fondo */
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-
-    /* Transición suave si se muestra/oculta */
     transition: all 0.3s ease;
 }
 
@@ -75,9 +64,9 @@
     width: 36px;
     height: 36px;
     z-index: 2000;
-    background-color: transparent;
+    background-color: var(--bg-surface);
     color: var(--text-muted);
-    border: none;
+    border: 1px solid var(--fw-border-input);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -88,9 +77,10 @@
 
 /* Efecto hover */
 .btn-close-auto:hover {
-    background-color: rgba(238, 82, 82, 0.1);
+    background-color: var(--bg-muted);
     color: var(--brand-primary);
-    transform: scale(1.05);
+    border-color: var(--brand-primary);
+    transform: scale(1.03);
 }
 
 /* Efecto al presionar */
@@ -130,6 +120,7 @@
 .modal-right-title {
     margin: 0;
     font-size: 1.25rem;
+    color: var(--text-main);
 }
 
 .modal-right-close-btn {
@@ -140,7 +131,7 @@
 }
 
 .modal-right-body {
-    padding: 1rem;
+    padding: 0.75rem;
     overflow-y: auto;
 }
 
@@ -156,9 +147,43 @@
 
 .modal-right-footer {
     padding: 1rem;
-    border-top: 1px solid #dee2e6;
+    border-top: 1px solid var(--fw-border);
     display: flex;
     justify-content: flex-end;
+    gap: 0.5rem;
+    background: var(--bg-surface);
+}
+
+.modal-right-header-content {
+    border-bottom: 1px solid var(--fw-border) !important;
+    background: var(--bg-surface);
+}
+
+.btn-cerrar-modal,
+.btn-guardar {
+    min-height: 38px;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--fw-border-input);
+    background: var(--bg-surface);
+    color: var(--text-main);
+    font-weight: 600;
+}
+
+.btn-cerrar-modal:hover,
+.btn-guardar:hover {
+    background: var(--bg-muted);
+    border-color: var(--brand-primary);
+}
+
+.btn-guardar {
+    border-color: rgba(23, 198, 104, 0.45);
+    color: var(--fw-emerald);
+}
+
+.btn-guardar:hover {
+    background: var(--bg-emerald-soft);
+    border-color: var(--fw-emerald);
 }
 
 /* ========== TEMA OSCURO PARA MODAL RIGHT ESTILO MODERNO CON ROJO CORPORATIVO ========== */
@@ -171,26 +196,15 @@ body.dark-theme .modal-right-container {
     position: relative;
     height: 100vh;
 
-    /* 🎨 Fondo más oscuro con degradado sutil */
-    background: linear-gradient(-150deg,
-            rgba(26, 33, 39, 0.726) 0%,
-            rgba(29, 35, 44, 0.699) 25%,
-            rgba(25, 25, 25, 0.747) 80%,
-            rgba(34, 28, 28, 0.63) 100%) !important;
-
-    box-shadow: -10px 0px 40px 0px rgba(0, 0, 0, 0.4);
+    background: var(--bg-surface) !important;
+    border-left: 1px solid var(--fw-border-input) !important;
+    box-shadow: -4px 0 16px rgba(0, 0, 0, 0.35);
     overflow-y: auto;
     overflow-x: visible !important;
     z-index: 1051;
 
-    /* 🔆 Difuminado del fondo */
-    backdrop-filter: blur(6px) !important;
-    -webkit-backdrop-filter: blur(5px) !important;
-
-    /* 💨 Transición suave */
     transition: all 0.3s ease;
-    color: #eaeaea;
-    /* texto más claro en modo oscuro */
+    color: var(--text-main);
 }
 
 body.dark-theme .btn-close-auto {
@@ -206,9 +220,9 @@ body.dark-theme .btn-close-auto:hover {
     transform: scale(1.05);
 }
 body.dark-theme .modal-right-title {
-    color: #ee5252 !important;
+    color: var(--text-main) !important;
     font-weight: 700;
-    letter-spacing: 0.5px;
+    letter-spacing: 0;
 }
 body.dark-theme .modal-right-close-btn {
     color: #ee5252 !important;
@@ -221,17 +235,17 @@ body.dark-theme .modal-right-close-btn:hover {
 }
 
 body.dark-theme .modal-right-footer {
-    border-top: 1.5px solid #313a46 !important;
+    border-top: 1px solid var(--fw-border) !important;
     background-color: transparent!important;
 }
 body.dark-theme .comprobante-thumbnail {
-    background: linear-gradient(90deg, #ee5252 60%, #ff7675 100%) !important;
-    color: #fff !important;
-    border: none !important;
-    box-shadow: 0 2px 8px rgba(238,82,82,0.10);
+    background: var(--bg-surface) !important;
+    color: var(--text-main) !important;
+    border: 1px solid var(--fw-border-input) !important;
+    box-shadow: none;
 }
 body.dark-theme .modal-right-backdrop {
-    background-color: rgba(21, 26, 32, 0) !important;
+    background-color: rgba(2, 6, 23, 0.58) !important;
 }
 /* ========== FIN TEMA OSCURO MODAL RIGHT ESTILO MODERNO ========== */
 

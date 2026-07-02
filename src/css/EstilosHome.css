@@ -44,21 +44,6 @@
 
 
 
-/* =========================================
-   EFECTO DE OBJETO DIFUMINADO EN TARJETAS
-   ========================================= */
-
-/* Preparamos la tarjeta para contener el efecto */
-/* =========================================
-   EFECTO DE AURA "BLEEDING" (ESTILO FIRE WOK)
-   ========================================= */
-/* =========================================
-   PALETA OFICIAL FIRE WOK - FLAT & MINIMALISTA
-   ========================================= */
-/* =========================================
-   BRILLO GAUSIANO CON LA PALETA FIRE WOK
-   ========================================= */
-
 /* 1. Preparamos la tarjeta para que el brillo pueda "sangrar" hacia afuera */
 /* =========================================
    AURA UI - CRITERIO FIRE WOK 🔥
@@ -66,11 +51,10 @@
 
 .card-difuminada {
     position: relative;
-    background-color: var(--bg-emerald-soft);
-        /* Automáticamente se adapta a claro u oscuro */
-    border: 1px solid #EAEAEA;
-    border-radius: 12px;
-    /* La tarjeta en sí no tiene sombra pesada, es flat */
+    background-color: var(--bg-surface);
+    border: 1px solid var(--outline-strong);
+    border-radius: 14px;
+    box-shadow: none;
 }
 
 .card-difuminada .card-body {
@@ -80,61 +64,49 @@
 
 /* Base del orbe de luz */
 .card-difuminada::after {
-    content: "";
-    position: absolute;
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    bottom: -30px;
-    right: -30px;
-    filter: blur(30px);
-    z-index: 1;
-    pointer-events: none;
+    content: none;
 }
 
 /* 1. VENTAS: Positivo (Emerald) */
 .difuminado-ventas::after {
-    background-color: #17C668;
-    opacity: 0.15;
-    /* Sutil, elegante */
+    background-color: transparent;
+    opacity: 0;
 }
 
 .icono-institucional-ventas {
-    color: #17C668;
+    color: #2f3747;
 }
 
 /* 2. MESAS: Operativo (Champagne Mist muy suave o transparente) */
 .difuminado-mesas::after {
-    background-color: #111213;
-    opacity: 0.20;
-    /* Da un calorcito tenue a la esquina, sin manchar */
+    background-color: transparent;
+    opacity: 0;
 }
 
 .icono-institucional-mesas {
-    color: #111213;
+    color: #2f3747;
 }
 
 /* Onyx para el contraste */
 
 /* 3. PEDIDOS: Espera (Naranja derivado de tu marca) */
 .difuminado-pedidos::after {
-    background-color: #FF992C;
-    /* Naranja cálido, encaja con Fire Wok */
-    opacity: 0.15;
+    background-color: transparent;
+    opacity: 0;
 }
 
 .icono-institucional-pedidos {
-    color: #FF992C;
+    color: #2f3747;
 }
 
 /* 4. ALMACÉN: Alerta (Strawberry Red) */
 .difuminado-almacen::after {
-    background-color: #E44949;
-    opacity: 0.20;
+    background-color: transparent;
+    opacity: 0;
 }
 
 .icono-institucional-almacen {
-    color: #E44949;
+    color: #2f3747;
 }
 
 
@@ -553,4 +525,197 @@ body.dark-theme .badge-danger {
 body.dark-theme .badge-info {
     background-color: rgba(59, 130, 246, 0.2);
     color: #93c5fd;
+}
+
+/* ================================
+   HOME REDESIGN - MINIMAL IMPACT
+================================= */
+
+.home-shell {
+    --home-bg-1: var(--bg-app);
+    --home-bg-2: var(--bg-app);
+    --home-card: #ffffff;
+    --home-card-border: var(--fw-border);
+    --home-text-main: #1f2430;
+    --home-text-muted: var(--text-muted);
+    --home-accent: #f05a3e;
+    --home-accent-dark: #b73a21;
+    --home-accent-soft: rgba(240, 90, 62, 0.08);
+    background: transparent;
+    min-height: auto;
+    border-radius: 0;
+    border: none;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.home-hero {
+    position: relative;
+    overflow: hidden;
+    padding: 1.3rem 1.25rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--outline-strong);
+    background: var(--bg-surface);
+    box-shadow: none;
+}
+
+.home-hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.home-hero-kicker {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.3rem 0.8rem;
+    border-radius: 999px;
+    background: var(--bg-muted);
+    border: 1px solid var(--outline-strong);
+    color: var(--text-muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.home-hero-title {
+    color: var(--text-main);
+    font-size: clamp(1.65rem, 2.8vw, 2.2rem);
+    margin: 0.7rem 0 0.2rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+.home-hero-subtitle {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+.home-hero-glow {
+    display: none;
+}
+
+.home-section-card {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    box-shadow: none;
+    transition: none;
+}
+
+.home-section-card--metrics,
+.home-section-card--accent {
+    background: transparent;
+}
+
+.home-banner-card {
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--outline-strong);
+    background-size: cover;
+    background-position: center;
+    min-height: 220px;
+}
+
+.home-banner-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background: linear-gradient(100deg, rgba(22, 22, 24, 0.82), rgba(22, 22, 24, 0.58));
+}
+
+.home-banner-content {
+    z-index: 2;
+    color: #fff;
+}
+
+.home-banner-title {
+    letter-spacing: -0.02em;
+}
+
+.home-banner-cta {
+    border: 1px solid rgba(255, 255, 255, 0.42);
+    margin-top: 0.5rem;
+    border-radius: 12px;
+    padding: 0.5rem 1.2rem;
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(100deg, var(--home-accent), var(--home-accent-dark));
+    box-shadow: none;
+}
+
+.home-banner-cta:hover {
+    color: #fff;
+    filter: brightness(1.04);
+}
+
+.home-banner-user {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+}
+
+.home-banner-meta small {
+    color: rgba(255, 255, 255, 0.86);
+}
+
+.metric-card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--home-text-main);
+}
+
+.metric-card-value {
+    font-size: 1.65rem !important;
+    letter-spacing: -0.02em;
+}
+
+.metric-card-copy {
+    color: var(--home-text-muted) !important;
+}
+
+.metric-icon-badge {
+    width: 62px;
+    height: 62px;
+    border-radius: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--outline-strong);
+    background: var(--bg-muted);
+}
+
+.metric-icon-badge--ventas {
+    background: var(--bg-muted);
+    border-color: var(--outline-strong);
+}
+
+.metric-icon-badge--mesas {
+    background: var(--bg-muted);
+    border-color: var(--outline-strong);
+}
+
+.metric-icon-badge--pedidos {
+    background: var(--bg-muted);
+    border-color: var(--outline-strong);
+}
+
+.metric-icon-badge--almacen {
+    background: var(--bg-muted);
+    border-color: var(--outline-strong);
+}
+
+@media (max-width: 992px) {
+    .home-shell {
+        border-radius: 0;
+    }
+
+    .home-hero {
+        border-radius: 14px;
+    }
 }

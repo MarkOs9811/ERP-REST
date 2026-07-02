@@ -10,6 +10,7 @@ body {
 .contenido {
   padding: 24px;
   background: var(--bg-app) !important;
+  font-family: inherit;
 }
 
 .contenido > div > div:last-child {
@@ -22,6 +23,7 @@ body {
 .content {
   transition: margin-left var(--transition-smooth), width var(--transition-smooth);
   width: 100%;
+  font-family: inherit;
 }
 
 .content.with-sidebar {
@@ -40,8 +42,13 @@ body {
 }
 
 .card:hover {
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-hover);
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Opt-in utility when a specific card needs hover emphasis */
+.card-hoverable:hover {
+  box-shadow: var(--shadow-soft) !important;
 }
 
 .stats-card {
@@ -65,52 +72,49 @@ body {
   align-items: center;
 }
 
-/* BOTON GENERAL DE LA EMPRESA */
-.boton-generico-empresa{
-  background-color: #20ca61;
-  border: 1px solid grey;
+/* Generic module table header layout */
+.module-table-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  flex-wrap: wrap;
 }
 
-/* BTONES GENERALES */
-button{
-  border-radius:100%;
-  border: 1px solid grey;
-  padding: 6px;
-}
-/* Buttons semantic */
-.btn-activar {
-  background: var(--bg-emerald-soft) !important;
-  color: var(--fw-emerald) !important;
-  border-color: transparent !important;
+.module-table-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: var(--control-height-md);
 }
 
-.btn-editar {
-  background: var(--bg-saffron-soft) !important;
-  color: var(--fw-saffron) !important;
-  border-color: transparent !important;
+.module-table-controls {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
-.btn-eliminar,
-.btn-opcional {
-  background: var(--bg-strawberry-soft) !important;
-  color: var(--fw-strawberry) !important;
-  border-color: transparent !important;
+.module-table-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
 }
 
-.btn-activar:hover {
-  background: #b9f3cf !important;
-  color: var(--fw-emerald) !important;
-}
-
-.btn-editar:hover {
-  background: #ffe7bf !important;
-  color: var(--fw-saffron) !important;
-}
-
-.btn-eliminar:hover,
-.btn-opcional:hover {
-  background: #f9c3c3 !important;
-  color: var(--fw-strawberry) !important;
+/* Icon action button utility (scoped, avoids global button leakage) */
+.btn-icon-circle {
+  width: var(--control-height-md);
+  height: var(--control-height-md);
+  padding: 0;
+  border-radius: 50% !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--outline-strong);
 }
 
 /* Badge / header */
@@ -158,5 +162,14 @@ body.dark-theme .badge-header {
 
   .card-header input.form-control {
     width: 100% !important;
+  }
+
+  .module-table-controls {
+    width: 100%;
+    align-items: stretch;
+  }
+
+  .module-table-buttons {
+    justify-content: flex-start;
   }
 }

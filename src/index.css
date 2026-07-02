@@ -1,45 +1,54 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 :root {
   --fw-onyx: #111213;
-  --fw-emerald: #17C668;
-  --fw-saffron: #ec8b23;
-  --fw-strawberry: #E44949;
+  --fw-emerald: #16a34a;
+  --fw-saffron: #d97706;
+  --fw-strawberry: #dc2626;
+  --fw-informative: #2563eb;
   --fw-white: #ffffff;
 
   --fw-slate-100: #f8fafc;
   --fw-slate-200: #e5e7eb;
-  --fw-slate-300: #cbd5e1;
-  --fw-slate-400: #94a3b8;
-  --fw-slate-600: #475569;
-  --fw-slate-700: #334155;
+  --fw-slate-300: #d1d5db;
+  --fw-slate-400: #9ca3af;
+  --fw-slate-600: #4b5563;
+  --fw-slate-700: #374151;
 
-  --bg-emerald-soft: #e8f9f0;
-  --bg-saffron-soft: #fff5e9;
-  --bg-strawberry-soft: #fcecec;
+  --bg-emerald-soft: #ecfdf3;
+  --bg-saffron-soft: #fff7ed;
+  --bg-strawberry-soft: #fef2f2;
+  --bg-informative-soft: #eaf1ff;
 
   --brand-primary: var(--fw-onyx);
   --brand-secondary: var(--fw-slate-700);
-  --bg-app: #f3f4f6;
+  --bg-app: #f6f7f9;
   --bg-surface: var(--fw-white);
   --bg-input: var(--fw-white);
   --bg-muted: var(--fw-slate-100);
   --text-main: var(--fw-onyx);
   --text-muted: var(--fw-slate-600);
-  --fw-border: #eef2f7;
+  --fw-border: #e5e7eb;
   --fw-border-input: var(--fw-slate-300);
+  --outline-strong: #c7cdd4;
 
   --glass-bg: transparent;
   --glass-border: transparent;
   --glass-shadow: none;
   --glass-blur: blur(0px);
 
-  --shadow-soft: 0 1px 3px rgba(15, 23, 42, 0.06);
-  --shadow-md: 0 10px 30px rgba(15, 23, 42, 0.08);
-  --shadow-hover: 0 16px 20px rgba(48, 48, 48, 0.034)!important;
+  --shadow-soft: 0 1px 2px rgba(16, 24, 40, 0.04);
+  --shadow-md: 0 1px 3px rgba(16, 24, 40, 0.08);
+  --shadow-hover: 0 1px 3px rgba(16, 24, 40, 0.1) !important;
+
+  --control-height-sm: 34px;
+  --control-height-md: 40px;
+  --control-height-lg: 44px;
+  --control-radius: 10px;
+  --table-action-size: 40px;
 
   --radius-sm: 10px;
-  --radius-md: 14px;
+  --radius-md: 12px;
   --radius-lg: 18px;
   --radius-pill: 9999px;
 
@@ -54,17 +63,19 @@ body.dark-theme {
   --brand-primary: var(--fw-saffron);
   --brand-secondary: var(--fw-strawberry);
   --bg-app: var(--fw-onyx);
-  --bg-surface: #1b1d1f;
-  --bg-input: #13161a;
-  --bg-muted: #202428;
-  --text-main: #f8fafc;
-  --text-muted: #9ca3af;
-  --fw-border: #2b3137;
-  --fw-border-input: #3a4249;
+  --bg-surface: #16181b;
+  --bg-input: #111317;
+  --bg-muted: #1f2328;
+  --text-main: #f3f4f6;
+  --text-muted: #9aa4b2;
+  --fw-border: #2c3238;
+  --fw-border-input: #3d4650;
+  --outline-strong: #4f5b67;
 
   --bg-emerald-soft: rgba(23, 198, 104, 0.16);
   --bg-saffron-soft: rgba(255, 153, 44, 0.16);
   --bg-strawberry-soft: rgba(228, 73, 73, 0.16);
+  --bg-informative-soft: rgba(37, 99, 235, 0.18);
 
   --glass-bg: rgba(27, 29, 31, 0.72);
   --glass-border: rgba(255, 255, 255, 0.06);
@@ -104,10 +115,10 @@ h3,
 h4,
 h5,
 .titulo-card-especial {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-weight: 700 !important;
   color: var(--text-main) !important;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.01em;
 }
 
 a {
@@ -129,7 +140,7 @@ a {
 .modal-content,
 .offcanvas {
   background-color: var(--bg-surface) !important;
-  border: 1px solid var(--fw-border) !important;
+  border: 1px solid var(--outline-strong) !important;
   color: var(--text-main) !important;
 }
 
@@ -137,7 +148,7 @@ a {
 .form-select,
 .form-check-input,
 .input-group-text {
-  border-radius: var(--radius-sm) !important;
+  border-radius: var(--control-radius) !important;
 }
 
 /* Inputs and selects */
@@ -158,7 +169,8 @@ input[type='number'],
 input[type='search'] {
   background-color: var(--bg-input) !important;
   color: var(--text-main) !important;
-  border: 1px solid var(--fw-border-input) !important;
+  border: 1px solid var(--outline-strong) !important;
+  min-height: var(--control-height-md);
   padding: 0.72rem 0.95rem !important;
   transition: border-color var(--transition-smooth), box-shadow var(--transition-smooth), background-color var(--transition-smooth);
 }
@@ -176,7 +188,58 @@ input::placeholder {
 textarea:focus,
 input:focus {
   border-color: var(--brand-primary) !important;
+  box-shadow: 0 0 0 2px rgba(17, 18, 19, 0.16) !important;
   outline: none;
+}
+
+body.dark-theme .form-control:focus,
+body.dark-theme .form-select:focus,
+body.dark-theme textarea:focus,
+body.dark-theme input:focus {
+  box-shadow: 0 0 0 2px rgba(255, 153, 44, 0.22) !important;
+}
+
+/* Table header search pattern (generic across modules) */
+.header-search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: auto;
+  min-width: 240px;
+  max-width: 360px;
+  flex: 1 1 300px;
+}
+
+.header-search-container .search-icon {
+  position: absolute;
+  left: 12px;
+  width: 18px;
+  height: 18px;
+  color: var(--text-muted);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.header-search-container .form-control {
+  width: 100%;
+  height: var(--control-height-md);
+  padding-left: 40px !important;
+  padding-right: 12px !important;
+  border: 1px solid var(--outline-strong) !important;
+}
+
+.header-search-container .form-control:focus {
+  border-color: var(--brand-primary) !important;
+  box-shadow: 0 0 0 2px rgba(17, 18, 19, 0.16);
+}
+
+body.dark-theme .header-search-container .form-control:focus {
+  box-shadow: 0 0 0 2px rgba(255, 153, 44, 0.15);
+}
+
+.fw-table-no-data {
+  padding: 16px;
+  color: var(--text-muted);
 }
 
 /* Buttons */
@@ -184,6 +247,7 @@ input:focus {
 button {
   border-radius: var(--radius-pill) !important;
   font-weight: 600 !important;
+  min-height: var(--control-height-md);
   transition: transform var(--transition-smooth), background-color var(--transition-smooth), color var(--transition-smooth), box-shadow var(--transition-smooth), border-color var(--transition-smooth);
 }
 
@@ -195,7 +259,50 @@ span.badge {
 
 .btn:hover,
 button:hover {
-  transform: translateY(-1px);
+  transform: none;
+}
+
+/* Table action buttons: perfect circles with uniform size */
+.rdt_TableCell .btn-ver,
+.rdt_TableCell .btn-editar,
+.rdt_TableCell .btn-eliminar,
+.rdt_TableCell .btn-activar,
+.rdt_TableCell .btn-generico,
+.rdt_TableCell .btn-informativo,
+.table td .btn-ver,
+.table td .btn-editar,
+.table td .btn-eliminar,
+.table td .btn-activar,
+.table td .btn-generico,
+.table td .btn-informativo {
+  width: var(--table-action-size) !important;
+  height: var(--table-action-size) !important;
+  min-width: var(--table-action-size) !important;
+  min-height: var(--table-action-size) !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+  aspect-ratio: 1 / 1;
+}
+
+.rdt_TableCell .btn-ver svg,
+.rdt_TableCell .btn-editar svg,
+.rdt_TableCell .btn-eliminar svg,
+.rdt_TableCell .btn-activar svg,
+.rdt_TableCell .btn-generico svg,
+.rdt_TableCell .btn-informativo svg,
+.table td .btn-ver svg,
+.table td .btn-editar svg,
+.table td .btn-eliminar svg,
+.table td .btn-activar svg,
+.table td .btn-generico svg,
+.table td .btn-informativo svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
 }
 
 .btn-primary,
@@ -232,6 +339,154 @@ body.dark-theme .btn-guardar {
 .btn-ver:hover {
   background: var(--bg-muted) !important;
   color: var(--text-main) !important;
+}
+
+/* Semantic reusable buttons */
+.btn-guardar {
+  background: rgb(23, 198, 105) !important;
+  color: rgb(21, 32, 27)!important;
+  border: 1px solid rgba(23, 198, 104, 0.5) !important;
+}
+
+.btn-guardar:hover {
+  background: rgb(21, 226, 114)!important;
+  color: rgb(21, 32, 27) !important;
+  border-color: rgba(23, 198, 104, 0.75) !important;
+}
+
+.btn-guardar:active,
+.btn-guardar.active {
+  background: rgba(23, 198, 104, 0.2) !important;
+  color: var(--fw-emerald) !important;
+  border-color: rgba(23, 198, 104, 0.9) !important;
+}
+
+.btn-activar,
+.btn-opcional {
+  background: var(--bg-surface) !important;
+  color: var(--fw-emerald) !important;
+  border: 1px solid rgba(22, 163, 74, 0.5) !important;
+}
+
+.btn-activar:hover,
+.btn-opcional:hover {
+  background: var(--bg-emerald-soft) !important;
+  color: var(--fw-emerald) !important;
+  border-color: rgba(22, 163, 74, 0.75) !important;
+}
+
+.btn-activar:active,
+.btn-activar.active,
+.btn-opcional:active,
+.btn-opcional.active {
+  background: rgba(22, 163, 74, 0.2) !important;
+  color: var(--fw-emerald) !important;
+  border-color: rgba(22, 163, 74, 0.9) !important;
+}
+
+.btn-cerrar {
+  background: var(--bg-surface) !important;
+  color: var(--text-main) !important;
+  border: 1px solid var(--outline-strong) !important;
+}
+
+.btn-cerrar:hover {
+  background: var(--bg-muted) !important;
+  color: var(--text-main) !important;
+  border-color: var(--fw-border-input) !important;
+}
+
+.btn-cerrar:active,
+.btn-cerrar.active {
+  background: rgba(148, 163, 184, 0.18) !important;
+  color: var(--text-main) !important;
+  border-color: var(--fw-slate-400) !important;
+}
+
+.btn-eliminar {
+  background: var(--bg-surface) !important;
+  color: var(--fw-strawberry) !important;
+  border: 1px solid rgba(228, 73, 73, 0.5) !important;
+}
+
+.btn-eliminar:hover {
+  background: var(--bg-strawberry-soft) !important;
+  color: var(--fw-strawberry) !important;
+  border-color: rgba(228, 73, 73, 0.75) !important;
+}
+
+.btn-eliminar:active,
+.btn-eliminar.active {
+  background: rgba(228, 73, 73, 0.2) !important;
+  color: var(--fw-strawberry) !important;
+  border-color: rgba(228, 73, 73, 0.9) !important;
+}
+
+.btn-editar {
+  background: var(--bg-surface) !important;
+  color: var(--fw-saffron) !important;
+  border: 1px solid rgba(236, 139, 35, 0.5) !important;
+}
+
+.btn-editar:hover {
+  background: var(--bg-saffron-soft) !important;
+  color: var(--fw-saffron) !important;
+  border-color: rgba(236, 139, 35, 0.75) !important;
+}
+
+.btn-editar:active,
+.btn-editar.active {
+  background: rgba(236, 139, 35, 0.2) !important;
+  color: var(--fw-saffron) !important;
+  border-color: rgba(236, 139, 35, 0.9) !important;
+}
+
+.btn-generico {
+  background: var(--bg-surface) !important;
+  color: var(--text-main) !important;
+  border: 1px solid var(--outline-strong) !important;
+}
+
+.btn-generico:hover {
+  background: var(--bg-muted) !important;
+  color: var(--text-main) !important;
+  border-color: var(--fw-border-input) !important;
+}
+
+.btn-generico:active,
+.btn-generico.active {
+  background: rgba(148, 163, 184, 0.16) !important;
+  color: var(--text-main) !important;
+  border-color: var(--fw-slate-400) !important;
+}
+
+.btn-informativo {
+  background: var(--bg-surface) !important;
+  color: var(--fw-informative) !important;
+  border: 1px solid rgba(37, 99, 235, 0.5) !important;
+}
+
+.btn-informativo:hover {
+  background: var(--bg-informative-soft) !important;
+  color: var(--fw-informative) !important;
+  border-color: rgba(37, 99, 235, 0.75) !important;
+}
+
+.btn-informativo:active,
+.btn-informativo.active {
+  background: rgba(37, 99, 235, 0.2) !important;
+  color: var(--fw-informative) !important;
+  border-color: rgba(37, 99, 235, 0.9) !important;
+}
+
+body.dark-theme .btn-informativo {
+  color: #7db2ff !important;
+  border-color: rgba(125, 178, 255, 0.55) !important;
+}
+
+body.dark-theme .btn-informativo:hover {
+  background: rgba(125, 178, 255, 0.16) !important;
+  border-color: rgba(125, 178, 255, 0.8) !important;
 }
 
 /* Switches */
@@ -295,6 +550,17 @@ body.dark-theme .text-body {
 
 body.dark-theme .text-muted {
   color: var(--text-muted) !important;
+}
+
+body.dark-theme .table-light,
+body.dark-theme .table-light > th,
+body.dark-theme .table-light > td,
+body.dark-theme .table > :not(caption) > * > .table-light,
+body.dark-theme .table > thead,
+body.dark-theme .table > thead > tr > th {
+  background-color: var(--bg-muted) !important;
+  color: var(--text-main) !important;
+  border-color: var(--fw-border) !important;
 }
 
 body.dark-theme .card-header,

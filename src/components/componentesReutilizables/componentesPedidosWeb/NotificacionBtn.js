@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
 import { NotificarPedido } from "../../../service/accionesReutilizables/NotificarPedido";
 import ToastAlert from "../../componenteToast/ToastAlert";
-import { Megaphone, MegaphoneIcon } from "lucide-react";
+import { MegaphoneIcon } from "lucide-react";
 
 const NotificacionBtn = ({ pedido }) => {
   const [loading, setLoading] = useState(false);

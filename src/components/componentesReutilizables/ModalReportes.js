@@ -1,3 +1,5 @@
+import "../../css/EstilosModalReportes.css";
+
 export default function ModalReportes({
   isOpen,
   setIsOpen,
@@ -11,51 +13,37 @@ export default function ModalReportes({
 
   return (
     <div
-      className={`modal fade show bd-example-modal-xl`}
+      className="fw-reportes-overlay"
       tabIndex="-1"
       aria-labelledby="myExtraLargeModalLabel"
       role="dialog"
-      style={{
-        display: "block",
-        backgroundColor: "rgba(0, 0, 0, 0.5)", // Fondo más claro (0.5 de opacidad)
-      }}
       aria-hidden="false"
     >
       <div
         className={`modal-dialog ${tamaño} modal-dialog-centered`}
         style={{ maxWidth: "90vw", width: "90vw" }}
       >
-        <div className={`modal-content ${fondo} border-0 shadow-lg`}>
-          {" "}
-          {/* Añadido sombra y sin borde */}
-          <div className="modal-header bg-light p-3 d-flex justify-content-between align-items-center">
-            {/* Contenedor del título y descripción (alineados verticalmente) */}
+        <div className={`modal-content ${fondo} fw-reportes-content`}>
+          <div className="modal-header fw-reportes-header">
             <div className="d-flex flex-column">
-              <p className="modal-title text-dark mb-0 h5">
+              <p className="modal-title mb-0 h5 fw-reportes-title">
                 Reporte de {titulo}
               </p>
-              <small className="text-muted">
-                De{" "}
-                <span className="fw-semibold text-dark">
-                  {data.fechaInicio}
-                </span>{" "}
-                hasta{" "}
-                <span className="fw-semibold text-dark">{data.fechaFin}</span>
+              <small className="fw-reportes-meta">
+                De <span className="fw-semibold">{data.fechaInicio}</span> hasta{" "}
+                <span className="fw-semibold">{data.fechaFin}</span>
               </small>
             </div>
 
-            {/* Botón de cierre alineado al centro verticalmente */}
             <button
               type="button"
-              className="btn-close ms-3 "
+              className="btn-close ms-3"
               data-bs-dismiss="modal"
               aria-label="Close"
               onClick={() => setIsOpen(false)}
             ></button>
           </div>
           <div className="modal-body p-0">
-            {" "}
-            {/* Sin padding para que el iframe ocupe todo */}
             {sheetUrl && (
               <iframe
                 src={sheetUrl}

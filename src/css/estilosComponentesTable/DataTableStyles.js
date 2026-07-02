@@ -1,58 +1,77 @@
-const getCustomDataTableStyles = (isDark) => ({
-  table: {
-    style: {
-      minHeight: "300px", // <-- Aquí controlas la altura mínima de la tabla en sí
-      backgroundColor: isDark ? "#161616" : "#ffffff",
+const getVar = (name, fallback) => {
+  const body = getComputedStyle(document.body);
+  const root = getComputedStyle(document.documentElement);
+  const value =
+    body.getPropertyValue(name).trim() || root.getPropertyValue(name).trim();
+  return value || fallback;
+};
+
+const getCustomDataTableStyles = (isDark) => {
+  const bgSurface = getVar("--bg-surface", isDark ? "#1b1d1f" : "#ffffff");
+  const bgMuted = getVar("--bg-muted", isDark ? "#202428" : "#f8fafc");
+  const textMain = getVar("--text-main", isDark ? "#f8fafc" : "#111213");
+  const textMuted = getVar("--text-muted", isDark ? "#9ca3af" : "#475569");
+  const border = getVar("--fw-border", isDark ? "#2b3137" : "#eef2f7");
+  const radiusMd = getVar("--radius-md", "12px");
+
+  return {
+    table: {
+      style: {
+        minHeight: "300px",
+        backgroundColor: bgSurface,
+        border: `1px solid ${border}`,
+        borderRadius: radiusMd,
+      },
     },
-  },
-  rows: {
-    style: {
-      borderLeftWidth: "0",
-      borderLeftStyle: "none",
-      borderLeftColor: "transparent",
-      backgroundColor: isDark ? "#161616" : "#ffffff",
-      color: isDark ? "#cbd5e1" : "#2d3748",
-      borderBottom: isDark ? "1px solid #161616 " : "1px solid #e2e8f0",
-      fontSize: "14px",
+    rows: {
+      style: {
+        borderLeftWidth: "0",
+        borderLeftStyle: "none",
+        borderLeftColor: "transparent",
+        backgroundColor: bgSurface,
+        color: textMain,
+        borderBottom: `1px solid ${border}`,
+        fontSize: "13px",
+      },
+      highlightOnHoverStyle: {
+        backgroundColor: bgMuted,
+        cursor: "pointer",
+      },
     },
-    highlightOnHoverStyle: {
-      backgroundColor: isDark ? "#161616" : "#f7fafc",
-      cursor: "pointer",
+    headCells: {
+      style: {
+        backgroundColor: bgMuted,
+        color: textMuted,
+        fontSize: "12px",
+        fontWeight: "600",
+        textAlign: "left",
+        padding: "11px 14px",
+        borderBottom: `1px solid ${border}`,
+        textTransform: "none",
+        letterSpacing: "0",
+      },
     },
-  },
-  headCells: {
-    style: {
-      backgroundColor: isDark ? "#161616" : "#f9fafb",
-      color: isDark ? "#94a3b8" : "#4b5563",
-      fontSize: "13px",
-      fontWeight: "600",
-      textAlign: "left",
-      padding: "12px 16px",
-      borderBottom: isDark ? "1px solid #161616" : "1px solid #e2e8f0",
-      textTransform: "none",
-      letterSpacing: "0",
+    header: {
+      style: {
+        backgroundColor: bgMuted,
+        color: textMain,
+      },
     },
-  },
-  header: {
-    style: {
-      backgroundColor: isDark ? "#0f172a" : "#f9fafb",
-      color: isDark ? "#cbd5e1" : "#2d3748",
+    footer: {
+      style: {
+        backgroundColor: bgMuted,
+        color: textMain,
+        borderTop: `1px solid ${border}`,
+      },
     },
-  },
-  footer: {
-    style: {
-      backgroundColor: isDark ? "#161616" : "#f9fafb",
-      color: isDark ? "#cbd5e1" : "#2d3748",
-      borderTop: isDark ? "1px solid #2d3748" : "1px solid #e2e8f0",
+    pagination: {
+      style: {
+        backgroundColor: bgMuted,
+        color: textMain,
+        fontSize: "12px",
+        borderTop: `1px solid ${border}`,
+      },
     },
-  },
-  pagination: {
-    style: {
-      backgroundColor: isDark ? "#161616" : "#f9fafb",
-      color: isDark ? "#cbd5e1" : "#2d3748",
-      fontSize: "13px",
-      borderTop: isDark ? "1px solid #2d3748" : "1px solid #e2e8f0",
-    },
-  },
-});
+  };
+};
 export default getCustomDataTableStyles;

@@ -5,7 +5,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(15, 23, 42, 0.4);
+    background: rgba(15, 23, 42, 0.46);
     backdrop-filter: blur(4px);
     display: flex;
     justify-content: center;
@@ -14,13 +14,106 @@
     padding: 20px;
 }
 
+/* ModalGenerales modern outline variant */
+.fw-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.28);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1050;
+    padding: 20px;
+}
+
+.fw-modal-shell {
+    background: var(--bg-surface);
+    border: 1px solid var(--fw-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    animation: modalPop 0.2s ease-out forwards;
+}
+
+.fw-modal-close-btn {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.6rem;
+    z-index: 2;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid var(--fw-border-input);
+    background: var(--bg-surface);
+    color: var(--text-muted);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fw-modal-close-btn:hover {
+    background: var(--bg-muted);
+    color: var(--brand-primary);
+    border-color: var(--brand-primary);
+}
+
+.fw-modal-header {
+    padding: 1.4rem 1.2rem 0.7rem;
+    color: var(--text-main);
+}
+
+.fw-modal-body {
+    padding: 0.9rem 1.2rem;
+}
+
+.fw-modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 0.7rem;
+    padding: 0.6rem 1.2rem 1.2rem;
+}
+
+.fw-modal-btn {
+    min-height: 38px;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--fw-border-input);
+    background: var(--bg-surface);
+    color: var(--text-main);
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+.fw-modal-btn:hover {
+    background: var(--bg-muted);
+}
+
+.fw-modal-btn-cancel {
+    color: var(--text-muted);
+}
+
+.fw-modal-btn-confirm,
+.fw-modal-btn.btn-danger {
+    border-color: rgba(228, 73, 73, 0.45);
+    color: var(--fw-strawberry);
+    background: var(--bg-surface);
+}
+
+.fw-modal-btn-confirm:hover,
+.fw-modal-btn.btn-danger:hover {
+    background: var(--bg-strawberry-soft);
+    border-color: var(--fw-strawberry);
+}
+
 /* Estilos para el contenido del modal */
 .contenido-model {
-    background: #ffffff;
+    background: var(--bg-surface);
     padding: 32px 40px;
-    border-radius: 16px !important;
+    border-radius: var(--radius-lg) !important;
     text-align: center;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    border: 1px solid var(--fw-border);
+    box-shadow: var(--shadow-md);
     max-width: 420px;
     width: 100%;
     animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
@@ -28,12 +121,14 @@
 .modal-name-delete{
     font-size: 1.15rem;
         font-weight: 700;
-        color: #0f172a;
+        color: var(--fw-strawberry);
         margin-bottom: 24px;
         text-transform: capitalize;
         padding: 10px 16px;
         /* Fondo sutil para enmarcar el nombre */
-        border-radius: 8px;
+        border-radius: var(--radius-sm);
+        background: var(--bg-strawberry-soft);
+        border: 1px solid rgba(220, 38, 38, 0.22);
         display: inline-block;
 }
 @keyframes modalPop {
@@ -53,7 +148,7 @@
     margin-bottom: 8px;
     font-size: 1.25rem;
     font-weight: 600;
-    color: #1e293b;
+    color: var(--text-main);
 }
 
 
@@ -68,30 +163,31 @@
 
 /* Botón de Confirmar (Peligro/Eliminar) */
 .btn-eliminarToast {
-    background-color: #ef4444;
-    /* Rojo moderno vibrante */
-    color: white;
-    border: none;
+    background-color: var(--bg-surface);
+    color: var(--fw-strawberry);
+    border: 1px solid rgba(220, 38, 38, 0.5);
     padding: 10px 24px;
     font-weight: 500;
     border-radius: 50px;
     /* Estilo píldora */
     cursor: pointer;
     transition: all 0.2s ease;
-    box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.2);
+    box-shadow: none;
 }
 
 .btn-eliminarToast:hover {
-    background-color: #dc2626;
-    transform: translateY(-1px);
-    box-shadow: 0 6px 8px -1px rgba(239, 68, 68, 0.3);
+    background-color: var(--bg-strawberry-soft);
+    color: var(--fw-strawberry);
+    border-color: rgba(220, 38, 38, 0.8);
+    transform: none;
+    box-shadow: none;
 }
 
 /* Botón de Cancelar */
-.btn-secondary {
-    background-color: #f8fafc;
-    color: #475569;
-    border: 1px solid #cbd5e1;
+.modal-overlay .btn-secondary {
+    background-color: var(--bg-surface);
+    color: var(--text-main);
+    border: 1px solid var(--outline-strong);
     padding: 10px 24px;
     font-weight: 500;
     border-radius: 50px;
@@ -99,52 +195,64 @@
     transition: all 0.2s ease;
 }
 
-.btn-secondary:hover {
-    background-color: #e2e8f0;
-    color: #1e293b;
+.modal-overlay .btn-secondary:hover {
+    background-color: var(--bg-muted);
+    color: var(--text-main);
+    border-color: var(--fw-border-input);
 }
 
 /* ========== TEMA OSCURO MODAL ALERT DELETE ESTILO MODERNO ========== */
 body.dark-theme .modal-overlay {
-    background: rgba(37, 37, 37, 0.8) !important;
+    background: rgba(2, 6, 23, 0.72) !important;
+}
+
+body.dark-theme .fw-modal-overlay {
+    background: rgba(2, 6, 23, 0.6) !important;
+}
+
+body.dark-theme .fw-modal-shell {
+    background: var(--bg-surface) !important;
+    border: 1px solid var(--fw-border) !important;
+    box-shadow: var(--shadow-md) !important;
 }
 
 body.dark-theme .contenido-model {
-    background: #252525 !important;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5) !important;
-    border: 1px solid #334155;
+    background: var(--bg-surface) !important;
+    box-shadow: var(--shadow-md) !important;
+    border: 1px solid var(--fw-border);
 }
 
 body.dark-theme .contenido-model h3 {
-    color: #f8fafc !important;
+    color: var(--text-main) !important;
 }
 
 body.dark-theme .modal-name-delete {
-    color: #fca5a5 !important;
-    /* Rojo claro para contraste en oscuro */
-    background: rgba(239, 68, 68, 0.1) !important;
-    border-color: rgba(239, 68, 68, 0.2) !important;
+    color: var(--fw-strawberry) !important;
+    background: var(--bg-strawberry-soft) !important;
+    border-color: rgba(220, 38, 38, 0.3) !important;
 }
 
 body.dark-theme .btn-eliminarToast {
-    background-color: #ef4444 !important;
-    color: #fff !important;
+    background-color: var(--bg-surface) !important;
+    color: var(--fw-strawberry) !important;
+    border-color: rgba(220, 38, 38, 0.62) !important;
 }
 
 body.dark-theme .btn-eliminarToast:hover {
-    background-color: #f87171 !important;
-    /* Ligeramente más brillante al hover en oscuro */
+    background-color: var(--bg-strawberry-soft) !important;
+    border-color: rgba(220, 38, 38, 0.84) !important;
 }
 
-body.dark-theme .btn-secondary {
-    background-color: transparent !important;
-    color: #cbd5e1 !important;
-    border: 1px solid #475569 !important;
+body.dark-theme .modal-overlay .btn-secondary {
+    background-color: var(--bg-surface) !important;
+    color: var(--text-main) !important;
+    border: 1px solid var(--outline-strong) !important;
 }
 
-body.dark-theme .btn-secondary:hover {
-    background-color: #334155 !important;
-    color: #fff !important;
+body.dark-theme .modal-overlay .btn-secondary:hover {
+    background-color: var(--bg-muted) !important;
+    color: var(--text-main) !important;
+    border-color: var(--fw-border-input) !important;
 }
 
 /* ========== FIN TEMA OSCURO ========== */
