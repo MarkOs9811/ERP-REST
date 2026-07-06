@@ -108,7 +108,9 @@ export function AlmacenRegister() {
         <div className="row g-3">
           <div className="col-md-6">
             <div className="almacen-field">
-              <label htmlFor="nombreProducto">Nombre Producto/Activo</label>
+              <label htmlFor="nombreProducto" className="form-label">
+                Nombre Producto/Activo
+              </label>
               <input
                 type="text"
                 className={`form-control ${errors.nombreProducto ? "is-invalid" : ""}`}
@@ -128,7 +130,9 @@ export function AlmacenRegister() {
 
           <div className="col-md-6">
             <div className="almacen-field">
-              <label htmlFor="cantidad">Cantidad</label>
+              <label htmlFor="cantidad" className="form-label">
+                Cantidad
+              </label>
               <input
                 type="number"
                 className={`form-control ${errors.cantidad ? "is-invalid" : ""}`}
@@ -154,7 +158,9 @@ export function AlmacenRegister() {
         <div className="row g-3 my-2">
           <div className="col-md-4">
             <div className="almacen-field">
-              <label htmlFor="precioUnit">Precio Unitario S/.</label>
+              <label htmlFor="precioUnit" className="form-label">
+                Precio Unitario S/.
+              </label>
               <input
                 type="text"
                 className={`form-control ${errors.precioUnit ? "is-invalid" : ""}`}
@@ -178,7 +184,9 @@ export function AlmacenRegister() {
 
           <div className="col-md-4">
             <div className="almacen-field">
-              <label htmlFor="descripcion">Descripción</label>
+              <label htmlFor="descripcion" className="form-label">
+                Descripción
+              </label>
               <textarea
                 className={`form-control ${errors.descripcion ? "is-invalid" : ""}`}
                 id="descripcion"
@@ -198,7 +206,9 @@ export function AlmacenRegister() {
 
           <div className="col-md-4">
             <div className="almacen-field">
-              <label htmlFor="marca">Marca</label>
+              <label htmlFor="marca" className="form-label">
+                Marca
+              </label>
               <input
                 type="text"
                 className={`form-control ${errors.marca ? "is-invalid" : ""}`}
@@ -218,7 +228,9 @@ export function AlmacenRegister() {
         <div className="row g-3 my-2">
           <div className="col-md-4">
             <div className="almacen-field">
-              <label htmlFor="categoria">Categoría</label>
+              <label htmlFor="categoria" className="form-label">
+                Categoría
+              </label>
               <select
                 className={`form-select ${errors.categoria ? "is-invalid" : ""}`}
                 id="categoria"
@@ -243,7 +255,9 @@ export function AlmacenRegister() {
 
           <div className="col-md-4 ">
             <div className="almacen-field">
-              <label htmlFor="unidad">Unidad de Medida</label>
+              <label htmlFor="unidad" className="form-label">
+                Unidad de Medida
+              </label>
               <select
                 className={`form-select ${errors.unidad ? "is-invalid" : ""}`}
                 id="unidad"
@@ -266,7 +280,9 @@ export function AlmacenRegister() {
 
           <div className="col-md-4">
             <div className="almacen-field">
-              <label htmlFor="proveedor">Proveedor</label>
+              <label htmlFor="proveedor" className="form-label">
+                Proveedor
+              </label>
               <select
                 className={`form-select ${errors.proveedor ? "is-invalid" : ""}`}
                 id="proveedor"
@@ -294,7 +310,9 @@ export function AlmacenRegister() {
 
         <div className="almacen-file-group">
           <div className="almacen-field mb-3">
-            <label htmlFor="pdf_file">Seleccionar PDF</label>
+            <label htmlFor="pdf_file" className="form-label">
+              Seleccionar PDF
+            </label>
             <input
               type="file"
               className={`form-control ${errors.pdf_file ? "is-invalid" : ""}`}
@@ -314,7 +332,9 @@ export function AlmacenRegister() {
           </div>
 
           <div className="almacen-field">
-            <label htmlFor="image_file">Cargar Firma</label>
+            <label htmlFor="image_file" className="form-label">
+              Cargar Firma
+            </label>
             <input
               type="file"
               className={`form-control ${errors.image_file ? "is-invalid" : ""}`}

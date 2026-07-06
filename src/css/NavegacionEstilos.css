@@ -3,6 +3,7 @@
   z-index: 100;
   margin-left: 240px;
   transition: all 0.3s ease;
+  background-color: transparent;
 }
 
 .compressedNavegacion {
@@ -34,29 +35,9 @@
   padding: 0 8px;
 }
 
-.card-shadow {
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.card.rounded {
-  border-radius: 10px;
-  /* Bordes redondeados suaves */
-}
 
 /* ========== TEMA OSCURO NAVEGACIÓN ESTILO MODERNO ========== */
-body.dark-theme .card {
-  background: #3a3f47 !important;
-  color: #e8eaed !important;
-  border: none !important;
-}
 
-body.dark-theme .card-shadow {
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
-}
-
-body.dark-theme .card.rounded {
-  border-radius: 8px !important;
-}
 
 body.dark-theme .breadcrumb {
   background-color: transparent !important;
@@ -112,7 +93,7 @@ body.dark-theme .breadcrumb-nav .fw-semibold[style*="opacity: 0.7"] {
 
 /* ========== SUBMENU TABS (MÓDULOS) ========== */
 .submenu-tabs-container {
-  background-color: white !important;
+  background-color: transparent !important;
   border-bottom: none !important;
   transition: background-color 0.3s ease;
 }
@@ -130,12 +111,12 @@ body.dark-theme .breadcrumb-nav .fw-semibold[style*="opacity: 0.7"] {
 }
 
 .submenu-tab-link.active {
-  color: #ffffff !important;
+  color: #000000 !important;
   border-top: none !important;
   border-left: none !important;
   border-right: none !important;
-  border-bottom: none !important;
-  background-color: #000000 !important;
+  background-color: transparent !important;
+  border-bottom: 2px solid #000000 !important;
 }
 
 /* ========== TEMA OSCURO SUBMENU TABS ========== */

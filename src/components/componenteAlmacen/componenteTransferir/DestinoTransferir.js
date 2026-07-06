@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { GetAreas } from "../../../service/GetAreas";
@@ -6,17 +6,26 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import ToastAlert from "../../componenteToast/ToastAlert";
 import axiosInstance from "../../../api/AxiosInstance";
 import { clearProductoSelececcionado } from "../../../redux/productoTransferirSlice";
-import { File, FileAxis3d } from "lucide-react";
+import { File } from "lucide-react";
 
 export function DestinoTransferir() {
   const [archivo, setArchivo] = useState(null);
   const [loading, setLoading] = useState(false);
   const [idDestino, setIdDestino] = useState("");
+  const fileInputRef = useRef(null);
   const dispatch = useDispatch();
 
   const queryClient = useQueryClient(); // ← Obtienes el cliente
   const productoSeleccionado = useSelector(
     (state) => state.productoTransferir.items,
+  );
+  const totalUnidades = useMemo(
+    () =>
+      productoSeleccionado.reduce(
+        (acc, item) => acc + (Number(item?.cantidad) || 0),
+        0,
+      ),
+    [productoSeleccionado],
   );
 
   const {
@@ -29,16 +38,29 @@ export function DestinoTransferir() {
   });
   const handleArchivoChange = (e) => {
     const file = e.target.files[0];
-    if (
-      file &&
-      (file.type === "application/pdf" ||
-        file.type ===
-          "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
-        file.type === "application/msword")
-    ) {
+
+    if (!file) {
+      setArchivo(null);
+      return;
+    }
+
+    const fileTypesPermitidos = [
+      "application/pdf",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "application/msword",
+    ];
+
+    if (file && fileTypesPermitidos.includes(file.type)) {
+      if (file.size > 5 * 1024 * 1024) {
+        ToastAlert("warning", "El archivo no debe superar 5MB.");
+        e.target.value = null;
+        setArchivo(null);
+        return;
+      }
+
       setArchivo(file);
     } else {
-      alert("Solo se permiten archivos PDF o Word.");
+      ToastAlert("warning", "Solo se permiten archivos PDF o Word.");
       e.target.value = null;
       setArchivo(null);
     }
@@ -57,6 +79,25 @@ export function DestinoTransferir() {
 
     if (productoSeleccionado.length === 0) {
       ToastAlert("warning", "Debe seleccionar al menos un producto.");
+      return;
+    }
+
+    const tieneCantidadInvalida = productoSeleccionado.some(
+      (item) => Number(item?.cantidad) <= 0,
+    );
+    if (tieneCantidadInvalida) {
+      ToastAlert("warning", "Hay productos con cantidades inválidas.");
+      return;
+    }
+
+    const excedeStock = productoSeleccionado.find(
+      (item) => Number(item?.cantidad) > Number(item?.stock),
+    );
+    if (excedeStock) {
+      ToastAlert(
+        "warning",
+        `La cantidad de ${excedeStock.nombre} supera su stock disponible.`,
+      );
       return;
     }
 
@@ -81,12 +122,17 @@ export function DestinoTransferir() {
         formData,
       );
       if (response.data.success) {
-        ToastAlert("success", "Se transferio correctamente");
+        ToastAlert("success", "Se transfirió correctamente");
         dispatch(clearProductoSelececcionado());
+        setArchivo(null);
+        setIdDestino("");
+        if (fileInputRef.current) {
+          fileInputRef.current.value = null;
+        }
         queryClient.invalidateQueries({ queryKey: ["almacen"] });
       }
     } catch (error) {
-      ToastAlert("error", "Ocurriò un error al transferrir");
+      ToastAlert("error", "Ocurrió un error al transferir");
     } finally {
       setLoading(false);
     }
@@ -94,9 +140,16 @@ export function DestinoTransferir() {
 
   return (
     <div className="card-body">
+      <div className="transfer-summary mb-3">
+        <span>{productoSeleccionado.length} productos</span>
+        <span>{totalUnidades} unidades</span>
+      </div>
+
       <div className="mb-3 position-relative">
         <div className="">
-          <label forHtml="destino">Destino</label>
+          <label htmlFor="destino" className="form-label fw-bold">
+            Destino
+          </label>
           <select
             id="destino"
             className="form-select"
@@ -124,6 +177,7 @@ export function DestinoTransferir() {
             <File className="text-auto" />
           </span>
           <input
+            ref={fileInputRef}
             type="file"
             id="archivo"
             className="form-control"
@@ -140,9 +194,11 @@ export function DestinoTransferir() {
       <button
         className="btn-realizarPedido w-100 display-7  p-3"
         onClick={handleConfirmar}
-        disabled={loading}
+        disabled={
+          loading || !idDestino || !archivo || productoSeleccionado.length === 0
+        }
       >
-        Tranferir
+        {loading ? "Transfiriendo..." : "Transferir"}
       </button>
     </div>
   );

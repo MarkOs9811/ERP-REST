@@ -46,18 +46,16 @@ export function CategoriaEditar({
 
   return (
     <form onSubmit={handleUpdateCategoria} className="p-3">
-      <div className="card  bg-transparent">
-        <div className="form-floating">
-          <input
-            id="inputNombreCat"
-            className="form-control"
-            value={dataForm.nombre}
-            onChange={(e) =>
-              setDataForm({ ...dataForm, nombre: e.target.value })
-            }
-          />
-          <label htmlFor="inputNombreCat">Nombre de categoría</label>
-        </div>
+      <div className="">
+        <label htmlFor="inputNombreCat" className="form-label">
+          Nombre de categoría
+        </label>
+        <input
+          id="inputNombreCat"
+          className="form-control"
+          value={dataForm.nombre}
+          onChange={(e) => setDataForm({ ...dataForm, nombre: e.target.value })}
+        />
       </div>
       {/* Botones */}
       <div className="d-flex justify-content-end my-3">

@@ -26,11 +26,8 @@ export function CabeceraHome({ load, error }) {
                   Hola, {user?.empleado?.persona?.nombre || "Usuario"}
                 </strong>
               </h2>
-              <button
-                className="btn home-banner-cta"
-                onClick={() => goVender()}
-              >
-                Iniciar
+              <button className="home-banner-cta" onClick={() => goVender()}>
+                Comenzar a vender
               </button>
               <User
                 color={"#fff"}

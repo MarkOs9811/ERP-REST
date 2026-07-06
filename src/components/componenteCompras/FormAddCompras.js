@@ -63,7 +63,7 @@ export function FormAddCompras() {
   };
 
   return (
-    <div>
+    <div className="p-3">
       <form onSubmit={handleSubmit(onSubmit)}>
         {/* Proveedor */}
         <div className="mb-3">

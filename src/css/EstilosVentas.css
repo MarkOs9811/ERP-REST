@@ -12,17 +12,6 @@
   transition: all var(--transition-smooth);
 }
 
-.ventas-root .card-header:hover .store-image {
-  opacity: 1;
-  transform: scale(1.02);
-}
-
-/* ===== CARD BODY ===== */
-.ventas-root .card-body {
-  padding: 28px 32px !important;
-  position: relative;
-  z-index: 1;
-}
 
 .ventas-root .card-body-ventasDahs {
   padding: 24px !important;
@@ -32,8 +21,8 @@
 
 /* ===== TOTAL VENTAS TITULO ===== */
 .ventas-root .totalVentasTitulo {
-  font-size: 3.5rem !important;
-  font-weight: 900 !important;
+  font-size: 2.5rem !important;
+  font-weight: 600 !important;
   /* Aplicamos el Emerald de Fire Wok para denotar ingresos */
   color: var(--fw-emerald);
   margin-bottom: 8px;
@@ -48,14 +37,7 @@
   letter-spacing: 0.5px;
 }
 
-/* ===== CARD FOOTER ===== */
-.ventas-root .card-footer {
-  background: var(--bg-surface) !important;
-  border: none !important;
-  padding: 20px 32px !important;
-  position: relative;
-  z-index: 1;
-}
+
 
 /* ===== TARJETAS RESUMEN KPI ===== */
 .ventas-root .card[style*="background: #"] {
@@ -144,11 +126,7 @@
 /* ====================================================
    🌙 TEMA OSCURO VENTAS PREMIUM (FIRE WOK DARK)
    ==================================================== */
-body.dark-theme .ventas-root .card {
-  background: var(--bg-surface) !important;
-  color: var(--text-main) !important;
-  box-shadow: none !important;
-}
+
 
 body.dark-theme .ventas-root .card:hover {
   box-shadow: none !important;

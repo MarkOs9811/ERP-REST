@@ -1,5 +1,4 @@
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { useIntersectionObserver } from "@uidotdev/usehooks";
+import { useQuery } from "@tanstack/react-query";
 import { GetAlmacen } from "../../service/serviceAlmacen/GetAlmacen";
 import { Cargando } from "../componentesReutilizables/Cargando";
 import { useEffect, useMemo, useState } from "react";
@@ -20,12 +19,17 @@ import {
   Search,
   Trash2,
 } from "lucide-react";
+import ToastAlert from "../componenteToast/ToastAlert";
 
 export function TransferirAlmacen() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredData, setFilteredData] = useState([]);
   const dispatch = useDispatch();
   const seleccionados = useSelector((state) => state.productoTransferir.items);
+  const seleccionadosById = useMemo(
+    () => new Map(seleccionados.map((item) => [item.id, item])),
+    [seleccionados],
+  );
 
   // Animación del ripple
   const [ripple, setRipple] = useState({
@@ -37,6 +41,19 @@ export function TransferirAlmacen() {
   });
 
   const handleClick = (e, item) => {
+    const stockDisponible = Number(item?.cantidad) || 0;
+    const seleccionado = seleccionadosById.get(item?.id);
+
+    if (stockDisponible <= 0) {
+      ToastAlert("warning", "Este producto no tiene stock disponible.");
+      return;
+    }
+
+    if (seleccionado && seleccionado.cantidad >= stockDisponible) {
+      ToastAlert("warning", "No puedes transferir más de su stock disponible.");
+      return;
+    }
+
     const rect = e.currentTarget.getBoundingClientRect();
 
     // Activa el ripple solo para este ítem
@@ -56,8 +73,8 @@ export function TransferirAlmacen() {
         marca: item?.marca,
         descripcion: item?.descripcion,
         presentacion: item?.presentacion,
-        precioUnit: item?.precioUnit,
-        stock: item?.cantidad,
+        precioUnit: Number(item?.precioUnit) || 0,
+        stock: stockDisponible,
       }),
     );
 
@@ -95,15 +112,15 @@ export function TransferirAlmacen() {
   }, [searchTerm, dataAlmacen]);
 
   return (
-    <div className="row g-3 ">
+    <div className="row g-3 transfer-layout">
       <div className="col-lg-4 col-md-4 col-sm-12">
-        <div className="card border h-100   ">
-          <div className="card-header   d-flex align-content-between align-align-items-center border-bottom ">
+        <div className="card border h-100 transfer-panel">
+          <div className="card-header d-flex align-content-between align-align-items-center border-bottom transfer-panel-header">
             <p className="card-title">Almacen</p>
             <div className="ms-auto position-relative d-flex">
               <Search className="position-absolute   my-2 text-muted ms-2" />
               <input
-                className="form-control rounded-pill ps-5 "
+                className="form-control rounded-pill ps-5 transfer-search"
                 type="search"
                 inputmode="search"
                 placeholder="Buscar..."
@@ -117,7 +134,7 @@ export function TransferirAlmacen() {
           </div>
 
           <div
-            className="card-body p-2 overflow-auto m-0 bg-light"
+            className="card-body p-2 overflow-auto m-0 bg-light transfer-list-scroller"
             style={{ maxHeight: "calc(100vh - 340px)" }}
           >
             {isLoading ? (
@@ -135,7 +152,7 @@ export function TransferirAlmacen() {
                       seleccionados.some((sel) => sel.id === item?.id)
                         ? "item-selected"
                         : ""
-                    }`}
+                    } ${Number(item?.cantidad) <= 0 ? "item-disabled" : ""}`}
                     onClick={(e) => handleClick(e, item)}
                   >
                     {/* Efecto Ripple (solo para este ítem) */}
@@ -177,7 +194,7 @@ export function TransferirAlmacen() {
                       </div>
                     </div>
                     <div>
-                      <span className="badge bg-light text-muted">
+                      <span className="badge bg-light text-muted me-1">
                         Stock {item?.cantidad}
                       </span>
                       <span className="badge badge-ok">
@@ -192,8 +209,8 @@ export function TransferirAlmacen() {
         </div>
       </div>
       <div className="col-lg-4 col-md-4 col-sm-12">
-        <div className="card h-100 border">
-          <div className="card-header d-flex">
+        <div className="card h-100 border transfer-panel">
+          <div className="card-header d-flex transfer-panel-header">
             <p className="card-title">
               Seleccionados ({seleccionados?.length})
             </p>
@@ -207,7 +224,7 @@ export function TransferirAlmacen() {
             </div>
           </div>
           <div
-            className="card-body overflow-auto bg-light"
+            className="card-body overflow-auto bg-light transfer-list-scroller"
             style={{ maxHeight: "calc(100vh - 340px)" }}
           >
             {seleccionados?.length === 0 ? (
@@ -259,7 +276,7 @@ export function TransferirAlmacen() {
                           <Minus size={18} />
                         </button>
 
-                        <span className="px-2 fw-bold text-secondary">
+                        <span className="px-2 fw-bold text-secondary transfer-qty-pill">
                           {item?.cantidad}
                         </span>
 
@@ -268,9 +285,23 @@ export function TransferirAlmacen() {
                           onClick={(e) => {
                             e.stopPropagation();
                             dispatch(
-                              addItem({ id: item?.id, nombre: item?.nombre }),
+                              addItem({
+                                id: item?.id,
+                                nombre: item?.nombre,
+                                marca: item?.marca,
+                                descripcion: item?.descripcion,
+                                presentacion: item?.presentacion,
+                                precioUnit: item?.precioUnit,
+                                stock: item?.stock,
+                              }),
                             );
                           }}
+                          disabled={item?.cantidad >= item?.stock}
+                          title={
+                            item?.cantidad >= item?.stock
+                              ? "Cantidad máxima alcanzada"
+                              : "Aumentar cantidad"
+                          }
                         >
                           <PlusIcon size={18} />
                         </button>
@@ -293,11 +324,11 @@ export function TransferirAlmacen() {
         </div>
       </div>
       <div className="col-lg-4 col-md-4 col-sm-12">
-        <div className="card border h-100">
-          <div className="card-header border-bottom">
+        <div className="card border h-100 transfer-panel">
+          <div className="card-header border-bottom transfer-panel-header">
             <p className="card-title">Destino</p>
           </div>
-          <div className="card-body bg-light">
+          <div className="card-body bg-light transfer-list-scroller">
             <DestinoTransferir />
           </div>
         </div>

@@ -55,15 +55,13 @@ export const Login = () => {
   const onSubmitLogin = async (data) => {
     setLoading(true);
     try {
-      const response = await axios.post(
-        // "https://erp-api-production-c7d4.up.railway.app/api/login",
-        "http://127.0.0.1:8000/api/login",
-        // const response = await axios.post("http://erp-api.test/api/login", {
-        {
-          email: data.email,
-          password: data.password,
-        },
-      );
+      // const response = await axios.post(
+      //   // "https://erp-api-production-c7d4.up.railway.app/api/login",
+      //   "http://127.0.0.1:8000/api/login",
+      const response = await axios.post("http://erp-api.test/api/login", {
+        email: data.email,
+        password: data.password,
+      });
 
       if (response.data.token) {
         // 1. Enviamos el valor del checkbox a tu AuthContext
@@ -119,7 +117,8 @@ export const Login = () => {
     setBadgeMessage({ type: "", text: "" });
 
     try {
-      await axiosInstance.post("http://127.0.0.1:8000/api/forgot-password", {
+      // await axiosInstance.post("http://127.0.0.1:8000/api/forgot-password", {
+      await axiosInstance.post("http://erp-api.test/api/forgot-password", {
         email: data.resetEmail,
       });
 
@@ -179,7 +178,7 @@ export const Login = () => {
                     Panel de administración
                   </span>
                 </div>
-                <h2 className="login-title">Iniciar Sesión</h2>
+                <h2 className="login-title text-center">Iniciar Sesión</h2>
 
                 {/* Input de Usuario */}
                 <div className="input-group-custom">

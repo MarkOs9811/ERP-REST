@@ -24,7 +24,7 @@ export function FormEditarCompra({
   }, [data, setValue]);
 
   return (
-    <form className="p-2" onSubmit={onSubmit}>
+    <form className="p-4" onSubmit={onSubmit}>
       <div className="row g-3">
         {/* Tipo de Compra */}
         <div className="col-md-12 col-sm-12">

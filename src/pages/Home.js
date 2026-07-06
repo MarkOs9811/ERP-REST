@@ -27,8 +27,8 @@ export function Home() {
   });
 
   return (
-    <div className="container-fluid home-shell py-4 py-lg-5">
-      <div className="home-hero mb-4 mb-lg-5">
+    <div className="container-fluid home-shell py-2">
+      <div className="home-hero  mb-4">
         <div className="home-hero-content">
           <span className="home-hero-kicker">Panel ejecutivo</span>
           <h1 className="home-hero-title">Dashboard</h1>

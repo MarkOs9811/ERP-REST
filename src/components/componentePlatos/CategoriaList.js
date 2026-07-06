@@ -249,7 +249,7 @@ export function CategoriaList() {
                   title="Editar Categoría"
                 />
 
-                {categoria.estado === 1 ? (
+                {categoria.estado == 1 ? (
                   <BtnEliminar
                     onClick={() =>
                       handleEliminarCat(categoria.id, categoria.nombre)

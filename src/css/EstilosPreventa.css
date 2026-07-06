@@ -108,15 +108,6 @@ body.dark-theme .btn-seleccionado {
   
 }
 
-
-body.dark-theme .card-platillo,
-body.dark-theme .card {
-  background-color: #212b36 !important;
-  color: #cfd8dc !important;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.25) !important;
-  border: none !important;
-}
-
 body.dark-theme .card-platillo:hover {
   background-color: #313a46 !important;
 }

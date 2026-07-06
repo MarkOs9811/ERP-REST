@@ -180,14 +180,18 @@ export function Ventas() {
                   <div className="card-body d-flex flex-column justify-content-center">
                     <div className="d-flex justify-content-between align-items-start mb-2">
                       <p className="fw-bold m-0">Ventas Hoy</p>
-                      <button
-                        type="button"
-                        className="btn-guardar"
-                        onClick={() => GetReporteExcel("/reporteVentasHOY")}
-                        title="Descargar Reporte"
-                      >
-                        <FileText size={22} />
-                      </button>
+                      <div>
+                        {" "}
+                        <button
+                          type="button"
+                          className="btn-informativo"
+                          onClick={() => GetReporteExcel("/reporteVentasHOY")}
+                          title="Descargar Reporte"
+                        >
+                          <FileText />
+                          Reporte
+                        </button>
+                      </div>
                     </div>
                     <p
                       className="totalVentasTitulo mb-0"

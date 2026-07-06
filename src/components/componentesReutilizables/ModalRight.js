@@ -63,13 +63,13 @@ const ModalRight = ({
           <div className="d-flex align-items-center gap-3">
             <button
               type="button"
-              className="btn-close-auto fw-bold shadow-sm d-flex align-items-center justify-content-center"
+              className="btn-cerrar fw-bold shadow-sm d-flex align-items-center justify-content-center"
               aria-label="Close"
               onClick={handleClose}
               title="Cerrar Modal"
               disabled={isLoading} // 🔥 Bloqueamos la X si está cargando
             >
-              <X size={20} />
+              <X />
             </button>
 
             <div className="d-flex flex-column modal-title-wrapper">

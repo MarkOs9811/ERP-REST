@@ -12,14 +12,6 @@ body {
   background: var(--bg-app) !important;
   font-family: inherit;
 }
-
-.contenido > div > div:last-child {
-  background: var(--bg-surface) !important;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--fw-border) !important;
-  overflow: auto;
-}
-
 .content {
   transition: margin-left var(--transition-smooth), width var(--transition-smooth);
   width: 100%;
@@ -38,6 +30,7 @@ body {
 
 /* Cards / stats */
 .card {
+  border:1px solid var(--fw-border) !important;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 

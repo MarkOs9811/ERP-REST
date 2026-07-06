@@ -180,16 +180,14 @@ export function ListaCompras({ data, search }) {
           handleSubmit(onSubmitEdit);
         }}
       >
-        <div className="card-body">
-          <FormEditarCompra
-            watch={watch}
-            setValue={setValue}
-            data={dataCompra}
-            errors={errors}
-            register={register}
-            onSubmit={handleSubmit(onSubmitEdit)}
-          />
-        </div>
+        <FormEditarCompra
+          watch={watch}
+          setValue={setValue}
+          data={dataCompra}
+          errors={errors}
+          register={register}
+          onSubmit={handleSubmit(onSubmitEdit)}
+        />
       </ModalRight>
     </div>
   );

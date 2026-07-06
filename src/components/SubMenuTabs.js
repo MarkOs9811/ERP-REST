@@ -13,7 +13,6 @@ import {
   Settings2,
   ChartArea,
   BikeIcon,
-  TargetIcon,
   GiftIcon,
   MessageCircleHeart,
 } from "lucide-react";

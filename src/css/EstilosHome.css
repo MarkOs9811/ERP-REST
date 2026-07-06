@@ -52,7 +52,7 @@
 .card-difuminada {
     position: relative;
     background-color: var(--bg-surface);
-    border: 1px solid var(--outline-strong);
+    border: 1px solid var(--fw-border);
     border-radius: 14px;
     box-shadow: none;
 }
@@ -487,74 +487,15 @@ body.dark-theme .ai-response {
     letter-spacing: 0.05em;
 }
 
-.badge-success {
-    background-color: #d1fae5;
-    color: #065f46;
-}
-
-.badge-warning {
-    background-color: #fef3c7;
-    color: #78350f;
-}
-
-.badge-danger {
-    background-color: #fee2e2;
-    color: #7f1d1d;
-}
-
-.badge-info {
-    background-color: #dbeafe;
-    color: #1e40af;
-}
-
-body.dark-theme .badge-success {
-    background-color: rgba(16, 185, 129, 0.2);
-    color: #86efac;
-}
-
-body.dark-theme .badge-warning {
-    background-color: rgba(245, 158, 11, 0.2);
-    color: #fcd34d;
-}
-
-body.dark-theme .badge-danger {
-    background-color: rgba(239, 68, 68, 0.2);
-    color: #fca5a5;
-}
-
-body.dark-theme .badge-info {
-    background-color: rgba(59, 130, 246, 0.2);
-    color: #93c5fd;
-}
-
 /* ================================
    HOME REDESIGN - MINIMAL IMPACT
 ================================= */
-
-.home-shell {
-    --home-bg-1: var(--bg-app);
-    --home-bg-2: var(--bg-app);
-    --home-card: #ffffff;
-    --home-card-border: var(--fw-border);
-    --home-text-main: #1f2430;
-    --home-text-muted: var(--text-muted);
-    --home-accent: #f05a3e;
-    --home-accent-dark: #b73a21;
-    --home-accent-soft: rgba(240, 90, 62, 0.08);
-    background: transparent;
-    min-height: auto;
-    border-radius: 0;
-    border: none;
-    padding-left: 0;
-    padding-right: 0;
-}
-
 .home-hero {
     position: relative;
     overflow: hidden;
     padding: 1.3rem 1.25rem;
     border-radius: var(--radius-md);
-    border: 1px solid var(--outline-strong);
+    border: 1px solid var(--fw-border);
     background: var(--bg-surface);
     box-shadow: none;
 }
@@ -570,7 +511,7 @@ body.dark-theme .badge-info {
     padding: 0.3rem 0.8rem;
     border-radius: 999px;
     background: var(--bg-muted);
-    border: 1px solid var(--outline-strong);
+    border: 1px solid var(--fw-border);
     color: var(--text-muted);
     font-size: 0.72rem;
     font-weight: 700;
@@ -613,7 +554,7 @@ body.dark-theme .badge-info {
 .home-banner-card {
     border-radius: 14px;
     overflow: hidden;
-    border: 1px solid var(--outline-strong);
+    border: 1px solid var(--fw-border);
     background-size: cover;
     background-position: center;
     min-height: 220px;
@@ -645,7 +586,7 @@ body.dark-theme .badge-info {
     padding: 0.5rem 1.2rem;
     font-weight: 700;
     color: #fff;
-    background: linear-gradient(100deg, var(--home-accent), var(--home-accent-dark));
+    background: linear-gradient(100deg, var(--fw-strawberry), var(--fw-strawberry));
     box-shadow: none;
 }
 
@@ -686,28 +627,28 @@ body.dark-theme .badge-info {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid var(--outline-strong);
+    border: 1px solid var(--fw-border);
     background: var(--bg-muted);
 }
 
 .metric-icon-badge--ventas {
     background: var(--bg-muted);
-    border-color: var(--outline-strong);
+    border-color: var(--fw-border);
 }
 
 .metric-icon-badge--mesas {
     background: var(--bg-muted);
-    border-color: var(--outline-strong);
+    border-color: var(--fw-border);
 }
 
 .metric-icon-badge--pedidos {
     background: var(--bg-muted);
-    border-color: var(--outline-strong);
+    border-color: var(--fw-border);
 }
 
 .metric-icon-badge--almacen {
     background: var(--bg-muted);
-    border-color: var(--outline-strong);
+    border-color: var(--fw-border);
 }
 
 @media (max-width: 992px) {

@@ -6,7 +6,6 @@ const productoTransferirSlice = createSlice({
     items: [],
   },
   reducers: {
-    // para agregar un producto o aumetnar en 1
     addItem: (state, action) => {
       const {
         id,
@@ -18,9 +17,19 @@ const productoTransferirSlice = createSlice({
         stock,
       } = action.payload;
       const existingItem = state.items.find((item) => item.id === id);
+      const stockDisponible = Number(stock ?? existingItem?.stock ?? 0);
+
       if (existingItem) {
+        if (stockDisponible > 0 && existingItem.cantidad >= stockDisponible) {
+          return;
+        }
+
         existingItem.cantidad += 1;
       } else {
+        if (stockDisponible <= 0) {
+          return;
+        }
+
         state.items.push({
           id,
           nombre,
@@ -28,8 +37,8 @@ const productoTransferirSlice = createSlice({
           marca,
           descripcion,
           presentacion,
-          precioUnit,
-          stock,
+          precioUnit: Number(precioUnit) || 0,
+          stock: stockDisponible,
         });
       }
     },
@@ -49,6 +58,25 @@ const productoTransferirSlice = createSlice({
       const { id } = action.payload;
       state.items = state.items.filter((item) => item.id !== id);
     },
+    setItemCantidad: (state, action) => {
+      const { id, cantidad } = action.payload;
+      const existingItem = state.items.find((item) => item.id === id);
+
+      if (!existingItem) return;
+
+      const stockDisponible = Number(existingItem.stock) || 0;
+      if (stockDisponible <= 0) {
+        existingItem.cantidad = 1;
+        return;
+      }
+
+      const cantidadNueva = Math.max(
+        1,
+        Math.min(Number(cantidad) || 1, stockDisponible),
+      );
+
+      existingItem.cantidad = cantidadNueva;
+    },
   },
 });
 
@@ -57,5 +85,6 @@ export const {
   removeItem,
   clearProductoSelececcionado,
   removeProductoSeleccionado,
+  setItemCantidad,
 } = productoTransferirSlice.actions;
 export default productoTransferirSlice.reducer;

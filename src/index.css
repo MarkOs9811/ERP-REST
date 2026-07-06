@@ -1,36 +1,39 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 :root {
-  --fw-onyx: #111213;
+  --fw-onyx: #030303;
   --fw-emerald: #16a34a;
   --fw-saffron: #d97706;
-  --fw-strawberry: #dc2626;
-  --fw-informative: #2563eb;
+  --fw-strawberry: #ca2929;
+  --fw-informative: #313131;
+  --fw-desactivar: #000000;
   --fw-white: #ffffff;
 
   --fw-slate-100: #f8fafc;
   --fw-slate-200: #e5e7eb;
   --fw-slate-300: #d1d5db;
-  --fw-slate-400: #9ca3af;
+  --fw-slate-400: #e6e6e6;
   --fw-slate-600: #4b5563;
   --fw-slate-700: #374151;
 
   --bg-emerald-soft: #ecfdf3;
   --bg-saffron-soft: #fff7ed;
   --bg-strawberry-soft: #fef2f2;
-  --bg-informative-soft: #eaf1ff;
+  --bg-informative-soft: #dddfe2;
 
   --brand-primary: var(--fw-onyx);
   --brand-secondary: var(--fw-slate-700);
-  --bg-app: #f6f7f9;
+  --bg-app: #f8f8f8;
   --bg-surface: var(--fw-white);
   --bg-input: var(--fw-white);
   --bg-muted: var(--fw-slate-100);
   --text-main: var(--fw-onyx);
   --text-muted: var(--fw-slate-600);
-  --fw-border: #e5e7eb;
+  --fw-border: #dfdfdf;
   --fw-border-input: var(--fw-slate-300);
   --outline-strong: #c7cdd4;
+
+  --border-card: #e6e6e6;
 
   --glass-bg: transparent;
   --glass-border: transparent;
@@ -44,7 +47,7 @@
   --control-height-sm: 34px;
   --control-height-md: 40px;
   --control-height-lg: 44px;
-  --control-radius: 10px;
+  --control-radius: 22px;
   --table-action-size: 40px;
 
   --radius-sm: 10px;
@@ -63,7 +66,7 @@ body.dark-theme {
   --brand-primary: var(--fw-saffron);
   --brand-secondary: var(--fw-strawberry);
   --bg-app: var(--fw-onyx);
-  --bg-surface: #16181b;
+  --bg-surface: #1313139c;
   --bg-input: #111317;
   --bg-muted: #1f2328;
   --text-main: #f3f4f6;
@@ -76,7 +79,7 @@ body.dark-theme {
   --bg-saffron-soft: rgba(255, 153, 44, 0.16);
   --bg-strawberry-soft: rgba(228, 73, 73, 0.16);
   --bg-informative-soft: rgba(37, 99, 235, 0.18);
-
+--fw-border-card-dark: #2e2e2e;
   --glass-bg: rgba(27, 29, 31, 0.72);
   --glass-border: rgba(255, 255, 255, 0.06);
   --glass-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
@@ -116,12 +119,13 @@ h4,
 h5,
 .titulo-card-especial {
   font-family: 'Inter', sans-serif;
-  font-weight: 700 !important;
+  font-weight: 500 !important;
   color: var(--text-main) !important;
   letter-spacing: -0.01em;
 }
 
 a {
+  font-family: 'Inter', sans-serif;
   color: inherit;
   text-decoration: none;
 }
@@ -133,13 +137,14 @@ a {
 .offcanvas,
 .table {
   border-radius: var(--radius-md) !important;
+  font-family: 'Inter', sans-serif;
 }
 
 .card,
 .dropdown-menu,
 .modal-content,
 .offcanvas {
-  background-color: var(--bg-surface) !important;
+  background-color: white!important;
   border: 1px solid var(--outline-strong) !important;
   color: var(--text-main) !important;
 }
@@ -169,9 +174,9 @@ input[type='number'],
 input[type='search'] {
   background-color: var(--bg-input) !important;
   color: var(--text-main) !important;
-  border: 1px solid var(--outline-strong) !important;
+  border: 1px solid var(--fw-border) !important;
   min-height: var(--control-height-md);
-  padding: 0.72rem 0.95rem !important;
+  padding: 0.55rem 0.95rem !important;
   transition: border-color var(--transition-smooth), box-shadow var(--transition-smooth), background-color var(--transition-smooth);
 }
 
@@ -188,8 +193,7 @@ input::placeholder {
 textarea:focus,
 input:focus {
   border-color: var(--brand-primary) !important;
-  box-shadow: 0 0 0 2px rgba(17, 18, 19, 0.16) !important;
-  outline: none;
+  outline: none!important;
 }
 
 body.dark-theme .form-control:focus,
@@ -267,12 +271,14 @@ button:hover {
 .rdt_TableCell .btn-editar,
 .rdt_TableCell .btn-eliminar,
 .rdt_TableCell .btn-activar,
+.rdt_TableCell .btn-desactivar,
 .rdt_TableCell .btn-generico,
 .rdt_TableCell .btn-informativo,
 .table td .btn-ver,
 .table td .btn-editar,
 .table td .btn-eliminar,
 .table td .btn-activar,
+.table td .btn-desactivar,
 .table td .btn-generico,
 .table td .btn-informativo {
   width: var(--table-action-size) !important;
@@ -292,12 +298,14 @@ button:hover {
 .rdt_TableCell .btn-editar svg,
 .rdt_TableCell .btn-eliminar svg,
 .rdt_TableCell .btn-activar svg,
+.rdt_TableCell .btn-desactivar svg,
 .rdt_TableCell .btn-generico svg,
 .rdt_TableCell .btn-informativo svg,
 .table td .btn-ver svg,
 .table td .btn-editar svg,
 .table td .btn-eliminar svg,
 .table td .btn-activar svg,
+.table td .btn-desactivar svg,
 .table td .btn-generico svg,
 .table td .btn-informativo svg {
   width: 18px;
@@ -305,47 +313,12 @@ button:hover {
   flex-shrink: 0;
 }
 
-.btn-primary,
-.btn-principal,
-.btn-guardar {
-  background-color: var(--brand-primary) !important;
-  color: var(--fw-white) !important;
-  border-color: var(--brand-primary) !important;
-}
-
-body.dark-theme .btn-primary,
-body.dark-theme .btn-principal,
-body.dark-theme .btn-guardar {
-  color: var(--fw-onyx) !important;
-}
-
-.btn-primary:hover,
-.btn-principal:hover,
-.btn-guardar:hover {
-  filter: brightness(1.06);
-  box-shadow: var(--shadow-soft);
-}
-
-.btn-outline-primary,
-.btn-outline-dark,
-.btn-ver {
-  background: transparent !important;
-  color: var(--text-main) !important;
-  border-color: var(--fw-border-input) !important;
-}
-
-.btn-outline-primary:hover,
-.btn-outline-dark:hover,
-.btn-ver:hover {
-  background: var(--bg-muted) !important;
-  color: var(--text-main) !important;
-}
-
 /* Semantic reusable buttons */
 .btn-guardar {
   background: rgb(23, 198, 105) !important;
   color: rgb(21, 32, 27)!important;
   border: 1px solid rgba(23, 198, 104, 0.5) !important;
+  font-size: 0.9rem !important;
 }
 
 .btn-guardar:hover {
@@ -385,9 +358,10 @@ body.dark-theme .btn-guardar {
 }
 
 .btn-cerrar {
-  background: var(--bg-surface) !important;
+  background: var(--bg-surface)!important;
   color: var(--text-main) !important;
   border: 1px solid var(--outline-strong) !important;
+  width:auto;
 }
 
 .btn-cerrar:hover {
@@ -463,30 +437,31 @@ body.dark-theme .btn-guardar {
 .btn-informativo {
   background: var(--bg-surface) !important;
   color: var(--fw-informative) !important;
-  border: 1px solid rgba(37, 99, 235, 0.5) !important;
+  border: 1px solid rgba(56, 56, 56, 0.5) !important;
+  font-size: 0.9rem !important;
 }
 
 .btn-informativo:hover {
   background: var(--bg-informative-soft) !important;
   color: var(--fw-informative) !important;
-  border-color: rgba(37, 99, 235, 0.75) !important;
+border: 1px solid rgba(56, 56, 56, 0.5) !important;
 }
 
 .btn-informativo:active,
 .btn-informativo.active {
   background: rgba(37, 99, 235, 0.2) !important;
   color: var(--fw-informative) !important;
-  border-color: rgba(37, 99, 235, 0.9) !important;
+  border: 1px solid rgba(56, 56, 56, 0.5) !important;
 }
-
-body.dark-theme .btn-informativo {
-  color: #7db2ff !important;
-  border-color: rgba(125, 178, 255, 0.55) !important;
+.btn-desactivar {
+  background: var(--bg-muted) !important;
+  color: var(--fw-desactivar)!important;
+  border: 1px solid rgba(46, 46, 46, 0.5) !important;
 }
-
-body.dark-theme .btn-informativo:hover {
-  background: rgba(125, 178, 255, 0.16) !important;
-  border-color: rgba(125, 178, 255, 0.8) !important;
+.btn-desactivar:hover {
+  background: var(--fw-desactivar)!important;
+  color: white!important;
+  border: 1px solid rgba(46, 46, 46, 0.5) !important;
 }
 
 /* Switches */
@@ -536,7 +511,9 @@ body.dark-theme .btn-informativo:hover {
 .nav-pills .show > .nav-link {
   background-color: var(--brand-primary) !important;
 }
-
+/* ========================================================================
+TEMA DARK=
+========================================================================= */
 body.dark-theme .bg-white,
 body.dark-theme .bg-light {
   background-color: var(--bg-surface) !important;
@@ -563,6 +540,11 @@ body.dark-theme .table > thead > tr > th {
   border-color: var(--fw-border) !important;
 }
 
+body.dark-theme .card{
+  background-color: var(--bg-surface) !important;
+  color: var(--text-main) !important;
+  border: 1px solid var(--fw-border-card-dark) !important;
+}
 body.dark-theme .card-header,
 body.dark-theme .card-footer,
 body.dark-theme .modal-header,

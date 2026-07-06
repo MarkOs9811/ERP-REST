@@ -10,7 +10,6 @@ export function PlatoEditar({ dataPlato, handleCloseModal }) {
   const [categorias, setCategorias] = useState([]);
   const [fotoFile, seetFotoFile] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const BASE_URL = process.env.REACT_APP_BASE_URL;
   const {
     register,
     handleSubmit,
@@ -39,7 +38,7 @@ export function PlatoEditar({ dataPlato, handleCloseModal }) {
       }
     };
     getCategoria();
-  }, [dataPlato]);
+  }, [dataPlato, setValue]);
 
   // const onSubmit = async (data) => {
   //   if (isSubmitting) return; // Evitar múltiples envíos
@@ -146,9 +145,10 @@ export function PlatoEditar({ dataPlato, handleCloseModal }) {
             style={{ cursor: "pointer" }}
           >
             <img
-              src={fotoPreview || `${BASE_URL}/storage/${dataPlato.foto}`}
+              src={fotoPreview || `${dataPlato.foto_url}`}
               width={150}
               className="rounded m-auto"
+              alt="Foto del plato"
             />
             <br></br>
             <input
@@ -172,7 +172,10 @@ export function PlatoEditar({ dataPlato, handleCloseModal }) {
 
       <div className="row">
         <div className="col-6">
-          <div className="form-floating mb-3">
+          <div className="mb-3">
+            <label htmlFor="categoria" className="form-label">
+              Categoria
+            </label>
             <select
               className="form-select"
               id="categoria"
@@ -187,14 +190,18 @@ export function PlatoEditar({ dataPlato, handleCloseModal }) {
                 </option>
               ))}
             </select>
-            <label htmlFor="categoria">Categoría</label>
             {errors.categoria && (
-              <div className="invalid-feedback">{errors.categoria.message}</div>
+              <p className="text-danger small mb-0 mt-1">
+                {errors.categoria.message}
+              </p>
             )}
           </div>
         </div>
         <div className="col-6">
-          <div className="form-floating mb-3">
+          <div className="mb-3">
+            <label htmlFor="nombre" className="form-label">
+              Nombre Plato
+            </label>
             <input
               type="text"
               className="form-control"
@@ -204,15 +211,19 @@ export function PlatoEditar({ dataPlato, handleCloseModal }) {
               })}
               defaultValue={dataPlato.nombre || ""}
             />
-            <label htmlFor="nombre">Nombre Plato</label>
             {errors.nombre && (
-              <div className="invalid-feedback">{errors.nombre.message}</div>
+              <p className="text-danger small mb-0 mt-1">
+                {errors.nombre.message}
+              </p>
             )}
           </div>
         </div>
       </div>
 
-      <div className="form-floating mb-3">
+      <div className="mb-3">
+        <label htmlFor="precio" className="form-label">
+          Precio S/.
+        </label>
         <input
           type="text"
           className="form-control"
@@ -224,12 +235,14 @@ export function PlatoEditar({ dataPlato, handleCloseModal }) {
           onInput={handlePrecioInput}
           defaultValue={dataPlato.precio || ""}
         />
-        <label htmlFor="precio">Precio S/.</label>
         {errors.precio && (
-          <div className="invalid-feedback">{errors.precio.message}</div>
+          <p className="text-danger small mb-0 mt-1">{errors.precio.message}</p>
         )}
       </div>
-      <div className="form-floating mb-3">
+      <div className="mb-3">
+        <label htmlFor="descripcion" className="form-label">
+          Descripcion
+        </label>
         <input
           type="text"
           className="form-control"
@@ -239,9 +252,10 @@ export function PlatoEditar({ dataPlato, handleCloseModal }) {
           })}
           defaultValue={dataPlato.descripcion || ""}
         />
-        <label htmlFor="descripcion">Descripcion</label>
         {errors.descripcion && (
-          <div className="invalid-feedback">{errors.descripcion.message}</div>
+          <p className="text-danger small mb-0 mt-1">
+            {errors.descripcion.message}
+          </p>
         )}
       </div>
       <div className="d-flex justify-content-center mt-4">

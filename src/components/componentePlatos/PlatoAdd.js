@@ -33,7 +33,7 @@ export function PlatoAdd({ handleCloseModal }) {
     const getCategoria = async () => {
       try {
         const response = await axiosInstance.get(
-          "/gestionPlatos/getCategoriaTrue"
+          "/gestionPlatos/getCategoriaTrue",
         );
         if (response.data.success) {
           setCategorias(response.data.data);
@@ -60,7 +60,7 @@ export function PlatoAdd({ handleCloseModal }) {
     try {
       const response = await axiosInstance.post(
         "/gestionPlatos/addPlatos",
-        formDataToSend
+        formDataToSend,
       );
 
       if (response.data.success) {
@@ -155,9 +155,6 @@ export function PlatoAdd({ handleCloseModal }) {
               Categoría
             </label>
             <div className="input-group input-group-sm">
-              <span className="input-group-text bg-light border-end-0 text-muted">
-                <Tags size={16} />
-              </span>
               <select
                 className={`form-select border-start-0 shadow-none ${
                   errors.categoria ? "is-invalid" : ""
@@ -187,9 +184,6 @@ export function PlatoAdd({ handleCloseModal }) {
               Nombre del Plato
             </label>
             <div className="input-group input-group-sm">
-              <span className="input-group-text bg-light border-end-0 text-muted">
-                <Utensils size={16} />
-              </span>
               <input
                 type="text"
                 className={`form-control border-start-0 shadow-none ${
@@ -212,15 +206,12 @@ export function PlatoAdd({ handleCloseModal }) {
               Precio Unitario
             </label>
             <div className="input-group input-group-sm">
-              <span className="input-group-text bg-light border-end-0 text-muted">
-                S/
-              </span>
               <input
                 type="text"
                 className={`form-control border-start-0 shadow-none ${
                   errors.precio ? "is-invalid" : ""
                 }`}
-                placeholder="0.00"
+                placeholder="S/. 0.00"
                 {...register("precio", {
                   required: "Requerido",
                   validate: validatePrecio,
@@ -241,9 +232,6 @@ export function PlatoAdd({ handleCloseModal }) {
               Descripción
             </label>
             <div className="input-group input-group-sm">
-              <span className="input-group-text bg-light border-end-0 text-muted">
-                <AlignLeft size={16} />
-              </span>
               <input
                 type="text"
                 className={`form-control border-start-0 shadow-none ${
