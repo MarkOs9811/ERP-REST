@@ -125,7 +125,7 @@ export function CombosList() {
 
   return (
     <div className="card  h-100">
-      <div className="card-header border-bottom d-flex justify-content-between align-items-center mb-2">
+      <div className="card-header  d-flex justify-content-between align-items-center mb-2">
         <h5 className="mb-0">Combos</h5>
         <div className="d-flex align-items-center gap-2">
           <div className="d-flex flex-wrap">
@@ -169,7 +169,7 @@ export function CombosList() {
         ) : (
           <div className="row d-flex">
             {visibleCombos.map((combo) => (
-              <div className="col-md-3 mb-3" key={combo.id}>
+              <div className="col-md-2 mb-3" key={combo.id}>
                 <div className="card h-100 p-0 m-0 border position-relative overflow-hidden">
                   {/* Overlay bloqueado si combo está inactivo */}
                   {combo.estado == 0 && (

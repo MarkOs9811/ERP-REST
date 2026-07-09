@@ -117,7 +117,7 @@ export function Inventario() {
               </button>
 
               <button
-                className="btn btn-dark px-3"
+                className="btn btn-outline-dark px-3"
                 onClick={() => navigate("/ventas/solicitud/realizarSolicitud")}
               >
                 <Plus size={18} />

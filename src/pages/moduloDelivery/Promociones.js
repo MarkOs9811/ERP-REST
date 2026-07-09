@@ -76,19 +76,19 @@ export function Promociones() {
 
   return (
     <div className="container-fluid p-0">
-      <div className="card shadow-sm border-0 rounded-4">
+      <div className="card   rounded-4">
         {/* HEADER DE LA VISTA */}
         <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-3">
           <div className="d-flex align-items-center">
             <h4 className="card-title mb-0 titulo-card-especial">
               Promociones App
-              <span className="badge-header">
+              <span className="badge-header ms-2 ">
                 {promociones?.length || 0} registradas
               </span>
             </h4>
           </div>
 
-          <div className="d-flex flex-wrap gap-2 mt-3 mt-md-0 align-items-center ms-auto">
+          <div className="d-flex  gap-2 mt-3 mt-md-0 align-items-center ms-auto">
             <div className="header-search-container">
               <Search className="search-icon" />
               <input
@@ -98,19 +98,22 @@ export function Promociones() {
               />
             </div>
 
-            <button className="btn btn-outline-dark px-3" title="Reporte">
-              <FileText size={18} />
+            <button
+              className="btn btn-outline-dark px-3 d-flex gap-2"
+              title="Reporte"
+            >
+              <FileText size={20} />
               <span className="d-none d-sm-inline">Reporte</span>
             </button>
 
             {/* BOTÓN QUE ABRE EL MODAL */}
             <button
-              className="btn btn-dark px-3"
+              className="btn btn-dark px-3 d-flex gap-2"
               title="Crear Promoción"
               onClick={() => setIsModalOpen(true)}
             >
-              <Plus size={18} />
-              <span className="d-none d-sm-inline">Crear Promo</span>
+              <Plus size={20} />
+              <span className="">Crear </span>
             </button>
           </div>
         </div>
@@ -123,7 +126,7 @@ export function Promociones() {
                 promociones.map((promo, index) => (
                   <div className="col-12 col-md-6 col-xl-3" key={promo.id}>
                     <div
-                      className={`card h-100 promo-card shadow-sm border-secondary overflow-hidden animacion-cascada ${
+                      className={`card h-100 promo-card  border-secondary overflow-hidden animacion-cascada ${
                         promo.estado === 1 ? "" : "inactiva"
                       }`}
                       style={{ animationDelay: `${index * 0.1}s` }}

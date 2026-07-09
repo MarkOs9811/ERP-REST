@@ -103,8 +103,8 @@ const BannerEditor = ({
   };
 
   return (
-    <form className="card p-3 rounded-5" onSubmit={handleSubmit(onSubmit)}>
-      <div className="editor-header">
+    <form className="card p-3 " onSubmit={handleSubmit(onSubmit)}>
+      <div className="card-header editor-header">
         <h3 className="editor-title">
           {isEditing ? "Editando Banner" : "Editor de Diseño"}
         </h3>
@@ -126,7 +126,7 @@ const BannerEditor = ({
         </div>
       </div>
 
-      <div className="row g-3">
+      <div className="card-body row g-3">
         {/* Información de Contenido */}
         <div className="col-md-6">
           <label className="form-label">Etiqueta (Tag)</label>
@@ -294,7 +294,7 @@ const BannerEditor = ({
           )}
           <button
             type="submit"
-            className={` ${isEditing ? "btn-activar w-50" : "btn-guardar w-100"} py-3 rounded-4 fw-bold`}
+            className={` ${isEditing ? "btn-activar " : "btn-guardar "}   fw-bold`}
           >
             {isEditing ? (
               <>

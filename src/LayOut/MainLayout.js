@@ -30,7 +30,6 @@ import { ReportesFinanzas } from "../pages/moduloFinanzas/ReportesFinanzas";
 import { AjustesFinanzas } from "../pages/moduloFinanzas/AjustesFinanzas";
 import { Presupuestos } from "../pages/moduloFinanzas/Presupuestos";
 import { InformesFinancieros } from "../pages/moduloFinanzas/InformesFinancieros";
-import { MenuPlato } from "../pages/MenuPlato";
 import { Eventos } from "../pages/moduloIncidencias/Eventos";
 import { AreasCargo } from "../pages/moduloAreasCargos/AreasCargos";
 import { Proveedores } from "../pages/moduloAlmacen/Proveedores";
@@ -83,6 +82,9 @@ import { DashboardCliente } from "../pages/moduloClientes/DashboardCliente";
 import { Clientes } from "../pages/moduloClientes/Clientes";
 import { FeedBack } from "../pages/moduloClientes/FeedBacks";
 import { Fidelizacion } from "../pages/moduloClientes/Fidelización";
+import { Platos } from "../pages/moduloPlatos/Platos";
+import { Combos } from "../pages/moduloPlatos/Combos";
+import { CategoriaPlatosCombos } from "../pages/moduloPlatos/CategoriaPlatosCombos";
 
 export const MainLayout = () => {
   // 1. OBTENCIÓN DE ESTADOS Y DATOS LOCALES
@@ -225,6 +227,32 @@ export const MainLayout = () => {
                       allowedRoles={["delivery", "conductor", "administrador"]}
                     >
                       <MisEntregas />
+                    </PrivateRoute>
+                  }
+                />
+                {/* RUTA PARA PLATOS Y CATEGORIAS
+                 */}
+                <Route
+                  path="/platos"
+                  element={
+                    <PrivateRoute allowedRoles={["ventas", "administrador"]}>
+                      <Platos />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/platos/combos"
+                  element={
+                    <PrivateRoute allowedRoles={["ventas", "administrador"]}>
+                      <Combos />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/platos/categorias"
+                  element={
+                    <PrivateRoute allowedRoles={["ventas", "administrador"]}>
+                      <CategoriaPlatosCombos />
                     </PrivateRoute>
                   }
                 />
@@ -696,16 +724,6 @@ export const MainLayout = () => {
                     }
                   />
                 </Route>
-
-                {/* Platos */}
-                <Route
-                  path="/platos"
-                  element={
-                    <PrivateRoute allowedRoles={["platos", "administrador"]}>
-                      <MenuPlato />
-                    </PrivateRoute>
-                  }
-                />
 
                 {/* RUTAS PARA MODULO FINANZAS */}
                 <Route path="/finanzas">

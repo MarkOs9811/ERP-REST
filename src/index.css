@@ -79,7 +79,7 @@ body.dark-theme {
   --bg-saffron-soft: rgba(255, 153, 44, 0.16);
   --bg-strawberry-soft: rgba(228, 73, 73, 0.16);
   --bg-informative-soft: rgba(37, 99, 235, 0.18);
---fw-border-card-dark: #2e2e2e;
+  --fw-border-card-dark: #2e2e2e;
   --glass-bg: rgba(27, 29, 31, 0.72);
   --glass-border: rgba(255, 255, 255, 0.06);
   --glass-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
@@ -130,7 +130,7 @@ a {
   text-decoration: none;
 }
 
-/* Structural surfaces: refined rounded corners, not overly pill-shaped */
+/* Structural surfaces */
 .card,
 .dropdown-menu,
 .modal-content,
@@ -144,7 +144,7 @@ a {
 .dropdown-menu,
 .modal-content,
 .offcanvas {
-  background-color: white!important;
+  background-color: white !important;
   border: 1px solid var(--outline-strong) !important;
   color: var(--text-main) !important;
 }
@@ -193,7 +193,7 @@ input::placeholder {
 textarea:focus,
 input:focus {
   border-color: var(--brand-primary) !important;
-  outline: none!important;
+  outline: none !important;
 }
 
 body.dark-theme .form-control:focus,
@@ -203,7 +203,7 @@ body.dark-theme input:focus {
   box-shadow: 0 0 0 2px rgba(255, 153, 44, 0.22) !important;
 }
 
-/* Table header search pattern (generic across modules) */
+/* Table header search pattern */
 .header-search-container {
   position: relative;
   display: flex;
@@ -246,13 +246,28 @@ body.dark-theme .header-search-container .form-control:focus {
   color: var(--text-muted);
 }
 
-/* Buttons */
+/* Base Buttons */
 .btn,
 button {
   border-radius: var(--radius-pill) !important;
   font-weight: 600 !important;
-  min-height: var(--control-height-md);
+  min-height: var(--control-height-md) !important;
+  min-width: var(--control-height-md) !important;
+
+  /* --- MAGIA DE ALINEACIÓN --- */
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.5rem;
+  /* Separación automática entre ícono y texto */
+
   transition: transform var(--transition-smooth), background-color var(--transition-smooth), color var(--transition-smooth), box-shadow var(--transition-smooth), border-color var(--transition-smooth);
+}
+
+/* Evitar que los íconos se aplasten si el botón tiene un texto largo */
+.btn svg,
+button svg {
+  flex-shrink: 0 !important;
 }
 
 .badge,
@@ -266,7 +281,7 @@ button:hover {
   transform: none;
 }
 
-/* Table action buttons: perfect circles with uniform size */
+/* AQUÍ ESTÁ LA MAGIA HERMANO: Botones dinámicos para la tabla sin clases extra */
 .rdt_TableCell .btn-ver,
 .rdt_TableCell .btn-editar,
 .rdt_TableCell .btn-eliminar,
@@ -281,19 +296,23 @@ button:hover {
 .table td .btn-desactivar,
 .table td .btn-generico,
 .table td .btn-informativo {
-  width: var(--table-action-size) !important;
-  height: var(--table-action-size) !important;
   min-width: var(--table-action-size) !important;
+  /* 40px como base para forzar el círculo */
   min-height: var(--table-action-size) !important;
-  padding: 0 !important;
-  border-radius: 50% !important;
+  width: auto !important;
+  /* Si hay texto, lo deja estirarse */
+  height: auto !important;
+  padding: 0 10px !important;
+  /* Da aire al texto, pero no deforma a un ícono normal */
+  border-radius: var(--radius-pill) !important;
+  /* 9999px hace círculos los iconos y píldoras los textos */
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
   line-height: 1 !important;
-  aspect-ratio: 1 / 1;
 }
 
+/* Control estricto del SVG para que no expanda el botón si es solo ícono */
 .rdt_TableCell .btn-ver svg,
 .rdt_TableCell .btn-editar svg,
 .rdt_TableCell .btn-eliminar svg,
@@ -308,21 +327,21 @@ button:hover {
 .table td .btn-desactivar svg,
 .table td .btn-generico svg,
 .table td .btn-informativo svg {
-  width: 18px;
-  height: 18px;
-  flex-shrink: 0;
+  width: 18px !important;
+  height: 18px !important;
+  flex-shrink: 0 !important;
 }
 
 /* Semantic reusable buttons */
 .btn-guardar {
   background: rgb(23, 198, 105) !important;
-  color: rgb(21, 32, 27)!important;
+  color: rgb(21, 32, 27) !important;
   border: 1px solid rgba(23, 198, 104, 0.5) !important;
   font-size: 0.9rem !important;
 }
 
 .btn-guardar:hover {
-  background: rgb(21, 226, 114)!important;
+  background: rgb(21, 226, 114) !important;
   color: rgb(21, 32, 27) !important;
   border-color: rgba(23, 198, 104, 0.75) !important;
 }
@@ -339,6 +358,7 @@ button:hover {
   background: var(--bg-surface) !important;
   color: var(--fw-emerald) !important;
   border: 1px solid rgba(22, 163, 74, 0.5) !important;
+  font-size: 0.9rem !important;
 }
 
 .btn-activar:hover,
@@ -358,10 +378,9 @@ button:hover {
 }
 
 .btn-cerrar {
-  background: var(--bg-surface)!important;
+  background: var(--bg-surface) !important;
   color: var(--text-main) !important;
   border: 1px solid var(--outline-strong) !important;
-  width:auto;
 }
 
 .btn-cerrar:hover {
@@ -444,7 +463,7 @@ button:hover {
 .btn-informativo:hover {
   background: var(--bg-informative-soft) !important;
   color: var(--fw-informative) !important;
-border: 1px solid rgba(56, 56, 56, 0.5) !important;
+  border: 1px solid rgba(56, 56, 56, 0.5) !important;
 }
 
 .btn-informativo:active,
@@ -453,14 +472,16 @@ border: 1px solid rgba(56, 56, 56, 0.5) !important;
   color: var(--fw-informative) !important;
   border: 1px solid rgba(56, 56, 56, 0.5) !important;
 }
+
 .btn-desactivar {
   background: var(--bg-muted) !important;
-  color: var(--fw-desactivar)!important;
+  color: var(--fw-desactivar) !important;
   border: 1px solid rgba(46, 46, 46, 0.5) !important;
 }
+
 .btn-desactivar:hover {
-  background: var(--fw-desactivar)!important;
-  color: white!important;
+  background: var(--fw-desactivar) !important;
+  color: white !important;
   border: 1px solid rgba(46, 46, 46, 0.5) !important;
 }
 
@@ -483,7 +504,7 @@ border: 1px solid rgba(56, 56, 56, 0.5) !important;
   color: var(--text-main) !important;
 }
 
-.table > :not(caption) > * > * {
+.table> :not(caption)>*>* {
   border-color: var(--fw-border) !important;
 }
 
@@ -508,11 +529,12 @@ border: 1px solid rgba(56, 56, 56, 0.5) !important;
 }
 
 .nav-pills .nav-link.active,
-.nav-pills .show > .nav-link {
+.nav-pills .show>.nav-link {
   background-color: var(--brand-primary) !important;
 }
+
 /* ========================================================================
-TEMA DARK=
+TEMA DARK
 ========================================================================= */
 body.dark-theme .bg-white,
 body.dark-theme .bg-light {
@@ -530,21 +552,22 @@ body.dark-theme .text-muted {
 }
 
 body.dark-theme .table-light,
-body.dark-theme .table-light > th,
-body.dark-theme .table-light > td,
-body.dark-theme .table > :not(caption) > * > .table-light,
-body.dark-theme .table > thead,
-body.dark-theme .table > thead > tr > th {
+body.dark-theme .table-light>th,
+body.dark-theme .table-light>td,
+body.dark-theme .table> :not(caption)>*>.table-light,
+body.dark-theme .table>thead,
+body.dark-theme .table>thead>tr>th {
   background-color: var(--bg-muted) !important;
   color: var(--text-main) !important;
   border-color: var(--fw-border) !important;
 }
 
-body.dark-theme .card{
+body.dark-theme .card {
   background-color: var(--bg-surface) !important;
   color: var(--text-main) !important;
   border: 1px solid var(--fw-border-card-dark) !important;
 }
+
 body.dark-theme .card-header,
 body.dark-theme .card-footer,
 body.dark-theme .modal-header,

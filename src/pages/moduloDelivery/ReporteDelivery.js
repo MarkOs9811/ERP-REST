@@ -70,10 +70,10 @@ export function ReporteDelivery() {
   return (
     <div className="container-fluid ">
       <div className="card">
-        <div className="card-header">
-          <h3>Reporte de Delivery</h3>
+        <div className="card-header border-0">
+          <h4>Reporte de Delivery</h4>
         </div>
-        <div className="card-body">
+        <div className="card-body p-3 ">
           <FormularioReporteClasico
             titulo="Reporte de Delivery"
             onSubmit={handleReporte1}

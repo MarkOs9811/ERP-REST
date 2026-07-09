@@ -33,7 +33,7 @@ export function Fidelizacion() {
   };
 
   return (
-    <div className="card border-0">
+    <div className="card ">
       <div className="card-header">
         <BannerFidelizacion
           botonAction={"crear"}

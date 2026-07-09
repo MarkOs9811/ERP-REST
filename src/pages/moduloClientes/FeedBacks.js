@@ -18,7 +18,7 @@ export function FeedBack() {
   const indicadores = respuestaIndicadores.data || {};
 
   return (
-    <div className="card border-0">
+    <div className="card ">
       <div className="card-header">
         <div>
           <h4 className="fw-bold text-fw-main mb-1">FeedBacks</h4>

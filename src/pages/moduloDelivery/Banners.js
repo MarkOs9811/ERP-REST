@@ -86,7 +86,7 @@ const Banner = () => {
   return (
     <div className="banner-generator-container p-2">
       <div className="container-fluid">
-        <div className="row mb-4">
+        <div className="row ">
           <div className="col-12">
             <h4 className="generator-title">Generador de Banners</h4>
             <p className="generator-subtitle">

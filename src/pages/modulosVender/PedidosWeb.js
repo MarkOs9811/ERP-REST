@@ -186,7 +186,7 @@ export function PedidosWeb() {
             colError: isErrorListos,
           },
         ].map(({ key, title, border, icon, colLoading, colError }) => (
-          <div key={key} className="kanban-col">
+          <div key={key} className="card kanban-col py-2">
             <div
               className=" kanban-column flex-grow-1 h-100 d-flex flex-column bg-white"
               style={{

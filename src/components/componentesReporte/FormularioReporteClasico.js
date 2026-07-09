@@ -101,7 +101,7 @@ export function FormularioReporteClasico({
           <div className="card-footer bg-transparent border-top d-flex justify-content-end">
             <button
               type="submit"
-              className="btn btn-primary px-3"
+              className="btn-generico px-3"
               disabled={isLoading}
             >
               {isLoading ? (

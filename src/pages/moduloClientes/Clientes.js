@@ -33,7 +33,7 @@ export function Clientes() {
     busqueda || filtros.fechaDesde || filtros.fechaHasta;
 
   return (
-    <div className="card border-0">
+    <div className="card">
       <div className="card-header d-flex flex-wrap gap-3 align-items-center">
         <div>
           <h4 className="fw-bold text-fw-main mb-1">Lista de clientes</h4>
@@ -142,7 +142,7 @@ export function Clientes() {
         </div>
       )}
 
-      <div className="card-body px-3">
+      <div className="card-body p-0">
         <ListaClientes busqueda={busqueda} filtros={filtros} />
       </div>
     </div>

@@ -138,7 +138,7 @@ export function ListaPedidosAsignados() {
           {row.estado_pedido === 54 && (
             <>
               <button
-                className="btn-principal my-2 me-2" // Añadí 'me-2' para separar los botones si están en la misma línea
+                className="btn btn-outline-dark my-2 me-2" // Añadí 'me-2' para separar los botones si están en la misma línea
                 onClick={() => {
                   setDataPedido(row);
                   setModalAsignarRider(true);
@@ -147,7 +147,7 @@ export function ListaPedidosAsignados() {
                 Cambiar
               </button>
               <button
-                className="btn-ver my-2"
+                className="btn-eliminar px-3"
                 onClick={() => {
                   setModalQuestion(true);
                   setDataPedido(row);

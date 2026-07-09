@@ -86,13 +86,15 @@ const BannerList = ({ onEdit }) => {
 
   return (
     <>
-      <div className="banner-list-card">
-        <h4 className="fw-bold mb-4 d-flex align-items-center gap-2">
-          <LucideIcons.LayoutGrid size={20} />
-          Banners Activos
-        </h4>
+      <div className="card  p-3">
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <h4 className="fw-bold mb-2 d-flex align-items-center gap-2">
+            <LucideIcons.LayoutGrid size={20} />
+            Banners Activos
+          </h4>
+        </div>
 
-        <div className="list-group list-group-flush">
+        <div className="card-body list-group list-group-flush">
           {Array.isArray(banners) && banners.length > 0 ? (
             banners.map((banner) => (
               <div
@@ -120,14 +122,6 @@ const BannerList = ({ onEdit }) => {
                 </div>
 
                 <div className="banner-actions d-flex align-items-center gap-2">
-                  {/* Botón Editar */}
-                  <button
-                    className="btn-editar btn-sm rounded-3 border-0 bg-warning-subtle text-warning"
-                    onClick={() => onEdit(banner)}
-                  >
-                    <LucideIcons.Edit2 size={16} />
-                  </button>
-
                   {/* Switch de Estado */}
                   <div className="form-check form-switch m-0">
                     <input
@@ -147,12 +141,16 @@ const BannerList = ({ onEdit }) => {
                       }
                     />
                   </div>
+                  {/* Botón Editar */}
+                  <button
+                    className="btn-editar  "
+                    onClick={() => onEdit(banner)}
+                  >
+                    <LucideIcons.Edit2 size={16} />
+                  </button>
 
                   {/* Botón Eliminar (Llama al modal) */}
-                  <button
-                    className="btn-eliminar btn-sm rounded-3 border-0 bg-danger-subtle text-danger"
-                    onClick={() => openDeleteModal(banner)}
-                  >
+                  <button className="btn-eliminar ">
                     <LucideIcons.Trash2 size={16} />
                   </button>
                 </div>

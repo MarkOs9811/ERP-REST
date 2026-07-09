@@ -134,14 +134,14 @@ export function PlatoEditar({ dataPlato, handleCloseModal }) {
   });
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="p-4">
-      <div className="card d-flex bg-transparent">
+      <div className="card d-flex bg-transparent p-3 mb-3">
         <label htmlFor="foto" className="form-label">
           Foto Plato
         </label>
         <div className="mb-4">
           <div
             {...getRootProps()}
-            className="dropzone border rounded p-4 text-center"
+            className="dropzone  rounded p-4 text-center"
             style={{ cursor: "pointer" }}
           >
             <img
@@ -162,7 +162,7 @@ export function PlatoEditar({ dataPlato, handleCloseModal }) {
                 Haz clic o arrastra para cargar el logo
               </p>
             )}
-            <button type="button" className="btn btn-outline-primary mt-2">
+            <button type="button" className="btn btn-outline-dark mt-2">
               Seleccionar archivo
             </button>
           </div>
@@ -258,10 +258,10 @@ export function PlatoEditar({ dataPlato, handleCloseModal }) {
           </p>
         )}
       </div>
-      <div className="d-flex justify-content-center mt-4">
+      <div className="d-flex justify-content-center mt-4 gap-2">
         <button
           type="button"
-          className="btn-cerrar-modal mx-3"
+          className="btn-cerrar px-3"
           onClick={handleCloseModal}
         >
           Cerrar

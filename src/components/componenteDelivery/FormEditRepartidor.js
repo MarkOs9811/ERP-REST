@@ -77,12 +77,13 @@ export function FormEditRepartidor({ onClose, repartidor }) {
       <div className="row g-3 mb-4">
         <div className="col-12">
           <label className="form-label fw-medium text-dark small">
-            Nombres
-          </label>
-          <div className="input-group shadow-sm">
-            <span className="input-group-text bg-white">
+            <span className="">
               <User size={16} className="text-muted" />
             </span>
+            Nombres
+          </label>
+
+          <div className="input-group ">
             <input
               type="text"
               className={`form-control ${errors.nombres ? "is-invalid" : ""}`}
@@ -97,12 +98,12 @@ export function FormEditRepartidor({ onClose, repartidor }) {
 
         <div className="col-12">
           <label className="form-label fw-medium text-dark small">
-            Apellidos
-          </label>
-          <div className="input-group shadow-sm">
-            <span className="input-group-text bg-white">
+            <span className="">
               <User size={16} className="text-muted" />
             </span>
+            Apellidos
+          </label>
+          <div className="input-group ">
             <input
               type="text"
               className={`form-control ${errors.apellidos ? "is-invalid" : ""}`}
@@ -121,7 +122,7 @@ export function FormEditRepartidor({ onClose, repartidor }) {
           <label className="form-label fw-medium text-dark small">
             DNI / Documento
           </label>
-          <div className="input-group shadow-sm">
+          <div className="input-group ">
             <span className="input-group-text bg-white">
               <Hash size={16} className="text-muted" />
             </span>
@@ -146,7 +147,7 @@ export function FormEditRepartidor({ onClose, repartidor }) {
           <label className="form-label fw-medium text-dark small">
             Teléfono
           </label>
-          <div className="input-group shadow-sm">
+          <div className="input-group ">
             <span className="input-group-text bg-white">
               <Phone size={16} className="text-muted" />
             </span>
@@ -177,7 +178,7 @@ export function FormEditRepartidor({ onClose, repartidor }) {
           <label className="form-label fw-medium text-dark small">
             Correo Electrónico (Opcional)
           </label>
-          <div className="input-group shadow-sm">
+          <div className="input-group ">
             <span className="input-group-text bg-white">
               <Mail size={16} className="text-muted" />
             </span>
@@ -194,7 +195,7 @@ export function FormEditRepartidor({ onClose, repartidor }) {
           <label className="form-label fw-medium text-dark small">
             Placa de Vehículo (Moto/Auto)
           </label>
-          <div className="input-group shadow-sm mb-1">
+          <div className="input-group  mb-1">
             <span className="input-group-text bg-white">
               <Car size={16} className="text-muted" />
             </span>

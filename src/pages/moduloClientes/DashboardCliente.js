@@ -1,9 +1,8 @@
 import { DashboardGrafic } from "../../components/componenteCliente/DashboardGrafic";
-import { ListaFeedBacks } from "../../components/componenteCliente/ListaFeedBacks";
 
 export function DashboardCliente() {
   return (
-    <div className="card border-0">
+    <div className="card ">
       <div className="card-header">
         <div>
           <h4 className="fw-bold text-fw-main mb-1">Modulo de clientes</h4>

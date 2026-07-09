@@ -210,7 +210,7 @@ export function DashboardGrafic() {
         >
           <div className="col-md-8">
             <div className="card">
-              <div className="card-header p-2 align-baseline d-flex justify-content-center">
+              <div className="card-header align-baseline d-flex justify-content-center">
                 <h6 className="fw-bold text-fw-main">
                   {" "}
                   <UsersRoundIcon className="me-2" />
@@ -219,7 +219,7 @@ export function DashboardGrafic() {
 
                 <div className="ms-auto">
                   <button
-                    className="btn-principal"
+                    className="btn btn-outline-dark"
                     onClick={() => navegacion("/clientes/lista")}
                   >
                     Ver todos
@@ -233,7 +233,7 @@ export function DashboardGrafic() {
           </div>
           <div className="col-md-4">
             <div className="card rounded-3">
-              <div className="card-header p-2 justify-content-left d-flex align-baseline">
+              <div className="card-header justify-content-left d-flex align-baseline">
                 <h6 className="fw-bold  text-fw-main">
                   <MessageSquareHeartIcon /> Comentarios Recientes
                 </h6>

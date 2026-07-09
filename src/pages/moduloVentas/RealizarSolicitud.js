@@ -88,26 +88,29 @@ export function RealizarSolicitud() {
       <form
         onSubmit={handleSubmit(onSubmit)}
         id="form-solicitud"
-        className="flex-column card shadow-sm p-3"
+        className="flex-column p-3"
       >
-        <div className="card-header  d-flex align-content-center">
-          <div>
-            <h5>Solicitud de productos</h5>
-            <small>Solicita un producto a almacen para ponerlo en venta</small>
-          </div>
-
-          <div className="ms-auto">
-            <button
-              className="btn btn-outline-dark btn-sm"
-              onClick={() => handleVolver()}
-            >
-              Volver
-            </button>
+        <div className="card d-flex align-content-center mb-3">
+          <div className="d-flex p-3">
+            <div>
+              <h5>Solicitud de productos</h5>
+              <small>
+                Solicita un producto a almacen para ponerlo en venta
+              </small>
+            </div>
+            <div className="ms-auto">
+              <button
+                className="btn btn-outline-dark btn-sm"
+                onClick={() => handleVolver()}
+              >
+                Volver
+              </button>
+            </div>
           </div>
         </div>
         <div className="card-body container">
           {/* Información del Solicitante */}
-          <div className="card mb-3 border shadow-sm ">
+          <div className="card mb-3 border ">
             <div className="card-header border-0 ">
               <div>
                 <p className="h5">Información del Solicitante</p>
@@ -116,31 +119,36 @@ export function RealizarSolicitud() {
             <div className="card-body">
               <div className="row g-3">
                 <div className="col-lg-6 col-sm-12">
-                  <div className="form-floating mb-3">
+                  <div className="mb-3">
+                    <label htmlFor="nombre_solicitante" className="form-label ">
+                      Nombre del Solicitante
+                    </label>
                     <input
                       type="text"
-                      className="form-control"
+                      className={`form-control ${
+                        errors.nombre_solicitante ? "is-invalid" : ""
+                      }`}
                       id="nombre_solicitante"
                       placeholder="Ingrese nombre"
                       {...register("nombre_solicitante", {
                         required: "Este campo es obligatorio",
                       })}
                     />
-                    <label htmlFor="nombre_solicitante">
-                      Nombre del Solicitante
-                    </label>
                     {errors.nombre_solicitante && (
-                      <span className="text-danger">
+                      <div className="invalid-feedback d-block">
                         {errors.nombre_solicitante.message}
-                      </span>
+                      </div>
                     )}
                   </div>
                 </div>
                 <div className="col-lg-6 col-sm-12">
-                  <div className="form-floating mb-3">
+                  <div className="mb-3">
+                    <label htmlFor="area" className="form-label ">
+                      Departamento/Área
+                    </label>
                     <select
                       id="area"
-                      className="form-select"
+                      className={`form-select ${errors.area ? "is-invalid" : ""}`}
                       {...register("area", {
                         required: "Seleccione un área",
                       })}
@@ -153,9 +161,10 @@ export function RealizarSolicitud() {
                           </option>
                         ))}
                     </select>
-                    <label htmlFor="area">Departamento/Área</label>
                     {errors.area && (
-                      <span className="text-danger">{errors.area.message}</span>
+                      <div className="invalid-feedback d-block">
+                        {errors.area.message}
+                      </div>
                     )}
                   </div>
                 </div>
@@ -163,10 +172,15 @@ export function RealizarSolicitud() {
 
               <div className="row g-3">
                 <div className="col-lg-6 col-sm-12">
-                  <div className="form-floating mb-3">
+                  <div className="mb-3">
+                    <label htmlFor="correo_electronico" className="form-label ">
+                      Correo Electrónico
+                    </label>
                     <input
                       type="email"
-                      className="form-control"
+                      className={`form-control ${
+                        errors.correo_electronico ? "is-invalid" : ""
+                      }`}
                       id="correo_electronico"
                       placeholder="Email"
                       {...register("correo_electronico", {
@@ -177,21 +191,23 @@ export function RealizarSolicitud() {
                         },
                       })}
                     />
-                    <label htmlFor="correo_electronico">
-                      Correo Electrónico
-                    </label>
                     {errors.correo_electronico && (
-                      <span className="text-danger">
+                      <div className="invalid-feedback d-block">
                         {errors.correo_electronico.message}
-                      </span>
+                      </div>
                     )}
                   </div>
                 </div>
                 <div className="col-lg-6 col-sm-12">
-                  <div className="form-floating mb-3">
+                  <div className="mb-3">
+                    <label htmlFor="telefono" className="form-label ">
+                      Teléfono
+                    </label>
                     <input
                       type="text"
-                      className="form-control"
+                      className={`form-control ${
+                        errors.telefono ? "is-invalid" : ""
+                      }`}
                       id="telefono"
                       placeholder="Teléfono"
                       {...register("telefono", {
@@ -202,11 +218,10 @@ export function RealizarSolicitud() {
                         },
                       })}
                     />
-                    <label htmlFor="telefono">Teléfono</label>
                     {errors.telefono && (
-                      <span className="text-danger">
+                      <div className="invalid-feedback d-block">
                         {errors.telefono.message}
-                      </span>
+                      </div>
                     )}
                   </div>
                 </div>
@@ -222,69 +237,85 @@ export function RealizarSolicitud() {
             <div className="card-body">
               <div className="row g-3">
                 <div className="col-lg-6 col-sm-12">
-                  <div className="form-floating mb-3">
+                  <div className="mb-3">
+                    <label htmlFor="nombre_producto" className="form-label ">
+                      Nombre del Producto/Activo
+                    </label>
                     <input
                       type="text"
-                      className="form-control"
+                      className={`form-control ${
+                        errors.nombre_producto ? "is-invalid" : ""
+                      }`}
                       id="nombre_producto"
                       placeholder="Nombre Producto"
                       {...register("nombre_producto", {
                         required: "Este campo es obligatorio",
                       })}
                     />
-                    <label htmlFor="nombre_producto">
-                      Nombre del Producto/Activo
-                    </label>
                     {errors.nombre_producto && (
-                      <span className="text-danger">
+                      <div className="invalid-feedback d-block">
                         {errors.nombre_producto.message}
-                      </span>
+                      </div>
                     )}
                   </div>
                 </div>
                 <div className="col-lg-6 col-sm-12">
-                  <div className="form-floating mb-3">
+                  <div className="mb-3">
+                    <label htmlFor="marcaProd" className="form-label ">
+                      Marca del Producto/Activo
+                    </label>
                     <input
                       type="text"
-                      className="form-control"
+                      className={`form-control ${
+                        errors.marcaProd ? "is-invalid" : ""
+                      }`}
                       id="marcaProd"
                       placeholder="Marca del Producto"
                       {...register("marcaProd", {
                         required: "Este campo es obligatorio",
                       })}
                     />
-                    <label htmlFor="marcaProd">Marca del Producto/Activo</label>
                     {errors.marcaProd && (
-                      <span className="text-danger">
+                      <div className="invalid-feedback d-block">
                         {errors.marcaProd.message}
-                      </span>
+                      </div>
                     )}
                   </div>
                 </div>
               </div>
-              <div className="form-floating mb-3">
+              <div className="mb-3">
+                <label htmlFor="descripcion" className="form-label ">
+                  Descripción
+                </label>
                 <textarea
                   id="descripcion"
-                  className="form-control"
+                  rows={3}
+                  className={`form-control ${
+                    errors.descripcion ? "is-invalid" : ""
+                  }`}
                   placeholder="Descripción"
                   {...register("descripcion", {
                     required: "Este campo es obligatorio",
                   })}
                 />
-                <label htmlFor="descripcion">Descripción</label>
                 {errors.descripcion && (
-                  <span className="text-danger">
+                  <div className="invalid-feedback d-block">
                     {errors.descripcion.message}
-                  </span>
+                  </div>
                 )}
               </div>
 
               <div className="row g-3">
                 <div className="col-lg-4 col-sm-12">
-                  <div className="form-floating mb-3">
+                  <div className="mb-3">
+                    <label htmlFor="cantidad" className="form-label ">
+                      Cantidad
+                    </label>
                     <input
                       type="number"
-                      className="form-control"
+                      className={`form-control ${
+                        errors.cantidad ? "is-invalid" : ""
+                      }`}
                       id="cantidad"
                       placeholder="Cantidad"
                       {...register("cantidad", {
@@ -292,19 +323,23 @@ export function RealizarSolicitud() {
                         min: 1,
                       })}
                     />
-                    <label htmlFor="cantidad">Cantidad</label>
                     {errors.cantidad && (
-                      <span className="text-danger">
+                      <div className="invalid-feedback d-block">
                         {errors.cantidad.message}
-                      </span>
+                      </div>
                     )}
                   </div>
                 </div>
                 <div className="col-lg-4 col-sm-12">
-                  <div className="form-floating mb-3">
+                  <div className="mb-3">
+                    <label htmlFor="unidad_medida" className="form-label ">
+                      Unidad de Medida
+                    </label>
                     <select
                       id="unidad_medida"
-                      className="form-select"
+                      className={`form-select ${
+                        errors.unidad_medida ? "is-invalid" : ""
+                      }`}
                       {...register("unidad_medida", {
                         required: "Seleccione una unidad",
                       })}
@@ -316,19 +351,23 @@ export function RealizarSolicitud() {
                         </option>
                       ))}
                     </select>
-                    <label htmlFor="unidad_medida">Unidad de Medida</label>
                     {errors.unidad_medida && (
-                      <span className="text-danger">
+                      <div className="invalid-feedback d-block">
                         {errors.unidad_medida.message}
-                      </span>
+                      </div>
                     )}
                   </div>
                 </div>
                 <div className="col-lg-4 col-sm-12">
-                  <div className="form-floating mb-3">
+                  <div className="mb-3">
+                    <label htmlFor="categoria" className="form-label ">
+                      Categoría
+                    </label>
                     <select
                       id="categoria"
-                      className="form-select"
+                      className={`form-select ${
+                        errors.categoria ? "is-invalid" : ""
+                      }`}
                       {...register("categoria", {
                         required: "Seleccione una categoría",
                       })}
@@ -340,29 +379,32 @@ export function RealizarSolicitud() {
                         </option>
                       ))}
                     </select>
-                    <label htmlFor="categoria">Categoría</label>
                     {errors.categoria && (
-                      <span className="text-danger">
+                      <div className="invalid-feedback d-block">
                         {errors.categoria.message}
-                      </span>
+                      </div>
                     )}
                   </div>
                 </div>
               </div>
               <div className="col-lg-12 ">
-                <div className="form-floating mb-3">
+                <div className="mb-3">
+                  <label htmlFor="precio_estimado" className="form-label ">
+                    Precio Estimado
+                  </label>
                   <input
                     type="text"
                     id="precio_estimado"
-                    className="form-control"
+                    className={`form-control ${
+                      errors.precio_estimado ? "is-invalid" : ""
+                    }`}
                     {...register("precio_estimado", {
                       validate: validatePrecio,
                     })}
                     onInput={handlePrecioInput}
                   />
-                  <label htmlFor="precio_estimado">Precio Estimado</label>
                   {errors.precio_estimado && (
-                    <div className="invalid-feedback">
+                    <div className="invalid-feedback d-block">
                       {errors.precio_estimado.message}
                     </div>
                   )}
@@ -378,43 +420,56 @@ export function RealizarSolicitud() {
               <p className="h5">Justificacion</p>
             </div>
             <div className="card-body">
-              <div className="form-floating col-lg-12 mb-3">
+              <div className="col-lg-12 mb-3">
+                <label htmlFor="motivo" className="form-label ">
+                  Motivo de la solicitud
+                </label>
                 <input
                   type="text"
                   id="motivo"
-                  className="form-control"
+                  className={`form-control ${
+                    errors.motivo ? "is-invalid" : ""
+                  }`}
                   {...register("motivo", {
                     required: "Justificacion requerida",
                   })}
                 />
-                <label htmlFor="motivo">Motivo de la solicitud</label>
                 {errors.motivo && (
-                  <div className="required-feedback">
+                  <div className="invalid-feedback d-block">
                     {errors.motivo.message}
                   </div>
                 )}
               </div>
-              <div className="form-floating col-lg-12 mb-3">
+              <div className="col-lg-12 mb-3">
+                <label htmlFor="uso_previsto" className="form-label ">
+                  Uso Previsto
+                </label>
                 <input
                   type="text"
                   id="uso_previsto"
-                  className="form-control"
+                  className={`form-control ${
+                    errors.uso_previsto ? "is-invalid" : ""
+                  }`}
                   {...register("uso_previsto", {
                     required: "Justificacion requerida",
                   })}
                 />
-                <label htmlFor="uso_previsto">Uso Previsto</label>
                 {errors.uso_previsto && (
-                  <div className="required-feedback">
+                  <div className="invalid-feedback d-block">
                     {errors.uso_previsto.message}
                   </div>
                 )}
               </div>
-              <div className="form-floating col-lg-12 mb-3">
+              <div className="col-lg-12 mb-3">
+                <label htmlFor="prioridad" className="form-label ">
+                  Prioridad
+                </label>
                 <select
                   type="text"
                   id="prioridad"
-                  className="form-select"
+                  className={`form-select ${
+                    errors.prioridad ? "is-invalid" : ""
+                  }`}
                   {...register("prioridad", {
                     required: "Justificacion requerida",
                   })}
@@ -423,9 +478,8 @@ export function RealizarSolicitud() {
                   <option value={"Media"}>Media</option>
                   <option value={"Baja"}>Bajo</option>
                 </select>
-                <label htmlFor="prioridad">Prioridad</label>
                 {errors.prioridad && (
-                  <div className="required-feedback">
+                  <div className="invalid-feedback d-block">
                     {errors.prioridad.message}
                   </div>
                 )}
@@ -433,7 +487,7 @@ export function RealizarSolicitud() {
             </div>
           </div>
           {/* Botón de Envío */}
-          <div className="card-footer  shadow-sm border-0 rounded d-flex justify-content-center">
+          <div className=" border-0 rounded d-flex justify-content-center">
             <button type="submit" className="btn-guardar">
               Guardar Solicitud
             </button>

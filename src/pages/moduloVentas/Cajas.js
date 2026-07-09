@@ -144,7 +144,7 @@ export function Cajas() {
                   className="form-select"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  style={{minWidth: "150px"}}
+                  style={{ minWidth: "150px" }}
                 >
                   <option value="">Todas las cajas</option>
                   {cajas?.map((caja) => (
@@ -158,7 +158,7 @@ export function Cajas() {
                   className="form-control"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  style={{maxWidth: "180px"}}
+                  style={{ maxWidth: "180px" }}
                 />
               </div>
             </div>

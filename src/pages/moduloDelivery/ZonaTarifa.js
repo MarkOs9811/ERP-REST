@@ -75,11 +75,13 @@ export function ZonaTarifa() {
           <div className="d-flex align-items-center">
             <h4 className="card-title mb-0 titulo-card-especial">
               Zonas y Tarifas
-              <span className="badge-header">{sedes?.length || 0} sedes</span>
+              <span className="badge-header ms-2">
+                {sedes?.length || 0} sedes
+              </span>
             </h4>
           </div>
 
-          <div className="d-flex flex-wrap gap-2 mt-3 mt-md-0 align-items-center ms-auto">
+          <div className="d-flex  gap-2 mt-3 mt-md-0 align-items-center ms-auto">
             <div className="header-search-container">
               <Search className="search-icon" />
               <input
@@ -88,8 +90,8 @@ export function ZonaTarifa() {
                 className="form-control"
               />
             </div>
-            <button className="btn btn-outline-dark px-3">
-              <FileText size={18} />
+            <button className="btn btn-outline-dark d-flex gap-2">
+              <FileText size={20} />
               <span className="d-none d-sm-inline">Reporte</span>
             </button>
           </div>
@@ -100,7 +102,7 @@ export function ZonaTarifa() {
           <div className="row g-4">
             {isLoading ? (
               <div className="col-12 text-center py-5">
-                <div className="spinner-border text-primary" role="status">
+                <div className="spinner-border" role="status">
                   <span className="visually-hidden">Cargando...</span>
                 </div>
                 <p className="text-muted mt-2 small">
@@ -148,9 +150,7 @@ export function ZonaTarifa() {
 
                 return (
                   <div className="col-12 col-xl-6" key={sede.id}>
-                    <div
-                      className={`card h-100 sede-config-card ${config && config.estado !== 1 ? "bg-light" : ""}`}
-                    >
+                    <div className={`card h-100 sede-config-card `}>
                       {/* Cabecera de la Tarjeta */}
                       <div className="card-header bg-transparent border-bottom px-4 py-3 d-flex justify-content-between align-items-center">
                         <div>
@@ -163,7 +163,7 @@ export function ZonaTarifa() {
                           </div>
                         </div>
                         <span
-                          className={`badge ${config?.estado == 1 ? "bg-success" : "bg-danger"} bg-opacity-10 text-white border border-${config?.estado == 1 ? "success" : "danger"} border-opacity-25 rounded-pill px-3 py-2`}
+                          className={`badge ${config?.estado == 1 ? "bg-success" : "bg-danger"} text-white border border-${config?.estado == 1 ? "success" : "danger"} border-opacity-25 rounded-pill px-3 py-2`}
                         >
                           {config?.estado == 1 ? "Activa" : "Inactiva"}
                         </span>
@@ -371,7 +371,7 @@ export function ZonaTarifa() {
                       {/* Pie de la Tarjeta */}
                       <div className="card-footer bg-transparent border-top px-4 py-3 d-flex gap-2">
                         <button
-                          className="btn btn-outline-secondary d-flex justify-content-center align-items-center gap-2 fw-medium"
+                          className="btn btn-outline-dark d-flex justify-content-center align-items-center gap-2 fw-medium"
                           disabled={!config}
                           onClick={() => {
                             if (config) {
@@ -387,7 +387,7 @@ export function ZonaTarifa() {
                         {config && (
                           <div className="d-flex ms-auto gap-2">
                             <button
-                              className="btn btn-outline-secondary d-flex justify-content-center align-items-center"
+                              className="btn-desactivar d-flex justify-content-center align-items-center"
                               title={
                                 config.estado == 1
                                   ? "Desactivar Configuración"

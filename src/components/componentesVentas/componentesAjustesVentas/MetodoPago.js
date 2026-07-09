@@ -56,7 +56,7 @@ const MetodoPago = ({ metodos, onToggle }) => {
   };
   return (
     <div className="col-md-4">
-      <div className="card shadow-sm border">
+      <div className="card  ">
         <div className="card-body">
           <div className="d-flex justify-content-between align-items-center">
             <h6 className="card-title mb-0 fw-bold">Métodos de Pago</h6>
@@ -72,7 +72,7 @@ const MetodoPago = ({ metodos, onToggle }) => {
             {metodos.map((metodo) => (
               <li
                 key={metodo.id}
-                className="d-flex align-items-center justify-content-between mb-3 py-2 px-2 rounded bg-light"
+                className="d-flex align-items-center justify-content-between mb-3 py-2 px-2 rounded"
               >
                 <div>
                   <h6 className="mb-1">{metodo.nombre}</h6>
@@ -114,7 +114,7 @@ const MetodoPago = ({ metodos, onToggle }) => {
         title="Agregar Método de Pago"
         hideFooter={true}
       >
-        <div className="card d-flex h-100 bg-transparent">
+        <div className="p-4 d-flex h-100 bg-transparent">
           <form
             className="card-body row g-3"
             onSubmit={handleSubmit(handleSubmitMetodo)}

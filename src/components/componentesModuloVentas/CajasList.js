@@ -88,7 +88,7 @@ export function CajasList({ search }) {
     try {
       const response = await axiosInstance.put(
         `/cajasUpdate/${dataCaja.id}`,
-        formData
+        formData,
       );
       if (response.data.success) {
         ToastAlert("success", "Caja actualizada correctamente");
@@ -112,8 +112,8 @@ export function CajasList({ search }) {
       {Array.isArray(cajas) && cajas.length > 0 ? (
         cajas.map((item) => (
           <div className="col-lg-3 col-md-4 col-sm-12">
-            <div className="card border w-100" key={item.id}>
-              <div className="card-header rounded-pill">
+            <div className="card  w-100" key={item.id}>
+              <div className="card-header">
                 <p className="h3">{capitalizeFirstLetter(item.nombreCaja)}</p>
                 <div
                   className="dropdown"

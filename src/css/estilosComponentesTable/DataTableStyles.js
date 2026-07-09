@@ -19,8 +19,6 @@ const getCustomDataTableStyles = (isDark) => {
       style: {
         minHeight: "300px",
         backgroundColor: bgSurface,
-        border: `1px solid ${border}`,
-        borderRadius: radiusMd,
       },
     },
     rows: {
@@ -28,7 +26,6 @@ const getCustomDataTableStyles = (isDark) => {
         borderLeftWidth: "0",
         borderLeftStyle: "none",
         borderLeftColor: "transparent",
-        backgroundColor: bgSurface,
         color: textMain,
         borderBottom: `1px solid ${border}`,
         fontSize: "13px",

@@ -168,7 +168,7 @@ export function FormEditConfigTarifa({ onClose, configuracion }) {
           <label className="form-label fw-medium text-dark small">
             Hora Apertura
           </label>
-          <div className="input-group shadow-sm">
+          <div className="input-group ">
             <span className="input-group-text bg-white">
               <Clock size={16} className="text-muted" />
             </span>
@@ -189,7 +189,7 @@ export function FormEditConfigTarifa({ onClose, configuracion }) {
           <label className="form-label fw-medium text-dark small">
             Hora Cierre
           </label>
-          <div className="input-group shadow-sm">
+          <div className="input-group ">
             <span className="input-group-text bg-white">
               <Clock size={16} className="text-muted" />
             </span>
@@ -216,7 +216,7 @@ export function FormEditConfigTarifa({ onClose, configuracion }) {
           <label className="form-label fw-medium text-dark small">
             Costo Base (S/)
           </label>
-          <div className="input-group shadow-sm">
+          <div className="input-group ">
             <span
               className="input-group-text bg-white text-muted fw-bold"
               style={{ fontSize: "0.9rem" }}
@@ -245,7 +245,7 @@ export function FormEditConfigTarifa({ onClose, configuracion }) {
           <label className="form-label fw-medium text-dark small">
             Costo Prioridad (S/)
           </label>
-          <div className="input-group shadow-sm">
+          <div className="input-group ">
             <span
               className="input-group-text bg-white text-muted fw-bold"
               style={{ fontSize: "0.9rem" }}
@@ -279,7 +279,7 @@ export function FormEditConfigTarifa({ onClose, configuracion }) {
           <label className="form-label fw-medium text-dark small">
             Minutos Min
           </label>
-          <div className="input-group shadow-sm">
+          <div className="input-group ">
             <span className="input-group-text bg-white">
               <Clock size={16} className="text-muted" />
             </span>
@@ -304,7 +304,7 @@ export function FormEditConfigTarifa({ onClose, configuracion }) {
           <label className="form-label fw-medium text-dark small">
             Minutos Max
           </label>
-          <div className="input-group shadow-sm">
+          <div className="input-group ">
             <span className="input-group-text bg-white">
               <Clock size={16} className="text-muted" />
             </span>
@@ -336,7 +336,7 @@ export function FormEditConfigTarifa({ onClose, configuracion }) {
         <label className="form-label fw-medium text-dark small">
           Lista de montos (S/)
         </label>
-        <div className="input-group shadow-sm mb-1">
+        <div className="input-group  mb-1">
           <span className="input-group-text bg-white">
             <HeartHandshake size={16} className="text-muted" />
           </span>

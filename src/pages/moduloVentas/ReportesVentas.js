@@ -91,7 +91,7 @@ export function ReportesVentas() {
   if (isError) return <p>Error: {error.message}</p>;
 
   return (
-    <div className="card shadow-sm border-0 p-3">
+    <div className="card p-3">
       <div className="row g-3 mb-4">
         <div className="col-md-12">
           <h3 className="mb-4">Reportes</h3>

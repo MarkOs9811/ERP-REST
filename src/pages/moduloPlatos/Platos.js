@@ -1,16 +1,15 @@
 import { useState } from "react";
-import { CategoriaList } from "../components/componentePlatos/CategoriaList";
-import { PlatoList } from "../components/componentePlatos/PlatoList";
-import { PlatoAdd } from "../components/componentePlatos/PlatoAdd";
-import { CombosList } from "../components/componentePlatos/CombosList";
-import { GetReporteExcel } from "../service/accionesReutilizables/GetReporteExcel";
-import { FileText, Plus, Search } from "lucide-react";
-import { CondicionCarga } from "../components/componentesReutilizables/CondicionCarga";
-import ModalRight from "../components/componentesReutilizables/ModalRight";
-import { CategoriaPlatos } from "../components/componenteVender/tareasVender/CategoriaPlatos";
-import { useSelector } from "react-redux";
 
-export function MenuPlato() {
+import { FileText, Plus, Search } from "lucide-react";
+import { useSelector } from "react-redux";
+import { CondicionCarga } from "../../components/componentesReutilizables/CondicionCarga";
+import { CategoriaPlatos } from "../../components/componenteVender/tareasVender/CategoriaPlatos";
+import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteExcel";
+import { PlatoList } from "../../components/componentePlatos/PlatoList";
+import ModalRight from "../../components/componentesReutilizables/ModalRight";
+import { PlatoAdd } from "../../components/componentePlatos/PlatoAdd";
+
+export function Platos() {
   const [search, setSearch] = useState("");
   const [upDateList, setUpDateList] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -31,7 +30,7 @@ export function MenuPlato() {
                 <span className="badge-header">Platos</span>
               </div>
               <CategoriaPlatos />
-              <div className="d-flex align-items-center flex-wrap gap-2 mt-3 mt-md-0">
+              <div className="d-flex align-items-center gap-2 mt-3 mt-md-0">
                 <div className="header-search-container">
                   <Search className="search-icon" />
                   <input
@@ -48,7 +47,7 @@ export function MenuPlato() {
                   className="btn btn-outline-dark px-3"
                   onClick={() => GetReporteExcel("/reportePlatosTodos")}
                 >
-                  <FileText size={18} />
+                  <FileText size={20} />
                   Reporte
                 </button>
 
@@ -57,8 +56,8 @@ export function MenuPlato() {
                   className="btn btn-dark px-3"
                   onClick={() => setShowModal(true)}
                 >
-                  <Plus size={18} />
-                  Nuevo Plato
+                  <Plus size={20} />
+                  Crear
                 </button>
               </div>
             </div>
@@ -70,16 +69,6 @@ export function MenuPlato() {
               />
             </div>
           </div>
-        </CondicionCarga>
-      </div>
-      <div className="col-sm-12 col-lg-8">
-        <CondicionCarga isLoading={upDateList} isError={null}>
-          <CombosList />
-        </CondicionCarga>
-      </div>
-      <div className="col-sm-12 col-lg-4">
-        <CondicionCarga isLoading={upDateList} isError={null}>
-          <CategoriaList />
         </CondicionCarga>
       </div>
 

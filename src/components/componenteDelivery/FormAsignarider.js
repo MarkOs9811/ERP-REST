@@ -91,15 +91,18 @@ export const FormAsignarRider = forwardRef(
     const detallesPlatos = dataPedido?.detalles_pedido || [];
 
     return (
-      <div className="container-fluid w-100   ">
-        {/* Cabecera Forzada a la Izquierda para romper el centrado del Modal */}
-        <div className="modal-header-custom  d-flex align-items-center gap-3 mb-4">
-          <div className="w-10 h-10  bg-dark rounded-3 text-white flex items-center justify-center p-2">
-            <UserPlus size={25} />
+      <div className="container-fluid w-100">
+        {/* Cabecera ARREGLADA: Solo cambiamos esto */}
+        <div className="d-flex align-items-center gap-3 mb-4 p-3">
+          <div
+            className=" rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"
+            style={{ width: "48px", height: "48px" }}
+          >
+            <UserPlus size={24} />
           </div>
-          <div className="flex flex-col ">
-            <h4 className="text-xl font-bold mb-0">Asignar Repartidor</h4>
-            <p className="text-secondary ln-sm small">
+          <div className="d-flex flex-column justify-content-center">
+            <h4 className="text-xl font-bold mb-0 lh-1">Asignar Repartidor</h4>
+            <p className="text-secondary small mb-0 mt-1">
               Pedido{" "}
               <span className="font-bold text-gray-800 bg-gray-100 px-1.5 py-0.5 rounded">
                 {dataPedido?.codigo_pedido || idPedido}
@@ -108,7 +111,7 @@ export const FormAsignarRider = forwardRef(
           </div>
         </div>
 
-        {/* CONTENEDOR HORIZONTAL BLINDADO */}
+        {/* CONTENEDOR HORIZONTAL BLINDADO (Tu código exacto) */}
         {dataPedido && (
           /* CONTENEDOR PADRE */
           <div
@@ -228,8 +231,8 @@ export const FormAsignarRider = forwardRef(
           </div>
         )}
 
-        {/* SELECTOR ABAJO (Bloque Completo) */}
-        <div className="row border rounded p-3 m–0">
+        {/* SELECTOR ABAJO (Tu código exacto, solo corregí el m–0 a m-0) */}
+        <div className="row border rounded p-3 m-0">
           <label className="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wide">
             Asignar a
           </label>

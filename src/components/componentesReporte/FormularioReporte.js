@@ -33,7 +33,7 @@ export default function FormularioReporte({
 
   return (
     <div className="col-lg-4 col-sm-12">
-      <div className="card border shadow-sm h-100 p-0 py-2">
+      <div className="card border  h-100 p-0 py-2">
         <div className="card-header py-2 px-3 border-bottom ">
           <p className="h6 mb-0">{titulo}</p>
         </div>

@@ -55,6 +55,15 @@ const subMenuGroups = {
     { label: "Reportes", path: "/rrhh/reportes", icon: <PieChart size={16} /> },
     { label: "Ajustes", path: "/rrhh/ajustes", icon: <Settings2 size={16} /> },
   ],
+  "/platos": [
+    { label: "Platos", path: "/platos", icon: <Box size={16} /> },
+    { label: "Combos", path: "/platos/combos", icon: <Box size={16} /> },
+    {
+      label: "Categorias",
+      path: "/platos/categorias",
+      icon: <Box size={16} />,
+    },
+  ],
   "/clientes": [
     {
       label: "Dashboard",

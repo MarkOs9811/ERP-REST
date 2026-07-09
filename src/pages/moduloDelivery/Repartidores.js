@@ -77,17 +77,17 @@ export function Repartidores() {
     <div className="container-fluid p-0">
       <div className="card rounded-4">
         {/* HEADER DE LA VISTA */}
-        <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-3">
+        <div className="card-header border-0 ">
           <div className="d-flex align-items-center">
             <h4 className="card-title mb-0 titulo-card-especial">
               Panel de Repartidores
-              <span className="badge-header">
+              <span className="badge-header ms-2">
                 {usuariosRepartidores.length} activos
               </span>
             </h4>
           </div>
 
-          <div className="d-flex flex-wrap gap-2 mt-3 mt-md-0 align-items-center ms-auto">
+          <div className="d-flex  gap-2  align-items-center ">
             <div className="header-search-container">
               <Search className="search-icon" />
               <input
@@ -97,20 +97,20 @@ export function Repartidores() {
               />
             </div>
             <button
-              className="btn btn-outline-dark px-3"
+              className="btn btn-outline-dark d-flex gap-2"
               title="Generar Reporte Completo"
             >
-              <FileText size={18} />
+              <FileText size={20} />
               <span className="d-none d-sm-inline">Reporte</span>
             </button>
             <button
-              className="btn btn-primary px-3"
+              className="btn btn-outline-dark d-flex gap-2"
               title="Agregar Nuevo Repartidor"
               onClick={() => {
                 navigate("/rrhh");
               }}
             >
-              <Plus size={18} />
+              <Plus size={20} />
               <span className="d-none d-sm-inline">Agregar</span>
             </button>
           </div>
@@ -149,8 +149,15 @@ export function Repartidores() {
                     <div className="card-body p-3 d-flex align-items-center gap-3">
                       {/* 1. Avatar fijo a la izquierda */}
                       <div className="position-relative flex-shrink-0">
-                        <div className="avatar-circle-horizontal">
-                          <User size={24} strokeWidth={1.5} />
+                        <div className="avatar-circle-horizontal overflow-hidden">
+                          <img
+                            src={repartidor.foto_url || "/default-avatar.png"}
+                            alt="Avatar"
+                            loading="lazy"
+                            width={60}
+                            height={60}
+                            className="avatar-img-horizontal"
+                          />
                         </div>
                         <div
                           className={`status-indicator-horizontal ${repartidor.estado == 1 ? "bg-success" : "bg-danger"}`}
@@ -176,7 +183,7 @@ export function Repartidores() {
 
                         <div className="mb-2">
                           <span
-                            className="badge bg-success bg-opacity-10  border border-success border-opacity-25 rounded-pill px-2 py-1"
+                            className="badge bg-success border border-success border-opacity-25 rounded-pill px-2 py-1"
                             style={{ fontSize: "0.65rem" }}
                           >
                             Motorizado
