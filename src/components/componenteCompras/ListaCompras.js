@@ -11,6 +11,7 @@ import {
   BtnEditar,
   BtnEliminar,
 } from "../componentesReutilizables/BotonesAccion";
+import { BadgeComponent } from "../componentesReutilizables/BadgeComponent";
 
 export function ListaCompras({ data, search }) {
   const [modalEditarCompra, setModalEditarCompra] = useState(false);
@@ -108,14 +109,10 @@ export function ListaCompras({ data, search }) {
     {
       name: "Estado",
       cell: (row) => (
-        <span
-          className="px-2 py-1 rounded text-white"
-          style={{
-            backgroundColor: row.estado === 1 ? "#4caf50" : "#ff9800",
-          }}
-        >
-          {row.estado === 1 ? "Pagado" : "Pendiente"}
-        </span>
+        <BadgeComponent
+          label={row.estado === 1 ? "Pagado" : "Pendiente"}
+          variant={row.estado === 1 ? "success" : "warning"}
+        />
       ),
       sortable: true,
     },

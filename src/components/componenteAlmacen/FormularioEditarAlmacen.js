@@ -24,7 +24,7 @@ export function FormularioEditarAlmacen({ data, onCancel }) {
       queryFn: GetCategoria,
       refetchOnWindowFocus: false,
       retry: 1,
-    }
+    },
   );
   const { data: unidadData = [], isLoading: isLoadingUnidad } = useQuery({
     queryKey: ["unidad"],
@@ -61,7 +61,7 @@ export function FormularioEditarAlmacen({ data, onCancel }) {
     try {
       const response = await axiosInstance.put(
         `/almacen/${formData.id}`,
-        formData
+        formData,
       );
       if (response.data.success) {
         ToastAlert("success", "Producto actualizado exitosamente");
@@ -71,7 +71,7 @@ export function FormularioEditarAlmacen({ data, onCancel }) {
       } else {
         ToastAlert(
           "error",
-          response.data.message || "Error al actualizar el producto"
+          response.data.message || "Error al actualizar el producto",
         );
       }
     } catch (error) {
@@ -106,7 +106,7 @@ export function FormularioEditarAlmacen({ data, onCancel }) {
 
           {/* Nombre del Producto */}
           <div className="col-md-12 mb-3">
-            <label className="form-label small" for="nombreProducto">
+            <label className="form-label " htmlFor="nombreProducto">
               Nombre del Producto*
             </label>
             <input
@@ -128,7 +128,7 @@ export function FormularioEditarAlmacen({ data, onCancel }) {
 
           {/* Marca */}
           <div className="col-md-6 mb-3">
-            <label className="form-label small">Marca*</label>
+            <label className="form-label ">Marca*</label>
             <input
               type="text"
               className={`form-control ${errors.marca ? "is-invalid" : ""}`}
@@ -143,7 +143,7 @@ export function FormularioEditarAlmacen({ data, onCancel }) {
 
           {/* Stock */}
           <div className="col-md-6 mb-3">
-            <label className="form-label small">Stock*</label>
+            <label className="form-label ">Stock*</label>
             <input
               type="number"
               disabled={true}
@@ -167,7 +167,7 @@ export function FormularioEditarAlmacen({ data, onCancel }) {
 
           {/* Precio Unitario */}
           <div className="col-md-6 mb-3">
-            <label className="form-label small">Precio Unitario (S/.)*</label>
+            <label className="form-label ">Precio Unitario (S/.)*</label>
             <input
               type="number"
               step="0.01"
@@ -195,7 +195,7 @@ export function FormularioEditarAlmacen({ data, onCancel }) {
 
           {/* Unidad de Medida */}
           <div className="col-md-6 mb-3">
-            <label className="form-label small">Unidad de Medida*</label>
+            <label className="form-label ">Unidad de Medida*</label>
             <select
               className={`form-select ${errors.unidad ? "is-invalid" : ""}`}
               {...register("unidad", {
@@ -217,7 +217,7 @@ export function FormularioEditarAlmacen({ data, onCancel }) {
 
           {/* Categoría */}
           <div className="col-md-6 mb-3">
-            <label className="form-label small">Categoría*</label>
+            <label className="form-label ">Categoría*</label>
             <select
               className={`form-select ${errors.categoria ? "is-invalid" : ""}`}
               {...register("categoria", {
@@ -239,7 +239,7 @@ export function FormularioEditarAlmacen({ data, onCancel }) {
 
           {/* Proveedor */}
           <div className="col-md-6 mb-3">
-            <label className="form-label small">Proveedor*</label>
+            <label className="form-label ">Proveedor*</label>
             <select
               className={`form-select ${errors.proveedor ? "is-invalid" : ""}`}
               {...register("proveedor", {
@@ -261,8 +261,8 @@ export function FormularioEditarAlmacen({ data, onCancel }) {
 
           {/* Presentación */}
           <div className="col-md-6 mb-3">
-            <label className="form-label small d-flex align-items-center gap-2">
-              <Box size={16} className="text-primary" />
+            <label className="form-label gap-2 ">
+              <Box size={16} />
               Presentación*
             </label>
             <input
@@ -288,8 +288,8 @@ export function FormularioEditarAlmacen({ data, onCancel }) {
 
           {/* Fecha de Vencimiento */}
           <div className="col-md-6 mb-3">
-            <label className="form-label small d-flex align-items-center gap-2">
-              <Calendar size={16} className="text-primary" />
+            <label className="form-label ">
+              <Calendar size={16} />
               Fecha de Vencimiento*
             </label>
             <input
@@ -315,8 +315,8 @@ export function FormularioEditarAlmacen({ data, onCancel }) {
 
           {/* Registro Sanitario */}
           <div className="col-md-6 mb-3">
-            <label className="form-label small d-flex align-items-center gap-2">
-              <CardSimIcon size={16} className="text-primary" />
+            <label className="form-label ">
+              <CardSimIcon size={16} />
               Registro Sanitario*
             </label>
             <input

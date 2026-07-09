@@ -17,6 +17,7 @@ import {
 import ModalRight from "../componentesReutilizables/ModalRight";
 import { ModalDetallesVentas } from "./ModalDetallesVentas";
 import { BtnVer } from "../componentesReutilizables/BotonesAccion";
+import { BadgeComponent } from "../componentesReutilizables/BadgeComponent";
 
 export function ListVentas({ search }) {
   const [modalDetallesVenta, setModalDetallesVenta] = useState(false);
@@ -230,7 +231,8 @@ export function ListVentas({ search }) {
 
     {
       name: "Estado SUNAT",
-      selector: (row) => {
+      cell: (row) => {
+        // Cambiado de 'selector' a 'cell' porque estamos retornando un componente visual
         const estado =
           row.documento === "B"
             ? row.boleta?.estado
@@ -238,33 +240,34 @@ export function ListVentas({ search }) {
               ? row.factura?.estado
               : null;
 
-        let icon = null;
-        let text = "";
-
+        // Retornamos directamente el BadgeComponent dependiendo del estado
         if (estado === 1) {
-          icon = <BadgeCheck className="text-auto" />;
-          text = "Aceptado";
-        } else if (estado === 0) {
-          icon = <CircleX className="text-auto" />;
-          text = "Rechazado";
-        } else {
-          icon = <CircleAlert className="text-auto" />;
-          text = "Aceptado con Observaciones";
+          return (
+            <BadgeComponent
+              label="Aceptado"
+              variant="success"
+              icon={<BadgeCheck />}
+            />
+          );
         }
 
+        if (estado === 0) {
+          return (
+            <BadgeComponent
+              label="Rechazado"
+              variant="danger"
+              icon={<CircleX />}
+            />
+          );
+        }
+
+        // Si no es 1 ni 0, cae en observaciones
         return (
-          <span
-            className={`badge rounded-pill d-flex align-items-center justify-content-center ${
-              estado === 1
-                ? "badge-ok"
-                : estado === 0
-                  ? "badge-fail"
-                  : "badge-alert"
-            }`}
-          >
-            {icon}
-            {text}
-          </span>
+          <BadgeComponent
+            label="Aceptado con Observaciones"
+            variant="warning"
+            icon={<CircleAlert />}
+          />
         );
       },
       sortable: true,

@@ -62,10 +62,10 @@ export function Mesas() {
     <div className="row g-3">
       <div className="col-md-12">
         <div className="card ">
-          <div className="card-header d-flex justify-content-between align-items-center">
-            <h5 className="mb-0">Gestión de Mesas</h5>
+          <div className="card-header d-flex justify-content-between align-items-center border-0">
+            <h4 className="mb-0">Gestión de Mesas</h4>
             <button
-              className="btn btn-outline-dark btn-sm"
+              className="btn-principal "
               title="Agregar nueva mesa"
               onClick={() => {
                 setIsEditMode(false);
@@ -73,7 +73,7 @@ export function Mesas() {
                 setModalOpen(true);
               }}
             >
-              <Plus size={18} className="me-1" />
+              <Plus size={18} />
               Agregar Mesa
             </button>
           </div>

@@ -1,77 +1,51 @@
-import React, { useState } from "react";
-import { Badge } from "react-bootstrap"; // Importamos Badge de react-bootstrap
-
+import React from "react";
 import { capitalizeFirstLetter } from "../../../hooks/FirstLetterUp";
-import ModalGeneral from "../../componenteToast/ModalGeneral";
-import axiosInstance from "../../../api/AxiosInstance";
-import ToastAlert from "../../componenteToast/ToastAlert";
 import {
   Box,
-  CheckCheck,
   FileAxis3D,
-  GitCompareIcon,
   Info,
-  PrinterIcon,
+  CalendarDays,
+  CircleAlert,
   UserRoundIcon,
 } from "lucide-react";
-import { useQueryClient } from "@tanstack/react-query";
-export function ModalDetallesSolicitud({ data, handleCloseModal }) {
-  // FUNCIONES PARA ELIMINAR Y ACTIVAR
-  const [modalQuestion, setModalQuestion] = useState(false);
-  const queryClient = useQueryClient();
-  const [idProceso, setIdProceso] = useState(null);
+import { BadgeComponent } from "../../componentesReutilizables/BadgeComponent";
 
-  // funcion para eliminar un registro - modal
-  const handleQuestionEstado = (id) => {
-    setModalQuestion(true);
-    setIdProceso(id);
-  };
+export function ModalDetallesSolicitud({ data }) {
+  if (!data) return null;
 
-  const handleCambiarEstado = async (id) => {
-    try {
-      const response = await axiosInstance.post("/solicitudes/cambioEstado", {
-        id,
-      });
-
-      if (response.data.success) {
-        ToastAlert("success", "Cambio de estado correctamente");
-        queryClient.invalidateQueries(["solicitudes"]);
-        handleCloseModal(false);
-        return true;
-      } else {
-        ToastAlert("error", response.data.error || "Error en la actualización");
-        return false;
-      }
-    } catch (error) {
-      ToastAlert("error", "Error de conexión");
-      console.error("Error:", error);
-      return false;
-    }
-  };
+  const estadoResuelto = data?.estado === 1;
 
   return (
-    <div className="container-fluid">
-      {/* Primera fila: Información General y Detalles del Producto */}
+    <div className="solicitud-detalle-wrap container-fluid p-3 p-md-4">
       <div className="row g-3">
         <div className="col-md-6">
-          <div className="card border h-100">
-            <div className="card-header">
-              <p className="h6 mt-3">
+          <div className="card border h-100 solicitud-detalle-card">
+            <div className="card-header solicitud-detalle-card-header">
+              <p className="h6 mt-1 mb-0 d-flex align-items-center gap-2">
                 <FileAxis3D className="text-auto me-2" />
                 Información General
               </p>
             </div>
-            <div className="card-body d-flex flex-column align-items-center justify-content-center">
-              <UserRoundIcon className="text-auto" height="50px" width="50px" />
+            <div className="card-body d-flex flex-column align-items-center justify-content-center text-center gap-1">
+              <span className="solicitud-avatar-icon">
+                <UserRoundIcon
+                  className="text-auto"
+                  height="36px"
+                  width="36px"
+                />
+              </span>
               <span id="detalleSolicitante" className="mt-2">
                 {capitalizeFirstLetter(data?.nombre_solicitante)}
               </span>
               <small id="detalleCorreo" className="text-muted mt-1">
                 {data?.usuario?.empleado?.persona?.correo}
               </small>
-              <Badge bg="primary" id="detalleArea" className="mt-2">
-                {data?.area.nombre}
-              </Badge>
+              <BadgeComponent
+                id="detalleArea"
+                className="mt-2"
+                label={capitalizeFirstLetter(data?.area?.nombre || "Sin área")}
+                variant="primary"
+              />
               <small id="detalleCelular" className="text-muted mt-2">
                 {data?.celular}
               </small>
@@ -80,13 +54,13 @@ export function ModalDetallesSolicitud({ data, handleCloseModal }) {
         </div>
 
         <div className="col-md-6">
-          <div className="card border h-100">
-            <div className="card-header">
-              <p className=" h6 mt-3">
+          <div className="card border h-100 solicitud-detalle-card">
+            <div className="card-header solicitud-detalle-card-header">
+              <p className="h6 mt-1 mb-0 d-flex align-items-center gap-2">
                 <Box className="text-auto me-2" /> Detalles del Producto
               </p>
             </div>
-            <div className="card-body">
+            <div className="card-body solicitud-info-list">
               <p>
                 <strong>Producto:</strong>{" "}
                 <span id="detalleProducto">{data?.nombre_producto}</span>
@@ -108,66 +82,55 @@ export function ModalDetallesSolicitud({ data, handleCloseModal }) {
         </div>
 
         <div className="col-md-12">
-          <div className="card border h-100">
-            <div className="card-header">
-              <p className="h6 mt-3">
+          <div className="card border h-100 solicitud-detalle-card">
+            <div className="card-header solicitud-detalle-card-header">
+              <p className="h6 mt-1 mb-0 d-flex align-items-center gap-2">
                 <Info className="text-auto me-2" /> Información Adicional
               </p>
             </div>
-            <div className="card-body">
+            <div className="card-body solicitud-info-list">
               <p>
                 <strong>Motivo:</strong>{" "}
-                <span id="detalleMotivo">{data?.motivo}</span>
+                <span id="detalleMotivo">{data?.motivo || "-"}</span>
               </p>
               <p>
                 <strong>Uso previsto:</strong>{" "}
-                <span id="detalleUsoPrevisto">{data?.uso_previsto}</span>
+                <span id="detalleUsoPrevisto">{data?.uso_previsto || "-"}</span>
               </p>
               <p>
                 <strong>Prioridad:</strong>{" "}
-                <span id="detallePrioridad">{data?.prioridad}</span>
+                <span id="detallePrioridad">
+                  {capitalizeFirstLetter(data?.prioridad || "media")}
+                </span>
               </p>
               <p>
                 <strong>Estado:</strong>{" "}
-                <span id="detalleEstado">{data?.estado}</span>
+                <span id="detalleEstado">
+                  {estadoResuelto ? (
+                    <BadgeComponent label="Atendido" variant="success" />
+                  ) : (
+                    <BadgeComponent
+                      label="Pendiente"
+                      variant="warning"
+                      icon={<CircleAlert size={14} />}
+                    />
+                  )}
+                </span>
               </p>
               <p>
                 <strong>Fecha:</strong>{" "}
-                <span id="fechaSolicitud">{data?.fecha_solicitud}</span>
+                <span
+                  id="fechaSolicitud"
+                  className="d-inline-flex align-items-center gap-2"
+                >
+                  <CalendarDays size={14} />
+                  {data?.fecha_solicitud || data?.created_at || "-"}
+                </span>
               </p>
             </div>
           </div>
         </div>
       </div>
-
-      {/* Pie del modal: Botones de acción */}
-      <div className="modal-footer mt-2 border-0">
-        <button type="button" className="btn-primary btn float-start me-auto">
-          <PrinterIcon className="text-auto" /> Imprimir
-        </button>
-        {data?.estado == 1 ? (
-          <h4>
-            <CheckCheck className="text-auto" /> Atendido
-          </h4>
-        ) : (
-          <button
-            type="button"
-            className="btn-guardar"
-            onClick={() => handleQuestionEstado(data.id)}
-          >
-            <GitCompareIcon className="text-auto" />
-            Cambiar Estado
-          </button>
-        )}
-      </div>
-
-      <ModalGeneral
-        show={modalQuestion}
-        idProceso={idProceso}
-        mensaje={"¿Cambiar estado a Atendido?"}
-        handleAccion={handleCambiarEstado}
-        handleCloseModal={() => setModalQuestion(false)}
-      />
     </div>
   );
 }

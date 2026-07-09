@@ -108,7 +108,7 @@ export function Header({ tipoHeader = null }) {
         <div className="d-flex align-items-center justify-content-center gap-2 mx-3 ">
           {/* Botón para comprimir/expandir Sidebar */}
           <button
-            className={`ico-header  border-0 ${anchuraHeader ? "d-none" : ""} rounded-pill align-items-center justify-content-center bg-transparent`}
+            className={`ico-header border-0 ${anchuraHeader ? "d-none" : "d-none d-md-inline-flex"} rounded-pill align-items-center justify-content-center bg-transparent`}
             title="Contraer Menú"
             onClick={() => dispatch(toggleSidebar())}
             style={{
@@ -125,7 +125,7 @@ export function Header({ tipoHeader = null }) {
             <Menu className={`text-muted `} height="24px" width="24px" />
           </button>
           <button
-            className={`${anchuraHeader ? "d-none" : ""} menu-ico-header-celular  border-0  align-items-center justify-content-center `}
+            className={`${anchuraHeader ? "d-none" : "d-inline-flex d-md-none"} menu-ico-header-celular border-0 align-items-center justify-content-center`}
             title="Contraer Menú"
             onClick={() => dispatch(toggleSidebarMobile())}
           >

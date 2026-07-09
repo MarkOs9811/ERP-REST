@@ -119,7 +119,7 @@ export default function FormularioReporte({
                     type="button"
                     loading={isLoadingGoogle}
                     disabled={isAnyLoading}
-                    className=""
+                    className="btn-guardar mx-3 px-3"
                     icon={
                       !isLoadingGoogle ? (
                         <FileTextIcon className="me-1" />

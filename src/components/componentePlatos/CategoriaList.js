@@ -180,7 +180,7 @@ export function CategoriaList() {
   return (
     <div className="card p-0  h-100">
       <div className="card-header border-0 d-flex justify-content-between align-items-center mb-2">
-        <h5 className="mb-0">Categorías</h5>
+        <h4 className="mb-0">Categorías</h4>
         <div className="d-flex">
           <button
             className="btn btn-dark btn-sm rounded-pill px-2 "
@@ -212,7 +212,7 @@ export function CategoriaList() {
       </div>
 
       {/* Lista de categorías */}
-      <div className="list-group card-body p-3">
+      <div className="card-body p-3">
         {loadingCategorias ? (
           <div className="text-center p-4">
             <Cargando />

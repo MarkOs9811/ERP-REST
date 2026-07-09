@@ -29,10 +29,10 @@ export function Proveedores() {
                   <h4 className="card-title mb-0 titulo-card-especial">
                     Panel de Proveedores
                   </h4>
-                  <span className="badge-header">Activos</span>
+                  <span className="badge-header ms-2">Activos</span>
                 </div>
 
-                <div className="d-flex align-items-center flex-wrap gap-2 mt-3 mt-md-0">
+                <div className="d-flex align-items-center  gap-2 mt-3 mt-md-0">
                   <div className="header-search-container">
                     <Search className="search-icon" />
                     <input
@@ -61,7 +61,7 @@ export function Proveedores() {
                   </button>
 
                   <button
-                    className="btn btn-dark px-3"
+                    className="btn btn-dark px-4"
                     onClick={() => handleAddProveedor()}
                   >
                     <Plus size={18} />

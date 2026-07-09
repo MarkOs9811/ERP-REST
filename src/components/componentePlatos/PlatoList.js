@@ -21,6 +21,7 @@ import {
   BtnEditar,
   BtnEliminar,
 } from "../componentesReutilizables/BotonesAccion";
+import { BadgeComponent } from "../componentesReutilizables/BadgeComponent";
 
 export function PlatoList({ search, categoriaActual = null }) {
   const queryClient = useQueryClient();
@@ -239,9 +240,9 @@ export function PlatoList({ search, categoriaActual = null }) {
       center: true,
       cell: (row) =>
         row.estado == 1 ? (
-          <span className="badge bg-success ">Activo</span>
+          <BadgeComponent label="Activo" variant="success" />
         ) : (
-          <span className="badge bg-danger">Inactivo</span>
+          <BadgeComponent label="Inactivo" variant="danger" />
         ),
     },
     {

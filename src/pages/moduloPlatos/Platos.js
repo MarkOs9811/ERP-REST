@@ -27,7 +27,7 @@ export function Platos() {
                 <h4 className="card-title mb-0 titulo-card-especial">
                   Panel de Menú
                 </h4>
-                <span className="badge-header">Platos</span>
+                <span className="badge-header ms-2">Platos</span>
               </div>
               <CategoriaPlatos />
               <div className="d-flex align-items-center gap-2 mt-3 mt-md-0">

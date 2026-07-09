@@ -87,7 +87,7 @@ export function FormEditarSolicitud({ dataSolicitud, onClose }) {
     try {
       const response = await axiosInstance.put(
         `/solicitudes/${dataSolicitud.id}`,
-        data
+        data,
       );
       if (response.data.success) {
         onClose && onClose();
@@ -107,10 +107,7 @@ export function FormEditarSolicitud({ dataSolicitud, onClose }) {
   };
 
   return (
-    <div
-      className="card p-4 h-100 d-flex flex-column"
-      style={{ margin: "0 auto" }}
-    >
+    <div className="p-4 h-100 d-flex flex-column" style={{ margin: "0 auto" }}>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="d-flex flex-column flex-grow-1 h-100"
@@ -118,7 +115,7 @@ export function FormEditarSolicitud({ dataSolicitud, onClose }) {
       >
         <div className="row g-3">
           <div className="col-md-6">
-            <label className="form-label small text-muted d-flex align-items-center gap-2">
+            <label className="form-label ">
               <Tag size={18} /> Producto
             </label>
             <input
@@ -138,7 +135,7 @@ export function FormEditarSolicitud({ dataSolicitud, onClose }) {
             )}
           </div>
           <div className="col-md-3">
-            <label className="form-label small text-muted d-flex align-items-center gap-2">
+            <label className="form-label ">
               <Hash size={18} /> Cantidad
             </label>
             <input
@@ -155,7 +152,7 @@ export function FormEditarSolicitud({ dataSolicitud, onClose }) {
             )}
           </div>
           <div className="col-md-3">
-            <label className="form-label small text-muted d-flex align-items-center gap-2">
+            <label className="form-label ">
               <ListChecks size={18} /> Unidad
             </label>
             <select
@@ -178,7 +175,7 @@ export function FormEditarSolicitud({ dataSolicitud, onClose }) {
             )}
           </div>
           <div className="col-md-6">
-            <label className="form-label small text-muted d-flex align-items-center gap-2">
+            <label className="form-label ">
               <Tag size={18} /> Categoría
             </label>
             <select
@@ -205,7 +202,7 @@ export function FormEditarSolicitud({ dataSolicitud, onClose }) {
             )}
           </div>
           <div className="col-md-6">
-            <label className="form-label small text-muted d-flex align-items-center gap-2">
+            <label className="form-label ">
               <Tag size={18} /> Marca
             </label>
             <input
@@ -216,7 +213,7 @@ export function FormEditarSolicitud({ dataSolicitud, onClose }) {
             />
           </div>
           <div className="col-md-6">
-            <label className="form-label small text-muted d-flex align-items-center gap-2">
+            <label className="form-label ">
               <FileEdit size={18} /> Motivo
             </label>
             <input
@@ -227,7 +224,7 @@ export function FormEditarSolicitud({ dataSolicitud, onClose }) {
             />
           </div>
           <div className="col-md-6">
-            <label className="form-label small text-muted d-flex align-items-center gap-2">
+            <label className="form-label ">
               <FileEdit size={18} /> Descripción
             </label>
             <input
@@ -240,9 +237,7 @@ export function FormEditarSolicitud({ dataSolicitud, onClose }) {
             />
           </div>
           <div className="col-md-4">
-            <label className="form-label small text-muted d-flex align-items-center gap-2">
-              Precio estimado
-            </label>
+            <label className="form-label ">Precio estimado</label>
             <input
               type="number"
               step="0.01"
@@ -254,7 +249,7 @@ export function FormEditarSolicitud({ dataSolicitud, onClose }) {
             />
           </div>
           <div className="col-md-4">
-            <label className="form-label small text-muted d-flex align-items-center gap-2">
+            <label className="form-label ">
               <FileEdit size={18} /> Prioridad
             </label>
             <select
@@ -273,7 +268,7 @@ export function FormEditarSolicitud({ dataSolicitud, onClose }) {
             )}
           </div>
           <div className="col-md-4">
-            <label className="form-label small text-muted d-flex align-items-center gap-2">
+            <label className="form-label ">
               <FileEdit size={18} /> Uso previsto
             </label>
             <input
@@ -286,7 +281,7 @@ export function FormEditarSolicitud({ dataSolicitud, onClose }) {
             />
           </div>
           <div className="col-md-6">
-            <label className="form-label small text-muted d-flex align-items-center gap-2">
+            <label className="form-label ">
               <User size={18} /> Solicitante
             </label>
             <input
@@ -306,7 +301,7 @@ export function FormEditarSolicitud({ dataSolicitud, onClose }) {
             )}
           </div>
           <div className="col-md-6">
-            <label className="form-label small text-muted d-flex align-items-center gap-2">
+            <label className="form-label ">
               <Mail size={18} /> Email
             </label>
             <input
@@ -330,7 +325,7 @@ export function FormEditarSolicitud({ dataSolicitud, onClose }) {
             )}
           </div>
           <div className="col-md-6">
-            <label className="form-label small text-muted d-flex align-items-center gap-2">
+            <label className="form-label ">
               <Phone size={18} /> Teléfono
             </label>
             <input
@@ -341,7 +336,7 @@ export function FormEditarSolicitud({ dataSolicitud, onClose }) {
             />
           </div>
           <div className="col-md-6">
-            <label className="form-label small text-muted d-flex align-items-center gap-2">
+            <label className="form-label ">
               <Tag size={18} /> Área
             </label>
             <select

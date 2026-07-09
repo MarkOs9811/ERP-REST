@@ -35,11 +35,11 @@ export function DetallesVentas() {
                 <h4 className="card-title mb-0 titulo-card-especial">
                   Panel de Ventas
                 </h4>
-                <span className="badge-header">Registros</span>
+                <span className="badge-header ms-2">Registros</span>
               </div>
 
               <div
-                className="d-flex align-items-center flex-wrap gap-2 mt-0"
+                className="d-flex align-items-center gap-2 mt-0"
                 style={{ width: "auto" }}
               >
                 <div className="header-search-container">
@@ -75,7 +75,7 @@ export function DetallesVentas() {
                   onClick={() => GetReporteExcel("/reporteVentasTodo")}
                 >
                   <FileText size={18} />
-                  Reporte General
+                  Reporte
                 </button>
               </div>
             </div>

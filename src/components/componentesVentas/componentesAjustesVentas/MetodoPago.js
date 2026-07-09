@@ -1,11 +1,11 @@
 import { Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import ModalRight from "../../componentesReutilizables/ModalRight";
-import { useForm } from "react-hook-form";
 import ToastAlert from "../../componenteToast/ToastAlert";
 import axiosInstance from "../../../api/AxiosInstance";
 import { useQueryClient } from "@tanstack/react-query";
 import ModalAlertQuestion from "../../componenteToast/ModalAlertQuestion";
+import { FormularioAddMetodo } from "../formularios/FormularioAddMetodo";
 
 const MetodoPago = ({ metodos, onToggle }) => {
   const [modalAddMetodoPago, setModalAddMetodoPago] = useState(false);
@@ -13,13 +13,6 @@ const MetodoPago = ({ metodos, onToggle }) => {
 
   const [metodoQuestion, setModalQuestion] = useState(false);
   const [dataMetodo, setDataMetodo] = useState([]);
-
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm();
 
   const handleSubmitMetodo = async (data) => {
     try {
@@ -29,14 +22,16 @@ const MetodoPago = ({ metodos, onToggle }) => {
       if (response.data.success) {
         ToastAlert("success", "Método de pago agregado");
         setModalAddMetodoPago(false);
-        reset();
         queryClient.invalidateQueries(["metodosPago"]);
+        return true;
       } else {
         ToastAlert("error", "No se pudo agregar el método de pago");
+        return false;
       }
     } catch (error) {
       ToastAlert("error", "Error al agregar el método de pago");
       console.error("Error al agregar el método de pago:", error);
+      return false;
     }
   };
 
@@ -61,7 +56,8 @@ const MetodoPago = ({ metodos, onToggle }) => {
           <div className="d-flex justify-content-between align-items-center">
             <h6 className="card-title mb-0 fw-bold">Métodos de Pago</h6>
             <button
-              className="btn btn-light btn-sm"
+              type="button"
+              className="btn-principal btn-sm"
               title="Agregar Método"
               onClick={() => setModalAddMetodoPago(true)}
             >
@@ -97,7 +93,7 @@ const MetodoPago = ({ metodos, onToggle }) => {
                       className="form-check-input"
                       type="checkbox"
                       id={`switch-metodo-${metodo.id}`}
-                      checked={metodo.estado == 1}
+                      checked={metodo.estado === 1}
                       onChange={() => onToggle(metodo.id)}
                     />
                   </div>
@@ -108,46 +104,6 @@ const MetodoPago = ({ metodos, onToggle }) => {
         </div>
       </div>
 
-      <ModalRight
-        isOpen={modalAddMetodoPago}
-        onClose={() => setModalAddMetodoPago(false)}
-        title="Agregar Método de Pago"
-        hideFooter={true}
-      >
-        <div className="p-4 d-flex h-100 bg-transparent">
-          <form
-            className="card-body row g-3"
-            onSubmit={handleSubmit(handleSubmitMetodo)}
-          >
-            <div className="col-12">
-              <label className="form-label">Nombre del Método</label>
-              <input
-                type="text"
-                className={`form-control ${errors.nombre ? "is-invalid" : ""}`}
-                {...register("nombre", {
-                  required: "El nombre es obligatorio",
-                  maxLength: {
-                    value: 20,
-                    message: "El nombre no debe exceder los 20 caracteres",
-                  },
-                })}
-                placeholder="Ej: Efectivo, Tarjeta, etc."
-                autoFocus
-              />
-              {errors.nombre && (
-                <div className="invalid-feedback">{errors.nombre.message}</div>
-              )}
-            </div>
-
-            <div className="col-12 text-end">
-              <button type="submit" className="btn-guardar">
-                Guardar Método
-              </button>
-            </div>
-          </form>
-        </div>
-      </ModalRight>
-
       <ModalAlertQuestion
         show={metodoQuestion}
         idEliminar={dataMetodo.id}
@@ -157,6 +113,19 @@ const MetodoPago = ({ metodos, onToggle }) => {
         tipo={"Metodo"}
         pregunta="¿Estás seguro de eliminar este"
       />
+      <ModalRight
+        isOpen={modalAddMetodoPago}
+        onClose={() => setModalAddMetodoPago(false)}
+        title="Agregar Método de Pago"
+        hideFooter={true}
+      >
+        {({ handleClose }) => (
+          <FormularioAddMetodo
+            onClose={handleClose}
+            onSubmit={handleSubmitMetodo}
+          />
+        )}
+      </ModalRight>
     </div>
   );
 };

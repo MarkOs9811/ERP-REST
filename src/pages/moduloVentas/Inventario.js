@@ -95,7 +95,7 @@ export function Inventario() {
               <span className="badge-header">Productos</span>
             </div>
 
-            <div className="d-flex align-items-center flex-wrap gap-2 mt-3 mt-md-0">
+            <div className="d-flex align-items-center  gap-2 mt-3 mt-md-0">
               <div className="header-search-container">
                 <Search className="search-icon" />
                 <input
@@ -117,7 +117,7 @@ export function Inventario() {
               </button>
 
               <button
-                className="btn btn-outline-dark px-3"
+                className="btn-principal px-3"
                 onClick={() => navigate("/ventas/solicitud/realizarSolicitud")}
               >
                 <Plus size={18} />

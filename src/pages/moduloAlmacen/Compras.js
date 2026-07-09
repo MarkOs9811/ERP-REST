@@ -71,7 +71,7 @@ export function Compras() {
         <div className="col-md-3 col-sm-12 h-100">
           <CondicionCarga isLoading={isLoading} isError={isError}>
             <div className="card  p-3 d-flex flex-row align-items-center">
-              <ShoppingCart color="#f4a261" width="63px" height="63px" />
+              <ShoppingCart color="#ff8018" width="63px" height="63px" />
               <div className="ms-auto text-end">
                 <h5 className="fw-light ">Compras</h5>
                 <h3 className="fw-bold mb-0">{totalCompras}</h3>
@@ -83,7 +83,7 @@ export function Compras() {
         <div className="col-md-3 col-sm-12">
           <CondicionCarga isLoading={isLoading} isError={isError}>
             <div className="card  p-3 d-flex flex-row align-items-center">
-              <CalendarDays color="#2a9d8f" width="63px" height="63px" />
+              <CalendarDays color="#3580e4" width="63px" height="63px" />
               <div className="ms-auto text-end">
                 <h5 className="fw-light ">Compras del Mes</h5>
                 <h3 className="fw-bold mb-0">{comprasDelMes}</h3>
@@ -95,7 +95,7 @@ export function Compras() {
         <div className="col-md-3 col-sm-12">
           <CondicionCarga isLoading={isLoading} isError={isError}>
             <div className="card  p-3 d-flex flex-row align-items-center">
-              <BanknoteArrowUp color="#e76f51" width="63px" height="63px" />
+              <BanknoteArrowUp color="#e75151" width="63px" height="63px" />
               <div className="ms-auto text-end">
                 <h5 className="fw-light ">Egresos del Mes</h5>
                 <h3 className="fw-bold mb-0">S/. {totalMontoComprasDelMes}</h3>
@@ -107,7 +107,7 @@ export function Compras() {
         <div className="col-md-3 col-sm-12">
           <CondicionCarga isLoading={isLoading} isError={isError}>
             <div className="card  p-3 d-flex flex-row align-items-center">
-              <Trophy color="#f4a261" width="63px" height="63px" />
+              <Trophy color="#ffd415" width="63px" height="63px" />
               <div className="ms-auto text-end">
                 <h5 className="fw-light ">Proveedor TOP</h5>
                 <h3 className="fw-bold mb-0">{proveedorTop}</h3>
@@ -123,10 +123,10 @@ export function Compras() {
                   <h4 className="card-title mb-0 titulo-card-especial">
                     Panel de Compras
                   </h4>
-                  <span className="badge-header">Registro</span>
+                  <span className="badge-header ms-2">Registro</span>
                 </div>
 
-                <div className="d-flex align-items-center flex-wrap gap-2 mt-3 mt-md-0">
+                <div className="d-flex align-items-center gap-2 mt-3 mt-md-0">
                   <div className="header-search-container">
                     <Search className="search-icon" />
                     <input
@@ -159,7 +159,7 @@ export function Compras() {
                   </button>
 
                   <button
-                    className="btn btn-dark px-3"
+                    className="btn-principal px-4"
                     onClick={() => setModalAddCompra(true)}
                   >
                     <Plus size={18} />

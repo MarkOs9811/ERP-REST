@@ -91,12 +91,11 @@ export function ReportesVentas() {
   if (isError) return <p>Error: {error.message}</p>;
 
   return (
-    <div className="card p-3">
-      <div className="row g-3 mb-4">
-        <div className="col-md-12">
-          <h3 className="mb-4">Reportes</h3>
-        </div>
-
+    <div className="card ">
+      <div className="card-header m-0 border-0 ">
+        <h4 className="">Reportes</h4>
+      </div>
+      <div className="card-body row g-3 mb-4">
         <FormularioReporte
           titulo="Reporte de Ventas"
           onSubmitGoogle={handleReporteGoogle}

@@ -1,0 +1,87 @@
+.solicitud-detalle-wrap {
+  background: transparent;
+}
+
+.solicitud-detalle-card {
+  border-radius: var(--radius-md);
+  border-color: var(--fw-border) !important;
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+}
+
+.solicitud-detalle-card-header {
+  background: linear-gradient(180deg, var(--bg-surface) 0%, var(--bg-muted) 100%);
+  border-bottom: 1px solid var(--fw-border) !important;
+}
+
+.solicitud-avatar-icon {
+  width: 68px;
+  height: 68px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-muted);
+  border: 1px solid var(--fw-border);
+}
+
+.solicitud-info-list p {
+  margin-bottom: 0.75rem;
+  line-height: 1.35;
+}
+
+.solicitud-info-list p:last-child {
+  margin-bottom: 0;
+}
+
+.solicitud-info-list strong {
+  color: var(--text-main);
+}
+
+.solicitud-info-list span {
+  color: var(--text-muted);
+}
+
+.modal-right-footer .btn-cambiar-estado {
+  background: linear-gradient(135deg, #14b86b 0%, #10a95f 100%) !important;
+  border: 1px solid rgba(16, 169, 95, 0.8) !important;
+  color: #082717 !important;
+  box-shadow: 0 8px 18px rgba(16, 169, 95, 0.28);
+}
+
+.modal-right-footer .btn-cambiar-estado:hover {
+  background: linear-gradient(135deg, #20cc79 0%, #14b86b 100%) !important;
+  border-color: rgba(16, 169, 95, 1) !important;
+  color: #072013 !important;
+}
+
+.modal-right-footer .btn-cambiar-estado:disabled {
+  opacity: 0.7;
+  box-shadow: none;
+}
+
+@media (max-width: 768px) {
+  .solicitud-detalle-wrap {
+    padding: 12px !important;
+  }
+
+  .solicitud-avatar-icon {
+    width: 58px;
+    height: 58px;
+  }
+}
+
+body.dark-theme .solicitud-detalle-card {
+  border-color: rgba(148, 163, 184, 0.2) !important;
+  background: rgba(15, 23, 42, 0.35);
+}
+
+body.dark-theme .solicitud-detalle-card-header {
+  background: rgba(15, 23, 42, 0.35);
+  border-bottom-color: rgba(148, 163, 184, 0.22) !important;
+}
+
+body.dark-theme .solicitud-avatar-icon {
+  background: rgba(148, 163, 184, 0.12);
+  border-color: rgba(148, 163, 184, 0.22);
+}

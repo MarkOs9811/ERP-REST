@@ -92,18 +92,16 @@ export function Cajas() {
     <div className="row g-3">
       <div className="col-lg-12 col-sm-12">
         <CondicionCarga isLoading={isLoading} isError={isError}>
-          <div className="card shadow-sm overflow-hidden">
+          <div className="card  ">
             <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
               <div className="d-flex align-items-center">
-                <h4 className="card-title mb-0 titulo-card-especial">
-                  Panel de Cajas
-                </h4>
-                <span className="badge-header">Registro</span>
+                <h4 className="card-title mb-0 ">Panel de Cajas</h4>
+                <span className="badge-header ms-2">Registro</span>
               </div>
               <div className="d-flex align-items-center flex-wrap gap-2 mt-3 mt-md-0">
                 <button
                   type="button"
-                  className="btn btn-dark px-3"
+                  className="btn-principal px-3"
                   onClick={() => setModalAddCaja(true)}
                 >
                   <Plus size={18} />
@@ -120,13 +118,13 @@ export function Cajas() {
       </div>
       <div className="col-lg-12 col-sm-12">
         <CondicionCarga isLoading={isLoading} isError={isError}>
-          <div className="card shadow-sm overflow-hidden">
+          <div className="card  overflow-hidden">
             <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
               <div className="d-flex align-items-center">
                 <h4 className="card-title mb-0 titulo-card-especial">
                   Registros Caja
                 </h4>
-                <span className="badge-header">Historial</span>
+                <span className="badge-header ms-2">Historial</span>
               </div>
 
               <div className="d-flex flex-column flex-md-row align-items-center justify-content-md-end gap-2 mt-3 mt-md-0">

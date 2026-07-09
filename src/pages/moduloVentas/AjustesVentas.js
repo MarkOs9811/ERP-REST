@@ -41,9 +41,9 @@ export default function AjustesVentas() {
   return (
     <div className="row">
       <div className="col-lg-12">
-        <div className="card p-3 shadow-sm">
-          <div className="card-header">
-            <h3>Ajustes de venta</h3>
+        <div className="card">
+          <div className="card-header border-0 ">
+            <h4>Ajustes de venta</h4>
           </div>
           <div className="card-body">
             {isLoading && <p>Cargando métodos de pago...</p>}

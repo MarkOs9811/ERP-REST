@@ -37,7 +37,7 @@ export function CategoriaPlatos() {
       {categorias.map((categoria) => (
         <button
           key={categoria.id}
-          className={`rounded-pill border p-1 mx-2 px-3  ${
+          className={`rounded-pill border-0 p-1 mx-2 px-3  ${
             estadoCategoria == categoria.nombre ? "categoriaSelect" : ""
           }`}
           onClick={() => handleFiltrarCategoria(`${categoria.nombre}`)}
@@ -46,7 +46,7 @@ export function CategoriaPlatos() {
         </button>
       ))}
       <button
-        className={`rounded-pill border p-1 mx-2 px-3  ${
+        className={`rounded-pill border-0 p-1 mx-2 px-3  ${
           estadoCategoria == "todo" ? "categoriaSelect" : ""
         }`}
         onClick={() => handleFiltrarCategoria(`todo`)}

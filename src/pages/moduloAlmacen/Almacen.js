@@ -28,7 +28,7 @@ export function Almacen() {
               <span className="badge-header">ítems</span>
             </div>
 
-            <div className="module-table-controls">
+            <div className="d-flex align-items-center gap-2 mt-3 mt-md-0">
               <div className="header-search-container">
                 <Search className="search-icon" />
                 <input
@@ -50,7 +50,7 @@ export function Almacen() {
                   Reporte
                 </button>
                 <button
-                  className="btn btn-dark px-3 d-inline-flex align-items-center gap-2"
+                  className="btn-principal px-3 d-inline-flex align-items-center gap-2"
                   onClick={() => handleAgregar()}
                 >
                   <Plus size={18} />

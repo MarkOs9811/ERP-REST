@@ -4,7 +4,6 @@ import getCustomDataTableStyles from "../../css/estilosComponentesTable/DataTabl
 export function TablasGenerales({
   columnas,
   datos,
-  conditionalRowStyles,
   // Nuevos props para soportar Backend y Loading
   cargando = false,
   paginacionServer = false,
@@ -20,10 +19,10 @@ export function TablasGenerales({
         columns={columnas}
         data={datos}
         responsive
-        conditionalRowStyles={conditionalRowStyles}
         dense
         fixedHeader
-        striped={true}
+        striped={true} // <-- ESTO ACTIVA EL INTERCALADO
+        highlightOnHover={true}
         customStyles={getCustomDataTableStyles(isDark)}
         // --- ESTADO DE CARGA ---
         progressPending={cargando}
@@ -33,7 +32,6 @@ export function TablasGenerales({
         paginationTotalRows={totalRegistros}
         onChangePage={alCambiarPagina}
         // -----------------------------------
-
         paginationComponentOptions={{
           rowsPerPageText: "Filas por página:",
           rangeSeparatorText: "de",

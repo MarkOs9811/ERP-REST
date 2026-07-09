@@ -36,9 +36,27 @@ const estadoColorMap = {
 };
 
 export const BadgeComponent = ({
+  // 1. label (String o Number):
+  // Es el texto principal que va a mostrar el badge (Ej: "ACTIVO", "Pendiente").
+  // Es OBLIGATORIO (si no lo pasas, el componente no se renderiza).
+  // Extra: Si no pasas 'variant', el componente usa esta palabra para adivinar el color automáticamente basándose en el diccionario de arriba.
   label,
+
+  // 2. variant (String):
+  // OPCIONAL. Sirve para forzar un color y saltarte el diccionario automático.
+  // Solo acepta estos textos: "success", "warning", "danger", "info", "primary", "secondary".
+  // Ej: Si el label es "Abierta" (que no está en tu diccionario), le pasas variant="success" para pintarlo de verde.
   variant = null,
+
+  // 3. icon (React Element):
+  // OPCIONAL. Le pasas un componente de ícono (como los de lucide-react).
+  // Ej: icon={<CheckCircle />}
+  // No necesitas ponerle tamaño al pasarlo, el componente lo detecta y lo fuerza a 14px automáticamente.
   icon,
+
+  // 4. className (String):
+  // OPCIONAL. Para inyectarle clases extra de CSS o Bootstrap a la envoltura del badge.
+  // Ej: className="ms-2 mt-1" (para darle márgenes) o "cursor-pointer".
   className = "",
 }) => {
   let claseColor = variantes.secondary;

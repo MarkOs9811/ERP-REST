@@ -2,7 +2,7 @@
 
 :root {
   --fw-onyx: #030303;
-  --fw-emerald: #16a34a;
+  --fw-emerald: #15572d;
   --fw-saffron: #d97706;
   --fw-strawberry: #ca2929;
   --fw-informative: #313131;
@@ -16,7 +16,7 @@
   --fw-slate-600: #4b5563;
   --fw-slate-700: #374151;
 
-  --bg-emerald-soft: #ecfdf3;
+  --bg-emerald-soft: #42d17e;
   --bg-saffron-soft: #fff7ed;
   --bg-strawberry-soft: #fef2f2;
   --bg-informative-soft: #dddfe2;
@@ -333,6 +333,26 @@ button:hover {
 }
 
 /* Semantic reusable buttons */
+.btn-principal {
+  background: var(--fw-onyx) !important;
+  color: var(--fw-white) !important;
+  border: 1px solid var(--fw-onyx) !important;
+  font-size: 0.9rem !important;
+}
+
+.btn-principal:hover {
+  background: #272727 !important;
+  color: var(--fw-white) !important;
+  border-color: #272727 !important;
+}
+
+.btn-principal:active,
+.btn-principal.active {
+  background: #404040 !important;
+  color: var(--fw-white) !important;
+  border-color: #404040 !important;
+}
+
 .btn-guardar {
   background: rgb(23, 198, 105) !important;
   color: rgb(21, 32, 27) !important;
@@ -499,14 +519,7 @@ button:hover {
   border-color: var(--brand-primary) !important;
 }
 
-/* Tables */
-.table {
-  color: var(--text-main) !important;
-}
 
-.table> :not(caption)>*>* {
-  border-color: var(--fw-border) !important;
-}
 
 /* Bootstrap color overrides */
 .text-primary {
@@ -551,16 +564,7 @@ body.dark-theme .text-muted {
   color: var(--text-muted) !important;
 }
 
-body.dark-theme .table-light,
-body.dark-theme .table-light>th,
-body.dark-theme .table-light>td,
-body.dark-theme .table> :not(caption)>*>.table-light,
-body.dark-theme .table>thead,
-body.dark-theme .table>thead>tr>th {
-  background-color: var(--bg-muted) !important;
-  color: var(--text-main) !important;
-  border-color: var(--fw-border) !important;
-}
+
 
 body.dark-theme .card {
   background-color: var(--bg-surface) !important;

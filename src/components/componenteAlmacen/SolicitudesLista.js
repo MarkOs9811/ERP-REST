@@ -1,34 +1,26 @@
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import axiosInstance from "../../api/AxiosInstance";
 import { capitalizeFirstLetter } from "../../hooks/FirstLetterUp";
 import { Cargando } from "../componentesReutilizables/Cargando";
 import { TablasGenerales } from "../componentesReutilizables/TablasGenerales";
 import { ModalDetallesSolicitud } from "./componenteSolicitud/ModalDetallesSolicitud";
 
-import { Modal } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-regular-svg-icons";
-import { CheckCheck, CheckCheckIcon, Clock, Clock1 } from "lucide-react";
+import { CheckCheckIcon, Clock1, GitCompareIcon } from "lucide-react";
 import { BadgeComponent } from "../componentesReutilizables/BadgeComponent";
+import ModalRight from "../componentesReutilizables/ModalRight";
+import ModalGeneral from "../componenteToast/ModalGeneral";
+import ToastAlert from "../componenteToast/ToastAlert";
+import "../../css/estilosAlmacen/EstilosSolicitudesModal.css";
 
 export function SolicitudesLista({ search, updateList }) {
-  const rowColors = ["#1dae79", "#d34242", "#4c7d9a", "#ff9800"];
-
-  const conditionalRowStyles = [
-    {
-      when: (row) => row,
-      style: (row) => {
-        const index = row.id % rowColors.length;
-        return {
-          borderLeft: `5px solid ${rowColors[index]}`,
-        };
-      },
-    },
-  ];
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [infoSolicitud, setInfoSolicitud] = useState(null);
+  const [modalQuestion, setModalQuestion] = useState(false);
+  const queryClient = useQueryClient();
 
   const {
     data: solicitudes = [],
@@ -65,9 +57,9 @@ export function SolicitudesLista({ search, updateList }) {
       } = solicitud;
 
       const persona = empleado?.persona || {};
-      const { nombre, apellidos, telefono, documento_identidad } = persona;
+      const { nombre, apellidos, telefono } = persona;
 
-      const estadoTexto = estado == 1 ? "Resuelta" : "Pendiente";
+      const estadoTexto = estado === 1 ? "Resuelta" : "Pendiente";
 
       return (
         (email && email.toLowerCase().includes(searchLower)) ||
@@ -101,6 +93,35 @@ export function SolicitudesLista({ search, updateList }) {
     updateList?.(); // Llama a la función de actualización si se pasa como prop
   };
 
+  const handleQuestionEstado = () => {
+    if (!infoSolicitud?.id || infoSolicitud?.estado === 1) return;
+    setModalQuestion(true);
+  };
+
+  const handleCambiarEstado = async () => {
+    if (!infoSolicitud?.id) return false;
+    try {
+      const response = await axiosInstance.post("/solicitudes/cambioEstado", {
+        id: infoSolicitud.id,
+      });
+
+      if (response.data.success) {
+        ToastAlert("success", "Cambio de estado correctamente");
+        queryClient.invalidateQueries(["solicitudes"]);
+        actualizarTabla();
+        setInfoSolicitud((prev) => (prev ? { ...prev, estado: 1 } : prev));
+        return true;
+      }
+
+      ToastAlert("error", response.data.error || "Error en la actualización");
+      return false;
+    } catch (error) {
+      ToastAlert("error", "Error de conexión");
+      console.error("Error:", error);
+      return false;
+    }
+  };
+
   const columns = [
     {
       name: "ID",
@@ -115,7 +136,7 @@ export function SolicitudesLista({ search, updateList }) {
       grow: 0,
       cell: (row) => (
         <button
-          className="btn-principal"
+          className="btn-informativo"
           title="Ver Solicitud"
           onClick={() => handleVerSolicitud(row)}
         >
@@ -130,18 +151,18 @@ export function SolicitudesLista({ search, updateList }) {
       center: false,
       wrap: true,
       cell: (row) => {
-        return row.estado == 1 ? (
+        return row.estado === 1 ? (
           <BadgeComponent
             label={"Resuelto"}
             icon={<CheckCheckIcon className="text-auto" />}
             variant={"success"}
           />
         ) : (
-          <span className="badge bg-warning m-2 text-dark">
-            <small>
-              <Clock1 className="text-auto" /> Pendiente
-            </small>
-          </span>
+          <BadgeComponent
+            label={"Pendiente"}
+            icon={<Clock1 className="text-auto" />}
+            variant={"warning"}
+          />
         );
       },
     },
@@ -210,23 +231,40 @@ export function SolicitudesLista({ search, updateList }) {
 
   return (
     <div>
-      <TablasGenerales
-        datos={filteredSolicitudes}
-        columnas={columns}
-        conditionalRowStyles={conditionalRowStyles}
-      />
+      <TablasGenerales datos={filteredSolicitudes} columnas={columns} />
 
-      <Modal show={isModalOpen} onHide={handleCloseModal} centered size="xl">
-        <Modal.Header closeButton>
-          <Modal.Title>Detalles Solicitud</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <ModalDetallesSolicitud
-            handleCloseModal={handleCloseModal}
-            data={infoSolicitud}
-          />
-        </Modal.Body>
-      </Modal>
+      <ModalRight
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        title="Detalles de la Solicitud"
+        width={"700px"}
+        hideFooter={false}
+        cancelText="Cerrar"
+        submitText={infoSolicitud?.estado === 1 ? "Atendido" : "Cambiar estado"}
+        onSubmit={
+          infoSolicitud?.estado === 1 ? undefined : handleQuestionEstado
+        }
+        submitIcon={
+          infoSolicitud?.estado === 1 ? (
+            <CheckCheckIcon size={16} className="me-1" />
+          ) : (
+            <GitCompareIcon size={16} className="me-1" />
+          )
+        }
+        submitButtonClassName={
+          infoSolicitud?.estado === 1 ? "" : "btn-cambiar-estado"
+        }
+        isSubmitDisabled={infoSolicitud?.estado === 1}
+      >
+        {() => <ModalDetallesSolicitud data={infoSolicitud} />}
+      </ModalRight>
+
+      <ModalGeneral
+        show={modalQuestion}
+        mensaje="¿Cambiar estado a Atendido?"
+        handleAccion={handleCambiarEstado}
+        handleCloseModal={() => setModalQuestion(false)}
+      />
     </div>
   );
 }

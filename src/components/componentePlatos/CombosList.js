@@ -15,6 +15,7 @@ import axiosInstance from "../../api/AxiosInstance";
 import { EllipsisVerticalIcon } from "lucide-react";
 import { EstadoIntegraciones } from "../../hooks/EstadoIntegraciones";
 import { EditCombo } from "./combos/EditCombo";
+import { BadgeComponent } from "../componentesReutilizables/BadgeComponent";
 
 export function CombosList() {
   const [search, setSearch] = useState("");
@@ -125,8 +126,8 @@ export function CombosList() {
 
   return (
     <div className="card  h-100">
-      <div className="card-header  d-flex justify-content-between align-items-center mb-2">
-        <h5 className="mb-0">Combos</h5>
+      <div className="card-header border-0  d-flex justify-content-between align-items-center mb-2">
+        <h4 className="mb-0">Combos</h4>
         <div className="d-flex align-items-center gap-2">
           <div className="d-flex flex-wrap">
             <input
@@ -262,11 +263,16 @@ export function CombosList() {
                   </div>
 
                   <div
-                    className="card-footer d-flex justify-content-between align-items-center flex-column position-relative"
+                    className="card-footer bg-white d-flex justify-content-between align-items-center flex-column position-relative"
                     style={{ zIndex: 2, backgroundColor: "rgba(0, 0, 0, 0.1)" }}
                   >
-                    <span className="badge badge-ok mb-2 fs-5">
-                      S/ {combo.precio}
+                    {/* solucionar error */}
+                    <span>
+                      <BadgeComponent
+                        label={`S/ ${combo.precio}`}
+                        variant={"info"}
+                        className="fw-bold border-black"
+                      />
                     </span>
                   </div>
                 </div>

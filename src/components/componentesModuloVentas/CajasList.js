@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 import { FormEditCaja } from "./accionesCaja/FormEditCaja";
 import { useState } from "react";
 import { EllipsisVertical } from "lucide-react";
+import { BadgeComponent } from "../componentesReutilizables/BadgeComponent";
 
 export function CajasList({ search }) {
   const [modalEliminarCaja, setModalEliminarCaja] = useState(false);
@@ -114,7 +115,7 @@ export function CajasList({ search }) {
           <div className="col-lg-3 col-md-4 col-sm-12">
             <div className="card  w-100" key={item.id}>
               <div className="card-header">
-                <p className="h3">{capitalizeFirstLetter(item.nombreCaja)}</p>
+                <p className="h4">{capitalizeFirstLetter(item.nombreCaja)}</p>
                 <div
                   className="dropdown"
                   style={{ position: "absolute", top: "10px", right: "10px" }}
@@ -129,7 +130,7 @@ export function CajasList({ search }) {
                     <EllipsisVertical className="text-auto" />
                   </button>
                   <ul
-                    className="dropdown-menu dropdown-menu-end"
+                    className="dropdown-menu dropdown-menu-end "
                     aria-labelledby={`dropdownMenuButton-${item.id}`}
                     style={{ zIndex: 1050 }}
                   >
@@ -176,21 +177,22 @@ export function CajasList({ search }) {
                 </div>
               </div>
               <div className="card-body d-flex">
-                <span
-                  className={`badge ${
+                <BadgeComponent
+                  label={
                     item.estado === 1
                       ? item.estadoCaja === 1
-                        ? "bg-success"
-                        : "bg-danger"
-                      : "bg-secondary"
-                  }`}
-                >
-                  {item.estado === 1
-                    ? item.estadoCaja === 1
-                      ? "Abierta"
-                      : "Cerrado"
-                    : "Deshabilitado"}
-                </span>
+                        ? "Abierta"
+                        : "Cerrado"
+                      : "Deshabilitado"
+                  }
+                  variant={
+                    item.estado === 1
+                      ? item.estadoCaja === 1
+                        ? "success"
+                        : "danger"
+                      : "secondary"
+                  }
+                />
                 <span className="ms-auto">{item.sedes?.nombre}</span>
               </div>
             </div>

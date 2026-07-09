@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { SolicitudesLista } from "../../components/componenteAlmacen/SolicitudesLista";
 
-import { ContenedorPrincipal } from "../../components/componentesReutilizables/ContenedorPrincipal";
 import { Plus, Search } from "lucide-react";
 import ModalRight from "../../components/componentesReutilizables/ModalRight";
 import { FormAddSolicitudExterna } from "../../components/componenteAlmacen/componenteSolicitud/FormAddSolicitudExterna";
@@ -23,7 +22,7 @@ export function Solicitudes() {
               </span>
             </div>
           </div>
-          <div className="d-flex align-items-center flex-wrap gap-2 mt-3 mt-md-0">
+          <div className="d-flex align-items-center  gap-2 mt-3 mt-md-0">
             <div className="header-search-container">
               <Search className="search-icon" />
               <input
@@ -35,7 +34,7 @@ export function Solicitudes() {
               />
             </div>
             <button
-              className="btn btn-dark px-3"
+              className="btn btn-dark px-4"
               onClick={setShowModalAdd}
               title="Realiza una solicitud"
             >

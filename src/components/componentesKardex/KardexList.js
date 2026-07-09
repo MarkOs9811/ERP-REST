@@ -91,28 +91,15 @@ export function KardexList({ search }) {
         const isEntrada = row.tipo_movimiento.toLowerCase() === "entrada";
 
         return (
-          <div
-            className="d-flex align-items-center justify-content-center rounded-pill px-2"
-            style={{
-              backgroundColor: isEntrada ? "#B3E5FC" : "#FFCDD2", // Azul bebé o rojo suave
-              width: "auto",
-              height: "30px",
-            }}
-          >
+          <div className="d-flex align-items-center justify-content-center">
             {isEntrada ? (
-              <>
-                <ArrowUpRight color="#0288D1" height="30px" width="30px" />
-                <p className="d-flex center text-center m-auto text-muted">
-                  Entrada
-                </p>
-              </>
+              <span className="kardex-chip-tipo kardex-chip-tipo-entrada">
+                <ArrowUpRight size={16} /> Entrada
+              </span>
             ) : (
-              <>
-                <ArrowDownLeft color="#D32F2F" height="30px" width="30px" />
-                <p className="d-flex center text-center m-auto text-muted">
-                  Salida
-                </p>
-              </>
+              <span className="kardex-chip-tipo kardex-chip-tipo-salida">
+                <ArrowDownLeft size={16} /> Salida
+              </span>
             )}
           </div>
         );
@@ -137,14 +124,7 @@ export function KardexList({ search }) {
       grow: 1,
       cell: (row) => {
         return (
-          <div
-            className=" w-auto  d-flex align-items-center justify-content-center"
-            style={{
-              color: "auto",
-            }}
-          >
-            <p className="mx-1 mb-0 fw-bold h6">{row.cantidad}</p>
-          </div>
+          <p className="mb-0 fw-bold kardex-numeric-chip">{row.cantidad}</p>
         );
       },
       sortable: true,
@@ -156,14 +136,9 @@ export function KardexList({ search }) {
       grow: 1,
       cell: (row) => {
         return (
-          <div
-            className="w-auto  d-flex align-items-center justify-content-center"
-            style={{
-              color: "auto",
-            }}
-          >
-            <p className="mx-1 mb-0 fw-bold h6">{row.stock_anterior}</p>
-          </div>
+          <p className="mb-0 fw-bold kardex-numeric-chip">
+            {row.stock_anterior}
+          </p>
         );
       },
       center: true,
@@ -174,14 +149,7 @@ export function KardexList({ search }) {
       grow: 1,
       cell: (row) => {
         return (
-          <div
-            className="w-auto  d-flex align-items-center justify-content-center"
-            style={{
-              color: "auto",
-            }}
-          >
-            <p className="mx-1 mb-0 fw-bold h6">{row.stock_actual}</p>
-          </div>
+          <p className="mb-0 fw-bold kardex-numeric-chip">{row.stock_actual}</p>
         );
       },
       center: true,
@@ -190,13 +158,10 @@ export function KardexList({ search }) {
     {
       name: "Fecha",
       grow: 1,
-      selector: (row) => {
+      cell: (row) => {
         return (
-          <div
-            className="w-100 d-flex align-items-center justify-content-center"
-            style={{ textAlign: "center" }}
-          >
-            <CalendarDays color={"auto"} width="20px" height="20px" />
+          <div className="w-100 d-flex align-items-center justify-content-center kardex-fecha-cell">
+            <CalendarDays size={16} />
             <p className="mx-1 mb-0">{row.fecha_movimiento}</p>
           </div>
         );
@@ -206,19 +171,17 @@ export function KardexList({ search }) {
     {
       name: "Detalles",
       grow: 1,
-      selector: (row) => {
+      cell: (row) => {
         return (
-          <div
-            className="w-100 d-flex align-items-center justify-content-center"
-            style={{ textAlign: "center" }}
-          >
+          <div className="w-100 d-flex align-items-center justify-content-center">
             <a
               href={row.kardex_url}
               target="_blank"
               rel="noopener noreferrer"
-              className=" btn btn-ver mx-2 mb-0 p-2 py-1 "
+              className="btn btn-ver kardex-detalle-btn"
+              title="Ver detalle del documento"
             >
-              <FileText color={"#1591c6"} size={18} />
+              <FileText size={16} />
             </a>
           </div>
         );

@@ -1,19 +1,15 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { KardexList } from "../../components/componentesKardex/KardexList";
-import { useCallback } from "react";
 import { GetKardex } from "../../service/GetKardex";
-
-import { ContenedorPrincipal } from "../../components/componentesReutilizables/ContenedorPrincipal";
 import { ArrowDown, ArrowUp, FileText, Search } from "lucide-react";
-import ToastAlert from "../../components/componenteToast/ToastAlert";
-import axiosInstance from "../../api/AxiosInstance";
 import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteExcel";
 import { CondicionCarga } from "../../components/componentesReutilizables/CondicionCarga";
 import { useQuery } from "@tanstack/react-query";
+import "../../css/estilosAlmacen/EstilosKardexModerno.css";
 export function Kardex() {
   const [search, setSearch] = useState("");
 
-  const { data, isLoading, isError, error, refetch } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["kardex"],
     queryFn: GetKardex,
     staleTime: 1000 * 60 * 2, // 2 minutos antes de volver a refetch automático
@@ -26,6 +22,7 @@ export function Kardex() {
 
   const totalSalidas =
     data?.data?.filter((item) => item.tipo_movimiento === "salida").length || 0;
+  const totalMovimientos = totalEntradas + totalSalidas;
 
   const handleReporteSalida = async () => {
     GetReporteExcel("/reporteKardexExcelSalida");
@@ -36,41 +33,29 @@ export function Kardex() {
   };
 
   return (
-    <div>
+    <div className="kardex-page">
       <div className="row g-3">
         <div className="col-sm-12 col-md-6">
           <CondicionCarga isLoading={isLoading} isError={isError}>
-            <div className="card h-100  d-flex flex-row align-items-center justify-content-between p-3">
-              <div
-                className="rounded-pill d-flex align-items-center justify-content-center p-3"
-                style={{
-                  backgroundColor: "#B3E5FC",
-                  width: "auto",
-                  height: "50px",
-                }}
-              >
+            <div className="card kardex-kpi-card kardex-kpi-card-entrada  h-100">
+              <div className="kardex-kpi-icon-wrap">
                 <ArrowUp
-                  color="#0288D1"
-                  height="50px"
-                  width="50px"
+                  className="kardex-kpi-icon"
                   style={{ transform: "rotate(45deg)" }}
                 />
               </div>
-              <p
-                className="mb-0 ms-2 text-center h3"
-                style={{ color: "#0288D1" }}
-              >
-                Entradas
-              </p>
-
-              <div className="d-flex align-items-center">
-                <p className="mx-4 h1"> {totalEntradas}</p>
+              <div className="kardex-kpi-content">
+                <p className="kardex-kpi-label mb-0">Entradas</p>
+                <p className="kardex-kpi-value mb-0">{totalEntradas}</p>
+              </div>
+              <div className="kardex-kpi-action">
                 <button
                   type="button"
-                  className="btn btn-sm"
+                  className="btn btn-ver kardex-export-btn"
                   onClick={() => handleReporteEntrada()}
+                  title="Exportar entradas a Excel"
                 >
-                  <FileText color="#0288D1" width="24px" height="24px" />
+                  <FileText size={18} />
                 </button>
               </div>
             </div>
@@ -79,41 +64,25 @@ export function Kardex() {
 
         <div className="col-sm-12 col-md-6">
           <CondicionCarga isLoading={isLoading} isError={isError}>
-            <div className="card h-100  d-flex flex-row align-items-center justify-content-between p-3">
-              {/* Ícono y texto de Salidas */}
-              <div className="d-flex align-items-center">
-                <div
-                  className="rounded-pill d-flex align-items-center justify-content-center p-3"
-                  style={{
-                    backgroundColor: "#FFCDD2",
-                    minWidth: "auto",
-                    height: "50px",
-                  }}
-                >
-                  <ArrowDown
-                    color="#D32F2F"
-                    height="50px"
-                    width="50px"
-                    style={{ transform: "rotate(45deg)" }}
-                  />
-                </div>
+            <div className="card kardex-kpi-card kardex-kpi-card-salida  h-100">
+              <div className="kardex-kpi-icon-wrap">
+                <ArrowDown
+                  className="kardex-kpi-icon"
+                  style={{ transform: "rotate(45deg)" }}
+                />
               </div>
-              <p
-                className="mb-0 ms-2 text-center h3"
-                style={{ color: "#7a5151" }}
-              >
-                Salidas
-              </p>
-
-              {/* Número de Salidas y Botón */}
-              <div className="d-flex align-items-center">
-                <p className="mx-4 h1 mb-0">{totalSalidas}</p>
+              <div className="kardex-kpi-content">
+                <p className="kardex-kpi-label mb-0">Salidas</p>
+                <p className="kardex-kpi-value mb-0">{totalSalidas}</p>
+              </div>
+              <div className="kardex-kpi-action">
                 <button
                   type="button"
-                  className="btn btn-sm"
+                  className="btn btn-ver kardex-export-btn"
                   onClick={() => handleReporteSalida()}
+                  title="Exportar salidas a Excel"
                 >
-                  <FileText color="#D32F2F" width="24px" height="24px" />
+                  <FileText size={18} />
                 </button>
               </div>
             </div>
@@ -122,28 +91,30 @@ export function Kardex() {
 
         <div className="col-md-12">
           <CondicionCarga isLoading={isLoading} isError={isError}>
-            <div className="card  py-2">
-              <div className="card-header border-bottom-0 d-flex justify-content-between align-items-center gap-2 flex-wrap">
-                <div className="d-flex align-items-center">
-                  <h4 className="card-title mb-0 titulo-card-especial">
-                    Panel de Kardex
+            <div className="card kardex-panel-card  py-2">
+              <div className="card-header border-bottom-0 d-flex justify-content-between align-items-center gap-2 flex-wrap kardex-panel-header">
+                <div className="d-flex align-items-center gap-2 flex-wrap">
+                  <h4 className="card-title mb-0 titulo-card-especial kardex-panel-title">
+                    Kardex de Movimientos
                   </h4>
-                  <span className="badge-header">Movimientos</span>
+                  <span className="badge-header kardex-panel-badge">
+                    Total: {totalMovimientos}
+                  </span>
                 </div>
                 <div className="d-flex align-items-center">
-                  <div className="header-search-container">
+                  <div className="header-search-container kardex-search-box">
                     <Search className="search-icon" />
                     <input
                       type="text"
                       placeholder="Buscar producto..."
-                      className="form-control"
+                      className="form-control kardex-search-input"
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
                     />
                   </div>
                 </div>
               </div>
-              <div className="card-body p-0">
+              <div className="card-body p-0 kardex-table-zone">
                 <KardexList search={search} />
               </div>
             </div>

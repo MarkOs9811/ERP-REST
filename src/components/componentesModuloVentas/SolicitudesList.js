@@ -1,8 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { GetMisSolicitudes } from "../../service/GetMisSolicitudes";
-import { useEstadoAsyn } from "../../hooks/EstadoAsync";
 import { Cargando } from "../componentesReutilizables/Cargando";
-import { useCallback } from "react";
 
 import { TablasGenerales } from "../componentesReutilizables/TablasGenerales";
 import { CheckCheck } from "lucide-react";
@@ -16,6 +14,7 @@ import {
 } from "../componentesReutilizables/BotonesAccion";
 import { FormEditarSolicitud } from "./FormEditarSolicitud";
 import { useQuery } from "@tanstack/react-query";
+import { BadgeComponent } from "../componentesReutilizables/BadgeComponent";
 
 export function SolicitudesList({ search }) {
   const [alertEliminar, setAlertEliminar] = useState(false);
@@ -133,14 +132,12 @@ export function SolicitudesList({ search }) {
       name: "estado",
       cell: (row) => {
         const { estado } = row;
-        return estado == 1 ? (
-          <span className="badge bg-success m-2">
-            <small>Resuelta</small>
-          </span>
-        ) : (
-          <span className="badge bg-warning m-2 text-dark">
-            <small>Pendiente</small>
-          </span>
+        return (
+          <BadgeComponent
+            label={estado == 1 ? "Resuelta" : "Pendiente"}
+            variant={estado == 1 ? "success" : "warning"}
+            className="m-2"
+          />
         );
       },
       sortable: true,

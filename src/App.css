@@ -124,16 +124,6 @@ body.dark-theme .badge-header {
 }
 
 
-/* Tables */
-.tablaGeneral .rdt_TableBody .rdt_TableRow {
-  background-color: var(--bg-surface) !important;
-  color: var(--text-main) !important;
-  border-bottom: 1px solid var(--fw-border) !important;
-}
-
-.tablaGeneral .rdt_TableBody .rdt_TableRow:hover {
-  background-color: var(--bg-muted) !important;
-}
 
 /* Responsive */
 @media (max-width: 768px) {
