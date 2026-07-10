@@ -1,6 +1,10 @@
 import { ChartNoAxesCombined, Lock } from "lucide-react";
 
 export function CardCuentaContable({ nombreCuenta, items }) {
+  if (!Array.isArray(items) || items.length === 0) {
+    return null;
+  }
+
   const cuenta = items[0]?.cuenta || {};
   const grupoCuenta = cuenta.grupoCuenta || {};
   const cuentaCerrada = cuenta.estado === 0;
@@ -21,13 +25,15 @@ export function CardCuentaContable({ nombreCuenta, items }) {
                 borderLeft: "2px solid var(--fw-emerald)",
               }}
             >
-              <span className="text-primary fw-bold mx-2">
+              <span className="fw-libro-subtitle fw-bold mx-2">
                 {grupoCuenta.codigo}
               </span>
-              <small className="text-primary fw-bold me-2">Grupo</small>
+              <small className="fw-libro-subtitle fw-bold me-2">Grupo</small>
             </div>
             <div className="text-center flex-grow-1">
-              <p className="card-subtitle text-muted mb-0">{cuenta.codigo}</p>
+              <p className="card-subtitle fw-flow-description mb-0">
+                {cuenta.codigo}
+              </p>
               <h6 className="mb-0">{nombreCuenta}</h6>
             </div>
             <div style={{ width: 30 }}></div>
@@ -82,7 +88,7 @@ export function CardCuentaContable({ nombreCuenta, items }) {
               >
                 lock
               </span>
-              <h2 className="text-dark">Cuenta Cerrada</h2>
+              <h2 style={{ color: "var(--text-main)" }}>Cuenta Cerrada</h2>
               <button
                 type="button"
                 className="btn btn-aperturarCuenta btn-sm"
@@ -100,14 +106,14 @@ export function CardCuentaContable({ nombreCuenta, items }) {
                 className="btn-eliminar btn-sm m-2"
                 title="Cerrar Cuenta"
               >
-                <Lock size={"auto"} />
+                <Lock />
               </button>
               <button
                 type="button"
                 className="btn-principal btn-sm m-2"
                 title="Reporte"
               >
-                <ChartNoAxesCombined size={"auto"} />
+                <ChartNoAxesCombined />
               </button>
             </div>
           </div>

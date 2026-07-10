@@ -17,7 +17,7 @@ import {
 export function CardResultadoEjercicio({ registroEjercicio, resultado }) {
   if (!registroEjercicio) {
     return (
-      <div className="alert alert-warning text-center d-flex justify-content-center align-items-center gap-2">
+      <div className="fw-libro-info-box text-center d-flex justify-content-center align-items-center gap-2">
         <AlertTriangle size={20} />
         No se encontró ningún registro de resultados del ejercicio.
       </div>
@@ -32,15 +32,18 @@ export function CardResultadoEjercicio({ registroEjercicio, resultado }) {
   };
 
   return (
-    <div className="card p-2 border shadow-sm">
+    <div className="card p-2 border">
       <div className="card-header bg-transparent border-bottom-0 pb-0">
         <div className="d-flex justify-content-between align-items-center flex-wrap gap-2">
           <div>
             <h5 className="mb-1 d-flex align-items-center gap-2">
-              <ArrowRightLeft className="text-primary" size={20} />
+              <ArrowRightLeft
+                style={{ color: "var(--brand-secondary)" }}
+                size={20}
+              />
               Resultado del Ejercicio - {registroEjercicio.temporada}
             </h5>
-            <small className="text-secondary d-flex align-items-center gap-1">
+            <small className="fw-flow-description d-flex align-items-center gap-1">
               <Calendar size={14} />
               Desde: {registroEjercicio.fechaInicio} Hasta:{" "}
               {registroEjercicio.fechaFin}
@@ -48,17 +51,23 @@ export function CardResultadoEjercicio({ registroEjercicio, resultado }) {
           </div>
           <div className="d-flex gap-2">
             <button
-              className="btn btn-outline-dark p-2 d-flex align-items-center gap-2"
+              className="btn p-2 d-flex align-items-center gap-2"
+              style={{
+                border: "1px solid var(--fw-border)",
+                backgroundColor: "var(--bg-card)",
+                color: "var(--text-main)",
+              }}
               title="Registros de balances"
             >
               <History size={16} /> Balances anteriores
             </button>
             <button
-              className="btn btn-primary p-2 d-flex align-items-center gap-2"
+              className="btn p-2 d-flex align-items-center gap-2"
               style={{
                 fontSize: "1rem",
-                backgroundColor: "var(--fw-emerald)",
-                borderColor: "var(--fw-emerald)",
+                border: "1px solid var(--fw-border)",
+                backgroundColor: "var(--bg-emerald-soft)",
+                color: "var(--fw-emerald)",
               }}
               title="Realizar Balance"
             >
@@ -69,7 +78,7 @@ export function CardResultadoEjercicio({ registroEjercicio, resultado }) {
       </div>
 
       <div className="card-body">
-        <p className="card-text text-secondary d-flex align-items-center gap-2">
+        <p className="card-text fw-flow-description d-flex align-items-center gap-2">
           <Info size={16} />
           Resultados del ejercicio para la temporada{" "}
           {registroEjercicio.temporada}.
@@ -78,12 +87,12 @@ export function CardResultadoEjercicio({ registroEjercicio, resultado }) {
         <div className="row g-3 mt-2">
           {/* Ingresos */}
           <div className="col-md-6">
-            <div className="card p-3 position-relative overflow-hidden h-100 border-success border-opacity-25 bg-success bg-opacity-10">
-              <p className="card-text text-success d-flex align-items-center gap-2 mb-1">
+            <div className="card p-3 position-relative overflow-hidden h-100 fw-libro-ingresos-card">
+              <p className="card-text fw-libro-positive d-flex align-items-center gap-2 mb-1">
                 <ArrowUp size={20} />
                 <strong>Ingresos:</strong>
               </p>
-              <h3 className="text-success fw-bold">
+              <h3 className="fw-libro-positive fw-bold">
                 S/. {Number(registroEjercicio.ingresos).toFixed(2)}
               </h3>
 
@@ -104,12 +113,12 @@ export function CardResultadoEjercicio({ registroEjercicio, resultado }) {
 
           {/* Gastos */}
           <div className="col-md-6">
-            <div className="card p-3 position-relative overflow-hidden h-100 border-danger border-opacity-25 bg-danger bg-opacity-10">
-              <p className="card-text text-danger d-flex align-items-center gap-2 mb-1">
+            <div className="card p-3 position-relative overflow-hidden h-100 fw-libro-gastos-card">
+              <p className="card-text fw-libro-negative d-flex align-items-center gap-2 mb-1">
                 <ArrowDown size={20} />
                 <strong>Gastos:</strong>
               </p>
-              <h3 className="text-danger fw-bold">
+              <h3 className="fw-libro-negative fw-bold">
                 S/. {Number(registroEjercicio.gastos).toFixed(2)}
               </h3>
 
@@ -131,12 +140,12 @@ export function CardResultadoEjercicio({ registroEjercicio, resultado }) {
 
         {/* Resultado Final */}
         <div
-          className={`alert text-center mt-3 d-flex align-items-center justify-content-center ${
+          className={`fw-libro-resultado-box text-center mt-3 d-flex align-items-center justify-content-center ${
             resultado > 0
-              ? "alert-primary"
+              ? "fw-libro-resultado-positive"
               : resultado < 0
-                ? "alert-danger"
-                : "alert-secondary"
+                ? "fw-libro-resultado-negative"
+                : "fw-libro-resultado-neutral"
           }`}
           role="alert"
         >

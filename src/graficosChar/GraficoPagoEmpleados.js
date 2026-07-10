@@ -9,6 +9,13 @@ import {
 } from "chart.js";
 import { useQuery } from "@tanstack/react-query";
 import { GetInformesFinancieros } from "../service/serviceFinanzas/GetInformesFinancieros";
+import {
+  darkenColor,
+  getThemeColors,
+  hexToRgb,
+  toRgba,
+} from "../utils/ThemeColors";
+import { HandCoins } from "lucide-react";
 
 Chart.register(BarElement, CategoryScale, LinearScale, Tooltip, Title);
 
@@ -30,6 +37,8 @@ const MESES_ABREVIADOS = [
 ];
 
 export function GraficoPagoEmpleados() {
+  const colors = getThemeColors();
+
   const {
     data: dataInformes = {},
     isLoading,
@@ -54,7 +63,7 @@ export function GraficoPagoEmpleados() {
   // 2. Transformación: Convertir números a Nombres
   // Si rawLabels trae ["1", "2", "11"], esto generará ["Ene", "Feb", "Nov"]
   const labels = rawLabels.map(
-    (mesNumero) => MESES_ABREVIADOS[parseInt(mesNumero)]
+    (mesNumero) => MESES_ABREVIADOS[parseInt(mesNumero)],
   );
 
   const data = {
@@ -63,9 +72,10 @@ export function GraficoPagoEmpleados() {
       {
         label: "Monto Pagado",
         data: montos,
-        backgroundColor: "rgba(54, 162, 235, 0.5)",
-        borderColor: "#0971AC",
-        borderWidth: 1,
+        backgroundColor: toRgba(hexToRgb(colors.saffron), 0.72),
+        borderColor: darkenColor(colors.saffron, 0.24),
+        borderWidth: 2,
+        borderRadius: 4,
       },
     ],
   };
@@ -93,6 +103,12 @@ export function GraficoPagoEmpleados() {
       },
     },
     plugins: {
+      legend: {
+        labels: {
+          color: "var(--text-muted)",
+          font: { family: "'Inter', sans-serif", weight: "500" },
+        },
+      },
       tooltip: {
         callbacks: {
           title: function (tooltipItems) {
@@ -115,8 +131,35 @@ export function GraficoPagoEmpleados() {
   };
 
   return (
-    <div style={{ width: "100%", height: "350px" }}>
-      <Bar data={data} options={options} />
+    <div className="d-flex flex-column h-100">
+      <div className="mb-4 d-flex gap-3 align-items-center">
+        <span
+          className="rounded-circle p-2 d-flex justify-content-center align-items-center"
+          style={{
+            backgroundColor: "var(--bg-saffron-soft)",
+            color: "var(--fw-saffron)",
+            minWidth: "48px",
+            minHeight: "48px",
+          }}
+        >
+          <HandCoins size={24} />
+        </span>
+        <div className="d-flex flex-column flex-grow-1">
+          <span
+            className="fw-bold"
+            style={{ color: "var(--text-main)", fontSize: "1.1rem" }}
+          >
+            Pagos a Empleados
+          </span>
+          <span style={{ color: "var(--text-muted)", fontSize: "0.85rem" }}>
+            Flujo mensual de pagos registrados
+          </span>
+        </div>
+      </div>
+
+      <div style={{ width: "100%", minHeight: "290px", flexGrow: 1 }}>
+        <Bar data={data} options={options} />
+      </div>
     </div>
   );
 }

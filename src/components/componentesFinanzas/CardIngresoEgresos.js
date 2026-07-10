@@ -8,20 +8,23 @@ import {
   PointElement,
   Filler,
 } from "chart.js";
+import { getThemeColors, hexToRgb, toRgba } from "../../utils/ThemeColors";
 
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Filler);
 
 export function CardIngresoEgresos({ sumaIngresos, sumaEgresos }) {
-  // --- Datos falsos para simular el gráfico ---
+  const colors = getThemeColors();
   const dataIngresos = [10, 12, 9, 15, 18, 20, 17, 25, 28];
   const dataEgresos = [8, 9, 11, 13, 10, 14, 13, 15, 12];
+  const ingresoBase = colors.emerald;
+  const egresoBase = colors.strawberry;
 
   const options = {
     responsive: true,
     maintainAspectRatio: false,
     elements: {
       line: { tension: 0.4, borderWidth: 2 },
-      point: { radius: 0 }, // sin puntos
+      point: { radius: 0 },
     },
     plugins: { legend: { display: false }, tooltip: { enabled: false } },
     scales: { x: { display: false }, y: { display: false } },
@@ -32,8 +35,8 @@ export function CardIngresoEgresos({ sumaIngresos, sumaEgresos }) {
     datasets: [
       {
         data: dataIngresos,
-        borderColor: "rgba(35, 170, 98, 0.9)",
-        backgroundColor: "rgba(35, 170, 98, 0.1)",
+        borderColor: ingresoBase,
+        backgroundColor: toRgba(hexToRgb(ingresoBase), 0.2),
         fill: true,
       },
     ],
@@ -44,84 +47,122 @@ export function CardIngresoEgresos({ sumaIngresos, sumaEgresos }) {
     datasets: [
       {
         data: dataEgresos,
-        borderColor: "rgba(228, 73, 73, 0.9)",
-        backgroundColor: "rgba(228, 73, 73, 0.1)",
+        borderColor: egresoBase,
+        backgroundColor: toRgba(hexToRgb(egresoBase), 0.18),
         fill: true,
       },
     ],
   };
 
   return (
-    <div className="col-md-12">
+    <div className="col-12">
       <div className="row g-3">
-        {/* CARD INGRESOS */}
-        <div className="col-md-12">
+        <div className="col-12 col-lg-6">
           <div
-            className="card shadow-sm py-2 h-100 position-relative overflow-hidden"
+            className="card p-3 h-100 d-flex flex-column justify-content-between position-relative overflow-hidden"
             style={{
-              background:
-                "linear-gradient(165deg, rgba(35, 170, 98, 0.05), rgba(35, 170, 98, 0.77))",
-              border: "1px solid rgba(35, 170, 98, 0.2)",
+              backgroundColor: "var(--bg-card)",
+              border: "1px solid var(--fw-border)",
+              minHeight: "140px",
             }}
           >
-            {/* gráfico de fondo */}
             <div
               className="position-absolute top-0 start-0 w-100 h-100"
-              style={{ opacity: 0.3 }}
+              style={{ opacity: 0.34, pointerEvents: "none" }}
             >
               <Line data={ingresosChartData} options={options} />
             </div>
 
-            <div className="card-header p-2 w-100 bg-transparent position-relative">
-              <p className="h6 card-title d-flex align-items-center">
-                <TrendingUp className="text-auto mx-2" size={35} />
-                Total Ingresos
-              </p>
+            <div className="d-flex align-items-center gap-2 mb-3">
+              <span
+                className="rounded-circle p-3 position-relative"
+                style={{
+                  backgroundColor: "var(--bg-emerald-soft)",
+                  color: colors.emerald,
+                }}
+              >
+                <TrendingUp size={24} />
+              </span>
+              <span
+                className="ms-auto fw-bold"
+                style={{ fontSize: "0.9rem", color: colors.emerald }}
+              >
+                Ingresos
+              </span>
             </div>
 
-            <div className="card-body p-3 position-relative">
-              <p
-                className="h1 text-left ms-3 fw-bold"
-                style={{ color: "var(--fw-emerald)" }}
+            <div className="position-relative">
+              <span
+                className="text-muted fw-bold"
+                style={{
+                  fontSize: "0.85rem",
+                  display: "block",
+                  marginBottom: "4px",
+                }}
+              >
+                Total Ingresos
+              </span>
+              <h3
+                className="fw-bold mb-0"
+                style={{ fontSize: "1.3rem", color: colors.emerald }}
               >
                 S/. {sumaIngresos.toFixed(2)}
-              </p>
+              </h3>
             </div>
           </div>
         </div>
 
-        {/* CARD EGRESOS */}
-        <div className="col-md-12">
+        <div className="col-12 col-lg-6">
           <div
-            className="card shadow-sm py-2 h-100 position-relative overflow-hidden"
+            className="card p-3 h-100 d-flex flex-column justify-content-between position-relative overflow-hidden"
             style={{
-              background:
-                "linear-gradient(175deg, rgba(228, 73, 73, 0.05), rgba(228, 73, 73, 0.51))",
-              border: "1px solid rgba(228, 73, 73, 0.3)",
+              backgroundColor: "var(--bg-card)",
+              border: "1px solid var(--fw-border)",
+              minHeight: "140px",
             }}
           >
-            {/* gráfico de fondo */}
             <div
               className="position-absolute top-0 start-0 w-100 h-100"
-              style={{ opacity: 0.3 }}
+              style={{ opacity: 0.34, pointerEvents: "none" }}
             >
               <Line data={egresosChartData} options={options} />
             </div>
 
-            <div className="card-header p-2 w-100 bg-transparent position-relative">
-              <p className="h6 card-title d-flex align-items-center">
-                <TrendingDown size={35} className="mx-2 text-auto" />
-                Total Egresos
-              </p>
+            <div className="d-flex align-items-center gap-2 mb-3">
+              <span
+                className="rounded-circle p-3 position-relative"
+                style={{
+                  backgroundColor: "var(--bg-strawberry-soft)",
+                  color: colors.strawberry,
+                }}
+              >
+                <TrendingDown size={24} />
+              </span>
+              <span
+                className="ms-auto fw-bold"
+                style={{ fontSize: "0.9rem", color: colors.strawberry }}
+              >
+                Egresos
+              </span>
             </div>
 
-            <div className="card-body p-3 position-relative">
-              <p
-                className="h1 text-left ms-3 fw-bold"
-                style={{ color: "var(--fw-strawberry)" }}
+            <div className="position-relative">
+              <span
+                className="text-muted fw-bold"
+                style={{
+                  fontSize: "0.85rem",
+                  display: "block",
+                  marginBottom: "4px",
+                }}
+              >
+                Total Egresos
+              </span>
+              <h3
+                className="fw-bold mb-0"
+                style={{ fontSize: "1.3rem", color: colors.strawberry }}
               >
                 S/. {sumaEgresos.toFixed(2)}
-              </p>
+              </h3>
             </div>
           </div>
         </div>

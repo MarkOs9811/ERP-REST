@@ -102,3 +102,169 @@ body.dark-theme .reporte-card {
     background-color: var(--bg-card);
     border: 1px solid  var(--brand-secondary);
 }
+
+.finanzas-dashboard {
+    width: 100%;
+}
+
+.finanzas-card {
+    border: 1px solid var(--fw-border) !important;
+    box-shadow: none;
+}
+
+.finanzas-kpi-mini-grid {
+    min-height: 120px;
+}
+
+.finanzas-mini-card {
+    min-height: 96px;
+    border-radius: var(--radius-md) !important;
+}
+
+.finanzas-mini-card small {
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.finanzas-mini-card-pagado {
+    background: var(--bg-emerald-soft);
+    border-color: var(--fw-border) !important;
+}
+
+.finanzas-mini-card-pagado p {
+    color: var(--brand-primary);
+}
+
+.finanzas-mini-card-restante {
+    background: var(--bg-saffron-soft);
+    border-color: var(--fw-border) !important;
+}
+
+.finanzas-mini-card-restante p {
+    color: var(--fw-saffron);
+}
+
+.fw-flow-description {
+    color: var(--text-muted);
+}
+
+.fw-flow-subtitle-row {
+    background-color: var(--bg-muted);
+}
+
+.fw-flow-subtitle-text {
+    color: var(--brand-secondary);
+}
+
+.fw-flow-positive {
+    color: var(--fw-emerald);
+    font-weight: 600;
+}
+
+.fw-flow-negative {
+    color: var(--fw-strawberry);
+    font-weight: 600;
+}
+
+.fw-flow-total-row {
+    background-color: var(--bg-saffron-soft);
+}
+
+.fw-flow-total-value {
+    color: var(--text-main);
+}
+
+.fw-flow-empty-month {
+    border: 1px dashed var(--fw-border);
+    border-radius: var(--radius-sm);
+    padding: 8px 10px;
+    color: var(--text-muted);
+    background-color: var(--bg-muted);
+}
+
+.fw-flow-error-box {
+    border: 1px solid var(--fw-strawberry);
+    border-radius: var(--radius-sm);
+    padding: 10px;
+    color: var(--text-main);
+    background-color: var(--bg-strawberry-soft);
+}
+
+.fw-libro-subtitle {
+    color: var(--brand-secondary);
+}
+
+.fw-libro-positive {
+    color: var(--fw-emerald);
+}
+
+.fw-libro-negative {
+    color: var(--fw-strawberry);
+}
+
+.fw-libro-info-box {
+    border: 1px dashed var(--fw-border);
+    border-radius: var(--radius-sm);
+    background-color: var(--bg-muted);
+    color: var(--text-muted);
+}
+
+.fw-libro-error-box {
+    border: 1px solid var(--fw-strawberry);
+    border-radius: var(--radius-sm);
+    background-color: var(--bg-strawberry-soft);
+    color: var(--text-main);
+}
+
+.fw-libro-resumen-card {
+    border: 1px solid var(--fw-border);
+    border-radius: var(--radius-md);
+    padding: 12px;
+    background-color: var(--bg-card);
+}
+
+.fw-libro-resumen-card small {
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: 4px;
+}
+
+.fw-libro-resumen-card h4 {
+    margin: 0;
+    color: var(--text-main);
+}
+
+.fw-libro-balance-card {
+    background-color: var(--bg-emerald-soft);
+}
+
+.fw-libro-ingresos-card {
+    border: 1px solid var(--fw-border) !important;
+    background-color: var(--bg-emerald-soft);
+}
+
+.fw-libro-gastos-card {
+    border: 1px solid var(--fw-border) !important;
+    background-color: var(--bg-strawberry-soft);
+}
+
+.fw-libro-resultado-box {
+    border: 1px solid var(--fw-border);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+}
+
+.fw-libro-resultado-positive {
+    background-color: var(--bg-emerald-soft);
+    color: var(--text-main);
+}
+
+.fw-libro-resultado-negative {
+    background-color: var(--bg-strawberry-soft);
+    color: var(--text-main);
+}
+
+.fw-libro-resultado-neutral {
+    background-color: var(--bg-muted);
+    color: var(--text-main);
+}

@@ -1,6 +1,4 @@
 import {
-  Tag,
-  User,
   CalendarDays,
   CalendarCheck,
   ListOrdered,
@@ -8,7 +6,7 @@ import {
   FileText,
   FileDown,
 } from "lucide-react";
-import { use, useState } from "react";
+import { useState } from "react";
 import ModalGeneral from "../../componenteToast/ModalGeneral";
 import axiosInstance from "../../../api/AxiosInstance";
 import ToastAlert from "../../componenteToast/ToastAlert";
@@ -16,7 +14,7 @@ import { useQueryClient } from "@tanstack/react-query";
 
 export function DetallesCuotasCliente({ data, refetch, modalClose }) {
   const [alertConfirmarPago, setAlertConfirmarPago] = useState(false);
-  const [dataPago, setDataPago] = useState([]);
+  const [dataPago, setDataPago] = useState(null);
 
   const queryClient = useQueryClient();
 
@@ -26,22 +24,42 @@ export function DetallesCuotasCliente({ data, refetch, modalClose }) {
     ? `${data.cliente.persona.nombre} ${data.cliente.persona.apellidos}`
     : data.cliente?.empresa?.nombre || "Sin cliente";
 
-  const hanldleRealizarPago = async (dataId) => {
+  const formatMoney = (value) => `S/. ${Number(value || 0).toFixed(2)}`;
+  const estadoCuenta = String(data.estado || "pendiente").toLowerCase();
+  const estadoCuentaTexto =
+    estadoCuenta.charAt(0).toUpperCase() + estadoCuenta.slice(1);
+  const cuotasRestantes =
+    Number(data.cuotas || 0) - Number(data.cuotas_pagadas || 0);
+
+  const estiloEstadoCuenta =
+    estadoCuenta === "pendiente"
+      ? {
+          backgroundColor: "var(--bg-saffron-soft)",
+          color: "var(--fw-saffron)",
+        }
+      : {
+          backgroundColor: "var(--bg-emerald-soft)",
+          color: "var(--fw-emerald)",
+        };
+
+  const handleRealizarPago = async (dataId) => {
     try {
       const response = await axiosInstance.put(
         `/cuentasPorCobrar/pagarCuota/${dataId}`,
-        {}
+        {},
       );
 
       if (response.data.success) {
         ToastAlert("success", "Pago registrado con éxito");
         setAlertConfirmarPago(false);
+        setDataPago(null);
         if (refetch) refetch();
         queryClient.invalidateQueries({ queryKey: ["cuentasPorCobrar"] });
+        if (modalClose) modalClose();
       } else {
         ToastAlert(
           "error",
-          "Error al registrar el pago" + response.data.message
+          "Error al registrar el pago" + response.data.message,
         );
       }
     } catch (error) {
@@ -49,104 +67,128 @@ export function DetallesCuotasCliente({ data, refetch, modalClose }) {
       ToastAlert("error", "Error de conexion");
     }
   };
+
+  const abrirConfirmacionPago = (cuota) => {
+    setDataPago(cuota);
+    setAlertConfirmarPago(true);
+  };
+
+  const cerrarConfirmacionPago = () => {
+    setAlertConfirmarPago(false);
+    setDataPago(null);
+  };
+
   return (
-    <div className="mb-3">
-      {/* Cabecera principal */}
-      <div className="card shadow-sm mb-4 border-0">
-        <div className="card-body pb-2">
-          <div className="d-flex justify-content-between align-items-center mb-2">
+    <div className="mb-3 p-4">
+      <div className="card shadow-sm border-0">
+        <div className="card-body">
+          <div className="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
             <div>
-              <h4 className="fw-bold mb-1">Cliente</h4>
-              <span className="text-secondary">{cliente}</span>
+              <h4 className="fw-bold mb-1">Detalle de Cuenta por Cobrar</h4>
+              <span className="text-muted">Cliente: {cliente}</span>
             </div>
             <span
-              className={`badge px-3 py-2 fs-6 ${
-                data.estado === "pendiente"
-                  ? "bg-warning text-dark"
-                  : "bg-success text-white"
-              }`}
-              style={{ borderRadius: "20px" }}
+              className="badge px-3 py-2 fs-6"
+              style={{ borderRadius: "20px", ...estiloEstadoCuenta }}
             >
-              {data.estado.charAt(0).toUpperCase() + data.estado.slice(1)}
+              {estadoCuentaTexto}
             </span>
           </div>
+
           <div className="row g-3 mb-2">
             <div className="col-md-3">
-              <div className="bg-light border rounded p-3 h-100 d-flex flex-column align-items-start">
+              <div className="border rounded p-3 h-100 d-flex flex-column align-items-start">
                 <span className="mb-1">
-                  <FileText size={20} className="me-1 text-danger" />
+                  <FileText
+                    size={20}
+                    className="me-1"
+                    style={{ color: "var(--fw-saffron)" }}
+                  />
                   Monto Total
                 </span>
-                <span className="fs-4 fw-bold ">S/. {data.monto}</span>
+                <span className="fs-4 fw-bold">{formatMoney(data.monto)}</span>
               </div>
             </div>
             <div className="col-md-3">
-              <div className=" border bg-opacity-10 rounded p-3 h-100 d-flex flex-column align-items-start">
+              <div className="border rounded p-3 h-100 d-flex flex-column align-items-start">
                 <span className="mb-1">
-                  <CheckCircle2 size={20} className="me-1 text-danger" /> Monto
-                  Pagado
+                  <CheckCircle2
+                    size={20}
+                    className="me-1"
+                    style={{ color: "var(--fw-emerald)" }}
+                  />
+                  Monto Pagado
                 </span>
-                <span className="fs-4 fw-bold ">S/. {data.monto_pagado}</span>
+                <span className="fs-4 fw-bold">
+                  {formatMoney(data.monto_pagado)}
+                </span>
               </div>
             </div>
             <div className="col-md-3">
-              <div className="border bg-opacity-10 rounded p-3 h-100 d-flex flex-column align-items-start">
-                <span className="mb-1 ">
-                  <CalendarDays size={20} className="me-1 text-danger" /> Fecha
-                  de Inicio
+              <div className="border rounded p-3 h-100 d-flex flex-column align-items-start">
+                <span className="mb-1">
+                  <CalendarDays
+                    size={20}
+                    className="me-1"
+                    style={{ color: "var(--fw-saffron)" }}
+                  />
+                  Fecha de Inicio
                 </span>
-                <span className="fs-5 fw-bold ">{data.fecha_inicio}</span>
+                <span className="fs-5 fw-bold">{data.fecha_inicio}</span>
               </div>
             </div>
             <div className="col-md-3">
-              <div className="bg-danger border bg-opacity-10 rounded p-3 h-100 d-flex flex-column align-items-start">
-                <span className="mb-1 text-danger fw-bold">
-                  <CalendarCheck size={20} className="me-1" /> Fecha de Fin
+              <div className="border rounded p-3 h-100 d-flex flex-column align-items-start">
+                <span
+                  className="mb-1 fw-bold"
+                  style={{ color: "var(--fw-strawberry)" }}
+                >
+                  <CalendarCheck size={20} className="me-1" />
+                  Fecha de Fin
                 </span>
-                <span className="fs-5 fw-bold text-danger">
+                <span
+                  className="fs-5 fw-bold"
+                  style={{ color: "var(--fw-strawberry)" }}
+                >
                   {data.fecha_fin}
                 </span>
               </div>
             </div>
           </div>
+
           <div className="row g-3 mb-2">
             <div className="col-md-4">
-              <div className=" border rounded p-3 h-100 d-flex flex-column align-items-left">
+              <div className="border rounded p-3 h-100 d-flex flex-column align-items-start">
                 <div className="d-flex gap-2">
-                  <ListOrdered size={22} className="mb-1 t" />
+                  <ListOrdered size={22} className="mb-1" />
                   <span>Cuotas Totales</span>
                 </div>
                 <span className="fs-4 fw-bold">{data.cuotas}</span>
               </div>
             </div>
             <div className="col-md-4">
-              <div className=" border rounded p-3 h-100 d-flex flex-column align-items-left">
+              <div className="border rounded p-3 h-100 d-flex flex-column align-items-start">
                 <div className="d-flex gap-2">
-                  <CheckCircle2 size={22} className="mb-1 " />
+                  <CheckCircle2 size={22} className="mb-1" />
                   <span>Cuotas Pagadas</span>
                 </div>
-
                 <span className="fs-4 fw-bold">{data.cuotas_pagadas}</span>
               </div>
             </div>
             <div className="col-md-4">
-              <div className=" border rounded p-3 h-100 d-flex flex-column align-items-left">
+              <div className="border rounded p-3 h-100 d-flex flex-column align-items-start">
                 <div className="d-flex gap-2">
-                  <CalendarDays size={22} className="mb-1 " />
+                  <CalendarDays size={22} className="mb-1" />
                   <span>Cuotas Restantes</span>
                 </div>
-
-                <span className="fs-4 fw-bold">
-                  {data.cuotas - data.cuotas_pagadas}
-                </span>
+                <span className="fs-4 fw-bold">{cuotasRestantes}</span>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Tabla de cuotas programadas */}
-      <div className="card shadow-sm border  p-3">
+      <div className="card shadow-sm border mt-3">
         <div className="card-header rounded-top">
           <CalendarDays size={20} className="mb-1 me-2" />
           <span className="fw-bold fs-5">Cuotas Programadas</span>
@@ -164,15 +206,21 @@ export function DetallesCuotasCliente({ data, refetch, modalClose }) {
                   <th>Acción</th>
                 </tr>
               </thead>
-              <tbody className="">
+              <tbody>
                 {Array.isArray(data.cuotas_programadas) &&
                 data.cuotas_programadas.length > 0 ? (
-                  data.cuotas_programadas.map((cuota, idx) => (
+                  data.cuotas_programadas.map((cuota) => (
                     <tr key={cuota.id}>
-                      <td className="text-center ">
+                      <td className="text-center">
                         <span
-                          className="badge rounded-circle bg-danger text-white fs-6"
-                          style={{ width: 32, height: 32, lineHeight: "20px" }}
+                          className="badge rounded-circle fs-6"
+                          style={{
+                            backgroundColor: "var(--bg-strawberry-soft)",
+                            color: "var(--fw-strawberry)",
+                            width: 32,
+                            height: 32,
+                            lineHeight: "20px",
+                          }}
                         >
                           {cuota.numero_cuota}
                         </span>
@@ -185,36 +233,62 @@ export function DetallesCuotasCliente({ data, refetch, modalClose }) {
                         {cuota.fecha_pago}
                       </td>
                       <td>
-                        <span className="fw-bold text-success">
-                          S/. {cuota.monto}
+                        <span
+                          className="fw-bold"
+                          style={{ color: "var(--fw-emerald)" }}
+                        >
+                          {formatMoney(cuota.monto)}
                         </span>
                       </td>
                       <td>
-                        <span
-                          className={`badge px-3 py-2 small ${
-                            cuota.estado === "pagado"
-                              ? "bg-success text-white"
-                              : "bg-warning text-dark"
-                          }`}
-                          style={{ borderRadius: "20px" }}
-                        >
-                          {cuota.estado.charAt(0).toUpperCase() +
-                            cuota.estado.slice(1)}
-                        </span>
+                        {(() => {
+                          const estadoCuota = String(
+                            cuota.estado || "pendiente",
+                          ).toLowerCase();
+                          const badgeStyle =
+                            estadoCuota === "pagado"
+                              ? {
+                                  backgroundColor: "var(--bg-emerald-soft)",
+                                  color: "var(--fw-emerald)",
+                                }
+                              : {
+                                  backgroundColor: "var(--bg-saffron-soft)",
+                                  color: "var(--fw-saffron)",
+                                };
+
+                          return (
+                            <span
+                              className="badge px-3 py-2 small"
+                              style={{ borderRadius: "20px", ...badgeStyle }}
+                            >
+                              {cuota.estado.charAt(0).toUpperCase() +
+                                cuota.estado.slice(1)}
+                            </span>
+                          );
+                        })()}
                       </td>
                       <td>{cuota.fecha_pagada ? cuota.fecha_pagada : "-"}</td>
                       <td>
                         {cuota.estado === "pagado" ? (
-                          <button className="btn btn-outline-success btn-sm fw-bold">
+                          <button
+                            className="btn btn-sm fw-bold"
+                            style={{
+                              border: "1px solid var(--fw-border)",
+                              backgroundColor: "var(--bg-card)",
+                              color: "var(--fw-emerald)",
+                            }}
+                          >
                             Ver Declarado
                           </button>
                         ) : (
                           <button
-                            className="btn btn-danger btn-sm fw-bold"
-                            onClick={() => {
-                              setAlertConfirmarPago(true);
-                              setDataPago(cuota);
+                            className="btn btn-sm fw-bold"
+                            style={{
+                              border: "1px solid var(--fw-border)",
+                              backgroundColor: "var(--bg-strawberry-soft)",
+                              color: "var(--fw-strawberry)",
                             }}
+                            onClick={() => abrirConfirmacionPago(cuota)}
                           >
                             Registrar Pago
                           </button>
@@ -235,18 +309,18 @@ export function DetallesCuotasCliente({ data, refetch, modalClose }) {
         </div>
       </div>
 
-      <div className="card my-3">
-        <button className="btn-guardar " style={{ width: "250px" }}>
-          <FileDown className="text-auto" /> Descargar Detalles en PDF
+      <div className="card mt-3 p-3">
+        <button className="btn-guardar" style={{ width: "250px" }}>
+          <FileDown className="text-auto" /> Descargar Detalles
         </button>
       </div>
 
       <ModalGeneral
         show={alertConfirmarPago}
-        handleCloseModal={() => setAlertConfirmarPago(false)}
+        handleCloseModal={cerrarConfirmacionPago}
         mensaje={"¿Está seguro de que desea registrar el pago de esta cuota?"}
-        handleAccion={() => hanldleRealizarPago(dataPago.id)}
-        idProceso={dataPago.id}
+        handleAccion={() => handleRealizarPago(dataPago?.id)}
+        idProceso={dataPago?.id}
       >
         <div className="card border m-3 text-left">
           {dataPago ? (

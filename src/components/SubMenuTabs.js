@@ -90,7 +90,7 @@ const subMenuGroups = {
   "/finanzas": [
     {
       label: "Informes Fin.",
-      path: "/finanzas/informes-financieros",
+      path: "/finanzas",
       icon: <PieChart size={16} />,
     },
     {

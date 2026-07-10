@@ -61,3 +61,23 @@ export const hexToRgb = (hex) => {
       )})`
     : hex;
 };
+
+/**
+ * Oscurece un color (hex o rgb) en un porcentaje entre 0 y 1
+ * @param {string} color - Color en formato hex o rgb
+ * @param {number} amount - Intensidad de oscurecimiento (0.2 = 20%)
+ * @returns {string} Color en formato rgb
+ */
+export const darkenColor = (color, amount = 0.2) => {
+  const safeAmount = Math.min(Math.max(amount, 0), 1);
+  const normalized = color.startsWith("#") ? hexToRgb(color) : color;
+  const rgbMatch = normalized.match(/\d+/g);
+
+  if (!rgbMatch || rgbMatch.length < 3) return color;
+
+  const r = Math.max(0, Math.round(Number(rgbMatch[0]) * (1 - safeAmount)));
+  const g = Math.max(0, Math.round(Number(rgbMatch[1]) * (1 - safeAmount)));
+  const b = Math.max(0, Math.round(Number(rgbMatch[2]) * (1 - safeAmount)));
+
+  return `rgb(${r}, ${g}, ${b})`;
+};

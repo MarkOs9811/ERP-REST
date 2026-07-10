@@ -3,7 +3,7 @@ import { Chart, ArcElement, Tooltip, Legend } from "chart.js";
 import { useQuery } from "@tanstack/react-query";
 import { GetInformesFinancieros } from "../service/serviceFinanzas/GetInformesFinancieros";
 import { CreditCard } from "lucide-react";
-import { getThemeColors, toRgba } from "../utils/ThemeColors";
+import { getThemeColors, hexToRgb, toRgba } from "../utils/ThemeColors";
 
 Chart.register(ArcElement, Tooltip, Legend);
 
@@ -34,7 +34,10 @@ export function GraficoCuentasPorCobrar() {
     datasets: [
       {
         data: [montoPagado, montoRestante],
-        backgroundColor: [colors.emerald, toRgba(colors.emerald, 0.1)],
+        backgroundColor: [
+          colors.bgEmeraldSoft || colors.emerald,
+          toRgba(hexToRgb(colors.saffron), 0.25),
+        ],
         borderWidth: 1,
       },
     ],
@@ -68,16 +71,34 @@ export function GraficoCuentasPorCobrar() {
 
   return (
     <div className="w-100 h-100 ms-auto m-auto d-flex flex-column">
-      <div className="mb-3 d-flex gap-2 align-middle justify-content-left p-3">
-        <span className="alert border-0 alert-primary text-primary p-2 mb-0">
+      <div className="mb-4 d-flex gap-3 align-items-center">
+        <span
+          className="rounded-circle p-2 d-flex justify-content-center align-items-center"
+          style={{
+            backgroundColor: "var(--bg-emerald-soft)",
+            color: "var(--fw-emerald)",
+            minWidth: "48px",
+            minHeight: "48px",
+          }}
+        >
           <CreditCard size={25} />
         </span>
-        <h6 className="mb-1 d-flex flex-column gap-1">
-          <span className="fw-bold">Ventas al credito</span>
-          <p className="text-muted small mb-0">Cuentas por cobrar</p>
-        </h6>
+        <div className="d-flex flex-column flex-grow-1">
+          <span
+            className="fw-bold"
+            style={{ color: "var(--text-main)", fontSize: "1.1rem" }}
+          >
+            Ventas al crédito
+          </span>
+          <span style={{ color: "var(--text-muted)", fontSize: "0.85rem" }}>
+            Avance de cobranza y saldo pendiente
+          </span>
+        </div>
       </div>
-      <div className="m-auto center">
+      <div
+        className="m-auto center"
+        style={{ width: "100%", minHeight: "190px" }}
+      >
         <Doughnut data={data} options={options} />
       </div>
     </div>
