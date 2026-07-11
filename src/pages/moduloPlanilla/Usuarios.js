@@ -19,11 +19,11 @@ export function Usuarios() {
           <div className="d-flex align-items-center">
             <h4 className="card-title mb-0 titulo-card-especial">
               Panel de Usuarios
-              <span className="badge-header">Lista</span>
+              <span className="badge-header ms-2">Lista</span>
             </h4>
           </div>
 
-          <div className="d-flex flex-wrap gap-2 mt-3 mt-md-0 align-items-center ms-auto">
+          <div className="d-flex  gap-2 mt-3 mt-md-0 align-items-center ms-auto">
             <div className="header-search-container">
               <Search className="search-icon" />
               <input
@@ -39,7 +39,7 @@ export function Usuarios() {
               className="btn btn-outline-dark px-3"
               onClick={() => navigate("/rrhh/ingreso-a-planilla")}
             >
-              Ingreso a Planilla
+              Planilla
             </button>
 
             <button

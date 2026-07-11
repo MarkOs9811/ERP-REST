@@ -9,10 +9,10 @@ import ToastAlert from "../componenteToast/ToastAlert";
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
 
 export function ListaDocumentosFirmados() {
-  const API_BASE_URL = process.env.REACT_APP_BASE_URL;
   const queryClient = useQueryClient();
   const [dataDocumento, setDataDocument] = useState([]);
   const [handleEliminar, setHandleEliminar] = useState(false);
+
   const {
     data: dataDocFirmados = [],
     isLoading,
@@ -23,10 +23,11 @@ export function ListaDocumentosFirmados() {
     refetchOnWindowFocus: false,
     retry: 1,
   });
+
   const EliminarDoc = async (id) => {
     try {
       const response = await axiosInstance.delete(
-        `/borrarDocumentoFirmado/${id}`
+        `/borrarDocumentoFirmado/${id}`,
       );
       if (response.data.success) {
         ToastAlert("success", "Se eliminó correctamente el documento");
@@ -38,6 +39,7 @@ export function ListaDocumentosFirmados() {
       ToastAlert("error", "Error de conexion interna");
     }
   };
+
   // 🔹 Definimos las columnas de la tabla
   const columnas = [
     {
@@ -62,10 +64,11 @@ export function ListaDocumentosFirmados() {
     },
     {
       name: "Ruta del Archivo",
-      selector: (row) => row.ruta_archivo,
+      // Cambiamos a row.documento_url, que es el accesor de Laravel con la ruta S3 absoluta
+      selector: (row) => row.documento_url,
       cell: (row) => (
         <a
-          href={API_BASE_URL + row.ruta_archivo}
+          href={row.documento_url}
           target="_blank"
           rel="noopener noreferrer"
           className="text-blue-600 hover:underline"

@@ -33,15 +33,15 @@ export function Fidelizacion() {
   };
 
   return (
-    <div className="card ">
-      <div className="card-header">
+    <div className="">
+      <div className="border-0 p-0">
         <BannerFidelizacion
           botonAction={"crear"}
           modalAddCampaña={modalAddCampaña}
           setModalAddCampaña={setModalAddCampaña}
         />
       </div>
-      <div className="card-body">
+      <div className="p-0">
         <ListaCampañas />
       </div>
 

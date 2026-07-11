@@ -41,7 +41,7 @@ export function Clientes() {
             Aquí puedes ver y gestionar todos tus clientes.
           </p>
         </div>
-        <div className="d-flex flex-wrap gap-2 mt-3 mt-md-0 align-items-center ms-auto">
+        <div className="d-flex  gap-2 mt-3 mt-md-0 align-items-center ms-auto">
           <div className="header-search-container">
             <Search className="search-icon" />
             <input
@@ -63,7 +63,7 @@ export function Clientes() {
           </div>
 
           <button
-            className={`btn ${mostrarFiltros ? "btn-outline-primary" : "btn-outline-dark"} px-3`}
+            className={`btn ${mostrarFiltros ? "btn-info" : "btn-outline-dark"} px-3`}
             title="Filtros de fecha de compra"
             onClick={() => setMostrarFiltros(!mostrarFiltros)}
           >
@@ -84,7 +84,7 @@ export function Clientes() {
           </button>
 
           <button
-            className="btn btn-outline-dark px-3"
+            className="btn-principal px-3"
             title="Generar Reporte Completo"
             onClick={() => GetReporteExcel("/reporteClientes")}
           >

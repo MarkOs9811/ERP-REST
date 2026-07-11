@@ -49,9 +49,7 @@ export function Paso1Personales({
     <div className="row g-3">
       <div className="col-md-12">
         <div className="card border p-4">
-          <h5 className="mb-4" style={{ color: "#15669c" }}>
-            Paso 1: Datos Personales
-          </h5>
+          <h5 className="mb-4">Paso 1: Datos Personales</h5>
 
           {/* FOTO DE PERFIL */}
           <div className="d-flex flex-column align-items-center text-center mb-4">
@@ -84,7 +82,7 @@ export function Paso1Personales({
             )}
             <button
               type="button"
-              className="btn btn-outline-primary btn-sm"
+              className="btn-generico btn-sm"
               onClick={() => fileInputRef.current.click()}
             >
               <Upload size={16} className="me-2" /> Seleccionar Imagen

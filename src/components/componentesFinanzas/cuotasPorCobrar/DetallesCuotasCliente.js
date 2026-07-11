@@ -78,9 +78,50 @@ export function DetallesCuotasCliente({ data, refetch, modalClose }) {
     setDataPago(null);
   };
 
+  const descargarDetalles = async (dataId) => {
+    try {
+      const response = await axiosInstance.get(
+        `/cuentasPorCobrar/descargarDetalles/${dataId}`,
+        {
+          responseType: "blob", // Indica que la respuesta será un archivo binario
+        },
+      );
+      // Crear un enlace temporal para descargar el archivo
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `detalles_cuenta_${dataId}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      let errorMessage = "Error al descargar los detalles";
+
+      // Si la respuesta es un Blob (lo que Axios hace por el responseType)
+      if (error.response && error.response.data instanceof Blob) {
+        // Leemos el texto dentro del Blob de forma asíncrona
+        const errorText = await error.response.data.text();
+        try {
+          // Intentamos convertir ese texto de vuelta a JSON
+          const errorJson = JSON.parse(errorText);
+          errorMessage = errorJson.message || errorMessage;
+          console.error("Detalle del error en Laravel:", errorJson.error); // Aquí verás el error real de PHP
+        } catch (e) {
+          console.error("No se pudo parsear el error:", e);
+        }
+      } else {
+        // Por si acaso el error no llegó como Blob
+        errorMessage = error.response?.data?.message || errorMessage;
+      }
+
+      console.error("Error al descargar los detalles:", errorMessage);
+      ToastAlert("error", errorMessage);
+    }
+  };
+
   return (
     <div className="mb-3 p-4">
-      <div className="card shadow-sm border-0">
+      <div className="card  border-0">
         <div className="card-body">
           <div className="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
             <div>
@@ -188,7 +229,7 @@ export function DetallesCuotasCliente({ data, refetch, modalClose }) {
         </div>
       </div>
 
-      <div className="card shadow-sm border mt-3">
+      <div className="card  border mt-3">
         <div className="card-header rounded-top">
           <CalendarDays size={20} className="mb-1 me-2" />
           <span className="fw-bold fs-5">Cuotas Programadas</span>
@@ -310,7 +351,12 @@ export function DetallesCuotasCliente({ data, refetch, modalClose }) {
       </div>
 
       <div className="card mt-3 p-3">
-        <button className="btn-guardar" style={{ width: "250px" }}>
+        <button
+          type="button"
+          className="btn-guardar"
+          style={{ width: "250px" }}
+          onClick={() => descargarDetalles(data.id)}
+        >
           <FileDown className="text-auto" /> Descargar Detalles
         </button>
       </div>

@@ -111,7 +111,7 @@ export function ListaCampañas() {
             return (
               <div
                 key={campana.id || index}
-                className="card campana-card overflow-hidden rounded-5 bg-white"
+                className="card overflow-hidden rounded-5 bg-white"
               >
                 {/* Cabecera con degradado */}
                 <div className={`campana-header ${gradientClass}`}>

@@ -12,23 +12,25 @@ export function FormularioFirmarDoc() {
     formState: { errors, isSubmitting },
     reset,
   } = useForm();
-  const API_BASE_URL = process.env.REACT_APP_BASE_URL; // O usa process.env.REACT_APP_API_URL
+
   const onSubmit = async (data) => {
     try {
       const formData = new FormData();
       formData.append("pdf_file", data.pdf_file[0]);
       formData.append("image_file", data.image_file[0]);
+
       const response = await axiosInstance.post("/firmar-solicitud", formData);
+
       if (response.data.success) {
         ToastAlert("success", "Documento firmado con éxito");
-        let pdfUrl = response.data.pdf_url;
-        // Si la URL es relativa, concatena la base
-        if (pdfUrl && pdfUrl.startsWith("/")) {
-          pdfUrl = API_BASE_URL + pdfUrl;
-        }
+
+        // Ya recibimos la URL completa y absoluta desde S3/R2 gracias al modelo de Laravel
+        const pdfUrl = response.data.pdf_url;
+
         if (pdfUrl) {
           window.open(pdfUrl, "_blank", "noopener,noreferrer");
         }
+
         queryClient.refetchQueries(["documentosFirmados"]);
         reset();
       } else {
@@ -46,6 +48,7 @@ export function FormularioFirmarDoc() {
       }
     }
   };
+
   return (
     <div>
       <div className="card-body p-4">
@@ -87,6 +90,7 @@ export function FormularioFirmarDoc() {
               </div>
             )}
           </div>
+
           <div className="mb-4">
             <label htmlFor="image_file" className="form-label fw-semibold">
               <ShieldCheck className="me-2" />
@@ -122,6 +126,7 @@ export function FormularioFirmarDoc() {
               </div>
             )}
           </div>
+
           <div className="d-flex justify-content-end mt-4">
             <button
               type="submit"

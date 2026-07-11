@@ -24,7 +24,7 @@ const fetchDatosParaResolver = async () => {
 
 const generarPagosApi = async (idPeriodo) => {
   const resp = await axiosInstance.post(
-    `/periodoNomina/realizarPago/${idPeriodo}`
+    `/periodoNomina/realizarPago/${idPeriodo}`,
   );
 
   return resp.data;
@@ -58,7 +58,7 @@ export function ValidarNomina({ onClose }) {
       queryClient.invalidateQueries({ queryKey: ["datosParaResolverNomina"] });
       ToastAlert(
         "success",
-        "Validación iniciada. Ahora puede resolver incidencias."
+        "Validación iniciada. Ahora puede resolver incidencias.",
       );
     } catch (error) {
       // AQUÍ ESTÁ EL CAMBIO CLAVE:
@@ -77,7 +77,7 @@ export function ValidarNomina({ onClose }) {
     onSuccess: (data) => {
       ToastAlert(
         "success",
-        data.message || "Nómina generada y periodo cerrado."
+        data.message || "Nómina generada y periodo cerrado.",
       );
       queryClient.invalidateQueries({ queryKey: ["listaPeriodosNomina"] });
       queryClient.invalidateQueries({ queryKey: ["nomina"] });
@@ -86,7 +86,7 @@ export function ValidarNomina({ onClose }) {
     onError: (error) => {
       ToastAlert(
         "error",
-        error.response?.data?.message || "Error al generar el pago"
+        error.response?.data?.message || "Error al generar el pago",
       );
     },
   });
@@ -328,7 +328,7 @@ export function ValidarNomina({ onClose }) {
   return (
     <>
       <div
-        className="modal-body p-0"
+        className="modal-body p-0 bg-transparent"
         style={{ minHeight: "400px", maxHeight: "80vh", overflowY: "auto" }}
       >
         {/* 1. SECCIÓN SUPERIOR DE BOTONES */}
@@ -387,7 +387,7 @@ export function ValidarNomina({ onClose }) {
           >
             <li className="nav-item" role="presentation">
               <button
-                className={`nav-link ${
+                className={`nav-link text-dark ${
                   activeTab === "asistencias" ? "active" : ""
                 }`}
                 onClick={() => setActiveTab("asistencias")}
@@ -400,20 +400,19 @@ export function ValidarNomina({ onClose }) {
             </li>
             <li className="nav-item" role="presentation">
               <button
-                className={`nav-link ${
+                className={`nav-link text-dark ${
                   activeTab === "adelantos" ? "active" : ""
                 }`}
                 onClick={() => setActiveTab("adelantos")}
                 type="button"
                 role="tab"
               >
-                <DollarSign size={16} className="me-1" /> Adelantos (
-                {adelantos.length})
+                S/. Adelantos ({adelantos.length})
               </button>
             </li>
             <li className="nav-item" role="presentation">
               <button
-                className={`nav-link ${
+                className={`nav-link text-dark ${
                   activeTab === "horasExtra" ? "active" : ""
                 }`}
                 onClick={() => setActiveTab("horasExtra")}
@@ -426,7 +425,7 @@ export function ValidarNomina({ onClose }) {
             </li>
             <li className="nav-item" role="presentation">
               <button
-                className={`nav-link ${
+                className={`nav-link text-dark ${
                   activeTab === "vacaciones" ? "active" : ""
                 }`}
                 onClick={() => setActiveTab("vacaciones")}
@@ -443,7 +442,7 @@ export function ValidarNomina({ onClose }) {
           <div className="tab-content" id="resolver-nomina-tabs-content">
             {/* PESTAÑA 1: ASISTENCIAS */}
             {activeTab === "asistencias" && (
-              <div className="py-2">
+              <div className="py-2 ">
                 <p className="text-muted small">
                   {estaSoloEnVistaPrevia
                     ? "Revise las incidencias de asistencia. Para editarlas, debe 'Comenzar Validación'."
@@ -483,8 +482,8 @@ export function ValidarNomina({ onClose }) {
                           className="form-check-label"
                           htmlFor="confirmar-resolucion-asistencias"
                         >
-                          Confirmo que se realizarón las validación de todas las
-                          incidencias
+                          Confirmo que se realizaron las validaciones de todas
+                          las incidencias
                         </label>
                       </div>
                     </div>
@@ -492,11 +491,16 @@ export function ValidarNomina({ onClose }) {
                 )}
 
                 {asistencias.length > 0 ? (
-                  <TablasGenerales
-                    columnas={columnasAsistencias}
-                    datos={asistencias}
-                    conditionalRowStyles={asistenciaCondicional}
-                  />
+                  <div
+                    className="border rounded py-2"
+                    style={{ backgroundColor: "#f8f9fa" }}
+                  >
+                    <TablasGenerales
+                      columnas={columnasAsistencias}
+                      datos={asistencias}
+                      conditionalRowStyles={asistenciaCondicional}
+                    />
+                  </div>
                 ) : (
                   // HTML para Alert
                   <div className="alert alert-secondary small" role="alert">
@@ -510,10 +514,15 @@ export function ValidarNomina({ onClose }) {
             {activeTab === "adelantos" && (
               <div className="py-2">
                 {adelantos.length > 0 ? (
-                  <TablasGenerales
-                    columnas={columnasAdelantos}
-                    datos={adelantos}
-                  />
+                  <div
+                    className="border rounded py-2"
+                    style={{ backgroundColor: "#f8f9fa" }}
+                  >
+                    <TablasGenerales
+                      columnas={columnasAdelantos}
+                      datos={adelantos}
+                    />
+                  </div>
                 ) : (
                   // HTML para Alert
                   <div className="alert alert-secondary small" role="alert">
@@ -527,10 +536,15 @@ export function ValidarNomina({ onClose }) {
             {activeTab === "horasExtra" && (
               <div className="py-2">
                 {horasExtra.length > 0 ? (
-                  <TablasGenerales
-                    columnas={columnasHorasExtra}
-                    datos={horasExtra}
-                  />
+                  <div
+                    className="border rounded  py-2"
+                    style={{ backgroundColor: "#f8f9fa" }}
+                  >
+                    <TablasGenerales
+                      columnas={columnasHorasExtra}
+                      datos={horasExtra}
+                    />
+                  </div>
                 ) : (
                   // HTML para Alert
                   <div className="alert alert-secondary small" role="alert">
@@ -544,10 +558,15 @@ export function ValidarNomina({ onClose }) {
             {activeTab === "vacaciones" && (
               <div className="py-2">
                 {vacaciones.length > 0 ? (
-                  <TablasGenerales
-                    columnas={columnasVacaciones}
-                    datos={vacaciones}
-                  />
+                  <div
+                    className="border rounded py-2"
+                    style={{ backgroundColor: "#f8f9fa" }}
+                  >
+                    <TablasGenerales
+                      columnas={columnasVacaciones}
+                      datos={vacaciones}
+                    />
+                  </div>
                 ) : (
                   // HTML para Alert
                   <div className="alert alert-secondary small" role="alert">

@@ -31,20 +31,8 @@ import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteE
 import { CondicionCarga } from "../../components/componentesReutilizables/CondicionCarga";
 
 export function Asistencia() {
-  const rowColors = ["#1dae79", "#d34242", "#4c7d9a", "#ff9800"]; // Colores alternados
   const [listAsistencias, setModalListAsistencias] = useState(false);
 
-  const conditionalRowStyles = [
-    {
-      when: (row) => row,
-      style: (row) => {
-        const index = row.id % rowColors.length; // Alterna colores según el ID
-        return {
-          borderLeftColor: rowColors[index],
-        };
-      },
-    },
-  ];
   const {
     data: listUsuario = [],
     isLoading,
@@ -260,9 +248,9 @@ export function Asistencia() {
                   <h4 className="card-title mb-0 titulo-card-especial">
                     Panel de Asistencia
                   </h4>
-                  <span className="badge-header">Hoy</span>
+                  <span className="badge-header ms-2">Hoy</span>
                 </div>
-                <div className="d-flex align-items-center flex-wrap gap-2 mt-3 mt-md-0">
+                <div className="d-flex align-items-center  gap-2 mt-3 mt-md-0">
                   <div className="header-search-container">
                     <Search className="search-icon" />
                     <input
@@ -272,7 +260,7 @@ export function Asistencia() {
                     />
                   </div>
                   <button
-                    className="btn btn-outline-dark px-3"
+                    className="btn-generico px-3"
                     onClick={() => GetReporteExcel("/reporteAsistenciaHoy")}
                   >
                     <FileText size={18} />
@@ -292,7 +280,6 @@ export function Asistencia() {
                   customStyles={customDataTableStyles}
                   fixedHeaderScrollHeight="100vh"
                   striped={true}
-                  conditionalRowStyles={conditionalRowStyles}
                   paginationComponentOptions={{
                     rowsPerPageText: "Filas por página:",
                     rangeSeparatorText: "de",

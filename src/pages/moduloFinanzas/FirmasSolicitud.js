@@ -1,5 +1,4 @@
 import { File, Mail } from "lucide-react";
-import { ContenedorPrincipal } from "../../components/componentesReutilizables/ContenedorPrincipal";
 import { FormularioFirmarDoc } from "../../components/componentesFinanzas/FormularioFirmarDoc";
 import { ListaDocumentosFirmados } from "../../components/componentesFinanzas/ListaDocumentosFirmados";
 
@@ -9,7 +8,7 @@ export function FirmasSolicitud() {
       <div className="row g-3">
         <div className="col-md-12">
           <div className="card  py-2">
-            <div className="card-header p-3 d-flex align-items-center">
+            <div className="card-header p-3 d-flex align-items-center border-0">
               <Mail color={"var(--fw-strawberry)"} height="45px" width="45px" />
               <div>
                 <p className="h4 card-title ms-2 mb-0">Firmar solicitud</p>

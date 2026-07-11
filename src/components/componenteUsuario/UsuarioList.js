@@ -271,7 +271,7 @@ export function UsuariosList({ search, updateList }) {
             href={row.empleado?.docContratoUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn btn-outline-primary btn-sm p-1"
+            className="btn-informativo text-decoration-none p-1"
           >
             Ver Contrato
           </a>

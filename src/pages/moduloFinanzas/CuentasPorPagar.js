@@ -1,4 +1,3 @@
-import { ContenedorPrincipal } from "../../components/componentesReutilizables/ContenedorPrincipal";
 import { TablasGenerales } from "../../components/componentesReutilizables/TablasGenerales";
 import { useQuery } from "@tanstack/react-query";
 import { Cargando } from "../../components/componentesReutilizables/Cargando";
@@ -119,12 +118,6 @@ export function CuentasPorPagar() {
             width="20px"
             style={{ verticalAlign: "middle" }}
           />
-          <ArrowRightIcon
-            className="text-auto"
-            height="20px"
-            width="20px"
-            style={{ verticalAlign: "middle", marginLeft: 4 }}
-          />
         </button>
       ),
       sortable: false,
@@ -150,7 +143,7 @@ export function CuentasPorPagar() {
                 </h4>
               </div>
             </div>
-            <div className="card-body">
+            <div className="card-body p-0">
               {isLoading && (
                 <div className="text-center">
                   <Cargando />

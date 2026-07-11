@@ -28,7 +28,7 @@ export function DetallesCuotasPagar({ data, refetch, modalClose }) {
     try {
       const response = await axiosInstance.put(
         `/cuentasPorPagar/pagarCuota/${dataId}`,
-        {}
+        {},
       );
 
       if (response.data.success) {
@@ -39,7 +39,7 @@ export function DetallesCuotasPagar({ data, refetch, modalClose }) {
       } else {
         ToastAlert(
           "error",
-          "Error al registrar el pago" + response.data.message
+          "Error al registrar el pago" + response.data.message,
         );
       }
     } catch (error) {
@@ -47,8 +47,49 @@ export function DetallesCuotasPagar({ data, refetch, modalClose }) {
       ToastAlert("error", "Error de conexion");
     }
   };
+
+  const descargarDetalles = async (dataId) => {
+    try {
+      const response = await axiosInstance.get(
+        `/cuentasPorPagar/descargarDetalles/${dataId}`,
+        {
+          responseType: "blob", // Indica que la respuesta será un archivo binario
+        },
+      );
+      // Crear un enlace temporal para descargar el archivo
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `detalles_cuenta_pagar_${dataId}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      let errorMessage = "Error al descargar los detalles";
+
+      // Si la respuesta es un Blob (lo que Axios hace por el responseType)
+      if (error.response && error.response.data instanceof Blob) {
+        // Leemos el texto dentro del Blob de forma asíncrona
+        const errorText = await error.response.data.text();
+        try {
+          // Intentamos convertir ese texto de vuelta a JSON
+          const errorJson = JSON.parse(errorText);
+          errorMessage = errorJson.message || errorMessage;
+          console.error("Detalle del error en Laravel:", errorJson.error); // Aquí verás el error real de PHP
+        } catch (e) {
+          console.error("No se pudo parsear el error:", e);
+        }
+      } else {
+        // Por si acaso el error no llegó como Blob
+        errorMessage = error.response?.data?.message || errorMessage;
+      }
+
+      console.error("Error al descargar los detalles:", errorMessage);
+      ToastAlert("error", errorMessage);
+    }
+  };
   return (
-    <div className="mb-3">
+    <div className="p-3">
       {/* Cabecera principal */}
       <div className="card shadow-sm mb-4 border-0">
         <div className="card-body pb-2">
@@ -235,9 +276,14 @@ export function DetallesCuotasPagar({ data, refetch, modalClose }) {
         </div>
       </div>
 
-      <div className="card my-3">
-        <button className="btn-guardar " style={{ width: "250px" }}>
-          <FileDown className="text-auto" /> Descargar Detalles en PDF
+      <div className="card my-3 p-3">
+        <button
+          type="button"
+          className="btn-guardar "
+          style={{ width: "250px" }}
+          onClick={() => descargarDetalles(data.id)}
+        >
+          <FileDown className="text-auto" /> Descargar Detalles
         </button>
       </div>
 

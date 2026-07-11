@@ -160,7 +160,7 @@ export function Nomina() {
           <div className="d-flex align-items-center">
             <h4 className="card-title mb-0 titulo-card-especial">
               Gestión de Nómina
-              <span className="badge-header">Periodo: {periodo}</span>
+              <span className="badge-header ms-2">Periodo: {periodo}</span>
             </h4>
           </div>
 
@@ -180,7 +180,7 @@ export function Nomina() {
               />
             </div>
             <button
-              className="btn btn-dark px-3"
+              className="btn-principal px-3"
               onClick={() => navigate("/rrhh/ajustes")}
             >
               <Eye size={18} className="me-1" /> Ver todos los periodos
@@ -188,13 +188,13 @@ export function Nomina() {
           </div>
         </div>
 
-        <div className="card-body">
+        <div className="card-body p-0">
           {/* TABLERO DE RESUMEN MACRO */}
           <div className="border-bottom px-4 py-3">
             <CondicionCarga isLoading={isLoading} isError={isError}>
               <div className="row g-3">
                 <div className="col-md-4">
-                  <div className="card border-0 shadow-sm h-100 ">
+                  <div className="card  h-100 ">
                     <div className="card-body d-flex align-items-center p-3">
                       <div className="p-3 rounded-circle text-danger me-3">
                         <Users size={24} />
@@ -209,7 +209,7 @@ export function Nomina() {
                   </div>
                 </div>
                 <div className="col-md-4">
-                  <div className="card border-0 shadow-sm h-100 ">
+                  <div className="card  h-100 ">
                     <div className="card-body d-flex align-items-center p-3">
                       <div className="p-3 rounded-circle me-3">
                         <span className="fw-bold h5">S/.</span>
@@ -225,7 +225,7 @@ export function Nomina() {
                 </div>
                 <div className="col-md-4">
                   <div
-                    className={`card border-0 shadow-sm h-100 ${
+                    className={`card  h-100 ${
                       nominaData?.resumen?.estado === "PAGADO"
                         ? "bg-success text-white"
                         : "bg-warning bg-opacity-10 text-dark"
@@ -283,7 +283,7 @@ export function Nomina() {
                 Reporte
               </button>
               <button
-                className="btn btn-outline-primary px-3"
+                className="btn-guardar px-3"
                 onClick={() => setModalValidarNomina(true)}
               >
                 <UserRoundCheck size={18} className="me-1" />
@@ -293,7 +293,7 @@ export function Nomina() {
           </div>
 
           {/* TABLA PRINCIPAL */}
-          <div>
+          <div className="card-body p-0">
             <CondicionCarga isLoading={isLoading} isError={isError}>
               <TablasGenerales columnas={columns} datos={filteredItems} />
             </CondicionCarga>

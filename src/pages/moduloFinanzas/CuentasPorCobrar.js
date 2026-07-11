@@ -198,12 +198,6 @@ export function CuentasPorCobrar() {
             width="20px"
             style={{ verticalAlign: "middle" }}
           />
-          <ArrowRightIcon
-            className="text-auto"
-            height="20px"
-            width="20px"
-            style={{ verticalAlign: "middle", marginLeft: 4 }}
-          />
         </button>
       ),
       sortable: false,
