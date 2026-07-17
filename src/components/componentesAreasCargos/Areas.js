@@ -26,7 +26,7 @@ export function Areas() {
     retry: 1,
     refetchOnWindowFocus: false,
   });
-
+  console.log("areas", areas);
   const {
     data: listAreas = [],
     isLoading: isLoadingList,
@@ -70,7 +70,7 @@ export function Areas() {
     reset();
   };
   return (
-    <div className="card  p-3">
+    <div className="card  ">
       <div className="card-header  d-flex align-items-center justify-content-between">
         <div className="d-flex gap-2 align-items-center">
           <div className="p-2 alert alert-primary rounded-lg mb-0">
@@ -91,11 +91,11 @@ export function Areas() {
       </div>
       <div className="card-body">
         <div className="row g-4">
-          <div className="col-md-4">
-            <div className="h-100 p-3 bg-light rounded shadow-sm border">
-              <h6 className="fw-bold mb-3 text-center border-bottom pb-2">
+          <div className="col-md-6">
+            <div className="h-100  rounded  border">
+              <h5 className="fw-bold mb-3 text-center border-bottom p-4">
                 Distribución de Personal
-              </h6>
+              </h5>
               {isloading && <Cargando />}
               {isError && (
                 <div className="text-danger">Error al cargar gráfico.</div>
@@ -108,8 +108,8 @@ export function Areas() {
                 )}
             </div>
           </div>
-          <div className="col-md-8">
-            <div className="list-group shadow-sm">
+          <div className="col-md-6">
+            <div className="list-group ">
               {isLoadingList && <Cargando />}
               {isErrorList && (
                 <div className="text-danger">
@@ -121,7 +121,7 @@ export function Areas() {
                   No hay áreas registradas.
                 </div>
               )}
-              {listAreas.map((area) => (
+              {(areas.areas || []).map((area) => (
                 <div
                   key={area.id}
                   className="list-group-item list-group-item-action d-flex align-items-center justify-content-between p-3"
@@ -131,12 +131,12 @@ export function Areas() {
                       {area.nombre || "Sin Nombre"}
                     </span>
                     <span className="text-muted small mt-1 d-flex align-items-center gap-1">
-                      Sede: {area.sede?.nombre || "General"} | Código:{" "}
-                      {area.codigo || "-"}
+                      Sede: {area.sede?.nombre || "General"}
                     </span>
                   </div>
                   <div className="d-flex align-items-center gap-2">
-                    <span className="badge bg-danger-subtle text-danger  rounded-pill px-3 py-2 shadow-none">
+                    <span className="badge bg-danger-subtle text-danger rounded-pill px-3 py-2 shadow-none">
+                      {/* Aquí ya te va a leer el conteo directo desde el backend */}
                       {area.empleados_count || 0} Empleados
                     </span>
                   </div>

@@ -7,7 +7,7 @@ export function BotonMotionGeneral({
   onClick = () => {},
   loading = false,
   loadingText = "Cargando...",
-  classDefault = "btn btn-motion-theme py-2 px-3",
+  classDefault = "btn-principal  py-2 px-3",
   fullWidth = false, // Prop para controlar si ocupa el 100%
 }) {
   const whileHover = loading ? {} : { y: -1 };
@@ -45,7 +45,10 @@ export function BotonMotionGeneral({
           <>
             {/* Icono: flex-shrink-0 evita que se aplaste */}
             {icon && (
-              <span className="d-flex align-items-center flex-shrink-0 mx-2">
+              <span
+                className="d-flex align-items-center flex-shrink-0 
+              "
+              >
                 {icon}
               </span>
             )}

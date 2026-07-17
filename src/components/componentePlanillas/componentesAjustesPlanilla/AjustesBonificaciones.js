@@ -207,7 +207,7 @@ export function AjustesBonificaciones() {
         </div>
 
         <button
-          className="btn-agregar mx-2"
+          className="btn-principal mx-2"
           title="Agregar"
           onClick={() => {
             setModalAddBoni(true);

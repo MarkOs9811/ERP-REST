@@ -135,18 +135,18 @@ export function Configuracion() {
         <div className="col-md-12">
           <div className="row g-2">
             <div className="col-md-12">
-              <div className="card shadow-sm h-100">
+              <div className="card border-0 h-100">
                 <ul className="list-group bg-muted list-group-horizontal text-center border-0 w-100 overflow-auto">
                   {opciones.map((op) => (
                     <Link
                       key={op.to}
                       to={op.to}
                       className={`list-group-item list-group-item-action d-flex flex-column flex-sm-row align-items-center justify-content-center p-2 border-0 flex-fill ${
-                        isActive(op.path) ? "active" : ""
+                        isActive(op.path) ? "btn-principal" : ""
                       }`}
                     >
                       {op.icon}
-                      <p className="h6 m-0">{op.label}</p>
+                      <p className="small m-0">{op.label}</p>
                     </Link>
                   ))}
                 </ul>

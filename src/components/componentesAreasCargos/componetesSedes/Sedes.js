@@ -118,7 +118,6 @@ export function Sedes() {
             text="Agregar Sede"
             icon={<Plus size={18} />}
             fullWidth={true}
-            // 👇 AQUÍ AGREGAS TU FUNCIÓN
             onClick={() => {
               setSedeActual(null);
               setShowModal(true);
@@ -201,8 +200,6 @@ function SedeCard({
 
   return (
     <div
-      // 1. Quité la clase 'border' que tenías en el código anterior (ahora no está)
-      //    La clase 'card' ya tiene un borde por defecto.
       className="rounded h-100 position-relative"
       style={{
         border: isMiSede
@@ -213,7 +210,6 @@ function SedeCard({
         boxShadow: isMiSede ? "0 6px 20px rgba(220,53,69,0.10)" : undefined,
       }}
     >
-      {/* Pasamos handlers al menú de acciones */}
       <SedeActionsMenu
         sede={sede}
         index={index}
@@ -223,7 +219,6 @@ function SedeCard({
         setShowModalActivar={setShowModalActivar}
       />
       <div className="card-body p-3 d-flex flex-column">
-        {/* ...resto del contenido... */}
         <div className="flex-grow-1">
           <h5 className="card-title d-flex align-items-center gap-2 mb-3">
             <Building2 className="text-danger" height="20px" width="20px" />

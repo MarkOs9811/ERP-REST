@@ -191,7 +191,7 @@ export function PeriodoNomina() {
           <div className="d-flex ms-auto gap-2">
             {/* <button className="btn btn-sm btn-success"> + Nuevo Periodo</button> */}
             <button
-              className="btn btn-sm btn-dark"
+              className="btn-principal"
               onClick={() => setModalGenerarPeriodo(true)}
             >
               Generar periodos del año

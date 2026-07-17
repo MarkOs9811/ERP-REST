@@ -1,11 +1,26 @@
-import { Doughnut } from "react-chartjs-2";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { useState, useMemo, useCallback } from "react";
+import { Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import { useMemo, useState } from "react";
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+);
 
 const COLORS = [
-  "#489ee7",
+  "#23cc77",
   "#ee5252",
   "#5a7a98",
   "#7ab0e0",
@@ -14,164 +29,145 @@ const COLORS = [
   "#00bcd4",
 ];
 
-export function GraficoAreas({
-  labels,
-  data,
-  centerTextDescription = "empleados",
-}) {
-  const [selectedItems, setSelectedItems] = useState([]);
+export function GraficoAreas({ labels, data }) {
+  // Estado para controlar el filtro actual
+  const [areaSeleccionada, setAreaSeleccionada] = useState("Todas");
 
-  const total = useMemo(() => data.reduce((acc, val) => acc + val, 0), [data]);
+  // Filtramos la data y las etiquetas según lo seleccionado en el input
+  const filteredData = useMemo(() => {
+    if (areaSeleccionada === "Todas") {
+      return {
+        labels: labels,
+        data: data,
+        colors: labels.map((_, i) => COLORS[i % COLORS.length]),
+      };
+    }
 
-  const toggleItem = useCallback((index) => {
-    setSelectedItems((prev) =>
-      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
-    );
-  }, []);
-
-  const backgroundColors = useMemo(() => {
-    return labels.map((_, i) => {
-      const base = COLORS[i % COLORS.length];
-      return selectedItems.length && !selectedItems.includes(i)
-        ? `${base}80`
-        : base;
-    });
-  }, [labels, selectedItems]);
+    // Si hay un área seleccionada, buscamos su índice para extraer solo esa data
+    const index = labels.indexOf(areaSeleccionada);
+    return {
+      labels: [labels[index]],
+      data: [data[index]],
+      colors: [COLORS[index % COLORS.length]], // Mantenemos el color original
+    };
+  }, [labels, data, areaSeleccionada]);
 
   const chartData = useMemo(
     () => ({
-      labels,
+      labels: filteredData.labels,
       datasets: [
         {
-          data,
-          backgroundColor: backgroundColors,
-          borderWidth: 2,
-          borderColor: "#fff",
-          cutout: "75%",
-          offset: labels.map((_, i) => (selectedItems.includes(i) ? 15 : 0)),
-          hoverBorderWidth: 3,
-          hoverOffset: 8,
+          label: "Empleados",
+          data: filteredData.data,
+          backgroundColor: filteredData.colors,
+          borderRadius: 8,
+          borderWidth: 0,
+          maxBarThickness: 80, // Un poco más ancha por si filtramos una sola
         },
       ],
     }),
-    [labels, data, backgroundColors, selectedItems]
+    [filteredData],
   );
 
-  const options = useMemo(
-    () => ({
-      responsive: true,
-      maintainAspectRatio: false,
-      onClick: (_, elements) => {
-        if (elements.length > 0) toggleItem(elements[0].index);
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false,
       },
-      plugins: {
-        legend: {
-          position: "right",
-          onClick: (_, item) => toggleItem(item.index),
-          labels: {
-            boxWidth: 14,
-            padding: 15,
-            font: { size: 12 },
-            generateLabels: (chart) =>
-              chart.data.labels.map((label, i) => {
-                const value = chart.data.datasets[0].data[i];
-                const isSelected = selectedItems.includes(i);
-                return {
-                  text: `${label}`, // SIN porcentaje
-                  fillStyle: chart.data.datasets[0].backgroundColor[i],
-                  strokeStyle: COLORS[i % COLORS.length],
-                  lineWidth: isSelected ? 2 : 1,
-                  hidden: false,
-                  index: i,
-                };
-              }),
-          },
-        },
-        tooltip: {
-          backgroundColor: "rgba(0,0,0,0.85)",
-          titleColor: "#fff",
-          bodyColor: "#fff",
-          borderColor: "rgba(255,255,255,0.2)",
-          borderWidth: 1,
-          padding: 12,
-          cornerRadius: 4,
-          displayColors: true,
-          callbacks: {
-            label: ({ label, raw }) => ` ${label}: ${raw}`, // SIN porcentaje
-          },
+      tooltip: {
+        backgroundColor: "rgba(15, 23, 42, 0.9)",
+        padding: 12,
+        cornerRadius: 8,
+        callbacks: {
+          label: (context) => ` ${context.raw} trabajadores`,
         },
       },
-      animation: {
-        duration: 700,
-        easing: "easeOutQuart",
-        animateScale: true,
-        animateRotate: true,
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: { stepSize: 1 },
+        grid: { color: "rgba(0, 0, 0, 0.05)" },
+        grace: "15%",
       },
-    }),
-    [toggleItem, selectedItems]
-  );
+      x: {
+        grid: { display: false },
+        ticks: {
+          maxRotation: 45,
+          minRotation: 0,
+        },
+      },
+    },
+  };
 
-  const centerTextPlugin = useMemo(
+  const dataLabelsPlugin = useMemo(
     () => [
       {
-        id: "centerText",
-        beforeDraw: ({ ctx, chartArea: { width, height }, data }) => {
-          ctx.save();
-          const x = width / 2;
-          const y = height / 2;
-          const fontSize = Math.min(width, height) / 22;
+        id: "dataLabelsPlugin",
+        afterDatasetsDraw(chart) {
+          const { ctx } = chart;
+          const dataset = chart.data.datasets[0];
+          const meta = chart.getDatasetMeta(0);
 
-          let title = "Total";
-          let value = total.toString();
-          let desc = centerTextDescription;
-
-          if (selectedItems.length === 1) {
-            const i = selectedItems[0];
-            title = data.labels[i];
-            value = data.datasets[0].data[i];
-            desc = centerTextDescription;
-          } else if (selectedItems.length > 1) {
-            const sum = selectedItems.reduce(
-              (sum, i) => sum + data.datasets[0].data[i],
-              0
-            );
-            title = `${selectedItems.length} seleccionados`;
-            value = sum;
-            desc = centerTextDescription;
-          }
-
-          ctx.textAlign = "center";
-          ctx.fillStyle = "#6b7280";
-          ctx.font = `bold ${Math.max(12, fontSize * 0.9)}px sans-serif`;
-          ctx.fillText(title, x, y - fontSize * 1.9);
-
-          ctx.fillStyle = "#1d2530";
-          ctx.font = `bold ${Math.max(20, fontSize * 1.6)}px sans-serif`;
-          ctx.fillText(value, x, y - fontSize * 0.2);
-
-          ctx.fillStyle = "#6b7280";
-          ctx.font = `${Math.max(10, fontSize * 0.8)}px sans-serif`;
-          ctx.fillText(desc, x, y + fontSize * 1.3);
-
-          ctx.restore();
+          meta.data.forEach((bar, index) => {
+            const value = dataset.data[index];
+            if (value > 0) {
+              ctx.save();
+              ctx.fillStyle = "#1d2530";
+              ctx.font = "bold 14px sans-serif";
+              ctx.textAlign = "center";
+              ctx.textBaseline = "bottom";
+              ctx.fillText(value, bar.x, bar.y - 6);
+              ctx.restore();
+            }
+          });
         },
       },
     ],
-    [selectedItems, total, centerTextDescription]
+    [],
   );
 
+  const minWidthStyle =
+    filteredData.labels.length > 6
+      ? `${filteredData.labels.length * 80}px`
+      : "100%";
+
   return (
-    <div
-      style={{
-        position: "relative",
-        width: "100%",
-        maxWidth: "600px",
-        height: "400px",
-        margin: "0 auto",
-        fontFamily: "sans-serif",
-      }}
-    >
-      <Doughnut data={chartData} options={options} plugins={centerTextPlugin} />
+    <div className="w-100 d-flex flex-column h-100">
+      {/* Contenedor del InputSelect alineado a la derecha */}
+      <div className="d-flex justify-content-end m-3">
+        <select
+          className="form-select form-select-sm shadow-none"
+          style={{ width: "auto", minWidth: "150px" }}
+          value={areaSeleccionada}
+          onChange={(e) => setAreaSeleccionada(e.target.value)}
+        >
+          <option value="Todas">Todas las áreas</option>
+          {labels.map((label) => (
+            <option key={label} value={label}>
+              {label}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Contenedor del Gráfico */}
+      <div
+        style={{
+          position: "relative",
+          width: "100%",
+          height: "280px", // Ajusté un pelín la altura para que encaje con el select arriba
+          overflowX: "auto",
+          overflowY: "hidden",
+        }}
+        className="d-flex align-items-center justify-content-center p-4"
+      >
+        <div style={{ minWidth: minWidthStyle, height: "100%" }}>
+          <Bar data={chartData} options={options} plugins={dataLabelsPlugin} />
+        </div>
+      </div>
     </div>
   );
 }

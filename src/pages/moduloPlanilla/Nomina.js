@@ -164,8 +164,8 @@ export function Nomina() {
             </h4>
           </div>
 
-          <div className="d-flex flex-wrap gap-2 mt-3 mt-md-0 align-items-center ms-auto">
-            <div className="d-flex gap-2 align-items-center px-3 py-1 rounded-pill border">
+          <div className="d-flex  gap-2 mt-3 mt-md-0 align-items-center ms-auto">
+            <div className="d-flex gap-2 align-items-center px-3  rounded-pill border">
               <CalendarDays size={18} className="text-danger" />
               <input
                 type="month"

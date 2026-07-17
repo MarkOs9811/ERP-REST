@@ -29,6 +29,7 @@ import ModalRight from "../../components/componentesReutilizables/ModalRight";
 import { ListaAsistencia } from "../../components/componentePlanillas/componentesAsistencia/ListaAsistencias";
 import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteExcel";
 import { CondicionCarga } from "../../components/componentesReutilizables/CondicionCarga";
+import { TablasGenerales } from "../../components/componentesReutilizables/TablasGenerales";
 
 export function Asistencia() {
   const [listAsistencias, setModalListAsistencias] = useState(false);
@@ -269,24 +270,7 @@ export function Asistencia() {
                 </div>
               </div>
               <div className="card-body p-0">
-                <DataTable
-                  className="tablaGeneral"
-                  columns={columnas}
-                  data={listaAsistenciaHoy}
-                  pagination
-                  responsive
-                  dense
-                  fixedHeader
-                  customStyles={customDataTableStyles}
-                  fixedHeaderScrollHeight="100vh"
-                  striped={true}
-                  paginationComponentOptions={{
-                    rowsPerPageText: "Filas por página:",
-                    rangeSeparatorText: "de",
-                    selectAllRowsItem: true,
-                    selectAllRowsItemText: "Todos",
-                  }}
-                />
+                <TablasGenerales columns={columnas} data={listaAsistenciaHoy} />
               </div>
             </div>
           </div>
@@ -315,15 +299,15 @@ export function Asistencia() {
                     <CalendarCheck className="me-2 color-auto" />
                     Asistencias Mensual
                   </p>
-                  <div className="d-flex align-items-center gap-3">
-                    <button
-                      className="btn btn-sm btn-outline-dark"
-                      onClick={() => setModalListAsistencias(true)}
-                    >
-                      <Eye className="me-1 text-auto" />
-                      Ver Asistencias
-                    </button>
-                  </div>
+                </div>
+                <div className="ms-auto">
+                  <button
+                    className="btn-generico  ms-auto"
+                    onClick={() => setModalListAsistencias(true)}
+                  >
+                    <Eye className="me-1 text-auto" />
+                    Ver Asistencias
+                  </button>
                 </div>
               </div>
               <div className="card-body h-100">

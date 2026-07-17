@@ -201,7 +201,7 @@ export function AjustesDeducciones() {
         </div>
 
         <button
-          className="btn-agregar mx-2"
+          className="btn-principal mx-2"
           title="Agregar"
           onClick={() => {
             setModalAddDeduccion(true);

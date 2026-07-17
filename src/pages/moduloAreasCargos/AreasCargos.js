@@ -7,7 +7,7 @@ export function AreasCargo() {
   const [activeTab, setActiveTab] = useState("areas");
 
   return (
-    <div className="bg-white rounded border-none p-4">
+    <div className="card p-4">
       <ul className="nav nav-pills mb-4" id="pills-tab" role="tablist">
         <li className="nav-item" role="presentation">
           <button

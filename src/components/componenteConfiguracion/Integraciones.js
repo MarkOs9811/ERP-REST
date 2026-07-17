@@ -130,10 +130,7 @@ export function Integraciones() {
       <div className="row g-3">
         {integraciones.map((item) => (
           <div className="col-md-4 col-xl-6 col-sm-12" key={item.id}>
-            <div
-              className="card border-0 shadow-sm p-4 h-100"
-              style={{ borderRadius: 18 }}
-            >
+            <div className="card  p-4 h-100" style={{ borderRadius: 18 }}>
               <div className="d-flex align-items-center mb-2">
                 <div className="me-3">{getIcon(item.nombre)}</div>
                 <div className="flex-grow-1">
