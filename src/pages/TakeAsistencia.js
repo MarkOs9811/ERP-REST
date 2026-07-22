@@ -7,11 +7,11 @@ import { ClockPlus, DoorOpenIcon, LogOut } from "lucide-react";
 
 export function TakeAsistencia() {
   const [currentTime, setCurrentTime] = useState("");
+  const [loading, setLoading] = useState(false); // 🔥 Control de peticiones concurrentes
   const dniInputRef = useRef(null);
 
   const {
     register,
-    handleSubmit,
     reset,
     setError,
     formState: { errors },
@@ -19,19 +19,17 @@ export function TakeAsistencia() {
   } = useForm();
 
   useEffect(() => {
-    if (dniInputRef.current) {
-      dniInputRef.current.focus();
-    }
+    if (dniInputRef.current) dniInputRef.current.focus();
 
     const updateClock = () => {
-      const now = new Date();
-      const formatted = now.toLocaleTimeString("es-PE", {
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: true,
-      });
-      setCurrentTime(formatted);
+      setCurrentTime(
+        new Date().toLocaleTimeString("es-PE", {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: true,
+        }),
+      );
     };
 
     updateClock();
@@ -39,111 +37,118 @@ export function TakeAsistencia() {
     return () => clearInterval(interval);
   }, []);
 
-  const registrarEntrada = async () => {
+  const validateDni = () => {
     const dni = getValues("documento_identidad");
-
-    try {
-      if (!dni) {
-        setError("documento_identidad", {
-          type: "manual",
-          message: "El campo DNI es obligatorio",
-        });
-        return;
-      }
-
-      const response = await axiosInstance.post(`/asistencia/ingreso`, {
-        dni: dni,
+    if (!dni || dni.length < 8) {
+      setError("documento_identidad", {
+        type: "manual",
+        message: "El campo DNI debe tener al menos 8 dígitos",
       });
+      return null;
+    }
+    return dni;
+  };
+
+  const registrarEntrada = async () => {
+    const dni = validateDni();
+    if (!dni || loading) return;
+
+    setLoading(true);
+    try {
+      const response = await axiosInstance.post(`/asistencia/ingreso`, { dni });
 
       if (response.data.success) {
-        // Reiniciar solo el campo DNI
         reset({ documento_identidad: "" });
-
         ToastAlert("success", "Entrada registrada con éxito");
       } else {
-        reset(); // Si prefieres resetear todo
-        toast.error("Error " + response.data.message);
+        ToastAlert("error", "Error: " + response.data.message);
       }
     } catch (error) {
-      const message =
-        error.response?.data?.message ||
-        "Error inesperado al registrar la entrada.";
-      toast.error(message);
+      ToastAlert(
+        "error",
+        error.response?.data?.message || "Error al registrar la entrada.",
+      );
+    } finally {
+      setLoading(false);
+      dniInputRef.current?.focus();
     }
   };
 
   const registrarSalida = async () => {
-    const dni = getValues("documento_identidad");
+    const dni = validateDni();
+    if (!dni || loading) return;
 
-    if (!dni) {
-      setError("dni", {
-        type: "manual",
-        message: "El campo DNI es obligatorio",
-      });
-      return;
-    }
-
+    setLoading(true);
     try {
-      const response = await axiosInstance.post(`/asistencia/salida`, {
-        dni: dni,
-      });
+      const response = await axiosInstance.post(`/asistencia/salida`, { dni });
 
       if (response.data.success) {
-        reset({ documento_identidad: "" }); // Reiniciar solo el campo DNI
-        toast.success(response.data.message || "Salida registrada");
+        reset({ documento_identidad: "" });
+        ToastAlert(
+          "success",
+          response.data.message || "Salida registrada con éxito",
+        );
       } else {
-        reset(); // Si prefieres resetear todo
-        toast.error(response.data.message || "Error al registrar salida");
+        ToastAlert(
+          "error",
+          response.data.message || "Error al registrar salida",
+        );
       }
-
-      dniInputRef.current.focus();
     } catch (error) {
       if (error.response?.data?.errors?.dni) {
-        setError("dni", {
+        setError("documento_identidad", {
+          // 🔥 Corregido: Era "documento_identidad", no "dni"
           type: "manual",
           message: error.response.data.errors.dni[0],
         });
       } else {
-        toast.error(
-          error.response?.data?.message || "Error al registrar salida",
+        ToastAlert(
+          error.response?.data?.message || "Error al procesar la salida",
         );
       }
+    } finally {
+      setLoading(false);
+      dniInputRef.current?.focus();
     }
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center  ">
-      <div className="card  my-3 p-4 rounded-4 justify-content-center ">
-        <div className="card-header bg-white border-0 text-center mb-3 d-flex flex-column justify-content-between align-items-center gap-2 p-3">
-          <h4 className="fw-bold text-dark mb-1">
-            <ClockPlus /> Registro de Asistencia
+    <div className="d-flex justify-content-center align-items-center">
+      <div className="card my-3 p-4 rounded-4 justify-content-center shadow-soft border-0">
+        <div className="card-header bg-white border-0 text-center mb-3 d-flex flex-column align-items-center gap-2 p-3">
+          <h4 className="fw-bold text-main mb-1">
+            <ClockPlus className="me-2" /> Registro de Asistencia
           </h4>
-          <div className="d-flex justify-content-center align-items-center text-secondary">
-            <i className="fa-regular fa-clock me-2"></i>
-            <p className="mb-0 h2">{currentTime}</p>
+          <div className="d-flex justify-content-center align-items-center text-muted">
+            <p
+              className="mb-0 h2 fw-bold"
+              style={{ color: "var(--brand-primary)" }}
+            >
+              {currentTime}
+            </p>
           </div>
         </div>
 
         <div className="card-body">
           <div className="mb-4">
-            <label htmlFor="dni" className="form-label fw-semibold">
-              <i className="fas fa-id-card me-2 text-secondary"></i>DNI del
-              Empleado
+            <label htmlFor="dni" className="form-label fw-semibold text-main">
+              DNI del Empleado
             </label>
             <input
               type="text"
               id="dni"
+              disabled={loading}
               {...register("documento_identidad", {
                 required: "El DNI es obligatorio",
-                minLength: {
-                  value: 8,
-                  message: "El DNI debe tener al menos 8 dígitos",
-                },
               })}
               className={`form-control form-control-lg rounded-3 shadow-sm ${
                 errors.documento_identidad ? "is-invalid" : ""
               }`}
               placeholder="Ingrese su DNI"
+              ref={(e) => {
+                register("documento_identidad").ref(e);
+                dniInputRef.current = e; // Mantener ref para el foco
+              }}
             />
             {errors.documento_identidad && (
               <div className="invalid-feedback">
@@ -152,22 +157,26 @@ export function TakeAsistencia() {
             )}
           </div>
 
-          <div className="d-flex justify-content-between gap-2">
+          <div className="d-flex justify-content-between gap-3">
             <button
               type="button"
-              className="btn-guardar flex-fill py-3 fw-semibold shadow-sm d-flex align-items-center justify-content-center"
+              className="btn btn-lg flex-fill fw-semibold shadow-sm d-flex align-items-center justify-content-center text-white"
+              style={{ backgroundColor: "var(--fw-emerald)" }}
               onClick={registrarEntrada}
+              disabled={loading}
             >
               <DoorOpenIcon height="20px" width="20px" className="me-2" />
-              Entrada
+              {loading ? "Procesando..." : "Entrada"}
             </button>
             <button
               type="button"
-              className="btn-cancelar flex-fill py-3 fw-semibold shadow-sm d-flex align-items-center justify-content-center"
+              className="btn btn-lg flex-fill fw-semibold shadow-sm d-flex align-items-center justify-content-center text-white"
+              style={{ backgroundColor: "var(--fw-strawberry)" }}
               onClick={registrarSalida}
+              disabled={loading}
             >
               <LogOut height="20px" width="20px" className="me-2" />
-              Salida
+              {loading ? "Procesando..." : "Salida"}
             </button>
           </div>
         </div>

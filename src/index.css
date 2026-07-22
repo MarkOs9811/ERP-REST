@@ -461,15 +461,15 @@ button:hover {
 }
 
 .btn-generico:hover {
-  background: var(--bg-muted) !important;
-  color: var(--text-main) !important;
+  background: #0f0f0f !important;
+  color: white!important;
   border-color: var(--fw-border-input) !important;
 }
 
 .btn-generico:active,
 .btn-generico.active {
   background: rgba(148, 163, 184, 0.16) !important;
-  color: var(--text-main) !important;
+  color: white!important;
   border-color: var(--fw-slate-400) !important;
 }
 

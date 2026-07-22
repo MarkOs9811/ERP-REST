@@ -276,12 +276,18 @@ export function Nomina() {
               <button
                 className="btn btn-outline-dark px-3"
                 onClick={() =>
-                  GetReporteExcel(`/reporteNomina?periodo=${periodo}`)
+                  GetReporteExcel(
+                    `/reporteNomina/${periodo}`,
+                    null,
+                    null,
+                    "Nomina",
+                  )
                 }
               >
                 <FileChartColumnIncreasing size={18} className="me-1" />
                 Reporte
               </button>
+
               <button
                 className="btn-guardar px-3"
                 onClick={() => setModalValidarNomina(true)}
