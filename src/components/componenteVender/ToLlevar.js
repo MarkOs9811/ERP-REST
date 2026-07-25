@@ -23,11 +23,14 @@ import {
   User,
   Utensils,
   Notebook,
-  Hamburger, // Icono para cliente/nota
+  Hamburger,
+  StoreIcon, // Icono para cliente/nota
 } from "lucide-react";
 import { BuscadorPlatos } from "./tareasVender/BuscadorPlatos";
 import { useState } from "react";
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
+import { GetConfi } from "../../service/accionesConfiguracion/GetConfi";
+import { GetInventario } from "../../service/GetInventario";
 
 export function ToLlevar() {
   const { id } = useParams();
@@ -43,19 +46,64 @@ export function ToLlevar() {
     (state) => state.categoriaFiltroPlatos.estado,
   );
 
+  // CONDICIONAR SI LA CONFIGURACIONDE LA EMRPESA ES PARA VENTAS RESTUARANTE O VENTAS STORE TIENDA NORMAL
+  // 1. Primero obtenemos la configuración de la empresa
   const {
-    data: productos = [],
-    isLoading: loadinPlatos,
-    isError: errorPlatos,
+    data: configEmpresa = [],
+    isLoading: isLoadingConfig,
+    isError: isErrorConfig,
   } = useQuery({
-    queryKey: ["platos"],
-    queryFn: GetPlatosVender,
+    queryKey: ["confiEmpresa"],
+    queryFn: GetConfi,
     retry: 1,
     refetchOnWindowFocus: false,
   });
 
+  // 2. Filtramos la configuración
+  const configTipoVenta = configEmpresa.find(
+    (item) => item.nombre === "Tipo Venta",
+  );
+
+  const claveVenta = configTipoVenta?.clave;
+  const esComida = claveVenta === "restaurante";
+
+  // 3. Hacemos UNA sola consulta dinámica dependiendo de la clave
+  const {
+    data: productos = [],
+    isLoading: isLoadingProductos,
+    isError: isErrorProductos,
+  } = useQuery({
+    // Usamos keys diferentes para no mezclar la memoria caché
+    queryKey: esComida ? ["platos"] : ["inventario"],
+
+    // Llamamos a la función correspondiente
+    queryFn: esComida ? GetPlatosVender : GetInventario,
+
+    // Esto evita que la consulta se dispare hasta que claveVenta tenga un valor (se haya cargado la config)
+    enabled: !!claveVenta,
+
+    retry: 1,
+    refetchOnWindowFocus: false,
+  });
+  // ===============================
+
   const handleAddPlatoPreventa = (producto) => {
-    dispatch(addItem({ ...producto }));
+    // Si NO es comida (es decir, es Tienda/Inventario), validamos el stock
+    if (!esComida) {
+      // 👉 BUSCAMOS EL PRODUCTO ORIGINAL PARA SABER EL STOCK REAL
+      const productoOriginal = productos.find((p) => p.id === producto.id);
+      const stockReal = productoOriginal ? productoOriginal.stock : 0;
+
+      const itemEnCarrito = items.find((i) => i.id === producto.id);
+      const cantidadActual = itemEnCarrito ? itemEnCarrito.cantidad : 0;
+
+      // 👉 AHORA SÍ COMPARAMOS CON EL STOCK REAL
+      if (cantidadActual >= stockReal) {
+        return;
+      }
+    }
+
+    dispatch(addItem({ ...producto, tipo: claveVenta }));
   };
   const handleRemovePlatoPreventa = (productoId) => {
     dispatch(removeItem({ id: productoId }));
@@ -80,7 +128,7 @@ export function ToLlevar() {
       <div className="row  h-100">
         {/* COLUMNA IZQUIERDA: CUENTA Y DETALLES */}
         <div className="col-md-4 col-lg-3 h-100">
-          <div className="card  flex-grow-1 h-100 d-flex flex-column border-0 overflow-hidden">
+          <div className="card  flex-grow-1 h-100 d-flex flex-column  overflow-hidden">
             {/* Header: Título y Botón Eliminar (Reubicado) */}
             <div className="card-header m-0 bg-white border-bottom d-flex justify-content-between align-items-center py-3">
               <h5 className="mb-0 fw-bold text-dark">Para Llevar</h5>
@@ -246,7 +294,7 @@ export function ToLlevar() {
               </div>
 
               <button
-                className="btn-realizarPedido w-100 py-2 fw-bold d-flex align-items-center justify-content-center gap-2 shadow-sm"
+                className="btn-guardar w-100 py-3 fw-bold d-flex align-items-center justify-content-center gap-2 shadow-sm"
                 onClick={hanldleRealizarPago}
                 disabled={items.length === 0}
               >
@@ -261,24 +309,31 @@ export function ToLlevar() {
           <div className="card  flex-grow-1 h-100 p-0 m-0 overflow-auto">
             <div className="card-header bg-white border-bottom py-3 px-3 m-0">
               <h6 className="m-0 text-dark fw-bold d-flex align-items-center gap-2 ">
-                <Hamburger size={28} /> Menú de Platos
+                {claveVenta === "restaurante" ? (
+                  <Hamburger size={28} />
+                ) : (
+                  <StoreIcon size={28} />
+                )}
+                {claveVenta === "restaurante"
+                  ? "Menú de Platos"
+                  : "Inventario / Productos"}
               </h6>
               <div className="d-flex  gap-2 ">
                 <BuscadorPlatos
                   searchTerm={searchTerm}
                   setSearchTerm={setSearchTerm}
                 />
-                <CategoriaPlatos />
+                <CategoriaPlatos claveVenta={claveVenta} />
               </div>
               {/* Categorías en móvil si es necesario */}
               <div className="d-md-none mt-2">
-                <CategoriaPlatos />
+                <CategoriaPlatos claveVenta={claveVenta} />
               </div>
             </div>
 
             <CondicionCarga
-              isLoading={loadinPlatos}
-              isError={errorPlatos}
+              isLoading={isLoadingProductos}
+              isError={isErrorProductos}
               mode="cards"
             >
               <div className="card-body overflow-auto p-2">
@@ -295,18 +350,31 @@ export function ToLlevar() {
                       return matchCategoria && matchSearch;
                     })
                     .map((producto) => {
-                      const isSelected = items.some(
-                        (item) => item.id === producto.id,
+                      // 1. Buscamos si el producto ya está en el carrito (Redux)
+                      const itemEnCarrito = items.find(
+                        (i) => i.id === producto.id,
                       );
+
+                      // 2. Extraemos la cantidad (si no está, es 0)
+                      const cantidadEnCarrito = itemEnCarrito
+                        ? itemEnCarrito.cantidad
+                        : 0;
+
+                      // 3. Está seleccionado si hay más de 0 en el carrito
+                      const isSelected = cantidadEnCarrito > 0;
+                      // ==========================================
+
                       return (
                         <CardPlatos
                           key={producto.id}
                           item={producto}
                           isSelected={isSelected}
+                          cantidadEnCarrito={cantidadEnCarrito} // 👉 LE PASAMOS LA CANTIDAD AL CARD
                           handleAdd={handleAddPlatoPreventa}
                           handleRemove={handleRemovePlatoPreventa}
                           BASE_URL={BASE_URL}
                           capitalizeFirstLetter={capitalizeFirstLetter}
+                          esComida={esComida}
                         />
                       );
                     })}

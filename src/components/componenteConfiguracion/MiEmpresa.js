@@ -453,7 +453,7 @@ export function MiEmpresa() {
                         Modo actual: {visuals.label}
                       </span>
                     </div>
-                    <div className="card-footer border-0 p-3 d-flex justify-content-end">
+                    <div className="card-footer bg-transparent border-0 p-3 d-flex justify-content-end">
                       <button
                         type="button"
                         className="btn-generico px-3"
@@ -463,7 +463,7 @@ export function MiEmpresa() {
                           setData(item);
                         }}
                       >
-                        <Settings2 size={18} className="me-2" />
+                        <Settings2 size={18} />
                         Configurar
                       </button>
                     </div>
@@ -499,7 +499,7 @@ export function MiEmpresa() {
                       setData(item);
                     }}
                   >
-                    <Settings2 size={18} className="me-2" />
+                    <Settings2 size={18} className="" />
                     Configuración
                   </button>
                 </div>

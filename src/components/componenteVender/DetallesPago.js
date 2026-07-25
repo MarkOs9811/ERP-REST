@@ -33,6 +33,7 @@ export function DetallesPago() {
     JSON.parse(
       localStorage.getItem("user") || sessionStorage.getItem("user"),
     ) || {};
+
   const pedidoLlevar = useSelector((state) => state.pedidoLlevar);
   const pedidoWeb = useSelector((state) => state.pedidoWeb);
 

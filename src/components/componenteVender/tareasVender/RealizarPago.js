@@ -106,7 +106,7 @@ export function RealizarPago({
             type="submit" // Importante: que sea tipo submit
             loading={loading}
             error={error}
-            className="btn-realizarPedido w-100 p-3 h-100 fs-5"
+            className="btn-guardar w-100 p-3 h-100 fs-5"
           >
             Realizar Pago
           </BotonAnimado>

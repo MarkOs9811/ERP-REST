@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from "react";
+import React, { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Line } from "react-chartjs-2";
 import {
@@ -13,7 +13,6 @@ import {
 } from "chart.js";
 import { getVentas } from "../../service/ObtenerVentasDetalle";
 import { GetVentasIA } from "../../service/serviceIA/GetVentasIA";
-import { PlatoMasVendido } from "./PlatosMasVendidos";
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
 import { ChartNoAxesCombined } from "lucide-react";
 
@@ -51,7 +50,10 @@ export function GraficoIAhome() {
     retry: 1,
   });
 
-  const ventasIA = Array.isArray(ventasIAResponse) ? ventasIAResponse : [];
+  // Extraemos la propiedad 'data' que envía Laravel
+  const ventasIA =
+    ventasIAResponse?.data ||
+    (Array.isArray(ventasIAResponse) ? ventasIAResponse : []);
 
   // Generar etiquetas (últimos 7 días + próximos 7)
   const hoy = new Date();
@@ -62,13 +64,20 @@ export function GraficoIAhome() {
     labels.push(fecha.toISOString().split("T")[0]);
   }
 
+  const fechaHoyStr = hoy.toISOString().split("T")[0];
+
   // Procesar Ventas Reales
   const ventasPorFecha = ventas.reduce((acc, venta) => {
     const fecha = new Date(venta.fechaVenta).toISOString().split("T")[0];
     acc[fecha] = (acc[fecha] || 0) + Number(venta.total || 0);
     return acc;
   }, {});
-  const dataVentas = labels.map((fecha) => ventasPorFecha[fecha] || 0);
+
+  // 👉 CORRECCIÓN: Si es una fecha futura, devolvemos null para que se corte la línea
+  const dataVentas = labels.map((fecha) => {
+    if (fecha > fechaHoyStr) return null;
+    return ventasPorFecha[fecha] || 0;
+  });
 
   // Procesar Predicciones IA
   const prediccionesPorFecha = ventasIA.reduce((acc, prediccion) => {
@@ -76,78 +85,65 @@ export function GraficoIAhome() {
     acc[fecha] = Number(prediccion.total) || 0;
     return acc;
   }, {});
+
+  // Hacemos que la línea roja empiece en el punto de hoy para que conecte con la línea naranja
+  if (ventasPorFecha[fechaHoyStr] !== undefined) {
+    prediccionesPorFecha[fechaHoyStr] = ventasPorFecha[fechaHoyStr];
+  }
+
   const dataPredicciones = labels.map(
-    (fecha) => prediccionesPorFecha[fecha] || 0,
+    (fecha) => prediccionesPorFecha[fecha] || null,
   );
 
-  const chartRef = useRef(null);
-
-  // Crear data con degradado dinámico
+  // 👉 LA MAGIA DE LOS DEGRADADOS DINÁMICOS
   const chartData = useMemo(() => {
-    const chart = chartRef.current;
-    const ctx = chart?.ctx;
-    const chartArea = chart?.chartArea;
-    if (!ctx || !chartArea) {
-      return {
-        labels,
-        datasets: [
-          {
-            label: "Ventas Reales",
-            data: dataVentas,
-            borderColor: "rgba(249, 115, 22, 1)",
-            backgroundColor: "rgba(249, 115, 22, 0.2)",
-            fill: true,
-          },
-          {
-            label: "Predicción de Ventas (IA)",
-            data: dataPredicciones,
-            borderColor: "rgba(255, 64, 64, 1)",
-            backgroundColor: "rgba(255, 64, 64, 0.2)",
-            fill: true,
-          },
-        ],
-      };
-    }
-
-    // Crear degradados
-    const gradientReales = ctx.createLinearGradient(
-      0,
-      chartArea.top,
-      0,
-      chartArea.bottom,
-    );
-    gradientReales.addColorStop(0, "rgba(249, 115, 22, 0.5)");
-    gradientReales.addColorStop(1, "rgba(249, 115, 22, 0)");
-
-    const gradientIA = ctx.createLinearGradient(
-      0,
-      chartArea.top,
-      0,
-      chartArea.bottom,
-    );
-    gradientIA.addColorStop(0, "rgba(255, 64, 64, 0.5)");
-    gradientIA.addColorStop(1, "rgba(255, 159, 64, 0)");
-
     return {
       labels,
       datasets: [
         {
           label: "Ventas Reales",
           data: dataVentas,
-          borderColor: "rgba(249, 115, 22, 1)",
-          backgroundColor: gradientReales,
-          tension: 0.4,
+          borderColor: "rgb(24, 172, 73)",
+          // Creamos el degradado directamente en el background con una función
+          backgroundColor: (context) => {
+            const chart = context.chart;
+            const { ctx, chartArea } = chart;
+            if (!chartArea) return "rgba(22, 249, 79, 0.2)"; // Color sólido antes del render final
+            const gradient = ctx.createLinearGradient(
+              0,
+              chartArea.top,
+              0,
+              chartArea.bottom,
+            );
+            gradient.addColorStop(0, "rgba(22, 249, 71, 0.5)");
+            gradient.addColorStop(1, "rgba(249, 115, 22, 0)");
+            return gradient;
+          },
+          tension: 0.4, // Esto garantiza que SIEMPRE tenga curvas
           fill: true,
           pointRadius: 6,
           pointHoverRadius: 8,
-          pointBackgroundColor: "rgba(249, 115, 22, 1)",
+          pointBackgroundColor: "rgb(34, 190, 81)",
           pointBorderColor: "#fff",
         },
         {
           label: "Predicción de Ventas (IA)",
           data: dataPredicciones,
           borderColor: "rgba(255, 64, 64, 1)",
-          backgroundColor: gradientIA,
+          backgroundColor: (context) => {
+            const chart = context.chart;
+            const { ctx, chartArea } = chart;
+            if (!chartArea) return "rgba(255, 64, 64, 0.2)";
+            const gradient = ctx.createLinearGradient(
+              0,
+              chartArea.top,
+              0,
+              chartArea.bottom,
+            );
+            gradient.addColorStop(0, "rgba(255, 64, 64, 0.5)");
+            gradient.addColorStop(1, "rgba(255, 159, 64, 0)");
+            return gradient;
+          },
           tension: 0.4,
           fill: true,
           pointRadius: 6,
@@ -189,10 +185,7 @@ export function GraficoIAhome() {
           color: "#666",
           font: { size: 14, weight: "bold" },
         },
-        ticks: {
-          color: "#666",
-          font: { size: 12 },
-        },
+        ticks: { color: "#666", font: { size: 12 } },
         grid: { display: false },
       },
       y: {
@@ -202,14 +195,9 @@ export function GraficoIAhome() {
           color: "#666",
           font: { size: 14, weight: "bold" },
         },
-        ticks: {
-          color: "#666",
-          font: { size: 12 },
-        },
+        ticks: { color: "#666", font: { size: 12 } },
         beginAtZero: true,
-        grid: {
-          color: "rgba(0, 0, 0, 0.1)",
-        },
+        grid: { color: "rgba(0, 0, 0, 0.1)" },
       },
     },
   };
@@ -231,11 +219,13 @@ export function GraficoIAhome() {
           >
             <ChartNoAxesCombined size={25} />
           </span>
-          <h6 className="mb-1 d-flex flex-column gap-1">
+          <h6 className="mb-1 d-flex flex-column gap-1 ms-2">
             <span className="fw-bold text-dark" style={{ fontSize: "1.1rem" }}>
               Ventas Históricas y Predicciones
             </span>
-            <p className="text-muted small mb-0">Últimos 7 días y pronóstico</p>
+            <span className="text-muted small mb-0">
+              Últimos 7 días y pronóstico
+            </span>
           </h6>
         </div>
 
@@ -250,7 +240,8 @@ export function GraficoIAhome() {
                 Cargando datos del gráfico...
               </p>
             ) : (
-              <Line ref={chartRef} data={chartData} options={options} />
+              // Eliminamos el ref que ya no es necesario
+              <Line data={chartData} options={options} />
             )}
           </div>
         </div>

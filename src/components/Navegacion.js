@@ -12,6 +12,8 @@ import {
   Search,
 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { GetConfi } from "../service/accionesConfiguracion/GetConfi";
 
 export function Navegacion({ tipoNavegacion = null }) {
   const location = useLocation();
@@ -98,7 +100,24 @@ export function Navegacion({ tipoNavegacion = null }) {
     opt.label.toLowerCase().includes(searchTerm.toLowerCase()),
   );
   // ===================================
+  const {
+    data: configEmpresa = [],
+    isLoading: isLoadingConfig,
+    isError: isErrorConfig,
+  } = useQuery({
+    queryKey: ["confiEmpresa"],
+    queryFn: GetConfi,
+    retry: 1,
+    refetchOnWindowFocus: false,
+  });
 
+  // 2. Filtramos la configuración
+  const configTipoVenta = configEmpresa.find(
+    (item) => item.nombre === "Tipo Venta",
+  );
+
+  const claveVenta = configTipoVenta?.clave;
+  const esComida = claveVenta === "restaurante";
   return (
     <div
       className={`
@@ -283,7 +302,11 @@ export function Navegacion({ tipoNavegacion = null }) {
           {rol?.empleado?.cargo?.nombre !== "delivery" && (
             <button
               className="btn btn-outline-dark d-flex align-items-center gap-1 px-2 p-1 px-md-3"
-              onClick={() => navigate("/vender/mesas")}
+              onClick={() => {
+                esComida
+                  ? navigate("/vender/mesas")
+                  : navigate("/vender/ventasLlevar/");
+              }}
               title="POS"
             >
               <StoreIcon size={20} />
@@ -292,7 +315,9 @@ export function Navegacion({ tipoNavegacion = null }) {
           )}
 
           {/* 5. Cocina */}
-          {rol?.empleado?.cargo?.nombre === "cocinero" && (
+          {["cocinero", "administrador"].includes(
+            rol?.empleado?.cargo?.nombre,
+          ) && (
             <button
               className="btn btn-outline-dark d-flex align-items-center gap-1 px-2 p-1 px-md-3"
               onClick={() => navigate("/cocina")}

@@ -28,8 +28,8 @@ export function Inventario() {
   });
 
   // Calculamos los valores basados en los datos
-  const metrics = data?.success
-    ? calculateMetrics(data.data)
+  const metrics = data
+    ? calculateMetrics(data)
     : {
         productosConteo: 0,
         porVencer: 0,

@@ -101,7 +101,7 @@ body.dark-theme .boton-venta.activo {
 }
 
 .pos-action-link.cerrar-caja {
-    color: var(--fw-warning, #ff9800);
+    color: var(--fw-warning, #9c5f02);
 }
 
 .pos-action-link.cerrar-caja:hover {

@@ -10,13 +10,15 @@ import { useDispatch } from "react-redux";
 import { abrirCaja } from "../redux/cajaSlice";
 import axiosInstance from "../api/AxiosInstance";
 import ToastAlert from "../components/componenteToast/ToastAlert";
-import { ContenedorPrincipal } from "../components/componentesReutilizables/ContenedorPrincipal";
 import { Cargando } from "../components/componentesReutilizables/Cargando";
+import { useQuery } from "@tanstack/react-query";
+import { GetConfi } from "../service/accionesConfiguracion/GetConfi";
+import { useNavigate } from "react-router-dom";
 
 export function AbrirCaja() {
   const dispatch = useDispatch();
   const [caja, setCajas] = useState([]);
-
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const {
     register,
@@ -36,6 +38,24 @@ export function AbrirCaja() {
       ToastAlert("error", "Error de conexión");
     }
   };
+  const {
+    data: configEmpresa = [],
+    isLoading: isLoadingConfig,
+    isError: isErrorConfig,
+  } = useQuery({
+    queryKey: ["confiEmpresa"],
+    queryFn: GetConfi,
+    retry: 1,
+    refetchOnWindowFocus: false,
+  });
+
+  // 2. Filtramos la configuración
+  const configTipoVenta = configEmpresa.find(
+    (item) => item.nombre === "Tipo Venta",
+  );
+
+  const claveVenta = configTipoVenta?.clave;
+  const esComida = claveVenta === "restaurante";
 
   useEffect(() => {
     getCajas();
@@ -55,7 +75,8 @@ export function AbrirCaja() {
 
         dispatch(abrirCaja(cajaData));
         setTimeout(() => {
-          window.location.href = "/vender/mesas";
+          // navigate te cambia de ruta al instante sin recargar la página
+          navigate(esComida ? "/vender/mesas" : "/vender/ventasLlevar");
         }, 100);
       } else {
         ToastAlert("error", response.data.message);

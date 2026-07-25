@@ -46,7 +46,6 @@ export function InventarioList({ search }) {
   } = useQuery({
     queryKey: ["inventario"],
     queryFn: GetInventario,
-    select: (data) => (data.success ? data.data : []),
   });
   const { loading, error, execute } = useEstadoAsyn(fetchInventario);
   const [hasError, setHasError] = useState(false); // Para manejar el estado de error

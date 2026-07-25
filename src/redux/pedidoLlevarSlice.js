@@ -8,12 +8,14 @@ const pedidoLlevarSlice = createSlice({
   },
   reducers: {
     addItem: (state, action) => {
-      const { id, nombre, precio } = action.payload;
+      const { id, nombre, precio, tipo } = action.payload;
       const existingItem = state.items.find((item) => item.id === id);
+
       if (existingItem) {
         existingItem.cantidad += 1;
       } else {
-        state.items.push({ id, nombre, precio, cantidad: 1 });
+        // 2. Lo guardamos en el estado inicial del item
+        state.items.push({ id, nombre, precio, cantidad: 1, tipo });
       }
     },
     removeItem: (state, action) => {
