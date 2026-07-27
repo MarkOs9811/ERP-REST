@@ -14,6 +14,7 @@ import { Cargando } from "../components/componentesReutilizables/Cargando";
 import { useQuery } from "@tanstack/react-query";
 import { GetConfi } from "../service/accionesConfiguracion/GetConfi";
 import { useNavigate } from "react-router-dom";
+import { Plus } from "lucide-react";
 
 export function AbrirCaja() {
   const dispatch = useDispatch();
@@ -38,6 +39,7 @@ export function AbrirCaja() {
       ToastAlert("error", "Error de conexión");
     }
   };
+
   const {
     data: configEmpresa = [],
     isLoading: isLoadingConfig,
@@ -103,10 +105,17 @@ export function AbrirCaja() {
             Caja Cerrada, Porfavor apertura una.
           </div>
           <form onSubmit={handleSubmit(onSubmit)} className="form-abrir-caja">
-            <div className="mb-3">
-              <label htmlFor="caja">
+            <div className="mb-3 ">
+              <label htmlFor="caja " className="mx-3">
                 <FontAwesomeIcon icon={faCashRegister} /> Seleccionar Caja
               </label>
+              <button
+                className="btn-principal mb-2"
+                onClick={() => navigate("/ventas/cajas")}
+              >
+                <Plus /> Agregar Caja
+              </button>
+
               <select
                 id="caja"
                 className={`form-select ${errors.caja ? "is-invalid" : ""}`}

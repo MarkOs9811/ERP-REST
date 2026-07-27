@@ -660,3 +660,64 @@ body.dark-theme .ai-response {
         border-radius: 14px;
     }
 }
+/* --- CABECERA HERO DASHBOARD --- */
+.home-hero {
+    border: 1px solid rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Efecto de decoración de fondo sutil (esquina superior derecha) */
+.hero-decoration {
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(13, 253, 33, 0.267) 0%, rgba(255, 255, 255, 0) 70%);
+    border-radius: 50%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Punto verde parpadeante de "Estado activo" */
+.status-dot {
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    box-shadow: 0 0 0 0 rgb(20, 224, 129);
+    animation: pulse-green 2s infinite;
+}
+
+@keyframes pulse-green {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(23, 226, 132, 0.7);
+    }
+
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 6px rgba(25, 135, 84, 0);
+    }
+
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(25, 135, 84, 0);
+    }
+}
+
+/* Animación y estilo mejorado para el botón de Abrir Caja */
+.btn-abrir-caja {
+    transition: all 0.3s ease;
+    background-color: #111827;
+    /* Un negro más suave y elegante */
+    border: none;
+}
+
+.btn-abrir-caja:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    background-color: #1f2937;
+}
+
+.btn-abrir-caja:active {
+    transform: translateY(0);
+}

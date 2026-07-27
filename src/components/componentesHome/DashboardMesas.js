@@ -2,7 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import { GetMesasVender } from "../../service/accionesVender/GetMesasVender";
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
 import "../../css/EstilosHome.css";
-import { Cookie } from "lucide-react";
+import { Cookie, Plus } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 
 export function DashboardMesas() {
   const {
@@ -15,6 +16,7 @@ export function DashboardMesas() {
     refetchOnWindowFocus: true,
   });
 
+  const navigate = useNavigate();
   // FIX: Si tu API devuelve { data: [...] } lo extraemos.
   // Si ya es un array, lo tomamos directo. Si llega vacío o undefined, pasamos un [].
   const listaMesas = Array.isArray(mesas) ? mesas : mesas?.data || [];
@@ -35,6 +37,16 @@ export function DashboardMesas() {
           </div>
           <h2 className="salon-title d-flex align-items-center m-0 gap-2">
             Salón de mesas ({listaMesas.length} Mesas)
+            {listaMesas.length === 0 ? (
+              <button
+                onClick={() => navigate("/ventas/mesas")}
+                className="btn-principal btn-sm"
+              >
+                <Plus /> Crear Mesas
+              </button>
+            ) : (
+              ""
+            )}
           </h2>
         </div>
 
@@ -59,8 +71,9 @@ export function DashboardMesas() {
         <div className="card-body px-4 pb-4 pt-0">
           {/* Si a pesar del fix listaMesas sigue vacío, mostramos este aviso para debuggear */}
           {listaMesas.length === 0 && !loading && (
-            <div className="alert alert-warning text-center">
-              No se encontraron mesas o el formato de la API no es un Array.
+            <div className="alert alert-warning text-center d-flex flex-column align-items-center justify-content-center">
+              <span className="mb-2">No se encontraron mesas.</span>
+              {/* Corregimos el 'to' y agregamos clases de botón */}
             </div>
           )}
 

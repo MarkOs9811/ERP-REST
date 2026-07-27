@@ -301,16 +301,16 @@ export function Navegacion({ tipoNavegacion = null }) {
           {/* 4. POS (Oculto estrictamente si el rol es "delivery") */}
           {rol?.empleado?.cargo?.nombre !== "delivery" && (
             <button
-              className="btn btn-outline-dark d-flex align-items-center gap-1 px-2 p-1 px-md-3"
+              className="btn-guardar d-flex align-items-center gap-1 px-2 p-1 px-md-3"
               onClick={() => {
                 esComida
                   ? navigate("/vender/mesas")
                   : navigate("/vender/ventasLlevar/");
               }}
-              title="POS"
+              title="Abrir ventas"
             >
               <StoreIcon size={20} />
-              <span className="d-none d-md-inline">POS</span>
+              <span className="d-none d-md-inline">Vender</span>
             </button>
           )}
 

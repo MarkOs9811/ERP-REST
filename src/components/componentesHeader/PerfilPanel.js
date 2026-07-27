@@ -135,54 +135,53 @@ export function PerfilPanel({ user, fotoPerfil }) {
       <ul className="list-unstyled px-4 mt-3">
         <li className="mb-3">
           <button
-            className="btn w-100 text-start d-flex align-items-center fw-medium pb-2 border-bottom border-light"
+            className="btn w-100 justify-content-start d-flex align-items-center gap-3 fw-medium pb-2 border-bottom border-light"
             onClick={() => navigate("/")}
           >
             <House
               style={{ color: "var(--brand-primary)" }}
-              className="me-3"
               height="20px"
               width="20px"
             />
             Panel Principal
           </button>
         </li>
+
         <li className="mb-3">
           <button
-            className="btn w-100 text-start d-flex align-items-center fw-medium pb-2 border-bottom border-light"
+            className="btn w-100 justify-content-start d-flex align-items-center gap-3 fw-medium pb-2 border-bottom border-light"
             onClick={() => navigate("/configuracion/MiPerfil")}
           >
             <User
               style={{ color: "var(--brand-primary)" }}
-              className="me-3"
               height="20px"
               width="20px"
             />
             Mi Perfil
           </button>
         </li>
+
         <li className="mb-3">
           <button
-            className="btn w-100 text-start d-flex align-items-center fw-medium pb-2 border-bottom border-light"
+            className="btn w-100 justify-content-start d-flex align-items-center gap-3 fw-medium pb-2 border-bottom border-light"
             onClick={() => navigate("/rr.hh/asistencia")}
           >
             <ShieldCheck
               style={{ color: "var(--brand-primary)" }}
-              className="me-3"
               height="20px"
               width="20px"
             />
             Mis Asistencias
           </button>
         </li>
+
         <li className="mb-3">
           <button
-            className="btn w-100 text-start d-flex align-items-center fw-medium pb-2 border-bottom border-light"
+            className="btn w-100 justify-content-start d-flex align-items-center gap-3 fw-medium pb-2 border-bottom border-light"
             onClick={() => navigate("/configuracion")}
           >
             <UserRoundCog
               style={{ color: "var(--brand-primary)" }}
-              className="me-3"
               height="20px"
               width="20px"
             />
@@ -190,7 +189,6 @@ export function PerfilPanel({ user, fotoPerfil }) {
           </button>
         </li>
       </ul>
-
       {/* 🔸 Selector de sede */}
       {rolUsuario == "administrador" ? (
         <div className="px-4 pb-2">
