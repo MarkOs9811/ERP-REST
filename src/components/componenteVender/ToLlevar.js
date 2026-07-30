@@ -338,7 +338,6 @@ export function ToLlevar() {
             >
               <div className="card-body overflow-auto p-2">
                 <div className="contenedor-platos">
-                  {/* Asegúrate que tu CSS defina .contenedor-platos como grid */}
                   {productos
                     .filter((producto) => {
                       const matchCategoria =
@@ -372,7 +371,6 @@ export function ToLlevar() {
                           cantidadEnCarrito={cantidadEnCarrito} // 👉 LE PASAMOS LA CANTIDAD AL CARD
                           handleAdd={handleAddPlatoPreventa}
                           handleRemove={handleRemovePlatoPreventa}
-                          BASE_URL={BASE_URL}
                           capitalizeFirstLetter={capitalizeFirstLetter}
                           esComida={esComida}
                         />

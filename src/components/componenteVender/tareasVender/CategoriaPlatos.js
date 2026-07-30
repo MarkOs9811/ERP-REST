@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { GetCategoriasPlatosTrue } from "../../../service/accionesVender/GetCategoriasPlatosTrue";
 import { GetCategoria } from "../../../service/GetCategoria"; // 👉 Ajusta esta ruta a donde tengas tu servicio de tienda
 
-export function CategoriaPlatos({ claveVenta }) {
+export function CategoriaPlatos({ claveVenta = "" }) {
   const dispatch = useDispatch();
   const estadoCategoria = useSelector(
     (state) => state.categoriaFiltroPlatos.estado,

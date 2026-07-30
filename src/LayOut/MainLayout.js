@@ -140,7 +140,6 @@ export const MainLayout = () => {
     <div className="main-container p-0 m-0 h-screen flex">
       {/* Si NO es rol especial (Delivery/Atención), le mostramos el menú lateral */}
       {showFullLayout && <SideBar />}
-      {/* ⚠️ CUIDADO AQUÍ: Lógica redundante */}
       {/* Estás diciendo: "Si NO es showHeader, muestra el Header" y luego "Si ES showFullLayout, muestra el Header". */}
       {/* En la práctica, esto está haciendo que el <Header /> se muestre SIEMPRE, sin importar el rol. */}
       {!showHeader && <Header tipoHeader={esRolEspecial} />}

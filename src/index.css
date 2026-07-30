@@ -1,5 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
+/* ========================================================================
+   VARIABLES GLOBALES (FIRE WOK STANDARDS)
+========================================================================= */
 :root {
   --fw-onyx: #030303;
   --fw-emerald: #15572d;
@@ -86,6 +89,9 @@ body.dark-theme {
   --glass-blur: blur(12px);
 }
 
+/* ========================================================================
+   BASE Y RESET
+========================================================================= */
 * {
   box-sizing: border-box;
 }
@@ -98,9 +104,7 @@ body,
 
 body {
   margin: 0;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--bg-app) !important;
@@ -130,7 +134,9 @@ a {
   text-decoration: none;
 }
 
-/* Structural surfaces */
+/* ========================================================================
+   ESTRUCTURAS GENERALES
+========================================================================= */
 .card,
 .dropdown-menu,
 .modal-content,
@@ -156,7 +162,7 @@ a {
   border-radius: var(--control-radius) !important;
 }
 
-/* Inputs and selects */
+/* Formularios */
 .form-label {
   font-size: 0.82rem;
   font-weight: 700;
@@ -203,7 +209,7 @@ body.dark-theme input:focus {
   box-shadow: 0 0 0 2px rgba(255, 153, 44, 0.22) !important;
 }
 
-/* Table header search pattern */
+/* Buscador de Tabla */
 .header-search-container {
   position: relative;
   display: flex;
@@ -246,110 +252,117 @@ body.dark-theme .header-search-container .form-control:focus {
   color: var(--text-muted);
 }
 
-/* Base Buttons */
-.btn,
-button {
-  border-radius: var(--radius-pill) !important;
-  font-weight: 600 !important;
-  min-height: var(--control-height-md) !important;
-  min-width: var(--control-height-md) !important;
-
-  /* --- MAGIA DE ALINEACIÓN --- */
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 0.5rem;
-  /* Separación automática entre ícono y texto */
-
-  transition: transform var(--transition-smooth), background-color var(--transition-smooth), color var(--transition-smooth), box-shadow var(--transition-smooth), border-color var(--transition-smooth);
-}
-
-/* Evitar que los íconos se aplasten si el botón tiene un texto largo */
-.btn svg,
-button svg {
-  flex-shrink: 0 !important;
-}
-
 .badge,
 .badge-pill,
 span.badge {
   border-radius: var(--radius-pill) !important;
 }
 
-.btn:hover,
-button:hover {
-  transform: none;
-}
-
-/* AQUÍ ESTÁ LA MAGIA HERMANO: Botones dinámicos para la tabla sin clases extra */
-.rdt_TableCell .btn-ver,
-.rdt_TableCell .btn-editar,
-.rdt_TableCell .btn-eliminar,
-.rdt_TableCell .btn-activar,
-.rdt_TableCell .btn-desactivar,
-.rdt_TableCell .btn-generico,
-.rdt_TableCell .btn-informativo,
-.table td .btn-ver,
-.table td .btn-editar,
-.table td .btn-eliminar,
-.table td .btn-activar,
-.table td .btn-desactivar,
-.table td .btn-generico,
-.table td .btn-informativo {
-  min-width: var(--table-action-size) !important;
-  /* 40px como base para forzar el círculo */
-  min-height: var(--table-action-size) !important;
-  width: auto !important;
-  /* Si hay texto, lo deja estirarse */
-  height: auto !important;
-  padding: 0 10px !important;
-  /* Da aire al texto, pero no deforma a un ícono normal */
-  border-radius: var(--radius-pill) !important;
-  /* 9999px hace círculos los iconos y píldoras los textos */
+/* ========================================================================
+   ESTRUCTURA GLOBAL DE BOTONES (FIRE WOK STANDARDS)
+========================================================================= */
+.btn,
+button,
+.btn-principal,
+.btn-guardar,
+.btn-activar,
+.btn-opcional,
+.btn-cerrar,
+.btn-eliminar,
+.btn-editar,
+.btn-generico,
+.btn-informativo,
+.btn-desactivar {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
+  gap: 0.5rem;
+
+  /* 🔥 CORRECCIÓN: Quitamos los !important para permitir la sobreescritura */
+  min-height: var(--control-height-md);
+  padding: 0.55rem 1.25rem;
+
+  border-radius: var(--radius-pill) !important;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600 !important;
+  font-size: 0.9rem !important;
   line-height: 1 !important;
+  cursor: pointer;
+  transition: transform var(--transition-smooth), background-color var(--transition-smooth), color var(--transition-smooth), box-shadow var(--transition-smooth), border-color var(--transition-smooth);
 }
 
-/* Control estricto del SVG para que no expanda el botón si es solo ícono */
-.rdt_TableCell .btn-ver svg,
-.rdt_TableCell .btn-editar svg,
-.rdt_TableCell .btn-eliminar svg,
-.rdt_TableCell .btn-activar svg,
-.rdt_TableCell .btn-desactivar svg,
-.rdt_TableCell .btn-generico svg,
-.rdt_TableCell .btn-informativo svg,
-.table td .btn-ver svg,
-.table td .btn-editar svg,
-.table td .btn-eliminar svg,
-.table td .btn-activar svg,
-.table td .btn-desactivar svg,
-.table td .btn-generico svg,
-.table td .btn-informativo svg {
+/* Evitar deformaciones en botones */
+.btn:hover,
+button:hover,
+[class*="btn-"]:hover {
+  transform: translateY(-1px);
+}
+
+.btn:active,
+button:active,
+[class*="btn-"]:active {
+  transform: translateY(0);
+}
+
+/* ========================================================================
+   CONTROL ESTRICTO DE ICONOS GLOBALMENTE
+========================================================================= */
+.btn svg,
+button svg,
+[class*="btn-"] svg:not(.btn-icon svg) {
   width: 18px !important;
   height: 18px !important;
   flex-shrink: 0 !important;
 }
 
-/* Semantic reusable buttons */
+/* ========================================================================
+   🔥 NUEVO: CLASE EXCLUSIVA PARA BOTONES REDONDOS DEL POS (+, -, Basurero)
+========================================================================= */
+.btn-icon {
+  width: 32px !important;
+  height: 32px !important;
+  min-height: 32px !important;
+  min-width: 32px !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  flex-shrink: 0 !important;
+}
+
+.btn-icon svg {
+  width: 16px !important;
+  height: 16px !important;
+  margin: 0 !important;
+}
+
+/* ========================================================================
+   COMPORTAMIENTO CONTEXTUAL (DENTRO DE TABLAS)
+========================================================================= */
+.rdt_TableCell .btn,
+.rdt_TableCell [class*="btn-"],
+.table td .btn,
+.table td [class*="btn-"] {
+  min-width: var(--table-action-size) !important;
+  height: auto !important;
+  padding: 0.4rem 0.8rem !important;
+}
+
+/* ========================================================================
+   VARIANTES DE COLOR (SEMÁNTICA FIRE WOK)
+========================================================================= */
 .btn-principal {
   background: var(--fw-onyx) !important;
   color: var(--fw-white) !important;
   border: 1px solid var(--fw-onyx) !important;
-  font-size: 0.9rem !important;
 }
 
 .btn-principal:hover {
   background: #272727 !important;
-  color: var(--fw-white) !important;
   border-color: #272727 !important;
 }
 
 .btn-principal:active,
 .btn-principal.active {
   background: #404040 !important;
-  color: var(--fw-white) !important;
   border-color: #404040 !important;
 }
 
@@ -357,12 +370,10 @@ button:hover {
   background: rgb(23, 198, 105) !important;
   color: rgb(21, 32, 27) !important;
   border: 1px solid rgba(23, 198, 104, 0.5) !important;
-  font-size: 0.9rem !important;
 }
 
 .btn-guardar:hover {
   background: rgb(21, 226, 114) !important;
-  color: rgb(21, 32, 27) !important;
   border-color: rgba(23, 198, 104, 0.75) !important;
 }
 
@@ -378,13 +389,11 @@ button:hover {
   background: var(--bg-surface) !important;
   color: var(--fw-emerald) !important;
   border: 1px solid rgba(22, 163, 74, 0.5) !important;
-  font-size: 0.9rem !important;
 }
 
 .btn-activar:hover,
 .btn-opcional:hover {
   background: var(--bg-emerald-soft) !important;
-  color: var(--fw-emerald) !important;
   border-color: rgba(22, 163, 74, 0.75) !important;
 }
 
@@ -393,7 +402,6 @@ button:hover {
 .btn-opcional:active,
 .btn-opcional.active {
   background: rgba(22, 163, 74, 0.2) !important;
-  color: var(--fw-emerald) !important;
   border-color: rgba(22, 163, 74, 0.9) !important;
 }
 
@@ -405,14 +413,12 @@ button:hover {
 
 .btn-cerrar:hover {
   background: var(--bg-muted) !important;
-  color: var(--text-main) !important;
   border-color: var(--fw-border-input) !important;
 }
 
 .btn-cerrar:active,
 .btn-cerrar.active {
   background: rgba(148, 163, 184, 0.18) !important;
-  color: var(--text-main) !important;
   border-color: var(--fw-slate-400) !important;
 }
 
@@ -424,14 +430,12 @@ button:hover {
 
 .btn-eliminar:hover {
   background: var(--bg-strawberry-soft) !important;
-  color: var(--fw-strawberry) !important;
   border-color: rgba(228, 73, 73, 0.75) !important;
 }
 
 .btn-eliminar:active,
 .btn-eliminar.active {
   background: rgba(228, 73, 73, 0.2) !important;
-  color: var(--fw-strawberry) !important;
   border-color: rgba(228, 73, 73, 0.9) !important;
 }
 
@@ -443,14 +447,12 @@ button:hover {
 
 .btn-editar:hover {
   background: var(--bg-saffron-soft) !important;
-  color: var(--fw-saffron) !important;
   border-color: rgba(236, 139, 35, 0.75) !important;
 }
 
 .btn-editar:active,
 .btn-editar.active {
   background: rgba(236, 139, 35, 0.2) !important;
-  color: var(--fw-saffron) !important;
   border-color: rgba(236, 139, 35, 0.9) !important;
 }
 
@@ -462,14 +464,14 @@ button:hover {
 
 .btn-generico:hover {
   background: #0f0f0f !important;
-  color: white!important;
+  color: white !important;
   border-color: var(--fw-border-input) !important;
 }
 
 .btn-generico:active,
 .btn-generico.active {
   background: rgba(148, 163, 184, 0.16) !important;
-  color: white!important;
+  color: white !important;
   border-color: var(--fw-slate-400) !important;
 }
 
@@ -477,20 +479,15 @@ button:hover {
   background: var(--bg-surface) !important;
   color: var(--fw-informative) !important;
   border: 1px solid rgba(56, 56, 56, 0.5) !important;
-  font-size: 0.9rem !important;
 }
 
 .btn-informativo:hover {
   background: var(--bg-informative-soft) !important;
-  color: var(--fw-informative) !important;
-  border: 1px solid rgba(56, 56, 56, 0.5) !important;
 }
 
 .btn-informativo:active,
 .btn-informativo.active {
   background: rgba(37, 99, 235, 0.2) !important;
-  color: var(--fw-informative) !important;
-  border: 1px solid rgba(56, 56, 56, 0.5) !important;
 }
 
 .btn-desactivar {
@@ -502,7 +499,6 @@ button:hover {
 .btn-desactivar:hover {
   background: var(--fw-desactivar) !important;
   color: white !important;
-  border: 1px solid rgba(46, 46, 46, 0.5) !important;
 }
 
 /* Switches */
@@ -518,8 +514,6 @@ button:hover {
   background-color: var(--brand-primary) !important;
   border-color: var(--brand-primary) !important;
 }
-
-
 
 /* Bootstrap color overrides */
 .text-primary {
@@ -547,7 +541,7 @@ button:hover {
 }
 
 /* ========================================================================
-TEMA DARK
+   TEMA DARK (COMPONENTES Y ESTRUCTURA)
 ========================================================================= */
 body.dark-theme .bg-white,
 body.dark-theme .bg-light {
@@ -563,8 +557,6 @@ body.dark-theme .text-body {
 body.dark-theme .text-muted {
   color: var(--text-muted) !important;
 }
-
-
 
 body.dark-theme .card {
   background-color: var(--bg-surface) !important;

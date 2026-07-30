@@ -345,14 +345,16 @@ export function SideBar() {
           </button>
         </Link> */}
         <Link
-          to="/configuracion"
+          to="/configuracion/general"
           className="text-decoration-none w-90"
           style={{ width: "85%" }} // deja un margen lateral bonito
           onClick={(e) => handleModuloSeleccionado("", e)}
         >
           <button
             className={`btn menu-item p-2 border-0 w-100 d-flex align-items-center justify-content-start ${
-              location.pathname.includes("/configuracion") ? "active" : ""
+              location.pathname.includes("/configuracion/general")
+                ? "active"
+                : ""
             }`}
             style={{
               borderRadius: "var(--radius-md)",

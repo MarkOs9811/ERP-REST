@@ -274,7 +274,7 @@ export function Header({ tipoHeader = null }) {
               </span>
             )}
           </button>
-          <button
+          <div
             className="ico-header border-0 rounded-pill d-flex align-items-center justify-content-center"
             style={{
               width: 44,
@@ -292,7 +292,7 @@ export function Header({ tipoHeader = null }) {
               <img
                 src={fotoPerfil}
                 alt="Mi foto"
-                className="img-fluid"
+                className="img-fluid w-100"
                 style={{
                   width: 32,
                   height: 32,
@@ -301,7 +301,7 @@ export function Header({ tipoHeader = null }) {
                 }}
               />
             )}
-          </button>
+          </div>
           <ModalRight
             isOpen={showNotificaciones}
             onClose={() => setShowNotificaciones(false)}

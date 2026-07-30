@@ -1,24 +1,24 @@
 import { MinusIcon, PlusIcon, ShoppingCart, Package } from "lucide-react";
 import "../../css/EstilosPlatosTodo.css";
 
-export const CardPlatos = ({
-  item,
-  isSelected,
-  handleAdd,
-  handleRemove,
-  BASE_URL,
-  capitalizeFirstLetter,
-  esComida, // Recibimos la nueva propiedad
-}) => {
+export const CardPlatos = (props) => {
+  console.log(props);
+
+  const {
+    item,
+    isSelected,
+    handleAdd,
+    handleRemove,
+    capitalizeFirstLetter,
+    esComida = "",
+  } = props;
   // ==========================================
-  // 🍔 DISEÑO 1: RESTAURANTE (Tu diseño original)
+  // 🍔 DISEÑO 1: RESTAURANTE
   // ==========================================
   if (esComida) {
     return (
       <div
-        className={`float-left card-platillo card overflow-auto m-2 ${
-          isSelected ? "selected" : ""
-        }`}
+        className={`float-left card-platillo card overflow-auto m-2 ${isSelected ? "selected" : ""}`}
       >
         <img
           src={item.foto_url}
@@ -27,30 +27,26 @@ export const CardPlatos = ({
           onError={(e) => {
             e.target.src = "/images/img-default.jpg";
           }}
-          style={{
-            maxWidth: "auto",
-            maxHeight: "80px",
-            objectFit: "cover",
-          }}
+          style={{ maxWidth: "auto", maxHeight: "80px", objectFit: "cover" }}
         />
         <div className="card-body">
           <span
-            className=" text-danger mb-1 d-block opacity-75"
+            className="text-danger mb-1 d-block opacity-75"
             style={{ fontSize: "0.73rem" }}
           >
             {capitalizeFirstLetter(item.categoria?.nombre || "Sin categoría")}
           </span>
-
           <p className="nombre-plato mb-3 fw-bold">
             {capitalizeFirstLetter(item.nombre)}
           </p>
-          <span className="rounded-pill  px-2 fw-bold precioCard ">
+          <span className="rounded-pill px-2 fw-bold precioCard">
             S/. {item.precio}
           </span>
         </div>
         <div className="card-footer border-0 w-100 p-1 d-flex bg-transparent justify-content-between">
           {isSelected ? (
             <>
+              {/* Aquí se mantiene tu lógica original */}
               <button
                 type="button"
                 className="btn-accionesPlatos btn-disminuir mx-1"
@@ -58,7 +54,7 @@ export const CardPlatos = ({
               >
                 <span className="me-2">
                   <MinusIcon className={"text-auto"} />
-                </span>
+                </span>{" "}
                 1
               </button>
               <button
@@ -68,19 +64,19 @@ export const CardPlatos = ({
               >
                 <span className="me-2">
                   <PlusIcon className={"text-auto"} />
-                </span>
+                </span>{" "}
                 1
               </button>
             </>
           ) : (
             <button
               type="button"
-              className="btn-accionesPlatos btn-añadir w-100"
+              className="btn-guardar w-100"
               onClick={() => handleAdd(item)}
             >
               <span className="me-2">
                 <PlusIcon className={"text-auto"} />
-              </span>
+              </span>{" "}
               Agregar
             </button>
           )}
@@ -90,15 +86,12 @@ export const CardPlatos = ({
   }
 
   // ==========================================
-  // 🛒 DISEÑO 2: TIENDA / RETAIL (Nuevo diseño llamativo)
+  // 🛒 DISEÑO 2: TIENDA / RETAIL
   // ==========================================
   return (
     <div
-      className={`float-left card-tienda card overflow-hidden m-2 ${
-        isSelected ? "selected-tienda" : ""
-      }`}
+      className={`float-left card-tienda card overflow-hidden m-2 ${isSelected ? "selected-tienda" : ""}`}
     >
-      {/* Etiqueta flotante de Stock */}
       <div
         className={`badge-stock ${item.stock <= 5 ? "stock-bajo" : "stock-ok"}`}
       >
@@ -132,27 +125,26 @@ export const CardPlatos = ({
       <div className="card-footer border-0 p-1 d-flex bg-transparent justify-content-center">
         {isSelected ? (
           <div className="d-flex w-100 justify-content-between align-items-center bg-light rounded-pill p-1 shadow-sm border">
+            {/* 🔥 CORRECCIÓN: Agregamos "btn" para la estructura base y "btn-icon" para hacerlo círculo perfecto */}
             <button
               type="button"
-              className="btn-cerrar rounded-circle d-flex align-items-center justify-content-center p-1"
-              style={{ width: "28px", height: "28px" }}
+              className="btn btn-cerrar btn-icon shadow-sm"
               onClick={() => handleRemove(item.id)}
             >
-              <MinusIcon size={16} />
+              <MinusIcon size={16} strokeWidth={3} />
             </button>
 
             <span className="fw-bold px-2 text-dark">
-              {/* Aquí asumo que quieres mostrar la cantidad seleccionada si puedes extraerla, si no, lo dejamos fijo o usas un prop nuevo. Por diseño pondré un check para indicar que ya está en el carrito */}
               <ShoppingCart size={16} className="text-dark" />
             </span>
 
+            {/* 🔥 CORRECCIÓN: Igual aquí, btn-guardar da el color, btn-icon da la forma circular */}
             <button
               type="button"
-              className="btn-guardar rounded-circle d-flex align-items-center justify-content-center p-1"
-              style={{ width: "28px", height: "28px" }}
+              className="btn btn-guardar btn-icon shadow-sm"
               onClick={() => handleAdd(item)}
             >
-              <PlusIcon size={16} />
+              <PlusIcon size={16} strokeWidth={3} />
             </button>
           </div>
         ) : (

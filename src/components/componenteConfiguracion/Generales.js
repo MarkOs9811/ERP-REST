@@ -196,13 +196,13 @@ export function Generales() {
                 <button
                   type="submit"
                   disabled={loadingIgv}
-                  className="btn-principal d-flex align-items-center gap-2"
+                  className="btn-principal px-2"
                 >
                   {loadingIgv ? (
                     "Guardando..."
                   ) : (
                     <>
-                      <Save size={18} /> Guardar IGV
+                      <Save /> Guardar IGV
                     </>
                   )}
                 </button>

@@ -21,7 +21,7 @@ export function Configuracion() {
 
   const isActive = (path) =>
     location.pathname === path ||
-    (path !== "/configuracion" && location.pathname.startsWith(path));
+    (path !== "/configuracion/general" && location.pathname.startsWith(path));
 
   // Opciones para administrador
   const opcionesAdmin = [

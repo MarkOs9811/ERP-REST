@@ -22,7 +22,7 @@ export function DashboardMesas() {
   const listaMesas = Array.isArray(mesas) ? mesas : mesas?.data || [];
 
   return (
-    <div className="salon-container card m-0 h-100 overflow-auto">
+    <div className="salon-container card m-0 h-100 overflow-auto p-2">
       {/* --- CABECERA --- */}
       <div className="card-header bg-white border-bottom-0 p-2 mb-3 d-flex flex-column flex-lg-row justify-content-between align-items-start align-items-lg-center">
         <div className="mb-lg-0 d-flex justify-content-center items-center">
@@ -40,12 +40,17 @@ export function DashboardMesas() {
             {listaMesas.length === 0 ? (
               <button
                 onClick={() => navigate("/ventas/mesas")}
-                className="btn-principal btn-sm"
+                className="btn-principal "
               >
                 <Plus /> Crear Mesas
               </button>
             ) : (
-              ""
+              <button
+                onClick={() => navigate("/ventas/mesas")}
+                className="btn-principal"
+              >
+                <Plus /> Gestionar Mesas
+              </button>
             )}
           </h2>
         </div>
@@ -68,7 +73,7 @@ export function DashboardMesas() {
 
       {/* --- GRID VISUAL --- */}
       <CondicionCarga isLoading={loading} isError={error} mode="cards">
-        <div className="card-body px-4 pb-4 pt-0">
+        <div className="card-body ">
           {/* Si a pesar del fix listaMesas sigue vacío, mostramos este aviso para debuggear */}
           {listaMesas.length === 0 && !loading && (
             <div className="alert alert-warning text-center d-flex flex-column align-items-center justify-content-center">

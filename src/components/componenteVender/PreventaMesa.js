@@ -758,14 +758,17 @@ export function PreventaMesa() {
               isError={errorPlatos}
               mode="cards"
             >
-              <div className="card-body overflow-auto contenedor-platos p-2 ">
+              <div className="card-body overflow-auto contenedor-platos p-2">
                 {productos
-                  .filter(
-                    (p) =>
-                      (categoriaFiltroPlatos === "todo" ||
-                        p.categoria.nombre === categoriaFiltroPlatos) &&
-                      p.nombre.toLowerCase().includes(searchTerm.toLowerCase()),
-                  )
+                  .filter((p) => {
+                    const matchCategoria =
+                      categoriaFiltroPlatos === "todo" ||
+                      p.categoria.nombre === categoriaFiltroPlatos;
+                    const matchSearch = p.nombre
+                      .toLowerCase()
+                      .includes(searchTerm.toLowerCase());
+                    return matchCategoria && matchSearch;
+                  })
                   .map((p) => (
                     <CardPlatos
                       key={p.id}
@@ -773,8 +776,8 @@ export function PreventaMesa() {
                       isSelected={itemsCarrito.some((i) => i.id === p.id)}
                       handleAdd={handleAddPlatoPreventa}
                       handleRemove={handleDecrementNewItem}
-                      BASE_URL={BASE_URL}
                       capitalizeFirstLetter={capitalizeFirstLetter}
+                      esComida={"restaurante"}
                     />
                   ))}
               </div>
