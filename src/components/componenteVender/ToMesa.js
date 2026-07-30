@@ -35,7 +35,6 @@ import { useReactToPrint } from "react-to-print";
 import { TicketsPedido } from "./TiketsType/TicketsPedido";
 
 export function ToMesa() {
-  const BASE_URL = process.env.REACT_APP_BASE_URL;
   const id = useSelector((state) => state.mesa.idPreventaMesa);
   const numeroMesa = useSelector((state) => state.mesa.numero);
 
@@ -315,7 +314,7 @@ export function ToMesa() {
               </div>
 
               <BotonAnimado
-                className="btn-realizarPedido py-2 fw-bold btn-block w-100 p-3 shadow-sm"
+                className="btn-guardar py-3 fw-bold btn-block w-100 p-3 shadow-sm"
                 onClick={() => handleAddPlatoPreventaMesas()}
                 loading={isLoadignPedido}
                 disabled={
@@ -346,11 +345,11 @@ export function ToMesa() {
                   searchTerm={searchTerm}
                   setSearchTerm={setSearchTerm}
                 />
-                <CategoriaPlatos />
+                <CategoriaPlatos claveVenta="restaurante" />
               </div>
               {/* Categorías en móvil si es necesario */}
               <div className="d-md-none mt-2">
-                <CategoriaPlatos />
+                <CategoriaPlatos claveVenta="restaurante" />
               </div>
             </div>
 
@@ -382,8 +381,8 @@ export function ToMesa() {
                           isSelected={isSelected}
                           handleAdd={handleAddPlatoPreventa}
                           handleRemove={handleRemovePlatoPreventa}
-                          BASE_URL={BASE_URL}
                           capitalizeFirstLetter={capitalizeFirstLetter}
+                          esComida="resturante"
                         />
                       );
                     })}

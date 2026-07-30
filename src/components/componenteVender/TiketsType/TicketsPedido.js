@@ -2,6 +2,7 @@ import React from "react";
 
 export const TicketsPedido = React.forwardRef((props, ref) => {
   const { venta } = props;
+  const datoEmpresa = JSON.parse(sessionStorage.getItem("empresa"))?.nombre;
 
   // Extraemos los datos según la estructura que devuelve tu Backend
   const productos = venta?.pedidoRegistro || [];
@@ -49,7 +50,7 @@ export const TicketsPedido = React.forwardRef((props, ref) => {
           `}</style>
 
           <div className="text-center">
-            <h2 style={{ margin: "0", fontSize: "14pt" }}>FIRE WOK</h2>
+            <h2 style={{ margin: "0", fontSize: "14pt" }}>{datoEmpresa}</h2>
             <h3 style={{ margin: "0", fontSize: "12pt" }} className="bold">
               ORDEN DE COCINA
             </h3>

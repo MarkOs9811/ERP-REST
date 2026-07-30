@@ -3,7 +3,9 @@ import React from "react";
 export const TicketImpresion = React.forwardRef(
   (props, ref, cliente = null) => {
     const { venta } = props;
+    const datoEmpresa = JSON.parse(sessionStorage.getItem("empresa"))?.nombre;
 
+    console.log(datoEmpresa);
     return (
       <div
         ref={ref}
@@ -42,9 +44,7 @@ export const TicketImpresion = React.forwardRef(
           `}</style>
 
             <div className="text-center">
-              <h2 style={{ margin: "0", fontSize: "12pt" }}>
-                Restaurante FIRE WOK
-              </h2>
+              <h2 style={{ margin: "0", fontSize: "12pt" }}>{datoEmpresa}</h2>
               <p style={{ margin: "1px 0" }}>{venta.tipo_comprobante}</p>
               <p className="bold" style={{ margin: "0" }}>
                 {venta.serie_correlativo}

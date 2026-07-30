@@ -1,17 +1,14 @@
 import { MinusIcon, PlusIcon, ShoppingCart, Package } from "lucide-react";
 import "../../css/EstilosPlatosTodo.css";
 
-export const CardPlatos = (props) => {
-  console.log(props);
-
-  const {
-    item,
-    isSelected,
-    handleAdd,
-    handleRemove,
-    capitalizeFirstLetter,
-    esComida = "",
-  } = props;
+export const CardPlatos = ({
+  item,
+  isSelected,
+  handleAdd,
+  handleRemove,
+  capitalizeFirstLetter,
+  esComida = "",
+}) => {
   // ==========================================
   // 🍔 DISEÑO 1: RESTAURANTE
   // ==========================================
@@ -39,7 +36,7 @@ export const CardPlatos = (props) => {
           <p className="nombre-plato mb-3 fw-bold">
             {capitalizeFirstLetter(item.nombre)}
           </p>
-          <span className="rounded-pill px-2 fw-bold precioCard">
+          <span className="rounded-pill px-2 mb-3 fw-bold precioCard">
             S/. {item.precio}
           </span>
         </div>
@@ -49,7 +46,7 @@ export const CardPlatos = (props) => {
               {/* Aquí se mantiene tu lógica original */}
               <button
                 type="button"
-                className="btn-accionesPlatos btn-disminuir mx-1"
+                className="btn-accionesPlatos btn-cerrar mx-1"
                 onClick={() => handleRemove(item.id)}
               >
                 <span className="me-2">
@@ -59,7 +56,7 @@ export const CardPlatos = (props) => {
               </button>
               <button
                 type="button"
-                className="btn-accionesPlatos btn-añadir mx-1"
+                className="btn-accionesPlatos btn-guardar mx-1"
                 onClick={() => handleAdd(item)}
               >
                 <span className="me-2">

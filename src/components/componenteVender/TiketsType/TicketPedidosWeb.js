@@ -2,6 +2,7 @@ import React from "react";
 
 export const TicketPedidosWeb = React.forwardRef((props, ref) => {
   const { dataActual } = props;
+  const datoEmpresa = JSON.parse(sessionStorage.getItem("empresa"))?.nombre;
 
   // Cálculos de seguridad
   const productos = dataActual?.productos || [];
@@ -45,7 +46,7 @@ export const TicketPedidosWeb = React.forwardRef((props, ref) => {
           `}</style>
 
           <div className="text-center">
-            <h2 style={{ margin: "0", fontSize: "12pt" }}>FIRE WOK</h2>
+            <h2 style={{ margin: "0", fontSize: "12pt" }}>{datoEmpresa}</h2>
             <p className="bold" style={{ margin: "2px 0", fontSize: "10pt" }}>
               *** PEDIDO WHATSAPP ***
             </p>

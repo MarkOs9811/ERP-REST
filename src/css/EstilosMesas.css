@@ -46,7 +46,7 @@
   background-position: right bottom;
   z-index: 1;
   pointer-events: none;
-  opacity: 0.6;
+  opacity: 0.8;
   transition: opacity 0.15s ease-out;
 }
 
@@ -57,19 +57,22 @@
 /* MESA DISPONIBLE - VERDE */
 .mesa-card.disponible::after {
   background-image: url("../../public/images/img-disponible-mesa.svg");
-  background-color: #c8fce0;
-  border-bottom: 10px solid #0b884e;
+  background-color: #e4fff1;
+  border-bottom: 10px solid #10c245;
 }
 
 .mesa-card.disponible:active::after {
-  background-color: #96e8c6;
+  background-color: #b9b9b9;
 }
 
 /* MESA EN ATENCIÓN - ROJO */
 .mesa-card.en-atencion::after {
   background-image: url("../../public/images/img-en-atencion.svg");
-  background-color: #ffd6d6;
-  border-bottom: 10px solid #c41c3b;
+  background-position: center right;
+  background-color: #fa1a1a;
+  background-size: 50%;
+  border-bottom: 10px solid #25070c;
+  overflow: hidden;
 }
 
 .mesa-card.en-atencion:active::after {
@@ -108,16 +111,13 @@
   gap: 6px;
   padding: 8px 12px;
 
-  /* 1. Fondo con transparencia (necesario para que el desenfoque se note) */
-  background-color: rgba(255, 255, 255, 0.3);
-
   /* 2. El efecto de difuminado */
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   /* Soporte para Safari */
 
-  border-radius: 6px;
-  font-size: 0.75em;
+  border-radius: 16px;
+  font-size: 0.80em;
   font-weight: 700;
   color: #222;
   z-index: 2;
@@ -132,15 +132,17 @@
 
 /* Ajuste para los estados específicos */
 .mesa-card.disponible .mesa-action-label {
-  background-color: rgba(11, 136, 78, 0.2);
+  border: 1px solid rgb(1, 68, 37);
+  background-color: rgba(248, 248, 248, 0.671);
   /* Bajamos la opacidad */
-  color: #014d29;
+  color: #020705;
 }
 
 .mesa-card.en-atencion .mesa-action-label {
-  background-color: rgba(196, 28, 59, 0.1);
+  border: 1px solid rgb(68, 1, 1);
+  background-color: rgba(253, 252, 252, 0);
   /* Bajamos la opacidad */
-  color: #c20024;
+  color: #fffefe;
 }
 
 .mesa-action-label svg {

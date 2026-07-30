@@ -107,7 +107,7 @@ export function MesasList() {
                 </p>
                 <p className="d-flex align-items-center gap-2 mb-0">
                   <Users size={16} />
-                  <span>Capacidad: {mesa.capacidad}</span>
+                  <span>{mesa.capacidad}</span>
                 </p>
               </div>
 
@@ -116,7 +116,7 @@ export function MesasList() {
                 {mesa.estado === 1 ? (
                   <>
                     <PlusCircle size={16} />
-                    <span>ABRIR</span>
+                    <span>Abrir</span>
                   </>
                 ) : (
                   <>

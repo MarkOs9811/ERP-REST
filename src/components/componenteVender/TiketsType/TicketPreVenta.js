@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 
 export const TicketPreVenta = React.forwardRef((props, ref) => {
   const { dataActual } = props;
+  const datoEmpresa = JSON.parse(sessionStorage.getItem("empresa"))?.nombre;
 
   // 1. SOLUCIÓN CANTIDAD: Agrupar items iguales por ID de plato
   const itemsAgrupados = useMemo(() => {
@@ -104,7 +105,7 @@ export const TicketPreVenta = React.forwardRef((props, ref) => {
           `}</style>
 
           <div className="text-center">
-            <h2 style={{ margin: "0", fontSize: "12pt" }}>FIRE WOK</h2>
+            <h2 style={{ margin: "0", fontSize: "12pt" }}>{datoEmpresa}</h2>
             <p className="bold" style={{ margin: "2px 0", fontSize: "10pt" }}>
               *** PRE-CUENTA ***
             </p>
