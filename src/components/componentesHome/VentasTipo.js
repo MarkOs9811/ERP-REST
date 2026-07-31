@@ -2,95 +2,123 @@ import { Globe, ShoppingBag, Utensils } from "lucide-react";
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
 
 export function VentasTipo({ load, error, ventasList }) {
-  // Obtener el mes y año actual
-  const currentMonth = new Date().getMonth() + 1; // Los meses en JavaScript son 0-indexados
+  // Lógica optimizada: Procesamos todo en una sola iteración (O(N)) usando reduce.
+  const currentMonth = new Date().getMonth() + 1;
   const currentYear = new Date().getFullYear();
 
-  // Contar los pedidos para "llevar" y "mesa" del presente mes
-  let totalPedidosLlevar = 0;
-  let totalPedidosMesa = 0;
+  const totales = (ventasList || []).reduce(
+    (acc, venta) => {
+      // 1. Cálculos de Pedidos (Llevar / Mesa)
+      if (venta.pedido) {
+        const { tipoVenta, detalle_pedidos, fechaPedido } = venta.pedido;
+        const fechaPedidoDate = new Date(fechaPedido);
 
-  ventasList.forEach((venta) => {
-    if (venta.pedido) {
-      const { tipoVenta, detalle_pedidos, fechaPedido } = venta.pedido;
+        if (
+          fechaPedidoDate.getMonth() + 1 === currentMonth &&
+          fechaPedidoDate.getFullYear() === currentYear
+        ) {
+          const cantidadPlatos = Array.isArray(detalle_pedidos)
+            ? detalle_pedidos.length
+            : 0;
 
-      // Verificar que el pedido sea del presente mes
-      const fechaPedidoDate = new Date(fechaPedido);
-      const esDelMesActual =
-        fechaPedidoDate.getMonth() + 1 === currentMonth &&
-        fechaPedidoDate.getFullYear() === currentYear;
-
-      if (esDelMesActual) {
-        if (tipoVenta === "llevar" && Array.isArray(detalle_pedidos)) {
-          totalPedidosLlevar += detalle_pedidos.length; // Contar los platos en detalle_pedidos
-        } else if (tipoVenta === "mesa" && Array.isArray(detalle_pedidos)) {
-          totalPedidosMesa += detalle_pedidos.length; // Contar los platos en detalle_pedidos
+          if (tipoVenta === "llevar") acc.llevar += cantidadPlatos;
+          if (tipoVenta === "mesa") acc.mesa += cantidadPlatos;
         }
       }
-    }
-  });
 
-  // Filtrar las ventas por web del presente mes
-  const ventasWebMes =
-    ventasList?.filter((venta) => {
-      const fechaVenta = new Date(venta.fechaVenta);
-      return (
-        venta.idPedidoWeb !== null && // idPedidoWeb no es null
-        fechaVenta.getMonth() + 1 === currentMonth && // Mismo mes
-        fechaVenta.getFullYear() === currentYear // Mismo año
-      );
-    }) || []; // Asegúrate de que sea un array
+      // 2. Cálculos de Ventas Web
+      if (venta.idPedidoWeb !== null && venta.fechaVenta) {
+        const fechaVentaDate = new Date(venta.fechaVenta);
+        if (
+          fechaVentaDate.getMonth() + 1 === currentMonth &&
+          fechaVentaDate.getFullYear() === currentYear
+        ) {
+          acc.web += 1;
+        }
+      }
 
-  // Contar las ventas por web
-  const totalVentasWeb = ventasWebMes.length || 0;
+      return acc;
+    },
+    { web: 0, llevar: 0, mesa: 0 }, // Valores iniciales
+  );
+
+  // Estructura de datos para no repetir código HTML (DRY)
+  const tarjetasStats = [
+    {
+      id: "web",
+      titulo: "Pedidos Web",
+      subtitulo: "Este mes",
+      valor: totales.web,
+      icono: <Globe size={24} color="var(--fw-emerald)" />,
+      bgIcono: "var(--bg-emerald-soft)",
+    },
+    {
+      id: "llevar",
+      titulo: "Llevar",
+      subtitulo: "Este mes",
+      valor: totales.llevar,
+      icono: <ShoppingBag size={24} color="var(--fw-saffron)" />,
+      bgIcono: "var(--bg-saffron-soft)",
+    },
+    {
+      id: "mesa",
+      titulo: "En Mesa",
+      subtitulo: "Este mes",
+      valor: totales.mesa,
+      icono: <Utensils size={24} color="var(--fw-strawberry)" />,
+      bgIcono: "var(--bg-strawberry-soft)",
+    },
+  ];
 
   return (
     <CondicionCarga isLoading={load} isError={error}>
-      <div className="d-flex flex-column gap-4 h-100">
-        {/* Pedidos Web */}
-        <div className="border d-flex align-items-center p-3 rounded-3 bg-light border ">
+      {/* Container principal con Flexbox y gap nativo de Bootstrap */}
+      <div className="d-flex flex-column gap-3 h-100">
+        {tarjetasStats.map((stat) => (
           <div
-            className="p-2 bg-white text-dark rounded-circle me-3 d-flex align-items-center justify-content-center"
-            style={{ width: "48px", height: "48px" }}
+            key={stat.id}
+            className="bg-white d-flex border align-items-center p-3"
+            style={{
+              backgroundColor: "var(--bg-card)",
+              borderRadius: "var(--radius-md)",
+            }}
           >
-            <Globe size={24} />
-          </div>
-          <div className="flex-grow-1">
-            <div className="fw-bold text-dark">Pedidos Web</div>
-            <div className="small text-muted">Este mes</div>
-          </div>
-          <div className="fs-4 fw-bold text-dark">{totalVentasWeb}</div>
-        </div>
+            {/* Ícono */}
+            <div
+              className="d-flex align-items-center justify-content-center rounded-circle me-3 flex-shrink-0"
+              style={{
+                width: "48px",
+                height: "48px",
+                backgroundColor: stat.bgIcono,
+              }}
+            >
+              {stat.icono}
+            </div>
 
-        {/* Pedidos Llevar */}
-        <div className="border d-flex align-items-center p-3 rounded-3 bg-light border ">
-          <div
-            className="p-2 bg-white text-dark rounded-circle me-3 d-flex align-items-center justify-content-center"
-            style={{ width: "48px", height: "48px" }}
-          >
-            <ShoppingBag size={24} />
-          </div>
-          <div className="flex-grow-1">
-            <div className="fw-bold text-dark">Llevar</div>
-            <div className="small text-muted">Este mes</div>
-          </div>
-          <div className="fs-4 fw-bold text-dark">{totalPedidosLlevar}</div>
-        </div>
+            {/* Textos (flex-grow-1 empuja el número hacia la derecha automáticamente) */}
+            <div className="d-flex flex-column flex-grow-1">
+              <span
+                className="fw-bold m-0"
+                style={{ color: "var(--text-main)" }}
+              >
+                {stat.titulo}
+              </span>
+              <small
+                style={{ color: "var(--text-muted)", fontSize: "0.85rem" }}
+              >
+                {stat.subtitulo}
+              </small>
+            </div>
 
-        {/* Pedidos Mesa */}
-        <div className="border d-flex align-items-center p-3 rounded-3 bg-light border ">
-          <div
-            className="p-2 bg-white text-dark rounded-circle me-3 d-flex align-items-center justify-content-center"
-            style={{ width: "48px", height: "48px" }}
-          >
-            <Utensils size={24} />
+            {/* Valor (Número final) */}
+            <div
+              className="fs-4 fw-bold m-0"
+              style={{ color: "var(--text-main)" }}
+            >
+              {stat.valor}
+            </div>
           </div>
-          <div className="flex-grow-1">
-            <div className="fw-bold text-dark">En Mesa</div>
-            <div className="small text-muted">Este mes</div>
-          </div>
-          <div className="fs-4 fw-bold text-dark">{totalPedidosMesa}</div>
-        </div>
+        ))}
       </div>
     </CondicionCarga>
   );

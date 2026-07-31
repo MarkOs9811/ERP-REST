@@ -11,6 +11,7 @@ import pedidoWebReducer from "./pedidoWebSlice";
 import productoTransferirReducer from "./productoTransferirSlice";
 import cuentaSeparadaSliceReducer from "./cuentaSeparadaSlice";
 import sideBarmobileSliceReducer from "./sideBarMobilSlice";
+import authReducer from "./authSlice";
 const store = configureStore({
   reducer: {
     caja: cajaReducer,
@@ -25,6 +26,7 @@ const store = configureStore({
     productoTransferir: productoTransferirReducer,
     cuentaSeparada: cuentaSeparadaSliceReducer,
     sidebarMobile: sideBarmobileSliceReducer,
+    auth: authReducer,
   },
 });
 

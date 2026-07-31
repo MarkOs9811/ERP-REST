@@ -10,14 +10,16 @@ import {
 
 import { Outlet, Link, useLocation } from "react-router-dom";
 
-// Simulación: obtén el rol desde tu contexto, redux, o props
-const cargo =
-  JSON.parse(localStorage.getItem("user") || sessionStorage.getItem("user")) ||
-  {};
-const userRol = cargo?.empleado?.cargo?.nombre.toLowerCase();
-
 export function Configuracion() {
   const location = useLocation();
+
+  // 🔥 SOLUCIÓN: Movimos esto ADENTRO de la función.
+  // Ahora se ejecuta cada vez que el usuario entra a esta ruta, leyendo los datos actualizados.
+  const cargo =
+    JSON.parse(
+      localStorage.getItem("user") || sessionStorage.getItem("user"),
+    ) || {};
+  const userRol = cargo?.empleado?.cargo?.nombre?.toLowerCase();
 
   const isActive = (path) =>
     location.pathname === path ||
@@ -127,7 +129,9 @@ export function Configuracion() {
     },
   ];
 
-  const opciones = userRol == "administrador" ? opcionesAdmin : opcionesUsuario;
+  // Evaluamos el rol dinámicamente
+  const opciones =
+    userRol === "administrador" ? opcionesAdmin : opcionesUsuario;
 
   return (
     <div>

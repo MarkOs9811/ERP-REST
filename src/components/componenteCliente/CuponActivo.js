@@ -1,5 +1,5 @@
 import React from "react";
-import { Tag, AlertCircle, ArrowRight, Circle } from "lucide-react";
+import { Tag, AlertCircle, Circle } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { GetCampañaPromos } from "../../service/accionesClientes/GetCampañaPromos";
@@ -19,28 +19,27 @@ export function CuponActivoHome() {
 
   const formatearFecha = (fechaString) => {
     if (!fechaString) return "Sin fecha";
-    const fecha = new Date(fechaString);
-    return fecha.toLocaleDateString("es-PE", {
+    return new Date(fechaString).toLocaleDateString("es-PE", {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
     });
   };
 
-  if (isLoading) {
+  if (isLoading || isError) {
     return (
-      <div className="fw-solid-card h-100 d-flex flex-column align-items-center justify-content-center p-4">
-        <div className="spinner-border text-light mb-2" role="status"></div>
-        <span>Cargando promociones...</span>
-      </div>
-    );
-  }
-
-  if (isError) {
-    return (
-      <div className="fw-solid-card h-100 d-flex flex-column align-items-center justify-content-center p-4">
-        <AlertCircle size={32} className="text-danger mb-2" />
-        <span className="text-center">Error al conectar con promociones.</span>
+      <div className="fw-promo-card align-items-center justify-content-center text-center">
+        {isLoading ? (
+          <div
+            className="spinner-border text-secondary mb-2"
+            role="status"
+          ></div>
+        ) : (
+          <AlertCircle size={32} className="text-danger mb-2" />
+        )}
+        <span className="fw-promo-text">
+          {isLoading ? "Cargando..." : "Error de conexión"}
+        </span>
       </div>
     );
   }
@@ -49,78 +48,65 @@ export function CuponActivoHome() {
 
   if (!campanaActiva) {
     return (
-      <div className="fw-solid-card h-100 d-flex flex-column align-items-center justify-content-center p-4 text-center">
-        <Tag size={40} className="mb-3 opacity-50" />
-        <h4 className="fw-bold mb-2">Sin Campañas Activas</h4>
-        <p className="small mb-4 opacity-75">
+      <div className="fw-promo-card align-items-center justify-content-center text-center">
+        <Tag size={40} className="mb-3 text-muted opacity-50" />
+        <h4 className="fw-promo-title mb-2">Sin Campañas</h4>
+        <p className="fw-promo-text mb-4">
           Crea una promoción para premiar a tus clientes.
         </p>
         <button
           onClick={() => navigate("/clientes/fidelizacion")}
-          className="fw-solid-btn w-100"
+          className="fw-btn-action fw-btn-emerald w-100 mt-auto"
         >
-          + Lanzar Nueva Campaña
+          + Nueva Campaña
         </button>
       </div>
     );
   }
 
   return (
-    <div className="fw-solid-card h-100 d-flex flex-column p-4">
-      {/* Cabecera (Badge) */}
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <span className="fw-solid-badge d-flex align-items-center gap-2">
-          <Tag size={14} /> CAMPAÑA ACTIVA
+    <div className="fw-promo-card">
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <span className="fw-badge fw-badge-emerald">
+          <Tag size={14} /> Campaña Activa
         </span>
-        <span className="fw-solid-counter">
+        <span className="small text-muted">
           {listaCampañas.length} disponibles
         </span>
       </div>
 
-      {/* Info Principal */}
-      <div className="mb-4">
-        <h2 className="fw-solid-title mb-2">
-          {campanaActiva.nombre || "PROMOCIÓN"}
-        </h2>
-        <p className="fw-solid-subtitle mb-3">
-          {campanaActiva.descuento
-            ? `${campanaActiva.descuento}% de descuento aplicado en sistema`
-            : "Promoción especial para clientes"}
-        </p>
+      <h2 className="fw-promo-title">
+        {campanaActiva.nombre || "Promoción Especial"}
+      </h2>
+      <p className="fw-promo-text mb-3">
+        {campanaActiva.descuento
+          ? `${campanaActiva.descuento}% de descuento aplicado`
+          : "Beneficio especial activo"}
+      </p>
 
-        <div className="d-flex align-items-center gap-2">
-          <span className="fw-solid-label">Código cupón:</span>
-          <span className="fw-solid-code">
-            {campanaActiva.codigo_cupon || "CUPON"}
-          </span>
-        </div>
+      <div className="d-flex align-items-center justify-content-between mb-3 bg-light p-2 rounded">
+        <span className="small text-muted fw-bold">Cupón:</span>
+        <span className="fw-promo-code">
+          {campanaActiva.codigo_cupon || "CUPON"}
+        </span>
       </div>
 
-      <hr className="fw-solid-divider" />
-
-      {/* Detalles y Estado */}
-      <div className="d-flex justify-content-between align-items-center mb-auto mt-2">
+      <div className="d-flex justify-content-between align-items-center mt-auto border-top pt-3">
         <div>
-          <span className="fw-solid-label d-block mb-1">Validez hasta:</span>
-          <span className="fw-solid-value fw-bold">
+          <span className="d-block small text-muted">Vence el:</span>
+          <span className="fw-bold text-dark">
             {formatearFecha(campanaActiva.fecha_fin)}
           </span>
         </div>
         <div className="text-end">
-          <span className="fw-solid-label d-block mb-1">Estado:</span>
-          <span className="fw-solid-status d-flex align-items-center gap-1 justify-content-end">
+          <span
+            className="d-flex align-items-center gap-1 fw-bold"
+            style={{ color: "var(--fw-emerald)", fontSize: "0.9rem" }}
+          >
             <Circle size={10} fill="currentColor" /> Activo
           </span>
         </div>
       </div>
-
-      {/* Botón Acción (Fijado al fondo gracias al mb-auto de arriba) */}
-      <button
-        onClick={() => navigate("/clientes/fidelizacion")}
-        className="fw-solid-btn w-100 mt-4"
-      >
-        + Lanzar Nueva Campaña
-      </button>
     </div>
   );
 }
