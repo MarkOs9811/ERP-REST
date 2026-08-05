@@ -103,7 +103,7 @@ export function OpcionesPago(props) {
   };
 
   return (
-    <div className="card shadow-sm flex-grow-1 h-100 d-flex flex-column h-100">
+    <div className="card border flex-grow-1 h-100 d-flex flex-column h-100">
       <div className="card-header">
         <h5>Método de pago</h5>
       </div>

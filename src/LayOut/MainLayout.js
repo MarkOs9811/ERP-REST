@@ -178,12 +178,7 @@ export const MainLayout = () => {
               "width var(--transition-smooth), margin var(--transition-smooth)",
           }}
         >
-          <div
-            className="overflow-y-scroll overflow-x-hidden px-2 py-2 "
-            style={{
-              height: "calc(100vh - 120px)",
-            }}
-          >
+          <div className="overflow-y-scroll overflow-x-hidden px-2 py-2 contenedor-scroll-principal">
             <ContenedorPrincipal>
               <ToastContainer />
               <SubMenuTabs />

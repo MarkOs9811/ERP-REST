@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "../../css/EstilosPreventa.css";
 import { capitalizeFirstLetter } from "../../hooks/FirstLetterUp";
 import { CardPlatos } from "./CardPlatos";
@@ -33,8 +33,6 @@ import { GetConfi } from "../../service/accionesConfiguracion/GetConfi";
 import { GetInventario } from "../../service/GetInventario";
 
 export function ToLlevar() {
-  const { id } = useParams();
-  const BASE_URL = process.env.REACT_APP_BASE_URL;
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -125,23 +123,25 @@ export function ToLlevar() {
 
   return (
     <div className="h-100 bg-transparent">
-      <div className="row  h-100">
+      <div className="row h-100 g-3">
         {/* COLUMNA IZQUIERDA: CUENTA Y DETALLES */}
         <div className="col-md-4 col-lg-3 h-100">
           <div className="card  flex-grow-1 h-100 d-flex flex-column  overflow-hidden">
             {/* Header: Título y Botón Eliminar (Reubicado) */}
-            <div className="card-header m-0 bg-white border-bottom d-flex justify-content-between align-items-center py-3">
-              <h5 className="mb-0 fw-bold text-dark">Para Llevar</h5>
-              {items.length > 0 && (
-                <button
-                  className="btn btn-outline-danger d-flex align-items-center gap-1"
-                  onClick={handleEliminarTodo}
-                  title="Limpiar cuenta"
-                >
-                  <Trash2 size={16} />
-                  <span className="small">Limpiar</span>
-                </button>
-              )}
+            <div className="card-header m-0 bg-white border-bottom  d-flex py-3">
+              <div className="d-flex justify-content-between align-items-center w-100">
+                <h5 className="mb-0 fw-bold text-dark">Para Llevar</h5>
+                {items.length > 0 && (
+                  <button
+                    className="btn btn-outline-danger d-flex align-items-center gap-1"
+                    onClick={handleEliminarTodo}
+                    title="Limpiar cuenta"
+                  >
+                    <Trash2 size={16} />
+                    <span className="small">Limpiar</span>
+                  </button>
+                )}
+              </div>
             </div>
 
             <div className="card-body overflow-auto p-0 d-flex flex-column ">
@@ -305,29 +305,40 @@ export function ToLlevar() {
           </div>
         </div>
         {/* COLUMNA DERECHA: CATÁLOGO (Sin cambios mayores, solo ancho) */}
-        <div className="col-md-8 col-lg-9 h-100">
-          <div className="card  flex-grow-1 h-100 p-0 m-0 overflow-auto">
-            <div className="card-header bg-white border-bottom py-3 px-3 m-0">
-              <h6 className="m-0 text-dark fw-bold d-flex align-items-center gap-2 ">
-                {claveVenta === "restaurante" ? (
-                  <Hamburger size={28} />
-                ) : (
-                  <StoreIcon size={28} />
-                )}
-                {claveVenta === "restaurante"
-                  ? "Menú de Platos"
-                  : "Inventario / Productos"}
-              </h6>
-              <div className="d-flex  gap-2 ">
-                <BuscadorPlatos
-                  searchTerm={searchTerm}
-                  setSearchTerm={setSearchTerm}
-                />
-                <CategoriaPlatos claveVenta={claveVenta} />
-              </div>
-              {/* Categorías en móvil si es necesario */}
-              <div className="d-md-none mt-2">
-                <CategoriaPlatos claveVenta={claveVenta} />
+        <div className="col-md-8 col-lg-9 h-100 ">
+          <div className="card d-flex flex-grow-1 flex-column h-100 p-0 m-0 overflow-auto">
+            <div className="card-header bg-white border-bottom py-3 px-3">
+              <div className="d-flex flex-column flex-lg-row align-items-stretch align-items-lg-center gap-3">
+                {/* Título */}
+                <div className="d-flex align-items-center gap-2 flex-shrink-0">
+                  {claveVenta === "restaurante" ? (
+                    <Hamburger size={28} />
+                  ) : (
+                    <StoreIcon size={28} />
+                  )}
+
+                  <h6 className="m-0 fw-bold">
+                    {claveVenta === "restaurante"
+                      ? "Menú de Platos"
+                      : "Inventario / Productos"}
+                  </h6>
+                </div>
+
+                {/* Buscador */}
+                <div className="flex-grow-1">
+                  <BuscadorPlatos
+                    searchTerm={searchTerm}
+                    setSearchTerm={setSearchTerm}
+                  />
+                </div>
+
+                {/* Categorías */}
+                <div className="d-flex justify-content-lg-end">
+                  <CategoriaPlatos
+                    claveVenta={claveVenta}
+                    clearSearch={setSearchTerm}
+                  />
+                </div>
               </div>
             </div>
 
@@ -336,47 +347,45 @@ export function ToLlevar() {
               isError={isErrorProductos}
               mode="cards"
             >
-              <div className="card-body overflow-auto p-2">
-                <div className="contenedor-platos">
-                  {productos
-                    .filter((producto) => {
-                      const matchCategoria =
-                        categoriaFiltroPlatos === "todo" ||
-                        producto.categoria.nombre === categoriaFiltroPlatos;
-                      const matchSearch = producto.nombre
-                        .toLowerCase()
-                        .includes(searchTerm.toLowerCase());
-                      return matchCategoria && matchSearch;
-                    })
-                    .map((producto) => {
-                      // 1. Buscamos si el producto ya está en el carrito (Redux)
-                      const itemEnCarrito = items.find(
-                        (i) => i.id === producto.id,
-                      );
+              <div className="card-body p-2  contenedor-platos overflow-x-hidden m-auto ">
+                {productos
+                  .filter((producto) => {
+                    const matchCategoria =
+                      categoriaFiltroPlatos === "todo" ||
+                      producto.categoria.nombre === categoriaFiltroPlatos;
+                    const matchSearch = producto.nombre
+                      .toLowerCase()
+                      .includes(searchTerm.toLowerCase());
+                    return matchCategoria && matchSearch;
+                  })
+                  .map((producto) => {
+                    // 1. Buscamos si el producto ya está en el carrito (Redux)
+                    const itemEnCarrito = items.find(
+                      (i) => i.id === producto.id,
+                    );
 
-                      // 2. Extraemos la cantidad (si no está, es 0)
-                      const cantidadEnCarrito = itemEnCarrito
-                        ? itemEnCarrito.cantidad
-                        : 0;
+                    // 2. Extraemos la cantidad (si no está, es 0)
+                    const cantidadEnCarrito = itemEnCarrito
+                      ? itemEnCarrito.cantidad
+                      : 0;
 
-                      // 3. Está seleccionado si hay más de 0 en el carrito
-                      const isSelected = cantidadEnCarrito > 0;
-                      // ==========================================
+                    // 3. Está seleccionado si hay más de 0 en el carrito
+                    const isSelected = cantidadEnCarrito > 0;
+                    // ==========================================
 
-                      return (
-                        <CardPlatos
-                          key={producto.id}
-                          item={producto}
-                          isSelected={isSelected}
-                          cantidadEnCarrito={cantidadEnCarrito} // 👉 LE PASAMOS LA CANTIDAD AL CARD
-                          handleAdd={handleAddPlatoPreventa}
-                          handleRemove={handleRemovePlatoPreventa}
-                          capitalizeFirstLetter={capitalizeFirstLetter}
-                          esComida={esComida}
-                        />
-                      );
-                    })}
-                </div>
+                    return (
+                      <CardPlatos
+                        key={producto.id}
+                        item={producto}
+                        isSelected={isSelected}
+                        cantidadEnCarrito={cantidadEnCarrito} // 👉 LE PASAMOS LA CANTIDAD AL CARD
+                        handleAdd={handleAddPlatoPreventa}
+                        handleRemove={handleRemovePlatoPreventa}
+                        capitalizeFirstLetter={capitalizeFirstLetter}
+                        esComida={esComida}
+                      />
+                    );
+                  })}
               </div>
             </CondicionCarga>
           </div>

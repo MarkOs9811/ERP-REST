@@ -485,7 +485,7 @@ export function PreventaMesa() {
       <div className="row g-3 h-100">
         <div className="col-lg-4 h-100">
           <div
-            className={`card shadow border-0 h-100 d-flex flex-column overflow-hidden ${isSplitMode ? "border-primary border-2" : ""}`}
+            className={`card shadow h-100 d-flex flex-column overflow-hidden ${isSplitMode ? "border-dark border-2" : ""}`}
           >
             <div
               className={`card-header d-flex justify-content-between align-items-center p-3 ${isSplitMode ? "bg-warning" : ""}`}
@@ -504,7 +504,7 @@ export function PreventaMesa() {
                 </small>
               </div>
               <button
-                className={`btn btn-sm rounded-pill px-3 ${isSplitMode ? "btn-light text-dark" : "btn-outline-dark"}`}
+                className={`btn btn-sm rounded-pill px-3 ${isSplitMode ? "btn-white text-dark" : "btn-outline-dark"}`}
                 onClick={isSplitMode ? toggleSplitMode : handleVolverMesas}
               >
                 {isSplitMode ? (
@@ -637,7 +637,7 @@ export function PreventaMesa() {
                     </BotonAnimado>
                   ) : (
                     <BotonAnimado
-                      className="btn-realizarPedido w-100  mb-2 fw-bold fs-5 shadow-sm"
+                      className="btn-guardar border w-100  mb-2 fw-bold fs-5 py-3"
                       onClick={handleRealizarPago}
                       disabled={granTotal === 0}
                     >
@@ -741,16 +741,25 @@ export function PreventaMesa() {
           className={`col-lg-8 h-100 ${isSplitMode ? "opacity-50 pe-none" : ""}`}
         >
           <div className="card shadow-sm h-100 d-flex flex-column overflow-auto">
-            <div className="card-header bg-white border-bottom px-4 m-0 ">
-              <h6 className="m-0 text-dark fw-bold d-flex align-items-center gap-2 ">
-                <Hamburger size={28} /> Menú de Platos
-              </h6>
-              <div className="d-flex  gap-2 ">
+            <div className="card-header bg-white border-bottom  py-3 px-3 m-0">
+              <div>
+                <h6 className="d-flex align-items-center gap-2 flex-shrink-0">
+                  <Hamburger size={28} /> Menú de Platos
+                </h6>
+              </div>
+
+              <div className="flex-grow-1">
                 <BuscadorPlatos
                   searchTerm={searchTerm}
                   setSearchTerm={setSearchTerm}
                 />
-                <CategoriaPlatos />
+              </div>
+              {/* Categorías */}
+              <div className="d-flex justify-content-lg-end">
+                <CategoriaPlatos
+                  claveVenta={"restaurante"}
+                  clearSearch={setSearchTerm}
+                />
               </div>
             </div>
             <CondicionCarga
@@ -758,7 +767,7 @@ export function PreventaMesa() {
               isError={errorPlatos}
               mode="cards"
             >
-              <div className="card-body overflow-auto contenedor-platos p-2">
+              <div className="card-body p-2  contenedor-platos overflow-x-hidden m-auto ">
                 {productos
                   .filter((p) => {
                     const matchCategoria =

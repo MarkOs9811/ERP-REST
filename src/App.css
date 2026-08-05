@@ -17,7 +17,26 @@ body {
   width: 100%;
   font-family: inherit;
 }
+/* =========================================
+   === CONTENEDOR PRINCIPAL SCROLL ===
+   ========================================= */
+.contenedor-scroll-principal {
+  /* Desktop por defecto */
+  height: calc(100vh - 120px);
+  /* Fix moderno: dvh se adapta dinámicamente a la interfaz del navegador */
+  height: calc(100dvh - 120px);
+}
 
+/* Ajuste específico para celulares */
+@media (max-width: 767.98px) {
+  .contenedor-scroll-principal {
+    /* Si tu header móvil es más alto, aumenta este 120px a 140px o lo que mida */
+    height: calc(100dvh - 120px);
+
+    /* 🔥 CLAVE: Da un respiro al final para que el usuario pueda scrollear un poco más arriba del límite */
+    padding-bottom: 80px !important;
+  }
+}
 .content.with-sidebar {
   margin-left: 230px;
   width: calc(100% - 230px);

@@ -80,53 +80,59 @@ export function MesasList() {
         </div>
       </div>
       <CondicionCarga isLoading={loading} isError={error} mode="cards">
-        <div className="mesas-container card-body overflow-auto  justify-content-center">
-          {listaMesas.map((mesa) => (
-            <div
-              key={mesa.id}
-              className={`mesa-card m-3 ${
-                mesa.estado === 1 ? "disponible" : "en-atencion"
-              }`}
-              onClick={() =>
-                mesa.estado === 1
-                  ? handleMesaAddPlato(mesa)
-                  : handleShowPedido(mesa.id)
-              }
-            >
-              {/* ICONO Y NÚMERO DE MESA */}
-              <h6 className="mesa-numero d-flex align-items-center justify-content-center gap-2">
-                <UtensilsCrossed size={20} />
-                Mesa {mesa.numero}
-              </h6>
+        <div className="card-body overflow-auto p-3">
+          {/* 🔥 ESTRUCTURA BOOTSTRAP PARA LA GRILLA */}
+          <div className="row g-3">
+            {listaMesas.map((mesa) => (
+              /* En móvil ocupa 50% (col-6), en tablet 33% (col-md-4), en PC 25% o menos */
+              <div key={mesa.id} className="col-6 col-md-4 col-lg-3 col-xl-2">
+                <div
+                  /* Añadimos h-100 para que todas las tarjetas de la fila midan lo mismo */
+                  className={`mesa-card h-100 ${
+                    mesa.estado === 1 ? "disponible" : "en-atencion"
+                  }`}
+                  onClick={() =>
+                    mesa.estado === 1
+                      ? handleMesaAddPlato(mesa)
+                      : handleShowPedido(mesa.id)
+                  }
+                >
+                  {/* ICONO Y NÚMERO DE MESA */}
+                  <h6 className="mesa-numero d-flex align-items-center justify-content-center gap-2">
+                    <UtensilsCrossed size={18} />
+                    Mesa {mesa.numero}
+                  </h6>
 
-              {/* DETALLES DE LA MESA */}
-              <div className="mt-3 px-2">
-                <p className="d-flex align-items-center gap-2 mb-2">
-                  <Layers size={16} />
-                  <span>Piso: {mesa.piso}</span>
-                </p>
-                <p className="d-flex align-items-center gap-2 mb-0">
-                  <Users size={16} />
-                  <span>{mesa.capacidad}</span>
-                </p>
-              </div>
+                  {/* DETALLES DE LA MESA */}
+                  <div className="mt-2 px-1 w-100">
+                    <p className="d-flex align-items-center gap-2 mb-2 text-truncate">
+                      <Layers size={14} />
+                      <span>Piso: {mesa.piso}</span>
+                    </p>
+                    <p className="d-flex align-items-center gap-2 mb-0">
+                      <Users size={14} />
+                      <span>{mesa.capacidad}</span>
+                    </p>
+                  </div>
 
-              {/* ETIQUETA DE ACCIÓN */}
-              <div className="mesa-action-label">
-                {mesa.estado === 1 ? (
-                  <>
-                    <PlusCircle size={16} />
-                    <span>Abrir</span>
-                  </>
-                ) : (
-                  <>
-                    <Eye size={16} />
-                    <span>VER PEDIDO</span>
-                  </>
-                )}
+                  {/* ETIQUETA DE ACCIÓN */}
+                  <div className="mesa-action-label mt-3">
+                    {mesa.estado === 1 ? (
+                      <>
+                        <PlusCircle size={14} />
+                        <span>Abrir</span>
+                      </>
+                    ) : (
+                      <>
+                        <Eye size={14} />
+                        <span>VER</span>
+                      </>
+                    )}
+                  </div>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </CondicionCarga>
     </div>

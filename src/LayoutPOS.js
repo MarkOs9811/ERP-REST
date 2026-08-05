@@ -50,7 +50,7 @@ export default function LayoutPOS({ children }) {
     enabled: !!cajaDatos?.id,
   });
   return (
-    <div className="card w-full h-screen p-0 m-0 overflow-hidden">
+    <div className="w-100 p-0 mb-4 overflow-hidden d-flex flex-column h-100">
       {/* Barra de módulos POS mejorada */}
       <div
         className="card-header p-0 m-0 rounded-0 d-flex align-items-center"

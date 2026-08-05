@@ -30,7 +30,7 @@ export function RealizarPago({
   const subTotal = (totalPreventa - igv).toFixed(2);
 
   return (
-    <div className="card h-100 shadow-sm border-0 overflow-auto">
+    <div className="card h-100   overflow-auto">
       <div className="card-header bg-white py-3">
         <h5 className="mb-0 fw-bold">Resumen</h5>
       </div>

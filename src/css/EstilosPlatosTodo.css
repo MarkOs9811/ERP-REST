@@ -297,3 +297,92 @@ body.dark-theme .btn-tienda-add {
 body.dark-theme .btn-tienda-add:hover:not(:disabled) {
     background-color: #dc2626;
 }
+/* =========================================
+   === REDISEÑO MÓVIL (1 SOLA COLUMNA - VISTA LISTA) ===
+   ========================================= */
+@media (max-width: 767.98px) {
+    .card-platillo {
+        display: flex !important;
+        flex-direction: row !important;
+
+        /* FORZAR 1 SOLA COLUMNA (Ocupa todo el ancho) */
+        flex: 0 0 100% !important;
+        width: 100% !important;
+        max-width: 100% !important;
+
+        height: auto;
+        max-height: none;
+        padding: 10px;
+        margin-bottom: 12px;
+        border-radius: var(--radius-md, 12px);
+        box-sizing: border-box;
+        /* Asegura que el padding no rompa el 100% del ancho */
+    }
+
+    /* Miniatura perfecta a la izquierda */
+    .card-platillo .card-img-top {
+        width: 90px !important;
+        height: 90px !important;
+        border-radius: var(--radius-sm, 8px) !important;
+        object-fit: cover !important;
+        flex-shrink: 0;
+    }
+
+    /* Contenedor de la información */
+    .card-platillo .card-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 100%;
+        padding: 0 0 0 12px !important;
+        text-align: left;
+    }
+
+    .card-platillo .nombre-plato {
+        font-size: 14px;
+        margin-bottom: 6px;
+        line-height: 1.2;
+        /* Truncar texto largo a 2 líneas */
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    /* Reposicionamos el precio */
+    .card-platillo .precioCard {
+        position: relative;
+        right: auto;
+        bottom: auto;
+        display: inline-block;
+        width: fit-content;
+        margin-bottom: 8px;
+        padding: 2px 8px;
+        border-radius: 4px;
+    }
+
+   .card-platillo .card-footer {
+       display: flex !important;
+       flex-direction: column !important;
+       /* Apilamos los botones si hay + y - */
+       justify-content: center !important;
+       align-items: flex-end !important;
+       /* Alineamos a la derecha */
+       align-self: center !important;
+       /* 🔥 CLAVE: Evita que el contenedor se estire a lo alto */
+       width: auto !important;
+       /* Anula el ancho automático que lo rompe */
+       min-width: max-content;
+       padding: 0 10px 0 0 !important;
+   }
+
+   .card-platillo .card-footer button {
+       width: auto !important;
+       /* 🔥 CLAVE: Anula el w-100 del botón "Agregar" */
+       height: max-content !important;
+       margin: 4px 0 !important;
+       /* Separación si hay dos botones apilados */
+       padding: 0.5rem 1rem !important;
+       /* Ajuste más compacto para móvil */
+   }
+}

@@ -2,11 +2,7 @@ import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../api/AxiosInstance";
 import "../../css/EstilosPreventa.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faArrowLeft,
-  faClipboardList,
-  faTrashCan,
-} from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { capitalizeFirstLetter } from "../../hooks/FirstLetterUp";
 import ToastAlert from "../componenteToast/ToastAlert";
 import { useDispatch, useSelector } from "react-redux";
@@ -25,7 +21,6 @@ import {
   Notebook,
   Plus,
   Trash2,
-  Utensils,
 } from "lucide-react";
 import { useRef, useState } from "react";
 import BotonAnimado from "../componentesReutilizables/BotonAnimado";
@@ -143,43 +138,50 @@ export function ToMesa() {
 
   return (
     <div className="h-100 bg-transparent">
-      <div className="row h-100">
+      <div className="row h-100 g-3">
         <div className="col-md-4 col-lg-3 h-100">
-          <div className="card  flex-grow-1 h-100 d-flex flex-column border-0 overflow-hidden">
-            <div className="card-header m-0 bg-white border-bottom d-flex justify-content-between align-items-center py-3">
-              <button
-                className="btn btn-outline-dark btn-sm"
-                onClick={habldeVolverMesas}
-              >
-                <FontAwesomeIcon icon={faArrowLeft} />
-              </button>
-              <div className="text-center">
-                <select
-                  className="form-select "
-                  value={id}
-                  onChange={(e) =>
-                    dispatch(setIdPreventaMesa(Number(e.target.value)))
-                  }
+          <div className="card  flex-grow-1 h-100 d-flex flex-column overflow-hidden">
+            <div className="card-header bg-white border-bottom py-3">
+              <div className="d-flex justify-content-center justify-content-lg-start">
+                <div
+                  className="d-flex gap-2"
+                  style={{ width: "100%", maxWidth: "420px" }}
                 >
-                  <option value="">Mesa actual: {id}</option>
-                  {mesasList
-                    .filter((m) => m.estado === 1)
-                    .map((m) => (
-                      <option key={m.id} value={m.id}>
-                        Mesa {m.numero}
-                      </option>
-                    ))}
-                </select>
-              </div>
-              <button
-                className="btn btn-outline-danger btn-sm"
-                title="Limpiar Pedido"
-                onClick={handleLimpiarMesa}
-              >
-                <FontAwesomeIcon icon={faTrashCan} />
-              </button>
-            </div>
+                  <button
+                    className="btn btn-outline-dark flex-shrink-0"
+                    onClick={habldeVolverMesas}
+                  >
+                    <FontAwesomeIcon icon={faArrowLeft} />
+                  </button>
 
+                  <select
+                    className="form-select"
+                    value={id}
+                    onChange={(e) =>
+                      dispatch(setIdPreventaMesa(Number(e.target.value)))
+                    }
+                  >
+                    <option value="">Mesa actual: {id}</option>
+
+                    {mesasList
+                      .filter((m) => m.estado === 1)
+                      .map((m) => (
+                        <option key={m.id} value={m.id}>
+                          Mesa {m.numero}
+                        </option>
+                      ))}
+                  </select>
+
+                  <button
+                    className="btn btn-outline-danger flex-shrink-0 ms-auto"
+                    title="Limpiar Pedido"
+                    onClick={handleLimpiarMesa}
+                  >
+                    <FontAwesomeIcon icon={faTrashCan} />
+                  </button>
+                </div>
+              </div>
+            </div>
             <div className="card-body overflow-auto p-0 d-flex flex-column ">
               {pedido.mesas[id] && pedido.mesas[id].items.length > 0 ? (
                 <div className="overflow-auto  rounded-none">
@@ -281,7 +283,7 @@ export function ToMesa() {
             </div>
 
             <div
-              className="card-footer  border-top p-3 shadow-lg"
+              className="card-footer  border-top p-3 shadow-lg bg-white"
               style={{ zIndex: 10 }}
             >
               <div className=" p-3 mb-3">
@@ -337,19 +339,24 @@ export function ToMesa() {
         <div className="col-md-8 col-lg-9 h-100">
           <div className="card d-flex flex-grow-1 flex-column h-100 p-0 m-0 overflow-auto">
             <div className="card-header bg-white border-bottom  py-3 px-3 m-0">
-              <h6 className="m-0 text-dark fw-bold d-flex align-items-center gap-2 ">
-                <Hamburger size={28} /> Menú de Platos
-              </h6>
-              <div className="d-flex  gap-2 ">
+              <div>
+                <h6 className="d-flex align-items-center gap-2 flex-shrink-0">
+                  <Hamburger size={28} /> Menú de Platos
+                </h6>
+              </div>
+
+              <div className="flex-grow-1">
                 <BuscadorPlatos
                   searchTerm={searchTerm}
                   setSearchTerm={setSearchTerm}
                 />
-                <CategoriaPlatos claveVenta="restaurante" />
               </div>
-              {/* Categorías en móvil si es necesario */}
-              <div className="d-md-none mt-2">
-                <CategoriaPlatos claveVenta="restaurante" />
+              {/* Categorías */}
+              <div className="d-flex justify-content-lg-end">
+                <CategoriaPlatos
+                  claveVenta={"restaurante"}
+                  clearSearch={setSearchTerm}
+                />
               </div>
             </div>
 
@@ -358,35 +365,33 @@ export function ToMesa() {
               isError={errorPlatos}
               mode="cards"
             >
-              <div className="card-body overflow-auto  p-2">
-                <div className="contenedor-platos">
-                  {productos
-                    .filter((producto) => {
-                      const matchCat =
-                        categoriaFiltroPlatos === "todo" ||
-                        producto.categoria.nombre === categoriaFiltroPlatos;
-                      const matchBus = producto.nombre
-                        .toLowerCase()
-                        .includes(searchTerm.toLowerCase());
-                      return matchCat && matchBus;
-                    })
-                    .map((producto) => {
-                      const isSelected = pedido.mesas[id]?.items.some(
-                        (item) => item.id === producto.id,
-                      );
-                      return (
-                        <CardPlatos
-                          key={producto.id}
-                          item={producto}
-                          isSelected={isSelected}
-                          handleAdd={handleAddPlatoPreventa}
-                          handleRemove={handleRemovePlatoPreventa}
-                          capitalizeFirstLetter={capitalizeFirstLetter}
-                          esComida="resturante"
-                        />
-                      );
-                    })}
-                </div>
+              <div className="card-body p-2  contenedor-platos overflow-x-hidden m-auto ">
+                {productos
+                  .filter((producto) => {
+                    const matchCat =
+                      categoriaFiltroPlatos === "todo" ||
+                      producto.categoria.nombre === categoriaFiltroPlatos;
+                    const matchBus = producto.nombre
+                      .toLowerCase()
+                      .includes(searchTerm.toLowerCase());
+                    return matchCat && matchBus;
+                  })
+                  .map((producto) => {
+                    const isSelected = pedido.mesas[id]?.items.some(
+                      (item) => item.id === producto.id,
+                    );
+                    return (
+                      <CardPlatos
+                        key={producto.id}
+                        item={producto}
+                        isSelected={isSelected}
+                        handleAdd={handleAddPlatoPreventa}
+                        handleRemove={handleRemovePlatoPreventa}
+                        capitalizeFirstLetter={capitalizeFirstLetter}
+                        esComida="resturante"
+                      />
+                    );
+                  })}
               </div>
             </CondicionCarga>
           </div>

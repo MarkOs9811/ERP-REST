@@ -21,7 +21,7 @@ export function DetallePedido({
   };
   const subTotal = (totalPreventa - igv).toFixed(2);
   return (
-    <div className="card shadow-sm h-100 ">
+    <div className="card border h-100 ">
       <div className="card-header d-flex align-items-center justify-content-center">
         <button
           className="btn btn-outline-dark me-auto"

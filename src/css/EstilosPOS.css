@@ -1,65 +1,150 @@
-/* --- ESTILOS RESPONSIVOS PARA BOTONES POS --- */
+/* =========================================
+   === FIX SCROLL POS (FLEXBOX + DVH) ===
+   ========================================= */
 
-/* Barra principal de módulos */
+/* 1. Controlamos la altura del Layout completo ignorando barras del navegador */
+.contenedor-layout-pos {
+    height: 100vh;
+    height: 100dvh;
+    /* dvh = Dynamic Viewport Height (Perfecto para móviles) */
+}
+
+/* 2. El contenedor scroll toma el espacio restante sin usar calc() */
+.contenedor-scroll {
+    flex: 1;
+    /* Toma todo el espacio restante del d-flex flex-column */
+    min-height: 0;
+    /* 🔥 CLAVE FLEXBOX: Permite que el div encoja y active el overflow en vez de desbordar o colapsar */
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-color: var(--bg-app, #f8f8f8);
+}
+
+/* 3. Ajuste para Sidebar (Si usas menú lateral) */
+.content.with-sidebar {
+    margin-left: 230px;
+    width: calc(100% - 230px);
+    transition: margin var(--transition-smooth), width var(--transition-smooth);
+}
+
+/* 4. Respiro final en celulares y reset del sidebar */
+@media (max-width: 767.98px) {
+    .contenedor-scroll {
+        padding-bottom: 80px !important;
+    }
+
+    .content.with-sidebar {
+        margin-left: 0;
+        width: 100%;
+    }
+}
+
+body.dark-theme .contenedor-scroll {
+    background-color: var(--bg-card, #1E2022);
+}
+
+
+/* =========================================
+   === BARRA DE MÓDULOS (NAVEGACIÓN POS) ===
+   ========================================= */
 .barra-modulos-pos {
+    display: flex;
+    gap: 0;
     overflow-x: auto;
     overflow-y: hidden;
     scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE/Edge */
     -webkit-overflow-scrolling: touch;
-    display: flex;
-    gap: 0;
+    background-color: var(--bg-sidebar-header);
+    border-bottom: 1px solid var(--glass-border);
 }
 
 .barra-modulos-pos::-webkit-scrollbar {
     display: none;
 }
 
-/* Estilos modernos para los botones de módulos */
+.pos-separator {
+    width: 1px;
+    height: 30px;
+    background: var(--fw-muetd);
+    margin: auto 2px;
+    opacity: 0.5;
+}
+
+/* --- BOTONES DE NAVEGACIÓN --- */
 .boton-venta {
-    background: transparent;
-    border: none;
-    text-decoration: none;
-    border-bottom: 3px solid transparent;
-    color: var(--text-secondary, #000000);
-    padding: 12px 18px;
-    height: 58px;
-    font-weight: 600;
-    font-size: 0.95rem;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
+    height: 58px;
+    padding: 12px 18px;
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    font-weight: 600;
     white-space: nowrap;
     flex-shrink: 0;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all var(--transition-smooth);
 }
 
 .boton-venta:hover {
-    background: rgba(0, 0, 0, 0.02);
+    background: var(--shadow-soft);
     color: var(--text-main);
 }
 
 .boton-venta.activo {
-    border-bottom-color: var( --fw-strawberry);
-    color: var( --fw-strawberry);
+    border-bottom-color: var(--fw-strawberry);
+    color: var(--fw-strawberry);
     font-weight: 700;
 }
 
-body.dark-theme .boton-venta {
-    color: rgba(255, 255, 255, 0.6);
+/* --- LINKS DE ACCIÓN (CERRAR CAJA / SALIR) --- */
+.pos-action-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 58px;
+    padding: 0 14px;
+    background: transparent;
+    border: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    white-space: nowrap;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all var(--transition-smooth);
+    color: var(--text-muted);
 }
 
-body.dark-theme .boton-venta:hover {
-    background: rgba(255, 255, 255, 0.08);
-    color: rgba(255, 255, 255, 1);
+.pos-action-link:hover {
+    transform: translateY(-2px);
 }
 
-body.dark-theme .boton-venta.activo {
+.pos-action-link.cerrar-caja {
     color: var(--fw-saffron);
 }
 
-/* 📱 Para tablets y celulares (Pantallas menores a 768px) */
+.pos-action-link.cerrar-caja:hover {
+    background: var(--bg-saffron-soft);
+}
+
+.pos-action-link.salir {
+    color: var(--fw-strawberry);
+}
+
+.pos-action-link.salir:hover {
+    background: var(--bg-strawberry-soft);
+}
+
+/* 📱 Responsive Barra Módulos */
 @media (max-width: 768px) {
     .pos-btn-text {
         display: none !important;
@@ -71,143 +156,89 @@ body.dark-theme .boton-venta.activo {
         height: 50px;
     }
 
+    .boton-venta svg,
     .pos-icon {
         margin: 0 !important;
     }
-}
 
-/* Estilos para los links de acciones (Cerrar Caja y Salir) */
-.pos-action-link {
-    background: transparent;
-    border: none;
-    color: var(--text-secondary);
-    padding: 0 14px;
-    height: 58px;
-    font-weight: 500;
-    font-size: 0.9rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    white-space: nowrap;
-    text-decoration: none;
-}
-
-.pos-action-link:hover {
-    color: var(--text-main);
-    transform: translateY(-1px);
-}
-
-.pos-action-link.cerrar-caja {
-    color: var(--fw-warning, #9c5f02);
-}
-
-.pos-action-link.cerrar-caja:hover {
-    color: var(--fw-warning-dark, #e68900);
-    background: rgba(255, 152, 0, 0.08);
-}
-
-.pos-action-link.salir {
-    color: var(--fw-danger, #d34242);
-}
-
-.pos-action-link.salir:hover {
-    color: var(--fw-danger-dark, #b82d2d);
-    background: rgba(211, 66, 66, 0.08);
-}
-
-body.dark-theme .pos-action-link {
-    color: rgba(255, 255, 255, 0.6);
-}
-
-body.dark-theme .pos-action-link:hover {
-    color: rgba(255, 255, 255, 0.9);
-}
-
-body.dark-theme .pos-action-link.cerrar-caja {
-    color: var(--fw-warning, #ff9800);
-}
-
-body.dark-theme .pos-action-link.salir {
-    color: var(--fw-danger, #ff6b6b);
-}
-
-/* Contenedor de scroll */
-.contenedor-scroll {
-    height: calc(100vh - 58px) !important;
-    background-color: rgb(233, 233, 233);
-    overflow-y: auto;
-}
-
-@media (max-width: 991px) {
-    .contenedor-scroll {
-        height: calc(100vh - 58px) !important;
+    .pos-action-link {
+        height: 50px;
     }
 }
 
-body.dark-theme .contenedor-scroll {
-    background-color: rgb(45, 52, 59);
+/* =========================================
+   === DARK THEME OVERRIDES (BARRA) ===
+   ========================================= */
+body.dark-theme .boton-venta {
+    color: var(--text-muted);
 }
 
-/* Separadores en la barra */
-.pos-separator {
-    width: 1px;
-    height: 30px;
-    background: var(--fw-border, #ddd);
-    margin: 0 2px;
-    opacity: 0.3;
+body.dark-theme .boton-venta:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-main);
+}
+
+body.dark-theme .boton-venta.activo {
+    border-bottom-color: var(--fw-saffron);
+    color: var(--fw-saffron);
 }
 
 body.dark-theme .pos-separator {
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--text-muted);
+    opacity: 0.2;
 }
 
-/* --- ESTILOS PARA EL TABLERO KANBAN (PEDIDOS) --- */
+body.dark-theme .pos-action-link.cerrar-caja:hover {
+    background: rgba(255, 153, 44, 0.1);
+}
+
+body.dark-theme .pos-action-link.salir:hover {
+    background: rgba(228, 73, 73, 0.1);
+}
+
+
+/* =========================================
+   === TABLERO KANBAN (PEDIDOS) ===
+   ========================================= */
 .kanban-container {
     display: flex;
     flex-wrap: nowrap;
+    gap: 1rem;
+    padding-bottom: 12px;
     overflow-x: auto;
     overflow-y: hidden;
-    gap: 1rem;
-    padding-bottom: 10px;
-    /* Espacio para el scrollbar */
     scroll-snap-type: x mandatory;
-    /* Hace que el deslizamiento se pegue a cada columna */
     -webkit-overflow-scrolling: touch;
-    /* Scroll suave en iOS */
 }
 
-/* Ocultar la barra de scroll para que se vea más limpio como una App nativa */
 .kanban-container::-webkit-scrollbar {
-    height: 6px;
+    height: 8px;
+}
+
+.kanban-container::-webkit-scrollbar-track {
+    background: transparent;
 }
 
 .kanban-container::-webkit-scrollbar-thumb {
-    background-color: #cbd5e1;
-    border-radius: 10px;
+    background-color: var(--fw-muetd);
+    border-radius: var(--radius-pill);
 }
 
 .kanban-col {
     flex: 0 0 auto;
     width: 85vw;
-    /* En celular, cada columna ocupa el 85% de la pantalla para que asome la siguiente */
     scroll-snap-align: center;
-    /* Centra la columna al terminar de hacer swipe */
     height: 100%;
 }
 
-/* 💻 Para PC y Tablets grandes (volvemos al formato de 3 columnas iguales) */
+/* 💻 Responsive Kanban PC / Tablets grandes */
 @media (min-width: 768px) {
     .kanban-container {
         overflow-x: hidden;
-        /* En PC no necesitamos scroll horizontal */
         scroll-snap-type: none;
     }
 
     .kanban-col {
         width: calc(33.333% - 0.66rem);
-        /* Divide exactamente en 3 columnas respetando el gap */
     }
 }
