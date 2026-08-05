@@ -307,38 +307,35 @@ export function ToLlevar() {
         {/* COLUMNA DERECHA: CATÁLOGO (Sin cambios mayores, solo ancho) */}
         <div className="col-md-8 col-lg-9 h-100 ">
           <div className="card d-flex flex-grow-1 flex-column h-100 p-0 m-0 overflow-auto">
-            <div className="card-header bg-white border-bottom py-3 px-3">
-              <div className="d-flex flex-column flex-lg-row align-items-stretch align-items-lg-center gap-3">
-                {/* Título */}
-                <div className="d-flex align-items-center gap-2 flex-shrink-0">
-                  {claveVenta === "restaurante" ? (
-                    <Hamburger size={28} />
-                  ) : (
-                    <StoreIcon size={28} />
-                  )}
+            <div className="card-header bg-white border-bottom py-3 px-3 d-flex align-items-center gap-3 flex-wrap">
+              <div className="d-flex align-items-center gap-2 flex-shrink-0">
+                {claveVenta === "restaurante" ? (
+                  <Hamburger size={28} />
+                ) : (
+                  <StoreIcon size={28} />
+                )}
 
-                  <h6 className="m-0 fw-bold">
-                    {claveVenta === "restaurante"
-                      ? "Menú de Platos"
-                      : "Inventario / Productos"}
-                  </h6>
-                </div>
+                <h6 className="m-0 fw-bold">
+                  {claveVenta === "restaurante"
+                    ? "Menú de Platos"
+                    : "Inventario / Productos"}
+                </h6>
+              </div>
 
-                {/* Buscador */}
-                <div className="flex-grow-1">
-                  <BuscadorPlatos
-                    searchTerm={searchTerm}
-                    setSearchTerm={setSearchTerm}
-                  />
-                </div>
+              {/* Buscador */}
+              <div className="flex-grow-1">
+                <BuscadorPlatos
+                  searchTerm={searchTerm}
+                  setSearchTerm={setSearchTerm}
+                />
+              </div>
 
-                {/* Categorías */}
-                <div className="d-flex justify-content-lg-end">
-                  <CategoriaPlatos
-                    claveVenta={claveVenta}
-                    clearSearch={setSearchTerm}
-                  />
-                </div>
+              {/* Categorías */}
+              <div className="overflow-auto ">
+                <CategoriaPlatos
+                  claveVenta={claveVenta}
+                  clearSearch={setSearchTerm}
+                />
               </div>
             </div>
 

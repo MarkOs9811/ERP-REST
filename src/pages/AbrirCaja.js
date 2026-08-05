@@ -96,25 +96,28 @@ export function AbrirCaja() {
         className="d-flex justify-content-center align-items-center"
         style={{ height: "80vh" }}
       >
-        <div className=" card abrir-caja-container w-50 shadow-sm p-4">
-          <h4 className="text-center">
-            <FontAwesomeIcon icon={faBoxOpen} /> Abrir Caja
-          </h4>
+        <div className=" card abrir-caja-container w-100  h-100 shadow-sm p-4">
+          <div class="card-header">
+            <h4 className="text-center">
+              <FontAwesomeIcon icon={faBoxOpen} /> Abrir Caja
+            </h4>
+            <button
+              className="btn-principal mb-2"
+              onClick={() => navigate("/ventas/cajas")}
+            >
+              <Plus /> Agregar Caja
+            </button>
+          </div>
+
           <div className="alert alert-secondary">
             <FontAwesomeIcon icon={faTriangleExclamation} className="mx-2" />
             Caja Cerrada, Porfavor apertura una.
           </div>
           <form onSubmit={handleSubmit(onSubmit)} className="form-abrir-caja">
             <div className="mb-3 ">
-              <label htmlFor="caja " className="mx-3">
+              <label htmlFor="caja " className="mx-3 small">
                 <FontAwesomeIcon icon={faCashRegister} /> Seleccionar Caja
               </label>
-              <button
-                className="btn-principal mb-2"
-                onClick={() => navigate("/ventas/cajas")}
-              >
-                <Plus /> Agregar Caja
-              </button>
 
               <select
                 id="caja"
@@ -137,7 +140,9 @@ export function AbrirCaja() {
             </div>
 
             <div className="mb-3">
-              <label htmlFor="monto">Monto de Apertura S/.</label>
+              <label htmlFor="monto" className="mx-3 small">
+                Monto de Apertura S/.
+              </label>
               <input
                 type="text"
                 id="monto"

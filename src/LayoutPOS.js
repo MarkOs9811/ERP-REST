@@ -50,20 +50,17 @@ export default function LayoutPOS({ children }) {
     enabled: !!cajaDatos?.id,
   });
   return (
-    <div className="w-100 p-0 mb-4 overflow-hidden d-flex flex-column h-100">
+    <div className="w-100 p-0 pb-3 overflow-hidden d-flex flex-column h-100">
       {/* Barra de módulos POS mejorada */}
       <div
-        className="card-header p-0 m-0 rounded-0 d-flex align-items-center"
+        className="card-header flex-column p-0 m-0 rounded-0 d-flex align-items-center"
         style={{
           height: "auto",
           borderBottom: "1px solid var(--fw-border, #ddd)",
         }}
       >
         {/* Lado Izquierdo: Módulos sin espacios */}
-        <div
-          className="d-flex flex-nowrap flex-grow-1 barra-modulos-pos"
-          style={{ gap: "0" }}
-        >
+        <div className="d-flex flex-nowrap flex-grow-1 barra-modulos-pos w-100 h-100">
           {/* Mesas - ¡SOLO SI ES COMIDA! */}
           {esComida &&
             ["atencion al cliente", "administrador"].includes(

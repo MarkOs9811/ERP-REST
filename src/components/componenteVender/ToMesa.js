@@ -338,7 +338,7 @@ export function ToMesa() {
 
         <div className="col-md-8 col-lg-9 h-100">
           <div className="card d-flex flex-grow-1 flex-column h-100 p-0 m-0 overflow-auto">
-            <div className="card-header bg-white border-bottom  py-3 px-3 m-0">
+            <div className="card-header bg-white border-bottom  py-3 px-3 m-0 d-flex align-items-center gap-3 flex-wrap">
               <div>
                 <h6 className="d-flex align-items-center gap-2 flex-shrink-0">
                   <Hamburger size={28} /> Menú de Platos
@@ -352,7 +352,7 @@ export function ToMesa() {
                 />
               </div>
               {/* Categorías */}
-              <div className="d-flex justify-content-lg-end">
+              <div className="overflow-auto d-flex justify-content-lg-end">
                 <CategoriaPlatos
                   claveVenta={"restaurante"}
                   clearSearch={setSearchTerm}

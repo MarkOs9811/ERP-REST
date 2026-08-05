@@ -157,7 +157,7 @@ body.dark-theme .badge-header {
   }
 
   .card-header {
-    flex-direction: column;
+    
     gap: 12px;
     align-items: stretch !important;
   }
