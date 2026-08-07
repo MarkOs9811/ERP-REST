@@ -68,7 +68,6 @@ export function PreventaMesa() {
   const queryClient = useQueryClient();
   const pedido = useSelector((state) => state.pedido);
   const mesas = useSelector((state) => state.pedido.mesas);
-  const BASE_URL = process.env.REACT_APP_BASE_URL;
 
   const componentRef = useRef();
   const [datosPreventa, setDatosPreventa] = useState(null);

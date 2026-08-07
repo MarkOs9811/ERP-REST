@@ -26,7 +26,37 @@ export function Navegacion({ tipoNavegacion = null }) {
     ) || [];
   const userStr =
     localStorage.getItem("user") || sessionStorage.getItem("user");
+  // VALIDAR VARIANTES DE LOS CARGOS PARA VALIDAR CADA OPCION DE BOTON
+
   const rol = userStr ? JSON.parse(userStr) : null;
+  // 1. Obtenemos el nombre del cargo en minúsculas de forma segura
+  const nombreCargo = rol?.empleado?.cargo?.nombre?.toLowerCase() || "";
+
+  // 2. Definimos las raíces o palabras clave bloqueadas
+  const palabrasBloqueadas = [
+    // Variantes para Delivery
+    "delivery",
+    "repartid",
+    "motorizad",
+    "despachad",
+    // Variantes para Cocina
+    "cocin",
+    "chef",
+    // Variantes para Mozo
+    "mozo",
+    "moso",
+    "meser",
+    "camarer",
+    "atencion",
+  ];
+
+  // 3. Evaluamos si el cargo CONTIENE alguna de las palabras bloqueadas
+  // Retorna TRUE si encuentra alguna coincidencia
+  const esRolBloqueadoParaCaja = palabrasBloqueadas.some((palabra) =>
+    nombreCargo.includes(palabra),
+  );
+  // =====================================
+
   const navegacionAnchura = tipoNavegacion;
   const routeNames = {
     "": "Inicio",
@@ -298,8 +328,8 @@ export function Navegacion({ tipoNavegacion = null }) {
             </button>
           )}
 
-          {/* 4. POS (Oculto estrictamente si el rol es "delivery") */}
-          {rol?.empleado?.cargo?.nombre !== "delivery" && (
+          {/* 4. POS (Oculto estrictamente para roles que no abren caja usando palabras clave) */}
+          {!esRolBloqueadoParaCaja && (
             <button
               className="btn-guardar d-flex align-items-center gap-1 px-2 p-1 px-md-3"
               onClick={() => {

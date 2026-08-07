@@ -114,7 +114,7 @@ export function TakeAsistencia() {
 
   return (
     <div className="d-flex justify-content-center align-items-center">
-      <div className="card my-3 p-4 rounded-4 justify-content-center shadow-soft border-0">
+      <div className="card my-3 p-4 rounded-4 justify-content-center ">
         <div className="card-header bg-white border-0 text-center mb-3 d-flex flex-column align-items-center gap-2 p-3">
           <h4 className="fw-bold text-main mb-1">
             <ClockPlus className="me-2" /> Registro de Asistencia
@@ -131,7 +131,7 @@ export function TakeAsistencia() {
 
         <div className="card-body">
           <div className="mb-4">
-            <label htmlFor="dni" className="form-label fw-semibold text-main">
+            <label htmlFor="dni" className="small">
               DNI del Empleado
             </label>
             <input
@@ -141,7 +141,7 @@ export function TakeAsistencia() {
               {...register("documento_identidad", {
                 required: "El DNI es obligatorio",
               })}
-              className={`form-control form-control-lg rounded-3 shadow-sm ${
+              className={`form-control form-control-lg  ${
                 errors.documento_identidad ? "is-invalid" : ""
               }`}
               placeholder="Ingrese su DNI"
@@ -160,7 +160,7 @@ export function TakeAsistencia() {
           <div className="d-flex justify-content-between gap-3">
             <button
               type="button"
-              className="btn btn-lg flex-fill fw-semibold shadow-sm d-flex align-items-center justify-content-center text-white"
+              className="btn-guardar w-100"
               style={{ backgroundColor: "var(--fw-emerald)" }}
               onClick={registrarEntrada}
               disabled={loading}
@@ -170,7 +170,7 @@ export function TakeAsistencia() {
             </button>
             <button
               type="button"
-              className="btn btn-lg flex-fill fw-semibold shadow-sm d-flex align-items-center justify-content-center text-white"
+              className="btn-eliminar w-100"
               style={{ backgroundColor: "var(--fw-strawberry)" }}
               onClick={registrarSalida}
               disabled={loading}

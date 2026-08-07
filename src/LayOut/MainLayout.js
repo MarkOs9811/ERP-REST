@@ -85,6 +85,8 @@ import { Fidelizacion } from "../pages/moduloClientes/Fidelización";
 import { Platos } from "../pages/moduloPlatos/Platos";
 import { Combos } from "../pages/moduloPlatos/Combos";
 import { CategoriaPlatosCombos } from "../pages/moduloPlatos/CategoriaPlatosCombos";
+import { LayOutCocina } from "./LayOutCocina";
+import { LayOutMozo } from "./LayOutMozo";
 
 export const MainLayout = () => {
   // 1. OBTENCIÓN DE ESTADOS Y DATOS LOCALES
@@ -98,6 +100,7 @@ export const MainLayout = () => {
     JSON.parse(
       localStorage.getItem("user") || sessionStorage.getItem("user"),
     ) || {};
+
   const empresa =
     JSON.parse(
       localStorage.getItem("empresa") || sessionStorage.getItem("empresa"),
@@ -107,10 +110,18 @@ export const MainLayout = () => {
 
   // 2. IDENTIFICACIÓN DEL ROL (CARGO)
   // Sacamos el nombre del cargo del usuario y lo pasamos a minúsculas para evitar errores al comparar (ej: "Delivery" vs "delivery").
-  const cargoUsuario = user?.empleado?.cargo?.nombre?.toLowerCase(); // Pasamos a minúscula por seguridad
 
-  // Luego agrupaste los roles que tienen vistas especiales en una variable:
-  const esRolEspecial = cargoUsuario === "atencion al cliente";
+  const cargoUsuario = user?.empleado?.cargo?.nombre?.toLowerCase();
+
+  // Creamos un arreglo con todos los roles especiales y usamos .includes()
+  const esRolEspecial = [
+    "atencion al cliente",
+    "moso",
+    "mozo",
+    "cocinero",
+    "delivery",
+    "conductor",
+  ].includes(cargoUsuario);
 
   // Si NO es un rol especial (es decir, es admin, ventas, etc), mostramos el layout completo.
   const showFullLayout = !esRolEspecial;
@@ -131,6 +142,10 @@ export const MainLayout = () => {
 
   const renderHomePorRol = () => {
     if (cargoUsuario === "atencion al cliente") return <LayOutAtencion />;
+    if (cargoUsuario === "cocinero" || cargoUsuario === "cosinero")
+      return <LayOutCocina />;
+    if (cargoUsuario === "moso" || cargoUsuario === "mozo")
+      return <LayOutMozo />;
     if (cargoUsuario === "delivery" || cargoUsuario === "conductor")
       return <LayOutDelivery />;
     return <Home />;
@@ -141,6 +156,7 @@ export const MainLayout = () => {
       {/* Si NO es rol especial (Delivery/Atención), le mostramos el menú lateral */}
       {showFullLayout && <SideBar />}
       {/* Estás diciendo: "Si NO es showHeader, muestra el Header" y luego "Si ES showFullLayout, muestra el Header". */}
+
       {/* En la práctica, esto está haciendo que el <Header /> se muestre SIEMPRE, sin importar el rol. */}
       {!showHeader && <Header tipoHeader={esRolEspecial} />}
       {showFullLayout && <Header tipoHeader={esRolEspecial} />}
