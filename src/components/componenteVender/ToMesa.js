@@ -27,7 +27,6 @@ import BotonAnimado from "../componentesReutilizables/BotonAnimado";
 import { BuscadorPlatos } from "./tareasVender/BuscadorPlatos";
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
 import { useReactToPrint } from "react-to-print";
-import { TicketsPedido } from "./TiketsType/TicketsPedido";
 
 export function ToMesa() {
   const id = useSelector((state) => state.mesa.idPreventaMesa);
@@ -82,12 +81,6 @@ export function ToMesa() {
   };
 
   const componentRef = useRef();
-  const [datosVenta, setDatosVenta] = useState(null);
-
-  const handlePrint = useReactToPrint({
-    contentRef: componentRef,
-    onAfterPrint: () => setDatosVenta(null),
-  });
 
   const handleAddPlatoPreventaMesas = async () => {
     if (!mesas[id] || mesas[id].items.length === 0) {
@@ -115,10 +108,8 @@ export function ToMesa() {
       );
 
       if (response.data.success) {
-        setDatosVenta(response.data.data);
         setTimeout(() => {
           if (componentRef.current) {
-            handlePrint();
             ToastAlert("success", response.data.message + " MESA " + id);
             setNotaPedido("");
             dispatch(clearPedido(id)); // Limpiamos solo la mesa actual
@@ -325,13 +316,6 @@ export function ToMesa() {
               >
                 REALIZAR PEDIDO
               </BotonAnimado>
-
-              <div style={{ display: "none" }}>
-                <TicketsPedido
-                  ref={componentRef}
-                  venta={datosVenta || { productos: [] }}
-                />
-              </div>
             </div>
           </div>
         </div>

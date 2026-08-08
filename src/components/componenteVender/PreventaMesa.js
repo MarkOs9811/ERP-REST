@@ -68,7 +68,6 @@ export function PreventaMesa() {
   const queryClient = useQueryClient();
   const pedido = useSelector((state) => state.pedido);
   const mesas = useSelector((state) => state.pedido.mesas);
-
   const componentRef = useRef();
   const [datosPreventa, setDatosPreventa] = useState(null);
 
@@ -94,9 +93,57 @@ export function PreventaMesa() {
 
   const handleImprimirTicket = async () => {
     const dataActual = preventas?.data || preventas;
+
     if (dataActual && dataActual.length > 0) {
-      setDatosPreventa(dataActual);
-      setTimeout(() => handlePrint(), 700);
+      // 1. Mapeamos la data para enviarla limpia al backend
+      const contenidoFormateado = dataActual.map((item) => {
+        const nombrePlato =
+          item.plato?.nombre || item.descripcion || "Item desconocido";
+        const cantidad = item.cantidad || 1;
+        const precio = item.precio || item.valor_unitario || 0;
+        const subtotal = cantidad * precio;
+
+        return {
+          nombre: nombrePlato,
+          cantidad: cantidad,
+          precio: precio,
+          subtotal: subtotal,
+        };
+      });
+
+      // 2. Calculamos el total de la mesa
+      const totalMesa = contenidoFormateado.reduce(
+        (acc, curr) => acc + curr.subtotal,
+        0,
+      );
+
+      // 3. Armamos el payload
+      const payload = {
+        titulo: "PRE-CUENTA MESA" + mesas.numero, // Aquí podrías concatenar el número de mesa si lo tienes
+        contenido: contenidoFormateado,
+        total: totalMesa,
+      };
+
+      try {
+        // 4. Petición super limpia con axiosInstance
+        // (Asegúrate de que la ruta coincida con la que tienes en api.php, a veces es solo 'imprimir-generico')
+        const response = await axiosInstance.post(
+          "/vender/imprimirGenerico",
+          payload,
+        );
+
+        if (response.data.success) {
+          ToastAlert("success", "Pre-cuenta enviada a la impresora");
+        } else {
+          ToastAlert("error", response.data.message || "Error al imprimir");
+        }
+      } catch (error) {
+        console.error("Error enviando impresión:", error);
+        // Axios captura los errores del servidor aquí
+        const mensajeError =
+          error.response?.data?.message || "Error de conexión con el servidor";
+        ToastAlert("error", mensajeError);
+      }
     } else {
       ToastAlert("error", "No hay platos registrados en esta mesa");
     }
