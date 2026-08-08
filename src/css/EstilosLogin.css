@@ -1,13 +1,17 @@
+/* =========================================
+   === CONTENEDOR PRINCIPAL ===
+   ========================================= */
 .login-container-wrapper {
   width: 100%;
   min-height: 100vh;
+  min-height: 100dvh;
   padding: 0;
   margin: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: "Montserrat", "Nunito Sans", "Segoe UI", sans-serif;
-  background:rgb(255, 255, 255);
+  background: var(--bg-sidebar-header);
   overflow: hidden;
 }
 
@@ -17,14 +21,17 @@
   width: min(1200px, 92vw);
   min-height: 700px;
   margin: 2rem;
-  border-radius: 28px;
+  border-radius: var(--radius-lg, 28px);
   overflow: hidden;
-  box-shadow: var(--shadow-soft);
-  background: var(--surface);
-  border: 1px solid rgba(0, 0, 0, 0.45);
-  backdrop-filter: blur(6px);
+  box-shadow: var(--shadow-hover);
+  background: var(--bg-card);
+  border: 1px solid var(--fw-muetd);
+  backdrop-filter: var(--glass-blur);
 }
 
+/* =========================================
+   === PANEL IZQUIERDO (BRANDING) ===
+   ========================================= */
 .login-left-panel {
   position: relative;
   display: flex;
@@ -32,9 +39,9 @@
   justify-content: center;
   padding: 3rem;
   text-align: left;
-  color: var(--text-light);
+  color: var(--fw-white);
   background:
-    linear-gradient(98deg, rgba(20, 18, 18, 0.88), rgba(20, 18, 18, 0.62)),
+    linear-gradient(98deg, rgba(17, 18, 19, 0.88), rgba(17, 18, 19, 0.62)),
     url('/public/images/fondoLogin2.jpg') no-repeat center center;
   background-size: cover;
   background-position: center;
@@ -46,7 +53,7 @@
   content: "";
   position: absolute;
   border-radius: 50%;
-  background: linear-gradient(135deg, rgba(240, 90, 62, 0.2), rgba(216, 122, 59, 0.08));
+  background: linear-gradient(135deg, rgba(228, 73, 73, 0.2), rgba(255, 153, 44, 0.08));
   z-index: 0;
 }
 
@@ -77,9 +84,9 @@
   justify-content: center;
   width: 58px;
   height: 58px;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   background: linear-gradient(135deg, var(--fw-strawberry), #b91c1c);
-  color: #ffffff;
+  color: var(--fw-white);
   font-weight: 800;
   letter-spacing: 1px;
 }
@@ -94,7 +101,7 @@
   margin: 1rem 0 0.6rem;
   font-size: 3rem;
   font-weight: 800;
-  color: #fff!important;
+  color: var(--fw-white) !important;
   line-height: 1;
 }
 
@@ -114,36 +121,40 @@
 
 .login-brand-badges span {
   padding: 0.45rem 0.8rem;
-  border-radius: 999px;
-  background: rgba(14, 12, 12, 0.32);
+  border-radius: var(--radius-pill);
+  background: rgba(17, 18, 19, 0.32);
   border: 1px solid rgba(255, 255, 255, 0.18);
   font-size: 0.85rem;
-  color: #fff;
+  color: var(--fw-white);
   backdrop-filter: blur(8px);
 }
 
+/* =========================================
+   === PANEL DERECHO (FORMULARIO) ===
+   ========================================= */
 .login-right-panel {
   display: flex;
   align-items: center;
   justify-content: center;
-  background:white;
+  background: transparent;
   padding: 3rem;
 }
 
 .login-form {
   width: 100%;
   max-width: 430px;
-  background: var(--surface);
-  border-radius: 22px;
+  background: var(--bg-card);
+  border-radius: var(--radius-md, 22px);
   padding: 2rem;
-  border: 1px solid var(--border-color);
-  box-shadow: 0 20px 45px rgba(14, 18, 28, 0.08);
+  border: 1px solid var(--fw-muetd);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
 }
 
 .login-form-body {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.2rem;
+  /* Separación ligeramente mayor para respirar */
 }
 
 .login-form-header {
@@ -164,14 +175,13 @@
   font-size: 0.78rem;
   font-weight: 700;
   text-transform: uppercase;
-  
 }
 
 .login-title {
   margin: 0;
   font-size: 2rem;
   font-weight: 800;
-  color: var(--text-dark);
+  color: var(--text-main);
   text-align: left;
   line-height: 1.2;
   letter-spacing: -0.01em;
@@ -192,17 +202,21 @@
   cursor: pointer;
   color: var(--text-muted);
   margin-top: 0.25rem;
-  transition: color 0.2s ease;
+  transition: color var(--transition-smooth);
 }
 
 .forgot-back-icon:hover {
-  color: var(--brand-color);
+  color: var(--brand-primary);
 }
 
+/* =========================================
+   === INPUTS Y CONTROLES (ESTILO MODERNO) ===
+   ========================================= */
 .input-group-custom {
   position: relative;
   margin: 0;
   display: block;
+  /* Eliminamos el borde de aquí, se lo damos al input directamente */
 }
 
 .input-icon {
@@ -211,79 +225,70 @@
   top: 50%;
   transform: translateY(-50%);
   color: var(--text-muted);
-  font-size: 1rem;
-  width: 18px;
-  height: 18px;
+  font-size: 1.1rem;
+  width: 20px;
+  height: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: color 0.2s ease;
+  transition: color var(--transition-smooth);
   pointer-events: none;
+  z-index: 2;
 }
 
-input.form-control-custom,
-input.form-control-custom[type="text"],
-input.form-control-custom[type="email"],
-input.form-control-custom[type="password"] {
+input.form-control-custom {
   height: 58px !important;
   width: 100% !important;
-  background: #f8fafc !important;
-  border: 1px solid var(--fw-border-input) !important;
-  border-radius: 14px !important;
-  padding: 0 56px 0 62px !important;
+  /* Fondo gris ultra suave para que resalte del fondo blanco */
+  background: #F9FAFB !important;
+  /* Borde sutil */
+  border: 1px solid #E5E7EB !important;
+  border-radius: var(--radius-sm, 14px) !important;
+  padding: 0 50px 0 54px !important;
   font-size: 0.96rem !important;
   font-weight: 500 !important;
   line-height: 1.2 !important;
-  color: var(--text-dark) !important;
+  color: var(--text-main) !important;
   box-sizing: border-box !important;
   box-shadow: none !important;
   outline: none !important;
-  transition: all 0.2s ease;
+  transition: all var(--transition-smooth) !important;
 }
 
-input.form-control-custom:focus,
-input.form-control-custom[type="text"]:focus,
-input.form-control-custom[type="email"]:focus,
-input.form-control-custom[type="password"]:focus {
-  border-color: var(--brand-color) !important;
-  background: #fff !important;
-  box-shadow: none!important;
-  outline: none !important;
+/* Efecto Focus Moderno (Halo) */
+input.form-control-custom:focus {
+  background: var(--bg-card) !important;
+  border-color: var(--brand-primary) !important;
+  box-shadow: 0 0 0 4px rgba(17, 18, 19, 0.08) !important;
 }
 
 .form-control-custom::placeholder {
-  color: #8b93a5;
+  color: #9CA3AF;
+  /* Color gris específico para placeholders */
   font-weight: 400;
 }
 
-.form-control-custom:focus {
-  outline: none;
-  border-color: var(--brand-color);
-  background: #fff;
-  box-shadow: none;
-}
-
-.form-control-custom:focus + .input-icon {
-  color: var(--brand-color);
+.form-control-custom:focus+.input-icon {
+  color: var(--brand-primary);
 }
 
 .form-control-custom.is-invalid {
-  border-color: var(--error-color);
-  background-color: #fff8f8;
+  border-color: var(--fw-strawberry) !important;
+  background-color: var(--bg-strawberry-soft) !important;
 }
 
 .form-control-custom.is-invalid:focus {
-  box-shadow: none;
+  box-shadow: 0 0 0 4px rgba(228, 73, 73, 0.15) !important;
 }
 
-.form-control-custom.is-invalid + .input-icon {
-  color: var(--error-color);
+.form-control-custom.is-invalid+.input-icon {
+  color: var(--fw-strawberry);
 }
 
 .invalid-feedback-custom {
   display: flex;
   align-items: center;
-  color: var(--error-color);
+  color: var(--fw-strawberry);
   font-size: 0.82rem;
   font-weight: 600;
   margin-top: 0.45rem;
@@ -296,12 +301,13 @@ input.form-control-custom[type="password"]:focus {
   transform: translateY(-50%);
   color: var(--text-muted);
   cursor: pointer;
-  font-size: 1rem;
-  transition: color 0.2s ease;
+  font-size: 1.1rem;
+  transition: color var(--transition-smooth);
+  z-index: 2;
 }
 
 .password-toggle-icon:hover {
-  color: var(--brand-color-dark);
+  color: var(--brand-primary);
 }
 
 .login-options-row {
@@ -309,34 +315,44 @@ input.form-control-custom[type="password"]:focus {
   justify-content: space-between;
   align-items: center;
   gap: 0.75rem;
-  margin: 0.1rem 0;
+  margin: 0.2rem 0;
 }
 
 .login-submit-wrapper {
-  margin-top: 0.2rem;
+  margin-top: 0.5rem;
 }
 
+/* =========================================
+   === BOTÓN DE SUBMIT ===
+   ========================================= */
 .btn-login-submit {
   width: 100%;
   height: 56px;
-  border: 1px solid rgba(0, 0, 0, 0.39);
-  border-radius: 14px;
+  border: none;
+  border-radius: var(--radius-sm, 14px);
   padding: 0 1.5rem;
   font-size: 1rem;
   font-weight: 700;
-  color: #000000;
-  background: linear-gradient(100deg, var(--brand-color), var(--brand-color-dark));
+  color: var(--fw-white);
+  background: var(--fw-onyx);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: 0 12px 14px rgba(46, 46, 46, 0.048);
+  transition: transform var(--transition-smooth), box-shadow var(--transition-smooth), background-color var(--transition-smooth);
 }
 
 .btn-login-submit:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(17, 18, 19, 0.15);
+  background: #272A2E;
+}
+
+.btn-login-submit:disabled {
+  background: var(--fw-muetd);
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
 }
 
 .login-remember-label {
@@ -347,21 +363,15 @@ input.form-control-custom[type="password"]:focus {
 }
 
 .forgot-password-link {
-  color: var(--text-dark) !important;
+  color: var(--text-main) !important;
   cursor: pointer;
   font-size: 0.85rem;
   font-weight: 600;
-  transition: color 0.2s ease;
+  transition: color var(--transition-smooth);
 }
 
 .forgot-password-link:hover {
-  color: var(--brand-color-dark) !important;
-}
-
-.btn-login-submit:disabled {
-  background: #c8bfb7;
-  cursor: not-allowed;
-  box-shadow: none;
+  color: var(--fw-saffron) !important;
 }
 
 @keyframes fade-in {
@@ -369,18 +379,39 @@ input.form-control-custom[type="password"]:focus {
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
+/* =========================================
+   === MODO OSCURO (CORRECCIONES) ===
+   ========================================= */
+body.dark-theme input.form-control-custom {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: var(--text-main) !important;
+}
+
+body.dark-theme input.form-control-custom:focus {
+  background: var(--bg-card) !important;
+  border-color: var(--brand-primary) !important;
+  box-shadow: 0 0 0 4px rgba(255, 153, 44, 0.15) !important;
+}
+
+
+/* =========================================
+   📱 MEDIA QUERIES (RESPONSIVE PROGRESIVO)
+   ========================================= */
+
+/* 1. TABLET (Hasta 992px) */
 @media (max-width: 992px) {
   .login-container-grid {
     grid-template-columns: 1fr;
-    min-height: 100vh;
-    margin: 0;
-    border-radius: 0;
+    width: min(500px, 92vw);
+    min-height: auto;
   }
 
   .login-left-panel {
@@ -388,11 +419,78 @@ input.form-control-custom[type="password"]:focus {
   }
 
   .login-right-panel {
-    padding: 1.5rem;
+    padding: 2.5rem;
+    border-radius: inherit;
   }
 
   .login-form {
     max-width: 100%;
-    padding: 1.5rem;
+    padding: 0;
+    border: none;
+    box-shadow: none;
+    background: transparent;
+  }
+}
+
+/* 2. MÓVIL (Hasta 576px): Aspecto Minimalista tipo App Nativa */
+@media (max-width: 576px) {
+  .login-container-wrapper {
+    align-items: flex-start;
+    /* Evita que el teclado aplaste el layout */
+    background: var(--bg-card);
+  }
+
+  .login-container-grid {
+    width: 100%;
+    min-height: 100dvh;
+    margin: 0;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+    background: transparent;
+  }
+
+  .login-right-panel {
+    padding: 2rem 1.5rem;
+    align-items: flex-start;
+    padding-top: 8vh;
+    /* Da espacio arriba pero permite scroll libre */
+    width: 100%;
+  }
+
+  .login-form {
+    padding: 0;
+  }
+
+  /* Centramos logo y título para balance visual en móviles */
+  .login-form-header {
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+
+  .login-title {
+    text-align: center;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .login-form-eyebrow {
+    text-align: center;
+  }
+
+  /* Inputs ligeramente más estilizados en móvil */
+  input.form-control-custom {
+    height: 54px !important;
+  }
+
+  /* Botón 100% redondeado en móvil (App style) */
+  .btn-login-submit {
+    height: 54px;
+    border-radius: var(--radius-pill);
+    margin-top: 0.5rem;
+  }
+
+  .login-options-row {
+    margin: 0.5rem 0 1rem;
   }
 }

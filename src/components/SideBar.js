@@ -27,7 +27,6 @@ import { useEffect } from "react";
 import { toggleSidebarMobile } from "../redux/sideBarMobilSlice";
 
 export function SideBar() {
-  const isCompressed = useSelector((state) => state.sidebar.isCompressed); // Desktop
   const isCompressedMobile = useSelector(
     (state) => state.sidebarMobile.isCompressedMobile,
   );
@@ -152,16 +151,10 @@ export function SideBar() {
   }, []);
   return (
     <div
-      className={`sidebar justify-content-between border-none m-auto 
-    ${isCompressed ? "sidebar-compressed" : ""} 
+      className={`sidebar sidebar-compressed 
     ${isCompressedMobile ? "sidebar-mobile-active" : "sidebar-mobile-hidden"}`}
-      style={{
-        background: "var(--glass-bg)",
-        backdropFilter: "var(--glass-blur)",
-        transition: "all var(--transition-smooth)",
-      }}
     >
-      <div className="sidebar-header d-flex flex-nowrap">
+      <div className="sidebar-header my-3">
         {fotoEmpresa && (
           <img
             src={fotoEmpresa}
@@ -191,7 +184,7 @@ export function SideBar() {
         </div>
       </div>
 
-      <div className="sidebar-menu my-2 mx-3">
+      <div className="sidebar-menu my-2 ">
         <ul className="menu-list h-100">
           {/* Inicio */}
           <Link
@@ -201,7 +194,7 @@ export function SideBar() {
             onClick={(e) => handleModuloSeleccionado("accesos rapido", e)}
           >
             <li
-              className={`menu-item px-3 py-2 mx-2 my-1 ${
+              className={`menu-item  ${
                 location.pathname === `/` ? "active" : ""
               }`}
             >
@@ -245,15 +238,11 @@ export function SideBar() {
                   title={role.nombre}
                   onClick={(e) => handleModuloSeleccionado(roleUrl, e)}
                 >
-                  <li
-                    className={`menu-item px-3 py-2 mx-2 my-1 ${
-                      isActive ? "active" : ""
-                    }`}
-                  >
+                  <li className={`menu-item  ${isActive ? "active" : ""}`}>
                     <div className="d-flex w-100 gap-2 align-items-center justify-content-md-start m-auto px-2">
                       <IconComponent
                         className="icon-lucide flex-shrink-0"
-                        size={20}
+                        size={25}
                       />
                       <small
                         className="small sidebar-text"
@@ -272,11 +261,7 @@ export function SideBar() {
                     title={role.nombre}
                     onClick={(e) => handleModuloSeleccionado(roleUrl, e)}
                   >
-                    <li
-                      className={`menu-item px-3 py-2 mx-2 my-1 ${
-                        isActive ? "active" : ""
-                      }`}
-                    >
+                    <li className={`menu-item  ${isActive ? "active" : ""}`}>
                       <div className="d-flex w-100 gap-2 align-items-center justify-content-md-start m-auto px-2">
                         <IconComponent
                           className="icon-lucide flex-shrink-0"
@@ -346,12 +331,12 @@ export function SideBar() {
         </Link> */}
         <Link
           to="/configuracion/general"
-          className="text-decoration-none w-90"
+          className="text-decoration-none w-100"
           style={{ width: "85%" }} // deja un margen lateral bonito
           onClick={(e) => handleModuloSeleccionado("", e)}
         >
           <button
-            className={`btn menu-item p-2 border-0 w-100 d-flex align-items-center justify-content-start ${
+            className={` menu-item border-0 w-100 d-flex align-items-center justify-content-center text-center ${
               location.pathname.includes("/configuracion/general")
                 ? "active"
                 : ""

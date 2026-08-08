@@ -4,8 +4,8 @@ import ToastAlert from "../components/componenteToast/ToastAlert";
 
 const axiosInstance = axios.create({
   // baseURL: "https://vv1g8thv-8000.brs.devtunnels.ms/api",
-  // baseURL: "http://erp-api.test/api",
-  baseURL: "http://127.0.0.1:8000/api",
+  baseURL: "http://erp-api.test/api",
+  // baseURL: "http://127.0.0.1:8000/api",
 
   // baseURL: "https://erp-api-production-c7d4.up.railway.app/api",
   // baseURL: "http://192.168.1.12:8000/api",
@@ -23,7 +23,7 @@ axiosRetry(axiosInstance, {
 // Interceptor de solicitudes para agregar el token de autorización
 axiosInstance.interceptors.request.use(
   (config) => {
-    // 🔥 CORRECCIÓN 1: Buscar el token en ambas bóvedas
+    // CORRECCIÓN 1: Buscar el token en ambas bóvedas
     const token =
       localStorage.getItem("token") || sessionStorage.getItem("token");
 

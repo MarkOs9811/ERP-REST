@@ -58,6 +58,9 @@ export const BadgeComponent = ({
   // OPCIONAL. Para inyectarle clases extra de CSS o Bootstrap a la envoltura del badge.
   // Ej: className="ms-2 mt-1" (para darle márgenes) o "cursor-pointer".
   className = "",
+
+  clickable = false, // OPCIONAL. Si quieres que el badge sea clickeable (cursor pointer y hover), ponlo en true.
+  onClick, // 1. AGREGAMOS ESTA PROP
 }) => {
   let claseColor = variantes.secondary;
 
@@ -85,8 +88,9 @@ export const BadgeComponent = ({
   return (
     <span
       className={`badge-custom ${claseColor} ${className} d-inline-flex align-items-center gap-1 small`}
+      // 2. REEMPLAZAMOS LA LÓGICA DEL ONCLICK
+      onClick={clickable && onClick ? onClick : undefined}
     >
-      {/* Ícono dinámico */}
       {isValidElement(icon)
         ? cloneElement(icon, { size: 14, strokeWidth: 2.5 })
         : icon}

@@ -255,11 +255,18 @@ export function SubMenuTabs() {
   const tabs = subMenuGroups[activeModule];
 
   return (
-    <div
-      className="submenu-tabs-container px-4  pb-0  mb-4 w-100  p-3"
-      style={{ marginTop: "-10px" }}
-    >
-      <ul className="nav nav-tabs border-0 " style={{ gap: "4px" }}>
+    <div className="submenu-tabs-container w-100 p-3">
+      {/* Opcional: Un pequeño título para la sección */}
+      <h6
+        className="text-muted mb-3 px-2"
+        style={{ fontSize: "11px", fontWeight: "700", letterSpacing: "0.5px" }}
+      >
+        SUBMÓDULOS
+      </h6>
+      <hr></hr>
+
+      {/* Cambiamos nav-tabs por flex-column para que sea una lista vertical */}
+      <ul className="nav flex-column border-0 w-100" style={{ gap: "4px" }}>
         {tabs.map((tab, idx) => {
           const isActive =
             currentPath === tab.path ||
@@ -268,20 +275,26 @@ export function SubMenuTabs() {
             (currentPath === activeModule && tab.path === activeModule);
 
           return (
-            <li className="nav-item" key={idx}>
+            <li className="nav-item w-100" key={idx}>
               <Link
                 to={tab.path}
-                className={`nav-link submenu-tab-link d-flex align-items-center gap-2 ${
+                // Cambiamos a flex-row para que el ícono esté al lado del texto
+                className={`nav-link  d-flex flex-row align-items-center gap-3 w-100 px-3 py-2 rounded-3 ${
                   isActive
-                    ? "active border-bottom-0 fw-bold"
-                    : "text-muted border-0"
+                    ? "bg-dark text-white fw-bold shadow-sm" // Estilo activo: fondo oscuro y texto blanco
+                    : "text-muted hover-bg-light" // Estilo inactivo
                 }`}
+                style={{ transition: "all 0.2s ease-in-out" }}
               >
-                {tab.icon}
-                <span
-                  className="d-none d-md-inline"
-                  style={{ fontSize: "14px" }}
+                {/* Contenedor para asegurar que los íconos tengan el mismo ancho y queden alineados */}
+                <div
+                  className="d-flex align-items-center justify-content-center"
+                  style={{ width: "20px" }}
                 >
+                  {tab.icon}
+                </div>
+
+                <span className="text-truncate" style={{ fontSize: "14px" }}>
                   {tab.label}
                 </span>
               </Link>

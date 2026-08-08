@@ -155,7 +155,7 @@ export function Header({ tipoHeader = null }) {
                 ? capitalizeFirstLetter(empresa?.nombre)
                 : ""}
             </h6>
-
+            Bienvenido
             <span className="small text-muted mb-0">
               {capitalizeFirstLetter(cargo?.empleado?.cargo?.nombre)}
             </span>
@@ -165,24 +165,30 @@ export function Header({ tipoHeader = null }) {
         {/* Icono de usuario */}
         {/* Contenedor del usuario en la barra de navegación */}
         <div className="navbar-right d-flex align-items-center ms-auto gap-2 p-0 m-0">
-          <button
-            onClick={() =>
-              window.open(
-                "https://lustrous-cupcake-b9cf4a.netlify.app/",
-                "_blank",
-              )
-            }
-            className="btn-web-site rounded-pill d-flex align-items-center justify-content-center"
-          >
-            <Globe size={16} className="icono_ver_web  text-center" />
-            <span>Ver Web</span>
-          </button>
+          {/* BOTÓN VER WEB - SOLO PARA ADMINISTRADOR */}
+          {fotoPerfilLocal &&
+            cargo?.empleado?.cargo?.nombre === "administrador" && (
+              <RippleWrapper>
+                <BadgeComponent
+                  clickable={true}
+                  label="Ver Web"
+                  variant="info"
+                  className="cursor-pointer"
+                  onClick={() =>
+                    window.open(
+                      "https://lustrous-cupcake-b9cf4a.netlify.app/",
+                      "_blank",
+                    )
+                  }
+                />
+              </RippleWrapper>
+            )}
           {fotoPerfilLocal && (
             <RippleWrapper>
               <BadgeComponent
                 label={capitalizeFirstLetter(fotoPerfilLocal?.sede?.nombre)}
                 variant="danger"
-                className="cursos-pointer"
+                className="cursor-pointer"
               />
             </RippleWrapper>
           )}
@@ -193,7 +199,7 @@ export function Header({ tipoHeader = null }) {
               <BadgeComponent
                 label={cajaDetalles.nombre}
                 variant="success"
-                className="cursos-pointer"
+                className="cursor-pointer"
               />
             </RippleWrapper>
           ) : null}

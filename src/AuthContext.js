@@ -10,32 +10,36 @@ export const useAuth = () => useContext(AuthContext);
 export const AuthProvider = ({ children }) => {
   const dispatch = useDispatch();
 
-  // Verificamos si hay token en cualquiera de los dos storages al iniciar
+  // 1. Centralizamos el estado del usuario leyendo desde el Storage inicial
+  const [user, setUser] = useState(() => {
+    const storedUser =
+      localStorage.getItem("user") || sessionStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
+
   const [isAuthenticated, setIsAuthenticated] = useState(
     !!(localStorage.getItem("token") || sessionStorage.getItem("token")),
   );
 
-  // Obtener id de localStorage o sessionStorage para suscribirse a eventos globales
-  const idCliente = JSON.parse(
-    localStorage.getItem("user") || sessionStorage.getItem("user"),
-  )?.id;
+  // 2. Usamos el ID directamente del estado en lugar de hacer JSON.parse en cada render
+  UseEventosGlobales(user?.id);
 
-  UseEventosGlobales(idCliente);
-
-  // Recibe 'rememberMe' para saber dónde guardar
-  const login = (token, user, rememberMe) => {
+  const login = (token, userData, rememberMe) => {
     const storage = rememberMe ? localStorage : sessionStorage;
 
     storage.setItem("token", token);
-    storage.setItem("user", JSON.stringify(user));
+    storage.setItem("user", JSON.stringify(userData));
+
     setIsAuthenticated(true);
+    setUser(userData); // Actualizamos el estado del usuario activo
   };
 
   const logout = () => {
     localStorage.clear();
-    sessionStorage.clear(); // Limpiamos AMBOS por seguridad
+    sessionStorage.clear();
     dispatch(cerrarCaja());
     setIsAuthenticated(false);
+    setUser(null); // Limpiamos el usuario en memoria
   };
 
   useEffect(() => {
@@ -45,7 +49,8 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    // 🔥 3. LA CLAVE ESTÁ AQUÍ: Ahora exportamos 'user' para que CajaProtectedRoute pueda usarlo
+    <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

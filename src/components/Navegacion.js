@@ -151,7 +151,7 @@ export function Navegacion({ tipoNavegacion = null }) {
   return (
     <div
       className={`
-        nav-navegacion  border-none ${navegacionAnchura ? "mx-3" : ""} ${
+        nav-navegacion  border-bottom mb-3 ${navegacionAnchura ? "mx-3" : "mx-0"} ${
           isCompressed ? "compressedNavegacion" : ""
         }
       `}
@@ -178,7 +178,7 @@ export function Navegacion({ tipoNavegacion = null }) {
               <>
                 <Link
                   to="/"
-                  className="text-decoration-none fw-semibold"
+                  className="text-decoration-none fw-semibold small"
                   style={{ color: "#222" }}
                 >
                   {routeNames[""]}

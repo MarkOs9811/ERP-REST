@@ -1,12 +1,9 @@
 .header-menu{
-    margin-left: 210px;
+    margin-left:0px;
     margin-right: 0 !important;
     transition: all 0.3s ease;
 }
-.compressedHeader{
-    margin-left: 60px!important;
-    margin-right: 0 !important;
-}
+
 .notificaciones-panel-list {
     background: var(--bg-muted) !important;
    

@@ -1,14 +1,11 @@
 .nav-navegacion {
   border-bottom: none !important;
   z-index: 100;
-  margin-left: 240px;
+  margin-left: 10px;
   transition: all 0.3s ease;
   background-color: transparent;
 }
 
-.compressedNavegacion {
-  margin-left: 80px;
-}
 
 .breadcrumb {
   background-color: transparent;
