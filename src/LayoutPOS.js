@@ -7,7 +7,7 @@ import {
   LockKeyhole,
   LogOut,
   ShoppingCartIcon,
-} from "lucide-react"; // <- Agregué LogOut
+} from "lucide-react";
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faKitchenSet } from "@fortawesome/free-solid-svg-icons";
@@ -20,6 +20,7 @@ export default function LayoutPOS({ children }) {
   const navigate = useNavigate();
   const location = useLocation();
   const caja = useSelector((state) => state.caja.caja);
+
   const cargo =
     JSON.parse(
       localStorage.getItem("user") || sessionStorage.getItem("user"),
@@ -29,7 +30,7 @@ export default function LayoutPOS({ children }) {
     localStorage.getItem("caja") || sessionStorage.getItem("caja"),
   );
 
-  // Consulta de configuración (usará el caché automáticamente)
+  // Consulta de configuración
   const { data: configEmpresa = [] } = useQuery({
     queryKey: ["confiEmpresa"],
     queryFn: GetConfi,
@@ -41,34 +42,30 @@ export default function LayoutPOS({ children }) {
     (item) => item.nombre == "Tipo Venta",
   );
 
-  // Condición clave
   const esComida = configTipoVenta?.clave == "restaurante";
-  // Consulta con React Query para obtener los datos de la caja
+
+  // Consulta para obtener los datos de la caja
   const { data: cajaData } = useQuery({
     queryKey: ["cajaClose", cajaDatos?.id],
     queryFn: () => fetchCajaClose(cajaDatos?.id),
     enabled: !!cajaDatos?.id,
   });
+
   return (
     <div className="w-100 p-0 pb-3 overflow-hidden d-flex flex-column h-100">
-      {/* Barra de módulos POS mejorada */}
-      <div
-        className="card-header p-0 m-0 rounded-0 d-flex flex-column flex-md-row align-items-center"
-        style={{
-          height: "auto",
-          borderBottom: "1px solid var(--fw-border, #ddd)",
-        }}
-      >
-        {/* Lado Izquierdo: Módulos sin espacios */}
-        <div className="d-flex flex-nowrap flex-grow-1 barra-modulos-pos w-100 h-100">
-          {/* Mesas - ¡SOLO SI ES COMIDA! */}
+      {/* HEADER LIMPIO SIN BORDES INVENTADOS */}
+      <div className="card-header p-0 m-0 rounded-0 d-flex flex-column flex-md-row align-items-stretch align-items-md-center bg-white shadow-sm">
+        {/* ========================================================= */}
+        {/* LADO IZQUIERDO: Exactamente con tu diseño original */}
+        {/* ========================================================= */}
+        <div className="d-flex h-100 overflow-x-auto">
           {esComida &&
             ["atencion al cliente", "administrador"].includes(
               cargo?.empleado?.cargo?.nombre,
             ) && (
               <RippleWrapper>
                 <Link
-                  className={`boton-venta d-flex align-items-center justify-content-center ${
+                  className={`boton-venta d-flex align-items-center justify-content-center  h-100 ${
                     location.pathname === "/vender/mesas" ? "activo" : ""
                   }`}
                   to="/vender/mesas"
@@ -83,14 +80,13 @@ export default function LayoutPOS({ children }) {
               </RippleWrapper>
             )}
 
-          {/* Delivery - ¡SOLO SI ES COMIDA! */}
           {esComida &&
             ["atencion al cliente", "administrador"].includes(
               cargo?.empleado?.cargo?.nombre,
             ) && (
               <RippleWrapper>
                 <Link
-                  className={`boton-venta d-flex align-items-center justify-content-center ${
+                  className={`boton-venta d-flex align-items-center justify-content-center h-100 ${
                     location.pathname === "/vender/pedidosWeb" ? "activo" : ""
                   }`}
                   to="/vender/pedidosWeb"
@@ -101,18 +97,16 @@ export default function LayoutPOS({ children }) {
               </RippleWrapper>
             )}
 
-          {/* Llevar / Ventas - ¡SE MUESTRA SIEMPRE, PERO CAMBIA DE NOMBRE! */}
           {["atencion al cliente", "administrador"].includes(
             cargo?.empleado?.cargo?.nombre,
           ) && (
             <RippleWrapper>
               <Link
-                className={`boton-venta d-flex align-items-center justify-content-center ${
+                className={`boton-venta d-flex align-items-center justify-content-center  h-100 ${
                   location.pathname === "/vender/ventasLlevar" ? "activo" : ""
                 }`}
                 to="/vender/ventasLlevar"
               >
-                {/* Cambiamos el icono dinámicamente si quieres */}
                 {esComida ? (
                   <Inbox
                     className="text-auto pos-icon"
@@ -126,8 +120,6 @@ export default function LayoutPOS({ children }) {
                     width="22px"
                   />
                 )}
-
-                {/* Cambiamos el texto dinámicamente */}
                 <span className="pos-btn-text ms-1">
                   {esComida ? "Llevar" : "Ventas"}
                 </span>
@@ -135,14 +127,13 @@ export default function LayoutPOS({ children }) {
             </RippleWrapper>
           )}
 
-          {/* Cocina - ¡SOLO SI ES COMIDA! */}
           {esComida &&
             ["cocinero", "administrador"].includes(
               cargo?.empleado?.cargo?.nombre,
             ) && (
               <RippleWrapper>
                 <Link
-                  className={`boton-venta d-flex align-items-center justify-content-center ${
+                  className={`boton-venta d-flex align-items-center justify-content-center  h-100 ${
                     location.pathname === "/vender/cocina" ? "activo" : ""
                   }`}
                   to="/vender/cocina"
@@ -154,91 +145,76 @@ export default function LayoutPOS({ children }) {
             )}
         </div>
 
-        {/* Lado Derecho: Información y Acciones */}
-        <div
-          className="ms-auto d-flex align-items-center"
-          style={{ height: "100%", gap: "0" }}
-        >
-          {/* Información de la Caja y el Cajero */}
-          <div
-            className="d-flex align-items-center px-3 h-100 gap-3"
-            style={{ borderRight: "1px solid var(--fw-border, #ddd)" }}
-          >
-            {/* 👉 NUEVO: Mostramos el nombre de la Caja */}
-            <span
-              style={{ fontSize: "0.9rem" }}
-              className="d-flex align-items-center"
+        {/* ========================================================= */}
+        {/* LADO DERECHO: Alineado, separado por 'gap' y sin líneas */}
+        {/* ========================================================= */}
+        <div className="d-flex flex-wrap flex-md-nowrap flex-grow-1 align-items-center justify-content-center justify-content-md-end p-2 pe-md-4 gap-4">
+          {/* Info Caja */}
+          <div className="d-flex align-items-center gap-2 text-nowrap">
+            <span className="text-muted small mb-0">Caja:</span>
+            <strong
+              className="text-dark border rounded px-2 py-1 bg-light shadow-sm text-uppercase mb-0"
+              style={{ fontSize: "0.85rem", letterSpacing: "0.5px" }}
             >
-              <span className="text-muted me-2">Caja:</span>
-              <strong
-                className="text-dark border rounded px-2 py-1 bg-light shadow-sm text-uppercase"
-                style={{ fontSize: "0.85rem", letterSpacing: "0.5px" }}
-              >
-                {/* Intentamos sacar el nombre de cajaDatos (localStorage) o de caja (Redux) */}
-                {cajaDatos?.nombre ||
-                  caja?.nombre ||
-                  `CAJA ${cajaDatos?.id || ""}`}
-              </strong>
-            </span>
-
-            {/* Información del Cajero (Existente) */}
-            <span
-              style={{
-                fontSize: "0.9rem",
-                borderLeft: "1px solid #eee",
-                paddingLeft: "15px",
-              }}
-            >
-              <span className="text-muted me-2">Cajero:</span>
-              <strong>
-                {cajaData?.datosRegistroCaja?.usuario?.empleado?.persona
-                  ?.nombre +
-                  " " +
-                  cajaData?.datosRegistroCaja?.usuario?.empleado?.persona
-                    ?.apellidos}
-              </strong>
-            </span>
+              {cajaDatos?.nombre ||
+                caja?.nombre ||
+                `CAJA ${cajaDatos?.id || ""}`}
+            </strong>
           </div>
 
-          {/* Botón Cerrar Caja como Link */}
-          {["atencion al cliente", "administrador"].includes(
-            cargo?.empleado?.cargo?.nombre,
-          ) &&
-            caja?.estado === "abierto" && (
-              <a
-                href="#cerrar-caja"
-                onClick={(e) => {
-                  e.preventDefault();
-                  navigate("/vender/cerrarCaja");
-                }}
-                className="pos-action-link cerrar-caja d-flex align-items-center justify-content-center"
-              >
-                <LockKeyhole
-                  className="text-auto pos-icon"
-                  height="18px"
-                  width="18px"
-                />
-                <span className="pos-btn-text">Cerrar Caja</span>
-              </a>
-            )}
+          {/* Info Cajero */}
+          <div className="d-flex align-items-center gap-2 text-nowrap">
+            <span className="text-muted small mb-0">Cajero:</span>
+            <strong
+              className="text-dark text-truncate mb-0"
+              style={{ fontSize: "0.85rem", maxWidth: "160px" }}
+            >
+              {cajaData?.datosRegistroCaja?.usuario?.empleado?.persona?.nombre}{" "}
+              {
+                cajaData?.datosRegistroCaja?.usuario?.empleado?.persona
+                  ?.apellidos
+              }
+            </strong>
+          </div>
 
-          {/* Botón Salir como Link */}
-          <a
-            href="#salir"
-            onClick={(e) => {
-              e.preventDefault();
-              navigate("/");
-            }}
-            className="pos-action-link salir d-flex align-items-center justify-content-center"
-          >
-            <LogOut className="pos-icon" height="18px" width="18px" />
-            <span className="pos-btn-text">Salir</span>
-          </a>
+          {/* Botones de Acción */}
+          <div className="d-flex align-items-center gap-3">
+            {["atencion al cliente", "administrador"].includes(
+              cargo?.empleado?.cargo?.nombre,
+            ) &&
+              caja?.estado === "abierto" && (
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigate("/vender/cerrarCaja");
+                  }}
+                  className="pos-action-link cerrar-caja d-flex align-items-center gap-2 text-decoration-none h-100"
+                >
+                  <LockKeyhole
+                    className="text-auto pos-icon"
+                    height="18px"
+                    width="18px"
+                  />
+                  <span className="pos-btn-text text-nowrap">Cerrar Caja</span>
+                </button>
+              )}
+
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                navigate("/");
+              }}
+              className="pos-action-link salir d-flex align-items-center gap-2 text-decoration-none h-100"
+            >
+              <LogOut className="pos-icon" height="18px" width="18px" />
+              <span className="pos-btn-text text-nowrap">Salir</span>
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Contenido dinámico */}
-      <div className="contenedor-scroll p-3">{children}</div>
+      <div className="contenedor-scroll p-3 flex-grow-1">{children}</div>
     </div>
   );
 }

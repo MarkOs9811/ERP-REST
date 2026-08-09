@@ -373,7 +373,7 @@ export function DetallesPago() {
   if (isError) return <p>Error: {errorPreventaMesa?.message}</p>;
 
   return (
-    <div className="card h-100 bg-transparent ">
+    <div className=" h-100 bg-transparent ">
       <div className="row h-100 g-3">
         <div className="col-lg-3 col-md-4 col-sm-6 col-12 d-flex flex-column h-100">
           <DetallePedido

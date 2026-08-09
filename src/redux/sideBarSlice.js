@@ -9,13 +9,15 @@ const sideBarSlice = createSlice({
   initialState,
   reducers: {
     toggleSidebar: (state) => {
-      state.isCompressed = !state.isCompressed; // alterna el valor actual
+      state.isCompressed = !state.isCompressed;
     },
+
     setSidebarCompressed: (state, action) => {
-      state.isCompressed = action.payload; // permite asignar directamente true o false
+      state.isCompressed = action.payload;
     },
   },
 });
 
-export const { toggleSidebar, setSidebarCompressed } = sideBarSlice.actions; // ⚠️ CAMBIO: Exportar con el nombre correcto
+export const { toggleSidebar, setSidebarCompressed } = sideBarSlice.actions;
+
 export default sideBarSlice.reducer;

@@ -173,13 +173,7 @@ export const MainLayout = () => {
 
       {showFullLayout && (
         <div
-          className="submenu-secundario-wrapper bg-white"
-          style={{
-            width: "260px",
-            flexShrink: 0,
-            borderRight: "1px solid #eaedf1",
-            zIndex: 9,
-          }}
+          className={`submenu-secundario-wrapper bg-white ${isCompressed ? "subMenuComprimido" : ""}`}
         >
           <SubMenuTabs />
         </div>

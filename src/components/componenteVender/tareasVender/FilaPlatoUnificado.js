@@ -171,13 +171,11 @@ export const FilaPlatoUnificado = ({
         </span>
         {!isSplitMode && tipo !== "entregado" && (
           <button
-            className="btn btn-sm btn-link text-danger p-0"
-            onClick={() => onDelete(tipo === "nuevo" ? item.id : item.idPlato)}
-            disabled={
-              loadingDelete === (tipo === "nuevo" ? item.id : item.idPlato)
-            }
+            className="btn btn-sm btn-link text-danger p-0 mx-3"
+            onClick={() => onDelete(item.id)}
+            disabled={loadingDelete === item.id}
           >
-            {loadingDelete === (tipo === "nuevo" ? item.id : item.idPlato) ? (
+            {loadingDelete === item.id ? (
               <Repeat size={16} className="spinner-spin" />
             ) : (
               <Trash2 size={16} />

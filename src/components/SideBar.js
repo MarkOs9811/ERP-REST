@@ -25,6 +25,7 @@ import { useAuth } from "../AuthContext";
 import { capitalizeFirstLetter } from "../hooks/FirstLetterUp";
 import { useEffect } from "react";
 import { toggleSidebarMobile } from "../redux/sideBarMobilSlice";
+import { setSidebarCompressed, toggleSidebar } from "../redux/sideBarSlice";
 
 export function SideBar() {
   const isCompressedMobile = useSelector(
@@ -191,7 +192,10 @@ export function SideBar() {
             to={"/"}
             className="link-opcion text-decoration-none"
             title="Inicio"
-            onClick={(e) => handleModuloSeleccionado("accesos rapido", e)}
+            onClick={(e) => {
+              handleModuloSeleccionado("accesos rapido", e);
+              dispatch(setSidebarCompressed(true));
+            }}
           >
             <li
               className={`menu-item  ${
@@ -236,7 +240,10 @@ export function SideBar() {
                   to={`/${roleUrl}`}
                   className="link-opcion text-decoration-none"
                   title={role.nombre}
-                  onClick={(e) => handleModuloSeleccionado(roleUrl, e)}
+                  onClick={(e) => {
+                    handleModuloSeleccionado(roleUrl, e);
+                    dispatch(setSidebarCompressed(false));
+                  }}
                 >
                   <li className={`menu-item  ${isActive ? "active" : ""}`}>
                     <div className="d-flex w-100 gap-2 align-items-center justify-content-md-start m-auto px-2">

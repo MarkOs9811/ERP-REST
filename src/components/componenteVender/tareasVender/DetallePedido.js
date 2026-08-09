@@ -23,8 +23,16 @@ export function DetallePedido({
   return (
     <div className="card border h-100 ">
       <div className="card-header d-flex align-items-center justify-content-center">
+        <h4 className="align-middle me-2">Cuenta </h4>
+        <h6 className=" fw-bold align-middle h4 text-success">
+          {estadoTipoVenta === "llevar"
+            ? "Llevar"
+            : mesa
+              ? `Mesa ${mesa}`
+              : "Web Pedido"}
+        </h6>
         <button
-          className="btn btn-outline-dark me-auto"
+          className="btn btn-outline-dark ms-auto"
           onClick={() =>
             estadoTipoVenta === "llevar"
               ? handleVolverLlevar()
@@ -33,17 +41,9 @@ export function DetallePedido({
                 : handleVolverPreVenta()
           }
         >
-          <ChevronLeft className="text-auto" />
+          <ChevronLeft />
           Volver
         </button>
-        <h4 className=" text-auto align-middle mx-3">Cuenta </h4>
-        <h6 className=" fw-bold align-middle h4 text-success">
-          {estadoTipoVenta === "llevar"
-            ? "Llevar"
-            : mesa
-              ? `Mesa ${mesa}`
-              : "Web Pedido"}
-        </h6>
       </div>
       <div className="card-body">
         {preVentas.length > 0 ? (

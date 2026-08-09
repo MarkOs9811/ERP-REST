@@ -83,7 +83,21 @@
     text-align: center;
     padding-left: 20px;
 }
+/* ESTILO PARA SUBMENU TABS  */
 
+.submenu-secundario-wrapper {
+    width: 220px;
+    flex-shrink: 0;
+    border-right: 1px solid #eaedf1;
+    z-index: 9;
+    overflow-y: auto;
+    overflow-x: hidden;
+    transition: width 0.3s ease;
+}
+
+.subMenuComprimido{
+    width: 0px;
+}
 /* Eliminated specific compressed rules */
 .menu-list {
     list-style: none!important;

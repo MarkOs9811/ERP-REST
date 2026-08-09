@@ -393,9 +393,7 @@ export function PreventaMesa() {
               <div>
                 <h5 className="mb-0 fw-bold d-flex align-items-center gap-2">
                   {isSplitMode && <Scissors size={20} />}{" "}
-                  {isSplitMode
-                    ? "Separar Cuenta"
-                    : `Mesa ${mesaNumero || idMesa}`}
+                  {isSplitMode ? "Separar Cuenta" : `Mesa ${mesaNumero}`}
                 </h5>
                 <small>
                   {isSplitMode
@@ -647,8 +645,8 @@ export function PreventaMesa() {
         <div
           className={`col-lg-8 h-100 ${isSplitMode ? "opacity-50 pe-none" : ""}`}
         >
-          <div className="card shadow-sm h-100 d-flex flex-column overflow-auto">
-            <div className="card-header bg-white border-bottom  py-3 px-3 m-0">
+          <div className="card d-flex flex-grow-1 flex-column h-100 p-0 m-0 overflow-auto">
+            <div className="card-header bg-white border-bottom  py-3 px-3 m-0 d-flex align-items-center gap-3 flex-wrap">
               <div>
                 <h6 className="d-flex align-items-center gap-2 flex-shrink-0">
                   <Hamburger size={28} /> Menú de Platos
@@ -662,7 +660,7 @@ export function PreventaMesa() {
                 />
               </div>
               {/* Categorías */}
-              <div className="d-flex justify-content-lg-end">
+              <div className="overflow-auto d-flex justify-content-lg-en">
                 <CategoriaPlatos
                   claveVenta={"restaurante"}
                   clearSearch={setSearchTerm}

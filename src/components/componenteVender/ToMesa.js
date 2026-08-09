@@ -22,15 +22,13 @@ import {
   Plus,
   Trash2,
 } from "lucide-react";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import BotonAnimado from "../componentesReutilizables/BotonAnimado";
 import { BuscadorPlatos } from "./tareasVender/BuscadorPlatos";
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
-import { useReactToPrint } from "react-to-print";
 
 export function ToMesa() {
   const id = useSelector((state) => state.mesa.idPreventaMesa);
-  const numeroMesa = useSelector((state) => state.mesa.numero);
 
   const categoriaFiltroPlatos = useSelector(
     (state) => state.categoriaFiltroPlatos.estado,
@@ -77,10 +75,7 @@ export function ToMesa() {
   const handleLimpiarMesa = () => {
     dispatch(clearPedido(id));
     setNotaPedido("");
-    ToastAlert("info", "Pedido de la mesa " + numeroMesa + " limpiado.");
   };
-
-  const componentRef = useRef();
 
   const handleAddPlatoPreventaMesas = async () => {
     if (!mesas[id] || mesas[id].items.length === 0) {
@@ -88,6 +83,7 @@ export function ToMesa() {
     }
 
     setLoadingPedido(true);
+
     try {
       const datosPreventa =
         mesas[id]?.items.map((item) => ({
@@ -108,21 +104,26 @@ export function ToMesa() {
       );
 
       if (response.data.success) {
-        setTimeout(() => {
-          if (componentRef.current) {
-            ToastAlert("success", response.data.message + " MESA " + id);
-            setNotaPedido("");
-            dispatch(clearPedido(id)); // Limpiamos solo la mesa actual
-            queryClient.invalidateQueries(["mesas"]);
-            navigate(`/vender/mesas`);
-          }
-        }, 1000);
+        // 1. Mostrar alerta de éxito
+        ToastAlert("success", `${response.data.message} MESA ${id}`);
+
+        // 2. Limpiar estados
+        setNotaPedido("");
+        dispatch(clearPedido(id));
+
+        // 3. Refrescar datos y redirigir
+        queryClient.invalidateQueries(["mesas"]);
+        navigate(`/vender/mesas`);
+
+        // Nota: Si aún necesitas componentRef para otra cosa, evalúalo de forma independiente,
+        // no bloquees el flujo principal de navegación.
       } else {
         ToastAlert("error", response.data.message);
-        setLoadingPedido(false);
       }
     } catch (error) {
       ToastAlert("error", "Error de conexión: " + error.message);
+    } finally {
+      // 🔥 BEST PRACTICE: Garantiza que el loading se apague en éxito O en error
       setLoadingPedido(false);
     }
   };
@@ -133,42 +134,42 @@ export function ToMesa() {
         <div className="col-md-4 col-lg-3 h-100">
           <div className="card  flex-grow-1 h-100 d-flex flex-column overflow-hidden">
             <div className="card-header bg-white border-bottom py-3">
-              <div className="d-flex justify-content-center justify-content-lg-start">
-                <div
-                  className="d-flex gap-2"
-                  style={{ width: "100%", maxWidth: "420px" }}
+              <div className="d-flex align-items-center w-100 gap-2">
+                <select
+                  className="form-select"
+                  value={id || ""}
+                  onChange={(e) => {
+                    // Opcional pero recomendado: Permitir cambiar de mesa desde aquí
+                    const nuevoId = parseInt(e.target.value);
+                    dispatch(setIdPreventaMesa(nuevoId));
+                  }}
                 >
+                  {mesasList
+                    // Nota: Si la mesa ya está ocupada (estado 0) y estás agregando más platos,
+                    // asegúrate de que el filtro permita ver la mesa actual.
+                    // .filter((m) => m.estado === 1 || m.id === id)
+                    .filter((m) => m.estado === 1)
+                    .map((m) => (
+                      <option key={m.id} value={m.id}>
+                        Mesa {m.numero}
+                      </option>
+                    ))}
+                </select>
+
+                <div className="d-flex gap-2 ms-auto">
+                  <button
+                    className="btn btn-outline-danger flex-shrink-0"
+                    title="Limpiar Pedido"
+                    onClick={handleLimpiarMesa}
+                  >
+                    <FontAwesomeIcon icon={faTrashCan} />
+                  </button>
+
                   <button
                     className="btn btn-outline-dark flex-shrink-0"
                     onClick={habldeVolverMesas}
                   >
                     <FontAwesomeIcon icon={faArrowLeft} />
-                  </button>
-
-                  <select
-                    className="form-select"
-                    value={id}
-                    onChange={(e) =>
-                      dispatch(setIdPreventaMesa(Number(e.target.value)))
-                    }
-                  >
-                    <option value="">Mesa actual: {id}</option>
-
-                    {mesasList
-                      .filter((m) => m.estado === 1)
-                      .map((m) => (
-                        <option key={m.id} value={m.id}>
-                          Mesa {m.numero}
-                        </option>
-                      ))}
-                  </select>
-
-                  <button
-                    className="btn btn-outline-danger flex-shrink-0 ms-auto"
-                    title="Limpiar Pedido"
-                    onClick={handleLimpiarMesa}
-                  >
-                    <FontAwesomeIcon icon={faTrashCan} />
                   </button>
                 </div>
               </div>
