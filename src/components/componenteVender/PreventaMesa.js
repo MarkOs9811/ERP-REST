@@ -46,6 +46,7 @@ import { useReactToPrint } from "react-to-print";
 import { TicketPreVenta } from "./TiketsType/TicketPreVenta";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClipboardList } from "@fortawesome/free-solid-svg-icons";
+import { FilaPlatoUnificado } from "./tareasVender/FilaPlatoUnificado";
 
 export function PreventaMesa() {
   const idMesa = useSelector((state) => state.mesa.idPreventaMesa);
@@ -70,11 +71,6 @@ export function PreventaMesa() {
   const mesas = useSelector((state) => state.pedido.mesas);
   const componentRef = useRef();
   const [datosPreventa, setDatosPreventa] = useState(null);
-
-  const handlePrint = useReactToPrint({
-    contentRef: componentRef,
-    onAfterPrint: () => setDatosPreventa(null),
-  });
 
   // Preventas desde BD
   const {
@@ -119,7 +115,7 @@ export function PreventaMesa() {
 
       // 3. Armamos el payload
       const payload = {
-        titulo: "PRE-CUENTA MESA" + mesas.numero, // Aquí podrías concatenar el número de mesa si lo tienes
+        titulo: "PRE-CUENTA MESA " + mesaNumero, // Aquí podrías concatenar el número de mesa si lo tienes
         contenido: contenidoFormateado,
         total: totalMesa,
       };
@@ -329,185 +325,6 @@ export function PreventaMesa() {
     navigate("/vender/mesas/detallesPago");
   };
 
-  const aumentarMutation = useMutation({
-    mutationFn: async (idPlato) =>
-      (
-        await axiosInstance.get(
-          `/vender/preventa/preventeMesaAumentar/${idPlato}/${idMesa}`,
-        )
-      ).data,
-    onSuccess: () =>
-      queryClient.invalidateQueries(["preventaMesa", idMesa, caja?.id]),
-    onError: (err) => ToastAlert("error", "Error al aumentar: " + err.message),
-  });
-
-  const disminuirMutation = useMutation({
-    mutationFn: async (idPlato) =>
-      (
-        await axiosInstance.get(
-          `/vender/preventa/preventeMesaDiminuir/${idPlato}/${idMesa}`,
-        )
-      ).data,
-    onSuccess: () =>
-      queryClient.invalidateQueries(["preventaMesa", idMesa, caja?.id]),
-    onError: (err) => ToastAlert("error", "Error al disminuir: " + err.message),
-  });
-
-  const FilaPlatoUnificado = ({
-    item,
-    tipo,
-    onAdd,
-    onRemove,
-    onDelete,
-    loadingDelete,
-    isSplitMode,
-    reduxItem,
-    onToggleSelect,
-    onChangeSplitQty,
-  }) => {
-    const nombrePlato = item.plato?.nombre || item.nombre;
-    const precioUnitario = item.plato?.precio || item.precio;
-    const precioTotal = item.cantidad * precioUnitario;
-    const isSelected = !!reduxItem;
-    const cantidadSeleccionada = reduxItem ? reduxItem.cantidad : 0;
-    const precioSeleccionado = reduxItem ? reduxItem.subtotal : 0;
-
-    const opacityClass =
-      isSplitMode && !isSelected ? "opacity-50" : "opacity-100";
-    const bgClass = tipo === "nuevo" ? "bg-warning bg-opacity-10" : "bg-white";
-    const borderClass =
-      tipo === "entregado" ? "border-success" : "border-light";
-    const canSelect = tipo !== "nuevo";
-
-    return (
-      <div
-        className={`d-flex align-items-center justify-content-between p-2 mb-1 rounded border ${bgClass} ${borderClass} ${opacityClass} transition-all`}
-      >
-        {isSplitMode && canSelect && (
-          <div className="me-2">
-            <input
-              type="checkbox"
-              className="form-check-input"
-              checked={isSelected}
-              onChange={() => onToggleSelect(item)}
-            />
-          </div>
-        )}
-        <div
-          className="d-flex align-items-center gap-2"
-          style={{ width: isSplitMode ? "35%" : "40%" }}
-        >
-          <div className="d-flex flex-column lh-1">
-            <span
-              className="fw-bold text-dark text-truncate"
-              style={{ fontSize: "0.9rem", maxWidth: "140px" }}
-            >
-              {nombrePlato}
-            </span>
-            <span className="text-muted small">
-              S/. {Number(precioUnitario).toFixed(2)}
-            </span>
-          </div>
-        </div>
-        <div
-          className="d-flex align-items-center justify-content-center"
-          style={{ width: "30%" }}
-        >
-          {!isSplitMode && (
-            <>
-              {tipo !== "entregado" ? (
-                <div className="d-flex align-items-center bg-white border rounded-pill px-1 shadow-sm">
-                  <button
-                    className="btn btn-sm btn-link text-dark p-0"
-                    onClick={() =>
-                      onRemove(tipo === "nuevo" ? item.id : item.idPlato)
-                    }
-                    disabled={
-                      aumentarMutation.isLoading || disminuirMutation.isLoading
-                    }
-                  >
-                    <Minus size={14} />
-                  </button>
-                  <span className="mx-2 fw-bold small">{item.cantidad}</span>
-                  <button
-                    className="btn btn-sm btn-link text-dark p-0"
-                    onClick={() =>
-                      onAdd(tipo === "nuevo" ? item : item.idPlato)
-                    }
-                    disabled={
-                      aumentarMutation.isLoading || disminuirMutation.isLoading
-                    }
-                  >
-                    <Plus size={14} />
-                  </button>
-                </div>
-              ) : (
-                <span className="fw-bold fs-6 text-success">
-                  x{item.cantidad}
-                </span>
-              )}
-            </>
-          )}
-          {isSplitMode && canSelect && isSelected && (
-            <div className="d-flex align-items-center bg-primary bg-opacity-10 border border-primary rounded-pill px-1">
-              <button
-                className="btn btn-sm btn-link text-primary border-none p-0"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onChangeSplitQty(item.id, -1, item.cantidad);
-                }}
-              >
-                <Minus size={14} />
-              </button>
-              <span className="mx-2 fw-bold small text-primary border-none">
-                {cantidadSeleccionada} / {item.cantidad}
-              </span>
-              <button
-                className="btn btn-sm btn-link text-primary border-none p-0"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onChangeSplitQty(item.id, 1, item.cantidad);
-                }}
-              >
-                <Plus size={14} />
-              </button>
-            </div>
-          )}
-        </div>
-        <div
-          className="d-flex align-items-center justify-content-end gap-2"
-          style={{ width: "30%" }}
-        >
-          <span
-            className={`fw-bold small ${isSelected ? "text-primary" : "text-dark"}`}
-          >
-            S/.{" "}
-            {Number(
-              isSplitMode && isSelected ? precioSeleccionado : precioTotal,
-            ).toFixed(2)}
-          </span>
-          {!isSplitMode && tipo !== "entregado" && (
-            <button
-              className="btn btn-sm btn-link text-danger p-0"
-              onClick={() =>
-                onDelete(tipo === "nuevo" ? item.id : item.idPlato)
-              }
-              disabled={
-                loadingDelete === (tipo === "nuevo" ? item.id : item.idPlato)
-              }
-            >
-              {loadingDelete === (tipo === "nuevo" ? item.id : item.idPlato) ? (
-                <Repeat size={16} className="spinner-spin" />
-              ) : (
-                <Trash2 size={16} />
-              )}
-            </button>
-          )}
-        </div>
-      </div>
-    );
-  };
-
   const totalCarrito = itemsCarrito.reduce(
     (acc, i) => acc + i.cantidad * i.precio,
     0,
@@ -525,6 +342,43 @@ export function PreventaMesa() {
     (acc, i) => acc + i.subtotal,
     0,
   );
+
+  // 1. LA MUTACIÓN (El Padre se comunica con la BD)
+  const actualizarCantidadMutation = useMutation({
+    mutationFn: async ({ idPlato, nuevaCantidad }) => {
+      return (
+        await axiosInstance.put(
+          `/vender/preventa/actualizarCantidad/${idPlato}/${idMesa}`,
+          { cantidad: nuevaCantidad },
+        )
+      ).data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["preventaMesa", idMesa, caja?.id]);
+    },
+    onError: (err) =>
+      ToastAlert("error", "Error al actualizar cantidad: " + err.message),
+  });
+
+  // 2. LA FUNCIÓN QUE ESCUCHA AL HIJO
+  const handleUpdateQuantity = (idReferencia, nuevaCantidad, tipo) => {
+    if (tipo === "nuevo") {
+      // Si el plato recién se agregó y no está en la BD (está en tu carrito local)
+      // Aquí usas tu función normal de Redux/Context para cambiar la cantidad a 'nuevaCantidad'
+      console.log(
+        "Cambiar en local el id:",
+        idReferencia,
+        "a cantidad:",
+        nuevaCantidad,
+      );
+    } else {
+      // Si el plato ya es "enviado", disparamos la mutación hacia la BD
+      actualizarCantidadMutation.mutate({
+        idPlato: idReferencia,
+        nuevaCantidad: nuevaCantidad,
+      });
+    }
+  };
 
   return (
     <div className="h-100 bg-transparent">
@@ -566,6 +420,7 @@ export function PreventaMesa() {
             </div>
 
             <div className="card-body overflow-auto p-2 bg-light d-flex flex-column gap-1">
+              {/* POR CONFIRMAR */}
               {itemsCarrito.length > 0 && (
                 <div
                   className={`mb-3 animate__animated animate__fadeIn ${isSplitMode ? "opacity-50" : ""}`}
@@ -578,8 +433,9 @@ export function PreventaMesa() {
                       key={`cart-${i.id}`}
                       item={i}
                       tipo="nuevo"
-                      onAdd={handleAddPlatoPreventa}
-                      onRemove={handleDecrementNewItem}
+                      // 👇 AQUÍ LE PASAMOS LA NUEVA FUNCIÓN AL HIJO
+                      onUpdateQuantity={handleUpdateQuantity}
+                      loadingUpdate={null}
                       onDelete={handleDecrementNewItem}
                       loadingDelete={deletingProductId}
                       isSplitMode={isSplitMode}
@@ -588,6 +444,7 @@ export function PreventaMesa() {
                 </div>
               )}
 
+              {/* EN PREPARACIÓN */}
               {platosSolicitados.length > 0 && (
                 <div className="mb-2">
                   <h6 className="text-secondary fw-bold small ms-1 mb-2 d-flex align-items-center gap-1">
@@ -598,8 +455,11 @@ export function PreventaMesa() {
                       key={`sol-${i.id}`}
                       item={i}
                       tipo="enviado"
-                      onAdd={aumentarMutation.mutate}
-                      onRemove={disminuirMutation.mutate}
+                      // 👇 AQUÍ LE PASAMOS LA NUEVA FUNCIÓN AL HIJO
+                      onUpdateQuantity={handleUpdateQuantity}
+                      loadingUpdate={
+                        actualizarCantidadMutation.isLoading ? i.idPlato : null
+                      }
                       onDelete={handleRemovePlatoPreventa}
                       loadingDelete={deletingProductId}
                       isSplitMode={isSplitMode}
@@ -611,6 +471,7 @@ export function PreventaMesa() {
                 </div>
               )}
 
+              {/* ENTREGADOS (No cambian, no tienen botones de cantidad) */}
               {platosEntregados.length > 0 && (
                 <div className="mb-2">
                   <h6 className="text-success fw-bold small ms-1 mb-2 d-flex align-items-center gap-1">
@@ -665,7 +526,7 @@ export function PreventaMesa() {
 
               {isSplitMode ? (
                 <BotonAnimado
-                  className="btn-realizarPedido w-100 p-3 mb-2 fw-bold fs-5 shadow-sm btn-primary"
+                  className="btn-guardar  w-100 p-3 mb-2 fw-bold fs-5 border"
                   onClick={handleCobrarSeleccion}
                   disabled={totalSeleccionado === 0}
                 >
@@ -675,7 +536,7 @@ export function PreventaMesa() {
                 <>
                   {itemsCarrito.length > 0 ? (
                     <BotonAnimado
-                      className="btn-realizarPedido w-100 p-3 mb-2 fw-bold fs-5 shadow-sm"
+                      className="btn-guardar  w-100 p-3 mb-2 fw-bold fs-5 border"
                       onClick={handleAddPlatoPreventaMesas}
                       loading={isSendingToKitchen}
                     >

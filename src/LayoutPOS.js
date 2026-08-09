@@ -53,7 +53,7 @@ export default function LayoutPOS({ children }) {
     <div className="w-100 p-0 pb-3 overflow-hidden d-flex flex-column h-100">
       {/* Barra de módulos POS mejorada */}
       <div
-        className="card-header flex-column p-0 m-0 rounded-0 d-flex align-items-center"
+        className="card-header p-0 m-0 rounded-0 d-flex flex-column flex-md-row align-items-center"
         style={{
           height: "auto",
           borderBottom: "1px solid var(--fw-border, #ddd)",
