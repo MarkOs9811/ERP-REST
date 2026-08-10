@@ -343,7 +343,7 @@ export function PreventaMesa() {
     0,
   );
 
-  // 1. LA MUTACIÓN (El Padre se comunica con la BD)
+  // 1. LA MUTACIÓN CON ACTUALIZACIÓN OPTIMISTA (Elimina el parpadeo)
   const actualizarCantidadMutation = useMutation({
     mutationFn: async ({ idPlato, nuevaCantidad }) => {
       return (
@@ -353,26 +353,67 @@ export function PreventaMesa() {
         )
       ).data;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries(["preventaMesa", idMesa, caja?.id]);
+    // Se ejecuta ANTES de que termine la petición HTTP
+    onMutate: async ({ idPlato, nuevaCantidad }) => {
+      const queryKey = ["preventaMesa", idMesa, caja?.id];
+
+      // 1. Cancelar cualquier refetch en curso para que no sobreescriba nuestra actualización manual
+      await queryClient.cancelQueries({ queryKey });
+
+      // 2. Guardar el estado anterior por si hay error (Rollback)
+      const previousPreventas = queryClient.getQueryData(queryKey);
+
+      // 3. Modificar la caché de React Query instantáneamente
+      queryClient.setQueryData(queryKey, (oldData) => {
+        if (!oldData) return oldData;
+
+        // Aseguramos si tu backend devuelve un array directo o un objeto { data: [...] }
+        const isArray = Array.isArray(oldData);
+        const dataList = isArray ? oldData : oldData.data;
+
+        if (!dataList) return oldData;
+
+        const newDataList = dataList.map((item) => {
+          // Buscamos el plato exacto y le actualizamos la cantidad en memoria
+          if (item.idPlato === idPlato || item.id === idPlato) {
+            return { ...item, cantidad: nuevaCantidad };
+          }
+          return item;
+        });
+
+        return isArray ? newDataList : { ...oldData, data: newDataList };
+      });
+
+      return { previousPreventas, queryKey };
     },
-    onError: (err) =>
-      ToastAlert("error", "Error al actualizar cantidad: " + err.message),
+    // Si la petición HTTP falla, restauramos la data original
+    onError: (err, variables, context) => {
+      if (context?.previousPreventas) {
+        queryClient.setQueryData(context.queryKey, context.previousPreventas);
+      }
+      ToastAlert("error", "Error al actualizar cantidad: " + err.message);
+    },
+    // Cuando termine (éxito o error), sincronizamos silenciosamente con la BD
+    onSettled: (data, error, variables, context) => {
+      if (context?.queryKey) {
+        queryClient.invalidateQueries({ queryKey: context.queryKey });
+      }
+    },
   });
 
   // 2. LA FUNCIÓN QUE ESCUCHA AL HIJO
   const handleUpdateQuantity = (idReferencia, nuevaCantidad, tipo) => {
     if (tipo === "nuevo") {
-      // Si el plato recién se agregó y no está en la BD (está en tu carrito local)
-      // Aquí usas tu función normal de Redux/Context para cambiar la cantidad a 'nuevaCantidad'
+      // ⚠️ IMPORTANTE: Aquí vi que solo tenías un console.log
+      // Si el item no ha sido enviado a cocina, debes disparar una acción de Redux para cambiar su cantidad.
+      // Ejemplo: dispatch(updateItemQuantity({ id: idReferencia, cantidad: nuevaCantidad, mesaId: idMesa }));
+
       console.log(
-        "Cambiar en local el id:",
+        "Debes despachar la acción de Redux para actualizar cantidad de:",
         idReferencia,
-        "a cantidad:",
-        nuevaCantidad,
       );
     } else {
-      // Si el plato ya es "enviado", disparamos la mutación hacia la BD
+      // Para platos ya enviados (BD)
       actualizarCantidadMutation.mutate({
         idPlato: idReferencia,
         nuevaCantidad: nuevaCantidad,

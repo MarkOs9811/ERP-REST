@@ -280,7 +280,7 @@ button,
 
   /* 🔥 CORRECCIÓN: Quitamos los !important para permitir la sobreescritura */
   min-height: var(--control-height-md);
-  padding: 0.55rem 1.25rem;
+  padding: 0.4rem 1.25rem;
 
   border-radius: var(--radius-pill) !important;
   font-family: 'Inter', sans-serif;
@@ -350,13 +350,14 @@ button svg,
    VARIANTES DE COLOR (SEMÁNTICA FIRE WOK)
 ========================================================================= */
 .btn-principal {
-  background: var(--fw-onyx) !important;
+background: #303030 !important;
   color: var(--fw-white) !important;
   border: 1px solid var(--fw-onyx) !important;
+  
 }
 
 .btn-principal:hover {
-  background: #272727 !important;
+  background: var(--fw-onyx) !important;
   border-color: #272727 !important;
 }
 

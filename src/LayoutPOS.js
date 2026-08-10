@@ -12,7 +12,7 @@ import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faKitchenSet } from "@fortawesome/free-solid-svg-icons";
 import "./css/EstilosPOS.css";
-import { fetchCajaClose } from "./pages/CerrarCaja";
+import { fetchCajaClose } from "./pages/modulosVender/CerrarCaja";
 import { useQuery } from "@tanstack/react-query";
 import { GetConfi } from "./service/accionesConfiguracion/GetConfi";
 

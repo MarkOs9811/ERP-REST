@@ -36,7 +36,7 @@ const NotificacionBtn = ({ pedido }) => {
   return (
     <button
       type="button"
-      className="btn-accion-card"
+      className="btn-generico w-0 px-2 rounded-2"
       disabled={loading}
       title="Notificar al cliente"
       onClick={() => handleNotificar()}

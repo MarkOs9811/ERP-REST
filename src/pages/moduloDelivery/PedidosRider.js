@@ -10,7 +10,6 @@ import {
   ArrowRight,
   AlertCircleIcon,
 } from "lucide-react";
-import { getPedidosListos } from "../../service/GetPedidosListos";
 import axiosInstance from "../../api/AxiosInstance";
 import ToastAlert from "../../components/componenteToast/ToastAlert";
 import { Cargando } from "../../components/componentesReutilizables/Cargando";
@@ -223,7 +222,7 @@ export function PedidosRider() {
                   />
                   <div className="p-3 bg-white border-top border-light">
                     <button
-                      className="btn-ver w-100 fw-bold rounded-pill py-2 shadow-sm d-flex justify-content-center align-items-center gap-2"
+                      className="btn-generico w-100 fw-bold rounded-pill py-2 shadow-sm d-flex justify-content-center align-items-center gap-2"
                       onClick={() => solicitarCambioEstado(pedido.id, 55)}
                     >
                       <Bike size={20} />

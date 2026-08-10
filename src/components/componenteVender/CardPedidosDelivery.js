@@ -2,6 +2,7 @@ import NotificacionBtn from "../componentesReutilizables/componentesPedidosWeb/N
 import { useProcesarPagoWeb } from "../../hooks/VenderDeliveryHook/UseProcesarPagoWeb";
 import {
   AlarmClock,
+  BikeIcon,
   CheckCheck,
   CheckCheckIcon,
   Megaphone,
@@ -65,7 +66,10 @@ const CardPedidoDelivery = ({ pedido, onOpenModal }) => {
       icono: <AlarmClock color="#ffc100" size={16} />,
       botones: (
         <div className="d-flex flex-column align-items-center justify-content-center gap-2 w-100 h-100">
-          <button className="btn-accion-card" title="Notificar al cliente">
+          <button
+            className="btn-generico w-0 px-2 rounded-2"
+            title="Notificar al cliente"
+          >
             <Megaphone size={18} />
           </button>
         </div>
@@ -73,11 +77,11 @@ const CardPedidoDelivery = ({ pedido, onOpenModal }) => {
     },
     4: {
       bgColor: "#ffe2e2",
-      icono: <AlarmClock color="#007bff" size={16} />,
+      icono: <AlarmClock color="#0e4988" size={16} />,
       botones: (
         <div className="d-flex flex-column align-items-center justify-content-center gap-2 w-100 h-100">
           <button
-            className="btn-accion-card"
+            className="btn-generico w-0 px-2 rounded-2"
             onClick={(e) => {
               e.stopPropagation(); // Buena práctica
               ImprimirPedidoWeb();
@@ -104,7 +108,7 @@ const CardPedidoDelivery = ({ pedido, onOpenModal }) => {
             <>
               <button
                 type="button"
-                className="btn-accion-card"
+                className="btn-generico w-0 px-2 rounded-2"
                 onClick={handleRealizarPago}
                 title="Procesar Pago"
               >
@@ -112,7 +116,7 @@ const CardPedidoDelivery = ({ pedido, onOpenModal }) => {
               </button>
 
               <button
-                className="btn-accion-card"
+                className="btn-generico w-0 px-2 rounded-2"
                 onClick={(e) => {
                   e.stopPropagation();
                   ImprimirPedidoWeb();
@@ -200,13 +204,14 @@ const CardPedidoDelivery = ({ pedido, onOpenModal }) => {
           {/* PONER BOTON DE ASIGNAR RIDER CUANDO ELE STADO SEA IGUAL A 5 */}
           {pedido.estado_pedido === 5 && (
             <span
-              className="btn-ver rounded-pill mt-2"
-              style={{ padding: "0.4rem 0.8rem", fontSize: "0.75rem" }}
+              className="btn-principal small mt-2"
+              style={{ fontSize: "0.75rem" }}
               onClick={() => {
                 setVerModalRider(true);
                 setDataIdPedido(pedido.id);
               }}
             >
+              <BikeIcon />
               {pedido.idDeliveryRider == null
                 ? "Asignar Rider"
                 : "Asigando a Rider"}

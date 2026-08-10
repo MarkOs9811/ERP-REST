@@ -1,39 +1,33 @@
-.mesas-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: left;
-  padding: 0px;
+/* =========================================
+   🔥 ESTILOS MAPA DE MESAS (FIRE WOK)
+   ========================================= */
+
+.fw-indicator {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
 }
 
+/* Tarjeta Base */
 .mesa-card {
   position: relative;
-  max-height: 200px;
-  background-color: #fff;
-  border-radius: 12px;
-  padding: 16px;
-  border:1px solid grey;
-  flex-grow: 0;
-  flex-basis: 200px;
-  text-align: left;
-  transition: all 0.15s ease-out;
-  overflow: hidden;
-  cursor: pointer;
-  font-family: inherit;
-  font-size: 1rem;
+  background-color: var(--bg-card);
+  border-radius: var(--radius-md);
+  border: 1px solid grey;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: flex-start;
-  margin: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  min-height: 160px;
 }
 
-/* EFECTO ACTIVE OPTIMIZADO PARA TOUCH */
 .mesa-card:active {
   transform: scale(0.96);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* FONDO DECORATIVO */
 .mesa-card::after {
   content: "";
   position: absolute;
@@ -41,175 +35,146 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-size: 140px;
   background-repeat: no-repeat;
-  background-position: right bottom;
-  z-index: 1;
+  background-position: right -10px bottom -10px;
+  background-size: 100px;
+  z-index: 0;
+  opacity: 0.1;
+  /* Opacidad sutil para no interferir con el texto */
   pointer-events: none;
-  opacity: 0.8;
-  transition: opacity 0.15s ease-out;
 }
 
-.mesa-card:active::after {
-  opacity: 0.8;
+.mesa-content {
+  position: relative;
+  z-index: 1;
+  padding: 16px 16px 8px 16px;
+  flex-grow: 1;
 }
 
-/* MESA DISPONIBLE - VERDE */
+.mesa-footer {
+  position: relative;
+  z-index: 1;
+  padding: 0 12px 12px 12px;
+}
+
+/* ESTADO: DISPONIBLE */
+.mesa-card.disponible {
+  border-bottom: 6px solid var(--fw-emerald);
+}
+
 .mesa-card.disponible::after {
   background-image: url("../../public/images/img-disponible-mesa.svg");
-  background-color: #e4fff1;
-  border-bottom: 10px solid #10c245;
+  background-color: var(--bg-emerald-soft);
 }
 
-.mesa-card.disponible:active::after {
-  background-color: #b9b9b9;
+/* ESTADO: EN ATENCIÓN */
+.mesa-card.en-atencion {
+  border-bottom: 6px solid var(--fw-strawberry);
 }
 
-/* MESA EN ATENCIÓN - ROJO */
 .mesa-card.en-atencion::after {
   background-image: url("../../public/images/img-en-atencion.svg");
-  background-position: center right;
-  background-color: #fa1a1a;
-  background-size: 50%;
-  border-bottom: 10px solid #25070c;
-  overflow: hidden;
+  background-color: var(--bg-strawberry-soft);
+  opacity: 0.15;
 }
 
-.mesa-card.en-atencion:active::after {
-  background-color: #ffb3b3;
-}
-
-/* NÚMERO DE MESA */
+/* Tipografía y Detalles */
 .mesa-numero {
-  font-size: 1.25em;
-  font-weight: 700;
-  color: #222;
-  text-align: center;
-  z-index: 2;
-  position: relative;
-  width: 100%;
-  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 0;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
+  gap: 6px;
 }
 
-/* DETALLES DE LA MESA */
-.mesa-card p {
-  margin: 6px 0;
-  font-size: 0.85em;
-  color: #444;
-  z-index: 2;
-  position: relative;
-  font-weight: 500;
+.mesa-detalles p {
+  margin: 4px 0;
+  font-size: 0.8rem;
+  color: var(--brand-secondary);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
+
+/* Vista Previa del Total */
+.mesa-total-preview {
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px dashed rgba(0, 0, 0, 0.1);
+  color: var(--text-main);
+}
+
+/* Botones y Etiquetas Inferiores */
 .mesa-action-label {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  padding: 8px 12px;
-
-  /* 2. El efecto de difuminado */
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  /* Soporte para Safari */
-
-  border-radius: 16px;
-  font-size: 0.80em;
+  padding: 8px;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
   font-weight: 700;
-  color: #222;
-  z-index: 2;
-  position: relative;
-  margin-top: auto;
-  width: 100%;
+  text-transform: uppercase;
   letter-spacing: 0.5px;
-
-  /* 3. Opcional: Un borde muy sutil para dar profundidad */
-  border: 1px solid rgba(41, 41, 41, 0.2);
+  background-color: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(4px);
+  color: var(--text-main);
 }
 
-/* Ajuste para los estados específicos */
 .mesa-card.disponible .mesa-action-label {
-  border: 1px solid rgb(1, 68, 37);
-  background-color: rgba(248, 248, 248, 0.671);
-  /* Bajamos la opacidad */
-  color: #020705;
+  color: var(--fw-emerald);
+  border-color: rgba(25, 143, 80, 0.2);
 }
 
 .mesa-card.en-atencion .mesa-action-label {
-  border: 1px solid rgb(68, 1, 1);
-  background-color: rgba(253, 252, 252, 0);
-  /* Bajamos la opacidad */
-  color: #fffefe;
+  color: var(--fw-strawberry);
+  border-color: rgba(228, 73, 73, 0.2);
 }
 
-.mesa-action-label svg {
-  stroke-width: 2.5;
+/* Botón de Impresión Rápida */
+.btn-print-quick {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(228, 73, 73, 0.3);
+  background-color: var(--fw-white);
+  color: var(--fw-strawberry);
+  cursor: pointer;
+  transition: all var(--transition-smooth);
+}
+
+.btn-print-quick:hover {
+  background-color: var(--fw-strawberry);
+  color: var(--fw-white);
 }
 
 /* ========== TEMA OSCURO ========== */
-body.dark-theme .mesas-container {
-  background: #151a20 !important;
-}
-
-body.dark-theme .mesa-card {
-  background-color: #1e2936 !important;
-  color: #e0e6ed !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35) !important;
-}
-
-body.dark-theme .mesa-card:active {
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45) !important;
-}
-
-body.dark-theme .mesa-numero {
-  color: #fff !important;
-}
-
-body.dark-theme .mesa-card p {
-  color: #c0c7d4 !important;
-}
-
-body.dark-theme .mesa-card::after {
-  opacity: 0.5 !important;
-}
-
-body.dark-theme .mesa-card:active::after {
-  opacity: 0.65 !important;
-}
-
-body.dark-theme .mesa-card.disponible::after {
-  background-color: #2d5a47 !important;
-  border-left-color: #27ae60 !important;
-}
-
-body.dark-theme .mesa-card.disponible:active::after {
-  background-color: #3a7054 !important;
-}
-
-body.dark-theme .mesa-card.en-atencion::after {
-  background-color: #5a2e3a !important;
-  border-left-color: #ee5252 !important;
-}
-
-body.dark-theme .mesa-card.en-atencion:active::after {
-  background-color: #6d3847 !important;
+body.dark-theme .mesa-total-preview {
+  background-color: rgba(0, 0, 0, 0.4);
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 body.dark-theme .mesa-action-label {
-  background-color: rgba(255, 255, 255, 0.08) !important;
-  color: #c0c7d4 !important;
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
 body.dark-theme .mesa-card.disponible .mesa-action-label {
-  background-color: rgba(39, 174, 96, 0.15) !important;
-  color: #27ae60 !important;
+  color: var(--bg-emerald-soft);
 }
 
-body.dark-theme .mesa-card.en-atencion .mesa-action-label {
-  background-color: rgba(238, 82, 82, 0.15) !important;
-  color: #ee5252 !important;
+body.dark-theme .btn-print-quick {
+  background-color: rgba(0, 0, 0, 0.4);
+  border-color: rgba(228, 73, 73, 0.4);
 }
-/* ========== FIN TEMA OSCURO ========== */
+
+body.dark-theme .btn-print-quick:hover {
+  background-color: var(--fw-strawberry);
+  color: var(--fw-white);
+}

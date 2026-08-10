@@ -11,8 +11,10 @@ import {
   CalendarCheck2,
   CircleAlert,
   CircleX,
+  Clock1,
   CloudDownload,
   Eye,
+  Layers2Icon,
 } from "lucide-react";
 import ModalRight from "../componentesReutilizables/ModalRight";
 import { ModalDetallesVentas } from "./ModalDetallesVentas";
@@ -125,7 +127,7 @@ export function ListVentas({ search }) {
             ? "Boleta"
             : row.documento === "F"
               ? "Factura"
-              : "Otro"}
+              : "Boleta Simple"}
         </span>
       ),
       sortable: true,
@@ -141,7 +143,7 @@ export function ListVentas({ search }) {
     },
     {
       name: "Metodo",
-      selector: (row) => row.metodo_pago?.nombre,
+      selector: (row) => row?.idMetodo,
       sortable: true,
       grow: 1,
     },
@@ -232,7 +234,18 @@ export function ListVentas({ search }) {
     {
       name: "Estado SUNAT",
       cell: (row) => {
-        // Cambiado de 'selector' a 'cell' porque estamos retornando un componente visual
+        // 1. Si es Boleta Simple (Uso interno), NO va a SUNAT
+        if (row.documento === "S") {
+          return (
+            <BadgeComponent
+              label="Uso Interno"
+              variant="secondary"
+              icon={<Layers2Icon />} // O el ícono de lucide-react que prefieras (ej. FileText)
+            />
+          );
+        }
+
+        // 2. Extraemos el estado para Facturas o Boletas electrónicas
         const estado =
           row.documento === "B"
             ? row.boleta?.estado
@@ -240,7 +253,7 @@ export function ListVentas({ search }) {
               ? row.factura?.estado
               : null;
 
-        // Retornamos directamente el BadgeComponent dependiendo del estado
+        // 3. Validaciones exactas
         if (estado === 1) {
           return (
             <BadgeComponent
@@ -261,12 +274,23 @@ export function ListVentas({ search }) {
           );
         }
 
-        // Si no es 1 ni 0, cae en observaciones
+        if (estado === 2 || estado === "2") {
+          // Ajusta el '2' según cómo guardes la observación en BD
+          return (
+            <BadgeComponent
+              label="Observaciones"
+              variant="warning"
+              icon={<CircleAlert />}
+            />
+          );
+        }
+
+        // 4. Si es B o F pero el estado es null/indefinido (aún no responde SUNAT o hubo error local)
         return (
           <BadgeComponent
-            label="Aceptado con Observaciones"
-            variant="warning"
-            icon={<CircleAlert />}
+            label="Pendiente"
+            variant="dark" // O "info", dependiendo de tu componente
+            icon={<Clock1 />}
           />
         );
       },

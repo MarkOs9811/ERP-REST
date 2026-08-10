@@ -18,7 +18,6 @@ import "../../css/estilosDelivery/EstilosRepartidores.css";
 
 import ModalRight from "../../components/componentesReutilizables/ModalRight";
 import ModalAlertQuestion from "../../components/componenteToast/ModalAlertQuestion";
-import { FormAddRepartidor } from "../../components/componenteDelivery/FormAddRepartidor";
 import { FormEditRepartidor } from "../../components/componenteDelivery/FormEditRepartidor";
 import { PutData } from "../../service/CRUD/PutData";
 import { DeleteData } from "../../service/CRUD/DeleteData";
@@ -43,9 +42,6 @@ export function Repartidores() {
   const [showModalActivar, setShowModalActivar] = useState(false);
   const [repartidorAccion, setRepartidorAccion] = useState(null);
 
-  const [showModalEliminar, setShowModalEliminar] = useState(false);
-  const [repartidorDelete, setRepartidorDelete] = useState(null);
-
   const handleToggleEstado = async (id) => {
     const nuevoEstado = repartidorAccion?.estado == 1 ? 0 : 1;
     const exito = await PutData("delivery/repartidores-estado", id, {
@@ -58,18 +54,12 @@ export function Repartidores() {
     return false;
   };
 
-  const handleDeleteRepartidor = async (id) => {
-    const exito = await DeleteData("delivery/repartidores", id);
-    if (exito) {
-      queryClient.invalidateQueries(["repartidores"]);
-      return true;
-    }
-    return false;
-  };
-
   const usuariosRepartidores = repartidores
     ? repartidores.filter(
-        (usuario) => usuario?.empleado?.cargo?.nombre === "conductor",
+        (usuario) =>
+          usuario?.empleado?.cargo?.nombre === "conductor" ||
+          usuario?.empleado?.cargo?.nombre === "repartidor" ||
+          usuario?.empleado?.cargo?.nombre === "delivery",
       )
     : [];
 

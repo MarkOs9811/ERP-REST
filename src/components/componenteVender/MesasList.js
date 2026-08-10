@@ -1,15 +1,27 @@
 import { useNavigate } from "react-router-dom";
-import "../../css/EstilosMesas.css";
 import { useDispatch } from "react-redux";
 import { setIdPreventaMesa } from "../../redux/mesaSlice";
 import { useQuery } from "@tanstack/react-query";
 import { GetMesasVender } from "../../service/accionesVender/GetMesasVender";
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
-import { Eye, Layers, PlusCircle, Users, UtensilsCrossed } from "lucide-react";
+import {
+  Eye,
+  Layers,
+  PlusCircle,
+  Users,
+  UtensilsCrossed,
+  Printer,
+  Receipt,
+  PrinterIcon,
+} from "lucide-react";
+import ToastAlert from "../componenteToast/ToastAlert";
+import axiosInstance from "../../api/AxiosInstance"; // Asegúrate de importar tu instancia
+import "../../css/EstilosMesas.css";
 
 export function MesasList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const {
     data: mesas = [],
     isLoading: loading,
@@ -17,78 +29,107 @@ export function MesasList() {
   } = useQuery({
     queryKey: ["mesas"],
     queryFn: GetMesasVender,
-    //HACER QUE CUANDO SE ENTRE A ESTA VISTA QUE SE EJECUTE ESTA BUSQUEA DE NUEVO, PARA QUE SI SE REGRESA A ESTA VISTA SE VEA ACTUALIZADA LA INFORMACIÓN DE LAS MESAS
-    refetchOnWindowFocus: true,
+    refetchOnWindowFocus: true, // Excelente práctica para mantener sincronizadas las mesas
   });
 
   const handleMesaAddPlato = (data) => {
-    // Enviamos un ÚNICO objeto como payload
-    dispatch(
-      setIdPreventaMesa({
-        id: data.id,
-        numero: data.numero,
-      }),
-    );
+    dispatch(setIdPreventaMesa({ id: data.id, numero: data.numero }));
     navigate(`/vender/mesas/platos`);
   };
 
   const handleShowPedido = (id) => {
-    // Como aquí solo tienes el ID, enviamos el numero como null (o búscalo si lo necesitas)
-    dispatch(
-      setIdPreventaMesa({
-        id: id,
-        numero: null,
-      }),
-    );
+    dispatch(setIdPreventaMesa({ id: id, numero: null }));
     navigate(`/vender/mesas/preVenta`);
   };
 
-  // si no es array, inicialízalo vacío
+  // Acción Rápida: Imprimir Pre-cuenta directamente desde la grilla
+  const handleImprimirPrecuentaRapida = async (e, mesa) => {
+    e.stopPropagation(); // Evita que la tarjeta se abra al hacer clic en el botón
+
+    // Verificamos que la mesa tenga items
+    const preventas = mesa.preventas || [];
+    if (preventas.length === 0) {
+      return ToastAlert("error", "No hay pedidos registrados en esta mesa.");
+    }
+
+    // 1. Formateamos el contenido tal como lo espera tu endpoint genérico
+    const contenidoFormateado = preventas.map((item) => ({
+      nombre: item.plato?.nombre || "Plato desconocido", // Extrae el nombre de la relación
+      cantidad: item.cantidad,
+      precio: item.precio,
+      subtotal: item.cantidad * item.precio,
+    }));
+
+    // 2. Armamos el Payload final
+    const payload = {
+      titulo: `PRE-CUENTA MESA ${mesa.numero}`,
+      contenido: contenidoFormateado,
+      total: mesa.total || 0,
+    };
+
+    try {
+      // 3. Petición POST a tu ruta genérica
+      const response = await axiosInstance.post(
+        "/vender/imprimirGenerico",
+        payload,
+      );
+
+      if (response.data.success) {
+        ToastAlert(
+          "success",
+          `Pre-cuenta de Mesa ${mesa.numero} enviada a impresión.`,
+        );
+      } else {
+        ToastAlert(
+          "error",
+          response.data.message || "No se pudo imprimir la pre-cuenta.",
+        );
+      }
+    } catch (error) {
+      ToastAlert(
+        "error",
+        error.response?.data?.message || "Error de conexión con el servidor.",
+      );
+    }
+  };
+
   const listaMesas = Array.isArray(mesas) ? mesas : [];
+  const mesasDisponibles = listaMesas.filter(
+    (mesa) => mesa.estado === 1,
+  ).length;
+  const mesasOcupadas = listaMesas.filter((mesa) => mesa.estado === 0).length;
+
   return (
-    <div className="card  m-0 h-100 overflow-auto">
-      <div className="card-header d-flex justify-content-between align-items-center border-bottom m-0">
-        <h3 className="m-0 size-auto">Mesas</h3>
-        <div className="d-flex align-middle">
-          <p className="align-middle  fw-normal">
-            {listaMesas.filter((mesa) => mesa.estado === 1).length} Disponibles
-            <span
-              className="mx-2"
-              style={{
-                display: "inline-block",
-                width: "10px",
-                height: "10px",
-                borderRadius: "50%",
-                backgroundColor: "#10ba82",
-              }}
-            ></span>
-          </p>
-          <span className="fw-normal"> | </span>
-          <p className="align-middle mx-2 fw-normal">
-            {listaMesas.filter((mesa) => mesa.estado === 0).length} En atención
-            <span
-              className="mx-2"
-              style={{
-                display: "inline-block",
-                width: "10px",
-                height: "10px",
-                borderRadius: "50%",
-                backgroundColor: "red",
-              }}
-            ></span>
-          </p>
+    <div className="card m-0 h-100 overflow-auto p-3">
+      {/* HEADER FIRE WOK */}
+      <div className="d-flex justify-content-between align-items-center mb-4 px-2">
+        <h3 className="m-0 fw-bold" style={{ color: "var(--text-main)" }}>
+          Mapa de Mesas
+        </h3>
+        <div className="d-flex align-items-center gap-3 bg-white px-3 py-2 rounded-pill shadow-sm border">
+          <div className="d-flex align-items-center gap-2">
+            <span className="fw-indicator bg-success"></span>
+            <span className="small fw-bold text-muted">
+              {mesasDisponibles} Libres
+            </span>
+          </div>
+          <div className="vr"></div>
+          <div className="d-flex align-items-center gap-2">
+            <span className="fw-indicator bg-danger"></span>
+            <span className="small fw-bold text-muted">
+              {mesasOcupadas} Ocupadas
+            </span>
+          </div>
         </div>
       </div>
+
       <CondicionCarga isLoading={loading} isError={error} mode="cards">
-        <div className="card-body overflow-auto p-3">
-          {/* 🔥 ESTRUCTURA BOOTSTRAP PARA LA GRILLA */}
+        <div className="p-1">
           <div className="row g-3">
             {listaMesas.map((mesa) => (
-              /* En móvil ocupa 50% (col-6), en tablet 33% (col-md-4), en PC 25% o menos */
               <div key={mesa.id} className="col-6 col-md-4 col-lg-3 col-xl-2">
                 <div
-                  /* Añadimos h-100 para que todas las tarjetas de la fila midan lo mismo */
-                  className={`mesa-card h-100 ${
+                  className={`mesa-card h-100  ${
                     mesa.estado === 1 ? "disponible" : "en-atencion"
                   }`}
                   onClick={() =>
@@ -97,36 +138,61 @@ export function MesasList() {
                       : handleShowPedido(mesa.id)
                   }
                 >
-                  {/* ICONO Y NÚMERO DE MESA */}
-                  <h6 className="mesa-numero d-flex align-items-center justify-content-center gap-2">
-                    <UtensilsCrossed size={18} />
-                    Mesa {mesa.numero}
-                  </h6>
+                  {/* Contenido Principal */}
+                  <div className="mesa-content">
+                    <h6 className="mesa-numero">
+                      <UtensilsCrossed size={16} />
+                      Mesa {mesa.numero}
+                    </h6>
 
-                  {/* DETALLES DE LA MESA */}
-                  <div className="mt-2 px-1 w-100">
-                    <p className="d-flex align-items-center gap-2 mb-2 text-truncate">
-                      <Layers size={14} />
-                      <span>Piso: {mesa.piso}</span>
-                    </p>
-                    <p className="d-flex align-items-center gap-2 mb-0">
-                      <Users size={14} />
-                      <span>{mesa.capacidad}</span>
-                    </p>
+                    <div className="mesa-detalles mt-2">
+                      <p>
+                        <Layers size={13} /> Piso {mesa.piso}
+                      </p>
+                      <p>
+                        <Users size={13} /> Capacidad: {mesa.capacidad}
+                      </p>
+                    </div>
+
+                    {/* VISTA PREVIA DEL TOTAL (Si está ocupada) */}
+                    {mesa.estado === 0 && (
+                      <div className="mesa-total-preview mt-2">
+                        <span
+                          className="text-muted small d-block"
+                          style={{ fontSize: "0.65rem" }}
+                        >
+                          TOTAL ACTUAL
+                        </span>
+                        {/* ⚠️ ADAPTACIÓN: Asegúrate de que tu backend (GetMesasVender) envíe el campo mesa.total */}
+                        <span className="fw-bold fs-6">
+                          S/ {Number(mesa.total || 0).toFixed(2)}
+                        </span>
+                      </div>
+                    )}
                   </div>
 
-                  {/* ETIQUETA DE ACCIÓN */}
-                  <div className="mesa-action-label mt-3">
+                  {/* Acciones y Etiquetas */}
+                  <div className="mesa-footer">
                     {mesa.estado === 1 ? (
-                      <>
-                        <PlusCircle size={14} />
-                        <span>Abrir</span>
-                      </>
+                      <div className="mesa-action-label">
+                        <PlusCircle size={14} /> <span>ABRIR MESA</span>
+                      </div>
                     ) : (
-                      <>
-                        <Eye size={14} />
-                        <span>VER</span>
-                      </>
+                      <div className="d-flex w-100 gap-1">
+                        <div className="mesa-action-label flex-grow-1">
+                          <Eye size={14} /> <span>VER PEDIDO</span>
+                        </div>
+                        {/* Botón de impresión directa */}
+                        <button
+                          className="btn-informativo"
+                          onClick={(e) =>
+                            handleImprimirPrecuentaRapida(e, mesa)
+                          }
+                          title="Imprimir Pre-cuenta"
+                        >
+                          <PrinterIcon size={16} />
+                        </button>
+                      </div>
                     )}
                   </div>
                 </div>

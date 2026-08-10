@@ -3,13 +3,14 @@ import { TicketImpresion } from "../componenteVender/TiketsType/TicketImpresion"
 import { useReactToPrint } from "react-to-print";
 import { useRef } from "react";
 import "../../css/estilosVentas/EstilosDetallesVentas.css"; // <-- Importamos los estilos Fire Wok
+import { formatearFecha } from "../../utils/formatearFechas";
 
 export function ModalDetallesVentas({ dataVentas }) {
   const {
     id,
-    fechaVenta,
+    created_at,
     usuario,
-    metodo_pago,
+    idMetodo,
     subTotal,
     igv,
     descuento,
@@ -25,11 +26,12 @@ export function ModalDetallesVentas({ dataVentas }) {
     dataVentas?.detalle_pedidos_web ||
     [];
 
+  console.log("Detalle de pedidos ventas:", dataVentas);
   const documento = boleta
     ? `Boleta B001-${boleta.numero}`
     : factura
       ? `Factura F001-${factura.numero}`
-      : "Documento no disponible";
+      : "Boleta Simple";
 
   const componentRef = useRef();
 
@@ -44,7 +46,7 @@ export function ModalDetallesVentas({ dataVentas }) {
         ? "FACTURA"
         : "TICKET DE VENTA",
     serie_correlativo: documento,
-    fecha: fechaVenta,
+    fecha: created_at,
     cliente: {
       nombre:
         pedido?.cliente?.nombre ||
@@ -62,7 +64,7 @@ export function ModalDetallesVentas({ dataVentas }) {
     subtotal: subTotal,
     igv: igv,
     total: total,
-    metodo_pago: metodo_pago?.nombre || "N/A",
+    idMetodo: idMetodo || "N/A",
     observacion: pedido?.observaciones || dataVentas?.observacion || "",
   };
 
@@ -82,15 +84,19 @@ export function ModalDetallesVentas({ dataVentas }) {
       <div className="row fw-info-grid">
         <div className="col-12 col-md-6 d-flex flex-column fw-info-col">
           <span className="fw-label">Fecha</span>
-          <span className="fw-value">{fechaVenta}</span>
+          <span className="fw-value">{formatearFecha(created_at)}</span>
         </div>
         <div className="col-12 col-md-6 d-flex flex-column fw-info-col">
           <span className="fw-label">Vendedor</span>
-          <span className="fw-value">{usuario?.correo || "N/A"}</span>
+          <span className="fw-value">
+            {usuario?.empleado.persona.nombre +
+              " " +
+              usuario?.empleado.persona.apellidos || "N/A"}
+          </span>
         </div>
         <div className="col-12 col-md-6 d-flex flex-column fw-info-col">
           <span className="fw-label">Método de pago</span>
-          <span className="fw-value">{metodo_pago?.nombre || "N/A"}</span>
+          <span className="fw-value">{idMetodo || "N/A"}</span>
         </div>
         <div className="col-12 col-md-6 d-flex flex-column fw-info-col">
           <span className="fw-label">Tipo de venta</span>

@@ -1,35 +1,31 @@
 import React, { useEffect, useRef, useState } from "react";
 
-import ModalAlertQuestion from "../components/componenteToast/ModalAlertQuestion";
-import axiosInstance from "../api/AxiosInstance";
-import ToastAlert from "../components/componenteToast/ToastAlert";
+import ModalAlertQuestion from "../../components/componenteToast/ModalAlertQuestion";
+import axiosInstance from "../../api/AxiosInstance";
+import ToastAlert from "../../components/componenteToast/ToastAlert";
 import { useNavigate } from "react-router-dom";
-import { handlePrecioInput, validatePrecio } from "../hooks/InputHandlers";
+import { handlePrecioInput, validatePrecio } from "../../hooks/InputHandlers";
 import { useForm } from "react-hook-form";
 
 import { useQuery } from "@tanstack/react-query";
-import { TablasGenerales } from "../components/componentesReutilizables/TablasGenerales";
-import { ContenedorPrincipal } from "../components/componentesReutilizables/ContenedorPrincipal";
-import BotonAnimado from "../components/componentesReutilizables/BotonAnimado";
+import { TablasGenerales } from "../../components/componentesReutilizables/TablasGenerales";
+import BotonAnimado from "../../components/componentesReutilizables/BotonAnimado";
 import {
   BanknoteArrowDown,
   Calendar,
-  ChartColumnBig,
   Clock,
   CreditCard,
-  DollarSign,
   Lock,
-  LockIcon,
   Printer,
   TrendingUp,
   User,
   Wallet,
   WalletMinimal,
 } from "lucide-react";
-import { cerrarCaja } from "../redux/cajaSlice";
+import { cerrarCaja } from "../../redux/cajaSlice";
 import { useDispatch } from "react-redux";
 import { useReactToPrint } from "react-to-print";
-import { TicketCerrarCaja } from "../components/componenteVender/TiketsType/TicketCerrarCaja";
+import { TicketCerrarCaja } from "../../components/componenteVender/TiketsType/TicketCerrarCaja";
 
 export const fetchCajaClose = async (cajaId) => {
   try {
@@ -74,6 +70,7 @@ export function CerrarCaja() {
     queryFn: () => fetchCajaClose(caja?.id),
     enabled: !!caja?.id,
   });
+
   // DATOS PARA LA IMPRESION
   const componentRef = useRef();
   const [datosCerrarCaja, setDatosCerrarCaja] = useState(null);
@@ -86,7 +83,6 @@ export function CerrarCaja() {
   });
   const handleImprimirCaja = async () => {
     const dataActual = cajaData?.data || cajaData;
-    console.log("Datos para imprimir cierre de caja:", dataActual);
     if (dataActual) {
       setDatosCerrarCaja(dataActual);
       if (componentRef.current) {
@@ -181,7 +177,12 @@ export function CerrarCaja() {
     },
     {
       name: "Documento",
-      selector: (row) => row.documento,
+      selector: (row) =>
+        row.documento === "S"
+          ? "Boleta Simple"
+          : row.documento === "F"
+            ? "Factura"
+            : "Boleta",
       sortable: true,
       wrap: true,
       center: true,
@@ -383,6 +384,9 @@ export function CerrarCaja() {
                   {/* Montos */}
                   <div className="bg-white rounded-3 p-3 border">
                     <div className=" mb-3">
+                      <label className="text-muted small">
+                        Monto Vendido S/.
+                      </label>
                       <input
                         type="text"
                         className="form-control border bg-light fs-5 fw-bold text-success"
@@ -393,12 +397,13 @@ export function CerrarCaja() {
                           validate: validatePrecio,
                         })}
                       />
-                      <label className="text-muted small">
-                        Monto Vendido S/.
-                      </label>
                     </div>
 
                     <div className="">
+                      <label className="text-muted small">
+                        <Wallet className="me-2" size={16} />
+                        Monto a Dejar
+                      </label>
                       <input
                         type="text"
                         className="form-control border bg-light fs-5 fw-bold text-primary"
@@ -410,10 +415,6 @@ export function CerrarCaja() {
                         })}
                         onInput={handlePrecioInput}
                       />
-                      <label className="text-muted small">
-                        <Wallet className="me-2" size={16} />
-                        Monto a Dejar
-                      </label>
                     </div>
                   </div>
                 </div>

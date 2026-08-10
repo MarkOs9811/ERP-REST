@@ -24,7 +24,7 @@ import { Login } from "./pages/Login";
 import { ToLlevar } from "./components/componenteVender/ToLlevar";
 import { ToMesa } from "./components/componenteVender/ToMesa";
 
-import { CerrarCaja } from "./pages/CerrarCaja";
+import { CerrarCaja } from "./pages/modulosVender/CerrarCaja";
 import { PreventaMesa } from "./components/componenteVender/PreventaMesa";
 import { DetallesPago } from "./components/componenteVender/DetallesPago";
 
