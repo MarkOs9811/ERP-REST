@@ -48,7 +48,8 @@ export function CuponActivoHome() {
 
   if (!campanaActiva) {
     return (
-      <div className="fw-promo-card align-items-center justify-content-center text-center">
+      // Nota la clase extra "card-cupon"
+      <div className="fw-promo-card card-cupon align-items-center justify-content-center text-center">
         <Tag size={40} className="mb-3 text-muted opacity-50" />
         <h4 className="fw-promo-title mb-2">Sin Campañas</h4>
         <p className="fw-promo-text mb-4">
@@ -65,7 +66,8 @@ export function CuponActivoHome() {
   }
 
   return (
-    <div className="fw-promo-card">
+    // Nota la clase extra "card-cupon"
+    <div className="fw-promo-card card-cupon">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <span className="fw-badge fw-badge-emerald">
           <Tag size={14} /> Campaña Activa
@@ -101,7 +103,7 @@ export function CuponActivoHome() {
         <div className="text-end">
           <span
             className="d-flex align-items-center gap-1 fw-bold"
-            style={{ color: "var(--fw-emerald)", fontSize: "0.9rem" }}
+            style={{ color: "var(--fw-emerald, #10b981)", fontSize: "0.9rem" }}
           >
             <Circle size={10} fill="currentColor" /> Activo
           </span>

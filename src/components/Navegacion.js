@@ -151,7 +151,7 @@ export function Navegacion({ tipoNavegacion = null }) {
   return (
     <div
       className={`
-        nav-navegacion  border-bottom mb-3 ${navegacionAnchura ? "mx-3" : "mx-0"} ${
+        nav-navegacion   mb-3 ${navegacionAnchura ? "mx-3" : "mx-0"} ${
           isCompressed ? "compressedNavegacion" : ""
         }
       `}

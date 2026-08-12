@@ -2,80 +2,172 @@
    CONTENEDOR PRINCIPAL DEL CARRUSEL
 ========================================= */
 .fw-carousel-marketing {
-    height: 340px !important;
-    min-height: 340px;
-    border-radius: var(--radius-lg);
+    height: 280px;
+    border-radius: 16px;
+    position: relative;
 }
 
 .fw-carousel-marketing .carousel,
 .fw-carousel-marketing .carousel-inner,
-.fw-carousel-marketing .carousel-item {
-    height: 100% !important;
-}
-
+.fw-carousel-marketing .carousel-item,
 .fw-carousel-marketing .carousel-item>div {
     height: 100% !important;
 }
 
 /* =========================================
-   INDICADORES (Ahora oscuros para verse en fondo claro)
-========================================= */
-.fw-carousel-marketing .carousel-indicators {
-    margin-bottom: 10px;
-    gap: 8px;
-    align-items: center;
-}
-
-.fw-carousel-marketing .carousel-indicators [data-bs-target] {
-    flex: 0 1 auto;
-    width: 8px !important;
-    height: 8px !important;
-    border-radius: var(--radius-pill) !important;
-    background-color: var(--text-muted) !important;
-    opacity: 0.3;
-    border: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    text-indent: -999px;
-    transition: all var(--transition-smooth);
-}
-
-.fw-carousel-marketing .carousel-indicators .active {
-    opacity: 1;
-    width: 20px !important;
-    /* Estilo cápsula moderna para el activo */
-    background-color: var(--fw-onyx) !important;
-}
-
-/* =========================================
-   TARJETAS BASE (MINIMALISTAS)
+   TARJETAS BASE (Estilo UI Moderno / Glass)
 ========================================= */
 .fw-promo-card {
-    background-color: var(--bg-card);
-    border: 1px solid rgba(187, 187, 187, 0.3);
-    /* Usando --fw-muetd con opacidad */
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-soft);
+    /* Degradado muy sutil para dar profundidad */
+    background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03);
+    border-radius: 16px;
     padding: 1.5rem;
-    padding-bottom: 40px !important;
-    /* Espacio para los indicadores */
+    padding-bottom: 45px !important;
+    /* Espacio reservado para los indicadores */
     height: 100%;
     display: flex;
     flex-direction: column;
     position: relative;
-    transition: box-shadow var(--transition-smooth);
+    overflow: hidden;
+    /* Vital: Corta el espectro de luz para que no salga de la tarjeta */
+    z-index: 1;
 }
 
-.fw-promo-card:hover {
-    box-shadow: var(--shadow-hover);
+/* Elevamos el contenido textual y botones por encima de las auras */
+.fw-promo-card>* {
+    position: relative;
+    z-index: 2;
 }
 
 /* =========================================
-   ETIQUETAS (BADGES) CON COLORES SUAVES
+   INDICADORES DEL CARRUSEL
+========================================= */
+.fw-carousel-marketing .carousel-indicators {
+    position: absolute;
+    bottom: 15px;
+    /* Los subimos hacia la zona segura del padding-bottom */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    z-index: 15;
+    /* Asegura que floten sobre la tarjeta */
+}
+
+/* Reseteo estricto contra los estilos por defecto de Bootstrap */
+.fw-carousel-marketing .carousel-indicators [data-bs-target] {
+    box-sizing: border-box !important;
+    flex: none !important;
+    display: inline-block !important;
+
+    width: 8px !important;
+    height: 8px !important;
+    min-width: 8px !important;
+    min-height: 8px !important;
+    max-width: 8px !important;
+    max-height: 8px !important;
+
+    border-radius: 50% !important;
+    background-color: #cbd5e1 !important;
+    /* Gris neutro */
+
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+
+    text-indent: -9999px !important;
+    overflow: hidden !important;
+    opacity: 0.6;
+    transition: all 0.3s ease !important;
+}
+
+/* Estado Activo: Pastilla alargada */
+.fw-carousel-marketing .carousel-indicators .active {
+    opacity: 1 !important;
+    width: 24px !important;
+    min-width: 24px !important;
+    max-width: 24px !important;
+    border-radius: 8px !important;
+    background-color: #1e293b !important;
+    /* Oscuro moderno */
+}
+
+/* =========================================
+   ESPECTROS / AURAS (Desenfoque Extremo)
+========================================= */
+
+/* --- Aura Roja (Tarjeta Fidelización) --- */
+.card-fidelizacion::before {
+    content: '';
+    position: absolute;
+    top: -80px;
+    right: -80px;
+    width: 280px;
+    height: 280px;
+    background: rgba(239, 68, 68, 0.35);
+    /* Base roja */
+    border-radius: 50%;
+    filter: blur(70px);
+    /* El truco: Difumina el color creando luz ambiental */
+    z-index: 0;
+    pointer-events: none;
+    /* No interfiere con clics */
+}
+
+.card-fidelizacion::after {
+    content: '';
+    position: absolute;
+    bottom: -60px;
+    left: -60px;
+    width: 220px;
+    height: 220px;
+    background: rgba(239, 68, 68, 0.25);
+    border-radius: 50%;
+    filter: blur(60px);
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* --- Aura Verde (Tarjeta Cupón) --- */
+.card-cupon::before {
+    content: '';
+    position: absolute;
+    top: -80px;
+    right: -80px;
+    width: 280px;
+    height: 280px;
+    background: rgba(16, 185, 129, 0.35);
+    /* Base esmeralda */
+    border-radius: 50%;
+    filter: blur(70px);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.card-cupon::after {
+    content: '';
+    position: absolute;
+    bottom: -60px;
+    left: -60px;
+    width: 220px;
+    height: 220px;
+    background: rgba(16, 185, 129, 0.25);
+    border-radius: 50%;
+    filter: blur(60px);
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* =========================================
+   TEXTOS Y ETIQUETAS
 ========================================= */
 .fw-badge {
-    padding: 4px 12px;
-    border-radius: var(--radius-pill);
+    padding: 6px 12px;
+    border-radius: 20px;
     font-size: 0.75rem;
     font-weight: 700;
     display: inline-flex;
@@ -84,29 +176,26 @@
 }
 
 .fw-badge-strawberry {
-    background-color: var(--bg-strawberry-soft);
-    color: var(--fw-strawberry);
+    background-color: #fef2f2;
+    color: #ef4444;
 }
 
 .fw-badge-emerald {
-    background-color: var(--bg-emerald-soft);
-    color: var(--fw-emerald);
+    background-color: #f0fdf4;
+    color: #10b981;
 }
 
-/* =========================================
-   TEXTOS MINIMALISTAS
-========================================= */
 .fw-promo-title {
-    color: var(--text-main);
-    font-size: 1.5rem;
+    color: #111827;
+    font-size: 1.35rem;
     font-weight: 800;
-    letter-spacing: -0.5px;
+    letter-spacing: -0.02em;
     margin-bottom: 0.5rem;
 }
 
 .fw-promo-text {
-    color: var(--text-muted);
-    font-size: 0.95rem;
+    color: #6b7280;
+    font-size: 0.9rem;
     line-height: 1.5;
 }
 
@@ -114,44 +203,130 @@
    CÓDIGO DE CUPÓN
 ========================================= */
 .fw-promo-code {
-    background-color: var(--bg-saffron-soft);
-    color: var(--fw-saffron);
-    border: 1px dashed var(--fw-saffron);
+    background-color: #fffbeb;
+    color: #d97706;
+    border: 1px dashed #fbbf24;
     padding: 6px 12px;
-    border-radius: var(--radius-sm);
+    border-radius: 6px;
     font-family: monospace;
     font-weight: 700;
-    font-size: 1rem;
+    font-size: 0.95rem;
     letter-spacing: 1px;
 }
 
 /* =========================================
-   BOTONES
+   BOTONES PREMIUM (Con resplandor)
 ========================================= */
 .fw-btn-action {
-    border-radius: var(--radius-sm);
+    border-radius: 10px;
+    /* Borde suave */
     font-weight: 600;
-    padding: 10px 20px;
-    transition: all var(--transition-smooth);
+    font-size: 0.95rem;
+    padding: 12px 20px;
     border: none;
+    margin-top: auto;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .fw-btn-strawberry {
-    background-color: var(--fw-strawberry);
-    color: var(--fw-white);
+    /* Degradado interno sutil */
+    background: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
+    color: #ffffff;
+    /* Sombras que crean el glow externo y el borde interno */
+    box-shadow: 0 4px 15px -3px rgba(239, 68, 68, 0.4),
+        0 0 0 1px rgba(239, 68, 68, 0.5) inset;
 }
 
 .fw-btn-strawberry:hover {
-    background-color: #c93d3d;
-    color: var(--fw-white);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px -4px rgba(239, 68, 68, 0.5),
+        0 0 0 1px rgba(239, 68, 68, 0.6) inset;
 }
 
 .fw-btn-emerald {
-    background-color: var(--fw-emerald);
-    color: var(--fw-white);
+    background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 15px -3px rgba(16, 185, 129, 0.4),
+        0 0 0 1px rgba(16, 185, 129, 0.5) inset;
 }
 
 .fw-btn-emerald:hover {
-    background-color: #147641;
-    color: var(--fw-white);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px -4px rgba(16, 185, 129, 0.5),
+        0 0 0 1px rgba(16, 185, 129, 0.6) inset;
+}
+
+/* =========================================
+   MODO OSCURO (DARK MODE)
+========================================= */
+
+/* Fondo y bordes de la tarjeta en modo oscuro */
+.dark-theme .fw-promo-card {
+    background: linear-gradient(145deg, #1e1e24 0%, #121215 100%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+}
+
+/* Textos adaptados para contraste */
+.dark-theme .fw-promo-title {
+    color: #f8fafc;
+}
+
+.dark-theme .fw-promo-text {
+    color: #94a3b8;
+}
+
+/* Etiquetas (Badges) con fondo semi-transparente y colores neón suaves */
+.dark-theme .fw-badge-strawberry {
+    background-color: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+}
+
+.dark-theme .fw-badge-emerald {
+    background-color: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+}
+
+/* Código de Cupón */
+.dark-theme .fw-promo-code {
+    background-color: rgba(251, 191, 36, 0.1);
+    color: #fbbf24;
+    border: 1px dashed rgba(251, 191, 36, 0.4);
+}
+
+/* Sobrescribiendo utilidades de Bootstrap (bg-light, text-dark) que pusimos en el HTML */
+.dark-theme .fw-promo-card .bg-light {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.dark-theme .fw-promo-card .text-dark {
+    color: #f8fafc !important;
+}
+
+.dark-theme .fw-promo-card .text-muted {
+    color: #94a3b8 !important;
+}
+
+.dark-theme .fw-promo-card .border-top {
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Indicadores del carrusel: de grises a blancos */
+.dark-theme .fw-carousel-marketing .carousel-indicators [data-bs-target] {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.dark-theme .fw-carousel-marketing .carousel-indicators .active {
+    background-color: #ffffff !important;
+    /* Pastilla activa blanca brillante */
+}
+
+/* Reducimos ligeramente la opacidad del aura principal para que no sea excesiva en fondo oscuro */
+.dark-theme .card-fidelizacion::before {
+    background: rgba(239, 68, 68, 0.20);
+}
+
+.dark-theme .card-cupon::before {
+    background: rgba(16, 185, 129, 0.20);
 }

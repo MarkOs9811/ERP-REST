@@ -28,21 +28,22 @@ import { toggleSidebarMobile } from "../redux/sideBarMobilSlice";
 import { setSidebarCompressed, toggleSidebar } from "../redux/sideBarSlice";
 
 export function SideBar() {
+  // OBTENEMOS AMBOS ESTADOS DE REDUX
   const isCompressedMobile = useSelector(
     (state) => state.sidebarMobile.isCompressedMobile,
   );
+  const isCompressed = useSelector((state) => state.sidebar.isCompressed);
+
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { logout } = useAuth();
 
-  // --- CORRECCIÓN: Buscamos la empresa en ambas bóvedas ---
   const empresaString =
     localStorage.getItem("empresa") || sessionStorage.getItem("empresa");
   const miEmpresa = empresaString ? JSON.parse(empresaString) : {};
   const fotoEmpresa = miEmpresa.logo_url;
 
-  // --- CORRECCIÓN: Buscamos los roles en ambas bóvedas ---
   const rolesString =
     localStorage.getItem("roles") || sessionStorage.getItem("roles");
   const roles = rolesString ? JSON.parse(rolesString) : [];
@@ -67,7 +68,6 @@ export function SideBar() {
     delivery: BikeIcon,
   };
 
-  // ESTO SE BASA EN LOS ROLES RGISTRADOS EN LA BASE DEDATOS
   const customOrder = [
     "ventas",
     "delivery",
@@ -94,22 +94,6 @@ export function SideBar() {
     return icons[roleKey] || Home;
   };
 
-  // const cerrarSession = async () => {
-  //   try {
-  //     await axiosInstance.post(
-  //       "/logout",
-  //       {},
-  //       {
-  //         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-  //       },
-  //     );
-  //     logout();
-  //     navigate("/login");
-  //   } catch (error) {
-  //     console.error("Error al cerrar sesión:", error);
-  //   }
-  // };
-
   const formatRoleToUrl = (roleName) => {
     return roleName.toLowerCase().replace(/\s+/g, "-").replace(/\./g, "-");
   };
@@ -126,22 +110,17 @@ export function SideBar() {
     dispatch(subMenuClick(nombreOpcion));
   };
 
-  // para estilo del header
   useEffect(() => {
     const storageData = localStorage.getItem("estiloEmpresa");
-
     if (storageData) {
       const parsedData = JSON.parse(storageData);
-
       if (Array.isArray(parsedData) && parsedData.length > 0) {
         const estiloObj = parsedData[0];
-
-        if (estiloObj.clave) {
+        if (estiloObj.clave)
           document.documentElement.style.setProperty(
             "--color-brand",
             estiloObj.clave,
           );
-        }
       } else if (parsedData.clave) {
         document.documentElement.style.setProperty(
           "--color-brand",
@@ -150,44 +129,48 @@ export function SideBar() {
       }
     }
   }, []);
+
   return (
     <div
       className={`sidebar sidebar-compressed 
-    ${isCompressedMobile ? "sidebar-mobile-active" : "sidebar-mobile-hidden"}`}
+      ${isCompressedMobile && isCompressed ? "sidebar-mobile-active" : "sidebar-mobile-hidden"}`}
     >
-      <div className="sidebar-header my-3">
-        {fotoEmpresa && (
-          <img
-            src={fotoEmpresa}
-            alt="logo empresa"
-            className="img-fluid"
-            style={{
-              maxWidth: "35px",
-              borderRadius: "50%",
-              height: "28px",
-            }}
-          />
-        )}
-        <div className="p-0 m-0 sidebar-text-container">
+      {/* CORRECCIÓN: Separamos la imagen de la clase que se oculta y centramos el contenido */}
+      <div className="sidebar-header my-3 position-relative d-flex align-items-center justify-content-center">
+        <div className="d-flex align-items-center gap-2">
+          {fotoEmpresa && (
+            <img
+              src={fotoEmpresa}
+              alt="logo empresa"
+              className="img-fluid"
+              style={{
+                width: "35px",
+                height: "35px",
+                borderRadius: "50%",
+                objectFit: "cover",
+              }}
+            />
+          )}
           <p
-            className="h5 fw-bold p-0 my-2 text-truncate"
-            style={{ color: "var(--text-main)", maxWidth: "140px" }}
+            className="h6 fw-bold p-0 m-0 text-truncate sidebar-text"
+            style={{ color: "var(--text-main)", maxWidth: "120px" }}
           >
             {miEmpresa.nombre}
           </p>
-          <button
-            className={`p-2 m-0 d-md-none btn-close-sudeBar-mobile 
-            ${isCompressedMobile ? "btnClose-mobile-active" : "btnClose-mobile-hidden"}`}
-            onClick={() => dispatch(toggleSidebarMobile())}
-          >
-            <X />
-          </button>
         </div>
+
+        {/* El botón de cerrar móvil ahora es absoluto para no romper el centrado */}
+        <button
+          className={`d-md-none btn-close-sudeBar-mobile shadow-sm position-absolute`}
+          style={{ right: "15px" }}
+          onClick={() => dispatch(toggleSidebarMobile())}
+        >
+          <X size={18} />
+        </button>
       </div>
 
       <div className="sidebar-menu my-2 ">
         <ul className="menu-list h-100">
-          {/* Inicio */}
           <Link
             to={"/"}
             className="link-opcion text-decoration-none"
@@ -198,12 +181,10 @@ export function SideBar() {
             }}
           >
             <li
-              className={`menu-item  ${
-                location.pathname === `/` ? "active" : ""
-              }`}
+              className={`menu-item  ${location.pathname === `/` ? "active" : ""}`}
             >
               <div className="d-flex w-100 gap-2 align-items-center justify-content-md-start m-auto px-2">
-                <Home className="icon-lucide flex-shrink-0" size={20} />
+                <Home className="icon-lucide flex-shrink-0" size={25} />
                 <small
                   className="small sidebar-text"
                   style={{ fontSize: "14px", transition: "opacity 0.2s" }}
@@ -217,8 +198,6 @@ export function SideBar() {
           {orderedRoles.map((role) => {
             const roleName = role.nombre.toLowerCase();
             const roleUrl = formatRoleToUrl(role.nombre);
-
-            // Ocultamos los modulos que ahora viven dentro de otros como tabs (ej. compras -> almacen)
             const ocultos = [
               "vender",
               "incidencias",
@@ -232,11 +211,9 @@ export function SideBar() {
             const isActive = location.pathname.includes(`/${roleUrl}`);
             const IconComponent = getIconForRole(role.nombre);
 
-            // Roles ahora son items de nivel superior directos sin submenus en el sidebar
             return (
-              <>
+              <div key={role.id}>
                 <Link
-                  key={role.id}
                   to={`/${roleUrl}`}
                   className="link-opcion text-decoration-none"
                   title={role.nombre}
@@ -286,93 +263,37 @@ export function SideBar() {
                       </div>
                     </li>
                   </Link>
-                ) : (
-                  <div></div>
-                )}
-              </>
+                ) : null}
+              </div>
             );
           })}
         </ul>
       </div>
+
       <div
         className="menu-footer d-flex flex-column align-items-center w-100"
         style={{ margin: "15px 0" }}
       >
-        {/* <Link
-          to="/iaMoodle"
-          className="text-decoration-none w-90"
-          style={{ width: "85%" }} // deja un margen lateral bonito
-          onClick={(e) => handleModuloSeleccionado("", e)}
-        >
-          <button
-            className={`menu-item btn border-0 w-100 d-flex align-items-center justify-content-start ${
-              location.pathname.includes("/iaMoodle") ? "active" : ""
-            }`}
-            style={{
-              padding: "15px 10px",
-              borderRadius: "var(--radius-md)",
-              transition:
-                "transform var(--transition-bounce), background-color var(--transition-smooth)",
-            }}
-            onMouseOver={(e) =>
-              (e.currentTarget.style.transform = "scale(1.03)")
-            }
-            onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
-          >
-            <LucideActivity
-              className="icon-lucide flex-shrink-0 me-0 me-md-2"
-              size={20}
-            />
-            <small
-              className="sidebar-text"
-              style={{
-                fontSize: "14px",
-                textAlign: "left",
-                color: "var(--text-main)",
-                transition: "opacity 0.2s",
-              }}
-            >
-              IA Moodle
-            </small>
-          </button>
-        </Link> */}
         <Link
           to="/configuracion/general"
-          className="text-decoration-none w-100"
-          style={{ width: "85%" }} // deja un margen lateral bonito
+          className="link-opcion text-decoration-none w-100"
           onClick={(e) => handleModuloSeleccionado("", e)}
         >
-          <button
-            className={` menu-item border-0 w-100 d-flex align-items-center justify-content-center text-center ${
-              location.pathname.includes("/configuracion/general")
-                ? "active"
-                : ""
-            }`}
-            style={{
-              borderRadius: "var(--radius-md)",
-              transition:
-                "transform var(--transition-bounce), background-color var(--transition-smooth)",
-            }}
-            onMouseOver={(e) =>
-              (e.currentTarget.style.transform = "scale(1.03)")
-            }
-            onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
+          <li
+            className={`menu-item ${location.pathname.includes("/configuracion") ? "active" : ""}`}
+            onClick={() => dispatch(setSidebarCompressed(false))}
+            style={{ listStyle: "none" }}
           >
-            <Settings
-              className="icon-lucide flex-shrink-0 me-0 me-md-2"
-              size={20}
-            />
-            <small
-              className="sidebar-text"
-              style={{
-                fontSize: "14px",
-                textAlign: "left",
-                transition: "opacity 0.2s",
-              }}
-            >
-              Ajustes
-            </small>
-          </button>
+            <div className="d-flex w-100 gap-2 align-items-center justify-content-md-start m-auto px-2">
+              <Settings className="icon-lucide flex-shrink-0" size={25} />
+              <small
+                className="small sidebar-text"
+                style={{ fontSize: "14px", transition: "opacity 0.2s" }}
+              >
+                Ajustes
+              </small>
+            </div>
+          </li>
         </Link>
       </div>
     </div>

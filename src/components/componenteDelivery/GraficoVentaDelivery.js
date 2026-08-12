@@ -144,7 +144,7 @@ export function GraficoVentasDelivery({ ventasList, load, errorLoad }) {
   return (
     <CondicionCarga isLoading={load} isError={errorLoad}>
       <div
-        className="card shadow-sm border-0 rounded-4 p-4 h-100 w-100"
+        className="card shadow-sm border rounded-4 p-4 h-100 w-100"
         style={{ backgroundColor: "var(--bg-card)" }}
       >
         <div className="d-flex align-items-center mb-4">

@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  isCompressed: false,
+  isCompressed: true,
 };
 
 const sideBarSlice = createSlice({

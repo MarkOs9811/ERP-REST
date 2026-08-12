@@ -68,7 +68,7 @@ import { DashboardDelivery } from "../pages/moduloDelivery/DashboardDelivery";
 import { Repartidores } from "../pages/moduloDelivery/Repartidores";
 import { ZonaTarifa } from "../pages/moduloDelivery/ZonaTarifa";
 import { Promociones } from "../pages/moduloDelivery/Promociones";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { SubMenuTabs } from "../components/SubMenuTabs";
 import { IAMoodle } from "../pages/moduloIAmoodle/IAMoodle";
 import { DetallesVentas } from "../pages/moduloVentas/DetallesVentas";
@@ -87,54 +87,56 @@ import { Combos } from "../pages/moduloPlatos/Combos";
 import { CategoriaPlatosCombos } from "../pages/moduloPlatos/CategoriaPlatosCombos";
 import { LayOutCocina } from "./LayOutCocina";
 import { LayOutMozo } from "./LayOutMozo";
+// IMPORTAMOS LA FUNCIÓN DEL DICCIONARIO
+import { getRolesPermitidos } from "../utils/diccionarioRoles";
+// IMPORTAMOS ÍCONOS EXTRA PARA LA CABECERA MÓVIL
+import { ArrowLeft, X } from "lucide-react";
+import { setSidebarCompressed } from "../redux/sideBarSlice";
+import { toggleSidebarMobile } from "../redux/sideBarMobilSlice";
+// NOTA: Asegúrate de importar las acciones correctamente según tus rutas de Redux
 
 export const MainLayout = () => {
+  const dispatch = useDispatch();
+
   // 1. OBTENCIÓN DE ESTADOS Y DATOS LOCALES
-  // Revisamos en Redux si la barra lateral (SideBar) está minimizada o abierta.
   const isCompressed = useSelector(
     (state) => state.sidebar?.isCompressed || false,
   );
+  const isCompressedMobile = useSelector(
+    (state) => state.sidebarMobile?.isCompressedMobile || false,
+  );
 
-  // Rescatamos los datos del usuario logueado y de la empresa desde el LocalStorage.
   const user =
     JSON.parse(
       localStorage.getItem("user") || sessionStorage.getItem("user"),
     ) || {};
-
   const empresa =
     JSON.parse(
       localStorage.getItem("empresa") || sessionStorage.getItem("empresa"),
-    ) ||
-    {} ||
-    {};
+    ) || {};
 
   // 2. IDENTIFICACIÓN DEL ROL (CARGO)
-  // Sacamos el nombre del cargo del usuario y lo pasamos a minúsculas para evitar errores al comparar (ej: "Delivery" vs "delivery").
-
   const cargoUsuario = user?.empleado?.cargo?.nombre?.toLowerCase();
 
-  // Creamos un arreglo con todos los roles especiales y usamos .includes()
-  const esRolEspecial = [
+  const rolesEspecialesValidos = getRolesPermitidos([
     "atencion al cliente",
     "moso",
     "mozo",
     "cocinero",
     "delivery",
     "conductor",
-  ].includes(cargoUsuario);
+    "clientes",
+    "cocina",
+  ]);
 
-  // Si NO es un rol especial (es decir, es admin, ventas, etc), mostramos el layout completo.
+  const esRolEspecial = rolesEspecialesValidos.includes(cargoUsuario);
   const showFullLayout = !esRolEspecial;
-
-  // Si NO es rol especial, también mostramos el header tradicional.
   const showHeader = !esRolEspecial;
 
   // 3. BARRA DE PROGRESO DE CONFIGURACIÓN DE LA EMPRESA
-  // Esto maneja un pequeño "tutorial" o "pasos de configuración inicial" de 5 pasos para la empresa.
-  const [step, setStep] = useState((empresa?.setup_steps || 0) < 5); // ¿Aún le faltan pasos?
-  const [showWelcome, setShowWelcome] = useState(empresa?.setup_steps == 0); // ¿Está en el paso cero?
+  const [step, setStep] = useState((empresa?.setup_steps || 0) < 5);
+  const [showWelcome, setShowWelcome] = useState(empresa?.setup_steps == 0);
 
-  // 1. Definimos constantes para el cálculo
   const currentStep = Number(empresa.setup_steps) || 0;
   const totalSteps = 5;
   const rawPercentage = ((currentStep + 1) / totalSteps) * 100;
@@ -158,66 +160,81 @@ export const MainLayout = () => {
   return (
     <div className="p-0 m-0 vh-100 d-flex overflow-hidden">
       {showFullLayout && (
-        <div
-          className="sidebar-principal-wrapper "
-          style={{
-            width: "70px",
-            flexShrink: 0,
-            zIndex: 10,
-            backgroundColor: "#f8f9fa",
-          }}
-        >
+        <div className="sidebar-main-wrapper border-0">
           <SideBar />
         </div>
       )}
 
       {showFullLayout && (
         <div
-          className={`submenu-secundario-wrapper bg-white ${isCompressed ? "subMenuComprimido" : ""}`}
+          className={`submenu-secundario-wrapper border-0 bg-white 
+            ${isCompressed ? "subMenuComprimido" : ""} 
+            ${isCompressedMobile && !isCompressed ? "mobile-submenu-active" : ""}`}
         >
+          {/* =========================================
+              CABECERA MÓVIL DEL SUBMENÚ (SOLO MÓVILES)
+              ========================================= */}
+          <div
+            className="d-flex d-md-none align-items-center justify-content-between p-3 border-bottom shadow-sm"
+            style={{ backgroundColor: "#f8fafc" }}
+          >
+            <button
+              className="btn btn-light d-flex align-items-center gap-2 fw-bold text-dark border-0 rounded-pill px-3 "
+              onClick={() => dispatch(setSidebarCompressed(true))}
+            >
+              <ArrowLeft size={18} /> Volver
+            </button>
+            <button
+              className="btn btn-light rounded-circle p-2 d-flex align-items-center justify-content-center"
+              onClick={() => dispatch(toggleSidebarMobile())}
+              style={{ width: "35px", height: "35px" }}
+            >
+              <X size={18} />
+            </button>
+          </div>
+
           <SubMenuTabs />
         </div>
       )}
 
-      {/* =========================================
-          3. CONTENIDO PRINCIPAL (Header + Navegación + Vistas)
-          Usamos flex-grow-1 para que ocupe todo el espacio sobrante a la derecha
-          ========================================= */}
       <div className="content-wrapper d-flex flex-column flex-grow-1 overflow-hidden">
-        {/* En la práctica, esto está haciendo que el <Header /> se muestre SIEMPRE, sin importar el rol. */}
         {!showHeader && <Header tipoHeader={esRolEspecial} />}
         {showFullLayout && <Header tipoHeader={esRolEspecial} />}
 
-        {/* Ruteo privado para los menús de navegación administrativos */}
-        {/* Solo los roles fuertes ven la Navegación envuelta en validación de seguridad */}
         {showFullLayout && (
           <PrivateRoute
-            allowedRoles={[
+            allowedRoles={getRolesPermitidos([
               "ventas",
               "finanzas",
               "delivery",
               "conductor",
               "cocinero",
               "administrador",
-            ]}
+            ])}
           >
             <Navegacion tipoNavegacion={esRolEspecial} />
           </PrivateRoute>
         )}
-        {/* Si es un rol especial (Atención al cliente), le muestras la navegación SIN la seguridad del PrivateRoute */}
+
         {!showHeader && <Navegacion tipoNavegacion={esRolEspecial} />}
-        {/* =============================================================================== */}
 
         <div className="flex-grow-1 overflow-auto overflow-x-hidden contenedor-scroll-principal p-3">
           <ContenedorPrincipal>
             <ToastContainer />
-
             <Routes>
+              {/* ====================================
+                   AQUÍ SE MANTIENEN TODAS TUS RUTAS INTACTAS
+                   ==================================== */}
               <Route path="/" element={renderHomePorRol()} />
               <Route
                 path="/cocina"
                 element={
-                  <PrivateRoute allowedRoles={["cocinero", "administrador"]}>
+                  <PrivateRoute
+                    allowedRoles={getRolesPermitidos([
+                      "cocinero",
+                      "administrador",
+                    ])}
+                  >
                     <CocinaDespacho />
                   </PrivateRoute>
                 }
@@ -227,18 +244,25 @@ export const MainLayout = () => {
               <Route
                 path="/usuarios"
                 element={
-                  <PrivateRoute allowedRoles={["usuario", "administrador"]}>
+                  <PrivateRoute
+                    allowedRoles={getRolesPermitidos([
+                      "usuario",
+                      "administrador",
+                    ])}
+                  >
                     <Usuarios />
                   </PrivateRoute>
                 }
               />
-              {/* RUTA PARA DELIVERY
-               */}
               <Route
                 path="/pedidosDelivery"
                 element={
                   <PrivateRoute
-                    allowedRoles={["delivery", "conductor", "administrador"]}
+                    allowedRoles={getRolesPermitidos([
+                      "delivery",
+                      "conductor",
+                      "administrador",
+                    ])}
                   >
                     <PedidosRider />
                   </PrivateRoute>
@@ -248,18 +272,25 @@ export const MainLayout = () => {
                 path="/mis-entregas"
                 element={
                   <PrivateRoute
-                    allowedRoles={["delivery", "conductor", "administrador"]}
+                    allowedRoles={getRolesPermitidos([
+                      "delivery",
+                      "conductor",
+                      "administrador",
+                    ])}
                   >
                     <MisEntregas />
                   </PrivateRoute>
                 }
               />
-              {/* RUTA PARA PLATOS Y CATEGORIAS
-               */}
               <Route
                 path="/platos"
                 element={
-                  <PrivateRoute allowedRoles={["ventas", "administrador"]}>
+                  <PrivateRoute
+                    allowedRoles={getRolesPermitidos([
+                      "ventas",
+                      "administrador",
+                    ])}
+                  >
                     <Platos />
                   </PrivateRoute>
                 }
@@ -267,7 +298,12 @@ export const MainLayout = () => {
               <Route
                 path="/platos/combos"
                 element={
-                  <PrivateRoute allowedRoles={["ventas", "administrador"]}>
+                  <PrivateRoute
+                    allowedRoles={getRolesPermitidos([
+                      "ventas",
+                      "administrador",
+                    ])}
+                  >
                     <Combos />
                   </PrivateRoute>
                 }
@@ -275,18 +311,27 @@ export const MainLayout = () => {
               <Route
                 path="/platos/categorias"
                 element={
-                  <PrivateRoute allowedRoles={["ventas", "administrador"]}>
+                  <PrivateRoute
+                    allowedRoles={getRolesPermitidos([
+                      "ventas",
+                      "administrador",
+                    ])}
+                  >
                     <CategoriaPlatosCombos />
                   </PrivateRoute>
                 }
               />
 
-              {/* RUTAS PARA MODULO ALMACEN */}
               <Route path="/almacen">
                 <Route
                   index
                   element={
-                    <PrivateRoute allowedRoles={["almacen", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "almacen",
+                        "administrador",
+                      ])}
+                    >
                       <Almacen />
                     </PrivateRoute>
                   }
@@ -294,7 +339,12 @@ export const MainLayout = () => {
                 <Route
                   path="Almacenes"
                   element={
-                    <PrivateRoute allowedRoles={["almacen", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "almacen",
+                        "administrador",
+                      ])}
+                    >
                       <Almacen />
                     </PrivateRoute>
                   }
@@ -302,7 +352,12 @@ export const MainLayout = () => {
                 <Route
                   path="registro"
                   element={
-                    <PrivateRoute allowedRoles={["almacen", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "almacen",
+                        "administrador",
+                      ])}
+                    >
                       <Registro />
                     </PrivateRoute>
                   }
@@ -310,7 +365,12 @@ export const MainLayout = () => {
                 <Route
                   path="transferencia"
                   element={
-                    <PrivateRoute allowedRoles={["almacen", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "almacen",
+                        "administrador",
+                      ])}
+                    >
                       <Transferencias />
                     </PrivateRoute>
                   }
@@ -318,7 +378,12 @@ export const MainLayout = () => {
                 <Route
                   path="solicitud"
                   element={
-                    <PrivateRoute allowedRoles={["almacen", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "almacen",
+                        "administrador",
+                      ])}
+                    >
                       <Solicitudes />
                     </PrivateRoute>
                   }
@@ -326,7 +391,12 @@ export const MainLayout = () => {
                 <Route
                   path="kardex"
                   element={
-                    <PrivateRoute allowedRoles={["almacen", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "almacen",
+                        "administrador",
+                      ])}
+                    >
                       <Kardex />
                     </PrivateRoute>
                   }
@@ -334,7 +404,12 @@ export const MainLayout = () => {
                 <Route
                   path="reportes"
                   element={
-                    <PrivateRoute allowedRoles={["almacen", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "almacen",
+                        "administrador",
+                      ])}
+                    >
                       <ReportesAlmacen />
                     </PrivateRoute>
                   }
@@ -342,7 +417,12 @@ export const MainLayout = () => {
                 <Route
                   path="ajustes"
                   element={
-                    <PrivateRoute allowedRoles={["almacen", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "almacen",
+                        "administrador",
+                      ])}
+                    >
                       <AjustesAlmacen />
                     </PrivateRoute>
                   }
@@ -350,7 +430,12 @@ export const MainLayout = () => {
                 <Route
                   path="compras"
                   element={
-                    <PrivateRoute allowedRoles={["compras", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "compras",
+                        "administrador",
+                      ])}
+                    >
                       <Compras />
                     </PrivateRoute>
                   }
@@ -359,7 +444,10 @@ export const MainLayout = () => {
                   path="proveedores"
                   element={
                     <PrivateRoute
-                      allowedRoles={["proveedores", "administrador"]}
+                      allowedRoles={getRolesPermitidos([
+                        "proveedores",
+                        "administrador",
+                      ])}
                     >
                       <Proveedores />
                     </PrivateRoute>
@@ -367,12 +455,16 @@ export const MainLayout = () => {
                 />
               </Route>
 
-              {/* RUTAS PARA MODULO RECURSOS HUMANOS PLANILLAS */}
               <Route path="/rrhh">
                 <Route
                   index
                   element={
-                    <PrivateRoute allowedRoles={["RRHH", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "RRHH",
+                        "administrador",
+                      ])}
+                    >
                       <Usuarios />
                     </PrivateRoute>
                   }
@@ -380,7 +472,12 @@ export const MainLayout = () => {
                 <Route
                   path="usuarios"
                   element={
-                    <PrivateRoute allowedRoles={["RRHH", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "RRHH",
+                        "administrador",
+                      ])}
+                    >
                       <Usuarios />
                     </PrivateRoute>
                   }
@@ -388,16 +485,25 @@ export const MainLayout = () => {
                 <Route
                   path="planilla"
                   element={
-                    <PrivateRoute allowedRoles={["RRHH", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "RRHH",
+                        "administrador",
+                      ])}
+                    >
                       <Usuarios />
                     </PrivateRoute>
                   }
                 />
-
                 <Route
                   path="ingreso-a-planilla"
                   element={
-                    <PrivateRoute allowedRoles={["RRHH", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "RRHH",
+                        "administrador",
+                      ])}
+                    >
                       <IngresoPlanilla />
                     </PrivateRoute>
                   }
@@ -405,7 +511,12 @@ export const MainLayout = () => {
                 <Route
                   path="nomina"
                   element={
-                    <PrivateRoute allowedRoles={["RRHH", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "RRHH",
+                        "administrador",
+                      ])}
+                    >
                       <Nomina />
                     </PrivateRoute>
                   }
@@ -413,7 +524,12 @@ export const MainLayout = () => {
                 <Route
                   path="asistencia"
                   element={
-                    <PrivateRoute allowedRoles={["RRHH", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "RRHH",
+                        "administrador",
+                      ])}
+                    >
                       <Asistencia />
                     </PrivateRoute>
                   }
@@ -421,7 +537,12 @@ export const MainLayout = () => {
                 <Route
                   path="horas-extras"
                   element={
-                    <PrivateRoute allowedRoles={["RRHH", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "RRHH",
+                        "administrador",
+                      ])}
+                    >
                       <HorasExtras />
                     </PrivateRoute>
                   }
@@ -429,7 +550,12 @@ export const MainLayout = () => {
                 <Route
                   path="adelanto-de-sueldo"
                   element={
-                    <PrivateRoute allowedRoles={["RRHH", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "RRHH",
+                        "administrador",
+                      ])}
+                    >
                       <AdelantoSueldo />
                     </PrivateRoute>
                   }
@@ -437,7 +563,12 @@ export const MainLayout = () => {
                 <Route
                   path="vacaciones"
                   element={
-                    <PrivateRoute allowedRoles={["RRHH", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "RRHH",
+                        "administrador",
+                      ])}
+                    >
                       <Vacaciones />
                     </PrivateRoute>
                   }
@@ -445,7 +576,12 @@ export const MainLayout = () => {
                 <Route
                   path="reportes"
                   element={
-                    <PrivateRoute allowedRoles={["RRHH", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "RRHH",
+                        "administrador",
+                      ])}
+                    >
                       <ReportePlanilla />
                     </PrivateRoute>
                   }
@@ -453,7 +589,12 @@ export const MainLayout = () => {
                 <Route
                   path="ajustes"
                   element={
-                    <PrivateRoute allowedRoles={["RRHH", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "RRHH",
+                        "administrador",
+                      ])}
+                    >
                       <AjustesPlanilla />
                     </PrivateRoute>
                   }
@@ -462,7 +603,10 @@ export const MainLayout = () => {
                   path="areas-y-cargos"
                   element={
                     <PrivateRoute
-                      allowedRoles={["areas y cargos", "administrador"]}
+                      allowedRoles={getRolesPermitidos([
+                        "areas y cargos",
+                        "administrador",
+                      ])}
                     >
                       <AreasCargo />
                     </PrivateRoute>
@@ -470,12 +614,16 @@ export const MainLayout = () => {
                 />
               </Route>
 
-              {/* RUTAS PARA CLIENTES */}
               <Route path="/clientes">
                 <Route
                   index
                   element={
-                    <PrivateRoute allowedRoles={["clientes", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "clientes",
+                        "administrador",
+                      ])}
+                    >
                       <DashboardCliente />
                     </PrivateRoute>
                   }
@@ -483,16 +631,25 @@ export const MainLayout = () => {
                 <Route
                   path="dashboard"
                   element={
-                    <PrivateRoute allowedRoles={["clientes", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "clientes",
+                        "administrador",
+                      ])}
+                    >
                       <DashboardCliente />
                     </PrivateRoute>
                   }
                 />
-
                 <Route
                   path="lista"
                   element={
-                    <PrivateRoute allowedRoles={["clientes", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "clientes",
+                        "administrador",
+                      ])}
+                    >
                       <Clientes />
                     </PrivateRoute>
                   }
@@ -500,7 +657,12 @@ export const MainLayout = () => {
                 <Route
                   path="comentarios"
                   element={
-                    <PrivateRoute allowedRoles={["clientes", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "clientes",
+                        "administrador",
+                      ])}
+                    >
                       <FeedBack />
                     </PrivateRoute>
                   }
@@ -508,18 +670,28 @@ export const MainLayout = () => {
                 <Route
                   path="fidelizacion"
                   element={
-                    <PrivateRoute allowedRoles={["clientes", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "clientes",
+                        "administrador",
+                      ])}
+                    >
                       <Fidelizacion />
                     </PrivateRoute>
                   }
                 />
               </Route>
-              {/* RUTAS PARA MODULO VENTAS */}
+
               <Route path="/ventas">
                 <Route
                   index
                   element={
-                    <PrivateRoute allowedRoles={["ventas", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "ventas",
+                        "administrador",
+                      ])}
+                    >
                       <Ventas />
                     </PrivateRoute>
                   }
@@ -527,7 +699,12 @@ export const MainLayout = () => {
                 <Route
                   path="dashboard"
                   element={
-                    <PrivateRoute allowedRoles={["ventas", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "ventas",
+                        "administrador",
+                      ])}
+                    >
                       <Ventas />
                     </PrivateRoute>
                   }
@@ -535,7 +712,12 @@ export const MainLayout = () => {
                 <Route
                   path="mis-ventas"
                   element={
-                    <PrivateRoute allowedRoles={["ventas", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "ventas",
+                        "administrador",
+                      ])}
+                    >
                       <DetallesVentas />
                     </PrivateRoute>
                   }
@@ -543,7 +725,12 @@ export const MainLayout = () => {
                 <Route
                   path="inventario"
                   element={
-                    <PrivateRoute allowedRoles={["ventas", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "ventas",
+                        "administrador",
+                      ])}
+                    >
                       <Inventario />
                     </PrivateRoute>
                   }
@@ -551,7 +738,12 @@ export const MainLayout = () => {
                 <Route
                   path="solicitud"
                   element={
-                    <PrivateRoute allowedRoles={["ventas", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "ventas",
+                        "administrador",
+                      ])}
+                    >
                       <Solicitud />
                     </PrivateRoute>
                   }
@@ -559,7 +751,12 @@ export const MainLayout = () => {
                 <Route
                   path="solicitud/realizarSolicitud"
                   element={
-                    <PrivateRoute allowedRoles={["ventas", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "ventas",
+                        "administrador",
+                      ])}
+                    >
                       <RealizarSolicitud />
                     </PrivateRoute>
                   }
@@ -567,7 +764,12 @@ export const MainLayout = () => {
                 <Route
                   path="mesas"
                   element={
-                    <PrivateRoute allowedRoles={["ventas", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "ventas",
+                        "administrador",
+                      ])}
+                    >
                       <Mesas />
                     </PrivateRoute>
                   }
@@ -575,7 +777,12 @@ export const MainLayout = () => {
                 <Route
                   path="reportes"
                   element={
-                    <PrivateRoute allowedRoles={["ventas", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "ventas",
+                        "administrador",
+                      ])}
+                    >
                       <ReportesVentas />
                     </PrivateRoute>
                   }
@@ -583,7 +790,12 @@ export const MainLayout = () => {
                 <Route
                   path="ajustesVentas"
                   element={
-                    <PrivateRoute allowedRoles={["ventas", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "ventas",
+                        "administrador",
+                      ])}
+                    >
                       <AjustesVentas />
                     </PrivateRoute>
                   }
@@ -591,18 +803,28 @@ export const MainLayout = () => {
                 <Route
                   path="cajas"
                   element={
-                    <PrivateRoute allowedRoles={["ventas", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "ventas",
+                        "administrador",
+                      ])}
+                    >
                       <Cajas />
                     </PrivateRoute>
                   }
                 />
               </Route>
-              {/* RUTAS PARA MODULO DELIVERY */}
+
               <Route path="/delivery">
                 <Route
                   index
                   element={
-                    <PrivateRoute allowedRoles={["delivery", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "delivery",
+                        "administrador",
+                      ])}
+                    >
                       <DashboardDelivery />
                     </PrivateRoute>
                   }
@@ -610,7 +832,12 @@ export const MainLayout = () => {
                 <Route
                   path="pedidos"
                   element={
-                    <PrivateRoute allowedRoles={["delivery", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "delivery",
+                        "administrador",
+                      ])}
+                    >
                       <PedidosDelivery />
                     </PrivateRoute>
                   }
@@ -618,7 +845,12 @@ export const MainLayout = () => {
                 <Route
                   path="pedidosAsignados"
                   element={
-                    <PrivateRoute allowedRoles={["delivery", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "delivery",
+                        "administrador",
+                      ])}
+                    >
                       <PedidosAsignados />
                     </PrivateRoute>
                   }
@@ -626,7 +858,12 @@ export const MainLayout = () => {
                 <Route
                   path="repartidores"
                   element={
-                    <PrivateRoute allowedRoles={["delivery", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "delivery",
+                        "administrador",
+                      ])}
+                    >
                       <Repartidores />
                     </PrivateRoute>
                   }
@@ -634,7 +871,12 @@ export const MainLayout = () => {
                 <Route
                   path="zonas-y-tarifas"
                   element={
-                    <PrivateRoute allowedRoles={["delivery", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "delivery",
+                        "administrador",
+                      ])}
+                    >
                       <ZonaTarifa />
                     </PrivateRoute>
                   }
@@ -642,7 +884,12 @@ export const MainLayout = () => {
                 <Route
                   path="promociones-app"
                   element={
-                    <PrivateRoute allowedRoles={["delivery", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "delivery",
+                        "administrador",
+                      ])}
+                    >
                       <Promociones />
                     </PrivateRoute>
                   }
@@ -650,7 +897,12 @@ export const MainLayout = () => {
                 <Route
                   path="banners"
                   element={
-                    <PrivateRoute allowedRoles={["delivery", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "delivery",
+                        "administrador",
+                      ])}
+                    >
                       <Banner />
                     </PrivateRoute>
                   }
@@ -658,7 +910,12 @@ export const MainLayout = () => {
                 <Route
                   path="mesas"
                   element={
-                    <PrivateRoute allowedRoles={["delivery", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "delivery",
+                        "administrador",
+                      ])}
+                    >
                       <Mesas />
                     </PrivateRoute>
                   }
@@ -666,16 +923,25 @@ export const MainLayout = () => {
                 <Route
                   path="reportes"
                   element={
-                    <PrivateRoute allowedRoles={["delivery", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "delivery",
+                        "administrador",
+                      ])}
+                    >
                       <ReporteDelivery />
                     </PrivateRoute>
                   }
                 />
-                {/* ================ */}
                 <Route
                   path="ajustes-ventas"
                   element={
-                    <PrivateRoute allowedRoles={["delivery", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "delivery",
+                        "administrador",
+                      ])}
+                    >
                       <AjustesVentas />
                     </PrivateRoute>
                   }
@@ -683,33 +949,41 @@ export const MainLayout = () => {
                 <Route
                   path="cajas"
                   element={
-                    <PrivateRoute allowedRoles={["delivery", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "delivery",
+                        "administrador",
+                      ])}
+                    >
                       <Cajas />
                     </PrivateRoute>
                   }
                 />
               </Route>
 
-              {/* RUTA PARA UNICAMENTE COCINA */}
-
               <Route
                 path="/vender/cocina"
                 element={
-                  <PrivateRoute allowedRoles={["cocina", "administrador"]}>
+                  <PrivateRoute
+                    allowedRoles={getRolesPermitidos([
+                      "cocina",
+                      "administrador",
+                    ])}
+                  >
                     <CocinaDespacho />
                   </PrivateRoute>
                 }
               />
 
-              {/* Proveedores y Áreas movidos a Almacén y RRHH */}
-
-              {/* RUTAS PARA MODULO INCIDENCIAS */}
               <Route path="/incidencias">
                 <Route
                   index
                   element={
                     <PrivateRoute
-                      allowedRoles={["incidencias", "administrador"]}
+                      allowedRoles={getRolesPermitidos([
+                        "incidencias",
+                        "administrador",
+                      ])}
                     >
                       <Eventos />
                     </PrivateRoute>
@@ -717,12 +991,16 @@ export const MainLayout = () => {
                 />
               </Route>
 
-              {/* RUTAS PARA MODULO FINANZAS */}
               <Route path="/finanzas">
                 <Route
                   index
                   element={
-                    <PrivateRoute allowedRoles={["finanzas", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "finanzas",
+                        "administrador",
+                      ])}
+                    >
                       <InformesFinancieros />
                     </PrivateRoute>
                   }
@@ -730,7 +1008,12 @@ export const MainLayout = () => {
                 <Route
                   path="informes-financieros"
                   element={
-                    <PrivateRoute allowedRoles={["finanzas", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "finanzas",
+                        "administrador",
+                      ])}
+                    >
                       <InformesFinancieros />
                     </PrivateRoute>
                   }
@@ -738,7 +1021,12 @@ export const MainLayout = () => {
                 <Route
                   path="presupuestos"
                   element={
-                    <PrivateRoute allowedRoles={["finanzas", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "finanzas",
+                        "administrador",
+                      ])}
+                    >
                       <Presupuestos />
                     </PrivateRoute>
                   }
@@ -746,7 +1034,12 @@ export const MainLayout = () => {
                 <Route
                   path="ajustes"
                   element={
-                    <PrivateRoute allowedRoles={["finanzas", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "finanzas",
+                        "administrador",
+                      ])}
+                    >
                       <AjustesFinanzas />
                     </PrivateRoute>
                   }
@@ -754,7 +1047,12 @@ export const MainLayout = () => {
                 <Route
                   path="reportes-financieros"
                   element={
-                    <PrivateRoute allowedRoles={["finanzas", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "finanzas",
+                        "administrador",
+                      ])}
+                    >
                       <ReportesFinanzas />
                     </PrivateRoute>
                   }
@@ -762,7 +1060,12 @@ export const MainLayout = () => {
                 <Route
                   path="firmar-solicitud"
                   element={
-                    <PrivateRoute allowedRoles={["finanzas", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "finanzas",
+                        "administrador",
+                      ])}
+                    >
                       <FirmasSolicitud />
                     </PrivateRoute>
                   }
@@ -770,7 +1073,12 @@ export const MainLayout = () => {
                 <Route
                   path="libro-diario"
                   element={
-                    <PrivateRoute allowedRoles={["finanzas", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "finanzas",
+                        "administrador",
+                      ])}
+                    >
                       <LibroDiario />
                     </PrivateRoute>
                   }
@@ -778,7 +1086,12 @@ export const MainLayout = () => {
                 <Route
                   path="libro-mayor"
                   element={
-                    <PrivateRoute allowedRoles={["finanzas", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "finanzas",
+                        "administrador",
+                      ])}
+                    >
                       <LibroMayor />
                     </PrivateRoute>
                   }
@@ -786,7 +1099,12 @@ export const MainLayout = () => {
                 <Route
                   path="cuentas-por-cobrar"
                   element={
-                    <PrivateRoute allowedRoles={["finanzas", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "finanzas",
+                        "administrador",
+                      ])}
+                    >
                       <CuentasPorCobrar />
                     </PrivateRoute>
                   }
@@ -794,19 +1112,25 @@ export const MainLayout = () => {
                 <Route
                   path="cuentas-por-pagar"
                   element={
-                    <PrivateRoute allowedRoles={["finanzas", "administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "finanzas",
+                        "administrador",
+                      ])}
+                    >
                       <CuentasPorPagar />
                     </PrivateRoute>
                   }
                 />
               </Route>
 
-              {/* Configuración */}
               <Route path="/configuracion" element={<Configuracion />}>
                 <Route
                   path="general"
                   element={
-                    <PrivateRoute allowedRoles={["administrador"]}>
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos(["administrador"])}
+                    >
                       <Generales />
                     </PrivateRoute>
                   }
@@ -823,11 +1147,11 @@ export const MainLayout = () => {
                 path="/abrirCaja"
                 element={
                   <PrivateRoute
-                    allowedRoles={[
+                    allowedRoles={getRolesPermitidos([
                       "ventas",
                       "administrador",
                       "atención al cliente",
-                    ]}
+                    ])}
                   >
                     <AbrirCaja />
                   </PrivateRoute>
@@ -837,6 +1161,8 @@ export const MainLayout = () => {
             </Routes>
           </ContenedorPrincipal>
         </div>
+
+        {/* MODAL GENERALES OMITIDO POR ESPACIO PERO SE QUEDA IGUAL QUE TU ARCHIVO */}
         <ModalGenerales
           show={step}
           handleCloseModal={() => setStep(false)}
@@ -847,7 +1173,7 @@ export const MainLayout = () => {
             className="w-100 bg-light position-relative"
             style={{
               height: "8px",
-              borderTopLeftRadius: "calc(0.3rem - 1px)", // Ajuste fino para bordes redondeados del modal
+              borderTopLeftRadius: "calc(0.3rem - 1px)",
               borderTopRightRadius: "calc(0.3rem - 1px)",
               overflow: "hidden",
             }}
@@ -858,11 +1184,10 @@ export const MainLayout = () => {
                 width: `${progressPercentage}%`,
                 transition: "width 0.5s ease-in-out",
                 background:
-                  "linear-gradient(90deg, #d31919ff 0%, #ff5f5fff 100%)", // Un gradiente bonito
+                  "linear-gradient(90deg, #d31919ff 0%, #ff5f5fff 100%)",
               }}
             ></div>
           </div>
-          {/* PASO 1: SEDES */}
           {empresa.setup_steps == 0 && (
             <>
               {showWelcome ? (
@@ -872,24 +1197,15 @@ export const MainLayout = () => {
               )}
             </>
           )}
-
-          {/* PASO 2: ÁREAS Y CARGOS */}
           {empresa.setup_steps == 1 && (
             <StepAreaCargo onFinish={() => setStep(false)} />
           )}
-
-          {/* PASO 3: CAJAS */}
           {empresa.setup_steps == 2 && (
             <StepCaja onFinish={() => setStep(false)} />
           )}
-
-          {/* PASO 4: PRODUCTOS */}
           {empresa.setup_steps == 3 && (
             <StepPlatosProductos onFinish={() => setStep(false)} />
           )}
-
-          {/* PASO 5: USUARIOS (OPCIONAL) */}
-
           {empresa.setup_steps == 4 && (
             <StepUsuario onFinish={() => setStep(false)} />
           )}

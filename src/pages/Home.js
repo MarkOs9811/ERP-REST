@@ -30,6 +30,10 @@ export function Home() {
 
   const navigate = useNavigate();
 
+  const caja = JSON.parse(
+    localStorage.getItem("caja") || sessionStorage.getItem("caja"),
+  );
+
   return (
     <div className="container-fluid home-shell py-2">
       {/* CABECERA HERO MEJORADA */}
@@ -51,15 +55,31 @@ export function Home() {
         <div className="text-end position-relative z-1 d-flex flex-column align-items-end">
           <p className="mb-2 fw-medium text-muted d-flex align-items-center gap-2">
             <span className="status-dot bg-success rounded-circle"></span>
-            ¿Listo para empezar el turno?
+            {caja.estado === "abierto" ? "Caja abierta" : "Caja cerrada"} -{" "}
+            {caja.nombre} - {caja.usuario_nombre}
           </p>
-          <button
-            className="btn-principal btn-lg px-4 py-2 fw-bold shadow-sm d-flex align-items-center gap-2 btn-abrir-caja"
-            onClick={() => navigate("/abrirCaja")}
-          >
-            <StoreIcon size={20} />
-            <span>Abrir Caja</span>
-          </button>
+          <p className="mb-3 fw-semibold text-dark">
+            {caja.estado === "abierto"
+              ? "¡Buen trabajo! Mantén el control de tus ventas."
+              : "Caja cerrada. Abre la caja para comenzar a vender."}
+          </p>
+          {caja.estado === "abierto" ? (
+            <button
+              className="btn-principal btn-lg px-4 py-2 fw-bold shadow-sm d-flex align-items-center gap-2 btn-ir-a-caja"
+              onClick={() => navigate("/vender/mesas")}
+            >
+              <StoreIcon size={20} />
+              <span>Ir a Caja</span>
+            </button>
+          ) : (
+            <button
+              className="btn-principal btn-lg px-4 py-2 fw-bold shadow-sm d-flex align-items-center gap-2 btn-abrir-caja"
+              onClick={() => navigate("/abrirCaja")}
+            >
+              <StoreIcon size={20} />
+              <span>Abrir Caja</span>
+            </button>
+          )}
         </div>
       </div>
       {/* FIN CABECERA HERO */}

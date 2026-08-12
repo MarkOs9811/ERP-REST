@@ -5,7 +5,7 @@ import "../../css/estilosHome/EstiloFidelizacion.css";
 
 export function CarouselMarketingHome() {
   return (
-    <div className="fw-carousel-marketing h-100">
+    <div className="fw-carousel-marketing">
       <div
         id="marketingCarousel"
         className="carousel slide h-100"

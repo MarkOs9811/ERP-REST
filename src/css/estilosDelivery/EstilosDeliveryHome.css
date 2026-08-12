@@ -1,0 +1,136 @@
+/* =========================================
+   TARJETAS KPI (ESTILO AURA MODERN)
+========================================= */
+.fw-kpi-card {
+    background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+   
+    border-radius: 16px;
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    /* Corta el aura para que no se salga */
+    z-index: 1;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.fw-kpi-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Elevamos el contenido sobre el fondo luminoso */
+.fw-kpi-card>* {
+    position: relative;
+    z-index: 2;
+}
+
+/* Contenedor del ícono */
+.kpi-icon-wrapper {
+    width: 60px;
+    height: 60px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+/* Textos */
+.kpi-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.kpi-label {
+    color: #6b7280;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.25rem;
+}
+
+.kpi-value {
+    color: #111827;
+    font-size: 2rem;
+    font-weight: 800;
+    margin: 0;
+    line-height: 1;
+}
+
+/* =========================================
+   EFECTOS DE AURA (GLOW)
+========================================= */
+/* Naranja para Web (#FF992C) */
+.kpi-web-aura::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    right: -40px;
+    width: 180px;
+    height: 180px;
+    background: rgba(255, 153, 44, 0.25);
+    border-radius: 50%;
+    filter: blur(50px);
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Verde para Local (#17C668) */
+.kpi-local-aura::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    right: -40px;
+    width: 180px;
+    height: 180px;
+    background: rgba(23, 198, 104, 0.20);
+    border-radius: 50%;
+    filter: blur(50px);
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Colores de utilidad para los iconos */
+.bg-saffron-soft {
+    background-color: rgba(255, 153, 44, 0.15);
+}
+
+.text-saffron {
+    color: #FF992C;
+}
+
+.bg-emerald-soft {
+    background-color: rgba(23, 198, 104, 0.15);
+}
+
+.text-emerald {
+    color: #17C668;
+}
+
+/* =========================================
+   ADAPTACIÓN A MODO OSCURO (DARK MODE)
+========================================= */
+.dark-theme .fw-kpi-card {
+    background: linear-gradient(145deg, #1e1e24 0%, #121215 100%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.dark-theme .kpi-label {
+    color: #94a3b8;
+}
+
+.dark-theme .kpi-value {
+    color: #f8fafc;
+}
+
+.dark-theme .kpi-web-aura::before {
+    background: rgba(255, 153, 44, 0.15);
+}
+
+.dark-theme .kpi-local-aura::before {
+    background: rgba(23, 198, 104, 0.12);
+}

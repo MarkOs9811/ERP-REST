@@ -9,7 +9,8 @@ export function BannerFidelizacion({
   const navigate = useNavigate();
 
   return (
-    <div className="fw-promo-card">
+    // Nota la clase extra "card-fidelizacion"
+    <div className="fw-promo-card card-fidelizacion">
       <div className="mb-3">
         <span className="fw-badge fw-badge-strawberry">
           <StarHalfIcon size={14} /> Fidelización
@@ -29,6 +30,7 @@ export function BannerFidelizacion({
             ? setModalAddCampaña(true)
             : navigate("/clientes/fidelizacion");
         }}
+        // Actualizamos las clases del botón
         className="fw-btn-action fw-btn-strawberry mt-auto w-100"
       >
         {botonAction === "crear" ? "Crear Campaña" : "Ver Campañas"}

@@ -29,7 +29,13 @@ export function Platos() {
                 </h4>
                 <span className="badge-header ms-2">Platos</span>
               </div>
-              <CategoriaPlatos />
+              <div className="overflow-auto">
+                {/* AQUI ENLAZAMOS EL SETSEARCH AL COMPONENTE CATEGORIA */}
+                <CategoriaPlatos
+                  claveVenta="restaurante"
+                  clearSearch={setSearch}
+                />
+              </div>
               <div className="d-flex align-items-center gap-2 mt-3 mt-md-0">
                 <div className="header-search-container">
                   <Search className="search-icon" />
