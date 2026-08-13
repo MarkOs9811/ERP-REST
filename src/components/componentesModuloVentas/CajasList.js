@@ -121,22 +121,23 @@ export function CajasList({ search }) {
                   style={{ position: "absolute", top: "10px", right: "10px" }}
                 >
                   <button
-                    className="btn btn-light btn-sm"
+                    className="btn-generico btn-icon btn-sm"
                     type="button"
                     id={`dropdownMenuButton-${item.id}`}
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                   >
-                    <EllipsisVertical className="text-auto" />
+                    <EllipsisVertical className="text-auto" size={18} />
                   </button>
+
                   <ul
-                    className="dropdown-menu dropdown-menu-end "
+                    className="dropdown-menu dropdown-menu-end"
                     aria-labelledby={`dropdownMenuButton-${item.id}`}
                     style={{ zIndex: 1050 }}
                   >
                     <li>
                       <button
-                        className="dropdown-item"
+                        className="dropdown-item text-start"
                         type="button"
                         onClick={() => {
                           setModalEditarCaja(true);
@@ -149,7 +150,7 @@ export function CajasList({ search }) {
                     {item.estado === 1 ? (
                       <li>
                         <button
-                          className="dropdown-item"
+                          className="dropdown-item text-start"
                           type="button"
                           onClick={() => {
                             setModalEliminarCaja(true);
@@ -162,7 +163,7 @@ export function CajasList({ search }) {
                     ) : (
                       <li>
                         <button
-                          className="dropdown-item"
+                          className="dropdown-item text-start"
                           type="button"
                           onClick={() => {
                             setModalActivarCaja(true);

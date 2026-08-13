@@ -79,33 +79,57 @@
   cursor: pointer;
 }
 
-.card {
-  border-radius: 8px;
-}
-.boton-opcion-pago{
+
+
+/* ========================================================================
+   OPCIONES DE PAGO (RESPONSIVE GRID)
+========================================================================= */
+.contenedor-pagos-grid {
+  display: grid;
+  /* Se adapta automáticamente: en PC en una fila, en móvil salta de línea */
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 12px;
   width: 100%;
-  border: none;
-  text-decoration: none;
-  background-color: auto;
 }
-.btn-seleccionado{
-  background-color: #2a313a!important;
-    color: #fff !important;
+.boton-opcion-pago {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  border: 1px solid var(--outline-strong) !important;
+  border-radius: var(--radius-pill) !important;
+  /* Forma de píldora para todos */
+  text-decoration: none;
+  background-color: transparent;
+  transition: all 0.2s ease-in-out;
+  white-space: normal;
+  /* Permite que textos largos se ajusten si es necesario */
+  gap: 8px;
+  /* Espacio entre el icono y el texto */
+}
+
+.btn-seleccionado {
+  background-color: black !important;
+  color: #fff !important;
+  border-color: black !important;
 }
 /* ========== TEMA OSCURO PLATOS ESTILO MODERNO CON ROJO CORPORATIVO ========== */
-body.dark-theme .boton-opcion-pago{
-  width: 100%;
-    border: none;
-    text-decoration: none;
-    background-color: #1b2025;
-    color: white;
+/* ========== TEMA OSCURO BOTONES DE PAGO ========== */
+body.dark-theme .boton-opcion-pago {
+  background-color: var(--bg-surface);
+  color: var(--text-main);
+  border-color: var(--fw-border-input) !important;
 }
-/* Estilo base que funciona en ambos temas */
+
+body.dark-theme .boton-opcion-pago:hover {
+  background-color: var(--bg-muted);
+}
 
 body.dark-theme .btn-seleccionado {
-  background-color: #b64242 !important;
+  background-color: var(--fw-strawberry) !important;
+  /* Rojo corporativo */
   color: #fff !important;
-  
+  border-color: var(--fw-strawberry) !important;
 }
 
 body.dark-theme .card-platillo:hover {

@@ -1,8 +1,8 @@
-import { Eye, Pencil, Trash2 } from "lucide-react";
+import { Eye, Pencil, Trash2, X } from "lucide-react";
 
 export const BtnVer = ({ onClick, disabled = false, title = "Ver" }) => (
   <button
-    className="btn btn-ver btn-icon-circle mx-1 my-2 d-inline-flex align-items-center justify-content-center"
+    className="btn btn-ver btn-icon mx-1 my-2 d-inline-flex align-items-center justify-content-center"
     onClick={onClick}
     disabled={disabled}
     data-bs-toggle="tooltip"
@@ -14,7 +14,7 @@ export const BtnVer = ({ onClick, disabled = false, title = "Ver" }) => (
 
 export const BtnEditar = ({ onClick, disabled = false, title = "Editar" }) => (
   <button
-    className="btn btn-editar btn-icon-circle mx-1 my-2 d-inline-flex align-items-center justify-content-center"
+    className="btn btn-editar btn-icon mx-1 my-2 d-inline-flex align-items-center justify-content-center"
     onClick={onClick}
     disabled={disabled}
     data-bs-toggle="tooltip"
@@ -30,13 +30,32 @@ export const BtnEliminar = ({
   title = "Eliminar",
 }) => (
   <button
-    className="btn btn-eliminar btn-icon-circle mx-1 my-2 d-inline-flex align-items-center justify-content-center"
+    className="btn btn-eliminar btn-icon mx-1 my-2 d-inline-flex align-items-center justify-content-center"
     onClick={onClick}
     disabled={disabled}
     data-bs-toggle="tooltip"
     title={title}
   >
     <Trash2 size={18} />
+  </button>
+);
+
+// 🔥 NUEVO BOTÓN AGREGADO
+export const BtnCerrar = ({
+  onClick,
+  disabled = false,
+  title = "Cerrar Modal",
+}) => (
+  <button
+    type="button"
+    className="btn btn-cerrar btn-icon d-inline-flex align-items-center justify-content-center"
+    onClick={onClick}
+    disabled={disabled}
+    aria-label="Close"
+    data-bs-toggle="tooltip"
+    title={title}
+  >
+    <X size={18} />
   </button>
 );
 

@@ -281,7 +281,7 @@ export function SideBar() {
         >
           <li
             className={`menu-item ${location.pathname.includes("/configuracion") ? "active" : ""}`}
-            onClick={() => dispatch(setSidebarCompressed(false))}
+            onClick={() => dispatch(setSidebarCompressed(true))}
             style={{ listStyle: "none" }}
           >
             <div className="d-flex w-100 gap-2 align-items-center justify-content-md-start m-auto px-2">

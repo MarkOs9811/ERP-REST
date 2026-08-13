@@ -205,7 +205,7 @@ export function Header({ tipoHeader = null }) {
           ) : null}
           {/* BOTON PARA CAMBIAR DE TEMA - SIEMPRE VISIBLE */}
           <button
-            className="ico-header border-0 rounded-pill d-flex align-items-center justify-content-center"
+            className="ico-header btn-icon border-0 rounded-pill d-flex align-items-center justify-content-center"
             title="Cambiar tema"
             style={{
               width: 44,
@@ -237,7 +237,7 @@ export function Header({ tipoHeader = null }) {
           </button>
           {/* Botón de Notificaciones - SIEMPRE VISIBLE */}
           <button
-            className="ico-header border-0 rounded-pill d-flex align-items-center justify-content-center position-relative"
+            className="ico-header btn-icon border-0 d-flex align-items-center justify-content-center position-relative"
             style={{
               width: 44,
               height: 44,
@@ -281,7 +281,7 @@ export function Header({ tipoHeader = null }) {
             )}
           </button>
           <div
-            className="ico-header border-0 rounded-pill d-flex align-items-center justify-content-center"
+            className="ico-header btn-icon border-0 rounded-pill d-flex align-items-center justify-content-center"
             style={{
               width: 44,
               height: 44,

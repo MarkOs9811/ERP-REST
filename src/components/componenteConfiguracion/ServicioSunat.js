@@ -53,7 +53,7 @@ export function ServicioSunat() {
     retry: 1,
   });
   const sunatConfig = configuracion.find(
-    (item) => item.nombre?.toLowerCase() === "sunat"
+    (item) => item.nombre?.toLowerCase() === "sunat",
   );
 
   const [switches, setSwitches] = useState({});
@@ -90,7 +90,7 @@ export function ServicioSunat() {
   const handleSetDefault = async (id) => {
     try {
       const response = await axiosInstance.put(
-        `/configuraciones/serieCorrelativoDefault/${id}`
+        `/configuraciones/serieCorrelativoDefault/${id}`,
       );
       if (response.data.success) {
         ToastAlert("success", "Se estableció por defecto");
@@ -122,7 +122,7 @@ export function ServicioSunat() {
   const handleActivarSerie = async (id) => {
     try {
       const response = await axiosInstance.put(
-        `/configuraciones/serieCorrelativoActivar/${id}`
+        `/configuraciones/serieCorrelativoActivar/${id}`,
       );
       if (response.data.success) {
         ToastAlert("success", "Se activó la serie");
@@ -154,7 +154,7 @@ export function ServicioSunat() {
   const handleDesactivarSerie = async (id) => {
     try {
       const response = await axiosInstance.put(
-        `/configuraciones/serieCorrelativoDesactivar/${id}`
+        `/configuraciones/serieCorrelativoDesactivar/${id}`,
       );
       if (response.data.success) {
         ToastAlert("success", "Se desactivó la serie");
@@ -424,7 +424,7 @@ export function ServicioSunat() {
           <div className="ms-auto">
             <button
               type="button"
-              className="btn btn-outline-dark"
+              className="btn-principal btn-icon"
               onClick={() => setModalAddSerieCorr(true)}
             >
               <PlusIcon />

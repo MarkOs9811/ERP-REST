@@ -113,7 +113,7 @@ export function FormAddConfigTarifa({ onClose, sedeId }) {
           <label className="form-label fw-medium text-dark small">
             Hora Apertura
           </label>
-          <div className="input-group shadow-sm">
+          <div className="input-group ">
             <span className="input-group-text bg-white">
               <Clock size={16} className="text-muted" />
             </span>
@@ -134,7 +134,7 @@ export function FormAddConfigTarifa({ onClose, sedeId }) {
           <label className="form-label fw-medium text-dark small">
             Hora Cierre
           </label>
-          <div className="input-group shadow-sm">
+          <div className="input-group ">
             <span className="input-group-text bg-white">
               <Clock size={16} className="text-muted" />
             </span>
@@ -161,7 +161,7 @@ export function FormAddConfigTarifa({ onClose, sedeId }) {
           <label className="form-label fw-medium text-dark small">
             Costo Base (S/)
           </label>
-          <div className="input-group shadow-sm">
+          <div className="input-group ">
             <span
               className="input-group-text bg-white text-muted fw-bold"
               style={{ fontSize: "0.9rem" }}
@@ -190,7 +190,7 @@ export function FormAddConfigTarifa({ onClose, sedeId }) {
           <label className="form-label fw-medium text-dark small">
             Costo Prioridad (S/)
           </label>
-          <div className="input-group shadow-sm">
+          <div className="input-group ">
             <span
               className="input-group-text bg-white text-muted fw-bold"
               style={{ fontSize: "0.9rem" }}
@@ -219,7 +219,7 @@ export function FormAddConfigTarifa({ onClose, sedeId }) {
           <label className="form-label fw-medium text-dark small">
             Minutos Min
           </label>
-          <div className="input-group shadow-sm">
+          <div className="input-group ">
             <span className="input-group-text bg-white">
               <Clock size={16} className="text-muted" />
             </span>
@@ -239,7 +239,7 @@ export function FormAddConfigTarifa({ onClose, sedeId }) {
           <label className="form-label fw-medium text-dark small">
             Minutos Max
           </label>
-          <div className="input-group shadow-sm">
+          <div className="input-group ">
             <span className="input-group-text bg-white">
               <Clock size={16} className="text-muted" />
             </span>
@@ -271,7 +271,7 @@ export function FormAddConfigTarifa({ onClose, sedeId }) {
         <label className="form-label fw-medium text-dark small">
           Lista de montos (S/)
         </label>
-        <div className="input-group shadow-sm mb-1">
+        <div className="input-group  mb-1">
           <span className="input-group-text bg-white">
             <HeartHandshake size={16} className="text-muted" />
           </span>
@@ -292,7 +292,7 @@ export function FormAddConfigTarifa({ onClose, sedeId }) {
       <div className="mt-auto d-flex justify-content-end gap-2 border-top pt-3 pb-1">
         <button
           type="button"
-          className="btn btn-outline-secondary rounded-pill px-4"
+          className="btn-cerrar rounded-pill px-4"
           onClick={onClose}
           disabled={isSubmitting}
         >
@@ -300,7 +300,7 @@ export function FormAddConfigTarifa({ onClose, sedeId }) {
         </button>
         <button
           type="submit"
-          className="btn btn-primary rounded-pill px-4"
+          className="btn-guardar px-4"
           disabled={isSubmitting}
         >
           {isSubmitting ? "Guardando..." : "Guardar Configuración"}

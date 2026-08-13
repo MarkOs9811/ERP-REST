@@ -204,7 +204,7 @@ export function AjustesHorario() {
         </div>
 
         <button
-          className="btn-principal mx-2"
+          className="btn-principal btn-icon mx-2"
           title="Agregar"
           onClick={() => {
             setModalAddHorario(true);

@@ -133,7 +133,7 @@ export function ToLlevar() {
                 <h5 className="mb-0 fw-bold text-dark">Para Llevar</h5>
                 {items.length > 0 && (
                   <button
-                    className="btn btn-outline-danger d-flex align-items-center gap-1"
+                    className="btn-eliminar d-flex align-items-center gap-1"
                     onClick={handleEliminarTodo}
                     title="Limpiar cuenta"
                   >
@@ -194,7 +194,7 @@ export function ToLlevar() {
                               }}
                             >
                               <button
-                                className="btn btn-sm btn-link border-0 text-dark p-0"
+                                className="btn-informativo btn-icon btn-link border-0 text-dark p-0"
                                 style={{ width: "22px" }}
                                 onClick={() =>
                                   handleRemovePlatoPreventa(item.id)
@@ -209,7 +209,7 @@ export function ToLlevar() {
                                 {item.cantidad}
                               </span>
                               <button
-                                className="btn btn-sm btn-link border-0 text-dark p-0"
+                                className="btn-informativo btn-icon btn-link border-0 text-dark p-0"
                                 style={{ width: "22px" }}
                                 onClick={() => handleAddPlatoPreventa(item)}
                               >
@@ -225,7 +225,7 @@ export function ToLlevar() {
                           </td>
                           <td className="text-center py-2">
                             <button
-                              className="btn btn-sm text-danger rounded-pill mx-2 p-0 border-0"
+                              className="btn-eliminar btn-icon   mx-2 p-0 "
                               onClick={() =>
                                 handleRemovePlatoPreventa(item.id, true)
                               }

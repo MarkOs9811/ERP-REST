@@ -125,7 +125,7 @@ export const CardPlatos = ({
             {/* 🔥 CORRECCIÓN: Agregamos "btn" para la estructura base y "btn-icon" para hacerlo círculo perfecto */}
             <button
               type="button"
-              className="btn btn-cerrar btn-icon shadow-sm"
+              className=" btn-cerrar btn-icon "
               onClick={() => handleRemove(item.id)}
             >
               <MinusIcon size={16} strokeWidth={3} />
@@ -138,7 +138,7 @@ export const CardPlatos = ({
             {/* 🔥 CORRECCIÓN: Igual aquí, btn-guardar da el color, btn-icon da la forma circular */}
             <button
               type="button"
-              className="btn btn-guardar btn-icon shadow-sm"
+              className="btn-guardar btn-icon"
               onClick={() => handleAdd(item)}
             >
               <PlusIcon size={16} strokeWidth={3} />

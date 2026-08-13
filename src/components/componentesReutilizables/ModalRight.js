@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import "../../css/EstiloModalRight.css";
 import { capitalizeFirstLetter } from "../../hooks/FirstLetterUp";
 import { X } from "lucide-react";
+import { BtnCerrar } from "./BotonesAccion";
 
 const ModalRight = ({
   isOpen,
@@ -26,6 +27,7 @@ const ModalRight = ({
 }) => {
   const [shouldRender, setShouldRender] = useState(isOpen);
 
+  // Efecto para la animación de entrada y salida
   useEffect(() => {
     if (isOpen) {
       setShouldRender(true);
@@ -36,6 +38,25 @@ const ModalRight = ({
       return () => clearTimeout(timer);
     }
   }, [isOpen, shouldRender]);
+
+  // 🔥 NUEVO: Efecto optimizado para cerrar con la tecla Escape
+  useEffect(() => {
+    const handleEsc = (event) => {
+      if (event.key === "Escape" && !isLoading) {
+        onClose();
+      }
+    };
+
+    // Solo agregamos el listener si el modal está abierto
+    if (isOpen) {
+      document.addEventListener("keydown", handleEsc);
+    }
+
+    // Cleanup: limpiamos el evento cuando se cierra el modal o se desmonta
+    return () => {
+      document.removeEventListener("keydown", handleEsc);
+    };
+  }, [isOpen, isLoading, onClose]);
 
   const handleClose = () => {
     // Si está cargando, bloqueamos que el usuario pueda cerrar el modal accidentalmente
@@ -60,16 +81,7 @@ const ModalRight = ({
         {/* Header fijo */}
         <div className="modal-right-header-content d-flex align-items-center justify-content-between p-3 w-100 border-bottom flex-shrink-0">
           <div className="d-flex align-items-center gap-3">
-            <button
-              type="button"
-              className="btn-cerrar fw-bold shadow-sm d-flex align-items-center justify-content-center"
-              aria-label="Close"
-              onClick={handleClose}
-              title="Cerrar Modal"
-              disabled={isLoading} // 🔥 Bloqueamos la X si está cargando
-            >
-              <X />
-            </button>
+            <BtnCerrar onClick={handleClose} disabled={isLoading} />
 
             <div className="d-flex flex-column modal-title-wrapper">
               <h3 className="modal-right-title mb-0">

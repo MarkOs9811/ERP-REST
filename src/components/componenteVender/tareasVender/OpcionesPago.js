@@ -1,3 +1,6 @@
+import React, { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { useQuery } from "@tanstack/react-query";
 import {
   Banknote,
   BanknoteArrowDown,
@@ -5,12 +8,18 @@ import {
   ReceiptText,
   User,
   WalletCards,
+  Search,
+  Loader2,
+  CheckCircle,
+  MapPin,
+  Building2,
 } from "lucide-react";
-import React from "react"; // Asegúrate de importar lo necesario
-import { useForm } from "react-hook-form";
+
+// Ajusta las rutas según tu proyecto
 import { EstadoIntegraciones } from "../../../hooks/EstadoIntegraciones";
-import { useQuery } from "@tanstack/react-query";
 import { GetMetodosPago } from "../../../service/accionesVentas/GetMetodosPago";
+import { ConsultarDocumento } from "../../../service/accionesVender/ConsultaDocumentos";
+import ToastAlert from "../../componenteToast/ToastAlert";
 
 export function OpcionesPago(props) {
   const {
@@ -48,29 +57,109 @@ export function OpcionesPago(props) {
     formState: { errors },
   } = useForm();
 
-  // 1. Configuramos el hook, pero NO dejamos que bloquee la renderización
+  // Integraciones y Data
   const {
     data: estadoSunat,
     isLoading,
     isError,
-    // error, // Ya no necesitamos mostrar el error en pantalla completa
     refetch: refetchSunat,
   } = EstadoIntegraciones("sunat", { enabled: false });
+
   const { data: metodosData } = useQuery({
     queryKey: ["metodosPagos"],
     queryFn: GetMetodosPago,
   });
-  console.log("Metodos", metodosData);
-  // 2. Eliminamos los IF que retornaban <p>Error...</p>.
-  // Ahora calculamos si Sunat está disponible de forma segura.
-  // Se considera activo SOLO si no está cargando, no hay error y el estado es 1.
-  const sunatActivo = !isLoading && !isError && estadoSunat?.estado === 1;
 
-  // Filtrar métodos de pago activos (estado === 1)
+  const sunatActivo = !isLoading && !isError && estadoSunat?.estado === 1;
   const metodosActivos =
     metodosData?.filter((metodo) => metodo.estado === 1) || [];
 
-  // Función para obtener el icono/imagen según el método
+  // 🔥 ESTADOS PARA BÚSQUEDA AUTOMÁTICA
+  const [isSearchingDni, setIsSearchingDni] = useState(false);
+  const [dniExitoso, setDniExitoso] = useState(false);
+
+  const [isSearchingRuc, setIsSearchingRuc] = useState(false);
+  const [rucExitoso, setRucExitoso] = useState(false);
+  const [rucLocal, setRucLocal] = useState("");
+
+  // ========================================================
+  // LÓGICA DE BÚSQUEDA AUTOMÁTICA: BOLETA (DNI)
+  // ========================================================
+  useEffect(() => {
+    if (tipoDocumento === "DNI" && numeroDocumento?.length === 8) {
+      ejecutarBusquedaDni(numeroDocumento);
+    } else {
+      setDniExitoso(false);
+    }
+  }, [numeroDocumento, tipoDocumento]);
+
+  const ejecutarBusquedaDni = async (doc) => {
+    setIsSearchingDni(true);
+    setDniExitoso(false);
+
+    const resultado = await ConsultarDocumento(doc, "DNI");
+    if (resultado.success) {
+      // 🔥 LÓGICA DE SEPARACIÓN (Asumiendo formato: PATERNO MATERNO NOMBRES)
+      const partes = resultado.nombre.trim().split(" ");
+      let apellidosCalculados = "";
+      let nombresCalculados = resultado.nombre;
+
+      if (partes.length >= 3) {
+        apellidosCalculados = `${partes[0]} ${partes[1]}`; // Toma las dos primeras palabras como apellidos
+        nombresCalculados = partes.slice(2).join(" "); // El resto como nombres
+      } else if (partes.length === 2) {
+        apellidosCalculados = partes[0];
+        nombresCalculados = partes[1];
+      }
+
+      setNombres(nombresCalculados);
+      setApellidos(apellidosCalculados);
+
+      // Actualizamos los inputs visualmente
+      const inputNombres = document.getElementById("nombres");
+      const inputApellidos = document.getElementById("apellidos");
+      if (inputNombres) inputNombres.value = nombresCalculados;
+      if (inputApellidos) inputApellidos.value = apellidosCalculados;
+
+      setDniExitoso(true);
+      ToastAlert("success", "Cliente encontrado");
+    } else {
+      ToastAlert("warning", "DNI no encontrado. Ingrese manualmente.");
+    }
+    setIsSearchingDni(false);
+  };
+
+  // ========================================================
+  // LÓGICA DE BÚSQUEDA AUTOMÁTICA: FACTURA (RUC)
+  // ========================================================
+  useEffect(() => {
+    if (rucLocal?.length === 11) {
+      ejecutarBusquedaRuc(rucLocal);
+    } else {
+      setRucExitoso(false);
+    }
+  }, [rucLocal]);
+
+  const ejecutarBusquedaRuc = async (doc) => {
+    setIsSearchingRuc(true);
+    setRucExitoso(false);
+
+    const resultado = await ConsultarDocumento(doc, "RUC");
+    if (resultado.success) {
+      setRazonSocial(resultado.nombre);
+
+      const inputRazon = document.getElementById("nombreRazonSocial");
+      if (inputRazon) inputRazon.value = resultado.nombre;
+
+      setRucExitoso(true);
+      ToastAlert("success", "Empresa encontrada");
+    } else {
+      ToastAlert("warning", "RUC no encontrado. Ingrese manualmente.");
+    }
+    setIsSearchingRuc(false);
+  };
+
+  // Renderizado de iconos de pago
   const getIconoMetodo = (nombre) => {
     const nombreLower = nombre?.toLowerCase().trim();
     if (nombreLower === "yape") {
@@ -79,7 +168,7 @@ export function OpcionesPago(props) {
           src="/images/yape-logo.png"
           alt="Yape"
           className="img-fluid rounded-pill"
-          style={{ maxHeight: "30px", marginRight: "8px" }}
+          style={{ maxHeight: "24px", marginRight: "8px" }}
         />
       );
     }
@@ -89,32 +178,31 @@ export function OpcionesPago(props) {
           src="/images/plin-log.png"
           alt="Plin"
           className="img-fluid rounded-pill"
-          style={{ maxHeight: "30px", marginRight: "8px" }}
+          style={{ maxHeight: "24px", marginRight: "8px" }}
         />
       );
     }
-    if (nombreLower === "efectivo") {
-      return <Banknote className="text-auto" />;
-    }
-    if (nombreLower === "tarjeta" || nombreLower === "tarjeta credito") {
-      return <CreditCard className="text-auto" />;
-    }
-    return <WalletCards className="text-auto" />;
+    if (nombreLower === "efectivo") return <Banknote size={18} />;
+    if (nombreLower === "tarjeta" || nombreLower === "tarjeta credito")
+      return <CreditCard size={18} />;
+    return <WalletCards size={18} />;
   };
 
   return (
-    <div className="card border flex-grow-1 h-100 d-flex flex-column h-100">
-      <div className="card-header">
-        <h5>Método de pago</h5>
+    <div className="card border flex-grow-1 h-100 d-flex flex-column overflow-auto">
+      <div className="card-header bg-white py-3 border-bottom">
+        <h5 className="mb-0 fw-bold">Método de pago</h5>
       </div>
       <div
-        className="card-body overflow-auto"
-        style={{ height: "calc(100vh - 480px)" }}
+        className="card-body overflow-auto p-3"
+        style={{ height: "calc(100vh - 250px)" }}
       >
-        {/* Métodos de pago */}
-        <div className="mt-0">
+        {/* ================================================================ */}
+        {/* MÉTODOS DE PAGO PRINCIPALES */}
+        {/* ================================================================ */}
+        <div className="mb-4">
           <div
-            className="btn-group w-100"
+            className="contenedor-pagos-grid"
             role="group"
             aria-label="Método de Pago"
           >
@@ -122,7 +210,7 @@ export function OpcionesPago(props) {
               <button
                 key={metodo.id}
                 type="button"
-                className={`boton-opcion-pago p-3 w-33 ${
+                className={`boton-opcion-pago p-2 ${
                   metodoSeleccionado === metodo.nombre
                     ? "btn-seleccionado"
                     : "btn-outline-dark"
@@ -142,87 +230,84 @@ export function OpcionesPago(props) {
                 }}
               >
                 {getIconoMetodo(metodo.nombre)}
-                {metodo.nombre.charAt(0).toUpperCase() + metodo.nombre.slice(1)}
+                <span className="fw-medium">
+                  {metodo.nombre.charAt(0).toUpperCase() +
+                    metodo.nombre.slice(1)}
+                </span>
               </button>
             ))}
           </div>
         </div>
 
-        {/* Tarjeta debito o credito */}
-        <div className={`mt-4 ${tarjetas ? "d-block" : "d-none"}`}>
-          <h6>Tarjeta</h6>
-          <div
-            className="btn-group w-100"
-            role="group"
-            aria-label="Método de Pago"
-          >
+        {/* ================================================================ */}
+        {/* TARJETAS (DÉBITO / CRÉDITO) */}
+        {/* ================================================================ */}
+        <div className={`mb-4 ${tarjetas ? "d-block" : "d-none"}`}>
+          <label className="small text-muted fw-bold mb-2">
+            Tipo de Tarjeta
+          </label>
+          <div className="contenedor-pagos-grid" role="group">
             <button
               type="button"
-              className={`boton-opcion-pago p-3 w-33 ${
+              className={`boton-opcion-pago p-2 ${
                 typeTarjeta === "debito"
                   ? "btn-seleccionado"
                   : "btn-outline-dark"
               }`}
-              onClick={() => {
-                handleTypeTarjeta("debito");
-              }}
+              onClick={() => handleTypeTarjeta("debito")}
             >
-              <CreditCard color={"auto"} /> Tarjeta Debito
+              <CreditCard size={18} /> Tarjeta Débito
             </button>
             <button
               type="button"
-              className={`boton-opcion-pago p-3 w-33 ${
+              className={`boton-opcion-pago p-2 ${
                 typeTarjeta === "credito"
                   ? "btn-seleccionado"
                   : "btn-outline-dark"
               }`}
-              onClick={() => {
-                handleTypeTarjeta("credito");
-              }}
+              onClick={() => handleTypeTarjeta("credito")}
             >
-              <BanknoteArrowDown color={"auto"} /> Tarjeta Credito
+              <BanknoteArrowDown size={18} /> Tarjeta Crédito
             </button>
           </div>
         </div>
 
-        {/* Opciones de Boleta/Factura */}
-        <div className={`mt-4 ${tipoComporbante ? "d-block" : "d-none"}`}>
-          <h6>Tipo de documento</h6>
-
-          <div
-            className="btn-group w-100 d-flex align-content-center"
-            role="group"
-            aria-label="Tipo de Documento"
-          >
+        {/* ================================================================ */}
+        {/* TIPO DE COMPROBANTE */}
+        {/* ================================================================ */}
+        <div className={`mb-4 ${tipoComporbante ? "d-block" : "d-none"}`}>
+          <label className="small text-muted fw-bold mb-2">
+            Tipo de Comprobante
+          </label>
+          <div className="contenedor-pagos-grid" role="group">
             {sunatActivo ? (
               <button
                 type="button"
-                className={`boton-opcion-pago p-3 w-50 ${
+                className={`boton-opcion-pago p-2 ${
                   comprobante === "B" ? "btn-seleccionado" : "btn-outline-dark"
                 }`}
                 onClick={() => {
                   handleShowFactura(false);
-                  handleShowDatosClientes(false);
+                  handleShowDatosClientes(true); // Mostrar datos cliente para boleta si es necesario
                   handleSlectComprobante("B");
                 }}
               >
-                <ReceiptText color="auto" /> Boleta
+                <ReceiptText size={18} /> Boleta
               </button>
             ) : (
-              // Si falla sunat, carga o no existe, mostramos el aviso pero el componente sigue vivo
-              <div className="d-flex align-items-center justify-content-center w-50 p-1 border rounded bg-light text-muted">
+              <div className="d-flex align-items-center justify-content-center p-2 border rounded bg-light text-muted w-100">
                 <small
                   className="text-center"
-                  style={{ fontSize: "0.75rem", lineHeight: "1.2" }}
+                  style={{ fontSize: "0.7rem", lineHeight: "1.2" }}
                 >
-                  Boleta no disponible <br /> (Venta interna)
+                  Boleta inactiva <br /> (Venta interna)
                 </small>
               </div>
             )}
-            {/* Boleta Simple siempre visible (Backup) */}
+
             <button
               type="button"
-              className={`boton-opcion-pago p-3 w-50 ${
+              className={`boton-opcion-pago p-2 ${
                 comprobante === "S" ? "btn-seleccionado" : "btn-outline-dark"
               }`}
               onClick={() => {
@@ -231,14 +316,13 @@ export function OpcionesPago(props) {
                 handleSlectComprobante("S");
               }}
             >
-              <ReceiptText color="auto" /> Boleta Simple
+              <ReceiptText size={18} /> Boleta Simple
             </button>
 
-            {/* Factura visible SOLO si Sunat respondió correctamente y está activo */}
             {sunatActivo ? (
               <button
                 type="button"
-                className={`boton-opcion-pago p-3 w-50 ${
+                className={`boton-opcion-pago p-2 ${
                   comprobante === "F" ? "btn-seleccionado" : "btn-outline-dark"
                 }`}
                 onClick={() => {
@@ -247,202 +331,263 @@ export function OpcionesPago(props) {
                   handleSlectComprobante("F");
                 }}
               >
-                <ReceiptText color="auto" /> Factura
+                <ReceiptText size={18} /> Factura
               </button>
             ) : (
-              // Si falla sunat, carga o no existe, mostramos el aviso pero el componente sigue vivo
-              <div className="d-flex align-items-center justify-content-center w-50 p-1 border rounded bg-light text-muted">
+              <div className="d-flex align-items-center justify-content-center p-2 border rounded bg-light text-muted w-100">
                 <small
                   className="text-center"
-                  style={{ fontSize: "0.75rem", lineHeight: "1.2" }}
+                  style={{ fontSize: "0.7rem", lineHeight: "1.2" }}
                 >
-                  Facturación no disponible <br /> (Venta interna)
+                  Facturación inactiva <br /> (Venta interna)
                 </small>
               </div>
             )}
           </div>
         </div>
 
-        {/* RESTO DEL CODIGO (Inputs de cliente, RUC, etc) SE MANTIENE IGUAL */}
-        {/* INFORMACION DEL CLIENTE BOLETAS */}
-        <div className={`mt-4 ${clienteBoleta ? "d-block" : "d-none"}`}>
-          {/* ... Inputs de Boleta ... */}
-          {/* (Mantén tu código original aquí abajo sin cambios) */}
-          <div className="mb-3">
-            <div className="form-floating">
+        <hr className="text-muted opacity-25 my-4" />
+
+        {/* ================================================================ */}
+        {/* INFORMACIÓN DEL CLIENTE: BOLETA */}
+        {/* ================================================================ */}
+        <div className={`mt-2 ${clienteBoleta ? "d-block" : "d-none"}`}>
+          <h6 className="fw-bold mb-3 text-dark">Datos del Cliente (Boleta)</h6>
+
+          <div className="row g-2 mb-2">
+            <div className="col-md-4">
+              <label
+                className="small text-muted mb-1"
+                style={{ fontSize: "0.75rem" }}
+              >
+                Tipo Doc.
+              </label>
               <select
                 id="tipo_documento"
-                className="form-select"
-                {...register("tipo_documento", {
-                  required: "Seleeciona un tipo de documento",
-                })}
+                className="form-select form-select-sm"
+                {...register("tipo_documento")}
                 onChange={handleSelectChange(
                   setTipoDocumento,
                   setValue,
                   "tipo_documento",
                   [{ name: "numero_documento", setter: setNumeroDocumento }],
                 )}
-                style={{ border: "1px solid black" }}
               >
                 <option value="DNI">DNI</option>
-                <option value="extranjeria">Carnet de Extranjería</option>
+                <option value="extranjeria">Carnet Ext.</option>
               </select>
-              <label htmlFor="tipo_documento">
-                <WalletCards color={"auto"} />
-                Tipo de Documento
-              </label>
-              {errors.tipo_documento && (
-                <div className="invalid-feedback">
-                  {errors.tipo_documento.message}
-                </div>
-              )}
             </div>
-          </div>
-          {/* ... Resto de tus inputs ... */}
-          {/* Por brevedad, asumo que el resto de inputs de DNI/RUC siguen aquí tal cual */}
-          {/* Número de documento */}
-          <div className="mb-3">
-            <div className="form-floating">
-              <input
-                type="text"
-                placeholder=" "
-                className={`form-control ${
-                  errors.numeroDocumento ? "is-invalid" : ""
-                }`}
-                id="numero_documento"
-                value={numeroDocumento}
-                {...register("numero_documento", {
-                  required: "Este campo es obligatorio",
-                  minLength: {
-                    value: tipoDocumento === "DNI" ? 8 : 10,
-                    message: `Debe tener ${
-                      tipoDocumento === "DNI" ? "8" : "10"
-                    } caracteres`,
-                  },
-                  maxLength: {
-                    value: tipoDocumento === "DNI" ? 8 : 10,
-                    message: `Debe tener ${
-                      tipoDocumento === "DNI" ? "8" : "10"
-                    } caracteres`,
-                  },
-                })}
-                onChange={handleInputChange(
-                  setNumeroDocumento,
-                  setValue,
-                  "numero_documento",
-                  /^\d*$/,
-                  tipoDocumento === "DNI" ? 8 : 10,
-                )}
-                style={{ border: "1px solid black" }}
-              />
-              <label htmlFor="numero_documento">Número de Documento</label>
-              {errors.numeroDocumento && (
-                <div className="invalided-feedback">
-                  {errors.numeroDocumento.message}
+
+            <div className="col-md-8">
+              <label
+                className="small text-muted mb-1"
+                style={{ fontSize: "0.75rem" }}
+              >
+                Número de Documento
+              </label>
+              <div className="position-relative">
+                <input
+                  type="text"
+                  className={`form-control form-control-sm ${errors.numeroDocumento ? "is-invalid" : ""}`}
+                  placeholder="Ingrese número..."
+                  value={numeroDocumento}
+                  style={{
+                    paddingRight: "30px",
+                    // 🔥 Aquí forzamos la línea verde y anulamos el resplandor azul de focus
+                    borderColor: dniExitoso ? "#198754" : undefined,
+                    boxShadow: dniExitoso ? "none" : undefined,
+                    outline: "none",
+                  }}
+                  {...register("numero_documento")}
+                  onChange={(e) => {
+                    setDniExitoso(false);
+                    handleInputChange(
+                      setNumeroDocumento,
+                      setValue,
+                      "numero_documento",
+                      /^\d*$/,
+                      tipoDocumento === "DNI" ? 8 : 12,
+                    )(e);
+                  }}
+                />
+                <div
+                  className="position-absolute top-50 end-0 translate-middle-y pe-2"
+                  style={{ pointerEvents: "none" }}
+                >
+                  {isSearchingDni ? (
+                    <Loader2
+                      size={16}
+                      className="text-dark"
+                      style={{ animation: "spin 1s linear infinite" }}
+                    />
+                  ) : dniExitoso ? (
+                    <CheckCircle size={16} className="text-success" />
+                  ) : (
+                    <Search size={16} className="text-muted opacity-50" />
+                  )}
                 </div>
-              )}
+              </div>
             </div>
           </div>
 
-          {/* Nombres y Apellidos */}
-          <div className="row">
+          <div className="row g-2">
             <div className="col-md-6">
-              <div className="form-floating">
-                <input
-                  type="text"
-                  placeholder=" "
-                  className="form-control"
-                  onChange={(e) => setNombres(e.target.value)}
-                  style={{ border: "1px solid black" }}
-                />
-                <label htmlFor="nombres">
-                  <User color={"auto"} />
-                  Nombres
-                </label>
-              </div>
+              <label
+                className="small text-muted mb-1"
+                style={{ fontSize: "0.75rem" }}
+              >
+                Nombres
+              </label>
+              <input
+                type="text"
+                id="nombres"
+                className="form-control form-control-sm"
+                placeholder="Nombres..."
+                onChange={(e) => {
+                  setNombres(e.target.value);
+                  setDniExitoso(false);
+                }}
+              />
             </div>
             <div className="col-md-6">
-              <div className="form-floating">
-                <input
-                  type="text"
-                  placeholder=" "
-                  className="form-control"
-                  id="apellidos"
-                  onChange={(e) => setApellidos(e.target.value)}
-                  style={{ border: "1px solid black" }}
-                />
-                <label htmlFor="apellidos">
-                  <User color={"auto"} />
-                  Apellidos
-                </label>
-              </div>
+              <label
+                className="small text-muted mb-1"
+                style={{ fontSize: "0.75rem" }}
+              >
+                Apellidos
+              </label>
+              <input
+                type="text"
+                id="apellidos"
+                className="form-control form-control-sm"
+                placeholder="Apellidos..."
+                onChange={(e) => {
+                  setApellidos(e.target.value);
+                  setDniExitoso(false);
+                }}
+              />
             </div>
           </div>
         </div>
 
-        {/* INFORMACION PARA CLIENTE FACTURA */}
-        <div className={`mt-4 ${clienteFactura ? "d-block" : "d-none"}`}>
-          {/* ... Tus inputs de factura ... */}
-          <div className="mb-3">
-            <div className="form-floating">
+        {/* ================================================================ */}
+        {/* INFORMACIÓN DEL CLIENTE: FACTURA */}
+        {/* ================================================================ */}
+        <div className={`mt-2 ${clienteFactura ? "d-block" : "d-none"}`}>
+          <h6 className="fw-bold mb-3 text-dark">Datos de Facturación</h6>
+
+          <div className="mb-2">
+            <label
+              className="small text-muted mb-1"
+              style={{ fontSize: "0.75rem" }}
+            >
+              Número de RUC <span className="text-danger">*</span>
+            </label>
+            <div className="position-relative">
               <input
                 type="text"
-                className="form-control"
+                className="form-control form-control-sm"
                 id="num_documento_ruc"
-                placeholder="Ingrese Ruc"
-                onChange={(e) => setRuc(e.target.value)}
-                style={{ border: "1px solid black" }}
+                placeholder="Ingrese 11 dígitos..."
+                maxLength={11}
+                value={rucLocal}
+                style={{
+                  paddingRight: "30px",
+                  borderColor: rucExitoso ? "#198754" : undefined,
+                  boxShadow: rucExitoso ? "none" : undefined,
+                  outline: "none",
+                }}
+                onChange={(e) => {
+                  const val = e.target.value.replace(/\D/g, "");
+                  setRuc(val);
+                  setRucLocal(val);
+                  setRucExitoso(false);
+                }}
               />
-              <label>
-                <i className="fas fa-id-card"></i> RUC
-              </label>
+              <div
+                className="position-absolute top-50 end-0 translate-middle-y pe-2"
+                style={{ pointerEvents: "none" }}
+              >
+                {isSearchingRuc ? (
+                  <Loader2
+                    size={16}
+                    className="text-dark"
+                    style={{ animation: "spin 1s linear infinite" }}
+                  />
+                ) : rucExitoso ? (
+                  <CheckCircle size={16} className="text-success" />
+                ) : (
+                  <Building2 size={16} className="text-muted opacity-50" />
+                )}
+              </div>
             </div>
           </div>
 
-          <div className="form-floating mb-3">
+          <div className="mb-2">
+            <label
+              className="small text-muted mb-1"
+              style={{ fontSize: "0.75rem" }}
+            >
+              Razón Social
+            </label>
             <input
               type="text"
-              className="form-control"
+              className="form-control form-control-sm"
               id="nombreRazonSocial"
-              onChange={(e) => setRazonSocial(e.target.value)}
-              placeholder="Razón social"
-              style={{ border: "1px solid black" }}
+              placeholder="Nombre de la empresa..."
+              onChange={(e) => {
+                setRazonSocial(e.target.value);
+                setRucExitoso(false);
+              }}
             />
-            <label>
-              <i className="fas fa-user"></i> Razón social
-            </label>
           </div>
 
-          <div className="form-floating">
-            <input
-              type="text"
-              className="form-control"
-              id="direccion"
-              onChange={(e) => setDireccion(e.target.value)}
-              placeholder=" "
-              style={{ border: "1px solid black" }}
-            />
-            <label>
-              <i className="fa-solid fa-location-dot"></i> Dirección
+          <div className="mb-2">
+            <label
+              className="small text-muted mb-1"
+              style={{ fontSize: "0.75rem" }}
+            >
+              Dirección Fiscal
             </label>
+            <div className="position-relative">
+              <input
+                type="text"
+                className="form-control form-control-sm"
+                id="direccion"
+                placeholder="Dirección..."
+                style={{ paddingLeft: "30px" }}
+                onChange={(e) => setDireccion(e.target.value)}
+              />
+              <MapPin
+                size={14}
+                className="text-muted position-absolute top-50 start-0 translate-middle-y ms-2"
+              />
+            </div>
           </div>
         </div>
 
-        {/* CREDITO */}
-        <div className={`mt-4 ${cuotas ? "d-block" : "d-none"}`}>
-          {/* ... Tus inputs de cuotas ... */}
-          <h6>Ingrese el numero de cuotas</h6>
-          <div className="form-floating w-100">
-            <input
-              id="cuotas"
-              type="number"
-              className="form-control "
-              onChange={(e) => setNumeroCuotas(e.target.value)}
-              style={{ border: "1px solid black" }}
-              placeholder=" "
-            />
-            <label htmlFor="cuotas">Nº de Cuotas</label>
-          </div>
+        {/* ================================================================ */}
+        {/* CUOTAS (CRÉDITO) */}
+        {/* ================================================================ */}
+        <div
+          className={`mt-4 bg-light p-3 rounded border ${cuotas ? "d-block" : "d-none"}`}
+        >
+          {/* 🔥 Eliminamos el texto azul (text-primary -> text-dark) */}
+          <h6 className="fw-bold mb-2 text-dark">Pago a Crédito</h6>
+          <label
+            className="small text-muted mb-1"
+            style={{ fontSize: "0.75rem" }}
+          >
+            Número de Cuotas
+          </label>
+          <input
+            id="cuotas"
+            type="number"
+            min="1"
+            className="form-control form-control-sm"
+            onChange={(e) => setNumeroCuotas(e.target.value)}
+            placeholder="Ej. 3"
+          />
         </div>
       </div>
     </div>

@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setIdPreventaMesa } from "../../redux/mesaSlice";
@@ -10,14 +11,62 @@ import {
   PlusCircle,
   Users,
   UtensilsCrossed,
-  Printer,
-  Receipt,
   PrinterIcon,
+  Clock,
+  MoreVertical,
+  CalendarDays,
+  UserRound,
+  ArrowRightLeft,
+  Trash2,
 } from "lucide-react";
 import ToastAlert from "../componenteToast/ToastAlert";
-import axiosInstance from "../../api/AxiosInstance"; // Asegúrate de importar tu instancia
+import axiosInstance from "../../api/AxiosInstance";
 import "../../css/EstilosMesas.css";
+import ModalAlertQuestion from "../componenteToast/ModalAlertQuestion";
+import { TransferirToMesa } from "./tareasVender/TransferirToMesa";
 
+// 🔥 Importa tus modales aquí (Ajusta la ruta exacta según cómo esté tu carpeta)
+
+// =================================================================================
+// 🔥 MINI-COMPONENTE: Calcula el tiempo en vivo sin saturar Redux ni la API
+// =================================================================================
+const TiempoOcupacion = ({ fechaApertura }) => {
+  const [minutos, setMinutos] = useState(0);
+
+  useEffect(() => {
+    if (!fechaApertura) return;
+
+    const calcularTiempo = () => {
+      // Reemplazamos '-' por '/' para evitar bugs de formato de fecha en Safari
+      const fechaParseada = new Date(fechaApertura.replace(/-/g, "/"));
+      const ahora = new Date();
+      const diferenciaMs = ahora - fechaParseada;
+      const diffMinutos = Math.floor(diferenciaMs / 60000);
+
+      setMinutos(diffMinutos > 0 ? diffMinutos : 0);
+    };
+
+    calcularTiempo(); // Cálculo inicial
+    const intervalo = setInterval(calcularTiempo, 60000); // Recalcula cada 1 minuto
+
+    return () => clearInterval(intervalo);
+  }, [fechaApertura]);
+
+  // Si pasa de 60 minutos, se pone en rojo para alertar al cajero
+  const esDemorado = minutos >= 60;
+
+  return (
+    <span
+      className={`small d-flex align-items-center gap-1 fw-bold ${esDemorado ? "text-danger" : "text-muted"}`}
+    >
+      <Clock size={13} /> {minutos} min
+    </span>
+  );
+};
+
+// =================================================================================
+// COMPONENTE PRINCIPAL
+// =================================================================================
 export function MesasList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -26,11 +75,21 @@ export function MesasList() {
     data: mesas = [],
     isLoading: loading,
     isError: error,
+    refetch, // Importante para recargar las mesas si anulamos un pedido
   } = useQuery({
     queryKey: ["mesas"],
     queryFn: GetMesasVender,
-    refetchOnWindowFocus: true, // Excelente práctica para mantener sincronizadas las mesas
+    refetchOnWindowFocus: true,
   });
+
+  // 🔥 ESTADOS
+  const [filtroPiso, setFiltroPiso] = useState("Todos");
+  const [modalTransferir, setModalTransferir] = useState(false);
+  const [modalQuestion, setModalQuestion] = useState(false);
+  const [mesaActiva, setMesaActiva] = useState({ id: null, numero: null });
+
+  const handleCloseTransferir = () => setModalTransferir(false);
+  const handleCloseModalQuestionEliminar = () => setModalQuestion(false);
 
   const handleMesaAddPlato = (data) => {
     dispatch(setIdPreventaMesa({ id: data.id, numero: data.numero }));
@@ -42,25 +101,40 @@ export function MesasList() {
     navigate(`/vender/mesas/preVenta`);
   };
 
-  // Acción Rápida: Imprimir Pre-cuenta directamente desde la grilla
-  const handleImprimirPrecuentaRapida = async (e, mesa) => {
-    e.stopPropagation(); // Evita que la tarjeta se abra al hacer clic en el botón
+  const handleReservas = () => {
+    ToastAlert("info", "El módulo de Reservas estará disponible muy pronto.");
+  };
 
-    // Verificamos que la mesa tenga items
+  // 🔥 ACCIÓN: Anular pedido desde el modal
+  const handleEliminarPreventeMesa = async (idMesaEliminar) => {
+    try {
+      // 👉 REEMPLAZA AQUÍ con tu ruta real de Axios para eliminar
+      // await axiosInstance.delete(`/vender/mesa/preventa/${idMesaEliminar}`);
+
+      ToastAlert("success", "Pedido anulado correctamente.");
+      handleCloseModalQuestionEliminar();
+      refetch(); // Recargamos el mapa de mesas
+    } catch (error) {
+      ToastAlert("error", "No se pudo anular el pedido.");
+    }
+  };
+
+  // 🔥 ACCIÓN: Imprimir Pre-cuenta Rápida
+  const handleImprimirPrecuentaRapida = async (e, mesa) => {
+    e.stopPropagation();
+
     const preventas = mesa.preventas || [];
     if (preventas.length === 0) {
       return ToastAlert("error", "No hay pedidos registrados en esta mesa.");
     }
 
-    // 1. Formateamos el contenido tal como lo espera tu endpoint genérico
     const contenidoFormateado = preventas.map((item) => ({
-      nombre: item.plato?.nombre || "Plato desconocido", // Extrae el nombre de la relación
+      nombre: item.plato?.nombre || "Plato desconocido",
       cantidad: item.cantidad,
       precio: item.precio,
       subtotal: item.cantidad * item.precio,
     }));
 
-    // 2. Armamos el Payload final
     const payload = {
       titulo: `PRE-CUENTA MESA ${mesa.numero}`,
       contenido: contenidoFormateado,
@@ -68,7 +142,6 @@ export function MesasList() {
     };
 
     try {
-      // 3. Petición POST a tu ruta genérica
       const response = await axiosInstance.post(
         "/vender/imprimirGenerico",
         payload,
@@ -94,18 +167,35 @@ export function MesasList() {
   };
 
   const listaMesas = Array.isArray(mesas) ? mesas : [];
+
+  // Procesamiento de Filtros
+  const pisosUnicos = ["Todos", ...new Set(listaMesas.map((m) => m.piso))];
+  const mesasFiltradas =
+    filtroPiso === "Todos"
+      ? listaMesas
+      : listaMesas.filter((m) => m.piso === filtroPiso);
+
   const mesasDisponibles = listaMesas.filter(
     (mesa) => mesa.estado === 1,
   ).length;
   const mesasOcupadas = listaMesas.filter((mesa) => mesa.estado === 0).length;
 
   return (
-    <div className="card m-0 h-100 overflow-auto p-3">
-      {/* HEADER FIRE WOK */}
-      <div className="d-flex justify-content-between align-items-center mb-4 px-2">
-        <h3 className="m-0 fw-bold" style={{ color: "var(--text-main)" }}>
-          Mapa de Mesas
-        </h3>
+    <div className="card m-0 h-100 overflow-auto p-3 bg-app">
+      {/* HEADER PRINCIPAL */}
+      <div className="d-flex flex-wrap gap-3 justify-content-between align-items-center mb-3 px-2">
+        <div className="d-flex align-items-center gap-3">
+          <h3 className="m-0 fw-bold" style={{ color: "var(--text-main)" }}>
+            Mapa de Mesas
+          </h3>
+          <button
+            className="btn btn-sm btn-outline-dark d-flex align-items-center gap-2 rounded-pill px-3"
+            onClick={handleReservas}
+          >
+            <CalendarDays size={16} /> Reservas
+          </button>
+        </div>
+
         <div className="d-flex align-items-center gap-3 bg-white px-3 py-2 rounded-pill shadow-sm border">
           <div className="d-flex align-items-center gap-2">
             <span className="fw-indicator bg-success"></span>
@@ -123,13 +213,32 @@ export function MesasList() {
         </div>
       </div>
 
+      {/* RENDERIZADO DE PÍLDORAS PARA EL FILTRO POR PISO */}
+      <div className="d-flex gap-2 px-2 mb-3 overflow-auto pb-1">
+        {pisosUnicos.map((piso) => (
+          <button
+            key={piso}
+            type="button"
+            className={`badge rounded-pill px-3 py-2 border transition-smooth ${
+              filtroPiso === piso
+                ? "bg-dark text-white border-dark"
+                : "bg-white text-muted border-secondary"
+            }`}
+            style={{ cursor: "pointer", fontSize: "0.85rem" }}
+            onClick={() => setFiltroPiso(piso)}
+          >
+            {piso === "Todos" ? "Todos los Pisos" : `Piso ${piso}`}
+          </button>
+        ))}
+      </div>
+
       <CondicionCarga isLoading={loading} isError={error} mode="cards">
         <div className="p-1">
           <div className="row g-3">
-            {listaMesas.map((mesa) => (
+            {mesasFiltradas.map((mesa) => (
               <div key={mesa.id} className="col-6 col-md-4 col-lg-3 col-xl-2">
                 <div
-                  className={`mesa-card h-100  ${
+                  className={`mesa-card h-100 ${
                     mesa.estado === 1 ? "disponible" : "en-atencion"
                   }`}
                   onClick={() =>
@@ -138,7 +247,75 @@ export function MesasList() {
                       : handleShowPedido(mesa.id)
                   }
                 >
-                  {/* Contenido Principal */}
+                  {/* 🔥 BOTÓN DROPDOWN (Trasladar / Anular) */}
+                  {mesa.estado === 0 && (
+                    <div
+                      className="position-absolute top-0 end-0 p-2 z-3 dropdown"
+                      onClick={(e) => e.stopPropagation()} // Evita abrir la tarjeta al clicar el menú
+                    >
+                      <div
+                        className="bg-white rounded-circle shadow-sm border d-flex align-items-center justify-content-center"
+                        style={{
+                          width: "28px",
+                          height: "28px",
+                          cursor: "pointer",
+                        }}
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        <MoreVertical
+                          size={16}
+                          className="text-muted hover-text-dark"
+                        />
+                      </div>
+
+                      {/* Opciones del menú Bootstrap */}
+                      <ul
+                        className="dropdown-menu dropdown-menu-end shadow-sm border-0"
+                        style={{ fontSize: "0.85rem" }}
+                      >
+                        <li>
+                          <button
+                            className="dropdown-item d-flex align-items-center gap-2 py-2"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setMesaActiva({
+                                id: mesa.id,
+                                numero: mesa.numero,
+                              });
+                              setModalTransferir(true);
+                            }}
+                          >
+                            <ArrowRightLeft
+                              size={15}
+                              className="text-primary"
+                            />{" "}
+                            Trasladar Mesa
+                          </button>
+                        </li>
+                        <li>
+                          <hr className="dropdown-divider my-1" />
+                        </li>
+                        <li>
+                          <button
+                            className="dropdown-item d-flex align-items-center gap-2 py-2 text-danger"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setMesaActiva({
+                                id: mesa.id,
+                                numero: mesa.numero,
+                              });
+                              setModalQuestion(true);
+                            }}
+                          >
+                            <Trash2 size={15} /> Anular Pedido
+                          </button>
+                        </li>
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* CONTENIDO DE LA TARJETA */}
                   <div className="mesa-content">
                     <h6 className="mesa-numero">
                       <UtensilsCrossed size={16} />
@@ -150,20 +327,38 @@ export function MesasList() {
                         <Layers size={13} /> Piso {mesa.piso}
                       </p>
                       <p>
-                        <Users size={13} /> Capacidad: {mesa.capacidad}
+                        <Users size={13} /> Cap: {mesa.capacidad}
                       </p>
+                      {/* MESERO ASIGNADO */}
+                      {mesa.estado === 0 && mesa.mesero && (
+                        <p
+                          className="text-truncate"
+                          title={`Atiende: ${mesa.mesero}`}
+                        >
+                          <UserRound size={13} /> {mesa.mesero}
+                        </p>
+                      )}
                     </div>
 
-                    {/* VISTA PREVIA DEL TOTAL (Si está ocupada) */}
+                    {/* VISTA PREVIA TOTAL Y TIEMPO (Si está ocupada) */}
                     {mesa.estado === 0 && (
-                      <div className="mesa-total-preview mt-2">
-                        <span
-                          className="text-muted small d-block"
-                          style={{ fontSize: "0.65rem" }}
-                        >
-                          TOTAL ACTUAL
-                        </span>
-                        {/* ⚠️ ADAPTACIÓN: Asegúrate de que tu backend (GetMesasVender) envíe el campo mesa.total */}
+                      <div className="mesa-total-preview mt-2 d-flex flex-column gap-1">
+                        <div className="d-flex justify-content-between align-items-center">
+                          <span
+                            className="text-muted small"
+                            style={{
+                              fontSize: "0.65rem",
+                              fontWeight: "700",
+                              letterSpacing: "0.5px",
+                            }}
+                          >
+                            TOTAL ACTUAL
+                          </span>
+                          {/* INDICADOR DE TIEMPO (Asume que el backend devuelve created_at) */}
+                          {mesa.created_at && (
+                            <TiempoOcupacion fechaApertura={mesa.created_at} />
+                          )}
+                        </div>
                         <span className="fw-bold fs-6">
                           S/ {Number(mesa.total || 0).toFixed(2)}
                         </span>
@@ -171,7 +366,7 @@ export function MesasList() {
                     )}
                   </div>
 
-                  {/* Acciones y Etiquetas */}
+                  {/* FOOTER ACCIONES */}
                   <div className="mesa-footer">
                     {mesa.estado === 1 ? (
                       <div className="mesa-action-label">
@@ -182,9 +377,9 @@ export function MesasList() {
                         <div className="mesa-action-label flex-grow-1">
                           <Eye size={14} /> <span>VER PEDIDO</span>
                         </div>
-                        {/* Botón de impresión directa */}
                         <button
-                          className="btn-informativo"
+                          className="btn-informativo m-0 d-flex align-items-center justify-content-center"
+                          style={{ width: "40px", flexShrink: 0, padding: 0 }}
                           onClick={(e) =>
                             handleImprimirPrecuentaRapida(e, mesa)
                           }
@@ -201,6 +396,25 @@ export function MesasList() {
           </div>
         </div>
       </CondicionCarga>
+
+      {/* ========================================== */}
+      {/* MODALES EXTERNOS                             */}
+      {/* ========================================== */}
+      <ModalAlertQuestion
+        show={modalQuestion}
+        idEliminar={mesaActiva.id}
+        nombre={`Mesa ${mesaActiva.numero}`}
+        tipo="Pedidos"
+        handleEliminar={handleEliminarPreventeMesa}
+        handleCloseModal={handleCloseModalQuestionEliminar}
+      />
+
+      <TransferirToMesa
+        show={modalTransferir}
+        idMesa={mesaActiva.id}
+        mesa={mesaActiva.numero}
+        handleCloseModal={handleCloseTransferir}
+      />
     </div>
   );
 }

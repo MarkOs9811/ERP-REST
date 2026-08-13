@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getPreventaMesa } from "../../service/preventaService";
 
@@ -229,22 +229,19 @@ export function DetallesPago() {
   };
 
   // === LÓGICA DE VENTA CON BLOQUEO MANUAL ===
-  const realizarVentaPago = async (data, nombreReferencia) => {
+  // Recibimos 'imprimirTicket' como tercer parámetro
+  const realizarVentaPago = async (data, nombreReferencia, imprimirTicket) => {
     setIsProcessing(true);
 
     try {
       const result = await RealizarVenta(data);
 
       if (result.success) {
-        setDatosVenta(result.ticket);
+        ToastAlert("success", "Venta realizada con éxito");
+        setIsProcessing(false);
         setNombreCliente(nombreReferencia);
-
-        setTimeout(() => {
-          if (componentRef.current) {
-            handlePrint();
-            ToastAlert("success", "Venta realizada con éxito");
-          }
-        }, 1000);
+        setDatosVenta(null);
+        ejecutarNavegacionFinal();
       } else {
         const mensajeDelBackend =
           result.message || "Error desconocido al realizar la venta";
@@ -261,7 +258,15 @@ export function DetallesPago() {
     }
   };
 
-  const handleCrearJson = async (nombreReferenciaPrincipal) => {
+  const handleCrearJson = async (formData) => {
+    // 1. EXTRAER DATOS DEL NUEVO FORMULARIO (Soportando objeto o string por seguridad)
+    const nombreRef =
+      typeof formData === "object" ? formData.nombreReferencia : formData;
+    const imprimirTicket =
+      typeof formData === "object" ? formData.imprimirTicket : true;
+    const notasCaja = typeof formData === "object" ? formData.notas : "";
+    const pagoCon = typeof formData === "object" ? formData.pagoCon : 0;
+
     let datosCliente = {};
     let metodoPagoFinal = "";
 
@@ -275,6 +280,7 @@ export function DetallesPago() {
       metodoPagoFinal = metodoSeleccionado;
     }
 
+    // 2. ASIGNAR EL NOMBRE LIMPIO A DATOS CLIENTE (Evita el error de Laravel)
     if (comprobante === "F") {
       datosCliente = {
         ruc,
@@ -299,61 +305,69 @@ export function DetallesPago() {
           );
           return;
         }
+      } else {
+        // En caso sea Boleta pero no tarjeta de crédito, aseguramos el nombreRef
+        datosCliente = {
+          nombre: nombreRef || "CLIENTE GENERICO",
+          documento: "00000000",
+        };
       }
     } else if (comprobante === "S") {
       datosCliente = {
-        nombre: nombreReferenciaPrincipal || "CLIENTE GENERICO",
+        nombre: nombreRef || "CLIENTE GENERICO",
         documento: "00000000",
       };
+    }
+
+    // 3. JUNTAR OBSERVACIONES (Unimos lo de la mesa con las notas de caja)
+    let observacionFinal = "";
+    if (estadoTipoVenta === "llevar") {
+      observacionFinal = pedidoLlevar?.descripcion || "";
+    }
+    if (notasCaja) {
+      observacionFinal = observacionFinal
+        ? `${observacionFinal} | Notas Caja: ${notasCaja}`
+        : `Notas Caja: ${notasCaja}`;
     }
 
     let data = {};
     let pedidoToLlevar = null;
 
+    // 4. PREPARAR EL PAYLOAD BASE INCLUYENDO LAS NUEVAS VARIABLES
+    const baseData = {
+      metodoPago: metodoPagoFinal,
+      totalPreventa: totalPreventa ?? 0,
+      comprobante: comprobante ?? "",
+      cuotas: numeroCuotas ?? 0,
+      tarjeta: typeTarjeta ?? null,
+      datosCliente: datosCliente ?? {},
+      idCaja: caja?.id ?? null,
+      idUsuario: usuarioLogeado?.id ?? null,
+      tipoVenta: estadoTipoVenta,
+      observacion: observacionFinal, // Enviamos las notas combinadas
+      imprimirTicket: imprimirTicket, // Enviamos la orden de impresión al backend
+      pagoCon: pagoCon,
+    };
+
     if (estadoTipoVenta === "mesa") {
       data = {
-        metodoPago: metodoPagoFinal,
-        totalPreventa: totalPreventa ?? 0,
-        comprobante: comprobante ?? "",
-        cuotas: numeroCuotas ?? 0,
-        tarjeta: typeTarjeta ?? null,
-        datosCliente: datosCliente ?? {},
-        idCaja: caja?.id ?? null,
+        ...baseData,
         idMesa: idMesa ?? null,
-        idUsuario: usuarioLogeado?.id ?? null,
-        tipoVenta: estadoTipoVenta,
         esCuentaSeparada: isSplitPayment,
         pedidosSeleccionados: isSplitPayment ? itemsSeleccionados : [],
       };
     } else if (estadoTipoVenta === "llevar") {
       pedidoToLlevar = pedidoLlevar?.items ?? [];
       data = {
-        metodoPago: metodoPagoFinal,
-        totalPreventa: totalPreventa ?? 0,
-        comprobante: comprobante ?? "",
-        cuotas: numeroCuotas ?? 0,
-        tarjeta: typeTarjeta ?? null,
-        datosCliente: datosCliente ?? {},
-        pedidoToLlevar,
-        observacion: pedidoLlevar.descripcion || "",
-        idCaja: caja?.id ?? null,
+        ...baseData,
         idMesa: null,
-        idUsuario: usuarioLogeado?.id ?? null,
-        tipoVenta: estadoTipoVenta,
+        pedidoToLlevar,
       };
     } else {
       data = {
-        metodoPago: metodoPagoFinal,
-        totalPreventa: totalPreventa ?? 0,
-        comprobante: comprobante ?? "",
-        cuotas: numeroCuotas ?? 0,
-        tarjeta: typeTarjeta ?? null,
-        datosCliente: datosCliente ?? {},
-        idPedidoWeb: idPedidoWeb,
-        idCaja: caja?.id ?? null,
+        ...baseData,
         idMesa: null,
-        idUsuario: usuarioLogeado?.id ?? null,
-        tipoVenta: estadoTipoVenta,
+        idPedidoWeb: idPedidoWeb,
       };
     }
 
@@ -365,8 +379,8 @@ export function DetallesPago() {
       return;
     }
 
-    // Ejecutamos la función directa (sin el hook useEstadoAsyn para tener control manual)
-    await realizarVentaPago(data, nombreReferenciaPrincipal);
+    // Pasamos el imprimirTicket a la función de venta para que el Frontend sepa si debe imprimir o no
+    await realizarVentaPago(data, nombreRef, imprimirTicket);
   };
 
   if (isLoading) return <p>Cargando preventas...</p>;

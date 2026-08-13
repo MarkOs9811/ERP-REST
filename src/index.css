@@ -47,9 +47,9 @@
   --shadow-md: 0 1px 3px rgba(16, 24, 40, 0.08);
   --shadow-hover: 0 1px 3px rgba(16, 24, 40, 0.1) !important;
 
-  --control-height-sm: 34px;
-  --control-height-md: 40px;
-  --control-height-lg: 44px;
+  --control-height-sm: 30px;
+  --control-height-md: 30px;
+  --control-height-lg: 30px;
   --control-radius: 22px;
   --table-action-size: 40px;
 
@@ -279,6 +279,8 @@ button,
   gap: 0.5rem;
 
   /* 🔥 CORRECCIÓN: Quitamos los !important para permitir la sobreescritura */
+  width: auto !important;
+  min-width: 30px !important;
   min-height: var(--control-height-md);
   padding: 0.4rem 1.25rem;
 
@@ -319,28 +321,38 @@ button svg,
    🔥 NUEVO: CLASE EXCLUSIVA PARA BOTONES REDONDOS DEL POS (+, -, Basurero)
 ========================================================================= */
 .btn-icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   width: 32px !important;
   height: 32px !important;
-  min-height: 32px !important;
   min-width: 32px !important;
+  min-height: 32px !important;
+  max-width: 32px !important;
+  /* Evita que se estire a lo ancho */
+  max-height: 32px !important;
+  /* Evita que se estire a lo alto */
   padding: 0 !important;
   border-radius: 50% !important;
+  /* Círculo perfecto */
   flex-shrink: 0 !important;
+  line-height: 0 !important;
 }
 
 .btn-icon svg {
   width: 16px !important;
   height: 16px !important;
   margin: 0 !important;
+  display: block !important;
 }
 
 /* ========================================================================
    COMPORTAMIENTO CONTEXTUAL (DENTRO DE TABLAS)
 ========================================================================= */
-.rdt_TableCell .btn,
-.rdt_TableCell [class*="btn-"],
-.table td .btn,
-.table td [class*="btn-"] {
+.rdt_TableCell .btn:not(.btn-icon),
+.rdt_TableCell [class*="btn-"]:not(.btn-icon),
+.table td .btn:not(.btn-icon),
+.table td [class*="btn-"]:not(.btn-icon) {
   min-width: var(--table-action-size) !important;
   height: auto !important;
   padding: 0.4rem 0.8rem !important;
@@ -350,10 +362,9 @@ button svg,
    VARIANTES DE COLOR (SEMÁNTICA FIRE WOK)
 ========================================================================= */
 .btn-principal {
-background: #303030 !important;
+  background: #303030 !important;
   color: var(--fw-white) !important;
   border: 1px solid var(--fw-onyx) !important;
-  
 }
 
 .btn-principal:hover {
@@ -502,18 +513,58 @@ background: #303030 !important;
   color: white !important;
 }
 
-/* Switches */
-.form-check-input {
-  width: 3rem;
-  height: 1.75rem;
-  background-color: var(--bg-muted);
-  border: 1px solid var(--fw-border-input);
+/* ========================================================================
+   SWITCHES (INTERRUPTORES FIRE WOK - ANTIAZUL CORREGIDO)
+========================================================================= */
+.form-switch .form-check-input {
+  width: 2.1rem !important;
+  height: 1rem !important;
+  background-color: var(--bg-muted) !important;
+  border: 1px solid var(--fw-border-input) !important;
   cursor: pointer;
+
+  background-repeat: no-repeat !important;
+  background-position: left center !important;
+  transition: background-color var(--transition-smooth), border-color var(--transition-smooth), background-position 0.15s ease-in-out !important;
+
+  /* Bolita gris oscura por defecto en modo claro */
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='rgba(0, 0, 0, 0.3)'/%3e%3c/svg%3e") !important;
 }
 
-.form-check-input:checked {
-  background-color: var(--brand-primary) !important;
-  border-color: var(--brand-primary) !important;
+.form-switch .form-check-input:checked {
+  background-color: var(--fw-onyx) !important;
+  border-color: var(--fw-onyx) !important;
+  background-position: right center !important;
+  /* Desliza a la derecha */
+  /* Bolita blanca al activar */
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e") !important;
+}
+
+.form-switch .form-check-input:focus {
+  box-shadow: 0 0 0 0.25rem rgba(65, 65, 65, 0.25) !important;
+  border-color: var(--fw-onyx) !important;
+}
+
+/* 🔥 DARK MODE (NARANJA SAFFRON) */
+body.dark-theme .form-switch .form-check-input {
+  background-color: var(--bg-muted) !important;
+  border-color: var(--fw-border-input) !important;
+  /* Bolita gris claro para contraste oscuro */
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='rgba(255, 255, 255, 0.5)'/%3e%3c/svg%3e") !important;
+}
+
+body.dark-theme .form-switch .form-check-input:checked {
+  background-color: var(--fw-saffron) !important;
+  border-color: var(--fw-saffron) !important;
+  background-position: right center !important;
+  /* Desliza a la derecha */
+  /* Bolita blanca al activar */
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e") !important;
+}
+
+body.dark-theme .form-switch .form-check-input:focus {
+  box-shadow: 0 0 0 0.25rem rgba(217, 119, 6, 0.25) !important;
+  border-color: var(--fw-saffron) !important;
 }
 
 /* Bootstrap color overrides */
@@ -612,4 +663,79 @@ body.dark-theme .shadow-lg {
 
 body.dark-theme ::-webkit-scrollbar-thumb {
   background: #3a4249;
+}
+
+/* ========================================================================
+   ESTILOS PARA DROPDOWN (MENÚS DESPLEGABLES)
+========================================================================= */
+/* Contenedor del Menú */
+.dropdown-menu {
+  background-color: var(--bg-surface) !important;
+  border: 1px solid var(--outline-strong) !important;
+  border-radius: var(--radius-md) !important;
+  padding: 0.4rem !important;
+  box-shadow: var(--shadow-md) !important;
+  min-width: 160px;
+  margin-top: 0.25rem !important;
+  /* Separación del botón activador */
+}
+
+/* Modo Dark para el Contenedor */
+body.dark-theme .dropdown-menu {
+  border-color: var(--fw-border-card-dark) !important;
+  box-shadow: var(--glass-shadow) !important;
+}
+
+/* Ocultar el background blanco que se colaba en los li */
+.dropdown-menu li {
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Estilos de los ítems del menú (Aislar de la etiqueta 'button' global) */
+.dropdown-menu .dropdown-item {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  /* 🔥 ELIMINA EL CENTRADO HEREDADO */
+  text-align: left !important;
+  /* 🔥 ASEGURA LA ALINEACIÓN DEL TEXTO */
+  width: 100% !important;
+  padding: 0.5rem 0.75rem !important;
+  color: var(--text-main) !important;
+  background-color: transparent !important;
+  border-radius: var(--radius-sm) !important;
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 500 !important;
+  font-size: 0.875rem !important;
+  line-height: 1.2 !important;
+  transition: background-color var(--transition-smooth), color var(--transition-smooth) !important;
+  margin-bottom: 2px !important;
+  border: none !important;
+}
+
+.dropdown-menu .dropdown-item:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* Hover y Focus de los items */
+.dropdown-menu .dropdown-item:hover,
+.dropdown-menu .dropdown-item:focus {
+  background-color: var(--bg-muted) !important;
+  color: var(--brand-primary) !important;
+  outline: none !important;
+}
+
+/* Active de los items */
+.dropdown-menu .dropdown-item:active {
+  background-color: var(--fw-border-input) !important;
+}
+
+/* Hover en Modo Dark */
+body.dark-theme .dropdown-menu .dropdown-item:hover,
+body.dark-theme .dropdown-menu .dropdown-item:focus {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  /* Un gris muy sutil sobre el fondo oscuro */
+  color: var(--fw-white) !important;
 }

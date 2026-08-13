@@ -158,7 +158,7 @@ export function ToMesa() {
 
                 <div className="d-flex gap-2 ms-auto">
                   <button
-                    className="btn btn-outline-danger flex-shrink-0"
+                    className="btn-eliminar btn-icon flex-shrink-0"
                     title="Limpiar Pedido"
                     onClick={handleLimpiarMesa}
                   >
@@ -166,7 +166,7 @@ export function ToMesa() {
                   </button>
 
                   <button
-                    className="btn btn-outline-dark flex-shrink-0"
+                    className="btn-cerrar btn-icon flex-shrink-0"
                     onClick={habldeVolverMesas}
                   >
                     <FontAwesomeIcon icon={faArrowLeft} />
@@ -222,7 +222,7 @@ export function ToMesa() {
                               }}
                             >
                               <button
-                                className="btn btn-sm btn-link border-0 text-dark p-0"
+                                className="btn-informativo btn-icon border-0 text-dark p-0"
                                 style={{ width: "22px" }}
                                 onClick={() =>
                                   handleRemovePlatoPreventa(item.id)
@@ -237,7 +237,7 @@ export function ToMesa() {
                                 {item.cantidad}
                               </span>
                               <button
-                                className="btn btn-sm btn-link border-0 text-dark p-0"
+                                className="btn-informativo btn-icon border-0 text-dark p-0"
                                 style={{ width: "22px" }}
                                 onClick={() => handleAddPlatoPreventa(item)}
                               >
@@ -253,7 +253,7 @@ export function ToMesa() {
                           </td>
                           <td className="text-center py-2 bg-transparent">
                             <button
-                              className="btn btn-sm text-danger rounded-pill mx-2 p-0 border-0"
+                              className="btn-eliminar btn-icon rounded-pill mx-2 p-0 border-0"
                               onClick={() =>
                                 handleRemovePlatoPreventa(item.id, true)
                               }

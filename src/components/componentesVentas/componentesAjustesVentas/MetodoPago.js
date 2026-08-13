@@ -57,7 +57,7 @@ const MetodoPago = ({ metodos, onToggle }) => {
             <h6 className="card-title mb-0 fw-bold">Métodos de Pago</h6>
             <button
               type="button"
-              className="btn-principal btn-sm"
+              className="btn-principal btn-icon btn-sm"
               title="Agregar Método"
               onClick={() => setModalAddMetodoPago(true)}
             >
@@ -77,7 +77,7 @@ const MetodoPago = ({ metodos, onToggle }) => {
                 <div className="d-flex gap-2">
                   <button
                     type="button"
-                    className="btn-eliminar rounded-5 "
+                    className="btn-eliminar btn-icon rounded-5 "
                     onClick={() => {
                       setModalQuestion(true);
                       setDataMetodo(metodo);

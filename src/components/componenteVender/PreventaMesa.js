@@ -426,7 +426,7 @@ export function PreventaMesa() {
       <div className="row g-3 h-100">
         <div className="col-lg-4 h-100">
           <div
-            className={`card shadow h-100 d-flex flex-column overflow-hidden ${isSplitMode ? "border-dark border-2" : ""}`}
+            className={`card  h-100 d-flex flex-column overflow-hidden ${isSplitMode ? "border-dark border-2" : ""}`}
           >
             <div
               className={`card-header d-flex justify-content-between align-items-center p-3 ${isSplitMode ? "bg-warning" : ""}`}
@@ -458,7 +458,7 @@ export function PreventaMesa() {
               </button>
             </div>
 
-            <div className="card-body overflow-auto p-2 bg-light d-flex flex-column gap-1">
+            <div className="card-body overflow-auto p-2  d-flex flex-column gap-1">
               {/* POR CONFIRMAR */}
               {itemsCarrito.length > 0 && (
                 <div

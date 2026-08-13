@@ -153,7 +153,7 @@ export function Mesas() {
                         {/* Footer de Acciones */}
                         <div className="card-footer d-flex justify-content-center gap-2">
                           <button
-                            className="btn-editar btn-sm"
+                            className="btn-editar btn-icon btn-sm"
                             title={
                               mesa?.estado == 0
                                 ? "No se puede editar (mesa ocupada)"
@@ -176,7 +176,7 @@ export function Mesas() {
                             <Edit2 size={16} />
                           </button>
                           <button
-                            className="btn-eliminar btn-sm"
+                            className="btn-eliminar btn-icon btn-sm"
                             title={
                               mesa?.estado == 0
                                 ? "No se puede eliminar (mesa ocupada)"

@@ -84,7 +84,7 @@ export const FilaPlatoUnificado = ({
       >
         <div className="d-flex flex-column lh-1">
           <span
-            className="fw-bold text-dark text-truncate"
+            className="fw-bold text-truncate"
             style={{ fontSize: "0.9rem", maxWidth: "140px" }}
           >
             {nombrePlato}
@@ -101,9 +101,9 @@ export const FilaPlatoUnificado = ({
         {!isSplitMode && (
           <>
             {tipo !== "entregado" ? (
-              <div className="d-flex align-items-center bg-white border rounded-pill px-1 shadow-sm">
+              <div className="d-flex align-items-center bg-white  rounded-pill px-1 ">
                 <button
-                  className="btn btn-sm btn-link text-dark p-0"
+                  className="btn-informativo btn-icon p-0"
                   onClick={() => handleCambioLocal(-1)}
                   disabled={
                     loadingUpdate ===
@@ -114,7 +114,7 @@ export const FilaPlatoUnificado = ({
                 </button>
                 <span className="mx-2 fw-bold small">{cantidadLocal}</span>
                 <button
-                  className="btn btn-sm btn-link text-dark p-0"
+                  className="btn-informativo btn-icon p-0"
                   onClick={() => handleCambioLocal(1)}
                   disabled={
                     loadingUpdate ===
@@ -134,7 +134,7 @@ export const FilaPlatoUnificado = ({
         {isSplitMode && canSelect && isSelected && (
           <div className="d-flex align-items-center bg-primary bg-opacity-10 border border-primary rounded-pill px-1">
             <button
-              className="btn btn-sm btn-link text-primary border-none p-0"
+              className="btn-informativo btn-icon text-primary border-none p-0"
               onClick={(e) => {
                 e.stopPropagation();
                 onChangeSplitQty(item.id, -1, item.cantidad);
@@ -146,7 +146,7 @@ export const FilaPlatoUnificado = ({
               {cantidadSeleccionada} / {item.cantidad}
             </span>
             <button
-              className="btn btn-sm btn-link text-primary border-none p-0"
+              className="btn-informativo btn-icon text-primary border-none p-0"
               onClick={(e) => {
                 e.stopPropagation();
                 onChangeSplitQty(item.id, 1, item.cantidad);
@@ -171,7 +171,7 @@ export const FilaPlatoUnificado = ({
         </span>
         {!isSplitMode && tipo !== "entregado" && (
           <button
-            className="btn btn-sm btn-link text-danger p-0 mx-3"
+            className="btn-eliminar btn-icon  p-0 mx-3"
             onClick={() => onDelete(item.id)}
             disabled={loadingDelete === item.id}
           >

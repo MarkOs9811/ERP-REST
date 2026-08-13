@@ -145,7 +145,7 @@ export function Configuracion() {
                     <Link
                       key={op.to}
                       to={op.to}
-                      className={`list-group-item list-group-item-action d-flex flex-column flex-sm-row align-items-center justify-content-center p-2 border-0 flex-fill ${
+                      className={`w-auto list-group-item list-group-item-action d-flex flex-column flex-sm-row align-items-center justify-content-center p-2 border-0 flex-fill ${
                         isActive(op.path) ? "btn-principal" : ""
                       }`}
                     >

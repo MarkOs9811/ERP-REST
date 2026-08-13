@@ -125,21 +125,16 @@ export const MiPerfil = () => {
               >
                 Editar
               </label>
-              <div className="form-switch d-flex">
+              <div className="form-switch d-flex m-0 p-0">
                 <input
-                  className="form-check-input"
+                  className="form-check-input m-0"
                   type="checkbox"
                   id="switch-editar"
+                  role="switch"
                   checked={editable}
                   onChange={() => {
                     setEditable((e) => !e);
                     if (editable) reset(); // Si cancela edición, resetear cambios
-                  }}
-                  style={{
-                    accentColor: "#ee5252",
-                    width: 45,
-                    height: 22,
-                    cursor: "pointer",
                   }}
                 />
               </div>
@@ -209,15 +204,13 @@ export const MiPerfil = () => {
             style={{ borderRadius: 20, background: "#fff" }}
           >
             <div className="d-flex justify-content-between align-items-center border-bottom mb-3">
-              <p className="">Mi Información</p>
+              <p className="h4">Mi Información</p>
             </div>
 
             <div className="row g-3">
               {/* Datos personales con Register */}
               <div className="col-md-6">
-                <label className="form-label text-secondary small">
-                  Nombre
-                </label>
+                <label className="text-secondary small">Nombre</label>
                 <input
                   className={`form-control ${
                     errors.nombre ? "is-invalid" : ""
@@ -233,9 +226,7 @@ export const MiPerfil = () => {
               </div>
 
               <div className="col-md-6">
-                <label className="form-label text-secondary small">
-                  Apellidos
-                </label>
+                <label className="text-secondary small">Apellidos</label>
                 <input
                   className={`form-control ${
                     errors.apellidos ? "is-invalid" : ""
@@ -253,7 +244,7 @@ export const MiPerfil = () => {
               </div>
 
               <div className="col-md-6">
-                <label className="form-label text-secondary small">
+                <label className="text-secondary small">
                   Fecha de nacimiento
                 </label>
                 <input
@@ -265,7 +256,7 @@ export const MiPerfil = () => {
               </div>
 
               <div className="col-md-6">
-                <label className="form-label text-secondary small">
+                <label className="text-secondary small">
                   Tipo de documento
                 </label>
                 <input
@@ -276,7 +267,7 @@ export const MiPerfil = () => {
               </div>
 
               <div className="col-md-6">
-                <label className="form-label text-secondary small">
+                <label className="text-secondary small">
                   Documento de identidad
                 </label>
                 <input
@@ -287,9 +278,7 @@ export const MiPerfil = () => {
               </div>
 
               <div className="col-md-6">
-                <label className="form-label text-secondary small">
-                  Teléfono
-                </label>
+                <label className="text-secondary small">Teléfono</label>
                 <input
                   className="form-control"
                   disabled={!editable}
@@ -298,9 +287,7 @@ export const MiPerfil = () => {
               </div>
 
               <div className="col-12">
-                <label className="form-label text-secondary small">
-                  Dirección
-                </label>
+                <label className="text-secondary small">Dirección</label>
                 <input
                   className="form-control"
                   disabled={!editable}
@@ -310,9 +297,7 @@ export const MiPerfil = () => {
 
               {/* Ubicación (Solo lectura por ahora, o podrías hacer selects si quisieras editarlos) */}
               <div className="col-md-4">
-                <label className="form-label text-secondary small">
-                  Departamento
-                </label>
+                <label className="text-secondary small">Departamento</label>
                 <input
                   className="form-control"
                   value={departamento?.nombre || ""}
@@ -320,9 +305,7 @@ export const MiPerfil = () => {
                 />
               </div>
               <div className="col-md-4">
-                <label className="form-label text-secondary small">
-                  Provincia
-                </label>
+                <label className="text-secondary small">Provincia</label>
                 <input
                   className="form-control"
                   value={provincia?.nombre || ""}
@@ -330,9 +313,7 @@ export const MiPerfil = () => {
                 />
               </div>
               <div className="col-md-4">
-                <label className="form-label text-secondary small">
-                  Distrito
-                </label>
+                <label className="text-secondary small">Distrito</label>
                 <input
                   className="form-control"
                   value={distrito?.nombre || ""}

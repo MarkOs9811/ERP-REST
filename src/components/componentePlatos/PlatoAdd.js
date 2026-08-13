@@ -12,12 +12,15 @@ import {
   Image as ImageIcon,
   UploadCloud,
 } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
 
 export function PlatoAdd({ handleCloseModal }) {
   // Estado para la lógica de la imagen (separado de useForm)
   const [formData, setFormData] = useState({
     foto: null,
   });
+
+  const queryClient = useQueryClient();
 
   const {
     register,
@@ -65,6 +68,7 @@ export function PlatoAdd({ handleCloseModal }) {
 
       if (response.data.success) {
         ToastAlert("success", "Registro exitoso!");
+        queryClient.invalidateQueries({ queryKey: ["platos"] });
         handleCloseModal();
       } else {
         ToastAlert("error", response.data.message);

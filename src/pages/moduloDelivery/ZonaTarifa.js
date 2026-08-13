@@ -356,7 +356,7 @@ export function ZonaTarifa() {
                               aún.
                             </p>
                             <button
-                              className="btn btn-sm btn-outline-primary rounded-pill px-4"
+                              className="btn-principal rounded-pill px-4"
                               onClick={() => {
                                 setSedeForAdd(sede);
                                 setIsModalAddOpen(true);
