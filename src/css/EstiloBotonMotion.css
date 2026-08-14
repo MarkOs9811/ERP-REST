@@ -19,7 +19,7 @@
     font-weight: 500;
     border: 1px solid var(--outline-strong);
     border-radius: var(--radius-pill) !important;
-    background: var(--bg-surface);
+    
     color: var(--text-main);
     box-shadow: none;
 }

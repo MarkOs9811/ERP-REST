@@ -93,6 +93,7 @@ import { getRolesPermitidos } from "../utils/diccionarioRoles";
 import { ArrowLeft, X } from "lucide-react";
 import { setSidebarCompressed } from "../redux/sideBarSlice";
 import { toggleSidebarMobile } from "../redux/sideBarMobilSlice";
+import { ReservasMesas } from "../pages/moduloVentas/ReservasMesas";
 // NOTA: Asegúrate de importar las acciones correctamente según tus rutas de Redux
 
 export const MainLayout = () => {
@@ -771,6 +772,19 @@ export const MainLayout = () => {
                       ])}
                     >
                       <Mesas />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="reservasMesas"
+                  element={
+                    <PrivateRoute
+                      allowedRoles={getRolesPermitidos([
+                        "ventas",
+                        "administrador",
+                      ])}
+                    >
+                      <ReservasMesas />
                     </PrivateRoute>
                   }
                 />

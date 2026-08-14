@@ -189,6 +189,12 @@ const subMenuGroups = {
       icon: <FileText size={16} />,
     },
     { label: "Mesas", path: "/ventas/mesas", icon: <Building size={16} /> },
+
+    {
+      label: "Reserva",
+      path: "/ventas/reservasMesas",
+      icon: <Building size={16} />,
+    },
     {
       label: "Reportes",
       path: "/ventas/reportes",

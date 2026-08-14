@@ -1,0 +1,19 @@
+.reservas-container {
+    container-type: inline-size;
+}
+
+.reserva-col {
+    width: 25%;
+}
+
+@container (max-width: 1000px) {
+    .reserva-col {
+        width: 50%;
+    }
+}
+
+@container (max-width: 600px) {
+    .reserva-col {
+        width: 100%;
+    }
+}

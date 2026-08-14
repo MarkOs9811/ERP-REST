@@ -3,14 +3,20 @@ import axiosInstance from "../../../api/AxiosInstance";
 import { useForm } from "react-hook-form";
 import ToastAlert from "../../componenteToast/ToastAlert";
 import { useNavigate } from "react-router-dom";
-import { Repeat, MoveRight, X } from "lucide-react";
+import { MoveRight, X } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import ReactDOM from "react-dom";
-import "../../../css/TransferirToMesa.css"; // Asegúrate de importar el CSS aquí
+import "../../../css/TransferirToMesa.css";
+// Ajusta la ruta de tu BotonConfirmar si es necesario
+import BotonConfirmar from "../../componentesReutilizables/BotonConfirmar";
 
 export function TransferirToMesa({ show, handleCloseModal, idMesa, mesa }) {
   const [mesasFree, setMesasFree] = useState([]);
   const [mesaDestino, setMesaDestino] = useState("");
+
+  // 🔥 ESTADOS DE CONTROL
+  const [loading, setLoading] = useState(false);
+  const [errorRespuesta, setErrorRespuesta] = useState(null); // Nuevo estado para error interno
 
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -18,6 +24,7 @@ export function TransferirToMesa({ show, handleCloseModal, idMesa, mesa }) {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm();
 
   const getMesasFree = async () => {
@@ -32,10 +39,21 @@ export function TransferirToMesa({ show, handleCloseModal, idMesa, mesa }) {
   };
 
   useEffect(() => {
-    if (show) getMesasFree();
-  }, [show, idMesa]);
+    if (show) {
+      getMesasFree();
+      setErrorRespuesta(null); // Limpiamos errores pasados al abrir
+      reset(); // Limpiamos el select
+      setMesaDestino("");
+    }
+  }, [show, idMesa, reset]);
 
   const onSubmit = async (data) => {
+    // 🔥 Bloqueo estricto: Si ya está cargando, ignoramos el clic
+    if (loading) return;
+
+    setLoading(true);
+    setErrorRespuesta(null); // Limpiamos el error visual al reintentar
+
     try {
       const response = await axiosInstance.put(
         `/vender/transferirToMesa/${idMesa}`,
@@ -43,15 +61,22 @@ export function TransferirToMesa({ show, handleCloseModal, idMesa, mesa }) {
       );
       if (response.data.success) {
         const mensaje = `¡Transferencia exitosa!<br><b>Mesa ${mesa}</b> → <b>Mesa ${response.data.mesaDestino.numero}</b>`;
-        ToastAlert("success", mensaje);
+        ToastAlert("success", mensaje); // El de success sí lo dejamos en toast porque el modal se va a cerrar
         queryClient.invalidateQueries(["mesas"]);
         handleCloseModal();
         navigate(`/vender/mesas`);
       } else {
-        ToastAlert("error", response.data.message);
+        // 🔥 Si hay error lógico, lo mostramos dentro del modal
+        setErrorRespuesta(response.data.message);
       }
     } catch (error) {
-      ToastAlert("error", "Error en el servidor");
+      // 🔥 Si explota el servidor (como tu error de SQL), lo mostramos dentro
+      setErrorRespuesta(
+        error.response?.data?.message ||
+          "Error interno del servidor. Revisa el log.",
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -67,7 +92,11 @@ export function TransferirToMesa({ show, handleCloseModal, idMesa, mesa }) {
               <div className="dot"></div> {mesasFree.length} Disponibles
             </div>
           </div>
-          <button className="btn-close-circle" onClick={handleCloseModal}>
+          <button
+            className="btn-close-circle btn-icon"
+            onClick={handleCloseModal}
+            disabled={loading}
+          >
             <X size={20} color="#666" />
           </button>
         </div>
@@ -88,12 +117,13 @@ export function TransferirToMesa({ show, handleCloseModal, idMesa, mesa }) {
           </div>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="modal-form">
+        <form className="modal-form">
           <div className="select-group">
             <label className="input-label">Mesa de destino</label>
             <div className="select-wrapper">
               <select
                 className={`custom-select ${errors.mesaDestino ? "is-invalid" : ""}`}
+                disabled={loading} // Bloqueamos el select mientras transfiere
                 {...register("mesaDestino", {
                   required: "Seleccione una mesa",
                   onChange: (e) => setMesaDestino(e.target.value),
@@ -109,19 +139,36 @@ export function TransferirToMesa({ show, handleCloseModal, idMesa, mesa }) {
               </select>
             </div>
             {errors.mesaDestino && (
-              <p className="error-message">{errors.mesaDestino.message}</p>
+              <p
+                className="error-message m-0 mt-1"
+                style={{ fontSize: "0.8rem", color: "#e3342f" }}
+              >
+                {errors.mesaDestino.message}
+              </p>
             )}
           </div>
 
-          <div className="actions-container">
-            <button className="w-100 btn-principal p-4" type="submit">
+          {/* 🔥 MENSAJE DE ERROR INTERNO (Sustituye al Toast problemático) */}
+          {errorRespuesta && (
+            <div
+              className="alert alert-danger py-2 px-3 mb-0 mt-3 text-center fw-medium border-danger border-opacity-25"
+              style={{ fontSize: "0.85rem", borderRadius: "8px" }}
+            >
+              {errorRespuesta}
+            </div>
+          )}
+
+          <div className="actions-container d-flex flex-column gap-2 mt-4">
+            {/* 🔥 Tu Botón Animado. React-Hook-Form valida al hacer clic */}
+            <BotonConfirmar loading={loading} onClick={handleSubmit(onSubmit)}>
               Confirmar Cambio
-              <Repeat size={18} />
-            </button>
+            </BotonConfirmar>
+
             <button
-              className="btn-cancel-transfer"
+              className="btn-cancel-transfer w-100 mt-2"
               type="button"
               onClick={handleCloseModal}
+              disabled={loading}
             >
               Mantener en mesa actual
             </button>

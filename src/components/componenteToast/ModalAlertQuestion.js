@@ -1,5 +1,6 @@
+import { useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
-import "../../css/ModalAlertQuestion.css"; // Importar CSS correctamente
+import "../../css/ModalAlertQuestion.css";
 import { useQueryClient } from "@tanstack/react-query";
 import ReactDOM from "react-dom";
 
@@ -11,24 +12,32 @@ function ModalAlertQuestion({
   handleCloseModal,
   tipo,
   pregunta = "¿Estás seguro de eliminar este",
-  loading = false, // <-- 1. Agregado el prop loading
+  loading = false,
 }) {
   const queryClient = useQueryClient();
-  const isLoading = Boolean(loading); // <-- 2. Constante booleana
+  // 1. Estado local para manejar la carga asíncrona internamente
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  // 2. Combinamos el loading externo (si existe) con el interno
+  const isLoading = Boolean(loading) || isProcessing;
 
   const handleConfirm = async () => {
+    // Bloqueo JS: Si ya está cargando, ignoramos clics extra
+    if (isLoading) return;
+
+    setIsProcessing(true); // Encendemos el loader
     try {
-      // Ejecutar la función de eliminación pasando el ID
+      // Esperamos a que termine la función del padre
       const success = await handleEliminar(idEliminar);
       if (success) {
-        // Si necesitas invalidar la caché como en activar, descomenta la siguiente línea:
-        // queryClient.invalidateQueries({ queryKey: ["usuarios"] });
         handleCloseModal();
       } else {
         handleCloseModal();
       }
     } catch (error) {
       handleCloseModal();
+    } finally {
+      setIsProcessing(false); // Apagamos el loader pase lo que pase
     }
   };
 
@@ -44,31 +53,40 @@ function ModalAlertQuestion({
           {nombre || "Nombre no disponible"}
         </h4>
 
-        <div>
-          {/* Botón Confirmar con estado de carga (Spinner) */}
+        <div className="d-flex justify-content-center mt-4">
+          {/* Botón Confirmar */}
           <button
             onClick={handleConfirm}
             className="btn-eliminarToast mx-2"
             disabled={isLoading}
+            style={{
+              opacity: isLoading ? 0.7 : 1,
+              cursor: isLoading ? "not-allowed" : "pointer",
+            }}
           >
             {isLoading ? (
-              <>
+              <div className="d-flex align-items-center gap-2">
                 <span
-                  className="spinner-border spinner-border-sm me-2"
+                  className="spinner-border spinner-border-sm"
                   role="status"
                   aria-hidden="true"
                 ></span>
-                Eliminando...
-              </>
+                <span>Procesando...</span>
+              </div>
             ) : (
               "Confirmar"
             )}
           </button>
+
           {/* Botón Cancelar */}
           <button
             onClick={handleCloseModal}
-            className="btn-cancelar"
+            className="btn-cancelar mx-2"
             disabled={isLoading}
+            style={{
+              opacity: isLoading ? 0.7 : 1,
+              cursor: isLoading ? "not-allowed" : "pointer",
+            }}
           >
             {isLoading ? "Espere..." : "Cancelar"}
           </button>

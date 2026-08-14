@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setIdPreventaMesa } from "../../redux/mesaSlice";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { GetMesasVender } from "../../service/accionesVender/GetMesasVender";
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
 import {
@@ -24,12 +24,10 @@ import axiosInstance from "../../api/AxiosInstance";
 import "../../css/EstilosMesas.css";
 import ModalAlertQuestion from "../componenteToast/ModalAlertQuestion";
 import { TransferirToMesa } from "./tareasVender/TransferirToMesa";
+import ModalRight from "../componentesReutilizables/ModalRight";
+import ListReservas from "../componentesVentas/reservasMesas/ListReservas";
+import FormAddReservarMesa from "../componentesVentas/reservasMesas/FormAddReservarMesa";
 
-// 🔥 Importa tus modales aquí (Ajusta la ruta exacta según cómo esté tu carpeta)
-
-// =================================================================================
-// 🔥 MINI-COMPONENTE: Calcula el tiempo en vivo sin saturar Redux ni la API
-// =================================================================================
 const TiempoOcupacion = ({ fechaApertura }) => {
   const [minutos, setMinutos] = useState(0);
 
@@ -37,8 +35,7 @@ const TiempoOcupacion = ({ fechaApertura }) => {
     if (!fechaApertura) return;
 
     const calcularTiempo = () => {
-      // Reemplazamos '-' por '/' para evitar bugs de formato de fecha en Safari
-      const fechaParseada = new Date(fechaApertura.replace(/-/g, "/"));
+      const fechaParseada = new Date(fechaApertura);
       const ahora = new Date();
       const diferenciaMs = ahora - fechaParseada;
       const diffMinutos = Math.floor(diferenciaMs / 60000);
@@ -46,18 +43,19 @@ const TiempoOcupacion = ({ fechaApertura }) => {
       setMinutos(diffMinutos > 0 ? diffMinutos : 0);
     };
 
-    calcularTiempo(); // Cálculo inicial
-    const intervalo = setInterval(calcularTiempo, 60000); // Recalcula cada 1 minuto
+    calcularTiempo();
+    const intervalo = setInterval(calcularTiempo, 60000);
 
     return () => clearInterval(intervalo);
   }, [fechaApertura]);
 
-  // Si pasa de 60 minutos, se pone en rojo para alertar al cajero
   const esDemorado = minutos >= 60;
 
   return (
     <span
-      className={`small d-flex align-items-center gap-1 fw-bold ${esDemorado ? "text-danger" : "text-muted"}`}
+      className={`small d-flex align-items-center gap-1 fw-bold ${
+        esDemorado ? "text-danger" : "text-muted"
+      }`}
     >
       <Clock size={13} /> {minutos} min
     </span>
@@ -70,19 +68,23 @@ const TiempoOcupacion = ({ fechaApertura }) => {
 export function MesasList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const queryClient = useQueryClient();
   const {
     data: mesas = [],
     isLoading: loading,
     isError: error,
-    refetch, // Importante para recargar las mesas si anulamos un pedido
+    refetch,
   } = useQuery({
     queryKey: ["mesas"],
     queryFn: GetMesasVender,
     refetchOnWindowFocus: true,
   });
+  // PARA ABRIR LAS RESERVAS
+  const [modalReservasOpen, setModalReservasOpen] = useState(false);
+  const [vistaReserva, setVistaReserva] = useState("lista");
+  const [reservaEdit, setReservaEdit] = useState(null);
 
-  // 🔥 ESTADOS
+  //ESTADOS
   const [filtroPiso, setFiltroPiso] = useState("Todos");
   const [modalTransferir, setModalTransferir] = useState(false);
   const [modalQuestion, setModalQuestion] = useState(false);
@@ -101,25 +103,24 @@ export function MesasList() {
     navigate(`/vender/mesas/preVenta`);
   };
 
-  const handleReservas = () => {
-    ToastAlert("info", "El módulo de Reservas estará disponible muy pronto.");
-  };
-
-  // 🔥 ACCIÓN: Anular pedido desde el modal
-  const handleEliminarPreventeMesa = async (idMesaEliminar) => {
+  const handleEliminarPreventeMesa = async (idEliminar) => {
     try {
-      // 👉 REEMPLAZA AQUÍ con tu ruta real de Axios para eliminar
-      // await axiosInstance.delete(`/vender/mesa/preventa/${idMesaEliminar}`);
-
-      ToastAlert("success", "Pedido anulado correctamente.");
-      handleCloseModalQuestionEliminar();
-      refetch(); // Recargamos el mapa de mesas
+      const response = await axiosInstance.delete(
+        `/vender/eliminarPreventaMesa/${idEliminar}`,
+      );
+      if (response.data.success) {
+        ToastAlert("success", response.data.message);
+        queryClient.invalidateQueries(["mesas"]);
+        setModalQuestion(false);
+        navigate(`/vender/mesas`);
+      } else {
+        ToastAlert("error", response.data.message);
+      }
     } catch (error) {
-      ToastAlert("error", "No se pudo anular el pedido.");
+      ToastAlert("error", "Error al anular pedido");
     }
   };
 
-  // 🔥 ACCIÓN: Imprimir Pre-cuenta Rápida
   const handleImprimirPrecuentaRapida = async (e, mesa) => {
     e.stopPropagation();
 
@@ -146,7 +147,6 @@ export function MesasList() {
         "/vender/imprimirGenerico",
         payload,
       );
-
       if (response.data.success) {
         ToastAlert(
           "success",
@@ -168,17 +168,18 @@ export function MesasList() {
 
   const listaMesas = Array.isArray(mesas) ? mesas : [];
 
-  // Procesamiento de Filtros
   const pisosUnicos = ["Todos", ...new Set(listaMesas.map((m) => m.piso))];
   const mesasFiltradas =
     filtroPiso === "Todos"
       ? listaMesas
       : listaMesas.filter((m) => m.piso === filtroPiso);
 
+  //  CONTADORES DE ESTADO
   const mesasDisponibles = listaMesas.filter(
     (mesa) => mesa.estado === 1,
   ).length;
   const mesasOcupadas = listaMesas.filter((mesa) => mesa.estado === 0).length;
+  const mesasReservadas = listaMesas.filter((mesa) => mesa.estado === 2).length;
 
   return (
     <div className="card m-0 h-100 overflow-auto p-3 bg-app">
@@ -190,19 +191,32 @@ export function MesasList() {
           </h3>
           <button
             className="btn btn-sm btn-outline-dark d-flex align-items-center gap-2 rounded-pill px-3"
-            onClick={handleReservas}
+            onClick={() => {
+              setVistaReserva("lista"); // Siempre abrimos primero la lista
+              setModalReservasOpen(true);
+            }}
           >
             <CalendarDays size={16} /> Reservas
           </button>
         </div>
 
-        <div className="d-flex align-items-center gap-3 bg-white px-3 py-2 rounded-pill shadow-sm border">
+        <div className="d-flex align-items-center gap-3 bg-white px-3 py-2 rounded-pill border">
           <div className="d-flex align-items-center gap-2">
             <span className="fw-indicator bg-success"></span>
             <span className="small fw-bold text-muted">
               {mesasDisponibles} Libres
             </span>
           </div>
+
+          {/* 🔥 SECCIÓN DE RESERVAS EN EL HEADER (Solo si hay > 0, o siempre visible) */}
+          <div className="vr"></div>
+          <div className="d-flex align-items-center gap-2">
+            <span className="fw-indicator bg-warning"></span>
+            <span className="small fw-bold text-muted">
+              {mesasReservadas} Reservadas
+            </span>
+          </div>
+
           <div className="vr"></div>
           <div className="d-flex align-items-center gap-2">
             <span className="fw-indicator bg-danger"></span>
@@ -238,80 +252,147 @@ export function MesasList() {
             {mesasFiltradas.map((mesa) => (
               <div key={mesa.id} className="col-6 col-md-4 col-lg-3 col-xl-2">
                 <div
+                  // 🔥 CLASES DINÁMICAS: Agregamos una clase "reservada" (Añádela a tu CSS si quieres cambiar bordes)
                   className={`mesa-card h-100 ${
-                    mesa.estado === 1 ? "disponible" : "en-atencion"
-                  }`}
-                  onClick={() =>
                     mesa.estado === 1
-                      ? handleMesaAddPlato(mesa)
-                      : handleShowPedido(mesa.id)
-                  }
+                      ? "disponible"
+                      : mesa.estado === 0
+                        ? "en-atencion"
+                        : "reservada border-warning" // <-- Puedes darle estilos en EstilosMesas.css
+                  }`}
+                  onClick={() => {
+                    // 🔥 PROTECCIÓN DE CLIC
+                    if (mesa.estado === 1) {
+                      handleMesaAddPlato(mesa);
+                    } else if (mesa.estado === 0) {
+                      handleShowPedido(mesa.id);
+                    } else {
+                      ToastAlert(
+                        "warning",
+                        "Mesa reservada. Revisa el módulo de reservas.",
+                      );
+                    }
+                  }}
+                  style={{
+                    cursor: mesa.estado === 2 ? "not-allowed" : "pointer",
+                    opacity: mesa.estado === 2 ? 0.9 : 1, // Ligeramente difuminada si está reservada
+                  }}
                 >
-                  {/* 🔥 BOTÓN DROPDOWN (Trasladar / Anular) */}
+                  {/* AVATAR Y DROPDOWN (Solo para mesas Ocupadas = 0) */}
                   {mesa.estado === 0 && (
                     <div
-                      className="position-absolute top-0 end-0 p-2 z-3 dropdown"
-                      onClick={(e) => e.stopPropagation()} // Evita abrir la tarjeta al clicar el menú
+                      className="position-absolute top-0 end-0 p-2 z-3 d-flex align-items-center gap-1"
+                      onClick={(e) => e.stopPropagation()}
                     >
-                      <div
-                        className="bg-white rounded-circle shadow-sm border d-flex align-items-center justify-content-center"
-                        style={{
-                          width: "28px",
-                          height: "28px",
-                          cursor: "pointer",
-                        }}
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                      >
-                        <MoreVertical
-                          size={16}
-                          className="text-muted hover-text-dark"
-                        />
-                      </div>
+                      {mesa.mesero && (
+                        <span
+                          className="text-muted text-truncate me-1"
+                          style={{
+                            fontSize: "0.65rem",
+                            fontWeight: "600",
+                            maxWidth: "110px",
+                            letterSpacing: "0.3px",
+                          }}
+                        >
+                          {mesa.mesero}
+                        </span>
+                      )}
+                      {/* 1. FOTO DEL MESERO */}
+                      {mesa.mesero && (
+                        <div
+                          className="bg-white rounded-circle border border-2 d-flex align-items-center justify-content-center overflow-hidden"
+                          style={{
+                            width: "28px",
+                            height: "28px",
+                            borderColor: "var(--fw-strawberry)",
+                          }}
+                          title={`Atiende: ${mesa.mesero}`}
+                        >
+                          {mesa.foto_mesero ? (
+                            <img
+                              src={mesa.foto_mesero}
+                              alt={mesa.mesero}
+                              style={{
+                                width: "100%",
+                                height: "100%",
+                                objectFit: "cover",
+                              }}
+                              onError={(e) => {
+                                e.target.style.display = "none";
+                                e.target.nextSibling.style.display = "flex";
+                              }}
+                            />
+                          ) : null}
+                          <span
+                            className="fw-bold text-secondary"
+                            style={{
+                              fontSize: "0.75rem",
+                              display: mesa.foto_mesero ? "none" : "flex",
+                            }}
+                          >
+                            {mesa.mesero.charAt(0).toUpperCase()}
+                          </span>
+                        </div>
+                      )}
 
-                      {/* Opciones del menú Bootstrap */}
-                      <ul
-                        className="dropdown-menu dropdown-menu-end shadow-sm border-0"
-                        style={{ fontSize: "0.85rem" }}
-                      >
-                        <li>
-                          <button
-                            className="dropdown-item d-flex align-items-center gap-2 py-2"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setMesaActiva({
-                                id: mesa.id,
-                                numero: mesa.numero,
-                              });
-                              setModalTransferir(true);
-                            }}
-                          >
-                            <ArrowRightLeft
-                              size={15}
-                              className="text-primary"
-                            />{" "}
-                            Trasladar Mesa
-                          </button>
-                        </li>
-                        <li>
-                          <hr className="dropdown-divider my-1" />
-                        </li>
-                        <li>
-                          <button
-                            className="dropdown-item d-flex align-items-center gap-2 py-2 text-danger"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setMesaActiva({
-                                id: mesa.id,
-                                numero: mesa.numero,
-                              });
-                              setModalQuestion(true);
-                            }}
-                          >
-                            <Trash2 size={15} /> Anular Pedido
-                          </button>
-                        </li>
-                      </ul>
+                      {/* 2. DROPDOWN (3 Puntitos) */}
+                      <div className="dropdown">
+                        <div
+                          className="bg-white rounded-circle border d-flex align-items-center justify-content-center "
+                          style={{
+                            width: "28px",
+                            height: "28px",
+                            cursor: "pointer",
+                          }}
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
+                        >
+                          <MoreVertical
+                            size={16}
+                            className="text-muted hover-text-dark"
+                          />
+                        </div>
+
+                        <ul
+                          className="dropdown-menu dropdown-menu-end"
+                          style={{ fontSize: "0.85rem" }}
+                        >
+                          <li>
+                            <button
+                              className="dropdown-item d-flex align-items-center gap-2 py-2"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setMesaActiva({
+                                  id: mesa.id,
+                                  numero: mesa.numero,
+                                });
+                                setModalTransferir(true);
+                              }}
+                            >
+                              <ArrowRightLeft size={15} className="text-dark" />{" "}
+                              Trasladar Mesa
+                            </button>
+                          </li>
+                          <li>
+                            <hr className="dropdown-divider my-1" />
+                          </li>
+                          <li>
+                            <button
+                              className="dropdown-item d-flex align-items-center gap-2 py-2 text-danger"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setMesaActiva({
+                                  id: mesa.id,
+                                  numero: mesa.numero,
+                                });
+                                setModalQuestion(true);
+                              }}
+                            >
+                              <Trash2 size={15} /> Anular Pedido
+                            </button>
+                          </li>
+                        </ul>
+                      </div>
                     </div>
                   )}
 
@@ -329,18 +410,9 @@ export function MesasList() {
                       <p>
                         <Users size={13} /> Cap: {mesa.capacidad}
                       </p>
-                      {/* MESERO ASIGNADO */}
-                      {mesa.estado === 0 && mesa.mesero && (
-                        <p
-                          className="text-truncate"
-                          title={`Atiende: ${mesa.mesero}`}
-                        >
-                          <UserRound size={13} /> {mesa.mesero}
-                        </p>
-                      )}
                     </div>
 
-                    {/* VISTA PREVIA TOTAL Y TIEMPO (Si está ocupada) */}
+                    {/* VISTA PREVIA TOTAL Y TIEMPO (Si está ocupada = 0) */}
                     {mesa.estado === 0 && (
                       <div className="mesa-total-preview mt-2 d-flex flex-column gap-1">
                         <div className="d-flex justify-content-between align-items-center">
@@ -354,9 +426,10 @@ export function MesasList() {
                           >
                             TOTAL ACTUAL
                           </span>
-                          {/* INDICADOR DE TIEMPO (Asume que el backend devuelve created_at) */}
-                          {mesa.created_at && (
-                            <TiempoOcupacion fechaApertura={mesa.created_at} />
+                          {mesa.tiempo_apertura && (
+                            <TiempoOcupacion
+                              fechaApertura={mesa.tiempo_apertura}
+                            />
                           )}
                         </div>
                         <span className="fw-bold fs-6">
@@ -364,21 +437,59 @@ export function MesasList() {
                         </span>
                       </div>
                     )}
+
+                    {/* 🔥 VISTA PREVIA RESERVA (Si está reservada = 2) */}
+                    {mesa.estado === 2 && (
+                      <div
+                        className="mesa-total-preview mt-2 d-flex flex-column gap-1 rounded p-2"
+                        style={{
+                          backgroundColor: "#fffbeb",
+                          border: "1px dashed #fcd34d",
+                        }} // Colores pastel naranjas
+                      >
+                        <div className="d-flex justify-content-between align-items-center">
+                          <span
+                            className="text-warning small"
+                            style={{
+                              fontSize: "0.65rem",
+                              fontWeight: "800",
+                              letterSpacing: "0.5px",
+                            }}
+                          >
+                            RESERVADA PARA
+                          </span>
+                          <span className="small fw-bold text-warning d-flex align-items-center gap-1">
+                            <Clock size={13} /> {mesa.reserva_hora}
+                          </span>
+                        </div>
+                        <span
+                          className="fw-bold fs-6 text-dark text-truncate mt-1"
+                          title={mesa.reserva_cliente}
+                        >
+                          <UserRound size={14} className="me-1 text-warning" />
+                          {mesa.reserva_cliente}
+                        </span>
+                      </div>
+                    )}
                   </div>
 
                   {/* FOOTER ACCIONES */}
                   <div className="mesa-footer">
-                    {mesa.estado === 1 ? (
+                    {/* ESTADO 1: LIBRE */}
+                    {mesa.estado === 1 && (
                       <div className="mesa-action-label">
                         <PlusCircle size={14} /> <span>ABRIR MESA</span>
                       </div>
-                    ) : (
+                    )}
+
+                    {/* ESTADO 0: OCUPADA */}
+                    {mesa.estado === 0 && (
                       <div className="d-flex w-100 gap-1">
                         <div className="mesa-action-label flex-grow-1">
                           <Eye size={14} /> <span>VER PEDIDO</span>
                         </div>
                         <button
-                          className="btn-informativo m-0 d-flex align-items-center justify-content-center"
+                          className="btn-informativo btn-icon m-0 d-flex align-items-center justify-content-center"
                           style={{ width: "40px", flexShrink: 0, padding: 0 }}
                           onClick={(e) =>
                             handleImprimirPrecuentaRapida(e, mesa)
@@ -387,6 +498,16 @@ export function MesasList() {
                         >
                           <PrinterIcon size={16} />
                         </button>
+                      </div>
+                    )}
+
+                    {/* 🔥 ESTADO 2: RESERVADA */}
+                    {mesa.estado === 2 && (
+                      <div
+                        className="mesa-action-label w-100"
+                        style={{ color: "#d97706", backgroundColor: "#fef3c7" }}
+                      >
+                        <CalendarDays size={14} /> <span>RESERVADA</span>
                       </div>
                     )}
                   </div>
@@ -415,6 +536,42 @@ export function MesasList() {
         mesa={mesaActiva.numero}
         handleCloseModal={handleCloseTransferir}
       />
+
+      {/* MODAL RIGHT DE RESERVAS */}
+      <ModalRight
+        isOpen={modalReservasOpen}
+        onClose={() => setModalReservasOpen(false)}
+        title={
+          vistaReserva === "lista"
+            ? "Gestión de Reservas"
+            : reservaEdit
+              ? "Editar Reserva"
+              : "Nueva Reserva"
+        }
+        subtitulo={
+          vistaReserva === "lista"
+            ? "Reservas del día y futuras"
+            : "Registrar cliente y mesa"
+        }
+        width="450px"
+        hideFooter={true}
+      >
+        {vistaReserva === "lista" ? (
+          <ListReservas
+            irAFormulario={(reserva = null) => {
+              setReservaEdit(reserva); // Si mandamos null es "Nueva", si mandamos el objeto es "Editar"
+              setVistaReserva("formulario");
+            }}
+          />
+        ) : (
+          <FormAddReservarMesa
+            volverALista={() => setVistaReserva("lista")}
+            onCloseModal={() => setModalReservasOpen(false)}
+            todasLasMesas={listaMesas}
+            reservaToEdit={reservaEdit}
+          />
+        )}
+      </ModalRight>
     </div>
   );
 }
