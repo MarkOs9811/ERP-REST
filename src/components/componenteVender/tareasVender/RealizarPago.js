@@ -141,8 +141,7 @@ export function RealizarPago({
             </label>
             <div className="input-group input-group-sm">
               <select
-                className="form-select text-center"
-                style={{ maxWidth: "70px", fontWeight: "600" }}
+                className="form-select"
                 value={tipoDocBusqueda}
                 onChange={(e) => {
                   setTipoDocBusqueda(e.target.value);
@@ -159,7 +158,7 @@ export function RealizarPago({
               <div className="position-relative flex-grow-1">
                 <input
                   type="text"
-                  className={`form-control form-control-sm w-100 ${
+                  className={`form-control form-control-sm  h-100 ${
                     errorBusqueda ? "is-invalid" : ""
                   }`}
                   placeholder={`Nº de ${tipoDocBusqueda}...`}

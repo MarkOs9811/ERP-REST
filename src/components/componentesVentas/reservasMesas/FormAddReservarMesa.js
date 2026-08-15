@@ -120,11 +120,9 @@ export default function FormAddReservarMesa({
       onSubmit={handleSubmit(onSubmit)}
       className="d-flex flex-column h-100 bg-white"
     >
-      {/* ... (Todo el HTML del formulario se queda EXACTAMENTE igual al anterior) ... */}
-
       <div className="p-4 flex-grow-1 overflow-auto">
         <div className="mb-4">
-          <label className="small fw-bold text-muted mb-1 text-uppercase d-block">
+          <label className="small fw-bold  mb-1  d-block">
             Nombre del Cliente *
           </label>
           <input
@@ -152,9 +150,7 @@ export default function FormAddReservarMesa({
 
         <div className="row mb-4">
           <div className="col-6">
-            <label className="small fw-bold text-muted mb-1 text-uppercase d-block">
-              Fecha *
-            </label>
+            <label className="small fw-bold  mb-1  d-block">Fecha *</label>
             <input
               type="date"
               className={`form-control border-secondary bg-light ${errors.fecha_reserva ? "is-invalid" : ""}`}
@@ -162,9 +158,7 @@ export default function FormAddReservarMesa({
             />
           </div>
           <div className="col-6">
-            <label className="small fw-bold text-muted mb-1 text-uppercase d-block">
-              Hora *
-            </label>
+            <label className="small fw-bold  mb-1  d-block">Hora *</label>
             <input
               type="time"
               className={`form-control border-secondary bg-light ${errors.hora_reserva ? "is-invalid" : ""}`}
@@ -175,9 +169,7 @@ export default function FormAddReservarMesa({
 
         <div className="row mb-4">
           <div className="col-8">
-            <label className="small fw-bold text-muted mb-1 text-uppercase d-block">
-              Mesa *
-            </label>
+            <label className="small fw-bold  mb-1  d-block">Mesa *</label>
             <select
               className={`form-select border-secondary bg-light ${errors.idMesa ? "is-invalid" : ""}`}
               {...register("idMesa", { required: "Requerida" })}
@@ -203,9 +195,7 @@ export default function FormAddReservarMesa({
             )}
           </div>
           <div className="col-4">
-            <label className="small fw-bold text-muted mb-1 text-uppercase d-block">
-              Personas
-            </label>
+            <label className="small fw-bold  mb-1  d-block">Personas</label>
             <input
               type="number"
               min="1"
@@ -216,7 +206,7 @@ export default function FormAddReservarMesa({
         </div>
 
         <div className="mb-4">
-          <label className="small fw-bold text-muted mb-1 text-uppercase d-block">
+          <label className="small fw-bold  mb-1  d-block">
             Celular (Opcional)
           </label>
           <input
@@ -228,7 +218,7 @@ export default function FormAddReservarMesa({
         </div>
 
         <div className="mb-4">
-          <label className="small fw-bold text-muted mb-1 text-uppercase d-block">
+          <label className="small fw-bold  mb-1  d-block">
             Notas (Opcional)
           </label>
           <textarea

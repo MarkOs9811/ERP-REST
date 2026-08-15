@@ -55,15 +55,15 @@ export function Home() {
         <div className="text-end position-relative z-1 d-flex flex-column align-items-end">
           <p className="mb-2 fw-medium text-muted d-flex align-items-center gap-2">
             <span className="status-dot bg-success rounded-circle"></span>
-            {caja.estado === "abierto" ? "Caja abierta" : "Caja cerrada"} -{" "}
-            {caja.nombre} - {caja.usuario_nombre}
+            {caja?.estadoCaja === 1 ? "Caja abierta" : "Caja cerrada"} -{" "}
+            {caja?.nombreCaja} - {caja?.usuario?.empleado?.persona?.nombre}
           </p>
           <p className="mb-3 fw-semibold text-dark">
-            {caja.estado === "abierto"
+            {caja?.estadoCaja === 1
               ? "¡Buen trabajo! Mantén el control de tus ventas."
               : "Caja cerrada. Abre la caja para comenzar a vender."}
           </p>
-          {caja.estado === "abierto" ? (
+          {caja?.estadoCaja === 1 ? (
             <button
               className="btn-principal btn-lg px-4 py-2 fw-bold shadow-sm d-flex align-items-center gap-2 btn-ir-a-caja"
               onClick={() => navigate("/vender/mesas")}

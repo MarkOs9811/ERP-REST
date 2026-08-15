@@ -39,7 +39,7 @@ export function TablasGenerales({
           selectAllRowsItemText: "Todos",
         }}
         noDataComponent={
-          <div className="fw-table-no-data">No hay datos para mostrar</div>
+          <div className="no-data-table">No hay datos para mostrar</div>
         }
       />
     </div>

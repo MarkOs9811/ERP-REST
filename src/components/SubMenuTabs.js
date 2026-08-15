@@ -15,6 +15,7 @@ import {
   BikeIcon,
   GiftIcon,
   MessageCircleHeart,
+  Calendar1Icon,
 } from "lucide-react";
 
 const subMenuGroups = {
@@ -193,7 +194,7 @@ const subMenuGroups = {
     {
       label: "Reserva",
       path: "/ventas/reservasMesas",
-      icon: <Building size={16} />,
+      icon: <Calendar1Icon size={16} />,
     },
     {
       label: "Reportes",

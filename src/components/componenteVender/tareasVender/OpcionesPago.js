@@ -346,8 +346,6 @@ export function OpcionesPago(props) {
           </div>
         </div>
 
-        <hr className="text-muted opacity-25 my-4" />
-
         {/* ================================================================ */}
         {/* INFORMACIÓN DEL CLIENTE: BOLETA */}
         {/* ================================================================ */}

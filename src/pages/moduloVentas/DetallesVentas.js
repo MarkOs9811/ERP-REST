@@ -72,7 +72,9 @@ export function DetallesVentas() {
                 <button
                   type="button"
                   className="btn btn-outline-dark px-3"
-                  onClick={() => GetReporteExcel("/reporteVentasTodo")}
+                  onClick={() =>
+                    GetReporteExcel("/reporteVentasTodo", "totalVentas")
+                  }
                 >
                   <FileText size={18} />
                   Reporte

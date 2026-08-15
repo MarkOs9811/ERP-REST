@@ -203,11 +203,11 @@
 
 /* ========== TEMA OSCURO MODAL ALERT DELETE ESTILO MODERNO ========== */
 body.dark-theme .modal-overlay {
-    background: rgba(2, 6, 23, 0.72) !important;
+    background: rgba(10, 10, 10, 0.72) !important;
 }
 
 body.dark-theme .fw-modal-overlay {
-    background: rgba(2, 6, 23, 0.6) !important;
+    background: rgba(13, 13, 14, 0.6) !important;
 }
 
 body.dark-theme .fw-modal-shell {
@@ -232,16 +232,7 @@ body.dark-theme .modal-name-delete {
     border-color: rgba(220, 38, 38, 0.3) !important;
 }
 
-body.dark-theme .btn-eliminarToast {
-    background-color: var(--bg-surface) !important;
-    color: var(--fw-strawberry) !important;
-    border-color: rgba(220, 38, 38, 0.62) !important;
-}
 
-body.dark-theme .btn-eliminarToast:hover {
-    background-color: var(--bg-strawberry-soft) !important;
-    border-color: rgba(220, 38, 38, 0.84) !important;
-}
 
 body.dark-theme .modal-overlay .btn-secondary {
     background-color: var(--bg-surface) !important;

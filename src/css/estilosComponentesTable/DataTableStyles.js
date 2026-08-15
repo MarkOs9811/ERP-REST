@@ -15,13 +15,21 @@ const getCustomDataTableStyles = (isDark) => {
 
   // COLOR DE INTERCALADO (GRIS SUTIL PARA LA CEBRA)
   const bgStriped = isDark ? "#24282d" : "#f8f8f8";
-
   const bgHover = isDark ? "#2c3137" : "#dadee2";
+
   return {
     table: {
       style: {
         minHeight: "300px",
-        backgroundColor: bgSurface, // El fondo de la tabla general
+        backgroundColor: bgSurface,
+      },
+    },
+    // 🔥 AGREGA ESTO PARA EL ESTADO "SIN DATOS"
+    noData: {
+      style: {
+        backgroundColor: bgSurface,
+        color: textMuted,
+        padding: "24px",
       },
     },
     rows: {
@@ -32,17 +40,16 @@ const getCustomDataTableStyles = (isDark) => {
         color: textMain,
         borderBottom: `1px solid ${border}`,
         fontSize: "13px",
-        // ELIMINAMOS EL backgroundColor AQUÍ PARA NO APLASTAR A LA CEBRA
       },
       stripedStyle: {
-        backgroundColor: bgStriped, // Esto ahora sí se va a ver en las filas pares
+        backgroundColor: bgStriped,
         color: textMain,
       },
       highlightOnHoverStyle: {
-        backgroundColor: bgHover, // Usamos el nuevo color aquí
+        backgroundColor: bgHover,
         color: textMain,
         cursor: "pointer",
-        transition: "background-color 0.15s ease-in-out", // Un pequeño toque suave
+        transition: "background-color 0.15s ease-in-out",
       },
     },
     headCells: {

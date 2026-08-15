@@ -45,7 +45,7 @@ function ModalAlertQuestion({
 
   return ReactDOM.createPortal(
     <div className={`modal-overlay my-0 ${show ? "show" : ""}`}>
-      <div className="contenido-model bg-white">
+      <div className="contenido-model ">
         <p className="h5">
           {pregunta} {tipo}?
         </p>
@@ -57,7 +57,7 @@ function ModalAlertQuestion({
           {/* Botón Confirmar */}
           <button
             onClick={handleConfirm}
-            className="btn-eliminarToast mx-2"
+            className="btn-eliminar mx-2"
             disabled={isLoading}
             style={{
               opacity: isLoading ? 0.7 : 1,

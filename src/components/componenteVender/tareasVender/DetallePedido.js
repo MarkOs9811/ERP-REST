@@ -23,14 +23,17 @@ export function DetallePedido({
   return (
     <div className="card border h-100 ">
       <div className="card-header d-flex align-items-center justify-content-center">
-        <h4 className="align-middle me-2">Cuenta </h4>
-        <h6 className=" fw-bold align-middle h4 text-success">
-          {estadoTipoVenta === "llevar"
-            ? "Llevar"
-            : mesa
-              ? `Mesa ${mesa}`
-              : "Web Pedido"}
-        </h6>
+        <div className="d-flex g-0 flex-column">
+          <h6 className="align-middle me-2 my-0 small">Cuenta </h6>
+          <h2 className=" fw-bold align-middle text-success my-0">
+            {estadoTipoVenta === "llevar"
+              ? "Llevar"
+              : mesa
+                ? `Mesa ${mesa}`
+                : "Web Pedido"}
+          </h2>
+        </div>
+
         <button
           className="btn btn-outline-dark ms-auto"
           onClick={() =>
