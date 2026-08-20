@@ -48,11 +48,13 @@ function App() {
     const miEmpresa = JSON.parse(
       localStorage.getItem("empresa") || sessionStorage.getItem("empresa"),
     );
-    if (miEmpresa) {
-      document.title = miEmpresa.nombre;
-      const favicon = document.getElementById("favicon");
 
-      favicon.href = miEmpresa.logo_url || "/favicon.ico"; // Ruta al logo de la empresa o favicon por defecto
+    // Si existe la empresa toma su nombre, si no, usa el default
+    document.title = miEmpresa?.nombre || "Administración Rest";
+
+    const favicon = document.getElementById("favicon");
+    if (favicon) {
+      favicon.href = miEmpresa?.logo_url || "/favicon.ico";
     }
   }, []);
 

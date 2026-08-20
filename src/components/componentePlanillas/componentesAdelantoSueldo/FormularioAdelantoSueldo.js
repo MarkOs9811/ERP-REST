@@ -201,7 +201,7 @@ export function FormularioAdelantoSueldo({
         </div>
       </div>
       <div className="d-flex  border-top p-3 gap-2">
-        <button type="button" className="btn-cerrar-modal" onClick={onClose}>
+        <button type="button" className="btn-cerrar" onClick={onClose}>
           Cancelar
         </button>
         <button type="submit" className="btn-guardar">

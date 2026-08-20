@@ -200,8 +200,8 @@ export function FormularioVacaciones({
           )}
         </div>
       </div>
-      <div className="d-flex gap-2 p-3 border-top">
-        <button type="button" className="btn-cerrar-modal" onClick={onClose}>
+      <div className="d-flex gap-2 p-3">
+        <button type="button" className="btn-cerrar" onClick={onClose}>
           Cancelar
         </button>
         <button type="submit" className="btn-guardar">

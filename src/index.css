@@ -164,10 +164,11 @@ a {
 
 /* Formularios */
 .form-label {
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: var(--text-main);
-  margin-bottom: 0.45rem;
+  font-size: 0.82rem !important;
+  font-weight: 700 !important;
+  color: rgb(126, 126, 126)!important;
+  margin-bottom: 0.45rem !important;
+  text-transform: capitalize !important;
 }
 
 .form-control,
@@ -591,6 +592,14 @@ body.dark-theme .form-switch .form-check-input:focus {
 .nav-pills .show>.nav-link {
   background-color: var(--brand-primary) !important;
 }
+body.dark-theme .btn-icon {
+  border: 1px solid white;
+  color: rgb(230, 227, 227)!important;
+}
+
+body.dark-theme .btn-icon svg {
+  color: rgb(230, 227, 227) !important;
+}
 
 /* ========================================================================
    TEMA DARK (COMPONENTES Y ESTRUCTURA)
@@ -664,7 +673,41 @@ body.dark-theme .shadow-lg {
 body.dark-theme ::-webkit-scrollbar-thumb {
   background: #3a4249;
 }
+/* ========================================================================
+   TEMA DARK PARA TABLAS (COMO LA DE PREVENTA)
+========================================================================= */
+/* Fondo general de la tabla */
+body.dark-theme .table {
+  color: var(--text-main) !important;
+  background-color: transparent !important;
+  border-color: var(--fw-border) !important;
+}
 
+/* Forzar que las celdas (td, th) no hereden el fondo blanco de Bootstrap */
+body.dark-theme .table> :not(caption)>*>*,
+body.dark-theme .table>tbody>tr>td,
+body.dark-theme .table>thead>tr>th {
+  background-color: transparent !important;
+  color: var(--text-main) !important;
+  border-bottom-color: var(--fw-border) !important;
+}
+
+/* Encabezados de tabla más sutiles en modo oscuro */
+body.dark-theme .table thead th,
+body.dark-theme .table thead .text-muted {
+  color: var(--text-muted) !important;
+  font-weight: 500 !important;
+}
+
+/* Asegurar que las clases nativas (como text-dark) se inviertan dentro de la tabla */
+body.dark-theme .table .text-dark {
+  color: var(--text-main) !important;
+}
+
+/* Efecto hover opcional para las filas en modo oscuro */
+body.dark-theme .table tbody tr:hover td {
+  background-color: rgba(255, 255, 255, 0.03) !important;
+}
 /* ========================================================================
    ESTILOS PARA DROPDOWN (MENÚS DESPLEGABLES)
 ========================================================================= */
@@ -738,4 +781,11 @@ body.dark-theme .dropdown-menu .dropdown-item:focus {
   background-color: rgba(255, 255, 255, 0.05) !important;
   /* Un gris muy sutil sobre el fondo oscuro */
   color: var(--fw-white) !important;
+}
+body.dark-theme .form-label {
+  font-size: 0.82rem !important;
+  font-weight: 500 !important;
+  color: rgb(119, 119, 119) !important;
+  margin-bottom: 0.45rem !important;
+  text-transform: capitalize !important;
 }

@@ -230,13 +230,10 @@ export default function FormAddReservarMesa({
         </div>
       </div>
 
-      <div
-        className="p-3 border-top d-flex justify-content-between flex-shrink-0"
-        style={{ backgroundColor: "#f8f9fa" }}
-      >
+      <div className="p-3 border-top d-flex justify-content-between flex-shrink-0">
         <button
           type="button"
-          className="btn-cerrar-modal border d-flex align-items-center gap-2 px-3 fw-bold text-dark shadow-sm"
+          className="btn-cerrar  d-flex align-items-center gap-2 px-3 fw-bold text-dark shadow-sm"
           onClick={volverALista}
           disabled={loading}
         >

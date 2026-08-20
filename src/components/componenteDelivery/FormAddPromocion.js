@@ -158,26 +158,22 @@ export function FormAddPromocion({ onClose, platos }) {
       {/* Fila de Precios y Descuentos */}
       <div className="row g-3 mb-4">
         <div className="col-6">
-          <label className="form-label fw-medium text-dark">
+          <label className="form-label fw-medium text-dark d-flex align-items-center gap-1">
+            <Percent size={16} className="text-muted" />
             Descuento (%)
           </label>
-          <div className="input-group ">
-            <span className="input-group-text bg-white">
-              <Percent size={16} className="text-muted" />
-            </span>
-            <input
-              type="number"
-              className={`form-control ${errors.porcentaje_descuento ? "is-invalid" : ""}`}
-              placeholder="Ej: 15"
-              {...register("porcentaje_descuento", {
-                required: "Ingrese un porcentaje",
-                min: { value: 1, message: "Mínimo 1%" },
-                max: { value: 100, message: "Máximo 100%" },
-                onChange: (e) =>
-                  calcularDescuento(e.target.value, precioOriginal),
-              })}
-            />
-          </div>
+          <input
+            type="number"
+            className={`form-control ${errors.porcentaje_descuento ? "is-invalid" : ""}`}
+            placeholder="Ej: 15"
+            {...register("porcentaje_descuento", {
+              required: "Ingrese un porcentaje",
+              min: { value: 1, message: "Mínimo 1%" },
+              max: { value: 100, message: "Máximo 100%" },
+              onChange: (e) =>
+                calcularDescuento(e.target.value, precioOriginal),
+            })}
+          />
           {errors.porcentaje_descuento && (
             <span className="text-danger small">
               {errors.porcentaje_descuento.message}
@@ -186,21 +182,18 @@ export function FormAddPromocion({ onClose, platos }) {
         </div>
 
         <div className="col-6">
-          <label className="form-label fw-medium text-dark">
+          <label className="form-label d-flex align-items-center gap-1">
             Precio Promo (S/)
           </label>
-          <div className="input-group ">
-            <span className="input-group-text bg-white">S/.</span>
-            <input
-              type="number"
-              step="0.01"
-              className={`form-control text-danger fw-bold ${errors.precio_promocional ? "is-invalid" : ""}`}
-              {...register("precio_promocional", {
-                required: "El precio final es obligatorio",
-                min: { value: 0.1, message: "Debe ser mayor a 0" },
-              })}
-            />
-          </div>
+          <input
+            type="number"
+            step="0.01"
+            className={`form-control text-danger fw-bold ${errors.precio_promocional ? "is-invalid" : ""}`}
+            {...register("precio_promocional", {
+              required: "El precio final es obligatorio",
+              min: { value: 0.1, message: "Debe ser mayor a 0" },
+            })}
+          />
           {errors.precio_promocional && (
             <span className="text-danger small">
               {errors.precio_promocional.message}
@@ -217,19 +210,17 @@ export function FormAddPromocion({ onClose, platos }) {
       {/* Fechas de Vigencia */}
       <div className="row g-3 mb-4">
         <div className="col-6">
-          <label className="form-label fw-medium text-dark">Fecha Inicio</label>
-          <div className="input-group ">
-            <span className="input-group-text bg-white">
-              <Calendar size={16} />
-            </span>
-            <input
-              type="date"
-              className={`form-control ${errors.fecha_inicio ? "is-invalid" : ""}`}
-              {...register("fecha_inicio", {
-                required: "Seleccione fecha de inicio",
-              })}
-            />
-          </div>
+          <label className="form-label fw-medium text-dark d-flex align-items-center gap-1">
+            <Calendar size={16} className="text-muted" />
+            Fecha Inicio
+          </label>
+          <input
+            type="date"
+            className={`form-control ${errors.fecha_inicio ? "is-invalid" : ""}`}
+            {...register("fecha_inicio", {
+              required: "Seleccione fecha de inicio",
+            })}
+          />
           {errors.fecha_inicio && (
             <span className="text-danger small">
               {errors.fecha_inicio.message}
@@ -238,27 +229,25 @@ export function FormAddPromocion({ onClose, platos }) {
         </div>
 
         <div className="col-6">
-          <label className="form-label fw-medium text-dark">Fecha Fin</label>
-          <div className="input-group ">
-            <span className="input-group-text bg-white">
-              <Calendar size={16} />
-            </span>
-            <input
-              type="date"
-              className={`form-control ${errors.fecha_fin ? "is-invalid" : ""}`}
-              {...register("fecha_fin", {
-                required: "Seleccione fecha de fin",
-                validate: (value) => {
-                  const inicio = getValues("fecha_inicio");
-                  return (
-                    !inicio ||
-                    value >= inicio ||
-                    "La fecha fin no puede ser menor a la inicial"
-                  );
-                },
-              })}
-            />
-          </div>
+          <label className="form-label fw-medium text-dark d-flex align-items-center gap-1">
+            <Calendar size={16} className="text-muted" />
+            Fecha Fin
+          </label>
+          <input
+            type="date"
+            className={`form-control ${errors.fecha_fin ? "is-invalid" : ""}`}
+            {...register("fecha_fin", {
+              required: "Seleccione fecha de fin",
+              validate: (value) => {
+                const inicio = getValues("fecha_inicio");
+                return (
+                  !inicio ||
+                  value >= inicio ||
+                  "La fecha fin no puede ser menor a la inicial"
+                );
+              },
+            })}
+          />
           {errors.fecha_fin && (
             <span className="text-danger small">
               {errors.fecha_fin.message}
@@ -269,11 +258,11 @@ export function FormAddPromocion({ onClose, platos }) {
 
       {/* Carga de Imagen */}
       <div className="mb-4">
-        <label className="form-label fw-medium text-dark">
+        <label className="form-label fw-medium text-dark d-flex align-items-center gap-1">
+          <Image size={16} className="text-muted" />
           Imagen del Banner
         </label>
         <div className="border border-2 border-dashed rounded-3 p-4 text-center bg-light">
-          <Image size={32} className="text-muted mb-2" />
           <p className="mb-0 text-muted small">
             Arrastra una imagen o haz clic para subir
           </p>

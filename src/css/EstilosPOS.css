@@ -40,7 +40,7 @@
 }
 
 body.dark-theme .contenedor-scroll {
-    background-color: var(--bg-card, #1E2022);
+    background-color: transparent;
 }
 
 

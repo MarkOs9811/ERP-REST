@@ -112,7 +112,7 @@ const ModalRight = ({
           <div className="modal-right-footer flex-shrink-0">
             <button
               type="button"
-              className={`btn-cerrar-modal ms-2 ${cancelButtonClassName}`.trim()}
+              className={`btn-cerrar ms-2 ${cancelButtonClassName}`.trim()}
               onClick={onCancel || handleClose}
               disabled={isLoading} // 🔥 Bloqueamos botón Cancelar
             >

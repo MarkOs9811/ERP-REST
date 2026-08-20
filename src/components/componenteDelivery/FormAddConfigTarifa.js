@@ -79,7 +79,8 @@ export function FormAddConfigTarifa({ onClose, sedeId }) {
 
       {/* Días de la semana */}
       <div className="mb-3">
-        <label className="form-label fw-medium text-dark small">
+        <label className="form-label fw-medium text-dark small d-flex align-items-center gap-1">
+          <CalendarDays size={16} className="text-muted" />
           Días de Operación
         </label>
         <div className="d-flex flex-wrap gap-2">
@@ -110,19 +111,15 @@ export function FormAddConfigTarifa({ onClose, sedeId }) {
       {/* Horas */}
       <div className="row g-3 mb-4">
         <div className="col-6">
-          <label className="form-label fw-medium text-dark small">
+          <label className="form-label fw-medium text-dark small d-flex align-items-center gap-1">
+            <Clock size={16} className="text-muted" />
             Hora Apertura
           </label>
-          <div className="input-group ">
-            <span className="input-group-text bg-white">
-              <Clock size={16} className="text-muted" />
-            </span>
-            <input
-              type="time"
-              className={`form-control ${errors.hora_apertura ? "is-invalid" : ""}`}
-              {...register("hora_apertura", { required: "Obligatorio" })}
-            />
-          </div>
+          <input
+            type="time"
+            className={`form-control ${errors.hora_apertura ? "is-invalid" : ""}`}
+            {...register("hora_apertura", { required: "Obligatorio" })}
+          />
           {errors.hora_apertura && (
             <span className="text-danger small">
               {errors.hora_apertura.message}
@@ -131,19 +128,15 @@ export function FormAddConfigTarifa({ onClose, sedeId }) {
         </div>
 
         <div className="col-6">
-          <label className="form-label fw-medium text-dark small">
+          <label className="form-label fw-medium text-dark small d-flex align-items-center gap-1">
+            <Clock size={16} className="text-muted" />
             Hora Cierre
           </label>
-          <div className="input-group ">
-            <span className="input-group-text bg-white">
-              <Clock size={16} className="text-muted" />
-            </span>
-            <input
-              type="time"
-              className={`form-control ${errors.hora_cierre ? "is-invalid" : ""}`}
-              {...register("hora_cierre", { required: "Obligatorio" })}
-            />
-          </div>
+          <input
+            type="time"
+            className={`form-control ${errors.hora_cierre ? "is-invalid" : ""}`}
+            {...register("hora_cierre", { required: "Obligatorio" })}
+          />
           {errors.hora_cierre && (
             <span className="text-danger small">
               {errors.hora_cierre.message}
@@ -158,27 +151,22 @@ export function FormAddConfigTarifa({ onClose, sedeId }) {
       </h6>
       <div className="row g-3 mb-4">
         <div className="col-6">
-          <label className="form-label fw-medium text-dark small">
-            Costo Base (S/)
-          </label>
-          <div className="input-group ">
-            <span
-              className="input-group-text bg-white text-muted fw-bold"
-              style={{ fontSize: "0.9rem" }}
-            >
+          <label className="form-label fw-medium text-dark small d-flex align-items-center gap-1">
+            <span className="text-muted fw-bold" style={{ fontSize: "0.9rem" }}>
               S/
             </span>
-            <input
-              type="number"
-              step="0.01"
-              className={`form-control ${errors.costo_base_delivery ? "is-invalid" : ""}`}
-              placeholder="Ej: 5.00"
-              {...register("costo_base_delivery", {
-                required: "Campo obligatorio",
-                min: { value: 0, message: "Mínimo 0" },
-              })}
-            />
-          </div>
+            Costo Base (S/)
+          </label>
+          <input
+            type="number"
+            step="0.01"
+            className={`form-control ${errors.costo_base_delivery ? "is-invalid" : ""}`}
+            placeholder="Ej: 5.00"
+            {...register("costo_base_delivery", {
+              required: "Campo obligatorio",
+              min: { value: 0, message: "Mínimo 0" },
+            })}
+          />
           {errors.costo_base_delivery && (
             <span className="text-danger small">
               {errors.costo_base_delivery.message}
@@ -187,26 +175,21 @@ export function FormAddConfigTarifa({ onClose, sedeId }) {
         </div>
 
         <div className="col-6">
-          <label className="form-label fw-medium text-dark small">
-            Costo Prioridad (S/)
-          </label>
-          <div className="input-group ">
-            <span
-              className="input-group-text bg-white text-muted fw-bold"
-              style={{ fontSize: "0.9rem" }}
-            >
+          <label className="form-label fw-medium text-dark small d-flex align-items-center gap-1">
+            <span className="text-muted fw-bold" style={{ fontSize: "0.9rem" }}>
               S/
             </span>
-            <input
-              type="number"
-              step="0.01"
-              className={`form-control ${errors.costo_prioridad ? "is-invalid" : ""}`}
-              placeholder="Ej: 8.00"
-              {...register("costo_prioridad", {
-                min: { value: 0, message: "Mínimo 0" },
-              })}
-            />
-          </div>
+            Costo Prioridad (S/)
+          </label>
+          <input
+            type="number"
+            step="0.01"
+            className={`form-control ${errors.costo_prioridad ? "is-invalid" : ""}`}
+            placeholder="Ej: 8.00"
+            {...register("costo_prioridad", {
+              min: { value: 0, message: "Mínimo 0" },
+            })}
+          />
         </div>
       </div>
 
@@ -216,45 +199,37 @@ export function FormAddConfigTarifa({ onClose, sedeId }) {
       </h6>
       <div className="row g-3 mb-4">
         <div className="col-6">
-          <label className="form-label fw-medium text-dark small">
+          <label className="form-label fw-medium text-dark small d-flex align-items-center gap-1">
+            <Clock size={16} className="text-muted" />
             Minutos Min
           </label>
-          <div className="input-group ">
-            <span className="input-group-text bg-white">
-              <Clock size={16} className="text-muted" />
-            </span>
-            <input
-              type="number"
-              className={`form-control ${errors.tiempo_min ? "is-invalid" : ""}`}
-              placeholder="Ej: 30"
-              {...register("tiempo_min", {
-                required: "Obligatorio",
-                min: { value: 1, message: "Mínimo 1" },
-              })}
-            />
-          </div>
+          <input
+            type="number"
+            className={`form-control ${errors.tiempo_min ? "is-invalid" : ""}`}
+            placeholder="Ej: 30"
+            {...register("tiempo_min", {
+              required: "Obligatorio",
+              min: { value: 1, message: "Mínimo 1" },
+            })}
+          />
         </div>
 
         <div className="col-6">
-          <label className="form-label fw-medium text-dark small">
+          <label className="form-label fw-medium text-dark small d-flex align-items-center gap-1">
+            <Clock size={16} className="text-muted" />
             Minutos Max
           </label>
-          <div className="input-group ">
-            <span className="input-group-text bg-white">
-              <Clock size={16} className="text-muted" />
-            </span>
-            <input
-              type="number"
-              className={`form-control ${errors.tiempo_max ? "is-invalid" : ""}`}
-              placeholder="Ej: 45"
-              {...register("tiempo_max", {
-                required: "Obligatorio",
-                validate: (value, formValues) =>
-                  parseInt(value) > parseInt(formValues.tiempo_min) ||
-                  "Debe ser mayor al mínimo",
-              })}
-            />
-          </div>
+          <input
+            type="number"
+            className={`form-control ${errors.tiempo_max ? "is-invalid" : ""}`}
+            placeholder="Ej: 45"
+            {...register("tiempo_max", {
+              required: "Obligatorio",
+              validate: (value, formValues) =>
+                parseInt(value) > parseInt(formValues.tiempo_min) ||
+                "Debe ser mayor al mínimo",
+            })}
+          />
           {errors.tiempo_max && (
             <span className="text-danger small">
               {errors.tiempo_max.message}
@@ -268,20 +243,16 @@ export function FormAddConfigTarifa({ onClose, sedeId }) {
         Propinas Sugeridas (Opcional)
       </h6>
       <div className="mb-4">
-        <label className="form-label fw-medium text-dark small">
+        <label className="form-label fw-medium text-dark small d-flex align-items-center gap-1">
+          <HeartHandshake size={16} className="text-muted" />
           Lista de montos (S/)
         </label>
-        <div className="input-group  mb-1">
-          <span className="input-group-text bg-white">
-            <HeartHandshake size={16} className="text-muted" />
-          </span>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Ej: 2, 3, 5"
-            {...register("propinasInput")}
-          />
-        </div>
+        <input
+          type="text"
+          className="form-control mb-1"
+          placeholder="Ej: 2, 3, 5"
+          {...register("propinasInput")}
+        />
         <small className="text-muted d-block" style={{ fontSize: "0.80rem" }}>
           Ingresa los montos separados por comas. Déjalo en blanco para ocultar
           módulos de propinas.

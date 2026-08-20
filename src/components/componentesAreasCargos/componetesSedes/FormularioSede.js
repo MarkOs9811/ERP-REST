@@ -141,7 +141,7 @@ export function FormularioSede({ onClose, sede }) {
             onPaste={(e) => {
               // evitar pegar texto con letras; pegar sólo dígitos
               const paste = (e.clipboardData || window.clipboardData).getData(
-                "text"
+                "text",
               );
               const onlyDigits = paste.replace(/\D/g, "").slice(0, 9);
               e.preventDefault();
@@ -180,7 +180,7 @@ export function FormularioSede({ onClose, sede }) {
       <div className="d-flex justify-content-end gap-2 mt-auto">
         <button
           type="button"
-          className="btn-cerrar-modal"
+          className="btn-cerrar"
           onClick={onClose}
           disabled={isSubmitting || loading}
         >
@@ -196,8 +196,8 @@ export function FormularioSede({ onClose, sede }) {
               ? "Actualizando..."
               : "Actualizar"
             : loading
-            ? "Guardando..."
-            : "Guardar"}
+              ? "Guardando..."
+              : "Guardar"}
         </button>
       </div>
     </form>

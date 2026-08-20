@@ -9,20 +9,23 @@ import { abrirCaja } from "../redux/cajaSlice";
 import { ArrowLeft, LockKeyhole } from "lucide-react";
 
 export const CajaProtectedRoute = ({ children }) => {
-  const { user } = useAuth(); // ⚠️ Asegúrate de que esto realmente contenga los datos del usuario
+  const { user } = useAuth();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const {
     data: dataCaja,
     isLoading: isLoadingCaja,
-    isFetching: isFetchingCaja,
+    // 1. Eliminamos isFetchingCaja de la extracción porque no lo usaremos para bloquear la UI
   } = useQuery({
     queryKey: ["caja"],
     queryFn: GetVerificacionCaja,
-    refetchOnMount: "always", // Obliga a consultar BD al montar
+    // 2. Quitamos refetchOnMount: "always". React query ya hace refetch por defecto al montar si la data es obsoleta.
+    // 3. Añadimos un staleTime (ej: 1 minuto). Durante este tiempo, asume que la caja sigue abierta sin preguntar a la BD.
+    staleTime: 1000 * 60 * 1,
   });
 
-  // 1. SINCRONIZACIÓN ESTRICTA CON REDUX
+  // 1. SINCRONIZACIÓN ESTRICTA CON REDUX (Sin cambios)
   useEffect(() => {
     if (dataCaja) {
       if (dataCaja.success && dataCaja.data && dataCaja.data.estadoCaja === 1) {
@@ -46,10 +49,10 @@ export const CajaProtectedRoute = ({ children }) => {
   }, [dataCaja, dispatch]);
 
   // ==========================================
-  // 🔥 ESCUDO DE CARGA UNIFICADO
+  // 🔥 ESCUDO DE CARGA UNIFICADO OPTIMIZADO
   // ==========================================
-  // Esperamos a que la API responda Y a que el contexto de Auth entregue al 'user'
-  if (isLoadingCaja || isFetchingCaja || !user) {
+  // 4. Solo bloqueamos la pantalla si es la PRIMERA VEZ que carga (isLoading) o falta el user.
+  if (isLoadingCaja || !user) {
     return (
       <div
         className="d-flex justify-content-center align-items-center"
@@ -67,7 +70,7 @@ export const CajaProtectedRoute = ({ children }) => {
   }
 
   // ==========================================
-  // 2. VALIDACIÓN DE ROLES (Aquí 'user' ya existe, superó el escudo)
+  // 2. VALIDACIÓN DE ROLES (Sin cambios)
   // ==========================================
   const nombreCargo = user?.empleado?.cargo?.nombre?.toLowerCase() || "";
   const palabrasBloqueadas = [
@@ -83,13 +86,12 @@ export const CajaProtectedRoute = ({ children }) => {
   );
 
   // ==========================================
-  // 3. LA API ES LA ÚNICA VERDAD (Validación estricta)
+  // 3. LA API ES LA ÚNICA VERDAD (Sin cambios)
   // ==========================================
   const cajaActivaConfirmada =
     dataCaja?.success === true && dataCaja?.data?.estadoCaja === 1;
 
   if (!cajaActivaConfirmada) {
-    // Si es Mozo, pantalla de bloqueo. NO SE REDIRIGE.
     if (esRolSinPermisoDeCaja) {
       return (
         <div
@@ -120,8 +122,6 @@ export const CajaProtectedRoute = ({ children }) => {
         </div>
       );
     }
-
-    // Solo si tiene permisos (Admin/Cajero) se redirige a abrir caja
     return <Navigate to="/abrirCaja" replace />;
   }
 

@@ -257,7 +257,7 @@ export function PlatoAdd({ handleCloseModal }) {
         <div className="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
           <button
             type="button"
-            className="btn-cerrar-modal px-4 rounded-pill"
+            className="btn-cerrar px-4 rounded-pill"
             onClick={handleCloseModal}
           >
             Cancelar

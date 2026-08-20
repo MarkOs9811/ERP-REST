@@ -124,6 +124,16 @@
   border: 1px solid rgba(0, 0, 0, 0.05);
   backdrop-filter: blur(4px);
   color: var(--text-main);
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease,
+    border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+}
+
+.mesa-action-label:hover,
+.mesa-action-label:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(15, 23, 42, 0.14);
+  outline: none;
 }
 
 .mesa-card.disponible .mesa-action-label {
@@ -133,7 +143,37 @@
 
 .mesa-card.en-atencion .mesa-action-label {
   color: var(--fw-strawberry);
-  border-color: rgba(228, 73, 73, 0.2);
+  border-color: rgb(212, 0, 0);
+}
+
+.mesa-card.disponible .mesa-action-label:hover,
+.mesa-card.disponible .mesa-action-label:focus-visible {
+  background-color: rgba(25, 143, 80, 0.12);
+  border-color: rgba(25, 143, 80, 0.45);
+  color: var(--fw-emerald);
+}
+
+.mesa-card.en-atencion .mesa-action-label:hover,
+.mesa-card.en-atencion .mesa-action-label:focus-visible {
+  background-color: rgb(228, 73, 73);
+  border-color: rgba(228, 73, 73, 0.45);
+  color: var(--fw-strawberry);
+}
+
+.mesa-reserva-action {
+  cursor: not-allowed;
+  transition: transform 0.2s ease, background-color 0.2s ease,
+    border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+}
+
+.mesa-reserva-action:hover,
+.mesa-reserva-action:focus-visible {
+  transform: translateY(-2px);
+  background-color: #fff4d6 !important;
+  border-color: #d6a94b !important;
+  color: #9a6700 !important;
+  box-shadow: 0 5px 12px rgba(146, 102, 20, 0.16);
+  outline: none;
 }
 
 /* Botón de Impresión Rápida */
@@ -171,10 +211,202 @@ body.dark-theme .mesa-card.disponible .mesa-action-label {
 
 body.dark-theme .btn-print-quick {
   background-color: rgba(0, 0, 0, 0.4);
-  border-color: rgba(228, 73, 73, 0.4);
+  border-color: rgb(199, 6, 6);
 }
 
 body.dark-theme .btn-print-quick:hover {
   background-color: var(--fw-strawberry);
   color: var(--fw-white);
+}
+
+/* ========== MAPA DE MESAS: DARK MODE LEGIBLE ========== */
+body.dark-theme .mesas-map {
+  background-color: transparent!important;
+  color: #e2e8f0;
+}
+
+body.dark-theme .mesas-map .mesa-status-summary {
+  background-color: #1d2328 !important;
+  border-color: #3a4650 !important;
+}
+
+body.dark-theme .mesas-map .mesa-status-summary .text-muted {
+  color: #cbd5df !important;
+}
+
+body.dark-theme .mesas-map .btn-outline-dark {
+  color: #d7e0e8;
+  border-color: #64717d;
+}
+
+body.dark-theme .mesas-map .btn-outline-dark:hover,
+body.dark-theme .mesas-map .btn-outline-dark:focus {
+  color: #111827;
+  background-color: #cbd5df;
+  border-color: #cbd5df;
+}
+
+body.dark-theme .mesas-map .mesa-floor-filter {
+  background-color: #242b31 !important;
+  color: #cbd5df !important;
+  border-color: #56616b !important;
+}
+
+body.dark-theme .mesas-map .mesa-floor-filter.bg-dark {
+  background-color: #cbd5df !important;
+  color: #182027 !important;
+  border-color: #cbd5df !important;
+}
+
+body.dark-theme .mesas-map .mesa-card {
+  background-color: #1b2024;
+  border-color: #56616b;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.22);
+}
+
+body.dark-theme .mesas-map .mesa-card:hover {
+  border-color: #94a3b8;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-theme .mesas-map .mesa-card::after {
+  opacity: 0.035;
+}
+
+body.dark-theme .mesas-map .mesa-card.disponible {
+  border-bottom-color: #4f9f7b;
+}
+
+body.dark-theme .mesas-map .mesa-card.en-atencion {
+  border-bottom-color: #ff2833;
+}
+
+body.dark-theme .mesas-map .mesa-card.reservada {
+  border-bottom-color: #8d9bb0;
+}
+
+body.dark-theme .mesas-map .mesa-card.reservada.border-warning {
+  border-color: #56616b !important;
+  border-bottom-color: #8d9bb0 !important;
+}
+
+body.dark-theme .mesas-map .mesa-numero {
+  color: #f1f5f9;
+}
+
+body.dark-theme .mesas-map .mesa-detalles p {
+  color: #aebbc7;
+}
+
+body.dark-theme .mesas-map .mesa-total-preview {
+  background-color: #242b31;
+  border-color: #4b5863;
+  color: #e2e8f0;
+}
+
+body.dark-theme .mesas-map .mesa-reserva-preview {
+  background-color: #302b20;
+  border: 1px dashed #8b774d;
+}
+
+body.dark-theme .mesas-map .mesa-reserva-preview .text-warning,
+body.dark-theme .mesas-map .mesa-reserva-action {
+  color: #e3bd70 !important;
+}
+
+body.dark-theme .mesas-map .mesa-reserva-action {
+  background-color: #302b20;
+  border-color: #8b774d;
+}
+
+body.dark-theme .mesas-map .mesa-action-label {
+  background-color: #242b31;
+  border-color: #4b5863;
+  color: #d5dee7;
+  backdrop-filter: none;
+}
+
+body.dark-theme .mesas-map .mesa-action-label:hover,
+body.dark-theme .mesas-map .mesa-action-label:focus-visible {
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.32);
+}
+
+body.dark-theme .mesas-map .mesa-card.disponible .mesa-action-label {
+  color: #83c9a8;
+  border-color: #4f9f7b;
+}
+
+body.dark-theme .mesas-map .mesa-card.en-atencion .mesa-action-label {
+  color: #fff9fa;
+  border-color: #e60b21;
+}
+
+body.dark-theme .mesas-map .mesa-card.disponible .mesa-action-label:hover,
+body.dark-theme .mesas-map .mesa-card.disponible .mesa-action-label:focus-visible {
+  background-color: #263d35;
+  border-color: #18c976;
+  color: #a6e0c2;
+}
+
+body.dark-theme .mesas-map .mesa-card.en-atencion .mesa-action-label:hover,
+body.dark-theme .mesas-map .mesa-card.en-atencion .mesa-action-label:focus-visible {
+  background-color: #ff0000;
+  border-color: #ff0011;
+  color: #dfdfdf;
+}
+
+body.dark-theme .mesas-map .mesa-reserva-action:hover,
+body.dark-theme .mesas-map .mesa-reserva-action:focus-visible {
+  background-color: #4a3b22 !important;
+  border-color: #c5a35c !important;
+  color: #f1d48e !important;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-theme .mesas-map .mesa-avatar,
+body.dark-theme .mesas-map .dropdown > div {
+  background-color: #242b31 !important;
+  border-color: #64717d !important;
+}
+
+body.dark-theme .mesas-map .dropdown .text-muted {
+  color: #cbd5df !important;
+}
+
+body.dark-theme .mesas-map .dropdown-menu {
+  background-color: #20262b;
+  border-color: #4b5863;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+}
+
+body.dark-theme .mesas-map .dropdown-item {
+  color: #dbe4ec;
+}
+
+body.dark-theme .mesas-map .dropdown-item:hover,
+body.dark-theme .mesas-map .dropdown-item:focus {
+  background-color: #34404a;
+  color: #ffffff;
+}
+
+body.dark-theme .mesas-map .dropdown-divider {
+  border-color: #4b5863;
+}
+
+body.dark-theme .mesas-map .btn-print-quick,
+body.dark-theme .mesas-map .btn-informativo {
+  background-color: #242b31;
+  border-color: #64717d;
+  color: #cbd5df;
+}
+
+body.dark-theme .mesas-map .btn-print-quick:hover,
+body.dark-theme .mesas-map .btn-informativo:hover {
+  background-color: #3b4853;
+  border-color: #94a3b8;
+  color: #ffffff;
+}
+
+body.dark-theme .mesas-map .text-danger {
+  color: #e0a0a0 !important;
 }

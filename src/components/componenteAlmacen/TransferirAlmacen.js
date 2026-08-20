@@ -112,15 +112,15 @@ export function TransferirAlmacen() {
   }, [searchTerm, dataAlmacen]);
 
   return (
-    <div className="row g-3 transfer-layout">
+    <div className="row g-3">
       <div className="col-lg-4 col-md-4 col-sm-12">
-        <div className="card border h-100 transfer-panel">
-          <div className="card-header d-flex align-content-between align-align-items-center border-bottom transfer-panel-header">
+        <div className="card border h-100">
+          <div className="card-header d-flex align-items-center">
             <p className="card-title">Almacen</p>
             <div className="ms-auto position-relative d-flex">
               <Search className="position-absolute   my-2 text-muted ms-2" />
               <input
-                className="form-control rounded-pill ps-5 transfer-search"
+                className="form-control ps-5"
                 type="search"
                 inputmode="search"
                 placeholder="Buscar..."
@@ -134,25 +134,25 @@ export function TransferirAlmacen() {
           </div>
 
           <div
-            className="card-body p-2 overflow-auto m-0 bg-light transfer-list-scroller"
+            className="card-body p-2 overflow-auto m-0 bg-light"
             style={{ maxHeight: "calc(100vh - 340px)" }}
           >
             {isLoading ? (
               <Cargando className="py-4" />
             ) : isError ? (
-              <p className="text-auto py-4 text-center">
+              <p className="text-secondary py-4 text-center">
                 Error al cargar datos
               </p>
             ) : (
-              <ul className="list-group border-none">
+              <ul className="list-group">
                 {filteredData?.map((item, index) => (
                   <li
                     key={item?.id}
-                    className={`list-item-transfer list-group-item d-flex justify-content-between align-items-center  border-0 border-bottom ${
+                    className={`list-group-item d-flex justify-content-between align-items-center border-0 border-bottom position-relative overflow-hidden ${
                       seleccionados.some((sel) => sel.id === item?.id)
-                        ? "item-selected"
+                        ? "bg-success-subtle"
                         : ""
-                    } ${Number(item?.cantidad) <= 0 ? "item-disabled" : ""}`}
+                    } ${Number(item?.cantidad) <= 0 ? "opacity-50 pe-none" : ""}`}
                     onClick={(e) => handleClick(e, item)}
                   >
                     {/* Efecto Ripple (solo para este ítem) */}
@@ -171,14 +171,14 @@ export function TransferirAlmacen() {
                     <div className="d-flex align-items-center gap-2 ">
                       {seleccionados.some((sel) => sel.id === item?.id) ? (
                         <CheckCheck
-                          color="#28a745"
+                          className="text-success"
                           width="22px"
                           height="22px"
                           style={{ flexShrink: 0 }}
                         />
                       ) : (
                         <Check
-                          color="#c6c6c6"
+                          className="text-secondary"
                           width="22px"
                           height="22px"
                           style={{ flexShrink: 0 }}
@@ -187,7 +187,7 @@ export function TransferirAlmacen() {
                       <div className="d-flex flex-column">
                         <span>{item?.nombre}</span>
 
-                        <small className=" badge-info text-auto">
+                        <small className="text-secondary">
                           {item?.marca} / {item?.descripcion} /{" "}
                           {item?.presentacion}
                         </small>
@@ -197,7 +197,7 @@ export function TransferirAlmacen() {
                       <span className="badge bg-light text-muted me-1">
                         Stock {item?.cantidad}
                       </span>
-                      <span className="badge badge-ok">
+                      <span className="badge bg-secondary">
                         S/. {item?.precioUnit}
                       </span>
                     </div>
@@ -209,8 +209,8 @@ export function TransferirAlmacen() {
         </div>
       </div>
       <div className="col-lg-4 col-md-4 col-sm-12">
-        <div className="card h-100 border transfer-panel">
-          <div className="card-header d-flex transfer-panel-header">
+        <div className="card h-100 border">
+          <div className="card-header d-flex">
             <p className="card-title">
               Seleccionados ({seleccionados?.length})
             </p>
@@ -224,7 +224,7 @@ export function TransferirAlmacen() {
             </div>
           </div>
           <div
-            className="card-body overflow-auto bg-light transfer-list-scroller"
+            className="card-body overflow-auto bg-light"
             style={{ maxHeight: "calc(100vh - 340px)" }}
           >
             {seleccionados?.length === 0 ? (
@@ -236,12 +236,12 @@ export function TransferirAlmacen() {
                 {seleccionados.map((item) => (
                   <li
                     key={item?.id}
-                    className="list-group-item d-flex justify-content-between align-items-center  bg-opacity-10 position-relative group-hoverable"
+                    className="list-group-item d-flex justify-content-between align-items-center position-relative"
                   >
                     <div className="d-flex align-items-center gap-2">
                       {/* Botón eliminar, oculto hasta hover */}
                       <button
-                        className="btn btn-sm btn-delete opacity-0"
+                        className="btn btn-sm btn-outline-danger p-1"
                         onClick={(e) => {
                           e.stopPropagation();
                           dispatch(
@@ -276,7 +276,7 @@ export function TransferirAlmacen() {
                           <Minus size={18} />
                         </button>
 
-                        <span className="px-2 fw-bold text-secondary transfer-qty-pill">
+                        <span className="badge bg-light text-secondary border px-3 py-2">
                           {item?.cantidad}
                         </span>
 
@@ -308,10 +308,10 @@ export function TransferirAlmacen() {
                       </div>
 
                       <div className="d-flex flex-column text-end">
-                        <span className="badge badge-info text-dark">
+                        <span className="badge bg-light text-secondary border">
                           Stock: {item?.stock ?? "--"}
                         </span>
-                        <span className="badge badge-ok mt-1">
+                        <span className="badge bg-secondary mt-1">
                           S/. {(item?.precioUnit * item?.cantidad).toFixed(2)}
                         </span>
                       </div>
@@ -324,11 +324,11 @@ export function TransferirAlmacen() {
         </div>
       </div>
       <div className="col-lg-4 col-md-4 col-sm-12">
-        <div className="card border h-100 transfer-panel">
-          <div className="card-header border-bottom transfer-panel-header">
+        <div className="card border h-100">
+          <div className="card-header border-bottom">
             <p className="card-title">Destino</p>
           </div>
-          <div className="card-body bg-light transfer-list-scroller">
+          <div className="card-body bg-light">
             <DestinoTransferir />
           </div>
         </div>

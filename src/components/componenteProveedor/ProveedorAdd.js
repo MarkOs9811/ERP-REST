@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import axiosInstance from "../../api/AxiosInstance";
-import "../../css/estilosProveedore.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircleInfo,
@@ -65,31 +64,35 @@ export function ProveedorAdd({ handleCloseModal }) {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="proveedor-form proveedor-form-modern p-4"
-    >
-      <div className="proveedor-form-hero mb-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="p-4">
+      <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-start gap-3 p-3 mb-4 border rounded bg-light">
         <div>
-          <p className="proveedor-eyebrow mb-1">Nuevo proveedor</p>
-          <h3 className="proveedor-heading mb-1">Registro comercial</h3>
-          <p className="proveedor-subtext mb-0">
+          <p className="small fw-semibold text-secondary text-uppercase mb-1">
+            Nuevo proveedor
+          </p>
+          <h3 className="h5 fw-bold mb-1">Registro comercial</h3>
+          <p className="small text-secondary mb-0">
             Completa los datos principales para crear el proveedor de forma
             clara y ordenada.
           </p>
         </div>
-        <div className="proveedor-helper-pill">
+        <div className="badge text-bg-secondary d-inline-flex align-items-center gap-2 align-self-start">
           <FontAwesomeIcon icon={faCircleInfo} />
           <span>Campos obligatorios</span>
         </div>
       </div>
 
-      <div className="proveedor-section mb-4">
-        <div className="proveedor-section-title">Documento y contacto</div>
-        <div className="row g-3 proveedor-grid-top">
+      <div className="mb-4">
+        <h6 className="fw-bold text-secondary border-bottom pb-2 mb-3">
+          Documento y contacto
+        </h6>
+        <div className="row g-3">
           <div className="col-md-4">
-            <div className="proveedor-field proveedor-card-field h-100">
-              <label htmlFor="tipo_documento" className="proveedor-label">
+            <div className="border rounded p-3 h-100">
+              <label
+                htmlFor="tipo_documento"
+                className="form-label small fw-semibold text-secondary d-flex align-items-center gap-2"
+              >
                 <FontAwesomeIcon icon={faIdCard} /> Tipo de Documento
               </label>
               <select
@@ -118,8 +121,11 @@ export function ProveedorAdd({ handleCloseModal }) {
           </div>
 
           <div className="col-md-4">
-            <div className="proveedor-field proveedor-card-field h-100">
-              <label htmlFor="numero_documento" className="proveedor-label">
+            <div className="border rounded p-3 h-100">
+              <label
+                htmlFor="numero_documento"
+                className="form-label small fw-semibold text-secondary d-flex align-items-center gap-2"
+              >
                 <FontAwesomeIcon icon={faIdCard} /> Número de Documento
               </label>
               <input
@@ -156,8 +162,11 @@ export function ProveedorAdd({ handleCloseModal }) {
           </div>
 
           <div className="col-md-4">
-            <div className="proveedor-field proveedor-card-field h-100">
-              <label htmlFor="telefono" className="proveedor-label">
+            <div className="border rounded p-3 h-100">
+              <label
+                htmlFor="telefono"
+                className="form-label small fw-semibold text-secondary d-flex align-items-center gap-2"
+              >
                 <FontAwesomeIcon icon={faPhone} /> Teléfono
               </label>
               <input
@@ -181,12 +190,17 @@ export function ProveedorAdd({ handleCloseModal }) {
         </div>
       </div>
 
-      <div className="proveedor-section mb-3">
-        <div className="proveedor-section-title">Información del proveedor</div>
+      <div className="mb-3">
+        <h6 className="fw-bold text-secondary border-bottom pb-2 mb-3">
+          Información del proveedor
+        </h6>
         <div className="row g-3">
           <div className="col-12">
-            <div className="proveedor-field proveedor-card-field">
-              <label htmlFor="nombre" className="proveedor-label">
+            <div className="border rounded p-3">
+              <label
+                htmlFor="nombre"
+                className="form-label small fw-semibold text-secondary d-flex align-items-center gap-2"
+              >
                 <FontAwesomeIcon icon={faUser} /> Nombre
               </label>
               <input
@@ -205,8 +219,11 @@ export function ProveedorAdd({ handleCloseModal }) {
           </div>
 
           <div className="col-12">
-            <div className="proveedor-field proveedor-card-field">
-              <label htmlFor="contacto" className="proveedor-label">
+            <div className="border rounded p-3">
+              <label
+                htmlFor="contacto"
+                className="form-label small fw-semibold text-secondary d-flex align-items-center gap-2"
+              >
                 <FontAwesomeIcon icon={faUser} /> Encargado o contacto
               </label>
               <input
@@ -227,8 +244,11 @@ export function ProveedorAdd({ handleCloseModal }) {
           </div>
 
           <div className="col-12">
-            <div className="proveedor-field proveedor-card-field">
-              <label htmlFor="direccion" className="proveedor-label">
+            <div className="border rounded p-3">
+              <label
+                htmlFor="direccion"
+                className="form-label small fw-semibold text-secondary d-flex align-items-center gap-2"
+              >
                 <FontAwesomeIcon icon={faMapMarkedAlt} /> Dirección
               </label>
               <input
@@ -249,8 +269,11 @@ export function ProveedorAdd({ handleCloseModal }) {
           </div>
 
           <div className="col-12">
-            <div className="proveedor-field proveedor-card-field">
-              <label htmlFor="correo" className="proveedor-label">
+            <div className="border rounded p-3">
+              <label
+                htmlFor="correo"
+                className="form-label small fw-semibold text-secondary d-flex align-items-center gap-2"
+              >
                 <FontAwesomeIcon icon={faEnvelope} /> Correo Electrónico
               </label>
               <input
@@ -274,12 +297,8 @@ export function ProveedorAdd({ handleCloseModal }) {
         </div>
       </div>
 
-      <div className="d-flex justify-content-end gap-2 mt-4 proveedor-form-actions">
-        <button
-          type="button"
-          className="btn-cerrar-modal"
-          onClick={handleCloseModal}
-        >
+      <div className="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+        <button type="button" className="btn-cerrar" onClick={handleCloseModal}>
           Cancelar
         </button>
         <button type="submit" className="btn-guardar" disabled={loading}>

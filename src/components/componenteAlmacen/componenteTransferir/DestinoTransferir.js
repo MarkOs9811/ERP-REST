@@ -6,7 +6,6 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import ToastAlert from "../../componenteToast/ToastAlert";
 import axiosInstance from "../../../api/AxiosInstance";
 import { clearProductoSelececcionado } from "../../../redux/productoTransferirSlice";
-import { File } from "lucide-react";
 
 export function DestinoTransferir() {
   const [archivo, setArchivo] = useState(null);
@@ -140,7 +139,7 @@ export function DestinoTransferir() {
 
   return (
     <div className="card-body">
-      <div className="transfer-summary mb-3">
+      <div className="d-flex justify-content-between align-items-center gap-2 p-2 mb-3 border rounded bg-light small fw-semibold text-secondary">
         <span>{productoSeleccionado.length} productos</span>
         <span>{totalUnidades} unidades</span>
       </div>
@@ -172,19 +171,14 @@ export function DestinoTransferir() {
         <label htmlFor="archivo" className="form-label fw-bold">
           Adjuntar archivo (PDF o Word)
         </label>
-        <div className="input-group">
-          <span className="input-group-text bg-white">
-            <File className="text-auto" />
-          </span>
-          <input
-            ref={fileInputRef}
-            type="file"
-            id="archivo"
-            className="form-control"
-            accept=".pdf,.doc,.docx"
-            onChange={handleArchivoChange}
-          />
-        </div>
+        <input
+          ref={fileInputRef}
+          type="file"
+          id="archivo"
+          className="form-control"
+          accept=".pdf,.doc,.docx"
+          onChange={handleArchivoChange}
+        />
         {archivo && (
           <div className="form-text text-success mt-1">
             Archivo seleccionado: {archivo.name}
@@ -192,7 +186,7 @@ export function DestinoTransferir() {
         )}
       </div>
       <button
-        className="btn-realizarPedido w-100 display-7  p-3"
+        className="btn-guardar w-100 p-3"
         onClick={handleConfirmar}
         disabled={
           loading || !idDestino || !archivo || productoSeleccionado.length === 0

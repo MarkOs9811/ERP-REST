@@ -349,7 +349,7 @@ input.form-control-custom:focus {
 }
 
 .btn-login-submit:disabled {
-  background: var(--fw-muetd);
+  background: var(--fw-onyx);
   cursor: not-allowed;
   box-shadow: none;
   transform: none;

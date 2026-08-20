@@ -134,35 +134,29 @@ export function FormAddSolicitudExterna({ onClose }) {
 
         <div className="row">
           <div className="col-md-6 mb-3 position-relative">
-            <label className="form-label">
+            <label className="form-label d-flex align-items-center gap-2">
+              <StoreIcon size={18} />
               Area <span className="text-danger">*</span>
             </label>
-            <div className="input-group">
-              <span className="input-group-text bg-light">
-                <StoreIcon />
-              </span>
-              <select
-                className={`form-select ${
-                  errors.proveedor ? "is-invalid" : ""
-                }`}
-                {...register("area_origen", { required: "Campo obligatorio" })}
-              >
-                <option value="">Seleccione un area_origen</option>
-                {Array.isArray(dataArea) &&
-                  dataArea
-                    .filter((area_origen) => area_origen.estado == 1)
-                    .map((area_origen) => (
-                      <option key={area_origen.id} value={area_origen.id}>
-                        {area_origen.nombre}
-                      </option>
-                    ))}
-              </select>
-              {errors.area_origen && (
-                <div className="invalid-feedback d-block">
-                  {errors.area_origen.message}
-                </div>
-              )}
-            </div>
+            <select
+              className={`form-select ${errors.proveedor ? "is-invalid" : ""}`}
+              {...register("area_origen", { required: "Campo obligatorio" })}
+            >
+              <option value="">Seleccione un area_origen</option>
+              {Array.isArray(dataArea) &&
+                dataArea
+                  .filter((area_origen) => area_origen.estado == 1)
+                  .map((area_origen) => (
+                    <option key={area_origen.id} value={area_origen.id}>
+                      {area_origen.nombre}
+                    </option>
+                  ))}
+            </select>
+            {errors.area_origen && (
+              <div className="invalid-feedback d-block">
+                {errors.area_origen.message}
+              </div>
+            )}
           </div>
 
           {/* Nombre del solicitante */}
@@ -243,68 +237,58 @@ export function FormAddSolicitudExterna({ onClose }) {
         <div className="row">
           {/* Proveedor */}
           <div className="col-md-6 mb-3 position-relative">
-            <label className="form-label">
+            <label className="form-label d-flex align-items-center gap-2">
+              <TruckIcon size={18} />
               Proveedor <span className="text-danger">*</span>
             </label>
-            <div className="input-group">
-              <span className="input-group-text bg-light">
-                <TruckIcon />
-              </span>
-              <select
-                className={`form-select ${
-                  errors.proveedor ? "is-invalid" : ""
-                }`}
-                {...register("proveedor", { required: "Campo obligatorio" })}
-              >
-                <option value="">Seleccione un proveedor</option>
-                {dataProveedor
-                  .filter((proveedor) => proveedor.estado == 1)
-                  .map((proveedor) => (
-                    <option key={proveedor.id} value={proveedor.id}>
-                      {proveedor.nombre}
-                    </option>
-                  ))}
-              </select>
-              {errors.proveedor && (
-                <div className="invalid-feedback d-block">
-                  {errors.proveedor.message}
-                </div>
-              )}
-            </div>
+            <select
+              className={`form-select ${errors.proveedor ? "is-invalid" : ""}`}
+              {...register("proveedor", { required: "Campo obligatorio" })}
+            >
+              <option value="">Seleccione un proveedor</option>
+              {dataProveedor
+                .filter((proveedor) => proveedor.estado == 1)
+                .map((proveedor) => (
+                  <option key={proveedor.id} value={proveedor.id}>
+                    {proveedor.nombre}
+                  </option>
+                ))}
+            </select>
+            {errors.proveedor && (
+              <div className="invalid-feedback d-block">
+                {errors.proveedor.message}
+              </div>
+            )}
           </div>
 
           {/* Unidad de medida */}
           <div className="col-md-6 mb-3 position-relative">
-            <label className="form-label">
+            <label className="form-label d-flex align-items-center gap-2">
+              <Tag size={18} />
               Unidad de medida <span className="text-danger">*</span>
             </label>
-            <div className="input-group">
-              <span className="input-group-text bg-light">
-                <Tag />
-              </span>
-              <select
-                className={`form-select ${
-                  errors.unidad_medida ? "is-invalid" : ""
-                }`}
-                {...register("unidad_medida", {
-                  required: "Campo obligatorio",
-                })}
-              >
-                <option value="">Seleccione una unidad</option>
-                {dataUnidad
-                  .filter((unidad_medida) => unidad_medida.estado == 1)
-                  .map((unidad_medida) => (
-                    <option key={unidad_medida.id} value={unidad_medida.id}>
-                      {unidad_medida.nombre}
-                    </option>
-                  ))}
-              </select>
-              {errors.unidad_medida && (
-                <div className="invalid-feedback d-block">
-                  {errors.unidad_medida.message}
-                </div>
-              )}
-            </div>
+            <select
+              className={`form-select ${
+                errors.unidad_medida ? "is-invalid" : ""
+              }`}
+              {...register("unidad_medida", {
+                required: "Campo obligatorio",
+              })}
+            >
+              <option value="">Seleccione una unidad</option>
+              {dataUnidad
+                .filter((unidad_medida) => unidad_medida.estado == 1)
+                .map((unidad_medida) => (
+                  <option key={unidad_medida.id} value={unidad_medida.id}>
+                    {unidad_medida.nombre}
+                  </option>
+                ))}
+            </select>
+            {errors.unidad_medida && (
+              <div className="invalid-feedback d-block">
+                {errors.unidad_medida.message}
+              </div>
+            )}
           </div>
 
           {/* Marca */}
@@ -473,56 +457,48 @@ export function FormAddSolicitudExterna({ onClose }) {
         <div className="row">
           {/* Firma del solicitante */}
           <div className="col-md-6 mb-3">
-            <label className="form-label">
+            <label className="form-label d-flex align-items-center gap-2">
+              <PenLine size={18} />
               Firma del solicitante <span className="text-danger">*</span>
             </label>
-            <div className="input-group">
-              <span className="input-group-text bg-light">
-                <PenLine />
-              </span>
-              <input
-                type="file"
-                accept="image/*"
-                className={`form-control ${
-                  errors.firmaSolicitante ? "is-invalid" : ""
-                }`}
-                {...register("firmaSolicitante", {
-                  required: "Campo obligatorio",
-                })}
-              />
-              {errors.firmaSolicitante && (
-                <div className="invalid-feedback d-block">
-                  {errors.firmaSolicitante.message}
-                </div>
-              )}
-            </div>
+            <input
+              type="file"
+              accept="image/*"
+              className={`form-control ${
+                errors.firmaSolicitante ? "is-invalid" : ""
+              }`}
+              {...register("firmaSolicitante", {
+                required: "Campo obligatorio",
+              })}
+            />
+            {errors.firmaSolicitante && (
+              <div className="invalid-feedback d-block">
+                {errors.firmaSolicitante.message}
+              </div>
+            )}
           </div>
 
           {/* Firma del administrador */}
           <div className="col-md-6 mb-3">
-            <label className="form-label">
+            <label className="form-label d-flex align-items-center gap-2">
+              <PenLine size={18} />
               Firma del administrador <span className="text-danger">*</span>
             </label>
-            <div className="input-group">
-              <span className="input-group-text bg-light">
-                <PenLine />
-              </span>
-              <input
-                type="file"
-                accept="image/*"
-                className={`form-control ${
-                  errors.firma_admin ? "is-invalid" : ""
-                }`}
-                {...register("firma_admin", {
-                  required: "Campo obligatorio",
-                })}
-              />
-              {errors.firma_admin && (
-                <div className="invalid-feedback d-block">
-                  {errors.firma_admin.message}
-                </div>
-              )}
-            </div>
+            <input
+              type="file"
+              accept="image/*"
+              className={`form-control ${
+                errors.firma_admin ? "is-invalid" : ""
+              }`}
+              {...register("firma_admin", {
+                required: "Campo obligatorio",
+              })}
+            />
+            {errors.firma_admin && (
+              <div className="invalid-feedback d-block">
+                {errors.firma_admin.message}
+              </div>
+            )}
           </div>
         </div>
 
@@ -530,7 +506,7 @@ export function FormAddSolicitudExterna({ onClose }) {
         <div className="mt-4 d-flex justify-content-end gap-2">
           <button
             type="button"
-            className="btn-cerrar-modal"
+            className="btn-cerrar"
             disabled={isLoadingSave}
             onClick={onClose}
           >

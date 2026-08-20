@@ -62,7 +62,7 @@ const KpiCard = ({ icon, trendType, trendValue, title, value, colorClass }) => {
           {icon}
         </div>
         <div
-          className={`badge rounded-pill px-2 py-1 fw-bold ${
+          className={` text-auto rounded-pill px-2 py-1 fw-bold ${
             isUp
               ? "bg-fw-emerald-soft text-fw-emerald"
               : "bg-fw-strawberry-soft text-fw-strawberry"

@@ -77,7 +77,6 @@ export function MesasList() {
   } = useQuery({
     queryKey: ["mesas"],
     queryFn: GetMesasVender,
-    refetchOnWindowFocus: true,
   });
   // PARA ABRIR LAS RESERVAS
   const [modalReservasOpen, setModalReservasOpen] = useState(false);
@@ -182,7 +181,7 @@ export function MesasList() {
   const mesasReservadas = listaMesas.filter((mesa) => mesa.estado === 2).length;
 
   return (
-    <div className="card m-0 h-100 overflow-auto p-3 bg-app">
+    <div className="card mesas-map m-0 h-100 overflow-auto p-3">
       {/* HEADER PRINCIPAL */}
       <div className="d-flex flex-wrap gap-3 justify-content-between align-items-center mb-3 px-2">
         <div className="d-flex align-items-center gap-3">
@@ -200,7 +199,7 @@ export function MesasList() {
           </button>
         </div>
 
-        <div className="d-flex align-items-center gap-3 bg-white px-3 py-2 rounded-pill border">
+        <div className="mesa-status-summary d-flex align-items-center gap-3 bg-white px-3 py-2 rounded-pill border">
           <div className="d-flex align-items-center gap-2">
             <span className="fw-indicator bg-success"></span>
             <span className="small fw-bold text-muted">
@@ -233,7 +232,7 @@ export function MesasList() {
           <button
             key={piso}
             type="button"
-            className={`badge rounded-pill px-3 py-2 border transition-smooth ${
+            className={`mesa-floor-filter badge rounded-pill px-3 py-2 border transition-smooth ${
               filtroPiso === piso
                 ? "bg-dark text-white border-dark"
                 : "bg-white text-muted border-secondary"
@@ -300,7 +299,7 @@ export function MesasList() {
                       {/* 1. FOTO DEL MESERO */}
                       {mesa.mesero && (
                         <div
-                          className="bg-white rounded-circle border border-2 d-flex align-items-center justify-content-center overflow-hidden"
+                          className="mesa-avatar bg-white rounded-circle border border-2 d-flex align-items-center justify-content-center overflow-hidden"
                           style={{
                             width: "28px",
                             height: "28px",
@@ -440,13 +439,7 @@ export function MesasList() {
 
                     {/* 🔥 VISTA PREVIA RESERVA (Si está reservada = 2) */}
                     {mesa.estado === 2 && (
-                      <div
-                        className="mesa-total-preview mt-2 d-flex flex-column gap-1 rounded p-2"
-                        style={{
-                          backgroundColor: "#fffbeb",
-                          border: "1px dashed #fcd34d",
-                        }} // Colores pastel naranjas
-                      >
+                      <div className="mesa-total-preview mesa-reserva-preview mt-2 d-flex flex-column gap-1 rounded p-2">
                         <div className="d-flex justify-content-between align-items-center">
                           <span
                             className="text-warning small"
@@ -489,7 +482,7 @@ export function MesasList() {
                           <Eye size={14} /> <span>VER PEDIDO</span>
                         </div>
                         <button
-                          className="btn-informativo btn-icon m-0 d-flex align-items-center justify-content-center"
+                          className="btn-informativo btn-icon text-auto m-0 d-flex align-items-center justify-content-center"
                           style={{ width: "40px", flexShrink: 0, padding: 0 }}
                           onClick={(e) =>
                             handleImprimirPrecuentaRapida(e, mesa)
@@ -503,10 +496,7 @@ export function MesasList() {
 
                     {/* 🔥 ESTADO 2: RESERVADA */}
                     {mesa.estado === 2 && (
-                      <div
-                        className="mesa-action-label w-100"
-                        style={{ color: "#d97706", backgroundColor: "#fef3c7" }}
-                      >
+                      <div className="mesa-action-label mesa-reserva-action w-100">
                         <CalendarDays size={14} /> <span>RESERVADA</span>
                       </div>
                     )}

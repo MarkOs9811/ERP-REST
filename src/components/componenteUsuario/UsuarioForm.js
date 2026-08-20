@@ -218,57 +218,49 @@ export function UsuarioForm({ handleCloseModal }) {
           <div className="row g-3 mb-3">
             {/* Tipo Documento */}
             <div className="col-md-4">
-              <label className="form-label small fw-semibold text-muted mb-1">
+              <label className="form-label small fw-semibold text-muted mb-1 d-flex align-items-center gap-1">
+                <IdCard size={16} />
                 Tipo Doc.
               </label>
-              <div className="input-group input-group-sm">
-                <span className="input-group-text bg-white border-end-0 text-muted">
-                  <IdCard size={16} />
-                </span>
-                <select
-                  className={`form-select border-start-0 ${
-                    errors.tipo_documento ? "is-invalid" : ""
-                  }`}
-                  {...register("tipo_documento", {
-                    required: "Requerido",
-                    onChange: (e) => {
-                      // Cuando cambia el tipo de documento, limpiamos el campo del número
-                      // para evitar que un DNI se quede guardado como Carnet y pase validaciones falsas.
-                      setValue("numero_documento", "", {
-                        shouldValidate: true,
-                      });
-                    },
-                  })}
-                >
-                  <option value="DNI">DNI</option>
-                  <option value="extranjeria">Carnet Ext.</option>
-                </select>
-              </div>
+              <select
+                className={`form-select form-select-sm ${
+                  errors.tipo_documento ? "is-invalid" : ""
+                }`}
+                {...register("tipo_documento", {
+                  required: "Requerido",
+                  onChange: (e) => {
+                    // Cuando cambia el tipo de documento, limpiamos el campo del número
+                    // para evitar que un DNI se quede guardado como Carnet y pase validaciones falsas.
+                    setValue("numero_documento", "", {
+                      shouldValidate: true,
+                    });
+                  },
+                })}
+              >
+                <option value="DNI">DNI</option>
+                <option value="extranjeria">Carnet Ext.</option>
+              </select>
             </div>
 
             {/* Número Documento */}
             <div className="col-md-8">
-              <label className="form-label small fw-semibold text-muted mb-1">
+              <label className="form-label small fw-semibold text-muted mb-1 d-flex align-items-center gap-1">
+                <CreditCard size={16} />
                 Número Documento
               </label>
-              <div className="input-group input-group-sm">
-                <span className="input-group-text bg-white border-end-0 text-muted">
-                  <CreditCard size={16} />
-                </span>
-                <input
-                  type="text"
-                  inputMode="numeric"
-                  className={`form-control border-start-0 ${
-                    errors.numero_documento ? "is-invalid" : ""
-                  }`}
-                  placeholder="Ingrese número"
-                  {...register("numero_documento", {
-                    validate: validateDocumento,
-                  })}
-                  // Pasamos el watch o el estado actual del tipo de documento para limitar el DOM
-                  onInput={limitDocumentoInput(watch("tipo_documento"))}
-                />
-              </div>
+              <input
+                type="text"
+                inputMode="numeric"
+                className={`form-control form-control-sm ${
+                  errors.numero_documento ? "is-invalid" : ""
+                }`}
+                placeholder="Ingrese número"
+                {...register("numero_documento", {
+                  validate: validateDocumento,
+                })}
+                // Pasamos el watch o el estado actual del tipo de documento para limitar el DOM
+                onInput={limitDocumentoInput(watch("tipo_documento"))}
+              />
               {errors.numero_documento && (
                 <span className="text-danger small">
                   {errors.numero_documento.message}
@@ -280,22 +272,18 @@ export function UsuarioForm({ handleCloseModal }) {
           {/* Nombres y Apellidos */}
           <div className="row g-3 mb-3">
             <div className="col-md-6">
-              <label className="form-label small fw-semibold text-muted mb-1">
+              <label className="form-label small fw-semibold text-muted mb-1 d-flex align-items-center gap-1">
+                <User size={16} />
                 Nombres
               </label>
-              <div className="input-group input-group-sm">
-                <span className="input-group-text bg-white border-end-0 text-muted">
-                  <User size={16} />
-                </span>
-                <input
-                  type="text"
-                  className={`form-control border-start-0 ${
-                    errors.nombres ? "is-invalid" : ""
-                  }`}
-                  placeholder="Ej. Juan Carlos"
-                  {...register("nombres", { required: "Nombre requerido" })}
-                />
-              </div>
+              <input
+                type="text"
+                className={`form-control form-control-sm ${
+                  errors.nombres ? "is-invalid" : ""
+                }`}
+                placeholder="Ej. Juan Carlos"
+                {...register("nombres", { required: "Nombre requerido" })}
+              />
               {errors.nombres && (
                 <span className="text-danger small">
                   {errors.nombres.message}
@@ -303,22 +291,18 @@ export function UsuarioForm({ handleCloseModal }) {
               )}
             </div>
             <div className="col-md-6">
-              <label className="form-label small fw-semibold text-muted mb-1">
+              <label className="form-label small fw-semibold text-muted mb-1 d-flex align-items-center gap-1">
+                <User size={16} />
                 Apellidos
               </label>
-              <div className="input-group input-group-sm">
-                <span className="input-group-text bg-white border-end-0 text-muted">
-                  <User size={16} />
-                </span>
-                <input
-                  type="text"
-                  className={`form-control border-start-0 ${
-                    errors.apellidos ? "is-invalid" : ""
-                  }`}
-                  placeholder="Ej. Pérez López"
-                  {...register("apellidos", { required: "Apellido requerido" })}
-                />
-              </div>
+              <input
+                type="text"
+                className={`form-control form-control-sm ${
+                  errors.apellidos ? "is-invalid" : ""
+                }`}
+                placeholder="Ej. Pérez López"
+                {...register("apellidos", { required: "Apellido requerido" })}
+              />
               {errors.apellidos && (
                 <span className="text-danger small">
                   {errors.apellidos.message}
@@ -333,29 +317,25 @@ export function UsuarioForm({ handleCloseModal }) {
           </h6>
           <div className="row g-3 mb-3">
             <div className="col-md-7">
-              <label className="form-label small fw-semibold text-muted mb-1">
+              <label className="form-label small fw-semibold text-muted mb-1 d-flex align-items-center gap-1">
+                <Mail size={16} />
                 Correo Electrónico
               </label>
-              <div className="input-group input-group-sm">
-                <span className="input-group-text bg-white border-end-0 text-muted">
-                  <Mail size={16} />
-                </span>
-                <input
-                  type="email"
-                  inputMode="email"
-                  className={`form-control border-start-0 ${
-                    errors.correo ? "is-invalid" : ""
-                  }`}
-                  placeholder="usuario@empresa.com"
-                  {...register("correo", {
-                    required: "Correo requerido",
-                    pattern: {
-                      value: /^\S+@\S+$/i,
-                      message: "Correo inválido",
-                    },
-                  })}
-                />
-              </div>
+              <input
+                type="email"
+                inputMode="email"
+                className={`form-control form-control-sm ${
+                  errors.correo ? "is-invalid" : ""
+                }`}
+                placeholder="usuario@empresa.com"
+                {...register("correo", {
+                  required: "Correo requerido",
+                  pattern: {
+                    value: /^\S+@\S+$/i,
+                    message: "Correo inválido",
+                  },
+                })}
+              />
               {errors.correo && (
                 <span className="text-danger small">
                   {errors.correo.message}
@@ -363,24 +343,20 @@ export function UsuarioForm({ handleCloseModal }) {
               )}
             </div>
             <div className="col-md-5">
-              <label className="form-label small fw-semibold text-muted mb-1">
+              <label className="form-label small fw-semibold text-muted mb-1 d-flex align-items-center gap-1">
+                <Lock size={16} />
                 Método Auth
               </label>
-              <div className="input-group input-group-sm">
-                <span className="input-group-text bg-white border-end-0 text-muted">
-                  <Lock size={16} />
-                </span>
-                <select
-                  className={`form-select border-start-0 ${
-                    errors.tipoAuth ? "is-invalid" : ""
-                  }`}
-                  {...register("tipoAuth", { required: "Requerido" })}
-                >
-                  <option value="">Seleccione...</option>
-                  <option value="manual">Manual</option>
-                  <option value="google Oauth2">Google</option>
-                </select>
-              </div>
+              <select
+                className={`form-select form-select-sm ${
+                  errors.tipoAuth ? "is-invalid" : ""
+                }`}
+                {...register("tipoAuth", { required: "Requerido" })}
+              >
+                <option value="">Seleccione...</option>
+                <option value="manual">Manual</option>
+                <option value="google Oauth2">Google</option>
+              </select>
               {errors.tipoAuth && (
                 <span className="text-danger small">
                   {errors.tipoAuth.message}
@@ -396,27 +372,23 @@ export function UsuarioForm({ handleCloseModal }) {
           <div className="row g-3 mb-3">
             {/* Área */}
             <div className="col-md-6">
-              <label className="form-label small fw-semibold text-muted mb-1">
+              <label className="form-label small fw-semibold text-muted mb-1 d-flex align-items-center gap-1">
+                <Building2 size={16} />
                 Área
               </label>
-              <div className="input-group input-group-sm">
-                <span className="input-group-text bg-white border-end-0 text-muted">
-                  <Building2 size={16} />
-                </span>
-                <select
-                  className={`form-select border-start-0 ${
-                    errors.area ? "is-invalid" : ""
-                  }`}
-                  {...register("area", { required: "Requerido" })}
-                >
-                  <option value="">Seleccione...</option>
-                  {areas.map((a) => (
-                    <option key={a.id} value={a.id}>
-                      {a.nombre}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              <select
+                className={`form-select form-select-sm ${
+                  errors.area ? "is-invalid" : ""
+                }`}
+                {...register("area", { required: "Requerido" })}
+              >
+                <option value="">Seleccione...</option>
+                {areas.map((a) => (
+                  <option key={a.id} value={a.id}>
+                    {a.nombre}
+                  </option>
+                ))}
+              </select>
               {errors.area && (
                 <span className="text-danger small">{errors.area.message}</span>
               )}
@@ -424,31 +396,27 @@ export function UsuarioForm({ handleCloseModal }) {
 
             {/* Cargo */}
             <div className="col-md-6">
-              <label className="form-label small fw-semibold text-muted mb-1">
+              <label className="form-label small fw-semibold text-muted mb-1 d-flex align-items-center gap-1">
+                <Briefcase size={16} />
                 Cargo
               </label>
-              <div className="input-group input-group-sm">
-                <span className="input-group-text bg-white border-end-0 text-muted">
-                  <Briefcase size={16} />
-                </span>
-                <select
-                  className={`form-select border-start-0 ${
-                    errors.cargo ? "is-invalid" : ""
-                  }`}
-                  {...register("cargo", { required: "Requerido" })}
-                  onChange={(e) => {
-                    setValue("cargo", e.target.value);
-                    handleCargoChange(e.target.value);
-                  }}
-                >
-                  <option value="">Seleccione...</option>
-                  {cargos.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.nombre}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              <select
+                className={`form-select form-select-sm ${
+                  errors.cargo ? "is-invalid" : ""
+                }`}
+                {...register("cargo", { required: "Requerido" })}
+                onChange={(e) => {
+                  setValue("cargo", e.target.value);
+                  handleCargoChange(e.target.value);
+                }}
+              >
+                <option value="">Seleccione...</option>
+                {cargos.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.nombre}
+                  </option>
+                ))}
+              </select>
               {errors.cargo && (
                 <span className="text-danger small">
                   {errors.cargo.message}
@@ -458,45 +426,37 @@ export function UsuarioForm({ handleCloseModal }) {
 
             {/* Salario */}
             <div className="col-md-4">
-              <label className="form-label small fw-semibold text-muted mb-1">
+              <label className="form-label small fw-semibold text-muted mb-1 d-flex align-items-center gap-1">
+                <Banknote size={16} />
                 Salario
               </label>
-              <div className="input-group input-group-sm">
-                <span className="input-group-text bg-white border-end-0 text-muted">
-                  <Banknote size={16} />
-                </span>
-                <input
-                  type="number"
-                  readOnly
-                  className="form-control border-start-0 "
-                  {...register("salario", { required: "Requerido" })}
-                />
-              </div>
+              <input
+                type="number"
+                readOnly
+                className="form-control form-control-sm"
+                {...register("salario", { required: "Requerido" })}
+              />
             </div>
 
             {/* Horario */}
             <div className="col-md-8">
-              <label className="form-label small fw-semibold text-muted mb-1">
+              <label className="form-label small fw-semibold text-muted mb-1 d-flex align-items-center gap-1">
+                <Clock size={16} />
                 Horario
               </label>
-              <div className="input-group input-group-sm">
-                <span className="input-group-text bg-white border-end-0 text-muted">
-                  <Clock size={16} />
-                </span>
-                <select
-                  className={`form-select border-start-0 ${
-                    errors.horario ? "is-invalid" : ""
-                  }`}
-                  {...register("horario", { required: "Requerido" })}
-                >
-                  <option value="">Seleccione Horario...</option>
-                  {horarios.map((h) => (
-                    <option key={h.id} value={h.id}>
-                      {h.horaEntrada} - {h.horaSalida}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              <select
+                className={`form-select form-select-sm ${
+                  errors.horario ? "is-invalid" : ""
+                }`}
+                {...register("horario", { required: "Requerido" })}
+              >
+                <option value="">Seleccione Horario...</option>
+                {horarios.map((h) => (
+                  <option key={h.id} value={h.id}>
+                    {h.horaEntrada} - {h.horaSalida}
+                  </option>
+                ))}
+              </select>
               {errors.horario && (
                 <span className="text-danger small">
                   {errors.horario.message}
@@ -510,7 +470,7 @@ export function UsuarioForm({ handleCloseModal }) {
         <div className="card-footer border-0 d-flex justify-content-end bg-transparent gap-2 pt-2 pb-0">
           <button
             type="button"
-            className="btn-cerrar-modal btn-sm px-4 rounded-3"
+            className="btn-cerrar  px-4 rounded-3"
             onClick={handleCloseModal}
           >
             Cancelar

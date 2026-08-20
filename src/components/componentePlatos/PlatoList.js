@@ -185,7 +185,7 @@ export function PlatoList({ search, categoriaActual = null }) {
       grow: 3, // Damos más espacio a esta columna
       cell: (row) => (
         <div>
-          <strong style={{ color: "#212529" }}>{row.nombre}</strong>
+          <strong>{row.nombre}</strong>
           <p
             className="text-muted mb-0"
             style={{ fontSize: "0.85em", whiteSpace: "normal" }}
