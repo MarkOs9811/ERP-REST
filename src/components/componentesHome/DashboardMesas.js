@@ -2,9 +2,42 @@ import { useQuery } from "@tanstack/react-query";
 import { GetMesasVender } from "../../service/accionesVender/GetMesasVender";
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
 import "../../css/EstilosHome.css";
-import { Cookie, Plus } from "lucide-react";
+import { Clock, Cookie, Plus } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+const TiempoOcupacion = ({ fechaApertura }) => {
+  const [minutos, setMinutos] = useState(0);
 
+  useEffect(() => {
+    if (!fechaApertura) return;
+
+    const calcularTiempo = () => {
+      const fechaParseada = new Date(fechaApertura);
+      const ahora = new Date();
+      const diferenciaMs = ahora - fechaParseada;
+      const diffMinutos = Math.floor(diferenciaMs / 60000);
+
+      setMinutos(diffMinutos > 0 ? diffMinutos : 0);
+    };
+
+    calcularTiempo();
+    const intervalo = setInterval(calcularTiempo, 60000);
+
+    return () => clearInterval(intervalo);
+  }, [fechaApertura]);
+
+  const esDemorado = minutos >= 60;
+
+  return (
+    <span
+      className={`small d-flex align-items-center gap-1 fw-bold ${
+        esDemorado ? "text-danger" : "text-muted"
+      }`}
+    >
+      <Clock size={13} /> {minutos} min
+    </span>
+  );
+};
 export function DashboardMesas() {
   const {
     data: mesas,
@@ -25,17 +58,17 @@ export function DashboardMesas() {
     <div className="salon-container card m-0 h-100 overflow-auto p-2">
       {/* --- CABECERA --- */}
       <div className="card-header bg-white border-bottom-0 p-2 mb-3 d-flex flex-column flex-lg-row justify-content-between align-items-start align-items-lg-center">
-        <div className="mb-lg-0 d-flex justify-content-center items-center">
-          <div
+        <div className="d-flex align-items-center  justify-content-center ">
+          <span
             className="rounded-circle p-2 me-2"
             style={{
-              color: "var(--fw-emerald)",
               background: "var(--bg-emerald-soft)",
+              color: "var(--fw-emerald)",
             }}
           >
-            <Cookie />
-          </div>
-          <h2 className="salon-title d-flex align-items-center m-0 gap-2">
+            <Cookie size={24} />
+          </span>
+          <h5 className="d-flex fw-bold align-items-center m-0 gap-2">
             Salón de mesas ({listaMesas.length} Mesas)
             {listaMesas.length === 0 ? (
               <button
@@ -52,7 +85,7 @@ export function DashboardMesas() {
                 <Plus /> Gestionar Mesas
               </button>
             )}
-          </h2>
+          </h5>
         </div>
 
         {/* --- LEYENDA (Contadores) --- */}
@@ -103,18 +136,29 @@ export function DashboardMesas() {
                     <h4 className="mesa-numero-flat">Mesa {mesa.numero}</h4>
 
                     <div className="mesa-footer-flat mt-4 w-100">
-                      {!isLibre ? (
-                        <div className="d-flex flex-column">
-                          <span className="consumo-label">
-                            Consumo comanda:
-                          </span>
-                          <span className="consumo-monto">
-                            S/ {mesa.consumo ? mesa.consumo : "0.00"}
+                      {mesa.estado === 0 && (
+                        <div className="mesa-total-preview mt-2 d-flex flex-column gap-1">
+                          <div className="d-flex justify-content-between align-items-center">
+                            <span
+                              className="text-muted small"
+                              style={{
+                                fontSize: "0.65rem",
+                                fontWeight: "700",
+                                letterSpacing: "0.5px",
+                              }}
+                            >
+                              TOTAL ACTUAL
+                            </span>
+                            {mesa.tiempo_apertura && (
+                              <TiempoOcupacion
+                                fechaApertura={mesa.tiempo_apertura}
+                              />
+                            )}
+                          </div>
+                          <span className="fw-bold fs-6">
+                            S/ {Number(mesa.total || 0).toFixed(2)}
                           </span>
                         </div>
-                      ) : (
-                        // Bloque vacío para mantener la estructura de la tarjeta sin textos
-                        <div style={{ minHeight: "42px" }}></div>
                       )}
                     </div>
                   </div>

@@ -15,6 +15,7 @@ import "./css/EstilosPOS.css";
 import { fetchCajaClose } from "./pages/modulosVender/CerrarCaja";
 import { useQuery } from "@tanstack/react-query";
 import { GetConfi } from "./service/accionesConfiguracion/GetConfi";
+import { HoraLive } from "./utils/HoraLive";
 
 export default function LayoutPOS({ children }) {
   const navigate = useNavigate();
@@ -80,23 +81,6 @@ export default function LayoutPOS({ children }) {
               </RippleWrapper>
             )}
 
-          {esComida &&
-            ["atencion al cliente", "administrador"].includes(
-              cargo?.empleado?.cargo?.nombre,
-            ) && (
-              <RippleWrapper>
-                <Link
-                  className={`boton-venta d-flex align-items-center justify-content-center h-100 ${
-                    location.pathname === "/vender/pedidosWeb" ? "activo" : ""
-                  }`}
-                  to="/vender/pedidosWeb"
-                >
-                  <BikeIcon className="pos-icon" height="22px" width="22px" />
-                  <span className="pos-btn-text ms-1">Delivery</span>
-                </Link>
-              </RippleWrapper>
-            )}
-
           {["atencion al cliente", "administrador"].includes(
             cargo?.empleado?.cargo?.nombre,
           ) && (
@@ -143,12 +127,33 @@ export default function LayoutPOS({ children }) {
                 </Link>
               </RippleWrapper>
             )}
+          {esComida &&
+            ["atencion al cliente", "administrador"].includes(
+              cargo?.empleado?.cargo?.nombre,
+            ) && (
+              <RippleWrapper>
+                <Link
+                  className={`boton-venta d-flex align-items-center justify-content-center h-100 ${
+                    location.pathname === "/vender/pedidosWeb" ? "activo" : ""
+                  }`}
+                  to="/vender/pedidosWeb"
+                >
+                  <BikeIcon className="pos-icon" height="22px" width="22px" />
+                  <span className="pos-btn-text ms-1">Delivery</span>
+                </Link>
+              </RippleWrapper>
+            )}
         </div>
 
         {/* ========================================================= */}
         {/* LADO DERECHO: Alineado, separado por 'gap' y sin líneas */}
         {/* ========================================================= */}
         <div className="d-flex flex-wrap flex-md-nowrap flex-grow-1 align-items-center justify-content-center justify-content-md-end p-2 pe-md-4 gap-4">
+          <div className="d-flex align-items-center">
+            <p className="fw-bold mb-0">
+              <HoraLive />
+            </p>
+          </div>
           {/* Info Caja */}
           <div className="d-flex align-items-center gap-2 text-nowrap">
             <span className="text-muted small mb-0">Caja:</span>

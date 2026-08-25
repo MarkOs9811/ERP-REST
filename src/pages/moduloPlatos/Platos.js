@@ -8,6 +8,7 @@ import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteE
 import { PlatoList } from "../../components/componentePlatos/PlatoList";
 import ModalRight from "../../components/componentesReutilizables/ModalRight";
 import { PlatoAdd } from "../../components/componentePlatos/PlatoAdd";
+import { PlatoMasVendido } from "../../components/componentesHome/PlatosMasVendidos";
 
 export function Platos() {
   const [search, setSearch] = useState("");
@@ -21,7 +22,7 @@ export function Platos() {
     <div className="row g-3 ">
       <div className="col-md-12 col-lg-12">
         <CondicionCarga isLoading={upDateList} isError={null}>
-          <div className="card  h-100">
+          <div className="card  h-100 py-2">
             <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center mb-2">
               <div className="d-flex align-items-center">
                 <h4 className="card-title mb-0 titulo-card-especial">
@@ -76,6 +77,9 @@ export function Platos() {
             </div>
           </div>
         </CondicionCarga>
+      </div>
+      <div className="col-md-12">
+        <PlatoMasVendido />
       </div>
 
       <ModalRight

@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { getVentas } from "../../service/ObtenerVentasDetalle";
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
-import { Award, Plus } from "lucide-react"; // Cambié el icono al de tu diseño
+import { Award } from "lucide-react"; // Cambié el icono al de tu diseño
 
 export function PlatoMasVendido() {
   const {
@@ -81,7 +81,7 @@ export function PlatoMasVendido() {
         {/* CABECERA */}
         <div className="d-flex justify-content-between align-items-center mb-2">
           <div>
-            <h5 className="fw-bold text-dark d-flex align-items-center gap-2 mb-1">
+            <h5 className="fw-bold  d-flex align-items-center gap-2 mb-1">
               <Award className="text-warning" size={24} />
               Platos más Vendidos
             </h5>

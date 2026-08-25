@@ -10,6 +10,8 @@ import { CheckCheck, PrinterIcon, RotateCcw, AlertCircle } from "lucide-react"; 
 import { PutData } from "../../service/CRUD/PutData";
 import { CondicionCarga } from "../../components/componentesReutilizables/CondicionCarga";
 import { BadgeComponent } from "../../components/componentesReutilizables/BadgeComponent";
+import ToastAlert from "../../components/componenteToast/ToastAlert";
+import axiosInstance from "../../api/AxiosInstance";
 
 const estados = {
   0: { texto: "En espera", variant: "warning", columna: "espera" },
@@ -64,6 +66,57 @@ function TarjetaPedido({ pedido }) {
       return [];
     }
   }, [pedido.detalle_platos]);
+
+  const handleImprimirPedidoCocina = async (e) => {
+    e.stopPropagation();
+
+    if (!platos || platos.length === 0) {
+      return ToastAlert("error", "No hay platos para imprimir en este pedido.");
+    }
+
+    // Esto está perfecto, lo mantenemos igual
+    const contenidoFormateado = platos.map((item) => {
+      const cantidad = Number(item.cantidad ?? 1);
+      const precio = Number(item.precio ?? 0);
+
+      return {
+        nombre: item.nombre || "Plato desconocido",
+        cantidad,
+        precio,
+        subtotal: cantidad * precio,
+      };
+    });
+
+    // 🔥 AQUÍ ESTÁ EL CAMBIO: Adaptamos el payload a lo que espera el servicio
+    const payload = {
+      mesa: pedido.numeroMesa || pedido.id || "Barra",
+      fecha: new Date().toLocaleString("es-PE"), // O la fecha exacta de tu pedido
+      usuario: "Cajero", // Aquí deberías pasar el nombre del mozo/usuario logueado si lo tienes en tu estado
+      productos: contenidoFormateado, // Cambiamos 'contenido' por 'productos'
+      nota: pedido.nota || "", // Si manejas alguna nota para la cocina
+    };
+
+    try {
+      const response = await axiosInstance.post(
+        "/vender/imprimirCocina",
+        payload,
+      );
+
+      if (response.data.success) {
+        ToastAlert("success", `Pedido enviado a impresión.`);
+      } else {
+        ToastAlert(
+          "error",
+          response.data.message || "No se pudo imprimir el pedido.",
+        );
+      }
+    } catch (error) {
+      ToastAlert(
+        "error",
+        error.response?.data?.message || "Error de conexión con el servidor.",
+      );
+    }
+  };
 
   const tipoPedidoInfo = {
     mesa: {
@@ -193,6 +246,7 @@ function TarjetaPedido({ pedido }) {
                 : "cocina-btn-imprimir-espera"
           }`}
           title="Imprimir Ticket"
+          onClick={(e) => handleImprimirPedidoCocina(e)}
         >
           <PrinterIcon className="text-auto" size={18} />
         </button>
@@ -200,10 +254,10 @@ function TarjetaPedido({ pedido }) {
         <BotonAnimado
           className={` p-1 ms-auto cocina-btn-accion ${
             esListo
-              ? "cocina-btn-accion-listo"
+              ? "btn-guardar"
               : esEnPreparacion
-                ? "cocina-btn-accion-preparacion"
-                : "cocina-btn-accion-espera"
+                ? "btn-generico"
+                : "btn-eliminar"
           }`}
           onClick={() => cambiarEstado()}
           loading={cargando}

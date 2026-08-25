@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import "../App.css";
 import "../css/EstilosPanelHeader.css";
@@ -6,7 +6,15 @@ import RippleWrapper from "./componentesReutilizables/RippleWrapper";
 import { PerfilPanel } from "./componentesHeader/PerfilPanel";
 import { NotificacionesPanel } from "./componentesHeader/NotificacionesPanel";
 import { capitalizeFirstLetter } from "../hooks/FirstLetterUp";
-import { Bell, Globe, Menu, Moon, SunMediumIcon } from "lucide-react";
+import {
+  Bell,
+  Expand,
+  Globe,
+  Menu,
+  Minimize,
+  Moon,
+  SunMediumIcon,
+} from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleSidebar } from "../redux/sideBarSlice";
 import ModalRight from "./componentesReutilizables/ModalRight";
@@ -82,6 +90,30 @@ export function Header({ tipoHeader = null }) {
     document.body.classList.toggle("dark-theme", !darkMode);
     localStorage.setItem("theme", newTheme);
   };
+
+  // Expandir o compirmir pantalla
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  const toggleFullscreen = async () => {
+    if (!document.fullscreenElement) {
+      await document.documentElement.requestFullscreen();
+    } else {
+      await document.exitFullscreen();
+    }
+  };
+
+  useEffect(() => {
+    const handleFullscreen = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreen);
+
+    return () =>
+      document.removeEventListener("fullscreenchange", handleFullscreen);
+  }, []);
+  // ==========================
+
   const isCompressed = useSelector((state) => state.sidebar.isCompressed);
   // Aplica el tema al cargar
   React.useEffect(() => {
@@ -203,6 +235,30 @@ export function Header({ tipoHeader = null }) {
               />
             </RippleWrapper>
           ) : null}
+          {/* BOTON PARA PANTALLA COMPLETA */}
+          <button
+            className="ico-header btn-icon border-0 rounded-pill d-flex align-items-center justify-content-center"
+            title={
+              isFullscreen ? "Salir de pantalla completa" : "Pantalla completa"
+            }
+            style={{
+              width: 44,
+              height: 44,
+              padding: 0,
+              transition: "transform var(--transition-bounce)",
+            }}
+            onMouseOver={(e) =>
+              (e.currentTarget.style.transform = "scale(1.1)")
+            }
+            onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
+            onClick={toggleFullscreen}
+          >
+            {isFullscreen ? (
+              <Minimize size={22} className="text-auto" />
+            ) : (
+              <Expand size={22} className="text-auto" />
+            )}
+          </button>
           {/* BOTON PARA CAMBIAR DE TEMA - SIEMPRE VISIBLE */}
           <button
             className="ico-header btn-icon border-0 rounded-pill d-flex align-items-center justify-content-center"
@@ -280,6 +336,7 @@ export function Header({ tipoHeader = null }) {
               </span>
             )}
           </button>
+
           <div
             className="ico-header btn-icon border-0 rounded-pill d-flex align-items-center justify-content-center"
             style={{

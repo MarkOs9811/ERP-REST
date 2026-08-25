@@ -210,7 +210,7 @@
 }
 
 .card-ocupado {
-    background-color: var(--bg-strawberry-soft);
+    background-color: #ff5454!important;
     border: 1px solid #FCD4D4!important;
     /* Tono derivado del rojo para el borde */
 }
@@ -551,14 +551,7 @@ body.dark-theme .ai-response {
     background: transparent;
 }
 
-.home-banner-card {
-    border-radius: 14px;
-    overflow: hidden;
-    border: 1px solid var(--fw-border);
-    background-size: cover;
-    background-position: center;
-    min-height: 220px;
-}
+
 
 .home-banner-overlay {
     position: absolute;
@@ -579,21 +572,7 @@ body.dark-theme .ai-response {
     letter-spacing: -0.02em;
 }
 
-.home-banner-cta {
-    border: 1px solid rgba(255, 255, 255, 0.42);
-    margin-top: 0.5rem;
-    border-radius: 12px;
-    padding: 0.5rem 1.2rem;
-    font-weight: 700;
-    color: #fff;
-    background: linear-gradient(100deg, var(--fw-strawberry), var(--fw-strawberry));
-    box-shadow: none;
-}
 
-.home-banner-cta:hover {
-    color: #fff;
-    filter: brightness(1.04);
-}
 
 .home-banner-user {
     position: absolute;

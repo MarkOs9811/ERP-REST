@@ -17,7 +17,7 @@ const echoEvents = new Echo({
   auth: {
     headers: {
       // El token para que Laravel sepa quién está escuchando
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      Authorization: `Bearer ${localStorage.getItem("token") || sessionStorage.getItem("token")}`,
       Accept: "application/json",
     },
   },

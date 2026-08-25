@@ -13,7 +13,7 @@ const GraficoMetodoPago = () => {
     queryKey: ["ventas"],
     queryFn: getVentas,
   });
-
+  console.log(listVentas);
   // Procesar ventas por método de pago (Optimizado con useMemo)
   const metodos = useMemo(() => {
     if (!listVentas.length) return [];
@@ -22,7 +22,7 @@ const GraficoMetodoPago = () => {
     let total = 0;
 
     listVentas.forEach((venta) => {
-      const metodo = venta?.metodo_pago?.nombre || "Sin método";
+      const metodo = venta?.idMetodo || "Sin método";
       resumen[metodo] = (resumen[metodo] || 0) + 1;
       total += 1;
     });

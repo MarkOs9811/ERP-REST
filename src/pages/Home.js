@@ -11,7 +11,7 @@ import { VentasTipo } from "../components/componentesHome/VentasTipo";
 import { CarouselMarketingHome } from "../components/componentesHome/CarouselMarketingHome";
 import { DashboardMesas } from "../components/componentesHome/DashboardMesas";
 import { useNavigate } from "react-router-dom";
-import { RocketIcon, StoreIcon } from "lucide-react";
+import { StoreIcon } from "lucide-react";
 
 // Nota: Quité las importaciones de "lucide-react" porque no se estaban utilizando en este archivo.
 // Esto ayuda a mantener el código limpio.
@@ -37,51 +37,56 @@ export function Home() {
   return (
     <div className="container-fluid home-shell py-2">
       {/* CABECERA HERO MEJORADA */}
-      <div className="home-hero mb-4 p-4 bg-white rounded-4 border d-flex align-items-center justify-content-between position-relative overflow-hidden">
-        {/* Decoración de fondo opcional para darle un toque premium */}
-        <div className="hero-decoration"></div>
-
-        <div className="home-hero-content position-relative z-1">
-          <span className="badge bg-primary text-light bg-opacity-10 rounded-pill px-3 fw-semibold d-inline-flex align-items-center gap-2">
-            <RocketIcon />
-            Panel ejecutivo
-          </span>
-          <h1 className="home-hero-title fw-bold text-dark mb-1">Dashboard</h1>
-          <p className="home-hero-subtitle text-secondary mb-0">
-            Resumen general y métricas en tiempo real de tu negocio.
-          </p>
+      <div className="row g-3 mb-4">
+        <div className="col-md-7 col-sm-7 h-100">
+          {" "}
+          <CabeceraHome
+            ventasList={ventasList}
+            load={loadingVentas}
+            error={errorVentas}
+          />
         </div>
+        <div className="col-md-5 col-sm-5">
+          {" "}
+          <div className="card h-100   overflow-hidden p-4">
+            {/* Decoración de fondo opcional para darle un toque premium */}
+            <div className="hero-decoration"></div>
 
-        <div className="text-end position-relative z-1 d-flex flex-column align-items-end">
-          <p className="mb-2 fw-medium text-muted d-flex align-items-center gap-2">
-            <span className="status-dot bg-success rounded-circle"></span>
-            {caja?.estadoCaja === 1 ? "Caja abierta" : "Caja cerrada"} -{" "}
-            {caja?.nombreCaja} - {caja?.usuario?.empleado?.persona?.nombre}
-          </p>
-          <p className="mb-3 fw-semibold text-dark">
-            {caja?.estadoCaja === 1
-              ? "¡Buen trabajo! Mantén el control de tus ventas."
-              : "Caja cerrada. Abre la caja para comenzar a vender."}
-          </p>
-          {caja?.estadoCaja === 1 ? (
-            <button
-              className="btn-principal btn-lg px-4 py-2 fw-bold shadow-sm d-flex align-items-center gap-2 btn-ir-a-caja"
-              onClick={() => navigate("/vender/mesas")}
-            >
-              <StoreIcon size={20} />
-              <span>Ir a Caja</span>
-            </button>
-          ) : (
-            <button
-              className="btn-principal btn-lg px-4 py-2 fw-bold shadow-sm d-flex align-items-center gap-2 btn-abrir-caja"
-              onClick={() => navigate("/abrirCaja")}
-            >
-              <StoreIcon size={20} />
-              <span>Abrir Caja</span>
-            </button>
-          )}
+            <div className="text-end position-relative mt-3 z-1 d-flex flex-column align-items-end">
+              <p className="mb-2 fw-medium text-muted d-flex align-items-center gap-2">
+                <span className="status-dot bg-success rounded-circle"></span>
+                {caja?.estado === "abierto"
+                  ? "Caja abierta"
+                  : "Caja cerrada"} - {caja?.nombreCaja} -{" "}
+                {caja?.usuario?.empleado?.persona?.nombre}
+              </p>
+              <p className="mb-3 fw-semibold text-dark">
+                {caja?.estado === "abierto"
+                  ? "¡Buen trabajo! Mantén el control de tus ventas."
+                  : "Caja cerrada. Abre la caja para comenzar a vender."}
+              </p>
+              {caja?.estado === "abierto" ? (
+                <button
+                  className="btn-principal btn-lg px-4 py-2 fw-bold shadow-sm d-flex align-items-center gap-2 btn-ir-a-caja"
+                  onClick={() => navigate("/vender/mesas")}
+                >
+                  <StoreIcon size={20} />
+                  <span>Ir a Caja</span>
+                </button>
+              ) : (
+                <button
+                  className="btn-principal btn-lg px-4 py-2 fw-bold shadow-sm d-flex align-items-center gap-2 btn-abrir-caja"
+                  onClick={() => navigate("/abrirCaja")}
+                >
+                  <StoreIcon size={20} />
+                  <span>Abrir Caja</span>
+                </button>
+              )}
+            </div>
+          </div>
         </div>
       </div>
+
       {/* FIN CABECERA HERO */}
 
       <div className="row g-4">
@@ -94,13 +99,7 @@ export function Home() {
         <div className="col-12 col-lg-8">
           <div className="row g-3">
             <div className="col-md-12">
-              <div className="home-section-card">
-                <CabeceraHome
-                  ventasList={ventasList}
-                  load={loadingVentas}
-                  error={errorVentas}
-                />
-              </div>
+              <div className="home-section-card"></div>
             </div>
             <div className="col-md-12">
               <div className="home-section-card">

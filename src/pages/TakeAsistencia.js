@@ -1,12 +1,12 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import axiosInstance from "../api/AxiosInstance";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import ToastAlert from "../components/componenteToast/ToastAlert";
 import { ClockPlus, DoorOpenIcon, LogOut } from "lucide-react";
+import { HoraLive } from "../utils/HoraLive";
 
 export function TakeAsistencia() {
-  const [currentTime, setCurrentTime] = useState("");
   const [loading, setLoading] = useState(false); // 🔥 Control de peticiones concurrentes
   const dniInputRef = useRef(null);
 
@@ -17,25 +17,6 @@ export function TakeAsistencia() {
     formState: { errors },
     getValues,
   } = useForm();
-
-  useEffect(() => {
-    if (dniInputRef.current) dniInputRef.current.focus();
-
-    const updateClock = () => {
-      setCurrentTime(
-        new Date().toLocaleTimeString("es-PE", {
-          hour: "2-digit",
-          minute: "2-digit",
-          second: "2-digit",
-          hour12: true,
-        }),
-      );
-    };
-
-    updateClock();
-    const interval = setInterval(updateClock, 1000);
-    return () => clearInterval(interval);
-  }, []);
 
   const validateDni = () => {
     const dni = getValues("documento_identidad");
@@ -124,7 +105,7 @@ export function TakeAsistencia() {
               className="mb-0 h2 fw-bold"
               style={{ color: "var(--brand-primary)" }}
             >
-              {currentTime}
+              <HoraLive />
             </p>
           </div>
         </div>
