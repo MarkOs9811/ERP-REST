@@ -1,0 +1,29 @@
+.filtro-metodos {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    padding: 4px;
+    background-color: #f1f3f5;
+    border-radius: 12px;
+}
+
+.filtro-metodos button {
+    border: none;
+    background: transparent;
+    padding: 7px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #495057;
+    transition: all 0.2s ease;
+}
+
+.filtro-metodos button:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.filtro-metodos button.activo {
+    background-color: #ffffff;
+    color: #e40d0d;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12);
+    border: 1px solid #e40d0d;
+}

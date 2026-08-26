@@ -11,7 +11,7 @@ import { abrirCaja } from "../redux/cajaSlice";
 import axiosInstance from "../api/AxiosInstance";
 import ToastAlert from "../components/componenteToast/ToastAlert";
 import { Cargando } from "../components/componentesReutilizables/Cargando";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { GetConfi } from "../service/accionesConfiguracion/GetConfi";
 import { useNavigate } from "react-router-dom";
 import { Plus } from "lucide-react";
@@ -21,6 +21,8 @@ export function AbrirCaja() {
   const [caja, setCajas] = useState([]);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const queryClient = useQueryClient();
+
   const {
     register,
     handleSubmit,
@@ -72,10 +74,14 @@ export function AbrirCaja() {
       );
       if (response.data.success) {
         ToastAlert("success", "Caja abierta correctamente");
+
+        console.log("Respuesta completa del backend:", response.data);
         const { nombreCaja, id } = response.data.caja;
         const cajaData = { nombre: nombreCaja, id: id, estado: "abierto" };
 
         dispatch(abrirCaja(cajaData));
+
+        queryClient.invalidateQueries({ queryKey: ["caja"] });
         setTimeout(() => {
           // navigate te cambia de ruta al instante sin recargar la página
           navigate(esComida ? "/vender/mesas" : "/vender/ventasLlevar");

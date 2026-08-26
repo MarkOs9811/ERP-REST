@@ -1,12 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
-
+import { useEffect, useRef, useState } from "react";
 import ModalAlertQuestion from "../../components/componenteToast/ModalAlertQuestion";
 import axiosInstance from "../../api/AxiosInstance";
 import ToastAlert from "../../components/componenteToast/ToastAlert";
 import { useNavigate } from "react-router-dom";
 import { handlePrecioInput, validatePrecio } from "../../hooks/InputHandlers";
 import { useForm } from "react-hook-form";
-
 import { useQuery } from "@tanstack/react-query";
 import { TablasGenerales } from "../../components/componentesReutilizables/TablasGenerales";
 import BotonAnimado from "../../components/componentesReutilizables/BotonAnimado";
@@ -21,11 +19,18 @@ import {
   User,
   Wallet,
   WalletMinimal,
+  PieChart,
 } from "lucide-react";
 import { cerrarCaja } from "../../redux/cajaSlice";
 import { useDispatch } from "react-redux";
 import { useReactToPrint } from "react-to-print";
 import { TicketCerrarCaja } from "../../components/componenteVender/TiketsType/TicketCerrarCaja";
+import ModalRight from "../../components/componentesReutilizables/ModalRight";
+import { BtnVer } from "../../components/componentesReutilizables/BotonesAccion";
+import { ModalDetallesVentas } from "../../components/componentesVentas/ModalDetallesVentas";
+import { GetMetodosPago } from "../../service/accionesVentas/GetMetodosPago";
+
+import "../../css/EstilosCerrarCaja.css";
 
 export const fetchCajaClose = async (cajaId) => {
   try {
@@ -33,7 +38,6 @@ export const fetchCajaClose = async (cajaId) => {
     if (!response.data.success) {
       throw new Error("Error en los datos de la caja");
     }
-
     return response.data;
   } catch (error) {
     throw new Error(`Error al obtener caja: ${error.message}`);
@@ -50,16 +54,22 @@ export function CerrarCaja() {
     reset,
   } = useForm();
 
+  const [modalDetallesVenta, setModalDetallesVenta] = useState(false);
+  const [dataVentas, setDataVentas] = useState([]);
+  // PARA LA BUSQUEDA
+  const [busqueda, setBusqueda] = useState("");
+  const [metodoFiltro, setMetodoFiltro] = useState("TODOS"); // "TODOS" para mostrar todo por defecto
+
   const [openModal, setOpenModal] = useState(false);
   const [tituloModal, setTituloModal] = useState(null);
   const [idCaja, setIdCaja] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const caja = JSON.parse(
     localStorage.getItem("caja") || sessionStorage.getItem("caja"),
   );
 
-  // Consulta con React Query para obtener los datos de la caja
   const {
     data: cajaData,
     isLoading,
@@ -71,16 +81,43 @@ export function CerrarCaja() {
     enabled: !!caja?.id,
   });
 
-  // DATOS PARA LA IMPRESION
+  const listaVentas = cajaData?.detallesVenta || [];
+
+  // Filtramos dinámicamente según el texto de búsqueda y el método seleccionado
+  const ventasFiltradas = listaVentas.filter((item) => {
+    // Coincidencia por texto (busca en pedido, documento o vendedor)
+    const textoMatch =
+      item.pedido.toLowerCase().includes(busqueda.toLowerCase()) ||
+      item.vendedor.toLowerCase().includes(busqueda.toLowerCase()) ||
+      item.documento.toLowerCase().includes(busqueda.toLowerCase());
+
+    // Coincidencia por método de pago
+    const metodoMatch =
+      metodoFiltro === "TODOS" ||
+      item.metodoPago.toLowerCase() === metodoFiltro.toLowerCase();
+
+    return textoMatch && metodoMatch;
+  });
+  // ============================
+  const {
+    data: dataMetodos = [],
+    isLoading: loadingMetodo,
+    isError: loadingError,
+  } = useQuery({
+    queryKey: ["metodosPagos"],
+    queryFn: GetMetodosPago,
+  });
+
   const componentRef = useRef();
   const [datosCerrarCaja, setDatosCerrarCaja] = useState(null);
-  // Configuración de la impresión
+
   const handlePrint = useReactToPrint({
     contentRef: componentRef,
     onAfterPrint: () => {
       setDatosCerrarCaja(null);
     },
   });
+
   const handleImprimirCaja = async () => {
     const dataActual = cajaData?.data || cajaData;
     if (dataActual) {
@@ -88,12 +125,13 @@ export function CerrarCaja() {
       if (componentRef.current) {
         setTimeout(() => {
           handlePrint();
-        }, 700); // Un pelín más de tiempo para asegurar el render
+        }, 700);
       }
     } else {
-      ToastAlert("error", "No hay platos registrados en esta mesa");
+      ToastAlert("error", "No hay datos registrados en esta caja");
     }
   };
+
   useEffect(() => {
     if (cajaData?.totalVenta !== undefined) {
       const montoVendido = Number(cajaData.totalVenta).toFixed(2);
@@ -104,16 +142,15 @@ export function CerrarCaja() {
     }
   }, [cajaData, setValue]);
 
-  // Calculamos valores derivados
-  const sumaTotal = cajaData
-    ? (
-        parseFloat(cajaData?.totalVenta || 0) +
-        parseFloat(cajaData?.montoInicial || 0)
-      ).toFixed(2)
+  // --- NUEVOS CÁLCULOS DEL BACKEND ---
+  const fisicoEsperado = cajaData?.fisicoEsperado
+    ? Number(cajaData.fisicoEsperado).toFixed(2)
     : "0.00";
 
+  const totalesPorMetodo = cajaData?.totalesPorMetodo || {};
+
   const handleCerrarCaja = async (id) => {
-    const sumaTotalFormatted = parseFloat(sumaTotal).toFixed(2);
+    const sumaTotalFormatted = parseFloat(fisicoEsperado).toFixed(2);
     const montoDejarFormatted = parseFloat(getValues("montoDejar")).toFixed(2);
 
     if (isNaN(sumaTotalFormatted) || isNaN(montoDejarFormatted)) {
@@ -156,21 +193,23 @@ export function CerrarCaja() {
   const columns = [
     {
       name: "Pedido",
-      selector: (row) => row.pedido,
+      selector: (row) => row.ventaOriginal.id,
       sortable: true,
       wrap: true,
       center: true,
     },
     {
       name: "Total",
-      selector: (row) => row.total,
+      selector: (row) => `S/. ${Number(row.total).toFixed(2)}`,
       sortable: true,
       wrap: true,
       center: true,
     },
     {
       name: "Metodo Pago",
-      selector: (row) => row.metodoPago,
+      selector: (row) => (
+        <span className="text-capitalize">{row.metodoPago}</span>
+      ),
       sortable: true,
       wrap: true,
       center: true,
@@ -188,11 +227,34 @@ export function CerrarCaja() {
       center: true,
     },
     {
+      name: "Vendedor",
+      selector: (row) => row.vendedor,
+      sortable: true,
+      wrap: true,
+      center: true,
+    },
+    {
       name: "Fecha",
       selector: (row) => row.fechaVenta,
       sortable: true,
       wrap: true,
       center: true,
+    },
+    {
+      name: "Detalles",
+      cell: (row) => (
+        <div className="d-flex ">
+          <BtnVer
+            onClick={() => {
+              setDataVentas(row.ventaOriginal);
+              setModalDetallesVenta(true);
+            }}
+            title="Ver Detalles de Venta"
+          />
+        </div>
+      ),
+      center: true,
+      grow: 0,
     },
   ];
 
@@ -200,117 +262,241 @@ export function CerrarCaja() {
   if (isError) return <div>Error: {error.message}</div>;
 
   return (
-    <div className="container d-flex align-items-center justify-content-center">
-      <div className="card h-100 overflow-auto ">
-        <div className="card-header p-3 border-bottom d-flex align-content-center align-items-center">
-          <h5 className="titulo-card-especial">Resumen Venta del día</h5>
-          <div className="badge  px-3 p-0 ms-auto bg-dark pt-2">
-            <p className="h4 text-auto">{caja?.nombre}</p>
+    <div className="container d-flex align-items-center justify-content-center ">
+      <div className="card h-100 overflow-auto border">
+        <div className="card-header p-3 border-bottom d-flex align-content-center align-items-center bg-white">
+          <h5 className="titulo-card-especial mb-0">Arqueo y Cierre de Caja</h5>
+          <div className="badge px-3 py-2 ms-auto bg-dark border">
+            <span className="h5 mb-0 text-white">{caja?.nombre}</span>
           </div>
         </div>
 
-        <div className="card-body p-3  h-100">
-          <div className="row g-3  h-100">
+        <div className="card-body p-4 h-100 ">
+          <div className="row g-4 h-100">
+            {/* LADO IZQUIERDO: Tarjetas y Tabla */}
             <div className="col-md-8 h-100">
               <div className="row g-3">
+                {/* TARJETA 1 (Fondo Inicial) */}
                 <div className="col-md-4">
                   <div
-                    className="card border-0 "
+                    className="card h-100"
                     style={{
-                      background:
-                        "linear-gradient(135deg, #d14e6fff 0%, #ffe2e7ff 100%)",
+                      backgroundColor: "#ffffff",
+                      border: "1px solid #eaeaea",
+                      borderRadius: "16px",
+                      // Efecto Aura Azul
+                      backgroundImage:
+                        "radial-gradient(circle at top left, rgba(74, 105, 189, 0.08) 0%, transparent 70%)",
                     }}
                   >
-                    <div className="card-body d-flex align-items-center justify-content-between p-3">
-                      <div className="bg-white bg-opacity-50 rounded-circle p-2">
-                        <BanknoteArrowDown // Icono de "Total Dinero"
-                          height="40px"
-                          width="40px"
-                          color="#C44569"
-                          strokeWidth={1.5}
-                        />
+                    <div className="card-body p-4 d-flex flex-column justify-content-between">
+                      <div className="d-flex justify-content-between align-items-start mb-3">
+                        <div
+                          className="d-flex align-items-center justify-content-center rounded-circle"
+                          style={{
+                            width: "45px",
+                            height: "45px",
+                            backgroundColor: "rgba(74, 105, 189, 0.12)",
+                          }}
+                        >
+                          <WalletMinimal
+                            size={22}
+                            color="#4A69BD"
+                            strokeWidth={2}
+                          />
+                        </div>
                       </div>
-                      <div className="w-100 text-end">
-                        <p className="mb-1 fw-semibold text-dark opacity-90">
-                          Total en Caja
+                      <div>
+                        <p className="mb-1 text-muted fw-semibold small">
+                          Fondo Inicial
                         </p>
-                        <p className="card-text text-end fw-bold h5 mb-0 text-dark">
-                          S/.{sumaTotal} {/* Usamos la variable sumaTotal */}
-                        </p>
+                        <h3
+                          className="fw-bold mb-0"
+                          style={{ color: "#2d3436" }}
+                        >
+                          S/. {Number(cajaData?.montoInicial || 0).toFixed(2)}
+                        </h3>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                {/* --- TARJETA 2 (Monto Inicial) --- */}
+                {/* TARJETA 2 (Efectivo Físico) */}
                 <div className="col-md-4">
                   <div
-                    className="card border-0 "
+                    className="card h-100"
                     style={{
-                      background:
-                        "linear-gradient(135deg, #C2E9FB 0%, #A1C4FD 100%)",
+                      backgroundColor: "#ffffff",
+                      border: "1px solid #eaeaea",
+                      borderRadius: "16px",
+                      // Efecto Aura Rosa/Rojo
+                      backgroundImage:
+                        "radial-gradient(circle at top left, rgba(196, 69, 105, 0.08) 0%, transparent 70%)",
                     }}
                   >
-                    <div className="card-body d-flex align-items-center justify-content-between p-3">
-                      <div className="bg-white bg-opacity-50 rounded-circle p-2">
-                        <WalletMinimal // Icono de "Dinero Inicial"
-                          height="40px"
-                          width="40px"
-                          color="#4A69BD"
-                          strokeWidth={1.5}
-                        />
+                    <div className="card-body p-4 d-flex flex-column justify-content-between">
+                      <div className="d-flex justify-content-between align-items-start mb-3">
+                        <div
+                          className="d-flex align-items-center justify-content-center rounded-circle"
+                          style={{
+                            width: "45px",
+                            height: "45px",
+                            backgroundColor: "rgba(255, 0, 0, 0.12)",
+                          }}
+                        >
+                          <BanknoteArrowDown
+                            size={22}
+                            color="#c44545"
+                            strokeWidth={2}
+                          />
+                        </div>
                       </div>
-                      <div className="w-100 text-end">
-                        <p className="mb-1 fw-semibold text-dark opacity-90">
-                          Dinero al Inicio
+                      <div>
+                        <p className="mb-1 text-muted fw-semibold small">
+                          Efectivo Físico
                         </p>
-                        <p className="card-text text-end fw-bold h5 mb-0 text-dark">
-                          S/.{Number(cajaData?.montoInicial || 0).toFixed(2)}
-                        </p>
+                        <h3
+                          className="fw-bold mb-0"
+                          style={{ color: "#2d3436" }}
+                        >
+                          S/. {fisicoEsperado}
+                        </h3>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                {/* --- ¡CORRECCIÓN #4: TARJETA 3 (Monto Vendido)! --- */}
+                {/* TARJETA 3 (Monto Vendido Total) */}
                 <div className="col-md-4">
                   <div
-                    className="card border-0 "
+                    className="card h-100"
                     style={{
-                      background:
-                        "linear-gradient(135deg, #D4FC79 0%, #96E6A1 100%)",
+                      backgroundColor: "#ffffff",
+                      border: "1px solid #eaeaea",
+                      borderRadius: "16px",
+                      // Efecto Aura Verde
+                      backgroundImage:
+                        "radial-gradient(circle at top left, rgba(34, 190, 55, 0.08) 0%, transparent 70%)",
                     }}
                   >
-                    <div className="card-body d-flex align-items-center justify-content-between p-3">
-                      <div className="bg-white bg-opacity-50 rounded-circle p-2">
-                        <TrendingUp // Icono de "Ventas/Ganancias"
-                          height="40px"
-                          width="40px"
-                          color="#38A169"
-                          strokeWidth={1.5}
-                        />
+                    <div className="card-body p-4 d-flex flex-column justify-content-between">
+                      <div className="d-flex justify-content-between align-items-start mb-3">
+                        <div
+                          className="d-flex align-items-center justify-content-center rounded-circle"
+                          style={{
+                            width: "45px",
+                            height: "45px",
+                            backgroundColor: "rgba(38, 199, 17, 0.12)",
+                          }}
+                        >
+                          <TrendingUp
+                            size={22}
+                            color="#1ab92f"
+                            strokeWidth={2}
+                          />
+                        </div>
                       </div>
-                      <div className="w-100 text-end">
-                        <p className="mb-1 fw-semibold text-dark opacity-90">
-                          Monto Vendido (Día)
+                      <div>
+                        <p className="mb-1 text-muted fw-semibold small">
+                          Total Vendido
                         </p>
-                        <p className="card-text text-end fw-bold h5 mb-0 text-dark">
-                          S/.
-                          {/* Mostramos solo el totalVenta (34.00) */}
-                          {Number(cajaData?.totalVenta || 0).toFixed(2)}
-                        </p>
+                        <h3
+                          className="fw-bold mb-0"
+                          style={{ color: "#2d3436" }}
+                        >
+                          S/. {Number(cajaData?.totalVenta || 0).toFixed(2)}
+                        </h3>
                       </div>
                     </div>
                   </div>
                 </div>
+
+                {/* DESGLOSE POR MÉTODO DE PAGO */}
                 <div className="col-md-12">
-                  <div className="card border  py-2">
-                    <div className="card-header">
-                      <p>Ventas Realizadas</p>
+                  <div className="card border bg-white p-3">
+                    <div className="d-flex align-items-center mb-3">
+                      <PieChart className="text-secondary me-2" size={18} />
+                      <h6 className="fw-bold mb-0 text-secondary">
+                        Desglose de Ingresos
+                      </h6>
                     </div>
-                    <div className="card-body p-0 ">
+                    <div className="d-flex flex-wrap gap-2">
+                      {Object.keys(totalesPorMetodo).length > 0 ? (
+                        Object.entries(totalesPorMetodo).map(
+                          ([metodo, monto]) => (
+                            <div
+                              key={metodo}
+                              className="border rounded px-3 py-2 bg-light d-flex justify-content-between align-items-center flex-grow-1"
+                              style={{ minWidth: "160px" }}
+                            >
+                              <span className="text-capitalize text-muted small fw-semibold me-3">
+                                {metodo}
+                              </span>
+                              <span className="fw-bold text-dark fs-6">
+                                S/. {Number(monto).toFixed(2)}
+                              </span>
+                            </div>
+                          ),
+                        )
+                      ) : (
+                        <p className="text-muted small mb-0 w-100 text-center py-2">
+                          No hay ventas registradas aún.
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* TABLA DE VENTAS */}
+                <div className="col-md-12">
+                  <div className="card border py-2 bg-white">
+                    <div className="card-header bg-white border-bottom-0 pb-3">
+                      <p className="fw-bold text-secondary mb-2">
+                        Historial de Transacciones
+                      </p>
+                      <div className="d-flex  gap-2 align-items-center">
+                        {/* Input de Búsqueda */}
+                        <div>
+                          <input
+                            type="search"
+                            className="form-control form-control-sm"
+                            placeholder="Buscar por pedido, vendedor..."
+                            value={busqueda}
+                            onChange={(e) => setBusqueda(e.target.value)}
+                            style={{ minWidth: "220px" }}
+                          />
+                        </div>
+                        <div className="filtro-metodos">
+                          <button
+                            type="button"
+                            className={metodoFiltro === "TODOS" ? "activo" : ""}
+                            onClick={() => setMetodoFiltro("TODOS")}
+                          >
+                            Todos
+                          </button>
+
+                          {dataMetodos.map((metodo) => (
+                            <button
+                              key={metodo.id || metodo.nombre}
+                              type="button"
+                              className={
+                                metodoFiltro.toLowerCase() ===
+                                metodo.nombre.toLowerCase()
+                                  ? "activo"
+                                  : ""
+                              }
+                              onClick={() => setMetodoFiltro(metodo.nombre)}
+                            >
+                              {metodo.nombre}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="card-body p-0 border-top">
                       <TablasGenerales
-                        datos={cajaData?.detallesVenta || []}
+                        datos={ventasFiltradas}
                         columnas={columns}
                       />
                     </div>
@@ -319,78 +505,77 @@ export function CerrarCaja() {
               </div>
             </div>
 
+            {/* LADO DERECHO: Detalles y Acciones */}
             <div className="col-md-4 h-100">
-              <div className="card border overflow-auto ">
-                <div className="card-header  border-0 rounded  pb-0">
+              <div className="card border  h-100 d-flex flex-column">
+                <div className="card-header border-bottom  p-3">
                   <div className="d-flex align-items-center">
-                    <div className="alert alert-danger rounded p-2 me-3">
-                      <CreditCard className="text-danger" size={24} />
+                    <div className=" alert alert-danger rounded p-2 me-3">
+                      <CreditCard className="text-danger" size={20} />
                     </div>
                     <div>
-                      <h5 className="fw-bold  mb-0">Detalles de Caja</h5>
-                      <p className="text-muted small mb-0">
-                        Resumen de operaciones
-                      </p>
+                      <h6 className="fw-bold text-dark mb-0">
+                        Detalles de Operación
+                      </h6>
+                      <p className="text-muted small mb-0">Auditoría de caja</p>
                     </div>
                   </div>
                 </div>
 
-                <div className="card-body">
+                <div className="card-body d-flex flex-column p-3">
                   {/* Información de Apertura */}
-                  <div className="bg-white rounded-3 p-3 mb-4 border">
-                    <div className="d-flex flex-column align-items-left mb-3">
-                      <div className="d-flex">
-                        <User className="text-muted me-2" size={18} />
-                        <h6 className="fw-semibold small text-dark mb-0">
-                          Usuario de Apertura
-                        </h6>
+                  <div className="bg-light rounded p-3 mb-4 border">
+                    <div className="d-flex flex-column mb-3 border-bottom pb-2">
+                      <div className="d-flex align-items-center mb-1">
+                        <User className="text-secondary me-2" size={16} />
+                        <span className="fw-semibold small text-secondary">
+                          Cajero / Usuario
+                        </span>
                       </div>
-
-                      <p className="text-dark fs-6 mb-3 ps-4">
+                      <span className="text-dark fw-bold ps-4">
                         {cajaData?.datosRegistroCaja?.usuario?.empleado?.persona
                           ?.nombre +
                           " " +
-                          cajaData?.datosRegistroCaja?.usuario?.empleado
-                            ?.persona?.apellidos}
-                      </p>
+                          (cajaData?.datosRegistroCaja?.usuario?.empleado
+                            ?.persona?.apellidos || "")}
+                      </span>
                     </div>
 
-                    <div className="d-flex flex-column align-items-left mb-3">
-                      <div className="d-flex">
-                        <Calendar className="text-muted me-2" size={18} />
-                        <h6 className="fw-semibold small text-dark mb-0">
+                    <div className="d-flex flex-column mb-3 border-bottom pb-2">
+                      <div className="d-flex align-items-center mb-1">
+                        <Calendar className="text-secondary me-2" size={16} />
+                        <span className="fw-semibold small text-secondary">
                           Fecha de Apertura
-                        </h6>
+                        </span>
                       </div>
-
-                      <p className="text-dark fs-6 mb-3 ps-4">
+                      <span className="text-dark fw-bold ps-4">
                         {cajaData?.datosRegistroCaja?.fechaApertura}
-                      </p>
+                      </span>
                     </div>
 
-                    <div className="d-flex flex-column align-items-left mb-2">
-                      <div className="d-flex">
-                        <Clock className="text-muted me-2" size={18} />
-                        <h6 className="fw-semibold small text-dark mb-0">
+                    <div className="d-flex flex-column">
+                      <div className="d-flex align-items-center mb-1">
+                        <Clock className="text-secondary me-2" size={16} />
+                        <span className="fw-semibold small text-secondary">
                           Hora de Apertura
-                        </h6>
+                        </span>
                       </div>
-                      <p className="text-dark fs-6 ps-4">
+                      <span className="text-dark fw-bold ps-4">
                         {cajaData?.datosRegistroCaja?.horaApertura}
-                      </p>
+                      </span>
                     </div>
                   </div>
 
-                  {/* Montos */}
-                  <div className="bg-white rounded-3 p-3 border">
-                    <div className=" mb-3">
-                      <label className="text-muted small">
-                        Monto Vendido S/.
+                  {/* Inputs de Cierre */}
+                  <div className="bg-white rounded p-3 border mb-4 flex-grow-1">
+                    <div className="mb-4">
+                      <label className="text-secondary small fw-semibold mb-1 d-block">
+                        Total Vendido Declarado
                       </label>
                       <input
                         type="text"
-                        className="form-control border bg-light fs-5 fw-bold text-success"
-                        style={{ height: "60px" }}
+                        className="form-control border-2 bg-light fs-5 fw-bold text-success text-end"
+                        style={{ height: "55px" }}
                         readOnly
                         {...register("montoVendido", {
                           required: "Este campo es requerido",
@@ -399,15 +584,15 @@ export function CerrarCaja() {
                       />
                     </div>
 
-                    <div className="">
-                      <label className="text-muted small">
-                        <Wallet className="me-2" size={16} />
-                        Monto a Dejar
+                    <div>
+                      <label className="text-secondary small fw-semibold mb-1 d-flex align-items-center">
+                        <Wallet className="me-2 text-secondary" size={16} />
+                        Monto Físico a Dejar en Cajón
                       </label>
                       <input
                         type="text"
-                        className="form-control border bg-light fs-5 fw-bold text-primary"
-                        style={{ height: "60px" }}
+                        className="form-control border-2 bg-white fs-5 fw-bold text-primary text-end"
+                        style={{ height: "55px" }}
                         defaultValue="0"
                         {...register("montoDejar", {
                           required: "Este campo es requerido",
@@ -415,24 +600,26 @@ export function CerrarCaja() {
                         })}
                         onInput={handlePrecioInput}
                       />
+                      <small className="text-muted mt-1 d-block">
+                        Fondo de inicio para el siguiente turno
+                      </small>
                     </div>
                   </div>
-                </div>
 
-                {/* Footer con Botones */}
-                <div className="card-footer bg-transparent border-0 pt-0">
-                  <div className="d-flex flex-column gap-3">
+                  {/* Botones */}
+                  <div className="d-flex flex-column gap-3 mt-auto">
                     <BotonAnimado
                       onClick={handleImprimirCaja}
                       loading={isLoading}
                       error={error}
-                      className="btn btn-outline-dark px-4 py-3 rounded-3 fw-semibold border-2"
+                      className="btn btn-light px-4 py-3 border-2 border-dark text-dark fw-bold"
                       icon={<Printer className="me-2" size={20} />}
                     >
                       <span className="d-flex align-items-center justify-content-center">
-                        Solo Imprimir
+                        Imprimir Arqueo
                       </span>
                     </BotonAnimado>
+
                     <div style={{ display: "none" }}>
                       <TicketCerrarCaja
                         ref={componentRef}
@@ -443,12 +630,12 @@ export function CerrarCaja() {
                     <BotonAnimado
                       loading={isLoading}
                       error={error}
-                      className="btn btn-danger px-4 py-3 rounded-3 fw-semibold shadow"
+                      className="btn btn-outline-danger border-2 px-4 py-3 fw-bold bg-danger text-white hover-outline"
                       onClick={() => handleQuestionCaja(caja)}
                       icon={<Lock className="me-2" size={20} />}
                     >
                       <span className="d-flex align-items-center justify-content-center">
-                        Cerrar Caja
+                        Cerrar Turno y Caja
                       </span>
                     </BotonAnimado>
                   </div>
@@ -466,6 +653,16 @@ export function CerrarCaja() {
           handleEliminar={handleCerrarCaja}
           handleCloseModal={handleQuestionClose}
         />
+        <ModalRight
+          isOpen={modalDetallesVenta}
+          onClose={() => setModalDetallesVenta(false)}
+          title="Detalles de la Venta"
+          submitText="Imprimir"
+          cancelText="Cerrar"
+          hideFooter={true}
+        >
+          <ModalDetallesVentas dataVentas={dataVentas} />
+        </ModalRight>
       </div>
     </div>
   );

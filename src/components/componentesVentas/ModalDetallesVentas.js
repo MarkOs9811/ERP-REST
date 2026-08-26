@@ -26,7 +26,6 @@ export function ModalDetallesVentas({ dataVentas }) {
     dataVentas?.detalle_pedidos_web ||
     [];
 
-  console.log("Detalle de pedidos ventas:", dataVentas);
   const documento = boleta
     ? `Boleta B001-${boleta.numero}`
     : factura
