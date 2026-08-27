@@ -18,6 +18,8 @@ import {
   UserRound,
   ArrowRightLeft,
   Trash2,
+  ChefHatIcon,
+  CheckCheckIcon,
 } from "lucide-react";
 import ToastAlert from "../componenteToast/ToastAlert";
 import axiosInstance from "../../api/AxiosInstance";
@@ -27,6 +29,8 @@ import { TransferirToMesa } from "./tareasVender/TransferirToMesa";
 import ModalRight from "../componentesReutilizables/ModalRight";
 import ListReservas from "../componentesVentas/reservasMesas/ListReservas";
 import FormAddReservarMesa from "../componentesVentas/reservasMesas/FormAddReservarMesa";
+import { BadgeComponent } from "../componentesReutilizables/BadgeComponent";
+import echoEvents from "../../api/echoEvents";
 
 const TiempoOcupacion = ({ fechaApertura }) => {
   const [minutos, setMinutos] = useState(0);
@@ -78,6 +82,7 @@ export function MesasList() {
     queryKey: ["mesas"],
     queryFn: GetMesasVender,
   });
+
   // PARA ABRIR LAS RESERVAS
   const [modalReservasOpen, setModalReservasOpen] = useState(false);
   const [vistaReserva, setVistaReserva] = useState("lista");
@@ -88,6 +93,23 @@ export function MesasList() {
   const [modalTransferir, setModalTransferir] = useState(false);
   const [modalQuestion, setModalQuestion] = useState(false);
   const [mesaActiva, setMesaActiva] = useState({ id: null, numero: null });
+
+  // =================================================================================
+  // ESCUCHADOR DE WEBSOCKETS (Actualización en Tiempo Real de Estados de Cocina)
+  // =================================================================================
+  useEffect(() => {
+    const canalCocina = echoEvents.channel("pedidosEstado");
+
+    canalCocina.listen(".pedidosEstado.creado", (evento) => {
+      if (evento.tipo_pedido === "mesa") {
+        queryClient.invalidateQueries(["mesas"]);
+      }
+    });
+
+    return () => {
+      echoEvents.leaveChannel("pedidosEstado");
+    };
+  }, [queryClient]);
 
   const handleCloseTransferir = () => setModalTransferir(false);
   const handleCloseModalQuestionEliminar = () => setModalQuestion(false);
@@ -251,16 +273,14 @@ export function MesasList() {
             {mesasFiltradas.map((mesa) => (
               <div key={mesa.id} className="col-6 col-md-4 col-lg-3 col-xl-2">
                 <div
-                  // 🔥 CLASES DINÁMICAS: Agregamos una clase "reservada" (Añádela a tu CSS si quieres cambiar bordes)
-                  className={`mesa-card h-100 ${
+                  className={`mesa-card h-100 position-relative d-flex flex-column ${
                     mesa.estado === 1
                       ? "disponible"
                       : mesa.estado === 0
                         ? "en-atencion"
-                        : "reservada border-warning" // <-- Puedes darle estilos en EstilosMesas.css
+                        : "reservada border-warning"
                   }`}
                   onClick={() => {
-                    // 🔥 PROTECCIÓN DE CLIC
                     if (mesa.estado === 1) {
                       handleMesaAddPlato(mesa);
                     } else if (mesa.estado === 0) {
@@ -274,10 +294,10 @@ export function MesasList() {
                   }}
                   style={{
                     cursor: mesa.estado === 2 ? "not-allowed" : "pointer",
-                    opacity: mesa.estado === 2 ? 0.9 : 1, // Ligeramente difuminada si está reservada
+                    opacity: mesa.estado === 2 ? 0.9 : 1,
                   }}
                 >
-                  {/* AVATAR Y DROPDOWN (Solo para mesas Ocupadas = 0) */}
+                  {/* 1. ZONA SUPERIOR DERECHA (Avatar y Opciones) */}
                   {mesa.estado === 0 && (
                     <div
                       className="position-absolute top-0 end-0 p-2 z-3 d-flex align-items-center gap-1"
@@ -289,20 +309,19 @@ export function MesasList() {
                           style={{
                             fontSize: "0.65rem",
                             fontWeight: "600",
-                            maxWidth: "110px",
+                            maxWidth: "85px",
                             letterSpacing: "0.3px",
                           }}
                         >
                           {mesa.mesero}
                         </span>
                       )}
-                      {/* 1. FOTO DEL MESERO */}
                       {mesa.mesero && (
                         <div
-                          className="mesa-avatar bg-white rounded-circle border border-2 d-flex align-items-center justify-content-center overflow-hidden"
+                          className="mesa-avatar bg-white rounded-circle border border-2 d-flex align-items-center justify-content-center overflow-hidden shadow-sm"
                           style={{
-                            width: "28px",
-                            height: "28px",
+                            width: "26px",
+                            height: "26px",
                             borderColor: "var(--fw-strawberry)",
                           }}
                           title={`Atiende: ${mesa.mesero}`}
@@ -333,27 +352,20 @@ export function MesasList() {
                           </span>
                         </div>
                       )}
-
-                      {/* 2. DROPDOWN (3 Puntitos) */}
                       <div className="dropdown">
                         <div
-                          className="bg-white rounded-circle border d-flex align-items-center justify-content-center "
+                          className="bg-white rounded-circle border d-flex align-items-center justify-content-center shadow-sm hover-bg-light"
                           style={{
-                            width: "28px",
-                            height: "28px",
+                            width: "26px",
+                            height: "26px",
                             cursor: "pointer",
                           }}
                           data-bs-toggle="dropdown"
-                          aria-expanded="false"
                         >
-                          <MoreVertical
-                            size={16}
-                            className="text-muted hover-text-dark"
-                          />
+                          <MoreVertical size={14} className="text-muted" />
                         </div>
-
                         <ul
-                          className="dropdown-menu dropdown-menu-end"
+                          className="dropdown-menu dropdown-menu-end shadow-sm"
                           style={{ fontSize: "0.85rem" }}
                         >
                           <li>
@@ -395,28 +407,77 @@ export function MesasList() {
                     </div>
                   )}
 
-                  {/* CONTENIDO DE LA TARJETA */}
-                  <div className="mesa-content">
-                    <h6 className="mesa-numero">
-                      <UtensilsCrossed size={16} />
-                      Mesa {mesa.numero}
-                    </h6>
+                  {/* 2. CONTENIDO PRINCIPAL */}
+                  <div className="mesa-content flex-grow-1 d-flex flex-column pt-1">
+                    {/* Título y Etiquetas */}
+                    <div className="mb-2">
+                      <h6
+                        className="mesa-numero d-flex align-items-center gap-1 mb-1 fw-bold text-dark"
+                        style={{ fontSize: "1.05rem" }}
+                      >
+                        <UtensilsCrossed size={16} />
+                        Mesa {mesa.numero}
+                      </h6>
 
-                    <div className="mesa-detalles mt-2">
-                      <p>
-                        <Layers size={13} /> Piso {mesa.piso}
-                      </p>
-                      <p>
-                        <Users size={13} /> Cap: {mesa.capacidad}
-                      </p>
+                      {mesa.estado === 0 && mesa?.preventas?.[0]?.idPedido && (
+                        <div className="d-flex align-items-center gap-1 flex-wrap">
+                          <BadgeComponent
+                            label={`PED-${mesa?.preventas?.[0]?.idPedido}`}
+                            className=" small px-2"
+                            variant="secondary"
+                          />
+                          {mesa.estado_cocina !== null &&
+                            mesa.estado_cocina !== undefined && (
+                              <BadgeComponent
+                                className="small px-2 "
+                                label={
+                                  mesa.estado_cocina === 0
+                                    ? "En espera"
+                                    : mesa.estado_cocina === 2
+                                      ? "Preparando"
+                                      : "Listo"
+                                }
+                                variant={
+                                  mesa.estado_cocina === 0
+                                    ? "warning"
+                                    : mesa.estado_cocina === 2
+                                      ? "primary"
+                                      : "success"
+                                }
+                                icon={
+                                  mesa.estado_cocina === 0 ? (
+                                    <Clock />
+                                  ) : mesa.estado_cocina === 2 ? (
+                                    <ChefHatIcon />
+                                  ) : (
+                                    <CheckCheckIcon />
+                                  )
+                                }
+                              />
+                            )}
+                        </div>
+                      )}
                     </div>
 
-                    {/* VISTA PREVIA TOTAL Y TIEMPO (Si está ocupada = 0) */}
+                    {/* Detalles (Alineados horizontalmente para ahorrar espacio) */}
+                    <div
+                      className="d-flex align-items-center gap-3 text-muted mb-2"
+                      style={{ fontSize: "0.75rem", fontWeight: "500" }}
+                    >
+                      <span className="d-flex align-items-center gap-1">
+                        <Layers size={13} /> Piso {mesa.piso}
+                      </span>
+                      <span className="d-flex align-items-center gap-1">
+                        <Users size={13} /> Cap: {mesa.capacidad}
+                      </span>
+                    </div>
+
+                    {/* Resumen Total */}
                     {mesa.estado === 0 && (
-                      <div className="mesa-total-preview mt-2 d-flex flex-column gap-1">
-                        <div className="d-flex justify-content-between align-items-center">
+                      <div className="mesa-total-preview bg-light bg-opacity-50 rounded p-2 mt-auto border">
+                        <div className="d-flex justify-content-between align-items-center mb-1">
                           <span
-                            className="text-muted small"
+                            className="text-muted"
                             style={{
                               fontSize: "0.65rem",
                               fontWeight: "700",
@@ -431,18 +492,21 @@ export function MesasList() {
                             />
                           )}
                         </div>
-                        <span className="fw-bold fs-6">
+                        <span
+                          className="fw-bold text-dark"
+                          style={{ fontSize: "1rem" }}
+                        >
                           S/ {Number(mesa.total || 0).toFixed(2)}
                         </span>
                       </div>
                     )}
 
-                    {/* 🔥 VISTA PREVIA RESERVA (Si está reservada = 2) */}
+                    {/* Vista Reserva */}
                     {mesa.estado === 2 && (
-                      <div className="mesa-total-preview mesa-reserva-preview mt-2 d-flex flex-column gap-1 rounded p-2">
-                        <div className="d-flex justify-content-between align-items-center">
+                      <div className="mesa-total-preview mesa-reserva-preview mt-auto rounded p-2 bg-warning bg-opacity-10 border border-warning border-opacity-25">
+                        <div className="d-flex justify-content-between align-items-center mb-1">
                           <span
-                            className="text-warning small"
+                            className="text-warning"
                             style={{
                               fontSize: "0.65rem",
                               fontWeight: "800",
@@ -451,53 +515,58 @@ export function MesasList() {
                           >
                             RESERVADA PARA
                           </span>
-                          <span className="small fw-bold text-warning d-flex align-items-center gap-1">
-                            <Clock size={13} /> {mesa.reserva_hora}
+                          <span
+                            className="fw-bold text-warning d-flex align-items-center gap-1"
+                            style={{ fontSize: "0.75rem" }}
+                          >
+                            <Clock size={12} /> {mesa.reserva_hora}
                           </span>
                         </div>
                         <span
-                          className="fw-bold fs-6 text-dark text-truncate mt-1"
+                          className="fw-bold text-dark text-truncate d-block"
+                          style={{ fontSize: "0.85rem" }}
                           title={mesa.reserva_cliente}
                         >
-                          <UserRound size={14} className="me-1 text-warning" />
+                          <UserRound size={13} className="me-1 text-warning" />
                           {mesa.reserva_cliente}
                         </span>
                       </div>
                     )}
                   </div>
 
-                  {/* FOOTER ACCIONES */}
-                  <div className="mesa-footer">
-                    {/* ESTADO 1: LIBRE */}
+                  {/* 3. FOOTER BOTONES */}
+                  <div className="mesa-footer mt-2 border-top pt-2">
                     {mesa.estado === 1 && (
-                      <div className="mesa-action-label">
-                        <PlusCircle size={14} /> <span>ABRIR MESA</span>
+                      <div className="mesa-action-label text-success justify-content-center fw-bold w-100 py-1">
+                        <PlusCircle size={15} className="me-1" /> ABRIR MESA
                       </div>
                     )}
 
-                    {/* ESTADO 0: OCUPADA */}
                     {mesa.estado === 0 && (
-                      <div className="d-flex w-100 gap-1">
-                        <div className="mesa-action-label flex-grow-1">
-                          <Eye size={14} /> <span>VER PEDIDO</span>
+                      <div className="d-flex w-100 gap-2">
+                        <div className="mesa-action-label flex-grow-1 text-danger justify-content-center fw-bold py-1">
+                          <Eye size={15} className="me-1" /> VER PEDIDO
                         </div>
                         <button
-                          className="btn-informativo btn-icon text-auto m-0 d-flex align-items-center justify-content-center"
-                          style={{ width: "40px", flexShrink: 0, padding: 0 }}
+                          className="btn btn-outline-secondary d-flex align-items-center justify-content-center"
+                          style={{
+                            width: "35px",
+                            padding: 0,
+                            borderRadius: "6px",
+                          }}
                           onClick={(e) =>
                             handleImprimirPrecuentaRapida(e, mesa)
                           }
                           title="Imprimir Pre-cuenta"
                         >
-                          <PrinterIcon size={16} />
+                          <PrinterIcon size={15} />
                         </button>
                       </div>
                     )}
 
-                    {/* 🔥 ESTADO 2: RESERVADA */}
                     {mesa.estado === 2 && (
-                      <div className="mesa-action-label mesa-reserva-action w-100">
-                        <CalendarDays size={14} /> <span>RESERVADA</span>
+                      <div className="mesa-action-label mesa-reserva-action w-100 justify-content-center py-1">
+                        <CalendarDays size={15} className="me-1" /> RESERVADA
                       </div>
                     )}
                   </div>

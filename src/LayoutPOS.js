@@ -30,7 +30,10 @@ export default function LayoutPOS({ children }) {
   const cajaDatos = JSON.parse(
     localStorage.getItem("caja") || sessionStorage.getItem("caja"),
   );
-
+  const empresaString =
+    localStorage.getItem("empresa") || sessionStorage.getItem("empresa");
+  const miEmpresa = empresaString ? JSON.parse(empresaString) : {};
+  const fotoEmpresa = miEmpresa.logo_url;
   // Consulta de configuración
   const { data: configEmpresa = [] } = useQuery({
     queryKey: ["confiEmpresa"],
@@ -60,6 +63,24 @@ export default function LayoutPOS({ children }) {
         {/* LADO IZQUIERDO: Exactamente con tu diseño original */}
         {/* ========================================================= */}
         <div className="d-flex h-100 overflow-x-auto">
+          <div className="d-flex align-items-center gap-2 ms-2 me-4">
+            {fotoEmpresa && (
+              <img
+                src={fotoEmpresa}
+                alt="logo empresa"
+                className="img-fluid"
+                style={{
+                  width: "35px",
+                  height: "35px",
+                  borderRadius: "50%",
+                  objectFit: "cover",
+                }}
+              />
+            )}
+            <p className="h6 fw-bold opacity-75 p-0 m-0 text-truncate sidebar-text">
+              {miEmpresa.nombre}
+            </p>
+          </div>
           {esComida &&
             ["atencion al cliente", "administrador"].includes(
               cargo?.empleado?.cargo?.nombre,

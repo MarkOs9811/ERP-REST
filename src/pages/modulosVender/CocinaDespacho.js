@@ -1,22 +1,43 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { GetPedidosCocina } from "../../service/accionesVender/GetPedidosCocina";
-
 import { useEffect, useMemo, useState } from "react";
-
 import BotonAnimado from "../../components/componentesReutilizables/BotonAnimado";
-import Pusher from "pusher-js";
-import "../../css/EstilosCocina.css";
-import { CheckCheck, PrinterIcon, RotateCcw, AlertCircle } from "lucide-react"; // Importamos AlertCircle
+import {
+  CheckCheck,
+  PrinterIcon,
+  RotateCcw,
+  AlertCircle,
+  Search,
+  Timer,
+  FlameIcon,
+  CheckCheckIcon,
+} from "lucide-react";
 import { PutData } from "../../service/CRUD/PutData";
 import { CondicionCarga } from "../../components/componentesReutilizables/CondicionCarga";
 import { BadgeComponent } from "../../components/componentesReutilizables/BadgeComponent";
 import ToastAlert from "../../components/componenteToast/ToastAlert";
 import axiosInstance from "../../api/AxiosInstance";
+import echoEvents from "../../api/echoEvents";
+
+import "../../css/EstilosCocina.css";
 
 const estados = {
-  0: { texto: "En espera", variant: "warning", columna: "espera" },
-  2: { texto: "En preparación", variant: "info", columna: "preparacion" },
-  1: { texto: "Listo", variant: "success", columna: "listo" },
+  0: { texto: "En espera", variant: "warning" },
+  2: { texto: "En preparación", variant: "secondary" },
+  1: { texto: "Listo", variant: "success" },
+};
+
+const generarCodigoReal = (pedido) => {
+  if (pedido.tipo_pedido === "mesa" && pedido.idPedidoMesa)
+    return `PED-${pedido.idPedidoMesa}`;
+  if (
+    pedido.tipo_pedido === "llevar" &&
+    (pedido.idPedidoLlevar || pedido.idPedidoLLevar)
+  )
+    return `LL-${pedido.idPedidoLlevar || pedido.idPedidoLLevar}`;
+  if (pedido.tipo_pedido === "web" && pedido.idPedidoWsp)
+    return `WSP-${pedido.idPedidoWsp}`;
+  return `#${pedido.id}`;
 };
 
 function TarjetaPedido({ pedido }) {
@@ -26,26 +47,6 @@ function TarjetaPedido({ pedido }) {
   const esListo = pedido.estado === 1;
   const esEnPreparacion = pedido.estado === 2;
 
-  const playBeep = () => {
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    if (!AudioContext) return;
-
-    const audioCtx = new AudioContext();
-    const oscillator = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-
-    oscillator.type = "sine";
-    oscillator.frequency.value = 1000;
-    gain.gain.value = 0.12;
-
-    oscillator.connect(gain);
-    gain.connect(audioCtx.destination);
-
-    oscillator.start();
-    oscillator.stop(audioCtx.currentTime + 0.12);
-    oscillator.onended = () => audioCtx.close();
-  };
-
   const cambiarEstado = async () => {
     setCargando(true);
     const nuevoEstado = pedido.estado === 0 ? 2 : pedido.estado === 2 ? 1 : 0;
@@ -53,8 +54,8 @@ function TarjetaPedido({ pedido }) {
       estado: nuevoEstado,
     });
     setCargando(false);
+
     if (success) {
-      playBeep();
       queryClient.invalidateQueries(["pedidosEstado"]);
     }
   };
@@ -74,11 +75,9 @@ function TarjetaPedido({ pedido }) {
       return ToastAlert("error", "No hay platos para imprimir en este pedido.");
     }
 
-    // Esto está perfecto, lo mantenemos igual
     const contenidoFormateado = platos.map((item) => {
       const cantidad = Number(item.cantidad ?? 1);
       const precio = Number(item.precio ?? 0);
-
       return {
         nombre: item.nombre || "Plato desconocido",
         cantidad,
@@ -87,13 +86,15 @@ function TarjetaPedido({ pedido }) {
       };
     });
 
-    // 🔥 AQUÍ ESTÁ EL CAMBIO: Adaptamos el payload a lo que espera el servicio
     const payload = {
-      mesa: pedido.numeroMesa || pedido.id || "Barra",
-      fecha: new Date().toLocaleString("es-PE"), // O la fecha exacta de tu pedido
-      usuario: "Cajero", // Aquí deberías pasar el nombre del mozo/usuario logueado si lo tienes en tu estado
-      productos: contenidoFormateado, // Cambiamos 'contenido' por 'productos'
-      nota: pedido.nota || "", // Si manejas alguna nota para la cocina
+      mesa:
+        pedido.tipo_pedido === "mesa"
+          ? `Mesa ${pedido.numeroMesa}`
+          : generarCodigoReal(pedido),
+      fecha: new Date().toLocaleString("es-PE"),
+      usuario: "Cajero",
+      productos: contenidoFormateado,
+      nota: pedido.detalles_extras || "",
     };
 
     try {
@@ -101,7 +102,6 @@ function TarjetaPedido({ pedido }) {
         "/vender/imprimirCocina",
         payload,
       );
-
       if (response.data.success) {
         ToastAlert("success", `Pedido enviado a impresión.`);
       } else {
@@ -121,124 +121,110 @@ function TarjetaPedido({ pedido }) {
   const tipoPedidoInfo = {
     mesa: {
       titulo: `MESA ${pedido?.numeroMesa ?? "?"}`,
-      borderTopColor: "#d8627e",
+      colorPunto: "var(--fw-strawberry, #ef4444)",
     },
-    llevar: { titulo: "LLEVAR", borderTopColor: "#2a9d8f" },
-    web: { titulo: "WSP", borderTopColor: "#0077b6" },
+    llevar: { titulo: "LLEVAR", colorPunto: "var(--fw-teal, #10b981)" },
+    web: { titulo: "DELIVERY", colorPunto: "var(--fw-blue, #3b82f6)" },
   };
 
-  const { titulo, borderTopColor } = tipoPedidoInfo[pedido.tipo_pedido] ?? {
+  const { titulo, colorPunto } = tipoPedidoInfo[pedido.tipo_pedido] ?? {
     titulo: "SIN TIPO",
-    borderTopColor: "#999",
+    colorPunto: "#999",
   };
-
-  const cardStyle = esListo
-    ? {
-        backgroundColor: "#f0fdf4",
-        border: "1px solid rgb(33, 146, 73)",
-        opacity: 0.95,
-      }
-    : esEnPreparacion
-      ? {
-          backgroundColor: "#eff6ff",
-          border: "1px solid #0c4a6e",
-        }
-      : {
-          backgroundColor: "#fff",
-          borderTop: `4px solid ${borderTopColor}`,
-          borderBottom: "1px solid #e5e7eb",
-          borderLeft: "1px solid #e5e7eb",
-          borderRight: "1px solid #e5e7eb",
-        };
 
   return (
     <div
-      className="mb-3 shadow-sm p-0 position-relative"
-      style={{
-        ...cardStyle,
-        borderRadius: "10px",
-        transition: "all 0.3s ease",
-      }}
+      className={`card overflow-hidden  mb-3 ${esListo ? "border-success opacity-75" : ""}`}
     >
-      {/* Header */}
+      {/* HEADER DE LA TARJETA USANDO TU CSS */}
       <div
-        className={`card-header d-flex justify-content-between align-items-center m-0 ${
+        className={`card-header d-flex justify-content-between align-items-center ${
           esListo
-            ? "bg-transparent border-bottom-0"
+            ? "bg-white border-bottom"
             : esEnPreparacion
               ? "cocina-header-preparacion"
               : "cocina-header-espera"
         }`}
-        style={{ borderTopLeftRadius: "10px", borderTopRightRadius: "10px" }}
       >
-        <span className="fw-bold cocina-pedido-id"># {pedido.id}</span>
-        <span
-          className={`cocina-pedido-title ${esListo ? "cocina-title-listo" : ""}`}
-        >
-          {titulo}
-        </span>
+        <div className="d-flex align-items-center gap-2">
+          {/* CÓDIGO REAL DEL PEDIDO */}
+          <span className="badge bg-white text-dark border px-2 py-1">
+            {generarCodigoReal(pedido)}
+          </span>
+          <span
+            className={`cocina-pedido-title text-truncate ${esListo ? "cocina-title-listo" : ""}`}
+          >
+            <span
+              className="rounded-circle d-inline-block me-1"
+              style={{
+                width: "8px",
+                height: "8px",
+                backgroundColor: colorPunto,
+              }}
+            ></span>
+            {titulo}
+          </span>
+        </div>
+
         <BadgeComponent
+          className="px-2"
           variant={estados[pedido.estado]?.variant}
           label={estados[pedido.estado]?.texto}
         />
       </div>
 
-      {/* Body */}
-      <div className="p-0">
-        <ul className="list-group list-group-flush mb-2 bg-transparent">
+      {/* CUERPO DE LA TARJETA */}
+      <div className="card-body p-0 pt-2 pb-2">
+        <ul className="list-group list-group-flush border-0">
           {platos.map((plato, idx) => (
             <li
               key={idx}
-              className="list-group-item d-flex border-0 align-items-center bg-transparent"
-              style={{
-                fontSize: "0.95rem",
-                textDecoration: esListo ? "line-through" : "none",
-                color: esListo ? "#6b7280" : "#000",
-              }}
+              className="list-group-item d-flex border-0 align-items-start py-1 px-3 "
             >
-              <span className={esListo ? "" : "fw-bold"}>{plato.cantidad}</span>
-              <span className="mx-2 cocina-text-muted">x</span>
-              <span style={{ whiteSpace: "normal" }}>{plato.nombre}</span>{" "}
-              {/* Ajuste para nombres largos */}
+              <span
+                className={`border p-1 rounded-pill btn-icon fw-bold me-2 mt-1 ${esListo ? "text-dark" : "text-dark"}`}
+              >
+                {plato.cantidad}
+              </span>
+              <span
+                className={`fw-medium ${esListo ? "text-decoration-line-through cocina-text-muted" : "text-dark"}`}
+              >
+                {plato.nombre}
+              </span>
             </li>
           ))}
         </ul>
 
-        {/* ============ SECCIÓN DE NOTAS DE COCINA (Detalles Extras) ============ */}
+        {/* NOTA DE COCINA USANDO TU CSS */}
         {pedido.detalles_extras && (
-          <div className="px-3 pb-2">
+          <div className="px-3 pt-2">
             <div
-              className={`d-flex align-items-start gap-2 p-2 rounded ${
-                esListo ? "cocina-nota-listo" : "cocina-nota-espera"
-              }`}
-              style={{
-                fontSize: "0.85rem",
-                border: esListo
-                  ? "1px solid var(--fw-border)"
-                  : "1px solid var(--fw-saffron)",
-              }}
+              className={`d-flex align-items-start gap-2 rounded ${esListo ? "cocina-nota-listo" : "cocina-nota-espera"}`}
             >
-              <AlertCircle
-                size={16}
-                className="cocina-icon-note"
-                style={{ minWidth: "16px", marginTop: "2px" }}
-              />
+              <AlertCircle size={16} className="cocina-icon-note mt-1" />
               <div>
-                <span className="fw-bold d-block mb-1">Nota de Cocina:</span>
-                <span className="fst-italic" style={{ lineHeight: "1.2" }}>
+                <span
+                  className="fw-bold d-block mb-1"
+                  style={{ fontSize: "0.75rem" }}
+                >
+                  NOTA:
+                </span>
+                <span
+                  className="fst-italic"
+                  style={{ fontSize: "0.85rem", lineHeight: "1.2" }}
+                >
                   {pedido.detalles_extras}
                 </span>
               </div>
             </div>
           </div>
         )}
-        {/* ==================================================================== */}
       </div>
 
-      {/* Footer */}
-      <div className="card-footer d-flex bg-transparent border-top-0 pb-3 pt-0 align-items-center mt-2">
+      {/* FOOTER DE LA TARJETA USANDO TU CSS */}
+      <div className="card-footer bg-transparent border-0 d-flex align-items-center gap-2 px-3 pb-3">
         <button
-          className={`cocina-btn-imprimir ${
+          className={`cocina-btn-imprimir btn-icon ${
             esListo
               ? "cocina-btn-imprimir-listo"
               : esEnPreparacion
@@ -246,28 +232,28 @@ function TarjetaPedido({ pedido }) {
                 : "cocina-btn-imprimir-espera"
           }`}
           title="Imprimir Ticket"
-          onClick={(e) => handleImprimirPedidoCocina(e)}
+          onClick={handleImprimirPedidoCocina}
         >
-          <PrinterIcon className="text-auto" size={18} />
+          <PrinterIcon size={18} />
         </button>
 
         <BotonAnimado
-          className={` p-1 ms-auto cocina-btn-accion ${
+          className={`ms-auto cocina-btn-accion ${
             esListo
-              ? "btn-guardar"
+              ? "cocina-btn-accion-listo"
               : esEnPreparacion
-                ? "btn-generico"
-                : "btn-eliminar"
+                ? "cocina-btn-accion-preparacion"
+                : "cocina-btn-accion-espera"
           }`}
-          onClick={() => cambiarEstado()}
+          onClick={cambiarEstado}
           loading={cargando}
           icon={
             pedido.estado === 0 ? (
-              <CheckCheck className="text-auto" width="20px" height="20px" />
+              <CheckCheck size={18} />
             ) : pedido.estado === 2 ? (
-              <CheckCheck className="text-auto" width="20px" height="20px" />
+              <CheckCheck size={18} />
             ) : (
-              <RotateCcw className="text-auto" width="18px" height="18px" />
+              <RotateCcw size={16} />
             )
           }
         >
@@ -296,6 +282,8 @@ export function CocinaDespacho() {
   });
 
   const [filtroTipo, setFiltroTipo] = useState("Todos");
+  const [searchTerm, setSearchTerm] = useState("");
+
   const filtroOpciones = [
     { label: "Todos", value: "Todos" },
     { label: "Mesa", value: "mesa" },
@@ -304,118 +292,160 @@ export function CocinaDespacho() {
   ];
 
   const pedidosFiltrados = useMemo(() => {
-    if (filtroTipo === "Todos") return pedidos;
-    return pedidos.filter((pedido) => pedido.tipo_pedido === filtroTipo);
-  }, [pedidos, filtroTipo]);
+    let result = pedidos;
+    if (filtroTipo !== "Todos") {
+      result = result.filter((pedido) => pedido.tipo_pedido === filtroTipo);
+    }
+    if (searchTerm.trim() !== "") {
+      const term = searchTerm.toLowerCase().trim();
+      result = result.filter((pedido) => {
+        const codigo = generarCodigoReal(pedido).toLowerCase();
+        const textoMesa = pedido.numeroMesa
+          ? `mesa ${pedido.numeroMesa}`.toLowerCase()
+          : "";
+        return codigo.includes(term) || textoMesa.includes(term);
+      });
+    }
+    return result;
+  }, [pedidos, filtroTipo, searchTerm]);
 
-  const pedidosEnEspera = pedidosFiltrados.filter(
-    (pedido) => pedido.estado === 0,
-  );
-  const pedidosEnPreparacion = pedidosFiltrados.filter(
-    (pedido) => pedido.estado === 2,
-  );
-  const pedidosListos = pedidosFiltrados.filter(
-    (pedido) => pedido.estado === 1,
-  );
-
-  const filtroLabel =
-    filtroTipo === "Todos"
-      ? "Todos"
-      : filtroTipo === "web"
-        ? "Delivery"
-        : filtroTipo.charAt(0).toUpperCase() + filtroTipo.slice(1);
+  const pedidosEnEspera = pedidosFiltrados.filter((p) => p.estado === 0);
+  const pedidosEnPreparacion = pedidosFiltrados.filter((p) => p.estado === 2);
+  const pedidosListos = pedidosFiltrados.filter((p) => p.estado === 1);
 
   useEffect(() => {
-    const pusher = new Pusher("3a474e6680223eaa4e3f", {
-      cluster: "eu",
-      forceTLS: true,
-    });
-
-    const channel = pusher.subscribe("pedidosEstado");
-    channel.bind("pedidosEstado.creado", () => {
+    const canalCocina = echoEvents.channel("pedidosEstado");
+    canalCocina.listen(".pedidosEstado.creado", () => {
       queryClient.invalidateQueries(["pedidosEstado"]);
     });
-
-    return () => {
-      channel.unbind_all();
-      pusher.disconnect();
-    };
+    return () => echoEvents.leaveChannel("pedidosEstado");
   }, [queryClient]);
 
   return (
-    <div className="row g-3 h-100">
+    <div className="h-100">
       <CondicionCarga isLoading={isLoading} isError={isError}>
-        <div className="overflow-hidden  justify-content-start cocina-card-body">
-          <div className="cocina-filter-bar mb-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
-            <div className="d-flex flex-wrap gap-2">
+        <div className="cocina-card-body h-100 p-2">
+          {/* BARRA SUPERIOR (Buscador y Filtros con tu CSS) */}
+          <div className="cocina-filter-bar mb-3 d-flex align-items-center justify-content-between gap-3">
+            <div className="d-flex gap-2">
               {filtroOpciones.map((option) => (
                 <button
                   key={option.value}
                   type="button"
-                  className={`cocina-filter-btn ${filtroTipo === option.value ? "cocina-filter-btn-active" : ""}`}
+                  className={`cocina-filter-btn fw-bold ${filtroTipo === option.value ? "cocina-filter-btn-active" : ""}`}
                   onClick={() => setFiltroTipo(option.value)}
                 >
                   {option.label}
                 </button>
               ))}
             </div>
-            <span className="text-muted small">Filtro: {filtroLabel}</span>
+
+            <div
+              className="d-flex align-items-center gap-3 flex-grow-1"
+              style={{ maxWidth: "450px" }}
+            >
+              {" "}
+              <span
+                className="text-center fw-bold h5"
+                style={{ width: "200px" }}
+              >
+                Total: {`${pedidosFiltrados.length}`}
+              </span>
+              <input
+                type="text"
+                className="form-control bg-transparent border-0 ps-0"
+                placeholder="Buscar PED-123 o Mesa 5..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
           </div>
+
           {pedidosFiltrados.length === 0 ? (
-            <div className="d-flex flex-column align-items-center justify-content-center h-100 text-muted opacity-50">
-              <CheckCheck size={50} className="mb-3" />
-              <h5>No hay pedidos</h5>
-              <p>Intenta otro filtro o espera nuevos pedidos.</p>
+            <div className="d-flex flex-column align-items-center justify-content-center h-100 text-muted opacity-50 bg-white rounded-4 border border-dashed">
+              <CheckCheck size={50} className="mb-3 text-success" />
+              <h4 className="fw-bold m-0">Cocina al día</h4>
+              <p>No hay pedidos pendientes.</p>
             </div>
           ) : (
+            /* ESTRUCTURA KANBAN USANDO TU CSS GRID (.cocina-columnas) */
             <div className="cocina-columnas">
-              <div className="cocina-columna bg-white rounded-4 border h-100">
-                <div className="d-flex  border-bottom   p-3 justify-content-between align-items-center mb-3">
-                  <div>
-                    <h6 className="mb-0">En espera</h6>
-                    <small className="text-muted">Pedidos nuevos</small>
+              {/* Columna: En Espera */}
+              <div className=" card overflow-hidden">
+                <div className="card-header d-flex justify-content-between align-items-center mb-3 px-4">
+                  <div className="d-flex">
+                    {" "}
+                    <span className="me-3">
+                      <Timer />
+                    </span>
+                    <div className="d-flex flex-column">
+                      <h6 className="m-0 fw-bold">En Espera</h6>
+                      <small className="text-muted">Pedidos nuevos</small>
+                    </div>
                   </div>
-                  <span className="cocina-badge-warning">
+                  <span className="cocina-badge-warning  btn-icon">
                     {pedidosEnEspera.length}
                   </span>
                 </div>
-                <div className="cocina-col-body d-flex flex-column px-3">
+                <div className="card-body cocina-col-body px-3">
                   {pedidosEnEspera.map((pedido, i) => (
-                    <TarjetaPedido key={`espera-${i}`} pedido={pedido} />
+                    <TarjetaPedido
+                      key={`espera-${pedido.id}-${i}`}
+                      pedido={pedido}
+                    />
                   ))}
                 </div>
               </div>
 
-              <div className="cocina-columna bg-white rounded-4 border h-100">
-                <div className="d-flex border-bottom   p-3 justify-content-between align-items-center mb-3">
-                  <div>
-                    <h6 className="mb-0">En preparación</h6>
-                    <small className="text-muted">Cocinando ahora</small>
+              {/* Columna: En Preparación */}
+              <div className="card overflow-hidden">
+                <div className="card-header d-flex justify-content-between align-items-center mb-3 px-4">
+                  <div className="d-flex">
+                    <span className="me-3">
+                      <FlameIcon />
+                    </span>
+                    <div className="d-flex flex-column">
+                      <h6 className="m-0 fw-bold">En Preparación</h6>
+                      <small className="text-muted">Cocinando ahora</small>
+                    </div>
                   </div>
-                  <span className="cocina-badge-preparacion">
+                  <span className="cocina-badge-preparacion  btn-icon">
                     {pedidosEnPreparacion.length}
                   </span>
                 </div>
-                <div className="cocina-col-body d-flex flex-column px-3">
+                <div className="card-body cocina-col-body px-3">
                   {pedidosEnPreparacion.map((pedido, i) => (
-                    <TarjetaPedido key={`preparacion-${i}`} pedido={pedido} />
+                    <TarjetaPedido
+                      key={`prep-${pedido.id}-${i}`}
+                      pedido={pedido}
+                    />
                   ))}
                 </div>
               </div>
 
-              <div className="cocina-columna bg-white rounded-4 border h-100">
-                <div className="d-flex border-bottom   p-3 justify-content-between align-items-center mb-3">
-                  <div>
-                    <h6 className="mb-0">Listo</h6>
-                    <small className="text-muted">Para despacho</small>
+              {/* Columna: Listo */}
+              <div className="card overflow-hidden">
+                <div className="card-header d-flex justify-content-between align-items-center mb-3 px-4">
+                  <div className="d-flex">
+                    {" "}
+                    <span className="me-3">
+                      <CheckCheckIcon />
+                    </span>
+                    <div className="d-flex flex-column">
+                      <h6 className="m-0 fw-bold">Listo</h6>
+                      <small className="text-muted">Para despacho</small>
+                    </div>
                   </div>
-                  <span className="cocina-badge-listo">
+                  <span className="cocina-badge-listo btn-icon ">
                     {pedidosListos.length}
                   </span>
                 </div>
-                <div className="cocina-col-body d-flex flex-column px-3">
+                <div className="card-body cocina-col-body px-3 ">
                   {pedidosListos.map((pedido, i) => (
-                    <TarjetaPedido key={`listo-${i}`} pedido={pedido} />
+                    <TarjetaPedido
+                      key={`listo-${pedido.id}-${i}`}
+                      pedido={pedido}
+                    />
                   ))}
                 </div>
               </div>

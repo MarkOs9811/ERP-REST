@@ -37,6 +37,7 @@ import {
   Scissors,
   XCircle,
   Hamburger,
+  Clock,
 } from "lucide-react";
 import { getPreventaMesa } from "../../service/preventaService";
 import { BuscadorPlatos } from "./tareasVender/BuscadorPlatos";
@@ -47,6 +48,7 @@ import { TicketPreVenta } from "./TiketsType/TicketPreVenta";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClipboardList } from "@fortawesome/free-solid-svg-icons";
 import { FilaPlatoUnificado } from "./tareasVender/FilaPlatoUnificado";
+import { BadgeComponent } from "../componentesReutilizables/BadgeComponent";
 
 export function PreventaMesa() {
   const idMesa = useSelector((state) => state.mesa.idPreventaMesa);
@@ -58,7 +60,7 @@ export function PreventaMesa() {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [deletingProductId, setDeletingProductId] = useState(null);
-  const [isSendingToKitchen, setIsSendingToKitchen] = useState(false); // Reemplazo de setLoadingPedido
+  const [isSendingToKitchen, setIsSendingToKitchen] = useState(false);
 
   const { idMesa: idMesaSeparada, itemsSeleccionados } = useSelector(
     (state) => state.cuentaSeparada,
@@ -91,7 +93,6 @@ export function PreventaMesa() {
     const dataActual = preventas?.data || preventas;
 
     if (dataActual && dataActual.length > 0) {
-      // 1. Mapeamos la data para enviarla limpia al backend
       const contenidoFormateado = dataActual.map((item) => {
         const nombrePlato =
           item.plato?.nombre || item.descripcion || "Item desconocido";
@@ -107,22 +108,18 @@ export function PreventaMesa() {
         };
       });
 
-      // 2. Calculamos el total de la mesa
       const totalMesa = contenidoFormateado.reduce(
         (acc, curr) => acc + curr.subtotal,
         0,
       );
 
-      // 3. Armamos el payload
       const payload = {
-        titulo: "PRE-CUENTA MESA " + mesaNumero, // Aquí podrías concatenar el número de mesa si lo tienes
+        titulo: "PRE-CUENTA MESA " + mesaNumero,
         contenido: contenidoFormateado,
         total: totalMesa,
       };
 
       try {
-        // 4. Petición super limpia con axiosInstance
-        // (Asegúrate de que la ruta coincida con la que tienes en api.php, a veces es solo 'imprimir-generico')
         const response = await axiosInstance.post(
           "/vender/imprimirGenerico",
           payload,
@@ -135,7 +132,6 @@ export function PreventaMesa() {
         }
       } catch (error) {
         console.error("Error enviando impresión:", error);
-        // Axios captura los errores del servidor aquí
         const mensajeError =
           error.response?.data?.message || "Error de conexión con el servidor";
         ToastAlert("error", mensajeError);
@@ -156,9 +152,9 @@ export function PreventaMesa() {
     refetchOnWindowFocus: false,
   });
 
-  const platosSolicitados = preventas.filter(
-    (p) => p.estadoPedido?.estado === 0,
-  );
+  // Filtros de estados actualizados
+  const platosEnEspera = preventas.filter((p) => p.estadoPedido?.estado === 0);
+  const platosCocinando = preventas.filter((p) => p.estadoPedido?.estado === 2);
   const platosEntregados = preventas.filter(
     (p) => p.estadoPedido?.estado === 1,
   );
@@ -196,7 +192,6 @@ export function PreventaMesa() {
     }
   };
 
-  // FUNCIÓN CORREGIDA PARA ACTUALIZAR PREVENTA (ENVIAR A COCINA)
   const handleAddPlatoPreventaMesas = async () => {
     const platosParaEnviar = mesas[idMesa]?.items || [];
 
@@ -207,11 +202,10 @@ export function PreventaMesa() {
     setIsSendingToKitchen(true);
 
     try {
-      // Mapeamos solo los platos de la mesa actual asegurando el idMesa correcto
       const datosEnvio = platosParaEnviar.map((item) => ({
         idCaja: caja.id,
         idPlato: item.id,
-        idMesa: idMesa, // Usamos la variable idMesa del selector
+        idMesa: idMesa,
         cantidad: item.cantidad,
         precio: item.precio,
       }));
@@ -220,13 +214,13 @@ export function PreventaMesa() {
         "/vender/addPlatosPreVentaMesa",
         {
           pedidos: datosEnvio,
-          nota: notaPedido, // Mantener la nota existente si la hubiera
+          nota: notaPedido,
         },
       );
 
       if (response.data.success) {
         ToastAlert("success", response.data.message);
-        dispatch(clearPedido(idMesa)); // Limpiar solo esta mesa
+        dispatch(clearPedido(idMesa));
         queryClient.invalidateQueries(["preventaMesa", idMesa, caja?.id]);
         queryClient.invalidateQueries(["mesas"]);
       } else {
@@ -329,7 +323,11 @@ export function PreventaMesa() {
     (acc, i) => acc + i.cantidad * i.precio,
     0,
   );
-  const totalSolicitados = platosSolicitados.reduce(
+  const totalEnEspera = platosEnEspera.reduce(
+    (acc, i) => acc + i.cantidad * i.plato.precio,
+    0,
+  );
+  const totalCocinando = platosCocinando.reduce(
     (acc, i) => acc + i.cantidad * i.plato.precio,
     0,
   );
@@ -337,13 +335,14 @@ export function PreventaMesa() {
     (acc, i) => acc + i.cantidad * i.plato.precio,
     0,
   );
-  const granTotal = totalCarrito + totalSolicitados + totalEntregados;
+  const granTotal =
+    totalCarrito + totalEnEspera + totalCocinando + totalEntregados;
+
   const totalSeleccionado = itemsSeleccionados.reduce(
     (acc, i) => acc + i.subtotal,
     0,
   );
 
-  // 1. LA MUTACIÓN CON ACTUALIZACIÓN OPTIMISTA (Elimina el parpadeo)
   const actualizarCantidadMutation = useMutation({
     mutationFn: async ({ idPlato, nuevaCantidad }) => {
       return (
@@ -353,47 +352,33 @@ export function PreventaMesa() {
         )
       ).data;
     },
-    // Se ejecuta ANTES de que termine la petición HTTP
     onMutate: async ({ idPlato, nuevaCantidad }) => {
       const queryKey = ["preventaMesa", idMesa, caja?.id];
-
-      // 1. Cancelar cualquier refetch en curso para que no sobreescriba nuestra actualización manual
       await queryClient.cancelQueries({ queryKey });
-
-      // 2. Guardar el estado anterior por si hay error (Rollback)
       const previousPreventas = queryClient.getQueryData(queryKey);
 
-      // 3. Modificar la caché de React Query instantáneamente
       queryClient.setQueryData(queryKey, (oldData) => {
         if (!oldData) return oldData;
-
-        // Aseguramos si tu backend devuelve un array directo o un objeto { data: [...] }
         const isArray = Array.isArray(oldData);
         const dataList = isArray ? oldData : oldData.data;
-
         if (!dataList) return oldData;
 
         const newDataList = dataList.map((item) => {
-          // Buscamos el plato exacto y le actualizamos la cantidad en memoria
           if (item.idPlato === idPlato || item.id === idPlato) {
             return { ...item, cantidad: nuevaCantidad };
           }
           return item;
         });
-
         return isArray ? newDataList : { ...oldData, data: newDataList };
       });
-
       return { previousPreventas, queryKey };
     },
-    // Si la petición HTTP falla, restauramos la data original
     onError: (err, variables, context) => {
       if (context?.previousPreventas) {
         queryClient.setQueryData(context.queryKey, context.previousPreventas);
       }
       ToastAlert("error", "Error al actualizar cantidad: " + err.message);
     },
-    // Cuando termine (éxito o error), sincronizamos silenciosamente con la BD
     onSettled: (data, error, variables, context) => {
       if (context?.queryKey) {
         queryClient.invalidateQueries({ queryKey: context.queryKey });
@@ -401,19 +386,13 @@ export function PreventaMesa() {
     },
   });
 
-  // 2. LA FUNCIÓN QUE ESCUCHA AL HIJO
   const handleUpdateQuantity = (idReferencia, nuevaCantidad, tipo) => {
     if (tipo === "nuevo") {
-      // ⚠️ IMPORTANTE: Aquí vi que solo tenías un console.log
-      // Si el item no ha sido enviado a cocina, debes disparar una acción de Redux para cambiar su cantidad.
-      // Ejemplo: dispatch(updateItemQuantity({ id: idReferencia, cantidad: nuevaCantidad, mesaId: idMesa }));
-
       console.log(
         "Debes despachar la acción de Redux para actualizar cantidad de:",
         idReferencia,
       );
     } else {
-      // Para platos ya enviados (BD)
       actualizarCantidadMutation.mutate({
         idPlato: idReferencia,
         nuevaCantidad: nuevaCantidad,
@@ -435,6 +414,11 @@ export function PreventaMesa() {
                 <h5 className="mb-0 fw-bold d-flex align-items-center gap-2">
                   {isSplitMode && <Scissors size={20} />}{" "}
                   {isSplitMode ? "Separar Cuenta" : `Mesa ${mesaNumero}`}
+                  <BadgeComponent
+                    label={`PED-${preventas?.[0]?.idPedido}`}
+                    className=" small px-2"
+                    variant="secondary"
+                  />
                 </h5>
                 <small>
                   {isSplitMode
@@ -472,7 +456,6 @@ export function PreventaMesa() {
                       key={`cart-${i.id}`}
                       item={i}
                       tipo="nuevo"
-                      // 👇 AQUÍ LE PASAMOS LA NUEVA FUNCIÓN AL HIJO
                       onUpdateQuantity={handleUpdateQuantity}
                       loadingUpdate={null}
                       onDelete={handleDecrementNewItem}
@@ -483,18 +466,17 @@ export function PreventaMesa() {
                 </div>
               )}
 
-              {/* EN PREPARACIÓN */}
-              {platosSolicitados.length > 0 && (
+              {/* EN ESPERA (Estado 0 - Modificable) */}
+              {platosEnEspera.length > 0 && (
                 <div className="mb-2">
-                  <h6 className="text-secondary fw-bold small ms-1 mb-2 d-flex align-items-center gap-1">
-                    <ChefHat size={14} /> En preparación
+                  <h6 className="text-warning fw-bold small ms-1 mb-2 d-flex align-items-center gap-1">
+                    <Clock size={14} /> En espera
                   </h6>
-                  {platosSolicitados.map((i) => (
+                  {platosEnEspera.map((i) => (
                     <FilaPlatoUnificado
-                      key={`sol-${i.id}`}
+                      key={`esp-${i.id}`}
                       item={i}
                       tipo="enviado"
-                      // 👇 AQUÍ LE PASAMOS LA NUEVA FUNCIÓN AL HIJO
                       onUpdateQuantity={handleUpdateQuantity}
                       loadingUpdate={
                         actualizarCantidadMutation.isLoading ? i.idPlato : null
@@ -510,7 +492,27 @@ export function PreventaMesa() {
                 </div>
               )}
 
-              {/* ENTREGADOS (No cambian, no tienen botones de cantidad) */}
+              {/* EN PREPARACIÓN (Estado 2 - Bloqueado) */}
+              {platosCocinando.length > 0 && (
+                <div className="mb-2">
+                  <h6 className="text-secondary fw-bold small ms-1 mb-2 d-flex align-items-center gap-1">
+                    <ChefHat size={14} /> En preparación
+                  </h6>
+                  {platosCocinando.map((i) => (
+                    <FilaPlatoUnificado
+                      key={`coc-${i.id}`}
+                      item={i}
+                      tipo="cocinando"
+                      isSplitMode={isSplitMode}
+                      reduxItem={itemsSeleccionados.find((s) => s.id === i.id)}
+                      onToggleSelect={handleCheckItem}
+                      onChangeSplitQty={handleChangeSplitQuantity}
+                    />
+                  ))}
+                </div>
+              )}
+
+              {/* ENTREGADOS (Estado 1 - Bloqueado) */}
               {platosEntregados.length > 0 && (
                 <div className="mb-2">
                   <h6 className="text-success fw-bold small ms-1 mb-2 d-flex align-items-center gap-1">
@@ -542,7 +544,8 @@ export function PreventaMesa() {
                     <div>
                       Items:{" "}
                       {itemsCarrito.length +
-                        platosSolicitados.length +
+                        platosEnEspera.length +
+                        platosCocinando.length +
                         platosEntregados.length}
                     </div>
                   )}
@@ -636,8 +639,8 @@ export function PreventaMesa() {
                     <div
                       className="d-flex align-items-start bg-warning bg-opacity-10 p-3"
                       style={{
-                        border: "2px dashed #ffc107", // Borde discontinuo color advertencia
-                        borderRadius: "8px", // Esquinas ligeramente redondeadas para parecer papel
+                        border: "2px dashed #ffc107",
+                        borderRadius: "8px",
                         minHeight: "60px",
                       }}
                     >
@@ -700,7 +703,6 @@ export function PreventaMesa() {
                   setSearchTerm={setSearchTerm}
                 />
               </div>
-              {/* Categorías */}
               <div className="overflow-auto d-flex justify-content-lg-en">
                 <CategoriaPlatos
                   claveVenta={"restaurante"}
@@ -743,14 +745,17 @@ export function PreventaMesa() {
       <div style={{ display: "none" }}>
         <TicketPreVenta ref={componentRef} dataActual={datosPreventa} />
       </div>
+
+      {/* CORRECCIÓN APLICADA AQUÍ: Mostrar el número de la mesa o un fallback vacío en lugar del ID */}
       <ModalAlertQuestion
         show={modalQuestion}
         idEliminar={idMesaEliminar}
-        nombre={`Mesa ${idMesa}`}
+        nombre={`Mesa ${mesaNumero || ""}`}
         tipo="Pedidos"
         handleEliminar={handleEliminarPreventeMesa}
         handleCloseModal={handleCloseModalQuestionEliminar}
       />
+
       <TransferirToMesa
         show={modalTransferir}
         idMesa={idMesa}

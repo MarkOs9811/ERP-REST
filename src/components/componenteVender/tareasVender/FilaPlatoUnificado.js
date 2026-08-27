@@ -5,8 +5,8 @@ export const FilaPlatoUnificado = ({
   item,
   tipo,
   onDelete,
-  onUpdateQuantity, // NUEVA PROP
-  loadingUpdate, // NUEVA PROP
+  onUpdateQuantity,
+  loadingUpdate,
   loadingDelete,
   isSplitMode,
   reduxItem,
@@ -58,10 +58,21 @@ export const FilaPlatoUnificado = ({
   const cantidadSeleccionada = reduxItem ? reduxItem.cantidad : 0;
   const precioSeleccionado = reduxItem ? reduxItem.subtotal : 0;
 
+  // 💡 NUEVO: Control centralizado para bloquear edición
+  const isReadOnly = tipo === "entregado" || tipo === "cocinando";
+
   const opacityClass =
     isSplitMode && !isSelected ? "opacity-50" : "opacity-100";
   const bgClass = tipo === "nuevo" ? "bg-warning bg-opacity-10" : "bg-white";
-  const borderClass = tipo === "entregado" ? "border-success" : "border-light";
+
+  // 💡 NUEVO: Color de borde según estado
+  const borderClass =
+    tipo === "entregado"
+      ? "border-success"
+      : tipo === "cocinando"
+        ? "border-secondary"
+        : "border-light";
+
   const canSelect = tipo !== "nuevo";
 
   return (
@@ -100,7 +111,8 @@ export const FilaPlatoUnificado = ({
       >
         {!isSplitMode && (
           <>
-            {tipo !== "entregado" ? (
+            {/* 💡 NUEVO: Usamos isReadOnly para ocultar los controles */}
+            {!isReadOnly ? (
               <div className="d-flex align-items-center bg-white  rounded-pill px-1 ">
                 <button
                   className="btn-informativo btn-icon p-0"
@@ -125,7 +137,9 @@ export const FilaPlatoUnificado = ({
                 </button>
               </div>
             ) : (
-              <span className="fw-bold fs-6 text-success">
+              <span
+                className={`fw-bold fs-6 ${tipo === "entregado" ? "text-success" : "text-secondary"}`}
+              >
                 x{cantidadLocal}
               </span>
             )}
@@ -169,7 +183,8 @@ export const FilaPlatoUnificado = ({
             isSplitMode && isSelected ? precioSeleccionado : precioTotal,
           ).toFixed(2)}
         </span>
-        {!isSplitMode && tipo !== "entregado" && (
+        {/* 💡 NUEVO: Ocultamos el tacho de basura si está cocinando o entregado */}
+        {!isSplitMode && !isReadOnly && (
           <button
             className="btn-eliminar btn-icon  p-0 mx-3"
             onClick={() => onDelete(item.id)}

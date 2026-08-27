@@ -4,8 +4,6 @@
 
 .badge-custom {
     font-weight: 600;
-    font-size: 0.75rem;
-    padding: 0.4em 0.8em;
     border-radius: var(--radius-pill);
     transition: all var(--transition-smooth);
     border: 1px solid transparent;
