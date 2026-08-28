@@ -91,7 +91,11 @@ export function Cajas() {
   return (
     <div className="row g-3">
       <div className="col-lg-12 col-sm-12">
-        <CondicionCarga isLoading={isLoading} isError={isError}>
+        <CondicionCarga
+          isLoading={isLoading}
+          isError={isError}
+          mode="single-card"
+        >
           <div className="card  ">
             <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
               <div className="d-flex align-items-center">
@@ -117,7 +121,11 @@ export function Cajas() {
         </CondicionCarga>
       </div>
       <div className="col-lg-12 col-sm-12">
-        <CondicionCarga isLoading={isLoading} isError={isError}>
+        <CondicionCarga
+          isLoading={isLoading}
+          isError={isError}
+          mode="single-card"
+        >
           <div className="card  overflow-hidden">
             <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
               <div className="d-flex align-items-center">

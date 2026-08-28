@@ -230,7 +230,7 @@ export function RealizarSolicitud() {
           </div>
 
           {/* Detalles del Producto/Activo Solicitado */}
-          <div className="card mb-3 border shadow-sm">
+          <div className="card mb-3 border ">
             <div className="card-header border-0">
               <p className="h5">Detalles del Producto/Activo Solicitado</p>
             </div>
@@ -415,7 +415,7 @@ export function RealizarSolicitud() {
 
           {/* {USO PREVISTO}            */}
 
-          <div className="card mb-3 border shadow-sm">
+          <div className="card mb-3 border ">
             <div className="card-header border-0">
               <p className="h5">Justificacion</p>
             </div>
@@ -487,8 +487,8 @@ export function RealizarSolicitud() {
             </div>
           </div>
           {/* Botón de Envío */}
-          <div className=" border-0 rounded d-flex justify-content-center">
-            <button type="submit" className="btn-guardar">
+          <div className="card p-4  d-flex justify-content-center">
+            <button type="submit" className="btn-guardar me-auto">
               Guardar Solicitud
             </button>
           </div>

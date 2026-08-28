@@ -377,7 +377,11 @@ export function PreventaMesa() {
       if (context?.previousPreventas) {
         queryClient.setQueryData(context.queryKey, context.previousPreventas);
       }
-      ToastAlert("error", "Error al actualizar cantidad: " + err.message);
+
+      // 🔥 CORRECCIÓN AQUÍ: Extraemos el mensaje del backend de 'err.response.data.message'
+      const mensajeError =
+        err.response?.data?.message || "Error al actualizar la cantidad";
+      ToastAlert("error", mensajeError);
     },
     onSettled: (data, error, variables, context) => {
       if (context?.queryKey) {
@@ -388,10 +392,6 @@ export function PreventaMesa() {
 
   const handleUpdateQuantity = (idReferencia, nuevaCantidad, tipo) => {
     if (tipo === "nuevo") {
-      console.log(
-        "Debes despachar la acción de Redux para actualizar cantidad de:",
-        idReferencia,
-      );
     } else {
       actualizarCantidadMutation.mutate({
         idPlato: idReferencia,
