@@ -1,35 +1,21 @@
 import axios from "axios";
-import axiosRetry from "axios-retry";
 import ToastAlert from "../components/componenteToast/ToastAlert";
 
 const axiosInstance = axios.create({
-  // baseURL: "https://vv1g8thv-8000.brs.devtunnels.ms/api",
-  // baseURL: "http://erp-api.test/api",
-  baseURL: "http://127.0.0.1:8000/api",
-
-  // baseURL: "https://erp-api-production-c7d4.up.railway.app/api",
-  // baseURL: "http://192.168.100.5:8000/api",
-  // baseURL:
-  //   "https://9ef6-2800-200-e3b0-3c4-edbb-e7fe-2580-6daa.ngrok-free.app/api",
+  baseURL: "http://erp-api.test/api",
   withCredentials: true,
 });
 
-// Configuración de axios-retry para manejar reintentos automáticos
-axiosRetry(axiosInstance, {
-  retries: 3, // Número de intentos
-  retryDelay: axiosRetry.exponentialDelay, // Retraso exponencial entre intentos
-  shouldResetTimeout: true, // Resetear el timeout entre reintentos
-});
-
-// Interceptor de solicitudes para agregar el token de autorización
+// =====================================================
+// INTERCEPTOR DE REQUEST
+// =====================================================
 axiosInstance.interceptors.request.use(
   (config) => {
-    // CORRECCIÓN 1: Buscar el token en ambas bóvedas
     const token =
       localStorage.getItem("token") || sessionStorage.getItem("token");
 
     if (token) {
-      config.headers["Authorization"] = `Bearer ${token}`;
+      config.headers.Authorization = `Bearer ${token}`;
     }
 
     if (!(config.data instanceof FormData)) {
@@ -38,37 +24,55 @@ axiosInstance.interceptors.request.use(
 
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  },
+  (error) => Promise.reject(error),
 );
 
-// Interceptor de respuestas para manejar errores globalmente
+// =====================================================
+// INTERCEPTOR DE RESPONSE
+// =====================================================
+let toast429Visible = false;
+
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Manejo de error 429: demasiadas solicitudes
-    if (error.response && error.response.status === 429) {
-      ToastAlert(
-        "error",
-        "Demasiadas solicitudes. Por favor, inténtalo de nuevo más tarde.",
-      );
+    const status = error.response?.status;
+
+    // 429 - demasiadas solicitudes
+    if (status === 429) {
+      if (!toast429Visible) {
+        toast429Visible = true;
+        ToastAlert(
+          "error",
+          "Demasiadas solicitudes. Por favor, espera un momento.",
+        );
+        setTimeout(() => {
+          toast429Visible = false;
+        }, 3000);
+      }
       return Promise.reject(error);
     }
 
-    // Manejo de error 401: sesión expirada
-    if (error.response && error.response.status === 401) {
-      // 🔥 CORRECCIÓN 2: Limpiar rastro para evitar bucles
-      localStorage.clear();
-      sessionStorage.clear();
+    // 401 - sesión expirada
+    if (status === 401) {
+      // 🔥 EXCEPCIÓN VITAL: Ignoramos el 401 si viene de intentar logearse
+      if (error.config.url && error.config.url.includes("/login")) {
+        return Promise.reject(error);
+      }
 
-      ToastAlert(
-        "error",
-        "Sesión expirada o inválida. Por favor, inicia sesión nuevamente.",
-      );
+      if (
+        window.location.pathname !== "/login" &&
+        window.location.pathname !== "/"
+      ) {
+        // 🔥 BORRADO SEGURO: No uses .clear()
+        localStorage.removeItem("token");
+        sessionStorage.removeItem("token");
 
-      // 🔥 CORRECCIÓN 3: Mandar a "/login", no a "/"
-      window.location.href = "/login";
+        ToastAlert(
+          "error",
+          "Sesión expirada o inválida. Por favor, inicia sesión nuevamente.",
+        );
+        window.location.href = "/login";
+      }
     }
 
     return Promise.reject(error);

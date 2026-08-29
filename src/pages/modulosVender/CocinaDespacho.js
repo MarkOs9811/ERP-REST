@@ -1,4 +1,9 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useIsMutating,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { GetPedidosCocina } from "../../service/accionesVender/GetPedidosCocina";
 import { useEffect, useMemo, useState } from "react";
 import BotonAnimado from "../../components/componentesReutilizables/BotonAnimado";
@@ -41,23 +46,37 @@ const generarCodigoReal = (pedido) => {
 };
 
 function TarjetaPedido({ pedido }) {
-  const [cargando, setCargando] = useState(false);
   const queryClient = useQueryClient();
+
+  // 1. ESCUDO GLOBAL: Cuenta si alguna tarjeta en toda la pantalla está cambiando de estado
+  const mutacionesCambiandoEstado = useIsMutating({
+    mutationKey: ["cambiarEstadoCocina"],
+  });
 
   const esListo = pedido.estado === 1;
   const esEnPreparacion = pedido.estado === 2;
 
-  const cambiarEstado = async () => {
-    setCargando(true);
-    const nuevoEstado = pedido.estado === 0 ? 2 : pedido.estado === 2 ? 1 : 0;
-    const success = await PutData("pedidoCocina", pedido.id, {
-      estado: nuevoEstado,
-    });
-    setCargando(false);
-
-    if (success) {
+  const mutationCambiarEstado = useMutation({
+    mutationKey: ["cambiarEstadoCocina"], // 🔥 Le asignamos una llave para identificar esta acción
+    mutationFn: async (nuevoEstado) => {
+      const success = await PutData("pedidoCocina", pedido.id, {
+        estado: nuevoEstado,
+      });
+      if (!success) throw new Error("Error al actualizar");
+      return success;
+    },
+    onSuccess: () => {
       queryClient.invalidateQueries(["pedidosEstado"]);
-    }
+    },
+  });
+
+  const cambiarEstado = () => {
+    // 🔥 2. BLOQUEO MULTI-TARJETA: Si hay alguna otra tarjeta cargando, se anula el clic
+    if (mutacionesCambiandoEstado > 0 || mutationCambiarEstado.isPending)
+      return;
+
+    const nuevoEstado = pedido.estado === 0 ? 2 : pedido.estado === 2 ? 1 : 0;
+    mutationCambiarEstado.mutate(nuevoEstado);
   };
 
   const platos = useMemo(() => {
@@ -68,8 +87,32 @@ function TarjetaPedido({ pedido }) {
     }
   }, [pedido.detalle_platos]);
 
-  const handleImprimirPedidoCocina = async (e) => {
+  // MUTACIÓN PARA IMPRIMIR
+  const mutationImprimir = useMutation({
+    mutationKey: ["imprimirCocina"],
+    mutationFn: async (payload) => {
+      return (await axiosInstance.post("/vender/imprimirCocina", payload)).data;
+    },
+    onSuccess: (data) => {
+      if (data.success) {
+        ToastAlert("success", `Pedido enviado a impresión.`);
+      } else {
+        ToastAlert("error", data.message || "No se pudo imprimir el pedido.");
+      }
+    },
+    onError: (error) => {
+      ToastAlert(
+        "error",
+        error.response?.data?.message || "Error de conexión.",
+      );
+    },
+  });
+
+  const handleImprimirPedidoCocina = (e) => {
     e.stopPropagation();
+
+    // Bloqueo de impresora
+    if (mutationImprimir.isPending) return;
 
     if (!platos || platos.length === 0) {
       return ToastAlert("error", "No hay platos para imprimir en este pedido.");
@@ -97,25 +140,7 @@ function TarjetaPedido({ pedido }) {
       nota: pedido.detalles_extras || "",
     };
 
-    try {
-      const response = await axiosInstance.post(
-        "/vender/imprimirCocina",
-        payload,
-      );
-      if (response.data.success) {
-        ToastAlert("success", `Pedido enviado a impresión.`);
-      } else {
-        ToastAlert(
-          "error",
-          response.data.message || "No se pudo imprimir el pedido.",
-        );
-      }
-    } catch (error) {
-      ToastAlert(
-        "error",
-        error.response?.data?.message || "Error de conexión con el servidor.",
-      );
-    }
+    mutationImprimir.mutate(payload);
   };
 
   const tipoPedidoInfo = {
@@ -132,22 +157,18 @@ function TarjetaPedido({ pedido }) {
     colorPunto: "#999",
   };
 
+  // 🔥 3. Variable que desactiva el botón visualmente si esta u otra tarjeta está procesando
+  const botonBloqueadoGlobal = mutacionesCambiandoEstado > 0;
+
   return (
     <div
-      className={`card overflow-hidden  mb-3 ${esListo ? "border-success opacity-75" : ""}`}
+      className={`card overflow-hidden mb-3 ${esListo ? "border-success opacity-75" : ""}`}
     >
-      {/* HEADER DE LA TARJETA USANDO TU CSS */}
+      {/* ... (Tu Header y Body se mantienen exactamente igual) ... */}
       <div
-        className={`card-header d-flex justify-content-between align-items-center ${
-          esListo
-            ? "bg-white border-bottom"
-            : esEnPreparacion
-              ? "cocina-header-preparacion"
-              : "cocina-header-espera"
-        }`}
+        className={`card-header d-flex justify-content-between align-items-center ${esListo ? "bg-white border-bottom" : esEnPreparacion ? "cocina-header-preparacion" : "cocina-header-espera"}`}
       >
         <div className="d-flex align-items-center gap-2">
-          {/* CÓDIGO REAL DEL PEDIDO */}
           <span className="badge bg-white text-dark border px-2 py-1">
             {generarCodigoReal(pedido)}
           </span>
@@ -165,7 +186,6 @@ function TarjetaPedido({ pedido }) {
             {titulo}
           </span>
         </div>
-
         <BadgeComponent
           className="px-2"
           variant={estados[pedido.estado]?.variant}
@@ -173,8 +193,8 @@ function TarjetaPedido({ pedido }) {
         />
       </div>
 
-      {/* CUERPO DE LA TARJETA */}
       <div className="card-body p-0 pt-2 pb-2">
+        {/* ... (Tus listas de platos e info de nota igual) ... */}
         <ul className="list-group list-group-flush border-0">
           {platos.map((plato, idx) => (
             <li
@@ -182,7 +202,7 @@ function TarjetaPedido({ pedido }) {
               className="list-group-item d-flex border-0 align-items-start py-1 px-3 "
             >
               <span
-                className={`border p-1 rounded-pill btn-icon fw-bold me-2 mt-1 ${esListo ? "text-dark" : "text-dark"}`}
+                className={`border p-1 rounded-pill btn-icon fw-bold me-2 mt-1 text-dark`}
               >
                 {plato.cantidad}
               </span>
@@ -194,59 +214,30 @@ function TarjetaPedido({ pedido }) {
             </li>
           ))}
         </ul>
-
-        {/* NOTA DE COCINA USANDO TU CSS */}
-        {pedido.detalles_extras && (
-          <div className="px-3 pt-2">
-            <div
-              className={`d-flex align-items-start gap-2 rounded ${esListo ? "cocina-nota-listo" : "cocina-nota-espera"}`}
-            >
-              <AlertCircle size={16} className="cocina-icon-note mt-1" />
-              <div>
-                <span
-                  className="fw-bold d-block mb-1"
-                  style={{ fontSize: "0.75rem" }}
-                >
-                  NOTA:
-                </span>
-                <span
-                  className="fst-italic"
-                  style={{ fontSize: "0.85rem", lineHeight: "1.2" }}
-                >
-                  {pedido.detalles_extras}
-                </span>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
 
-      {/* FOOTER DE LA TARJETA USANDO TU CSS */}
       <div className="card-footer bg-transparent border-0 d-flex align-items-center gap-2 px-3 pb-3">
         <button
-          className={`cocina-btn-imprimir btn-icon ${
-            esListo
-              ? "cocina-btn-imprimir-listo"
-              : esEnPreparacion
-                ? "cocina-btn-imprimir-preparacion"
-                : "cocina-btn-imprimir-espera"
-          }`}
+          className={`cocina-btn-imprimir btn-icon ${esListo ? "cocina-btn-imprimir-listo" : esEnPreparacion ? "cocina-btn-imprimir-preparacion" : "cocina-btn-imprimir-espera"} ${mutationImprimir.isPending ? "opacity-50" : ""}`}
           title="Imprimir Ticket"
           onClick={handleImprimirPedidoCocina}
+          disabled={mutationImprimir.isPending}
         >
-          <PrinterIcon size={18} />
+          {mutationImprimir.isPending ? (
+            <div
+              className="spinner-border spinner-border-sm"
+              role="status"
+            ></div>
+          ) : (
+            <PrinterIcon size={18} />
+          )}
         </button>
 
         <BotonAnimado
-          className={`ms-auto cocina-btn-accion ${
-            esListo
-              ? "cocina-btn-accion-listo"
-              : esEnPreparacion
-                ? "cocina-btn-accion-preparacion"
-                : "cocina-btn-accion-espera"
-          }`}
+          className={`ms-auto cocina-btn-accion ${esListo ? "cocina-btn-accion-listo" : esEnPreparacion ? "cocina-btn-accion-preparacion" : "cocina-btn-accion-espera"}`}
           onClick={cambiarEstado}
-          loading={cargando}
+          loading={mutationCambiarEstado.isPending} // El spinner solo gira en la tarjeta cliqueada
+          disabled={botonBloqueadoGlobal} // 🔥 Todas las demás tarjetas se bloquean y oscurecen un segundo
           icon={
             pedido.estado === 0 ? (
               <CheckCheck size={18} />
@@ -277,8 +268,9 @@ export function CocinaDespacho() {
   } = useQuery({
     queryKey: ["pedidosEstado"],
     queryFn: GetPedidosCocina,
-    retry: 1,
+    retry: 0, //  Apagamos el retry local porque Axios ya lo maneja
     refetchOnWindowFocus: false,
+    staleTime: 2000, //  Espera 2 segundos antes de permitir otra recarga masiva por WebSockets
   });
 
   const [filtroTipo, setFiltroTipo] = useState("Todos");

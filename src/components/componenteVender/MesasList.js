@@ -81,6 +81,8 @@ export function MesasList() {
   } = useQuery({
     queryKey: ["mesas"],
     queryFn: GetMesasVender,
+    retry: 1,
+    refetchOnWindowFocus: false,
   });
 
   // PARA ABRIR LAS RESERVAS

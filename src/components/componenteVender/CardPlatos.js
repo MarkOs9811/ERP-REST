@@ -10,7 +10,7 @@ export const CardPlatos = ({
   esComida = "",
 }) => {
   // ==========================================
-  // 🍔 DISEÑO 1: RESTAURANTE
+  //  DISEÑO 1: RESTAURANTE
   // ==========================================
   if (esComida) {
     return (
@@ -83,7 +83,7 @@ export const CardPlatos = ({
   }
 
   // ==========================================
-  // 🛒 DISEÑO 2: TIENDA / RETAIL
+  // DISEÑO 2: TIENDA / RETAIL
   // ==========================================
   return (
     <div

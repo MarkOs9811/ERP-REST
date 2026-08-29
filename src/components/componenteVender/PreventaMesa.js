@@ -43,7 +43,6 @@ import { getPreventaMesa } from "../../service/preventaService";
 import { BuscadorPlatos } from "./tareasVender/BuscadorPlatos";
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
 import BotonAnimado from "../componentesReutilizables/BotonAnimado";
-import { useReactToPrint } from "react-to-print";
 import { TicketPreVenta } from "./TiketsType/TicketPreVenta";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClipboardList } from "@fortawesome/free-solid-svg-icons";
@@ -59,8 +58,6 @@ export function PreventaMesa() {
   const caja = useSelector((state) => state.caja.caja);
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [deletingProductId, setDeletingProductId] = useState(null);
-  const [isSendingToKitchen, setIsSendingToKitchen] = useState(false);
 
   const { idMesa: idMesaSeparada, itemsSeleccionados } = useSelector(
     (state) => state.cuentaSeparada,
@@ -74,7 +71,7 @@ export function PreventaMesa() {
   const componentRef = useRef();
   const [datosPreventa, setDatosPreventa] = useState(null);
 
-  // Preventas desde BD
+  // Consultas GET (useQuery)
   const {
     data: preventas = [],
     isLoading,
@@ -84,62 +81,9 @@ export function PreventaMesa() {
     queryKey: ["preventaMesa", idMesa, caja?.id],
     queryFn: () => getPreventaMesa(idMesa, caja.id),
     enabled: !!idMesa && !!caja?.id,
+    retry: 1,
+    refetchOnWindowFocus: false,
   });
-
-  const mesaNumero = preventas?.[0]?.mesa?.numero;
-  const notaPedido = preventas?.[0]?.estadoPedido?.detalles_extras;
-
-  const handleImprimirTicket = async () => {
-    const dataActual = preventas?.data || preventas;
-
-    if (dataActual && dataActual.length > 0) {
-      const contenidoFormateado = dataActual.map((item) => {
-        const nombrePlato =
-          item.plato?.nombre || item.descripcion || "Item desconocido";
-        const cantidad = item.cantidad || 1;
-        const precio = item.precio || item.valor_unitario || 0;
-        const subtotal = cantidad * precio;
-
-        return {
-          nombre: nombrePlato,
-          cantidad: cantidad,
-          precio: precio,
-          subtotal: subtotal,
-        };
-      });
-
-      const totalMesa = contenidoFormateado.reduce(
-        (acc, curr) => acc + curr.subtotal,
-        0,
-      );
-
-      const payload = {
-        titulo: "PRE-CUENTA MESA " + mesaNumero,
-        contenido: contenidoFormateado,
-        total: totalMesa,
-      };
-
-      try {
-        const response = await axiosInstance.post(
-          "/vender/imprimirGenerico",
-          payload,
-        );
-
-        if (response.data.success) {
-          ToastAlert("success", "Pre-cuenta enviada a la impresora");
-        } else {
-          ToastAlert("error", response.data.message || "Error al imprimir");
-        }
-      } catch (error) {
-        console.error("Error enviando impresión:", error);
-        const mensajeError =
-          error.response?.data?.message || "Error de conexión con el servidor";
-        ToastAlert("error", mensajeError);
-      }
-    } else {
-      ToastAlert("error", "No hay platos registrados en esta mesa");
-    }
-  };
 
   const {
     data: productos = [],
@@ -152,13 +96,167 @@ export function PreventaMesa() {
     refetchOnWindowFocus: false,
   });
 
-  // Filtros de estados actualizados
+  const mesaNumero = preventas?.[0]?.mesa?.numero || "";
+  const notaPedido = preventas?.[0]?.estadoPedido?.detalles_extras;
+
+  // Filtros de estados
   const platosEnEspera = preventas.filter((p) => p.estadoPedido?.estado === 0);
   const platosCocinando = preventas.filter((p) => p.estadoPedido?.estado === 2);
   const platosEntregados = preventas.filter(
     (p) => p.estadoPedido?.estado === 1,
   );
   const itemsCarrito = pedido.mesas[idMesa]?.items || [];
+
+  // ==========================================
+  // MUTACIONES (POST, PUT, DELETE)
+  // 1. Mutación para eliminar un plato de la mesa
+  const eliminarPlatoMutation = useMutation({
+    mutationFn: async (idProducto) => {
+      return (
+        await axiosInstance.delete(
+          `/vender/preventa/deletePlatoPreventa/${idProducto}/${idMesa}`,
+        )
+      ).data;
+    },
+    onSuccess: (data) => {
+      if (data.success) {
+        ToastAlert("success", "Pedido eliminado de la mesa");
+
+        queryClient.invalidateQueries(["preventaMesa", idMesa, caja?.id]);
+        queryClient.invalidateQueries(["mesas"]);
+
+        // 🔥 Redirección segura usando la bandera del backend
+        if (data.mesaLiberada && itemsCarrito.length === 0) {
+          navigate("/vender/mesas", { replace: true }); // replace: true evita errores en el botón de retroceso
+        }
+      } else {
+        ToastAlert("error", data.message || "Error al eliminar");
+      }
+    },
+    onError: () => {
+      ToastAlert("error", "Error de conexión al eliminar el plato");
+    },
+  });
+  // 2. Mutación para enviar platos a cocina
+  const enviarCocinaMutation = useMutation({
+    mutationFn: async ({ datosEnvio, notaPedido }) => {
+      return (
+        await axiosInstance.post("/vender/addPlatosPreVentaMesa", {
+          pedidos: datosEnvio,
+          nota: notaPedido,
+        })
+      ).data;
+    },
+    onSuccess: (data) => {
+      if (data.success) {
+        ToastAlert("success", data.message);
+        dispatch(clearPedido(idMesa));
+        queryClient.invalidateQueries(["preventaMesa", idMesa, caja?.id]);
+        queryClient.invalidateQueries(["mesas"]);
+        if (preventas.length === 1 && itemsCarrito.length === 0) {
+          navigate("/vender/mesas"); // Es más seguro usar la ruta absoluta que -1, por si hubo recargas
+        }
+      } else {
+        ToastAlert("error", data.message);
+      }
+    },
+    onError: (error) => {
+      const msg = error.response?.data?.message || error.message;
+      ToastAlert("error", "Error: " + msg);
+    },
+  });
+
+  // 3. Mutación para anular la mesa completa
+  const anularMesaMutation = useMutation({
+    mutationFn: async (idEliminar) => {
+      return (
+        await axiosInstance.delete(`/vender/eliminarPreventaMesa/${idEliminar}`)
+      ).data;
+    },
+    onSuccess: (data) => {
+      if (data.success) {
+        ToastAlert("success", data.message);
+        queryClient.invalidateQueries(["mesas"]);
+        setModalQuestion(false);
+        navigate(`/vender/mesas`);
+      } else {
+        ToastAlert("error", data.message);
+      }
+    },
+    onError: () => {
+      ToastAlert("error", "Error al anular pedido");
+    },
+  });
+
+  // 4. Mutación para imprimir el ticket
+  const imprimirTicketMutation = useMutation({
+    mutationFn: async (payload) => {
+      return (await axiosInstance.post("/vender/imprimirGenerico", payload))
+        .data;
+    },
+    onSuccess: (data) => {
+      if (data.success) {
+        ToastAlert("success", "Pre-cuenta enviada a la impresora");
+      } else {
+        ToastAlert("error", data.message || "Error al imprimir");
+      }
+    },
+    onError: (error) => {
+      const mensajeError =
+        error.response?.data?.message || "Error de conexión con el servidor";
+      ToastAlert("error", mensajeError);
+    },
+  });
+
+  // 5. Mutación para actualizar cantidades (Optimizada con UI previa)
+  const actualizarCantidadMutation = useMutation({
+    mutationFn: async ({ idPlato, nuevaCantidad }) => {
+      return (
+        await axiosInstance.put(
+          `/vender/preventa/actualizarCantidad/${idPlato}/${idMesa}`,
+          { cantidad: nuevaCantidad },
+        )
+      ).data;
+    },
+    onMutate: async ({ idPlato, nuevaCantidad }) => {
+      const queryKey = ["preventaMesa", idMesa, caja?.id];
+      await queryClient.cancelQueries({ queryKey });
+      const previousPreventas = queryClient.getQueryData(queryKey);
+
+      queryClient.setQueryData(queryKey, (oldData) => {
+        if (!oldData) return oldData;
+        const isArray = Array.isArray(oldData);
+        const dataList = isArray ? oldData : oldData.data;
+        if (!dataList) return oldData;
+
+        const newDataList = dataList.map((item) => {
+          if (item.idPlato === idPlato || item.id === idPlato) {
+            return { ...item, cantidad: nuevaCantidad };
+          }
+          return item;
+        });
+        return isArray ? newDataList : { ...oldData, data: newDataList };
+      });
+      return { previousPreventas, queryKey };
+    },
+    onError: (err, variables, context) => {
+      if (context?.previousPreventas) {
+        queryClient.setQueryData(context.queryKey, context.previousPreventas);
+      }
+      const mensajeError =
+        err.response?.data?.message || "Error al actualizar la cantidad";
+      ToastAlert("error", mensajeError);
+    },
+    onSettled: (data, error, variables, context) => {
+      if (context?.queryKey) {
+        queryClient.invalidateQueries({ queryKey: context.queryKey });
+      }
+    },
+  });
+
+  // ==========================================
+  // HANDLERS (Usando las mutaciones)
+  // ==========================================
 
   const handleAddPlatoPreventa = (producto) => {
     if (isSplitMode) return;
@@ -172,70 +270,83 @@ export function PreventaMesa() {
 
   const handleRemovePlatoPreventa = (productoId) => {
     if (isSplitMode) return;
-    handleRemoveFromPreventaByPlato(productoId);
+    if (eliminarPlatoMutation.isPending) return;
+    eliminarPlatoMutation.mutate(productoId);
   };
 
-  const handleRemoveFromPreventaByPlato = async (idProducto) => {
-    setDeletingProductId(idProducto);
-    try {
-      const response = await axiosInstance.delete(
-        `/vender/preventa/deletePlatoPreventa/${idProducto}/${idMesa}`,
-      );
-      if (response.data.success) {
-        ToastAlert("success", "Pedido eliminado de la mesa");
-        queryClient.invalidateQueries(["preventaMesa", idMesa, caja?.id]);
-      }
-    } catch (error) {
-      ToastAlert("error", "No se pudo eliminar el plato");
-    } finally {
-      setDeletingProductId(null);
-    }
-  };
-
-  const handleAddPlatoPreventaMesas = async () => {
+  const handleAddPlatoPreventaMesas = () => {
     const platosParaEnviar = mesas[idMesa]?.items || [];
-
     if (platosParaEnviar.length === 0) {
       return ToastAlert("error", "Agrega platos nuevos para enviar a cocina.");
     }
 
-    setIsSendingToKitchen(true);
+    const datosEnvio = platosParaEnviar.map((item) => ({
+      idCaja: caja.id,
+      idPlato: item.id,
+      idMesa: idMesa,
+      cantidad: item.cantidad,
+      precio: item.precio,
+    }));
 
-    try {
-      const datosEnvio = platosParaEnviar.map((item) => ({
-        idCaja: caja.id,
-        idPlato: item.id,
-        idMesa: idMesa,
-        cantidad: item.cantidad,
-        precio: item.precio,
-      }));
+    enviarCocinaMutation.mutate({ datosEnvio, notaPedido });
+  };
 
-      const response = await axiosInstance.post(
-        "/vender/addPlatosPreVentaMesa",
-        {
-          pedidos: datosEnvio,
-          nota: notaPedido,
-        },
+  const handleImprimirTicket = () => {
+    const dataActual = preventas?.data || preventas;
+
+    if (dataActual && dataActual.length > 0) {
+      const contenidoFormateado = dataActual.map((item) => {
+        const nombrePlato =
+          item.plato?.nombre || item.descripcion || "Item desconocido";
+        const cantidad = item.cantidad || 1;
+        const precio = item.precio || item.valor_unitario || 0;
+
+        return {
+          nombre: nombrePlato,
+          cantidad: cantidad,
+          precio: precio,
+          subtotal: cantidad * precio,
+        };
+      });
+
+      const totalMesa = contenidoFormateado.reduce(
+        (acc, curr) => acc + curr.subtotal,
+        0,
       );
 
-      if (response.data.success) {
-        ToastAlert("success", response.data.message);
-        dispatch(clearPedido(idMesa));
-        queryClient.invalidateQueries(["preventaMesa", idMesa, caja?.id]);
-        queryClient.invalidateQueries(["mesas"]);
-      } else {
-        ToastAlert("error", response.data.message);
-      }
-    } catch (error) {
-      const msg = error.response?.data?.message || error.message;
-      ToastAlert("error", "Error: " + msg);
-    } finally {
-      setIsSendingToKitchen(false);
+      imprimirTicketMutation.mutate({
+        titulo: "PRE-CUENTA MESA " + mesaNumero,
+        contenido: contenidoFormateado,
+        total: totalMesa,
+      });
+    } else {
+      ToastAlert("error", "No hay platos registrados en esta mesa");
     }
   };
 
+  const handleEliminarPreventeMesa = (idEliminar) => {
+    if (anularMesaMutation.isPending) return;
+    anularMesaMutation.mutate(idEliminar);
+  };
+
+  const handleUpdateQuantity = (idReferencia, nuevaCantidad, tipo) => {
+    if (tipo !== "nuevo") {
+      if (actualizarCantidadMutation.isPending) return;
+
+      actualizarCantidadMutation.mutate({
+        idPlato: idReferencia,
+        nuevaCantidad: nuevaCantidad,
+      });
+    }
+  };
+
+  // ==========================================
+  // ESTADOS Y MODALES LOCALES
+  // ==========================================
+
   const [modalQuestion, setModalQuestion] = useState(false);
   const [idMesaEliminar, setIdMesaEliminar] = useState(null);
+  const [modalTransferir, setModalTransferir] = useState(false);
 
   const handleCancelarPedidosQuestion = () => {
     setModalQuestion(true);
@@ -252,25 +363,6 @@ export function PreventaMesa() {
     navigate(-1);
   };
 
-  const handleEliminarPreventeMesa = async (idEliminar) => {
-    try {
-      const response = await axiosInstance.delete(
-        `/vender/eliminarPreventaMesa/${idEliminar}`,
-      );
-      if (response.data.success) {
-        ToastAlert("success", response.data.message);
-        queryClient.invalidateQueries(["mesas"]);
-        setModalQuestion(false);
-        navigate(`/vender/mesas`);
-      } else {
-        ToastAlert("error", response.data.message);
-      }
-    } catch (error) {
-      ToastAlert("error", "Error al anular pedido");
-    }
-  };
-
-  const [modalTransferir, setModalTransferir] = useState(false);
   const handleTranferirToMesa = () => setModalTransferir(true);
   const handleCloseTransferir = () => setModalTransferir(false);
 
@@ -319,6 +411,7 @@ export function PreventaMesa() {
     navigate("/vender/mesas/detallesPago");
   };
 
+  // Cálculos de totales
   const totalCarrito = itemsCarrito.reduce(
     (acc, i) => acc + i.cantidad * i.precio,
     0,
@@ -337,68 +430,18 @@ export function PreventaMesa() {
   );
   const granTotal =
     totalCarrito + totalEnEspera + totalCocinando + totalEntregados;
-
   const totalSeleccionado = itemsSeleccionados.reduce(
     (acc, i) => acc + i.subtotal,
     0,
   );
 
-  const actualizarCantidadMutation = useMutation({
-    mutationFn: async ({ idPlato, nuevaCantidad }) => {
-      return (
-        await axiosInstance.put(
-          `/vender/preventa/actualizarCantidad/${idPlato}/${idMesa}`,
-          { cantidad: nuevaCantidad },
-        )
-      ).data;
-    },
-    onMutate: async ({ idPlato, nuevaCantidad }) => {
-      const queryKey = ["preventaMesa", idMesa, caja?.id];
-      await queryClient.cancelQueries({ queryKey });
-      const previousPreventas = queryClient.getQueryData(queryKey);
-
-      queryClient.setQueryData(queryKey, (oldData) => {
-        if (!oldData) return oldData;
-        const isArray = Array.isArray(oldData);
-        const dataList = isArray ? oldData : oldData.data;
-        if (!dataList) return oldData;
-
-        const newDataList = dataList.map((item) => {
-          if (item.idPlato === idPlato || item.id === idPlato) {
-            return { ...item, cantidad: nuevaCantidad };
-          }
-          return item;
-        });
-        return isArray ? newDataList : { ...oldData, data: newDataList };
-      });
-      return { previousPreventas, queryKey };
-    },
-    onError: (err, variables, context) => {
-      if (context?.previousPreventas) {
-        queryClient.setQueryData(context.queryKey, context.previousPreventas);
-      }
-
-      // 🔥 CORRECCIÓN AQUÍ: Extraemos el mensaje del backend de 'err.response.data.message'
-      const mensajeError =
-        err.response?.data?.message || "Error al actualizar la cantidad";
-      ToastAlert("error", mensajeError);
-    },
-    onSettled: (data, error, variables, context) => {
-      if (context?.queryKey) {
-        queryClient.invalidateQueries({ queryKey: context.queryKey });
-      }
-    },
-  });
-
-  const handleUpdateQuantity = (idReferencia, nuevaCantidad, tipo) => {
-    if (tipo === "nuevo") {
-    } else {
-      actualizarCantidadMutation.mutate({
-        idPlato: idReferencia,
-        nuevaCantidad: nuevaCantidad,
-      });
-    }
-  };
+  // Reemplazamos los estados manuales por los estados nativos de useMutation
+  const isSendingToKitchen = enviarCocinaMutation.isPending;
+  const deletingProductId = eliminarPlatoMutation.isPending
+    ? eliminarPlatoMutation.variables
+    : null;
+  const isPrinting = imprimirTicketMutation.isPending;
+  const isAnulando = anularMesaMutation.isPending;
 
   return (
     <div className="h-100 bg-transparent">
@@ -466,7 +509,7 @@ export function PreventaMesa() {
                 </div>
               )}
 
-              {/* EN ESPERA (Estado 0 - Modificable) */}
+              {/* EN ESPERA */}
               {platosEnEspera.length > 0 && (
                 <div className="mb-2">
                   <h6 className="text-warning fw-bold small ms-1 mb-2 d-flex align-items-center gap-1">
@@ -479,7 +522,10 @@ export function PreventaMesa() {
                       tipo="enviado"
                       onUpdateQuantity={handleUpdateQuantity}
                       loadingUpdate={
-                        actualizarCantidadMutation.isLoading ? i.idPlato : null
+                        actualizarCantidadMutation.isPending &&
+                        actualizarCantidadMutation.variables?.idPlato === i.id
+                          ? i.id
+                          : null
                       }
                       onDelete={handleRemovePlatoPreventa}
                       loadingDelete={deletingProductId}
@@ -492,7 +538,7 @@ export function PreventaMesa() {
                 </div>
               )}
 
-              {/* EN PREPARACIÓN (Estado 2 - Bloqueado) */}
+              {/* EN PREPARACIÓN */}
               {platosCocinando.length > 0 && (
                 <div className="mb-2">
                   <h6 className="text-secondary fw-bold small ms-1 mb-2 d-flex align-items-center gap-1">
@@ -512,7 +558,7 @@ export function PreventaMesa() {
                 </div>
               )}
 
-              {/* ENTREGADOS (Estado 1 - Bloqueado) */}
+              {/* ENTREGADOS */}
               {platosEntregados.length > 0 && (
                 <div className="mb-2">
                   <h6 className="text-success fw-bold small ms-1 mb-2 d-flex align-items-center gap-1">
@@ -622,15 +668,17 @@ export function PreventaMesa() {
                     <button
                       className="btn btn-outline-dark w-100 btn-sm rounded-pill"
                       onClick={handleImprimirTicket}
+                      disabled={isPrinting}
                     >
-                      <Printer size={16} /> Ticket
+                      <Printer size={16} />{" "}
+                      {isPrinting ? "Imprimiendo..." : "Ticket"}
                     </button>
                   </div>
                   <div className="col-4">
                     <button
                       className="btn btn-outline-danger w-100 btn-sm rounded-pill"
                       onClick={handleCancelarPedidosQuestion}
-                      disabled={platosEntregados.length > 0}
+                      disabled={platosEntregados.length > 0 || isAnulando}
                     >
                       <BanIcon size={16} /> Anular
                     </button>
@@ -746,7 +794,6 @@ export function PreventaMesa() {
         <TicketPreVenta ref={componentRef} dataActual={datosPreventa} />
       </div>
 
-      {/* CORRECCIÓN APLICADA AQUÍ: Mostrar el número de la mesa o un fallback vacío en lugar del ID */}
       <ModalAlertQuestion
         show={modalQuestion}
         idEliminar={idMesaEliminar}
