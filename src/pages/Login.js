@@ -55,14 +55,18 @@ export const Login = () => {
   const onSubmitLogin = async (data) => {
     setLoading(true);
     try {
-      // const response = await axios.post("http://127.0.0.1:8000/api/login", {
+      // const response = await axios.post("http://127.0.0.1:8000/api/login", {                                                                                               
       //   //"https://erp-api-production-c7d4.up.railway.app/api/login",
       // const response = await axios.post("http://192.168.100.5:8000/api/login", {
       const response = await axios.post("http://erp-api.test/api/login", {
         email: data.email,
         password: data.password,
       });
-
+// 🔥 AGREGA ESTAS 4 LÍNEAS AQUÍ:
+      console.log("===============================");
+      console.log("TIPO DE DATA:", typeof response.data);
+      console.log("CONTENIDO DE DATA:", response.data);
+      console.log("===============================");
       if (response.data.token) {
         // 1. Enviamos el valor del checkbox a tu AuthContext
         login(response.data.token, response.data.user, data.rememberMe);
@@ -98,16 +102,25 @@ export const Login = () => {
           navigate("/");
         }, 2000);
       } else {
-        ToastAlert("error", "Credenciales incorrectas");
+      
+        ToastAlert("error", response.data.message || "Credenciales incorrectas");
         setLoading(false);
       }
-    } catch (err) {
-      ToastAlert(
-        "error",
-        err.response
-          ? err.response.data.message
-          : "Error al conectar con el servidor",
-      );
+    }  catch (err) {
+      // Extraemos el mensaje de forma segura para evitar el toast vacío
+      let errorMsg = "Error al conectar con el servidor";
+
+      if (err.response) {
+        if (typeof err.response.data === "string") {
+          // Si Laravel devuelve una vista HTML genérica (ej. un 500 o un 429 nativo)
+          errorMsg = `Error del servidor (Código HTTP ${err.response.status})`;
+        } else {
+          // Si devuelve un JSON, buscamos 'message', luego 'error', o el código
+          errorMsg = err.response.data.message || err.response.data.error || `Ocurrió un error (HTTP ${err.response.status})`;
+        }
+      }
+
+      ToastAlert("error", errorMsg);
       setLoading(false);
     }
   };

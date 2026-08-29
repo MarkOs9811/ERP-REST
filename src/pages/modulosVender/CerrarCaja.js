@@ -118,17 +118,36 @@ export function CerrarCaja() {
     },
   });
 
-  const handleImprimirCaja = async () => {
+ const handleImprimirCaja = async () => {
     const dataActual = cajaData?.data || cajaData;
-    if (dataActual) {
-      setDatosCerrarCaja(dataActual);
-      if (componentRef.current) {
-        setTimeout(() => {
-          handlePrint();
-        }, 700);
-      }
-    } else {
+    if (!dataActual) {
       ToastAlert("error", "No hay datos registrados en esta caja");
+      return;
+    }
+
+    // Armamos el paquete estructurado que espera nuestro backend
+    const payload = {
+      nombreCaja: caja?.nombre || "Caja Principal",
+      cajero: `${dataActual.datosRegistroCaja?.usuario?.empleado?.persona?.nombre} ${dataActual.datosRegistroCaja?.usuario?.empleado?.persona?.apellidos || ""}`,
+      fechaApertura: dataActual.datosRegistroCaja?.fechaApertura,
+      horaApertura: dataActual.datosRegistroCaja?.horaApertura,
+      montoInicial: dataActual.montoInicial,
+      totalVenta: dataActual.totalVenta,
+      fisicoEsperado: dataActual.fisicoEsperado,
+      totalesPorMetodo: dataActual.totalesPorMetodo,
+      // 🔥 NUEVO: Enviamos el historial de transacciones
+      detallesVenta: dataActual.detallesVenta || [], 
+    };
+
+    try {
+      const response = await axiosInstance.post("/cajas/imprimirCierre", payload);
+      if (response.data.success) {
+        ToastAlert("success", "Imprimiendo Arqueo de Caja...");
+      } else {
+        ToastAlert("error", response.data.message);
+      }
+    } catch (error) {
+      ToastAlert("error", "Error al enviar la impresión al servidor");
     }
   };
 
@@ -149,7 +168,7 @@ export function CerrarCaja() {
 
   const totalesPorMetodo = cajaData?.totalesPorMetodo || {};
 
-  const handleCerrarCaja = async (id) => {
+ const handleCerrarCaja = async (id) => {
     const sumaTotalFormatted = parseFloat(fisicoEsperado).toFixed(2);
     const montoDejarFormatted = parseFloat(getValues("montoDejar")).toFixed(2);
 
@@ -159,6 +178,10 @@ export function CerrarCaja() {
     }
 
     try {
+      // 🔥 NUEVO: Mandamos a imprimir automáticamente el arqueo antes de cerrar
+      await handleImprimirCaja();
+
+      // Luego procedemos a cerrar la caja en el backend
       const response = await axiosInstance.put(`/cajas/closeCaja/${id}`, {
         sumaTotalFormatted,
         montoDejarFormatted,
@@ -620,12 +643,7 @@ export function CerrarCaja() {
                       </span>
                     </BotonAnimado>
 
-                    <div style={{ display: "none" }}>
-                      <TicketCerrarCaja
-                        ref={componentRef}
-                        cajaData={datosCerrarCaja}
-                      />
-                    </div>
+                   
 
                     <BotonAnimado
                       loading={isLoading}

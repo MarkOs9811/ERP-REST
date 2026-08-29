@@ -7,7 +7,6 @@ import { TablasGenerales } from "../../components/componentesReutilizables/Tabla
 import { Eye, FileText, Plus, Search } from "lucide-react";
 
 export function ListaTrabajador() {
-  const BASE_URL = process.env.REACT_APP_BASE_URL;
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
 
@@ -42,12 +41,12 @@ export function ListaTrabajador() {
     },
     {
       name: "Foto",
-      selector: (row) => row.usuario?.fotoPerfil || "No disponible",
+      selector: (row) => row.usuario?.foto_url || "No disponible",
       cell: (row) => (
         <div className="d-flex justify-content-center">
           {row.usuario?.fotoPerfil ? (
             <img
-              src={`${BASE_URL}/storage/${row.usuario.fotoPerfil}`}
+              src={`${row.usuario?.foto_url}`}
               alt="Foto perfil"
               style={{
                 width: "50px",

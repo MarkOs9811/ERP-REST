@@ -30,6 +30,7 @@ export const DICCIONARIO_ROLES = {
     "jefe de ventas",
     "encargado de caja",
     "facturacion",
+    "atencion al cliente",
     "asesor de ventas",
   ],
   cocina: [
@@ -72,7 +73,7 @@ export const DICCIONARIO_ROLES = {
   ],
   clientes: [
     "clientes",
-    "atencion al cliente",
+    
     "mozo",
     "moso",
     "mesero",

@@ -77,7 +77,6 @@ export const CajaProtectedRoute = ({ children }) => {
     "mozo",
     "moso",
     "meser",
-    "atencion",
     "delivery",
     "cocin",
   ];

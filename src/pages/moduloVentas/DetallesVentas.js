@@ -69,12 +69,17 @@ export function DetallesVentas() {
                   }}
                   style={{ maxWidth: "180px", minWidth: "150px" }}
                 />
-                <button
+              <button
                   type="button"
                   className="btn btn-outline-dark px-3"
-                  onClick={() =>
-                    GetReporteExcel("/reporteVentasTodo", "totalVentas")
-                  }
+                  onClick={() => {
+                    const urlReporte = selectedDate 
+                      ? `/reporteVentasTodo?fecha=${selectedDate}` 
+                      : "/reporteVentasTodo";
+                      
+                    // Pasamos null a las fechas y "Ventas" al parámetro 'tipo'
+                    GetReporteExcel(urlReporte, null, null, "Ventas");
+                  }}
                 >
                   <FileText size={18} />
                   Reporte

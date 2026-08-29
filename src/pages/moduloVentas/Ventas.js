@@ -182,10 +182,10 @@ export function Ventas() {
                       <p className="fw-bold m-0">Ventas Hoy</p>
                       <div>
                         {" "}
-                        <button
+                       <button
                           type="button"
                           className="btn-informativo"
-                          onClick={() => GetReporteExcel("/reporteVentasHOY")}
+                          onClick={() => GetReporteExcel("/reporteVentasHOY", null, null, "Ventas_Hoy")}
                           title="Descargar Reporte"
                         >
                           <FileText />

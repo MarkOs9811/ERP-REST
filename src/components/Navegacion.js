@@ -47,7 +47,6 @@ export function Navegacion({ tipoNavegacion = null }) {
     "moso",
     "meser",
     "camarer",
-    "atencion",
   ];
 
   // 3. Evaluamos si el cargo CONTIENE alguna de las palabras bloqueadas
