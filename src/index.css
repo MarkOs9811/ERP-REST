@@ -20,7 +20,7 @@
   --fw-slate-700: #374151;
 
   --bg-emerald-soft: #42d17e;
-  --bg-saffron-soft: #fff7ed;
+  --bg-saffron-soft: #ffedd8;
   --bg-strawberry-soft: #fef2f2;
   --bg-informative-soft: #dddfe2;
 
@@ -453,19 +453,22 @@ button svg,
 }
 
 .btn-editar {
-  background: var(--bg-surface) !important;
-  color: var(--fw-saffron) !important;
-  border: 1px solid rgba(236, 139, 35, 0.5) !important;
+  background: var(--bg-saffron-soft);
+  color: var(--fw-saffron);
+  border: 1px solid var(--fw-saffron);
+  font-weight: bold !important;
 }
 
 .btn-editar:hover {
-  background: var(--bg-saffron-soft) !important;
-  border-color: rgba(236, 139, 35, 0.75) !important;
+  background: var(--bg-saffron-soft);
+  color: rgb(141, 80, 0) !important;
+  border: 1px solid var(--fw-saffron);
 }
 
 .btn-editar:active,
 .btn-editar.active {
   background: rgba(236, 139, 35, 0.2) !important;
+    color: rgb(102, 54, 0) !important;
   border-color: rgba(236, 139, 35, 0.9) !important;
 }
 

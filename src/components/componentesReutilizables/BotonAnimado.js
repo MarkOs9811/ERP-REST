@@ -5,23 +5,37 @@ const BotonAnimado = ({
   children,
   type = "button",
   loading = false,
+  disabled = false, // 1. Extraemos disabled explícitamente
   onClick,
   className = "w-auto ms-auto btn btn-motion-theme",
   icon = <CheckCheck className="text-auto" width="20px" height="20px" />,
   ...props
 }) => {
+  // 2. Unificamos la condición de inactividad (por carga o por lógica de negocio)
+  const isBtnDisabled = loading || disabled;
+
   const clasesBase = `${className} fw-btn-base p-2 d-inline-flex align-items-center justify-content-center gap-2`;
 
-  const clasesFinal = loading
-    ? `${clasesBase} opacity-75 pointer-events-none`
+  // 3. Aplicamos la opacidad y bloqueamos eventos del puntero a nivel CSS
+  const clasesFinal = isBtnDisabled
+    ? `${clasesBase} opacity-50 pe-none`
     : clasesBase;
+
+  // 4. Bloqueo estricto de la función manejadora
+  const handleClick = (e) => {
+    if (isBtnDisabled) {
+      e.preventDefault();
+      return; // Corta la ejecución inmediatamente
+    }
+    if (onClick) onClick(e);
+  };
 
   return (
     <button
       className={clasesFinal}
       type={type}
-      onClick={type === "button" ? onClick : undefined}
-      disabled={loading}
+      onClick={type === "button" ? handleClick : undefined}
+      disabled={isBtnDisabled} // 5. Bloqueo nativo HTML
       {...props}
     >
       {loading ? (

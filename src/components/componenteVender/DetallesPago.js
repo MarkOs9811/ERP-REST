@@ -22,7 +22,6 @@ import { clearCuentaSeparada } from "../../redux/cuentaSeparadaSlice";
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useReactToPrint } from "react-to-print";
-import { TicketImpresion } from "./TiketsType/TicketImpresion";
 import { FileText } from "lucide-react";
 
 export function DetallesPago() {
@@ -58,20 +57,11 @@ export function DetallesPago() {
 
   const { idPedidoWeb } = useParams();
 
-  const componentRef = useRef();
   const [datosVenta, setDatosVenta] = useState(null);
   const [nombreReferencia, setNombreCliente] = useState("");
 
   // === ESTADO DE BLOQUEO MANUAL ===
   const [isProcessing, setIsProcessing] = useState(false);
-
-  const handlePrint = useReactToPrint({
-    contentRef: componentRef,
-    onAfterPrint: () => {
-      setDatosVenta(null);
-      ejecutarNavegacionFinal();
-    },
-  });
 
   const {
     register,
@@ -451,13 +441,6 @@ export function DetallesPago() {
             loading={isProcessing}
             error={null}
           />
-          <div style={{ display: "none" }}>
-            <TicketImpresion
-              ref={componentRef}
-              venta={datosVenta || { productos: [] }}
-              cliente={nombreReferencia}
-            />
-          </div>
         </div>
       </div>
     </div>

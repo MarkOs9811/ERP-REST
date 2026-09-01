@@ -48,6 +48,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClipboardList } from "@fortawesome/free-solid-svg-icons";
 import { FilaPlatoUnificado } from "./tareasVender/FilaPlatoUnificado";
 import { BadgeComponent } from "../componentesReutilizables/BadgeComponent";
+import { ImprimirTicket } from "./tareasVender/ImprimiTIcket";
 
 export function PreventaMesa() {
   const idMesa = useSelector((state) => state.mesa.idPreventaMesa);
@@ -70,6 +71,8 @@ export function PreventaMesa() {
   const mesas = useSelector((state) => state.pedido.mesas);
   const componentRef = useRef();
   const [datosPreventa, setDatosPreventa] = useState(null);
+
+  const [imprimirTicket, setImprimirTicket] = useState(false);
 
   // Consultas GET (useQuery)
   const {
@@ -123,11 +126,10 @@ export function PreventaMesa() {
         ToastAlert("success", "Pedido eliminado de la mesa");
 
         queryClient.invalidateQueries(["preventaMesa", idMesa, caja?.id]);
-        queryClient.invalidateQueries(["mesas"]);
 
-        // 🔥 Redirección segura usando la bandera del backend
+        //  Redirección segura usando la bandera del backend
         if (data.mesaLiberada && itemsCarrito.length === 0) {
-          navigate("/vender/mesas", { replace: true }); // replace: true evita errores en el botón de retroceso
+          navigate(-1); // replace: true evita errores en el botón de retroceso
         }
       } else {
         ToastAlert("error", data.message || "Error al eliminar");
@@ -139,11 +141,12 @@ export function PreventaMesa() {
   });
   // 2. Mutación para enviar platos a cocina
   const enviarCocinaMutation = useMutation({
-    mutationFn: async ({ datosEnvio, notaPedido }) => {
+    mutationFn: async ({ datosEnvio, notaPedido, imprimirTicket }) => {
       return (
         await axiosInstance.post("/vender/addPlatosPreVentaMesa", {
           pedidos: datosEnvio,
           nota: notaPedido,
+          imprimirTicket: imprimirTicket,
         })
       ).data;
     },
@@ -151,11 +154,8 @@ export function PreventaMesa() {
       if (data.success) {
         ToastAlert("success", data.message);
         dispatch(clearPedido(idMesa));
-        queryClient.invalidateQueries(["preventaMesa", idMesa, caja?.id]);
         queryClient.invalidateQueries(["mesas"]);
-        if (preventas.length === 1 && itemsCarrito.length === 0) {
-          navigate("/vender/mesas"); // Es más seguro usar la ruta absoluta que -1, por si hubo recargas
-        }
+        navigate(-1);
       } else {
         ToastAlert("error", data.message);
       }
@@ -288,7 +288,7 @@ export function PreventaMesa() {
       precio: item.precio,
     }));
 
-    enviarCocinaMutation.mutate({ datosEnvio, notaPedido });
+    enviarCocinaMutation.mutate({ datosEnvio, notaPedido, imprimirTicket });
   };
 
   const handleImprimirTicket = () => {
@@ -428,8 +428,10 @@ export function PreventaMesa() {
     (acc, i) => acc + i.cantidad * i.plato.precio,
     0,
   );
+
   const granTotal =
     totalCarrito + totalEnEspera + totalCocinando + totalEntregados;
+
   const totalSeleccionado = itemsSeleccionados.reduce(
     (acc, i) => acc + i.subtotal,
     0,
@@ -451,38 +453,44 @@ export function PreventaMesa() {
             className={`card  h-100 d-flex flex-column overflow-hidden ${isSplitMode ? "border-dark border-2" : ""}`}
           >
             <div
-              className={`card-header d-flex justify-content-between align-items-center p-3 ${isSplitMode ? "bg-warning" : ""}`}
+              className={`card-header p-3 d-flex flex-column gap-2 ${isSplitMode ? "bg-warning" : ""}`}
             >
-              <div>
-                <h5 className="mb-0 fw-bold d-flex align-items-center gap-2">
-                  {isSplitMode && <Scissors size={20} />}{" "}
-                  {isSplitMode ? "Separar Cuenta" : `Mesa ${mesaNumero}`}
-                  <BadgeComponent
-                    label={`PED-${preventas?.[0]?.idPedido}`}
-                    className=" small px-2"
-                    variant="secondary"
-                  />
-                </h5>
-                <small>
-                  {isSplitMode
-                    ? "Selecciona items a pagar"
-                    : "Resumen de cuenta"}
-                </small>
+              {/* 1. CONTENEDOR SUPERIOR (Título y Botón) */}
+              <div className="d-flex justify-content-between align-items-center w-100">
+                <div>
+                  <h5 className="mb-0 fw-bold d-flex align-items-center gap-2">
+                    {isSplitMode && <Scissors size={20} />}{" "}
+                    {isSplitMode ? "Separar Cuenta" : `Mesa ${mesaNumero}`}
+                    <BadgeComponent
+                      label={`PED-${preventas?.[0]?.idPedido}`}
+                      className="small px-2"
+                      variant="secondary"
+                    />
+                  </h5>
+                  <small className="text-muted">
+                    {isSplitMode
+                      ? "Selecciona items a pagar"
+                      : "Resumen de cuenta"}
+                  </small>
+                </div>
+
+                <button
+                  className={`btn btn-sm rounded-pill px-3 ${
+                    isSplitMode ? "btn-white text-dark" : "btn-outline-dark"
+                  }`}
+                  onClick={isSplitMode ? toggleSplitMode : handleVolverMesas}
+                >
+                  {isSplitMode ? (
+                    <>
+                      <XCircle size={16} className="me-1" /> Cancelar
+                    </>
+                  ) : (
+                    <>
+                      <ChevronLeft size={16} className="me-1" /> Volver
+                    </>
+                  )}
+                </button>
               </div>
-              <button
-                className={`btn btn-sm rounded-pill px-3 ${isSplitMode ? "btn-white text-dark" : "btn-outline-dark"}`}
-                onClick={isSplitMode ? toggleSplitMode : handleVolverMesas}
-              >
-                {isSplitMode ? (
-                  <>
-                    <XCircle size={16} /> Cancelar
-                  </>
-                ) : (
-                  <>
-                    <ChevronLeft size={16} /> Volver
-                  </>
-                )}
-              </button>
             </div>
 
             <div className="card-body overflow-auto p-2  d-flex flex-column gap-1">
@@ -580,6 +588,11 @@ export function PreventaMesa() {
             </div>
 
             <div className="card-footer bg-white border-top shadow-lg pt-3 pb-2 px-3">
+              <ImprimirTicket
+                itemsCarrito={itemsCarrito}
+                imprimirTicket={imprimirTicket}
+                setImprimirTicket={setImprimirTicket}
+              />
               <div className="d-flex justify-content-between align-items-end mb-3">
                 <div className="text-muted small lh-sm">
                   {isSplitMode ? (
@@ -623,13 +636,17 @@ export function PreventaMesa() {
               ) : (
                 <>
                   {itemsCarrito.length > 0 ? (
-                    <BotonAnimado
-                      className="btn-guardar  w-100 p-3 mb-2 fw-bold fs-5 border"
-                      onClick={handleAddPlatoPreventaMesas}
-                      loading={isSendingToKitchen}
-                    >
-                      ENVIAR A COCINA
-                    </BotonAnimado>
+                    <>
+                      <div className="d-flex flex-column gap-2">
+                        <BotonAnimado
+                          className="btn-guardar  w-100 p-3  fw-bold fs-5 border mb-2"
+                          onClick={handleAddPlatoPreventaMesas}
+                          loading={isSendingToKitchen}
+                        >
+                          ENVIAR A COCINA
+                        </BotonAnimado>
+                      </div>
+                    </>
                   ) : (
                     <BotonAnimado
                       className="btn-guardar border w-100  mb-2 fw-bold fs-5 py-3"

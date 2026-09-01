@@ -55,14 +55,14 @@ export const Login = () => {
   const onSubmitLogin = async (data) => {
     setLoading(true);
     try {
-      // const response = await axios.post("http://127.0.0.1:8000/api/login", {                                                                                               
-      //   //"https://erp-api-production-c7d4.up.railway.app/api/login",
-      // const response = await axios.post("http://192.168.100.5:8000/api/login", {
-      const response = await axios.post("http://erp-api.test/api/login", {
+      const response = await axios.post("http://127.0.0.1:8000/api/login", {
+        //   //"https://erp-api-production-c7d4.up.railway.app/api/login",
+        // const response = await axios.post("http://192.168.100.5:8000/api/login", {
+        // const response = await axios.post("http://erp-api.test/api/login", {
         email: data.email,
         password: data.password,
       });
-// 🔥 AGREGA ESTAS 4 LÍNEAS AQUÍ:
+      // 🔥 AGREGA ESTAS 4 LÍNEAS AQUÍ:
       console.log("===============================");
       console.log("TIPO DE DATA:", typeof response.data);
       console.log("CONTENIDO DE DATA:", response.data);
@@ -102,11 +102,13 @@ export const Login = () => {
           navigate("/");
         }, 2000);
       } else {
-      
-        ToastAlert("error", response.data.message || "Credenciales incorrectas");
+        ToastAlert(
+          "error",
+          response.data.message || "Credenciales incorrectas",
+        );
         setLoading(false);
       }
-    }  catch (err) {
+    } catch (err) {
       // Extraemos el mensaje de forma segura para evitar el toast vacío
       let errorMsg = "Error al conectar con el servidor";
 
@@ -116,7 +118,10 @@ export const Login = () => {
           errorMsg = `Error del servidor (Código HTTP ${err.response.status})`;
         } else {
           // Si devuelve un JSON, buscamos 'message', luego 'error', o el código
-          errorMsg = err.response.data.message || err.response.data.error || `Ocurrió un error (HTTP ${err.response.status})`;
+          errorMsg =
+            err.response.data.message ||
+            err.response.data.error ||
+            `Ocurrió un error (HTTP ${err.response.status})`;
         }
       }
 

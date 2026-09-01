@@ -11,7 +11,7 @@ import { addItem, clearPedido, removeItem } from "../../redux/pedidoSlice";
 import { CardPlatos } from "./CardPlatos";
 import { CategoriaPlatos } from "./tareasVender/CategoriaPlatos";
 import { GetMesasVender } from "../../service/accionesVender/GetMesasVender";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { setIdPreventaMesa } from "../../redux/mesaSlice";
 import { GetPlatosVender } from "../../service/accionesVender/GetPlatosVender";
 import {
@@ -26,15 +26,15 @@ import { useState } from "react";
 import BotonAnimado from "../componentesReutilizables/BotonAnimado";
 import { BuscadorPlatos } from "./tareasVender/BuscadorPlatos";
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
+import { ImprimirTicket } from "./tareasVender/ImprimiTIcket";
 
 export function ToMesa() {
   const id = useSelector((state) => state.mesa.idPreventaMesa);
-
+  const [imprimirTicket, setImprimirTicket] = useState(true);
   const categoriaFiltroPlatos = useSelector(
     (state) => state.categoriaFiltroPlatos.estado,
   );
 
-  const [isLoadignPedido, setLoadingPedido] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [notaPedido, setNotaPedido] = useState("");
 
@@ -62,7 +62,44 @@ export function ToMesa() {
     queryFn: GetPlatosVender,
   });
 
-  const habldeVolverMesas = () => navigate(`/vender/mesas`);
+  // MUTACIÓN PARA ENVIAR PEDIDO
+  const addPlatosMutation = useMutation({
+    mutationFn: async ({ datosPreventa, notaPedido, imprimirTicket }) => {
+      const response = await axiosInstance.post(
+        "/vender/addPlatosPreVentaMesa",
+        {
+          pedidos: datosPreventa,
+          nota: notaPedido,
+          imprimirTicket: imprimirTicket,
+        },
+      );
+      return response.data;
+    },
+    onSuccess: (data) => {
+      if (data.success) {
+        // 1. Mostrar alerta de éxito
+        ToastAlert(
+          "success",
+          `${data.message} MESA ${data.data[0]?.mesa.numero}`,
+        );
+
+        // 2. Limpiar estados
+        setNotaPedido("");
+        dispatch(clearPedido(id));
+
+        // 3. Refrescar datos y redirigir
+        queryClient.invalidateQueries(["mesas"]);
+        navigate(`/vender/mesas`);
+      } else {
+        ToastAlert("error", data.message);
+      }
+    },
+    onError: (error) => {
+      ToastAlert("error", "Error de conexión: " + error.message);
+    },
+  });
+
+  const handleVolverToMesas = () => navigate(`/vender/mesas`);
 
   const handleAddPlatoPreventa = (producto) => {
     dispatch(addItem({ ...producto, mesaId: id }));
@@ -77,55 +114,29 @@ export function ToMesa() {
     setNotaPedido("");
   };
 
-  const handleAddPlatoPreventaMesas = async () => {
+  // PREPARAR DATOS Y EJECUTAR MUTACIÓN
+  const handleAddPlatoPreventaMesas = () => {
+    console.log("Se hace click en el botón de realizar pedido");
     if (!mesas[id] || mesas[id].items.length === 0) {
       return ToastAlert("error", "No hay platos en el pedido");
     }
 
-    setLoadingPedido(true);
+    const datosPreventa =
+      mesas[id]?.items.map((item) => ({
+        idCaja: caja.id,
+        idPlato: item.id,
+        idMesa: id,
+        cantidad: item.cantidad,
+        precio: item.precio,
+        nota: notaPedido,
+      })) || [];
 
-    try {
-      const datosPreventa =
-        mesas[id]?.items.map((item) => ({
-          idCaja: caja.id,
-          idPlato: item.id,
-          idMesa: id,
-          cantidad: item.cantidad,
-          precio: item.precio,
-          nota: notaPedido,
-        })) || [];
-
-      const response = await axiosInstance.post(
-        "/vender/addPlatosPreVentaMesa",
-        {
-          pedidos: datosPreventa,
-          nota: notaPedido,
-        },
-      );
-
-      if (response.data.success) {
-        // 1. Mostrar alerta de éxito
-        ToastAlert("success", `${response.data.message} MESA ${id}`);
-
-        // 2. Limpiar estados
-        setNotaPedido("");
-        dispatch(clearPedido(id));
-
-        // 3. Refrescar datos y redirigir
-        queryClient.invalidateQueries(["mesas"]);
-        navigate(`/vender/mesas`);
-
-        // Nota: Si aún necesitas componentRef para otra cosa, evalúalo de forma independiente,
-        // no bloquees el flujo principal de navegación.
-      } else {
-        ToastAlert("error", response.data.message);
-      }
-    } catch (error) {
-      ToastAlert("error", "Error de conexión: " + error.message);
-    } finally {
-      // 🔥 BEST PRACTICE: Garantiza que el loading se apague en éxito O en error
-      setLoadingPedido(false);
-    }
+    // Disparamos la mutación
+    addPlatosMutation.mutate({
+      datosPreventa,
+      notaPedido,
+      imprimirTicket,
+    });
   };
 
   return (
@@ -139,15 +150,11 @@ export function ToMesa() {
                   className="form-select"
                   value={id || ""}
                   onChange={(e) => {
-                    // Opcional pero recomendado: Permitir cambiar de mesa desde aquí
                     const nuevoId = parseInt(e.target.value);
                     dispatch(setIdPreventaMesa(nuevoId));
                   }}
                 >
                   {mesasList
-                    // Nota: Si la mesa ya está ocupada (estado 0) y estás agregando más platos,
-                    // asegúrate de que el filtro permita ver la mesa actual.
-                    // .filter((m) => m.estado === 1 || m.id === id)
                     .filter((m) => m.estado === 1)
                     .map((m) => (
                       <option key={m.id} value={m.id}>
@@ -167,7 +174,7 @@ export function ToMesa() {
 
                   <button
                     className="btn-cerrar btn-icon flex-shrink-0"
-                    onClick={habldeVolverMesas}
+                    onClick={handleVolverToMesas}
                   >
                     <FontAwesomeIcon icon={faArrowLeft} />
                   </button>
@@ -278,6 +285,11 @@ export function ToMesa() {
               className="card-footer  border-top p-3 shadow-lg bg-white"
               style={{ zIndex: 10 }}
             >
+              <ImprimirTicket
+                itemsCarrito={pedido.mesas[id]?.items}
+                imprimirTicket={imprimirTicket}
+                setImprimirTicket={setImprimirTicket}
+              />
               <div className=" p-3 mb-3">
                 <label className="form-label text-success small fw-bold d-flex align-items-center gap-1">
                   <Notebook /> Cliente / Notas del Pedido:
@@ -310,7 +322,9 @@ export function ToMesa() {
               <BotonAnimado
                 className="btn-guardar py-3 fw-bold btn-block w-100 p-3 shadow-sm"
                 onClick={() => handleAddPlatoPreventaMesas()}
-                loading={isLoadignPedido}
+                loading={
+                  addPlatosMutation.isPending || addPlatosMutation.isLoading
+                }
                 disabled={
                   !pedido.mesas[id] || pedido.mesas[id].items.length === 0
                 }

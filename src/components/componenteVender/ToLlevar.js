@@ -24,13 +24,16 @@ import {
   Utensils,
   Notebook,
   Hamburger,
-  StoreIcon, // Icono para cliente/nota
+  StoreIcon,
+  ListOrderedIcon, // Icono para cliente/nota
 } from "lucide-react";
 import { BuscadorPlatos } from "./tareasVender/BuscadorPlatos";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
 import { GetConfi } from "../../service/accionesConfiguracion/GetConfi";
 import { GetInventario } from "../../service/GetInventario";
+import { OffcanvasColaLlevar } from "./tareasVender/OffCanvaColaLlevar";
+import { GetPedidosCocina } from "../../service/accionesVender/GetPedidosCocina";
 
 export function ToLlevar() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -43,6 +46,23 @@ export function ToLlevar() {
   const categoriaFiltroPlatos = useSelector(
     (state) => state.categoriaFiltroPlatos.estado,
   );
+  // consulta de pedidos detalles pedidos PARA LLEVAR
+  const {
+    data: todosLosPedidos = [],
+    isLoading: isLoadingPedidos,
+    isError: isErrorPedidos,
+  } = useQuery({
+    queryKey: ["pedidosEstado"],
+    queryFn: GetPedidosCocina,
+    retry: 0, //  Apagamos el retry local porque Axios ya lo maneja
+    refetchOnWindowFocus: false,
+    staleTime: 2000, //  Espera 2 segundos antes de permitir otra recarga masiva por WebSockets
+  });
+  const pedidosLlevar = useMemo(() => {
+    return todosLosPedidos.filter(
+      (pedidos) => pedidos.tipo_pedido === "llevar",
+    );
+  }, [todosLosPedidos]);
 
   // CONDICIONAR SI LA CONFIGURACIONDE LA EMRPESA ES PARA VENTAS RESTUARANTE O VENTAS STORE TIENDA NORMAL
   // 1. Primero obtenemos la configuración de la empresa
@@ -131,16 +151,38 @@ export function ToLlevar() {
             <div className="card-header m-0 bg-white border-bottom  d-flex py-3">
               <div className="d-flex justify-content-between align-items-center w-100">
                 <h5 className="mb-0 fw-bold text-dark">Para Llevar</h5>
-                {items.length > 0 && (
+                <div className="d-flex align-items-center gap-2">
                   <button
-                    className="btn-eliminar d-flex align-items-center gap-1"
-                    onClick={handleEliminarTodo}
-                    title="Limpiar cuenta"
+                    className="btn-editar d-flex align-items-center gap-2 position-relative rounded-pill px-3"
+                    data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasColaLlevar"
+                    aria-controls="offcanvasColaLlevar"
                   >
-                    <Trash2 size={16} />
-                    <span className="small">Limpiar</span>
+                    <ListOrderedIcon size={16} />
+                    Cola
+                    {pedidosLlevar?.length > 0 && (
+                      <span
+                        className="position-absolute top-0 start-0 translate-middle badge rounded-pill"
+                        style={{
+                          backgroundColor: "var(--fw-strawberry)",
+                          color: "var(--fw-white)",
+                        }}
+                      >
+                        {pedidosLlevar.length}
+                      </span>
+                    )}
                   </button>
-                )}
+                  {items.length > 0 && (
+                    <button
+                      className="btn-eliminar d-flex align-items-center gap-1"
+                      onClick={handleEliminarTodo}
+                      title="Limpiar cuenta"
+                    >
+                      <Trash2 size={16} />
+                      <span className="small">Limpiar</span>
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -388,6 +430,7 @@ export function ToLlevar() {
           </div>
         </div>
       </div>
+      <OffcanvasColaLlevar pedidosCola={pedidosLlevar} />
     </div>
   );
 }

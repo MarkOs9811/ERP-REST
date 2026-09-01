@@ -71,7 +71,7 @@ function TarjetaPedido({ pedido }) {
   });
 
   const cambiarEstado = () => {
-    // 🔥 2. BLOQUEO MULTI-TARJETA: Si hay alguna otra tarjeta cargando, se anula el clic
+    //  2. BLOQUEO MULTI-TARJETA: Si hay alguna otra tarjeta cargando, se anula el clic
     if (mutacionesCambiandoEstado > 0 || mutationCambiarEstado.isPending)
       return;
 
@@ -194,7 +194,6 @@ function TarjetaPedido({ pedido }) {
       </div>
 
       <div className="card-body p-0 pt-2 pb-2">
-        {/* ... (Tus listas de platos e info de nota igual) ... */}
         <ul className="list-group list-group-flush border-0">
           {platos.map((plato, idx) => (
             <li
