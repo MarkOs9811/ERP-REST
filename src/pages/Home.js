@@ -11,16 +11,14 @@ import { VentasTipo } from "../components/componentesHome/VentasTipo";
 import { CarouselMarketingHome } from "../components/componentesHome/CarouselMarketingHome";
 import { DashboardMesas } from "../components/componentesHome/DashboardMesas";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { StoreIcon } from "lucide-react";
-
-// Nota: Quité las importaciones de "lucide-react" porque no se estaban utilizando en este archivo.
-// Esto ayuda a mantener el código limpio.
 
 export function Home() {
   const {
     data: ventasList = [],
-    isLoading: loadingVentas, // Corregido: en React Query suele ser isLoading
-    isError: errorVentas, // Corregido: en React Query suele ser isError
+    isLoading: loadingVentas,
+    isError: errorVentas,
   } = useQuery({
     queryKey: ["ventas"],
     queryFn: getVentas,
@@ -29,120 +27,82 @@ export function Home() {
   });
 
   const navigate = useNavigate();
-
-  const caja = JSON.parse(
-    localStorage.getItem("caja") || sessionStorage.getItem("caja"),
-  );
+  const caja = useSelector((state) => state.caja.caja);
+  const cajaAbierta = caja?.estado === "abierto" && caja?.id;
+  const nombreCaja = caja?.nombre || caja?.nombreCaja || "Sin caja";
 
   return (
-    <div className="container-fluid home-shell py-2">
-      {/* CABECERA HERO MEJORADA */}
-      <div className="row g-3 mb-4">
-        <div className="col-md-7 col-sm-7 h-100">
-          {" "}
-          <CabeceraHome
-            ventasList={ventasList}
-            load={loadingVentas}
-            error={errorVentas}
-          />
+    <div className="container-fluid home-shell py-3">
+      <div className="row g-3 mb-3 align-items-stretch">
+        <div className="col-12 col-lg-8">
+          <CabeceraHome cajaAbierta={!!cajaAbierta} />
         </div>
-        <div className="col-md-5 col-sm-5">
-          {" "}
-          <div className="card h-100   overflow-hidden p-4">
-            {/* Decoración de fondo opcional para darle un toque premium */}
+        <div className="col-12 col-lg-4">
+          <div className="card h-100 overflow-hidden p-4 home-caja-card position-relative">
             <div className="hero-decoration"></div>
-
-            <div className="text-end position-relative mt-3 z-1 d-flex flex-column align-items-end">
+            <div className="position-relative z-1 d-flex flex-column h-100">
               <p className="mb-2 fw-medium text-muted d-flex align-items-center gap-2">
-                <span className="status-dot bg-success rounded-circle"></span>
-                {caja?.estado === "abierto"
-                  ? "Caja abierta"
-                  : "Caja cerrada"} - {caja?.nombreCaja} -{" "}
-                {caja?.usuario?.empleado?.persona?.nombre}
+                <span
+                  className={`status-dot rounded-circle ${
+                    cajaAbierta ? "bg-success" : "bg-secondary"
+                  }`}
+                ></span>
+                {cajaAbierta ? "Caja abierta" : "Caja cerrada"}
               </p>
-              <p className="mb-3 fw-semibold text-dark">
-                {caja?.estado === "abierto"
+              <h5 className="fw-bold mb-2" style={{ color: "var(--text-main)" }}>
+                {nombreCaja}
+              </h5>
+              <p className="mb-4 text-muted flex-grow-1">
+                {cajaAbierta
                   ? "¡Buen trabajo! Mantén el control de tus ventas."
                   : "Caja cerrada. Abre la caja para comenzar a vender."}
               </p>
-              {caja?.estado === "abierto" ? (
-                <button
-                  className="btn-principal btn-lg px-4 py-2 fw-bold shadow-sm d-flex align-items-center gap-2 btn-ir-a-caja"
-                  onClick={() => navigate("/vender/mesas")}
-                >
-                  <StoreIcon size={20} />
-                  <span>Ir a Caja</span>
-                </button>
-              ) : (
-                <button
-                  className="btn-principal btn-lg px-4 py-2 fw-bold shadow-sm d-flex align-items-center gap-2 btn-abrir-caja"
-                  onClick={() => navigate("/abrirCaja")}
-                >
-                  <StoreIcon size={20} />
-                  <span>Abrir Caja</span>
-                </button>
-              )}
+              <button
+                className={`btn-principal btn-lg px-4 py-2 fw-bold shadow-sm d-flex align-items-center justify-content-center gap-2 w-100 ${
+                  cajaAbierta ? "btn-ir-a-caja" : "btn-abrir-caja"
+                }`}
+                onClick={() =>
+                  navigate(cajaAbierta ? "/vender/mesas" : "/abrirCaja")
+                }
+              >
+                <StoreIcon size={20} />
+                <span>{cajaAbierta ? "Ir a Caja" : "Abrir Caja"}</span>
+              </button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* FIN CABECERA HERO */}
+      <section className="mb-3">
+        <InformacionRapidaHome />
+      </section>
 
-      <div className="row g-4">
-        <div className="col-12">
-          <div className="home-section-card home-section-card--metrics">
-            <InformacionRapidaHome />
-          </div>
+      <div className="row g-3 mb-3">
+        <div className="col-12 col-xl-8">
+          <DashboardMesas />
         </div>
-
-        <div className="col-12 col-lg-8">
-          <div className="row g-3">
-            <div className="col-md-12">
-              <div className="home-section-card"></div>
-            </div>
-            <div className="col-md-12">
-              <div className="home-section-card">
-                <DashboardMesas />
-              </div>
-            </div>
-            <div className="col-md-12">
-              <div className="home-section-card">
-                <PlatoMasVendido />
-              </div>
-            </div>
-            <div className="col-md-12">
-              <div className="home-section-card">
-                <GraficoIAhome />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="col-12 col-lg-4">
-          <div className="row g-3">
-            <div className="col-md-12">
-              <div className="home-section-card home-section-card--accent">
-                <CarouselMarketingHome />
-              </div>
-            </div>
-            <div className="col-12 col-lg-12">
-              <div className="home-section-card">
-                <VentasTipo
-                  ventasList={ventasList}
-                  load={loadingVentas}
-                  errorLoad={errorVentas}
-                />
-              </div>
-              <div className="col-md-12">
-                <div className="home-section-card mt-3">
-                  <UsuariosActivosHome />
-                </div>
-              </div>
+        <div className="col-12 col-xl-4">
+          <div className="d-flex flex-column gap-3 h-100">
+            <CarouselMarketingHome />
+            <VentasTipo
+              ventasList={ventasList}
+              load={loadingVentas}
+              errorLoad={errorVentas}
+            />
+            <div className="flex-grow-1">
+              <UsuariosActivosHome />
             </div>
           </div>
         </div>
       </div>
+
+      <section className="mb-3">
+        <PlatoMasVendido />
+      </section>
+
+      <section>
+        <GraficoIAhome />
+      </section>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCashRegister,
@@ -18,81 +18,94 @@ import { Plus } from "lucide-react";
 
 export function AbrirCaja() {
   const dispatch = useDispatch();
-  const [caja, setCajas] = useState([]);
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
   const queryClient = useQueryClient();
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm();
 
-  const getCajas = async () => {
-    try {
-      const response = await axiosInstance.get("/cajas");
-      if (response.data.success) {
-        setCajas(response.data.cajas);
-      } else {
-        ToastAlert("error", response.data.message);
-      }
-    } catch (error) {
-      ToastAlert("error", "Error de conexión");
-    }
-  };
-
   const {
-    data: configEmpresa = [],
-    isLoading: isLoadingConfig,
-    isError: isErrorConfig,
+    data: cajas = [],
+    isLoading: isLoadingCajas,
+    isError: isErrorCajas,
   } = useQuery({
+    queryKey: ["cajasSede"],
+    queryFn: async () => {
+      const response = await axiosInstance.get("/cajas");
+      if (!response.data.success) {
+        throw new Error(
+          response.data.message || "No se pudieron cargar las cajas",
+        );
+      }
+      return response.data.cajas || [];
+    },
+    retry: 1,
+    refetchOnWindowFocus: false,
+  });
+
+  const { data: configEmpresa = [] } = useQuery({
     queryKey: ["confiEmpresa"],
     queryFn: GetConfi,
     retry: 1,
     refetchOnWindowFocus: false,
   });
 
-  // 2. Filtramos la configuración
-  const configTipoVenta = configEmpresa.find(
+  const listaConfig = Array.isArray(configEmpresa) ? configEmpresa : [];
+  const configTipoVenta = listaConfig.find(
     (item) => item.nombre === "Tipo Venta",
   );
+  const claveVenta = (configTipoVenta?.clave || "").toLowerCase();
+  const esComida = claveVenta === "restaurante" || claveVenta === "comida";
 
-  const claveVenta = configTipoVenta?.clave;
-  const esComida = claveVenta === "restaurante";
-
-  useEffect(() => {
-    getCajas();
-  }, []);
+  const cajasCerradas = (Array.isArray(cajas) ? cajas : []).filter(
+    (item) => Number(item.estadoCaja) === 0,
+  );
 
   const onSubmit = async (data) => {
     try {
-      setIsLoading(true);
       const response = await axiosInstance.post(
         "/cajas/storeCajaApertura",
         data,
       );
-      if (response.data.success) {
-        ToastAlert("success", "Caja abierta correctamente");
 
-        console.log("Respuesta completa del backend:", response.data);
-        const { nombreCaja, id } = response.data.caja;
-        const cajaData = { nombre: nombreCaja, id: id, estado: "abierto" };
-
-        dispatch(abrirCaja(cajaData));
-
-        queryClient.invalidateQueries({ queryKey: ["caja"] });
-        setTimeout(() => {
-          // navigate te cambia de ruta al instante sin recargar la página
-          navigate(esComida ? "/vender/mesas" : "/vender/ventasLlevar");
-        }, 100);
-      } else {
-        ToastAlert("error", response.data.message);
+      if (!response.data.success) {
+        ToastAlert(
+          "error",
+          response.data.message || "No se pudo abrir la caja",
+        );
+        return;
       }
+
+      const cajaAbierta = response.data.caja;
+      const cajaData = {
+        nombre: cajaAbierta?.nombreCaja,
+        id: cajaAbierta?.id,
+        estado: "abierto",
+      };
+
+      dispatch(abrirCaja(cajaData));
+
+      // Evita que CajaProtectedRoute use la caché de "caja cerrada" y te devuelva aquí.
+      queryClient.setQueryData(["caja"], {
+        success: true,
+        data: {
+          id: cajaAbierta?.id,
+          nombreCaja: cajaAbierta?.nombreCaja,
+          estadoCaja: 1,
+        },
+      });
+      await queryClient.invalidateQueries({ queryKey: ["cajasSede"] });
+
+      ToastAlert("success", "Caja abierta correctamente");
+      navigate(esComida ? "/vender/mesas" : "/vender/ventasLlevar");
     } catch (error) {
-      ToastAlert("error", "Error al abrir la caja");
-    } finally {
-      setIsLoading(false); // 🟢 Siempre se desactiva al final (éxito o error)
+      ToastAlert(
+        "error",
+        error.response?.data?.message || "Error al abrir la caja",
+      );
     }
   };
 
@@ -100,57 +113,81 @@ export function AbrirCaja() {
     <div>
       <div
         className="d-flex justify-content-center align-items-center"
-        style={{ height: "80vh" }}
+        style={{ minHeight: "80vh" }}
       >
-        <div className=" card abrir-caja-container w-100  h-100 shadow-sm p-4">
-          <div class="card-header">
-            <h4 className="text-center">
-              <FontAwesomeIcon icon={faBoxOpen} /> Abrir Caja
+        <div
+          className="card abrir-caja-container shadow-sm p-4"
+          style={{ maxWidth: 480, width: "100%" }}
+        >
+          <div className="card-header bg-transparent border-0 d-flex justify-content-between align-items-center px-0 pt-0">
+            <h4 className="mb-0">
+              <FontAwesomeIcon icon={faBoxOpen} className="me-2" />
+              Abrir Caja
             </h4>
             <button
-              className="btn-principal mb-2"
+              type="button"
+              className="btn-principal mb-0"
               onClick={() => navigate("/ventas/cajas")}
             >
-              <Plus /> Agregar Caja
+              <Plus size={16} /> Agregar Caja
             </button>
           </div>
 
-          <div className="alert alert-secondary">
+          <div className="alert alert-secondary mt-3">
             <FontAwesomeIcon icon={faTriangleExclamation} className="mx-2" />
-            Caja Cerrada, Porfavor apertura una.
+            Caja cerrada. Por favor, aperture una para continuar.
           </div>
+
           <form onSubmit={handleSubmit(onSubmit)} className="form-abrir-caja">
-            <div className="mb-3 ">
-              <label htmlFor="caja " className="mx-3 small">
+            <div className="mb-3">
+              <label htmlFor="caja" className="mx-1 small">
                 <FontAwesomeIcon icon={faCashRegister} /> Seleccionar Caja
               </label>
 
               <select
                 id="caja"
                 className={`form-select ${errors.caja ? "is-invalid" : ""}`}
+                disabled={isLoadingCajas}
                 {...register("caja", { required: "Seleccione una caja" })}
               >
-                <option value="">Seleccione...</option>
-                {caja
-                  .filter((cajas) => cajas.estadoCaja == 0)
-                  .map((cajas) => (
-                    <option key={cajas.id} value={cajas.id}>
-                      {cajas.nombreCaja}
-                    </option>
-                  ))}
+                <option value="">
+                  {isLoadingCajas ? "Cargando cajas..." : "Seleccione..."}
+                </option>
+                {cajasCerradas.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.nombreCaja}
+                  </option>
+                ))}
               </select>
 
               {errors.caja && (
                 <div className="invalid-feedback">{errors.caja.message}</div>
               )}
+
+              {isErrorCajas && (
+                <div className="text-danger small mt-1">
+                  No se pudieron cargar las cajas.
+                </div>
+              )}
+
+              {!isLoadingCajas &&
+                !isErrorCajas &&
+                cajasCerradas.length === 0 && (
+                  <div className="text-muted small mt-1">
+                    No hay cajas cerradas disponibles. Cree una nueva o cierre
+                    la que está abierta.
+                  </div>
+                )}
             </div>
 
             <div className="mb-3">
-              <label htmlFor="monto" className="mx-3 small">
+              <label htmlFor="monto" className="mx-1 small">
                 Monto de Apertura S/.
               </label>
               <input
-                type="text"
+                type="number"
+                step="0.01"
+                min="0"
                 id="monto"
                 className={`form-control ${
                   errors.montoApertura ? "is-invalid" : ""
@@ -158,6 +195,10 @@ export function AbrirCaja() {
                 placeholder="Ingrese el monto inicial"
                 {...register("montoApertura", {
                   required: "Ingrese el monto de apertura",
+                  min: {
+                    value: 0,
+                    message: "El monto no puede ser negativo",
+                  },
                 })}
               />
 
@@ -170,10 +211,12 @@ export function AbrirCaja() {
 
             <button
               type="submit"
-              className="btn-guardar btn-block"
-              disabled={isLoading}
+              className="btn-guardar btn-block w-100"
+              disabled={
+                isSubmitting || isLoadingCajas || cajasCerradas.length === 0
+              }
             >
-              {isLoading ? (
+              {isSubmitting ? (
                 <Cargando />
               ) : (
                 <>

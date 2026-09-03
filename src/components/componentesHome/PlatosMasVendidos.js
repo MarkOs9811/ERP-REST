@@ -86,7 +86,7 @@ export function PlatoMasVendido() {
               Platos más Vendidos
             </h5>
             <p className="text-muted small mb-0">
-              Platos que piden recurrente.
+              Platos más pedidos este mes.
             </p>
           </div>
         </div>
@@ -163,7 +163,7 @@ export function PlatoMasVendido() {
 
             {/* SECCIÓN MENÚ SECUNDARIO (El resto de platos) */}
             {menuSecundario.length > 0 && (
-              <div className="mt-5">
+              <div className="mt-4">
                 <h6
                   className="text-muted fw-bold mb-3"
                   style={{ letterSpacing: "2px", fontSize: "0.8rem" }}

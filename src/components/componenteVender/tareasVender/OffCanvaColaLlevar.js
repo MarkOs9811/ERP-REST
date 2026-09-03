@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Clock,
   Printer,
@@ -7,11 +7,22 @@ import {
   Search,
   AlertCircle,
   User,
+  XCircle,
+  LoaderCircle,
 } from "lucide-react";
+import { BadgeComponent } from "../../componentesReutilizables/BadgeComponent";
+import { obtenerTiempoRelativo } from "../../../utils/formatoFechas";
+import { BotonImprimirComanda } from "./BotonImprimirComanda";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axiosInstance from "../../../api/AxiosInstance";
+import ToastAlert from "../../componenteToast/ToastAlert";
 
 export function OffcanvasColaLlevar({ pedidosCola = [] }) {
   const offcanvasRef = useRef(null);
+
+  const queryCliente = useQueryClient();
   const [searchTerm, setSearchTerm] = useState("");
+  const [filtroTab, setFiltroTab] = useState("todos"); // "todos" | "pendientes" | "entregados"
 
   useEffect(() => {
     const handleInteraction = (e) => {
@@ -41,6 +52,11 @@ export function OffcanvasColaLlevar({ pedidosCola = [] }) {
   }, []);
 
   const pedidosFiltrados = pedidosCola.filter((pedido) => {
+    // 1. Filtrado por pestañas (estado)
+    if (filtroTab === "pendientes" && pedido.estado !== 0) return false;
+    if (filtroTab === "entregados" && pedido.estado !== 1) return false;
+
+    // 2. Filtrado por texto de búsqueda (código o cliente)
     const termino = searchTerm.toLowerCase();
     const codigo = `ped-${pedido.idPedidoLLevar || pedido.id}`.toLowerCase();
     const clienteStr =
@@ -53,34 +69,65 @@ export function OffcanvasColaLlevar({ pedidosCola = [] }) {
     );
   });
 
-  // 🔥 FUNCIÓN AYUDANTE: Centraliza la lógica de los estados
+  // FUNCIÓN AYUDANTE: Centraliza la lógica de los estados
   const obtenerConfigEstado = (estado) => {
     switch (estado) {
       case 0:
-        return {
-          label: "EN ESPERA",
-          bg: "#F3F4F6",
-          color: "var(--text-muted)",
-        };
+        return (
+          <BadgeComponent label="Pendiente" className="px-2 text-capitalize" />
+        );
+
       case 2:
-        return {
-          label: "EN PREPARACIÓN",
-          bg: "var(--bg-saffron-soft)",
-          color: "var(--fw-saffron)",
-        };
+        return (
+          <BadgeComponent
+            label="En Proceso"
+            className="px-2 text-capitalize "
+          />
+        );
+
       case 1:
-        return {
-          label: "LISTO",
-          bg: "var(--bg-emerald-soft)",
-          color: "var(--fw-emerald)",
-        };
+        return (
+          <BadgeComponent label="Listo" className="px-2 text-capitalize" />
+        );
+
       default:
-        return {
-          label: "DESCONOCIDO",
-          bg: "transparent",
-          color: "var(--fw-onyx)",
-        };
+        return (
+          <BadgeComponent
+            label="Desconocido"
+            className="px-2 text-capitalize"
+          />
+        );
     }
+  };
+  const [pedidoProcesando, setPedidoProcesando] = useState(null);
+  const cambiarEstado = useMutation({
+    mutationFn: async ({ idPedido }) => {
+      const { data } = await axiosInstance.put(`/pedidoCocina/${idPedido}`);
+      return data;
+    },
+    onSuccess: () => {
+      ToastAlert("success", "Estado del pedido actualizado correctamente");
+      queryCliente.invalidateQueries({ queryKey: ["pedidosEstado"] });
+    },
+    onError: (error) => {
+      ToastAlert(
+        "error",
+        "Error al actualizar el estado del pedido: " +
+          (error?.response?.data?.message || error.message),
+      );
+    },
+  });
+
+  const handleCambiarEstadoPedido = (idPedido) => {
+    setPedidoProcesando(idPedido);
+    cambiarEstado.mutate(
+      { idPedido },
+      {
+        onSettled: () => {
+          setPedidoProcesando(null);
+        },
+      },
+    );
   };
 
   return (
@@ -99,7 +146,8 @@ export function OffcanvasColaLlevar({ pedidosCola = [] }) {
             className="offcanvas-title fw-bold d-flex align-items-center gap-2 m-0"
             style={{ color: "var(--brand-primary)" }}
           >
-            <ListOrderedIcon size={20} /> Pedidos en Cola
+            {" "}
+            Pedidos en Cola
           </h5>
           <button
             type="button"
@@ -107,6 +155,46 @@ export function OffcanvasColaLlevar({ pedidosCola = [] }) {
             data-bs-dismiss="offcanvas"
             aria-label="Close"
           ></button>
+        </div>
+
+        {/* PESTAÑAS DE FILTRO (Por entregar / Entregados / Todos) */}
+        <div className="w-100 d-flex gap-1 p-1 bg-light rounded-pill border">
+          <button
+            type="button"
+            className={`flex-fill btn btn-sm rounded-pill fw-semibold py-1 transition-all ${
+              filtroTab === "todos"
+                ? "bg-white text-dark shadow-sm"
+                : "text-muted border-0 bg-transparent"
+            }`}
+            onClick={() => setFiltroTab("todos")}
+            style={{ fontSize: "0.85rem" }}
+          >
+            Todos
+          </button>
+          <button
+            type="button"
+            className={`flex-fill btn btn-sm rounded-pill fw-semibold py-1 transition-all ${
+              filtroTab === "pendientes"
+                ? "bg-white text-dark shadow-sm"
+                : "text-muted border-0 bg-transparent"
+            }`}
+            onClick={() => setFiltroTab("pendientes")}
+            style={{ fontSize: "0.85rem" }}
+          >
+            Por entregar
+          </button>
+          <button
+            type="button"
+            className={`flex-fill btn btn-sm rounded-pill fw-semibold py-1 transition-all ${
+              filtroTab === "entregados"
+                ? "bg-white text-dark shadow-sm"
+                : "text-muted border-0 bg-transparent"
+            }`}
+            onClick={() => setFiltroTab("entregados")}
+            style={{ fontSize: "0.85rem" }}
+          >
+            Entregados
+          </button>
         </div>
 
         <div className="position-relative w-100 mt-1">
@@ -146,22 +234,14 @@ export function OffcanvasColaLlevar({ pedidosCola = [] }) {
               return suma + item.cantidad * Number(item.precio_unitario);
             }, 0);
 
-            const horaFormateada = pedido.created_at
-              ? new Date(pedido.created_at).toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })
-              : "Hace un momento";
-
             // Usamos la función para obtener el color y texto exacto
             const configEstado = obtenerConfigEstado(pedido.estado);
 
             return (
               <div
                 key={`cola-${pedido.id}`}
-                className="card mb-3 border-0 shadow-sm"
+                className="card mb-3 "
                 style={{
-                  borderLeft: `4px solid ${configEstado.color} !important`, // El borde ahora coincide con el estado
                   borderRadius: "var(--radius-sm)",
                 }}
               >
@@ -179,25 +259,14 @@ export function OffcanvasColaLlevar({ pedidosCola = [] }) {
                         {pedido.detalle_cliente || "Cliente Genérico"}
                       </small>
                       <small
-                        className="text-muted d-flex align-items-center gap-1"
+                        className=" d-flex align-items-center gap-1 text-dark opacity-50"
                         style={{ fontSize: "0.8rem" }}
                       >
-                        <Clock size={12} /> {horaFormateada}
+                        <Clock size={12} />{" "}
+                        {obtenerTiempoRelativo(pedido.created_at)}
                       </small>
                     </div>
-
-                    {/* 🔥 Aplicamos los estilos del estado aquí */}
-                    <span
-                      className="badge rounded-pill fw-bold"
-                      style={{
-                        backgroundColor: configEstado.bg,
-                        color: configEstado.color,
-                        fontSize: "0.7rem",
-                        letterSpacing: "0.5px",
-                      }}
-                    >
-                      {configEstado.label}
-                    </span>
+                    <div>{configEstado}</div>
                   </div>
 
                   <div className="small mb-3 text-dark border-top pt-2 mt-2">
@@ -227,22 +296,37 @@ export function OffcanvasColaLlevar({ pedidosCola = [] }) {
 
                   <div className="d-flex justify-content-between align-items-center mt-3 pt-2 border-top">
                     <div className="d-flex gap-2">
-                      <button
-                        className="btn btn-sm btn-light border d-flex align-items-center justify-content-center text-muted rounded-pill px-3"
-                        title="Reimprimir"
-                      >
-                        <Printer size={16} />
-                      </button>
-                      <button
-                        className="btn btn-sm d-flex align-items-center gap-1 rounded-pill px-3 fw-bold"
-                        style={{
-                          backgroundColor: "var(--bg-emerald-soft)",
-                          color: "var(--fw-emerald)",
-                          border: "1px solid var(--fw-emerald)",
-                        }}
-                      >
-                        <CheckCircle size={16} /> Entregar
-                      </button>
+                      <BotonImprimirComanda dataPedido={pedido} />
+
+                      {pedido.estado === 0 || pedido.estado === 1 ? (
+                        <button
+                          key={`btn-estado-${pedido.id}`}
+                          type="button"
+                          className={`d-flex align-items-center gap-1 rounded-pill px-3 fw-bold ${
+                            pedido.estado === 0 ? "btn-editar" : "btn-generico"
+                          } ${
+                            pedidoProcesando === pedido.id
+                              ? "disabled cursor-not-allowed"
+                              : ""
+                          }`}
+                          disabled={pedidoProcesando === pedido.id}
+                          onClick={() => handleCambiarEstadoPedido(pedido.id)}
+                        >
+                          {pedidoProcesando === pedido.id ? (
+                            <LoaderCircle size={16} className="animate-spin" />
+                          ) : pedido.estado === 0 ? (
+                            <CheckCircle size={16} />
+                          ) : (
+                            <XCircle size={16} />
+                          )}
+
+                          {pedidoProcesando === pedido.id
+                            ? "Procesando..."
+                            : pedido.estado === 0
+                              ? "Entregar"
+                              : "Reabrir"}
+                        </button>
+                      ) : null}
                     </div>
                     <span className="fw-bold fs-6 text-dark">
                       S/. {totalPedido.toFixed(2)}

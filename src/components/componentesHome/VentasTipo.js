@@ -1,7 +1,8 @@
 import { Globe, ShoppingBag, Utensils } from "lucide-react";
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
 
-export function VentasTipo({ load, error, ventasList }) {
+export function VentasTipo({ load, error, errorLoad, ventasList }) {
+  const isError = error ?? errorLoad;
   // Lógica optimizada: Procesamos todo en una sola iteración (O(N)) usando reduce.
   const currentMonth = new Date().getMonth() + 1;
   const currentYear = new Date().getFullYear();
@@ -71,15 +72,18 @@ export function VentasTipo({ load, error, ventasList }) {
   ];
 
   return (
-    <CondicionCarga isLoading={load} isError={error}>
-      {/* Container principal con Flexbox y gap nativo de Bootstrap */}
-      <div className="d-flex flex-column gap-3 h-100">
+    <CondicionCarga isLoading={load} isError={isError}>
+      <div className="card p-3 h-100">
+        <h6 className="fw-bold mb-3" style={{ color: "var(--text-main)" }}>
+          Ventas por tipo
+        </h6>
+        <div className="d-flex flex-column gap-3">
         {tarjetasStats.map((stat) => (
           <div
             key={stat.id}
-            className="bg-white d-flex border align-items-center p-3"
+            className="d-flex border align-items-center p-3"
             style={{
-              backgroundColor: "var(--bg-card)",
+              backgroundColor: "var(--bg-muted)",
               borderRadius: "var(--radius-md)",
             }}
           >
@@ -119,6 +123,7 @@ export function VentasTipo({ load, error, ventasList }) {
             </div>
           </div>
         ))}
+        </div>
       </div>
     </CondicionCarga>
   );

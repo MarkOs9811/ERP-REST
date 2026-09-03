@@ -6,7 +6,7 @@
 :root {
   --fw-onyx: #030303;
   --fw-emerald: #15572d;
-  --fw-saffron: #ff9419;
+  --fw-saffron: #d48020;
   --fw-strawberry: #ca2929;
   --fw-informative: #313131;
   --fw-desactivar: #000000;
@@ -20,7 +20,7 @@
   --fw-slate-700: #374151;
 
   --bg-emerald-soft: #42d17e;
-  --bg-saffron-soft: #ffedd8;
+  --bg-saffron-soft: #fff9f3;
   --bg-strawberry-soft: #fef2f2;
   --bg-informative-soft: #dddfe2;
 
@@ -454,14 +454,14 @@ button svg,
 
 .btn-editar {
   background: var(--bg-saffron-soft);
-  color: var(--fw-saffron);
-  border: 1px solid var(--fw-saffron);
+  color: rgb(240, 149, 30) !important;
+  border: 1px solid rgb(226, 140, 28) !important;
   font-weight: bold !important;
 }
 
 .btn-editar:hover {
-  background: var(--bg-saffron-soft);
-  color: rgb(141, 80, 0) !important;
+  background: #fff0e1 !important;
+  color: rgb(255, 145, 0) !important;
   border: 1px solid var(--fw-saffron);
 }
 

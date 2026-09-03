@@ -13,6 +13,7 @@ const variantes = {
 const estadoColorMap = {
   // CLAVES EN MAYÚSCULAS (Para buscar el color internamente)
   PAGADO: "success",
+  LISTO: "success",
   ACTIVO: "success",
   COMPLETADO: "success",
   APROBADO: "success",

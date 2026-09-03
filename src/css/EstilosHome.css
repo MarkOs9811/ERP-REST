@@ -700,3 +700,29 @@ body.dark-theme .ai-response {
 .btn-abrir-caja:active {
     transform: translateY(0);
 }
+
+.home-shell {
+    max-width: 1600px;
+}
+
+.home-hero-banner {
+    min-height: 220px;
+    background-size: cover;
+    background-position: center;
+}
+
+.home-caja-card {
+    border: 1px solid var(--fw-border);
+    background: var(--bg-surface);
+    border-radius: var(--radius-md);
+}
+
+.home-salon-grid {
+    max-height: 520px;
+    overflow: auto;
+    padding-right: 4px;
+}
+
+.fw-carousel-marketing {
+    min-height: 240px;
+}

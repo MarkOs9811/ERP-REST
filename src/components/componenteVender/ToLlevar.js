@@ -59,10 +59,13 @@ export function ToLlevar() {
     staleTime: 2000, //  Espera 2 segundos antes de permitir otra recarga masiva por WebSockets
   });
   const pedidosLlevar = useMemo(() => {
-    return todosLosPedidos.filter(
-      (pedidos) => pedidos.tipo_pedido === "llevar",
-    );
+    return todosLosPedidos.filter((pedido) => pedido.tipo_pedido === "llevar");
   }, [todosLosPedidos]);
+
+  // 2. Solo los pendientes (exclusivo para el contador del botón)
+  const pedidosLlevarPendientes = useMemo(() => {
+    return pedidosLlevar.filter((pedido) => pedido.estado === 0);
+  }, [pedidosLlevar]);
 
   // CONDICIONAR SI LA CONFIGURACIONDE LA EMRPESA ES PARA VENTAS RESTUARANTE O VENTAS STORE TIENDA NORMAL
   // 1. Primero obtenemos la configuración de la empresa
@@ -160,7 +163,7 @@ export function ToLlevar() {
                   >
                     <ListOrderedIcon size={16} />
                     Cola
-                    {pedidosLlevar?.length > 0 && (
+                    {pedidosLlevarPendientes?.length > 0 && (
                       <span
                         className="position-absolute top-0 start-0 translate-middle badge rounded-pill"
                         style={{
@@ -168,7 +171,7 @@ export function ToLlevar() {
                           color: "var(--fw-white)",
                         }}
                       >
-                        {pedidosLlevar.length}
+                        {pedidosLlevarPendientes.length}
                       </span>
                     )}
                   </button>

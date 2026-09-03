@@ -49,7 +49,7 @@ export const Login = () => {
     setBadgeMessage({ type: "", text: "" });
     reset();
     clearErrors();
-  };
+  };  
 
   // --- Lógica de Login con Control de Sesión ---
   const onSubmitLogin = async (data) => {
@@ -62,7 +62,7 @@ export const Login = () => {
         email: data.email,
         password: data.password,
       });
-      // 🔥 AGREGA ESTAS 4 LÍNEAS AQUÍ:
+      // AGREGA ESTAS 4 LÍNEAS AQUÍ:
       console.log("===============================");
       console.log("TIPO DE DATA:", typeof response.data);
       console.log("CONTENIDO DE DATA:", response.data);

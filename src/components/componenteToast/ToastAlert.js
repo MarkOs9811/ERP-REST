@@ -16,31 +16,31 @@ const ToastAlert = (type, message) => {
     case "success":
       toast.success(
         <span dangerouslySetInnerHTML={{ __html: message }} />,
-        options
+        options,
       );
       break;
     case "error":
       toast.error(
         <span dangerouslySetInnerHTML={{ __html: message }} />,
-        options
+        options,
       );
       break;
     case "info":
       toast.info(
         <span dangerouslySetInnerHTML={{ __html: message }} />,
-        options
+        options,
       );
       break;
     case "warning":
       toast.warning(
         <span dangerouslySetInnerHTML={{ __html: message }} />,
-        options
+        options,
       );
       break;
     case "loading":
       toast.loading(
         <span dangerouslySetInnerHTML={{ __html: message }} />,
-        options
+        options,
       );
       break;
     default:

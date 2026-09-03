@@ -21,24 +21,25 @@ import { ModalDetallesVentas } from "./ModalDetallesVentas";
 import { BtnVer } from "../componentesReutilizables/BotonesAccion";
 import { BadgeComponent } from "../componentesReutilizables/BadgeComponent";
 
-export function ListVentas({ search }) {
+export function ListVentas({ search, ventas }) {
   const [modalDetallesVenta, setModalDetallesVenta] = useState(false);
   const [dataVentas, setDataVentas] = useState([]);
 
   // React Query: obtener ventas con `useQuery`
   const {
-    data: listVentas = [],
+    data: ventasConsultadas = [],
     isLoading,
     isError,
   } = useQuery({
     queryKey: ["ventas"],
     queryFn: getVentas,
+    enabled: ventas === undefined,
   });
-  console.log(listVentas);
+  const listVentas = ventas ?? ventasConsultadas;
   // Estado para la lista filtrada
   const [filteredVentas, setFilteredVentas] = useState([]);
 
-  // Filtrado cuando cambia `search` o `listVentas`
+  // La búsqueda refina el período que ya recibió la tabla.
   useEffect(() => {
     const formatToDMY = (isoDate) => {
       if (!isoDate) return "";

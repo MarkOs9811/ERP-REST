@@ -1,49 +1,51 @@
-import { Activity, User } from "lucide-react";
-
+import { Activity } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
+import { useAuth } from "../../AuthContext";
 
-export function CabeceraHome({ load, error }) {
-  const user = JSON.parse(localStorage.getItem("user"));
-
+export function CabeceraHome({ cajaAbierta = false }) {
+  const { user } = useAuth();
   const navigate = useNavigate();
-  const goVender = () => {
-    navigate("/vender");
-  };
+  const nombre = user?.empleado?.persona?.nombre || "Usuario";
+  const fecha = new Date().toLocaleDateString();
+  const hora = new Date().toLocaleTimeString();
+
   return (
     <div className="h-100">
-      <CondicionCarga isLoading={load} isError={error}>
         <div
-          className="card rounded-4 overflow-hidden position-relative "
+          className="card rounded-4 overflow-hidden position-relative h-100 home-hero-banner"
           style={{ backgroundImage: "url('/images/background2.jpg')" }}
         >
           <div className="home-banner-overlay"></div>
 
-          <div className="card-body text-auto position-relative p-4 p-lg-5 home-banner-content">
-            <h2 className="mb-1 text-white home-banner-title">
-              <strong>
-                Hola, {user?.empleado?.persona?.nombre || "Usuario"}
-              </strong>
-            </h2>
-            <button className="btn-eliminar py-3" onClick={() => goVender()}>
-              Comenzar a vender
-            </button>
-            <User
-              color={"#fff"}
-              height="30px"
-              width="30px"
-              className="home-banner-user"
-            />
-            <div className="d-flex align-items-center mt-3 home-banner-meta">
-              <Activity color={"#fff"} height="18px" width="18px" />
-              <small className="opacity-75 ms-2">
-                Panel de control - {new Date().toLocaleDateString()} | Última
-                actualización: {new Date().toLocaleTimeString()}
-              </small>
+          <div className="card-body position-relative p-4 p-lg-5 home-banner-content d-flex flex-column justify-content-between h-100">
+            <div>
+              <span className="home-hero-kicker mb-3">Panel de control</span>
+              <h2 className="mb-2 text-white home-banner-title">
+                <strong>Hola, {nombre}</strong>
+              </h2>
+              <p className="text-white-50 mb-4 mb-lg-0">
+                Revisa ventas, salón y alertas del día desde un solo lugar.
+              </p>
+            </div>
+
+            <div className="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3 mt-4">
+              <button
+                className="btn-eliminar py-3 px-4"
+                onClick={() =>
+                  navigate(cajaAbierta ? "/vender/mesas" : "/abrirCaja")
+                }
+              >
+                Comenzar a vender
+              </button>
+              <div className="d-flex align-items-center home-banner-meta">
+                <Activity color="#fff" size={18} />
+                <small className="opacity-75 ms-2">
+                  {fecha} · Última actualización: {hora}
+                </small>
+              </div>
             </div>
           </div>
         </div>
-      </CondicionCarga>
     </div>
   );
 }

@@ -347,14 +347,13 @@ export function GraficoIAhome() {
               {
                 label: "Ventas Reales (7 días)",
                 value: formatCurrency(ventasTotales),
-                delta: "+12.4%",
+                delta: `${variacion >= 0 ? "+" : ""}${variacion.toFixed(1)}%`,
                 color: "#1fae68",
                 bg: "#e8f9ee",
               },
               {
                 label: "Predicción (7 días)",
                 value: formatCurrency(prediccionTotal),
-                delta: "+8.7%",
                 color: "#ef4c4c",
                 bg: "#ffe9e9",
               },

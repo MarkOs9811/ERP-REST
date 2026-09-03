@@ -1,8 +1,14 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { CondicionCarga } from "../../components/componentesReutilizables/CondicionCarga";
 import { useQuery } from "@tanstack/react-query";
 import { getVentas } from "../../service/ObtenerVentasDetalle";
-import { FileText, Search } from "lucide-react";
+import {
+  CalendarRange,
+  FileText,
+  Search,
+  ShoppingBag,
+  WalletCards,
+} from "lucide-react";
 import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteExcel";
 import { ListVentas } from "../../components/componentesVentas/ListaVentas";
 import "../../css/estilosVentas/EstilosListaVentas.css";
@@ -10,6 +16,7 @@ import "../../css/estilosVentas/EstilosListaVentas.css";
 export function DetallesVentas() {
   const [search, setSearch] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
+  const [period, setPeriod] = useState("all");
   const {
     data: ventasData,
     isLoading,
@@ -18,14 +25,51 @@ export function DetallesVentas() {
     queryKey: ["ventas"],
     queryFn: getVentas,
   });
-  const formatToDMY = (isoDate) => {
-    if (!isoDate) return "";
-    const [year, month, day] = isoDate.split("-");
-    const shortYear = year.slice(2); // "2025" -> "25"
-    return `${parseInt(day)}/${parseInt(month)}/${shortYear}`;
-  };
+  const ventasFiltradas = useMemo(() => {
+    const ventas = Array.isArray(ventasData) ? ventasData : [];
+    const now = new Date();
+    const startOfToday = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+    );
+    const startOfWeek = new Date(startOfToday);
+    const dayOfWeek = startOfWeek.getDay() || 7;
+    startOfWeek.setDate(startOfWeek.getDate() - dayOfWeek + 1);
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+    return ventas.filter((venta) => {
+      const fecha = new Date(venta.created_at);
+      if (Number.isNaN(fecha.getTime())) return false;
+      if (selectedDate) {
+        const fechaLocal = [
+          fecha.getFullYear(),
+          String(fecha.getMonth() + 1).padStart(2, "0"),
+          String(fecha.getDate()).padStart(2, "0"),
+        ].join("-");
+        return fechaLocal === selectedDate;
+      }
+      if (period === "today") return fecha >= startOfToday;
+      if (period === "week") return fecha >= startOfWeek;
+      if (period === "month") return fecha >= startOfMonth;
+      return true;
+    });
+  }, [period, selectedDate, ventasData]);
+
+  const metricas = useMemo(() => {
+    const total = ventasFiltradas.reduce(
+      (sum, venta) => sum + Number.parseFloat(venta.total || 0),
+      0,
+    );
+    const cantidad = ventasFiltradas.length;
+    return {
+      total,
+      cantidad,
+      promedio: cantidad ? total / cantidad : 0,
+    };
+  }, [ventasFiltradas]);
   return (
-    <div>
+    <div className="ventas-root">
       {/* Lista de ventas */}
       <div className="col-12">
         <CondicionCarga isLoading={isLoading} isError={isError}>
@@ -38,10 +82,22 @@ export function DetallesVentas() {
                 <span className="badge-header ms-2">Registros</span>
               </div>
 
-              <div
-                className="d-flex align-items-center gap-2 mt-0"
-                style={{ width: "auto" }}
-              >
+              <div className="ventas-toolbar">
+                <select
+                  className="form-select ventas-period-select"
+                  value={period}
+                  onChange={(e) => {
+                    setPeriod(e.target.value);
+                    setSelectedDate("");
+                  }}
+                  aria-label="Filtrar ventas por período"
+                >
+                  <option value="all">Todas las ventas</option>
+                  <option value="today">Hoy</option>
+                  <option value="week">Esta semana</option>
+                  <option value="month">Este mes</option>
+                </select>
+
                 <div className="header-search-container">
                   <Search className="search-icon" size={18} />
                   <input
@@ -51,7 +107,7 @@ export function DetallesVentas() {
                     value={search}
                     onChange={(e) => {
                       setSearch(e.target.value);
-                      setSelectedDate(""); // limpiar fecha si escribes texto
+                      setSelectedDate("");
                     }}
                   />
                 </div>
@@ -59,24 +115,23 @@ export function DetallesVentas() {
                 {/* Filtro por fecha */}
                 <input
                   type="date"
-                  className="form-control"
+                  className="form-control ventas-date-input"
                   value={selectedDate}
                   onChange={(e) => {
                     const rawDate = e.target.value;
                     setSelectedDate(rawDate);
-                    const formatted = formatToDMY(rawDate);
-                    setSearch(formatted);
+                    setPeriod("all");
+                    setSearch("");
                   }}
-                  style={{ maxWidth: "180px", minWidth: "150px" }}
                 />
-              <button
+                <button
                   type="button"
-                  className="btn btn-outline-dark px-3"
+                  className="btn-principal"
                   onClick={() => {
-                    const urlReporte = selectedDate 
-                      ? `/reporteVentasTodo?fecha=${selectedDate}` 
+                    const urlReporte = selectedDate
+                      ? `/reporteVentasTodo?fecha=${selectedDate}`
                       : "/reporteVentasTodo";
-                      
+
                     // Pasamos null a las fechas y "Ventas" al parámetro 'tipo'
                     GetReporteExcel(urlReporte, null, null, "Ventas");
                   }}
@@ -86,8 +141,28 @@ export function DetallesVentas() {
                 </button>
               </div>
             </div>
+            <div className="ventas-kpi-grid px-4 pb-3">
+              <div className="ventas-kpi">
+                <span>
+                  <WalletCards size={17} /> Recaudación
+                </span>
+                <strong>S/ {metricas.total.toFixed(2)}</strong>
+              </div>
+              <div className="ventas-kpi">
+                <span>
+                  <ShoppingBag size={17} /> Ventas
+                </span>
+                <strong>{metricas.cantidad}</strong>
+              </div>
+              <div className="ventas-kpi">
+                <span>
+                  <CalendarRange size={17} /> Ticket promedio
+                </span>
+                <strong>S/ {metricas.promedio.toFixed(2)}</strong>
+              </div>
+            </div>
             <div className="card-body p-0">
-              <ListVentas search={search} />
+              <ListVentas search={search} ventas={ventasFiltradas} />
             </div>
           </div>
         </CondicionCarga>

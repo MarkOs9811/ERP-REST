@@ -25,35 +25,30 @@ export function UsuariosActivosHome() {
   return (
     <CondicionCarga isLoading={isLoadingUsuarios} isError={isErrorUsuarios}>
       <div className="card h-100 p-0 overflow-auto">
-        <div className="card-header d-flex m-0 align-middle justify-content-left p-3 border-bottom">
+        <div className="card-header bg-transparent d-flex align-items-center gap-2 p-3 border-bottom">
           <span
-            className="p-2 mb-0 rounded-circle bg-opacity-10 text-white"
+            className="p-2 rounded-circle text-white d-inline-flex"
             style={{ background: "var(--fw-strawberry)" }}
           >
-            <UserRound />
+            <UserRound size={18} />
           </span>
-          <h6 className="mb-1 d-flex flex-column gap-1">
-            <span className="fw-bold text-dark">Usuarios activos</span>
-            <p className="text-muted small mb-0">{listaAsistenciaHoy.length}</p>
-          </h6>
+          <div>
+            <h6 className="fw-bold mb-0" style={{ color: "var(--text-main)" }}>
+              Usuarios activos
+            </h6>
+            <p className="text-muted small mb-0">
+              {listaAsistenciaHoy.length} en asistencia hoy
+            </p>
+          </div>
         </div>
         <div className="p-3">
-          {isLoadingUsuarios ? (
-            <p className="text-muted">Cargando usuarios...</p>
-          ) : isErrorUsuarios ? (
-            <p className="text-danger">Error al cargar los usuarios.</p>
-          ) : listaAsistenciaHoy.length > 0 ? (
+          {listaAsistenciaHoy.length > 0 ? (
             <>
-              <ul className="mt-3">
+              <ul className="list-unstyled mb-0">
                 {listaAsistenciaHoy.slice(0, 4).map((usuario) => (
                   <li
                     key={usuario.id}
-                    className="list-group-item d-flex align-items-center"
-                    style={{
-                      textAlign: "left",
-                      padding: "10px",
-                      border: "none",
-                    }}
+                    className="d-flex align-items-center py-2"
                   >
                     <img
                       src={`${usuario.empleado?.empleado?.usuario?.foto_url}`}
@@ -62,17 +57,17 @@ export function UsuariosActivosHome() {
                         width: "50px",
                         height: "50px",
                         borderRadius: "50%",
-                        border: "2px solid silver",
+                        border: "2px solid var(--fw-border)",
                         marginRight: "15px",
                       }}
                     />
                     <div style={{ flex: 1 }}>
                       <p className="fw-bold mb-0 text-dark">
                         {capitalizeFirstLetter(
-                          usuario?.empleado?.nombre.toLowerCase(),
+                          (usuario?.empleado?.nombre || "").toLowerCase(),
                         )}{" "}
                         {capitalizeFirstLetter(
-                          usuario?.empleado?.apellidos.toLowerCase(),
+                          (usuario?.empleado?.apellidos || "").toLowerCase(),
                         )}
                       </p>
                     </div>

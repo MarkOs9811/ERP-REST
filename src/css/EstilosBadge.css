@@ -32,7 +32,7 @@
 .badge-soft-warning {
     background-color: var(--bg-saffron-soft);
     color: var(--fw-saffron);
-    border-color: rgba(236, 139, 35, 0.42);
+    border-color: rgb(236, 139, 35);
 }
 
 /* Estado: Peligro (Inactivo, Error) - Strawberry Fire Wok */
