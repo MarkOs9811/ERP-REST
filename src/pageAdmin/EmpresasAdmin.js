@@ -2,14 +2,11 @@ import { useQuery } from "@tanstack/react-query";
 import { GetEmpresas } from "../serviceAdmin/GetEmpresas";
 import { TablasGenerales } from "../components/componentesReutilizables/TablasGenerales";
 import { useMemo, useState } from "react";
-import { wrap } from "framer-motion";
 import {
   Check,
   Eye,
-  Grab,
   LayoutDashboard,
   MoreVertical,
-  MoreVerticalIcon,
   Pen,
   Plus,
   Trash2,
@@ -230,7 +227,7 @@ export function EmpresasAdmin() {
           <BotonMotionGeneral
             text="Crear nueva empresa"
             icon={<Plus />}
-            classDefault="d-flex w-100 align-items-center border-0 rounded-3 "
+            classDefault="btn-generico w-100 align-items-center "
             onClick={() => {
               setFormularioAbierto(true);
               setDataEmpresa(null);

@@ -10,6 +10,7 @@ import {
   UserRoundCheck,
   BikeIcon,
   Search,
+  Package,
 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -109,6 +110,8 @@ export function Navegacion({ tipoNavegacion = null }) {
     { label: "Lista Clientes", path: "/clientes/lista" },
     { label: "Feedbacks", path: "/clientes/comentarios" },
     { label: "Campañas", path: "/clientes/fidelizacion" },
+
+    { label: "mis entregas", path: "/mis-entregas" },
   ];
   const isCompressed = useSelector((state) => state.sidebar.isCompressed);
   const [searchTerm, setSearchTerm] = useState("");
@@ -290,7 +293,6 @@ export function Navegacion({ tipoNavegacion = null }) {
               </div>
             )}
           </div>
-
           {/* 1. Asistencia */}
           <button
             className="btn btn-outline-dark d-flex align-items-center gap-1 px-2 p-1 px-md-3"
@@ -300,7 +302,6 @@ export function Navegacion({ tipoNavegacion = null }) {
             <UserRoundCheck size={20} />
             <span className="d-none d-md-inline">Asistencia</span>
           </button>
-
           {/* 2. Eventos */}
           {rolesLocalStorage.some((r) => r.nombre === "incidencias") && (
             <button
@@ -310,6 +311,17 @@ export function Navegacion({ tipoNavegacion = null }) {
             >
               <Megaphone size={20} className="text-auto" />
               <span className="d-none d-md-inline">Eventos</span>
+            </button>
+          )}
+          {/* PARA MIS ENTREGAS DEL DELIVERY CONDUCTOR */}
+          {rolesLocalStorage.some((r) => r.nombre === "mis entregas") && (
+            <button
+              className="btn btn-outline-dark d-flex align-items-center gap-1 px-2 p-1 px-md-3"
+              onClick={() => navigate("/mis-entregas")}
+              title="Mis Entregas"
+            >
+              <Package size={20} className="text-auto" />
+              <span className="d-none d-md-inline">Mis Entregas</span>
             </button>
           )}
 
@@ -326,7 +338,6 @@ export function Navegacion({ tipoNavegacion = null }) {
               <span className="d-none d-md-inline">Pedidos</span>
             </button>
           )}
-
           {/* 4. POS (Oculto estrictamente para roles que no abren caja usando palabras clave) */}
           {!esRolBloqueadoParaCaja && (
             <button
@@ -342,7 +353,6 @@ export function Navegacion({ tipoNavegacion = null }) {
               <span className="d-none d-md-inline">Vender</span>
             </button>
           )}
-
           {/* 5. Cocina */}
           {["cocinero", "administrador"].includes(
             rol?.empleado?.cargo?.nombre,

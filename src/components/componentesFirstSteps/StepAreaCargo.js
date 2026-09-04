@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Briefcase, Network, Shield, ArrowRight, Users2 } from "lucide-react";
 import { PutData } from "../../service/CRUD/PutData";
 
 export function StepAreaCargo({ onFinish }) {
   const navigate = useNavigate();
-  const [setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const cambiarEstado = async (estado) => {
     setLoading(true); // Bloqueamos el botón para que no den doble click
     navigate("/rrhh/areas-y-cargos");

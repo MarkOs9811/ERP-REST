@@ -73,7 +73,7 @@ export const DICCIONARIO_ROLES = {
   ],
   clientes: [
     "clientes",
-    
+
     "mozo",
     "moso",
     "mesero",
@@ -101,6 +101,7 @@ export const DICCIONARIO_ROLES = {
     "supervisor",
     "prevencion",
   ],
+  misEntregas: ["misentregas", "mis-entregas"],
 };
 
 /**
@@ -110,7 +111,7 @@ export const DICCIONARIO_ROLES = {
  * Ejemplo: getRolesPermitidos(["almacen", "administrador"])
  * Devuelve: ["almacen", "almacenero", "inventario", ..., "admin", "gerente", ...]
  */
-export const getRolesPermitidos = (categoriasPermitidas = []) => {
+export const getCargosPermitidos = (categoriasPermitidas = []) => {
   let rolesAceptados = [];
 
   categoriasPermitidas.forEach((categoria) => {

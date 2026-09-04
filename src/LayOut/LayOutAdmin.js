@@ -13,6 +13,7 @@ import { EmpresasAdmin } from "../pageAdmin/EmpresasAdmin";
 import "../cssAdmin/estilosGeneralesAdmin.css"; // Ruta ajustada si es necesario
 import { AdminSidebar } from "../pageAdmin/AdminSideBar";
 import { AdminHeader } from "../pageAdmin/AdminHeader";
+import { ConfiguracionGeneral } from "../pageAdmin/ConfiguracionGeneral";
 
 export const LayOutAdmin = () => {
   return (
@@ -30,6 +31,7 @@ export const LayOutAdmin = () => {
               <Route index element={<HomeAdmin />} />
               <Route path="home" element={<HomeAdmin />} />
               <Route path="empresas" element={<EmpresasAdmin />} />
+              <Route path="configuracion" element={<ConfiguracionGeneral />} />
 
               <Route path="*" element={<Navigate to="" replace />} />
             </Routes>

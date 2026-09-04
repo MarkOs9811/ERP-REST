@@ -49,24 +49,21 @@ export const Login = () => {
     setBadgeMessage({ type: "", text: "" });
     reset();
     clearErrors();
-  };  
+  };
 
   // --- Lógica de Login con Control de Sesión ---
   const onSubmitLogin = async (data) => {
     setLoading(true);
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/login", {
-        //   //"https://erp-api-production-c7d4.up.railway.app/api/login",
-        // const response = await axios.post("http://192.168.100.5:8000/api/login", {
-        // const response = await axios.post("http://erp-api.test/api/login", {
+      // const response = await axios.post("http://127.0.0.1:8000/api/login", {
+      //   //"https://erp-api-production-c7d4.up.railway.app/api/login",
+      // const response = await axios.post("http://192.168.100.5:8000/api/login", {
+      const response = await axios.post("http://erp-api.test/api/login", {
         email: data.email,
         password: data.password,
       });
       // AGREGA ESTAS 4 LÍNEAS AQUÍ:
-      console.log("===============================");
-      console.log("TIPO DE DATA:", typeof response.data);
-      console.log("CONTENIDO DE DATA:", response.data);
-      console.log("===============================");
+
       if (response.data.token) {
         // 1. Enviamos el valor del checkbox a tu AuthContext
         login(response.data.token, response.data.user, data.rememberMe);

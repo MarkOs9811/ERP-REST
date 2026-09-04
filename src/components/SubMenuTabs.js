@@ -214,6 +214,7 @@ const subMenuGroups = {
       path: "/delivery/pedidos",
       icon: <ShoppingCart size={16} />,
     },
+
     {
       label: "Asignados",
       path: "/delivery/pedidosAsignados",
@@ -223,6 +224,11 @@ const subMenuGroups = {
       label: "Repartidores",
       path: "/delivery/repartidores",
       icon: <Users size={16} />,
+    },
+    {
+      label: "Mis Envios",
+      path: "/delivery/mis-entregas",
+      icon: <ShoppingCart size={16} />,
     },
     {
       label: "Zonas y Tarifas",

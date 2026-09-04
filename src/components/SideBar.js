@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { subMenuClick } from "../redux/subMenuSlice";
 import "../css/EstilosSideBar.css";
@@ -12,20 +12,19 @@ import {
   ShoppingBag,
   ShoppingCart,
   Truck,
-  Users,
+  UserRoundCheckIcon,
   Warehouse,
-  UsersRound,
+  UsersRoundIcon,
   BikeIcon,
   X,
   PackageCheckIcon,
   Landmark,
   UserRoundCogIcon,
 } from "lucide-react";
-import { useAuth } from "../AuthContext";
 import { capitalizeFirstLetter } from "../hooks/FirstLetterUp";
 import { useEffect } from "react";
 import { toggleSidebarMobile } from "../redux/sideBarMobilSlice";
-import { setSidebarCompressed, toggleSidebar } from "../redux/sideBarSlice";
+import { setSidebarCompressed } from "../redux/sideBarSlice";
 
 export function SideBar() {
   // OBTENEMOS AMBOS ESTADOS DE REDUX
@@ -35,9 +34,7 @@ export function SideBar() {
   const isCompressed = useSelector((state) => state.sidebar.isCompressed);
 
   const location = useLocation();
-  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { logout } = useAuth();
 
   const empresaString =
     localStorage.getItem("empresa") || sessionStorage.getItem("empresa");
@@ -50,7 +47,7 @@ export function SideBar() {
 
   const icons = {
     inicio: Home,
-    usuarios: Users,
+    usuarios: UsersRoundIcon,
     ventas: ShoppingBag,
     incidenciasempleado: Home,
     incidencias: Megaphone,
@@ -59,7 +56,7 @@ export function SideBar() {
     proveedores: Truck,
     compras: Calendar,
     platos: Hamburger,
-    clientes: UsersRound,
+    clientes: UserRoundCheckIcon,
     rrhh: UserRoundCogIcon,
     finanzas: Landmark,
     "areas-y-cargos": Building2,
@@ -205,6 +202,8 @@ export function SideBar() {
               "compras",
               "proveedores",
               "areas y cargos",
+              "mis entregas",
+              "cocina",
             ];
             if (ocultos.includes(roleName)) return null;
 
@@ -237,33 +236,6 @@ export function SideBar() {
                     </div>
                   </li>
                 </Link>
-
-                {roleName === "mis-entregas" ? (
-                  <Link
-                    to={`/${roleUrl}`}
-                    className="link-opcion text-decoration-none"
-                    title={role.nombre}
-                    onClick={(e) => handleModuloSeleccionado(roleUrl, e)}
-                  >
-                    <li className={`menu-item  ${isActive ? "active" : ""}`}>
-                      <div className="d-flex w-100 gap-2 align-items-center justify-content-md-start m-auto px-2">
-                        <IconComponent
-                          className="icon-lucide flex-shrink-0"
-                          size={20}
-                        />
-                        <small
-                          className="small sidebar-text"
-                          style={{
-                            fontSize: "14px",
-                            transition: "opacity 0.2s",
-                          }}
-                        >
-                          Mis entregas
-                        </small>
-                      </div>
-                    </li>
-                  </Link>
-                ) : null}
               </div>
             );
           })}

@@ -88,7 +88,7 @@ import { CategoriaPlatosCombos } from "../pages/moduloPlatos/CategoriaPlatosComb
 import { LayOutCocina } from "./LayOutCocina";
 import { LayOutMozo } from "./LayOutMozo";
 // IMPORTAMOS LA FUNCIÓN DEL DICCIONARIO
-import { getRolesPermitidos } from "../utils/diccionarioRoles";
+import { getCargosPermitidos } from "../utils/diccionarioRoles";
 // IMPORTAMOS ÍCONOS EXTRA PARA LA CABECERA MÓVIL
 import { ArrowLeft, X } from "lucide-react";
 import { setSidebarCompressed } from "../redux/sideBarSlice";
@@ -119,7 +119,7 @@ export const MainLayout = () => {
   // 2. IDENTIFICACIÓN DEL ROL (CARGO)
   const cargoUsuario = user?.empleado?.cargo?.nombre?.toLowerCase();
 
-  const rolesEspecialesValidos = getRolesPermitidos([
+  const rolesEspecialesValidos = getCargosPermitidos([
     "atencion al cliente",
     "moso",
     "mozo",
@@ -204,7 +204,7 @@ export const MainLayout = () => {
 
         {showFullLayout && (
           <PrivateRoute
-            allowedRoles={getRolesPermitidos([
+            allowedRoles={getCargosPermitidos([
               "ventas",
               "finanzas",
               "delivery",
@@ -231,7 +231,7 @@ export const MainLayout = () => {
                 path="/cocina"
                 element={
                   <PrivateRoute
-                    allowedRoles={getRolesPermitidos([
+                    allowedRoles={getCargosPermitidos([
                       "cocinero",
                       "administrador",
                     ])}
@@ -246,7 +246,7 @@ export const MainLayout = () => {
                 path="/usuarios"
                 element={
                   <PrivateRoute
-                    allowedRoles={getRolesPermitidos([
+                    allowedRoles={getCargosPermitidos([
                       "usuario",
                       "administrador",
                     ])}
@@ -259,7 +259,7 @@ export const MainLayout = () => {
                 path="/pedidosDelivery"
                 element={
                   <PrivateRoute
-                    allowedRoles={getRolesPermitidos([
+                    allowedRoles={getCargosPermitidos([
                       "delivery",
                       "conductor",
                       "administrador",
@@ -273,7 +273,8 @@ export const MainLayout = () => {
                 path="/mis-entregas"
                 element={
                   <PrivateRoute
-                    allowedRoles={getRolesPermitidos([
+                    allowedRoles={getCargosPermitidos([
+                      "mis entregas",
                       "delivery",
                       "conductor",
                       "administrador",
@@ -287,7 +288,7 @@ export const MainLayout = () => {
                 path="/platos"
                 element={
                   <PrivateRoute
-                    allowedRoles={getRolesPermitidos([
+                    allowedRoles={getCargosPermitidos([
                       "ventas",
                       "administrador",
                     ])}
@@ -300,7 +301,7 @@ export const MainLayout = () => {
                 path="/platos/combos"
                 element={
                   <PrivateRoute
-                    allowedRoles={getRolesPermitidos([
+                    allowedRoles={getCargosPermitidos([
                       "ventas",
                       "administrador",
                     ])}
@@ -313,7 +314,7 @@ export const MainLayout = () => {
                 path="/platos/categorias"
                 element={
                   <PrivateRoute
-                    allowedRoles={getRolesPermitidos([
+                    allowedRoles={getCargosPermitidos([
                       "ventas",
                       "administrador",
                     ])}
@@ -328,7 +329,7 @@ export const MainLayout = () => {
                   index
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "almacen",
                         "administrador",
                       ])}
@@ -341,7 +342,7 @@ export const MainLayout = () => {
                   path="Almacenes"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "almacen",
                         "administrador",
                       ])}
@@ -354,7 +355,7 @@ export const MainLayout = () => {
                   path="registro"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "almacen",
                         "administrador",
                       ])}
@@ -367,7 +368,7 @@ export const MainLayout = () => {
                   path="transferencia"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "almacen",
                         "administrador",
                       ])}
@@ -380,7 +381,7 @@ export const MainLayout = () => {
                   path="solicitud"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "almacen",
                         "administrador",
                       ])}
@@ -393,7 +394,7 @@ export const MainLayout = () => {
                   path="kardex"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "almacen",
                         "administrador",
                       ])}
@@ -406,7 +407,7 @@ export const MainLayout = () => {
                   path="reportes"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "almacen",
                         "administrador",
                       ])}
@@ -419,7 +420,7 @@ export const MainLayout = () => {
                   path="ajustes"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "almacen",
                         "administrador",
                       ])}
@@ -432,7 +433,7 @@ export const MainLayout = () => {
                   path="compras"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "compras",
                         "administrador",
                       ])}
@@ -445,7 +446,7 @@ export const MainLayout = () => {
                   path="proveedores"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "proveedores",
                         "administrador",
                       ])}
@@ -461,7 +462,7 @@ export const MainLayout = () => {
                   index
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "RRHH",
                         "administrador",
                       ])}
@@ -474,7 +475,7 @@ export const MainLayout = () => {
                   path="usuarios"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "RRHH",
                         "administrador",
                       ])}
@@ -487,7 +488,7 @@ export const MainLayout = () => {
                   path="planilla"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "RRHH",
                         "administrador",
                       ])}
@@ -500,7 +501,7 @@ export const MainLayout = () => {
                   path="ingreso-a-planilla"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "RRHH",
                         "administrador",
                       ])}
@@ -513,7 +514,7 @@ export const MainLayout = () => {
                   path="nomina"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "RRHH",
                         "administrador",
                       ])}
@@ -526,7 +527,7 @@ export const MainLayout = () => {
                   path="asistencia"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "RRHH",
                         "administrador",
                       ])}
@@ -539,7 +540,7 @@ export const MainLayout = () => {
                   path="horas-extras"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "RRHH",
                         "administrador",
                       ])}
@@ -552,7 +553,7 @@ export const MainLayout = () => {
                   path="adelanto-de-sueldo"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "RRHH",
                         "administrador",
                       ])}
@@ -565,7 +566,7 @@ export const MainLayout = () => {
                   path="vacaciones"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "RRHH",
                         "administrador",
                       ])}
@@ -578,7 +579,7 @@ export const MainLayout = () => {
                   path="reportes"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "RRHH",
                         "administrador",
                       ])}
@@ -591,7 +592,7 @@ export const MainLayout = () => {
                   path="ajustes"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "RRHH",
                         "administrador",
                       ])}
@@ -604,7 +605,7 @@ export const MainLayout = () => {
                   path="areas-y-cargos"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "areas y cargos",
                         "administrador",
                       ])}
@@ -620,7 +621,7 @@ export const MainLayout = () => {
                   index
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "clientes",
                         "administrador",
                       ])}
@@ -633,7 +634,7 @@ export const MainLayout = () => {
                   path="dashboard"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "clientes",
                         "administrador",
                       ])}
@@ -646,7 +647,7 @@ export const MainLayout = () => {
                   path="lista"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "clientes",
                         "administrador",
                       ])}
@@ -659,7 +660,7 @@ export const MainLayout = () => {
                   path="comentarios"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "clientes",
                         "administrador",
                       ])}
@@ -672,7 +673,7 @@ export const MainLayout = () => {
                   path="fidelizacion"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "clientes",
                         "administrador",
                       ])}
@@ -688,7 +689,7 @@ export const MainLayout = () => {
                   index
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "ventas",
                         "administrador",
                       ])}
@@ -701,7 +702,7 @@ export const MainLayout = () => {
                   path="dashboard"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "ventas",
                         "administrador",
                       ])}
@@ -714,7 +715,7 @@ export const MainLayout = () => {
                   path="mis-ventas"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "ventas",
                         "administrador",
                       ])}
@@ -727,7 +728,7 @@ export const MainLayout = () => {
                   path="inventario"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "ventas",
                         "administrador",
                       ])}
@@ -740,7 +741,7 @@ export const MainLayout = () => {
                   path="solicitud"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "ventas",
                         "administrador",
                       ])}
@@ -753,7 +754,7 @@ export const MainLayout = () => {
                   path="solicitud/realizarSolicitud"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "ventas",
                         "administrador",
                       ])}
@@ -766,7 +767,7 @@ export const MainLayout = () => {
                   path="mesas"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "ventas",
                         "administrador",
                       ])}
@@ -779,7 +780,7 @@ export const MainLayout = () => {
                   path="reservasMesas"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "ventas",
                         "administrador",
                       ])}
@@ -792,7 +793,7 @@ export const MainLayout = () => {
                   path="reportes"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "ventas",
                         "administrador",
                       ])}
@@ -805,7 +806,7 @@ export const MainLayout = () => {
                   path="ajustesVentas"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "ventas",
                         "administrador",
                       ])}
@@ -818,7 +819,7 @@ export const MainLayout = () => {
                   path="cajas"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "ventas",
                         "administrador",
                       ])}
@@ -834,7 +835,7 @@ export const MainLayout = () => {
                   index
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "delivery",
                         "administrador",
                       ])}
@@ -847,7 +848,7 @@ export const MainLayout = () => {
                   path="pedidos"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "delivery",
                         "administrador",
                       ])}
@@ -860,7 +861,7 @@ export const MainLayout = () => {
                   path="pedidosAsignados"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "delivery",
                         "administrador",
                       ])}
@@ -873,7 +874,7 @@ export const MainLayout = () => {
                   path="repartidores"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "delivery",
                         "administrador",
                       ])}
@@ -883,10 +884,24 @@ export const MainLayout = () => {
                   }
                 />
                 <Route
+                  path="mis-entregas"
+                  element={
+                    <PrivateRoute
+                      allowedRoles={getCargosPermitidos([
+                        "delivery",
+                        "conductor",
+                        "administrador",
+                      ])}
+                    >
+                      <MisEntregas />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
                   path="zonas-y-tarifas"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "delivery",
                         "administrador",
                       ])}
@@ -899,7 +914,7 @@ export const MainLayout = () => {
                   path="promociones-app"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "delivery",
                         "administrador",
                       ])}
@@ -912,7 +927,7 @@ export const MainLayout = () => {
                   path="banners"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "delivery",
                         "administrador",
                       ])}
@@ -925,7 +940,7 @@ export const MainLayout = () => {
                   path="mesas"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "delivery",
                         "administrador",
                       ])}
@@ -938,7 +953,7 @@ export const MainLayout = () => {
                   path="reportes"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "delivery",
                         "administrador",
                       ])}
@@ -951,7 +966,7 @@ export const MainLayout = () => {
                   path="ajustes-ventas"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "delivery",
                         "administrador",
                       ])}
@@ -964,7 +979,7 @@ export const MainLayout = () => {
                   path="cajas"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "delivery",
                         "administrador",
                       ])}
@@ -979,7 +994,7 @@ export const MainLayout = () => {
                 path="/vender/cocina"
                 element={
                   <PrivateRoute
-                    allowedRoles={getRolesPermitidos([
+                    allowedRoles={getCargosPermitidos([
                       "cocina",
                       "administrador",
                     ])}
@@ -994,7 +1009,7 @@ export const MainLayout = () => {
                   index
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "incidencias",
                         "administrador",
                       ])}
@@ -1010,7 +1025,7 @@ export const MainLayout = () => {
                   index
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "finanzas",
                         "administrador",
                       ])}
@@ -1023,7 +1038,7 @@ export const MainLayout = () => {
                   path="informes-financieros"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "finanzas",
                         "administrador",
                       ])}
@@ -1036,7 +1051,7 @@ export const MainLayout = () => {
                   path="presupuestos"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "finanzas",
                         "administrador",
                       ])}
@@ -1049,7 +1064,7 @@ export const MainLayout = () => {
                   path="ajustes"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "finanzas",
                         "administrador",
                       ])}
@@ -1062,7 +1077,7 @@ export const MainLayout = () => {
                   path="reportes-financieros"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "finanzas",
                         "administrador",
                       ])}
@@ -1075,7 +1090,7 @@ export const MainLayout = () => {
                   path="firmar-solicitud"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "finanzas",
                         "administrador",
                       ])}
@@ -1088,7 +1103,7 @@ export const MainLayout = () => {
                   path="libro-diario"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "finanzas",
                         "administrador",
                       ])}
@@ -1101,7 +1116,7 @@ export const MainLayout = () => {
                   path="libro-mayor"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "finanzas",
                         "administrador",
                       ])}
@@ -1114,7 +1129,7 @@ export const MainLayout = () => {
                   path="cuentas-por-cobrar"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "finanzas",
                         "administrador",
                       ])}
@@ -1127,7 +1142,7 @@ export const MainLayout = () => {
                   path="cuentas-por-pagar"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos([
+                      allowedRoles={getCargosPermitidos([
                         "finanzas",
                         "administrador",
                       ])}
@@ -1143,7 +1158,7 @@ export const MainLayout = () => {
                   path="general"
                   element={
                     <PrivateRoute
-                      allowedRoles={getRolesPermitidos(["administrador"])}
+                      allowedRoles={getCargosPermitidos(["administrador"])}
                     >
                       <Generales />
                     </PrivateRoute>
@@ -1161,7 +1176,7 @@ export const MainLayout = () => {
                 path="/abrirCaja"
                 element={
                   <PrivateRoute
-                    allowedRoles={getRolesPermitidos([
+                    allowedRoles={getCargosPermitidos([
                       "ventas",
                       "administrador",
                       "atención al cliente",

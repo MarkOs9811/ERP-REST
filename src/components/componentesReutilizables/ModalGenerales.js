@@ -59,7 +59,7 @@ function ModalGenerales({
       >
         <button
           onClick={handleCloseModal}
-          className="fw-modal-close-btn"
+          className="fw-modal-close-btn btn-icon"
           aria-label="Cerrar"
           disabled={isLoading}
         >
@@ -85,7 +85,7 @@ function ModalGenerales({
           <div className="fw-modal-actions">
             <button
               onClick={handleCloseModal}
-              className="btn fw-modal-btn fw-modal-btn-cancel"
+              className="btn-cerrar-modal"
               disabled={!handleAccion || isLoading}
             >
               {textCancel}
