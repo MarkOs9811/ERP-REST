@@ -10,6 +10,9 @@ import {
 } from "chart.js";
 import { getThemeColors, hexToRgb, toRgba } from "../../utils/ThemeColors";
 
+//  IMPORTAMOS EL HELPER
+import { formatMoneda } from "../../utils/currency";
+
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Filler);
 
 export function CardIngresoEgresos({ sumaIngresos, sumaEgresos }) {
@@ -57,6 +60,7 @@ export function CardIngresoEgresos({ sumaIngresos, sumaEgresos }) {
   return (
     <div className="col-12">
       <div className="row g-3">
+        {/* CARD INGRESOS */}
         <div className="col-12 col-lg-6">
           <div
             className="card p-3 h-100 d-flex flex-column justify-content-between position-relative overflow-hidden"
@@ -106,12 +110,14 @@ export function CardIngresoEgresos({ sumaIngresos, sumaEgresos }) {
                 className="fw-bold mb-0"
                 style={{ fontSize: "1.3rem", color: colors.emerald }}
               >
-                S/. {sumaIngresos.toFixed(2)}
+                {/*  USO DEL HELPER AQUÍ */}
+                {formatMoneda(sumaIngresos)}
               </h3>
             </div>
           </div>
         </div>
 
+        {/* CARD EGRESOS */}
         <div className="col-12 col-lg-6">
           <div
             className="card p-3 h-100 d-flex flex-column justify-content-between position-relative overflow-hidden"
@@ -161,7 +167,8 @@ export function CardIngresoEgresos({ sumaIngresos, sumaEgresos }) {
                 className="fw-bold mb-0"
                 style={{ fontSize: "1.3rem", color: colors.strawberry }}
               >
-                S/. {sumaEgresos.toFixed(2)}
+                {/*  USO DEL HELPER AQUÍ */}
+                {formatMoneda(sumaEgresos)}
               </h3>
             </div>
           </div>

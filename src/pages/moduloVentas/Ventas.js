@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
   CalendarFold,
@@ -20,11 +20,14 @@ import GraficoLineaEjemplo from "../../graficosChar/GraficoLineVentas";
 import GraficoLineaDayVentas from "../../graficosChar/GraficoLineDayVentas";
 import GraficoMetodoPago from "../../graficosChar/GraficoMetodoPago";
 
+// IMPORTAMOS EL HELPER DE MONEDA
+
 // Estilos
 import "../../css/EstilosVentas.css";
+import { formatMoneda } from "../../utils/currency";
 
 /* =================================================================================
-   1. SUB-COMPONENTE REUTILIZABLE: Tarjeta KPI (Evita repetir código HTML)
+   1. SUB-COMPONENTE REUTILIZABLE: Tarjeta KPI
 ================================================================================= */
 const KpiCard = ({
   titulo,
@@ -80,7 +83,8 @@ const KpiCard = ({
                 : "var(--text-main)",
           }}
         >
-          S/ {monto}
+          {/*      USO DEL HELPER AQUÍ */}
+          {formatMoneda(monto)}
         </h3>
       </div>
     </div>
@@ -182,10 +186,17 @@ export function Ventas() {
                       <p className="fw-bold m-0">Ventas Hoy</p>
                       <div>
                         {" "}
-                       <button
+                        <button
                           type="button"
                           className="btn-informativo"
-                          onClick={() => GetReporteExcel("/reporteVentasHOY", null, null, "Ventas_Hoy")}
+                          onClick={() =>
+                            GetReporteExcel(
+                              "/reporteVentasHOY",
+                              null,
+                              null,
+                              "Ventas_Hoy",
+                            )
+                          }
                           title="Descargar Reporte"
                         >
                           <FileText />
@@ -197,7 +208,8 @@ export function Ventas() {
                       className="totalVentasTitulo mb-0"
                       style={{ fontSize: "2rem" }}
                     >
-                      S/ {metricas.hoy}
+                      {/*      USO DEL HELPER AQUÍ */}
+                      {formatMoneda(metricas.hoy)}
                     </p>
                   </div>
                 </div>
@@ -264,11 +276,10 @@ export function Ventas() {
           </div>
         </div>
 
-        {/* ================= FILA 2: PROTAGONISTAS (Gráfico Ancho + Ranking) ================= */}
+        {/* ================= FILA 2: PROTAGONISTAS ================= */}
         <div className="col-12 col-lg-8">
           <CondicionCarga isLoading={isLoading} isError={isError}>
             <div className="card p-4 h-100">
-              {/* Al darle 8 columnas, este gráfico al fin podrá mostrar los meses de Enero a Diciembre sin aplastarse */}
               <GraficoBarVentas />
             </div>
           </CondicionCarga>
@@ -276,12 +287,11 @@ export function Ventas() {
 
         <div className="col-12 col-lg-4">
           <CondicionCarga isLoading={isLoading} isError={isError}>
-            {/* El Plato Más Vendido encaja perfecto como barra lateral derecha */}
             <PlatoMasVendido />
           </CondicionCarga>
         </div>
 
-        {/* ================= FILA 3: ANÁLISIS DETALLADO (Tercios) ================= */}
+        {/* ================= FILA 3: ANÁLISIS DETALLADO ================= */}
         <div className="col-12 col-lg-6">
           <CondicionCarga isLoading={isLoading} isError={isError}>
             <div className="card p-4 h-100 m-0">

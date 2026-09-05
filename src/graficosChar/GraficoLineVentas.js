@@ -13,6 +13,7 @@ import {
 import { getVentas } from "../service/ObtenerVentasDetalle";
 import { Cargando } from "../components/componentesReutilizables/Cargando";
 import { CalendarDays } from "lucide-react";
+import { getMoneda, formatMoneda } from "../utils/currency"; // 🔥 Ambos importados
 
 // Registrar módulos necesarios para ChartJS
 ChartJS.register(
@@ -115,9 +116,8 @@ const GraficoBarEjemplo = () => {
     labels: Array.from({ length: ventasProcesadas.maxDias }, (_, i) => i + 1),
     datasets: [
       {
-        label: "Mes Actual (S/)",
+        label: `Mes Actual (${getMoneda()})`, // 🔥 USO DE getMoneda
         data: ventasProcesadas.actual,
-        // Emerald
         backgroundColor: isDarkMode
           ? "rgba(23, 198, 104, 0.7)"
           : "rgba(23, 198, 104, 0.5)",
@@ -127,9 +127,8 @@ const GraficoBarEjemplo = () => {
         hoverBackgroundColor: "#17C668",
       },
       {
-        label: "Mes Pasado (S/)",
+        label: `Mes Pasado (${getMoneda()})`, // 🔥 USO DE getMoneda
         data: ventasProcesadas.pasado,
-        // Deep Saffron (con un poco más de transparencia para que sea secundario)
         backgroundColor: isDarkMode
           ? "rgba(255, 153, 44, 0.4)"
           : "rgba(255, 153, 44, 0.3)",
@@ -160,6 +159,12 @@ const GraficoBarEjemplo = () => {
         borderWidth: 1,
         padding: 10,
         cornerRadius: 8,
+        callbacks: {
+          label: function (context) {
+            // 🔥 Formatear también el tooltip para que muestre la moneda correctamente
+            return ` ${context.dataset.label.split(" ")[0]}: ${formatMoneda(context.raw)}`;
+          },
+        },
       },
     },
     scales: {
@@ -182,7 +187,7 @@ const GraficoBarEjemplo = () => {
           color: isDarkMode ? "#9CA3AF" : "#6B7280",
           font: { family: "'Inter', sans-serif" },
           callback: function (value) {
-            return `S/ ${value}`;
+            return formatMoneda(value); // 🔥 USO DE formatMoneda
           },
         },
       },

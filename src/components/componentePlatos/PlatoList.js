@@ -1,17 +1,12 @@
-import { faPowerOff, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { faPowerOff } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 import { useEffect, useState } from "react";
 import axiosInstance from "../../api/AxiosInstance";
-
-import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 import { useTooltips } from "../../hooks/UseToolTips";
 import { PlatoEditar } from "./PlatoEdit";
-import { Modal } from "react-bootstrap";
 import ModalAlertQuestion from "../componenteToast/ModalAlertQuestion";
 import { GetPlatos } from "../../service/GetPlatos";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-
 import { Cargando } from "../componentesReutilizables/Cargando";
 import ToastAlert from "../componenteToast/ToastAlert";
 import ModalAlertActivar from "../componenteToast/ModalAlertActivar";
@@ -22,6 +17,9 @@ import {
   BtnEliminar,
 } from "../componentesReutilizables/BotonesAccion";
 import { BadgeComponent } from "../componentesReutilizables/BadgeComponent";
+
+// 🔥 IMPORTAMOS EL HELPER DE MONEDA
+import { formatMoneda } from "../../utils/currency";
 
 export function PlatoList({ search, categoriaActual = null }) {
   const queryClient = useQueryClient();
@@ -35,9 +33,15 @@ export function PlatoList({ search, categoriaActual = null }) {
     retry: 1,
     refetchOnWindowFocus: false,
   });
+
   const [showModalEditar, setShowModalEditar] = useState(false);
   const [dataPlato, setDataPlato] = useState([]);
   const [filterPlatos, setFilterPlatos] = useState([]);
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+  const [modalActivar, setModalActivar] = useState(false);
+  const [nombrePlato, setNombrePlato] = useState("");
+  const [idPlatoActivar, setIdPlatoActivar] = useState("");
+  const [arrayPlato, setArrayPlato] = useState([]);
 
   const handleOpenEditar = (dataPlato) => {
     setShowModalEditar(true);
@@ -59,11 +63,10 @@ export function PlatoList({ search, categoriaActual = null }) {
           : plato.categoria?.nombre?.toLowerCase() ===
             categoriaActual.toLowerCase();
 
-      // 2. Condición de Búsqueda (Tu lógica original)
+      // 2. Condición de Búsqueda
       const { nombre, categoria, descripcion, precio } = plato;
       const searchLower = search.toLowerCase();
 
-      // Si el search está vacío, matchSearch es true. Si no, busca las coincidencias.
       const matchSearch = !search
         ? true
         : (nombre && nombre.toLowerCase().includes(searchLower)) ||
@@ -72,18 +75,11 @@ export function PlatoList({ search, categoriaActual = null }) {
           (descripcion && descripcion.toLowerCase().includes(searchLower)) ||
           (precio && precio.toString().includes(searchLower));
 
-      // El plato debe cumplir AMBAS condiciones para mostrarse en la tabla
       return matchCategoria && matchSearch;
     });
 
     setFilterPlatos(result);
   }, [search, platosList, categoriaActual]);
-
-  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
-  const [modalActivar, setModalActivar] = useState(false);
-  const [nombrePlato, setNombrePlato] = useState("");
-  const [idPlatoActivar, setIdPlatoActivar] = useState("");
-  const [arrayPlato, setArrayPlato] = useState([]);
 
   const handleEliminarQuestion = (plato) => {
     setShowConfirmDelete(true);
@@ -97,9 +93,9 @@ export function PlatoList({ search, categoriaActual = null }) {
 
   const handleEliminar = async (id) => {
     try {
-      const response = await axiosInstance.put(`/combos/desactivar/ ${id}`);
+      const response = await axiosInstance.put(`/combos/desactivar/${id}`);
       if (response.data.success) {
-        ToastAlert("success", "Platos desactivado correctamente");
+        ToastAlert("success", "Plato desactivado correctamente");
         queryClient.invalidateQueries({ queryKey: ["platos"] });
       } else {
         ToastAlert("error", "Ocurrio un error", response.data.message);
@@ -116,7 +112,7 @@ export function PlatoList({ search, categoriaActual = null }) {
         ToastAlert("success", "Activado correctamente");
         queryClient.invalidateQueries({ queryKey: ["platos"] });
       } else {
-        ToastAlert("error", "Ocurrió un error al activar el combo");
+        ToastAlert("error", "Ocurrió un error al activar el plato");
       }
     } catch (error) {
       ToastAlert("error", "Error de conexion", error);
@@ -126,7 +122,6 @@ export function PlatoList({ search, categoriaActual = null }) {
   const handleBanderEnWeb = async (id, estadoActual) => {
     try {
       const estadoEnviar = estadoActual === 1 ? 0 : 1;
-
       const response = await axiosInstance.put(
         `/gestionPlatos/updateEstadoWebPlato/${id}/${estadoEnviar}`,
       );
@@ -145,7 +140,6 @@ export function PlatoList({ search, categoriaActual = null }) {
     } catch (error) {
       const errorMensaje =
         error.response?.data?.message || "Error de conexión con el servidor";
-
       ToastAlert("error", errorMensaje);
     }
   };
@@ -155,11 +149,7 @@ export function PlatoList({ search, categoriaActual = null }) {
       name: "Foto",
       cell: (row) => (
         <img
-          src={
-            row.foto_url // <-- AHORA USAMOS EL NUEVO CAMPO QUE MANDA LARAVEL
-              ? row.foto_url
-              : "/images/img-default.jpg"
-          }
+          src={row.foto_url ? row.foto_url : "/images/img-default.jpg"}
           alt="Foto del Plato"
           onError={(e) => {
             if (!e.target.src.includes("img-default.jpg")) {
@@ -179,18 +169,21 @@ export function PlatoList({ search, categoriaActual = null }) {
     },
     {
       name: "Plato",
-      selector: (row) => row.nombre, // El selector se mantiene para ordenar por nombre
+      selector: (row) => row.nombre,
       sortable: true,
       wrap: true,
-      grow: 3, // Damos más espacio a esta columna
+      grow: 3,
       cell: (row) => (
         <div>
-          <strong>{row.nombre}</strong>
+          <strong style={{ color: "var(--text-main)" }}>{row.nombre}</strong>
           <p
-            className="text-muted mb-0"
-            style={{ fontSize: "0.85em", whiteSpace: "normal" }}
+            className="mb-0"
+            style={{
+              fontSize: "0.85em",
+              whiteSpace: "normal",
+              color: "var(--text-muted)",
+            }}
           >
-            {/* Acortamos la descripción si es muy larga */}
             {row.descripcion.length > 80
               ? row.descripcion.substring(0, 80) + "..."
               : row.descripcion}
@@ -199,33 +192,40 @@ export function PlatoList({ search, categoriaActual = null }) {
       ),
     },
     {
-      name: "Categoría", // <-- CAMBIO: Tilde
+      name: "Categoría",
       selector: (row) => row.categoria.nombre,
       sortable: true,
       wrap: true,
     },
     {
       name: "Precio",
-      selector: (row) => row.precio, // <-- CAMBIO: Ordenar por número
+      selector: (row) => row.precio,
       sortable: true,
       wrap: true,
       cell: (row) => (
-        // Formateamos el precio y lo ponemos en negrita
-        <strong>S/. {Number(row.precio).toFixed(2)}</strong>
+        // 🔥 USO DEL HELPER DE MONEDA AQUÍ
+        <strong style={{ color: "var(--fw-emerald)" }}>
+          {formatMoneda(row.precio)}
+        </strong>
       ),
     },
     {
       name: "Activo en Web",
       selector: (row) => row.enWeb,
       sortable: true,
-      center: true, // Para que el switch quede bien centrado
+      center: true,
       cell: (row) => (
         <div className="form-check form-switch d-flex justify-content-center mb-0">
           <input
             className="form-check-input"
             type="checkbox"
             role="switch"
-            style={{ cursor: "pointer" }}
+            style={{
+              cursor: "pointer",
+              // Pequeña mejora para que cuando esté checkeado use el color verde de Fire Wok
+              backgroundColor: row.enWeb === 1 ? "var(--fw-emerald)" : "",
+              borderColor: row.enWeb === 1 ? "var(--fw-emerald)" : "",
+            }}
             checked={row.enWeb === 1}
             onChange={() => handleBanderEnWeb(row.id, row.enWeb)}
           />
@@ -233,13 +233,13 @@ export function PlatoList({ search, categoriaActual = null }) {
       ),
     },
     {
-      name: "Estado", // <-- CAMBIO: Nueva columna de Estado
+      name: "Estado",
       selector: (row) => row.estado,
       sortable: true,
       width: "120px",
       center: true,
       cell: (row) =>
-        row.estado == 1 ? (
+        row.estado === 1 ? (
           <BadgeComponent label="Activo" variant="success" />
         ) : (
           <BadgeComponent label="Inactivo" variant="danger" />
@@ -252,7 +252,7 @@ export function PlatoList({ search, categoriaActual = null }) {
       cell: (row) => {
         const { estado } = row;
         return (
-          <div className="d-flex gap-2">
+          <div className="d-flex gap-2 justify-content-center">
             {estado === 1 ? (
               <>
                 <BtnEditar
@@ -266,7 +266,12 @@ export function PlatoList({ search, categoriaActual = null }) {
               </>
             ) : (
               <button
-                className="btn btn-outline-success btn-sm"
+                className="btn btn-sm"
+                style={{
+                  color: "var(--fw-emerald)",
+                  borderColor: "var(--fw-emerald)",
+                  backgroundColor: "transparent",
+                }}
                 data-bs-toggle="tooltip"
                 title="Activar Plato"
                 onClick={() => {
@@ -286,13 +291,12 @@ export function PlatoList({ search, categoriaActual = null }) {
   ];
 
   useTooltips(platosList);
+
   return (
     <div>
       {loadingPlatos ? (
         <div className="text-center p-4">
-          <p>
-            <Cargando />
-          </p>
+          <Cargando />
         </div>
       ) : errorPlatos ? (
         <div className="text-center p-4 text-danger">
@@ -302,7 +306,7 @@ export function PlatoList({ search, categoriaActual = null }) {
         <TablasGenerales datos={filterPlatos} columnas={columns} />
       )}
 
-      {/* // modal para editar un PLATO */}
+      {/* Modal para editar plato */}
       <ModalRight
         isOpen={showModalEditar}
         onClose={handleCloseEditarCat}
@@ -314,7 +318,7 @@ export function PlatoList({ search, categoriaActual = null }) {
         )}
       </ModalRight>
 
-      {/* MODAL PARA ELIMINAR USUARIO */}
+      {/* Modal para confirmar eliminación */}
       <ModalAlertQuestion
         show={showConfirmDelete}
         idEliminar={arrayPlato.id}
@@ -324,6 +328,7 @@ export function PlatoList({ search, categoriaActual = null }) {
         handleCloseModal={handleCloseModalQuestionEliminar}
       />
 
+      {/* Modal para activar plato */}
       <ModalAlertActivar
         show={modalActivar}
         idActivar={idPlatoActivar}

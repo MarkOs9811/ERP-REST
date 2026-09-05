@@ -205,7 +205,7 @@ export function Header({ tipoHeader = null }) {
                   clickable={true}
                   label="Ver Web"
                   variant="info"
-                  className="cursor-pointer"
+                  className="cursor-pointer px-2 "
                   onClick={() =>
                     window.open(
                       "https://lustrous-cupcake-b9cf4a.netlify.app/",
@@ -220,7 +220,7 @@ export function Header({ tipoHeader = null }) {
               <BadgeComponent
                 label={capitalizeFirstLetter(fotoPerfilLocal?.sede?.nombre)}
                 variant="danger"
-                className="cursor-pointer"
+                className="cursor-pointer px-2"
               />
             </RippleWrapper>
           )}
@@ -231,7 +231,7 @@ export function Header({ tipoHeader = null }) {
               <BadgeComponent
                 label={cajaDetalles.nombre}
                 variant="success"
-                className="cursor-pointer"
+                className="cursor-pointer px-2"
               />
             </RippleWrapper>
           ) : null}

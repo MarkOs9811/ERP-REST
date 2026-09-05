@@ -3,6 +3,11 @@ import { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form"; // <--- Importamos React Hook Form
 import { GetMiPerfil } from "../../service/accionesConfiguracion/GetMiPerfil";
 import { PostData } from "../../service/CRUD/PostData";
+import axiosInstance from "../../api/AxiosInstance";
+import ToastAlert from "../componenteToast/ToastAlert";
+import { KeyIcon } from "lucide-react";
+import ModalRight from "../componentesReutilizables/ModalRight";
+import { FormPassChange } from "./formularios/FormPassChange";
 
 export const MiPerfil = () => {
   const queryClient = useQueryClient();
@@ -10,6 +15,8 @@ export const MiPerfil = () => {
   const [previewImage, setPreviewImage] = useState(null); // Estado para previsualizar foto nueva
   const fileInputRef = useRef(null); // Referencia al input de archivo oculto
 
+  // PARA ABRIR MODAL DE CAMBIO DE CONTRASEÑA
+  const [modalPass, setModalPass] = useState(false);
   // React Hook Form
   const {
     register,
@@ -60,13 +67,14 @@ export const MiPerfil = () => {
     const file = e.target.files[0];
     if (file) {
       setPreviewImage(URL.createObjectURL(file)); // Crea URL temporal para vista previa
-      setValue("foto", file); // Registra el archivo en react-hook-form
+      // IMPORTANTE: Guardamos el archivo binario real en react-hook-form bajo la key "foto_file"
+      setValue("foto_file", file);
     }
   };
 
   // Enviar formulario
   const onSubmit = async (data) => {
-    // Usamos FormData para enviar archivos y textos
+    // Usamos FormData para enviar archivos y textos (multipart/form-data)
     const formData = new FormData();
 
     // Agregamos campos de texto
@@ -78,17 +86,26 @@ export const MiPerfil = () => {
     formData.append("telefono", data.telefono || "");
     formData.append("direccion", data.direccion || "");
 
-    // Agregamos la foto solo si existe una nueva seleccionada
-    if (data.foto_url) {
-      formData.append("foto", data.foto_url);
+    // CORRECCIÓN CLAVE: Agregamos el archivo binario almacenado, no una URL.
+    if (data.foto_file) {
+      formData.append("foto", data.foto_file);
     }
 
-    const success = await PostData("miPerfilUpdate", formData);
+    try {
+      // Importante: No uses headers de Content-Type manuales, Axios lo calcula automático con FormData.
+      // Si tu axiosInstance.post no soporta form-data de manera nativa, asegúrate de que use config con 'multipart/form-data'
+      const response = await axiosInstance.post("/miPerfilUpdate", formData);
 
-    if (success) {
-      setEditable(false);
-      setPreviewImage(null); // Limpiar preview
-      queryClient.invalidateQueries(["perfil"]); // Recargar datos del perfil
+      if (response.data.success) {
+        ToastAlert("success", "Perfil actualizado correctamente");
+        setEditable(false);
+        setPreviewImage(null); // Limpiar preview
+        queryClient.invalidateQueries(["perfil"]); // Recargar datos del perfil
+      }
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message || "Error al actualizar perfil";
+      ToastAlert("error", errorMessage);
     }
   };
 
@@ -179,20 +196,29 @@ export const MiPerfil = () => {
               ref={fileInputRef}
               onChange={onFileChange}
             />
-            <button
-              className="btn w-50 mx-auto"
-              type="button"
-              onClick={handleFotoClick}
-              disabled={!editable} // Solo habilitado si está en modo edición
-              style={{
-                background: editable ? "#ffeaea" : "#f0f0f0",
-                color: editable ? "#ee5252" : "#999",
-                fontWeight: 500,
-                cursor: editable ? "pointer" : "not-allowed",
-              }}
-            >
-              Cambiar foto
-            </button>
+            <div className="d-flex flex-column gap-2 w-100">
+              <button
+                className="btn w-50 mx-auto"
+                type="button"
+                onClick={handleFotoClick}
+                disabled={!editable} // Solo habilitado si está en modo edición
+                style={{
+                  background: editable ? "#ffeaea" : "#f0f0f0",
+                  color: editable ? "#ee5252" : "#999",
+                  fontWeight: 500,
+                  cursor: editable ? "pointer" : "not-allowed",
+                }}
+              >
+                Cambiar foto
+              </button>
+              <button
+                className="btn-principal w-50 mx-auto"
+                onClick={() => setModalPass(true)}
+              >
+                <KeyIcon />
+                Cambiar contraseña
+              </button>
+            </div>
           </div>
         </div>
 
@@ -360,6 +386,17 @@ export const MiPerfil = () => {
           </form>
         </div>
       </div>
+
+      <ModalRight
+        isOpen={modalPass}
+        onClose={() => setModalPass(false)}
+        title="Cambiar Contraseña"
+        subtitulo="Protege tu cuenta con una contraseña segura."
+        width="450px"
+        hideFooter={true} // CRÍTICO: Delega el control de botones al hijo
+      >
+        <FormPassChange onClose={() => setModalPass(false)} />
+      </ModalRight>
     </div>
   );
 };

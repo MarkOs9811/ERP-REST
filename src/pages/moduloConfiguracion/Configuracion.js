@@ -87,18 +87,7 @@ export function Configuracion() {
       label: "Servicio Sunat",
       path: "/configuracion/ServicioSunat",
     },
-    {
-      to: "/configuracion/Mantenimiento",
-      icon: (
-        <DatabaseBackup
-          height="24px"
-          width="24px"
-          className="text-auto mb-1 mb-sm-0 me-sm-2"
-        />
-      ),
-      label: "Backup y Mantenimiento",
-      path: "/configuracion/Mantenimiento",
-    },
+
     {
       to: "/configuracion/SoporteContacto",
       icon: (

@@ -9,6 +9,9 @@ import GraficoEgresosMensuales from "../../graficosChar/GraficoEgresosMensuales"
 import { CardIngresoEgresos } from "../../components/componentesFinanzas/CardIngresoEgresos";
 import "../../css/EstilosFinanzas.css";
 
+// 🔥 IMPORTAMOS EL HELPER DE MONEDA GLOBAL
+import { formatMoneda } from "../../utils/currency";
+
 export function InformesFinancieros() {
   const { data: dataInformes = [] } = useQuery({
     queryKey: ["finanzas"],
@@ -39,12 +42,6 @@ export function InformesFinancieros() {
     0,
   );
 
-  const formatearMoneda = (monto) =>
-    monto.toLocaleString("es-PE", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
-
   return (
     <div className="finanzas-root container-fluid p-0">
       <div className="row g-3">
@@ -73,7 +70,8 @@ export function InformesFinancieros() {
                     <div className="card-body d-flex flex-column justify-content-center align-items-center">
                       <small>Deudas Cobradas</small>
                       <p className="text-center mb-0 h4">
-                        S/. {formatearMoneda(montoPagado)}
+                        {/*  USO DEL HELPER */}
+                        {formatMoneda(montoPagado)}
                       </p>
                     </div>
                   </div>
@@ -83,7 +81,8 @@ export function InformesFinancieros() {
                     <div className="card-body d-flex flex-column justify-content-center align-items-center">
                       <small>Saldo Pendiente</small>
                       <p className="text-center mb-0 h4">
-                        S/. {formatearMoneda(montoRestante)}
+                        {/*  USO DEL HELPER */}
+                        {formatMoneda(montoRestante)}
                       </p>
                     </div>
                   </div>

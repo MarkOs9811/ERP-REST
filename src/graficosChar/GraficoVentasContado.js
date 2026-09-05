@@ -14,6 +14,9 @@ import { getThemeColors, toRgba } from "../utils/ThemeColors";
 import { useRef } from "react";
 import { ChartLine } from "lucide-react";
 
+// Importamos los helpers de moneda
+import { formatMoneda, getMoneda } from "../utils/currency";
+
 Chart.register(
   LineElement,
   PointElement,
@@ -65,7 +68,7 @@ export function GraficoVentasContado() {
     labels,
     datasets: [
       {
-        label: "Ventas por Mes",
+        label: `Ventas por Mes (${getMoneda()})`, // Uso de getMoneda
         data: dataVentas,
         borderColor: colorVentas,
         backgroundColor: function (context) {
@@ -97,13 +100,22 @@ export function GraficoVentasContado() {
           font: { family: "'Inter', sans-serif", weight: "500" },
         },
       },
+      tooltip: {
+        callbacks: {
+          label: function (context) {
+            // Formatear el valor en el tooltip
+            return ` Ventas: ${formatMoneda(context.raw)}`;
+          },
+        },
+      },
     },
     scales: {
       y: {
         beginAtZero: true,
         ticks: {
           callback: function (value) {
-            return `S/ ${value}`;
+            // Uso de formatMoneda en el eje Y
+            return formatMoneda(value);
           },
         },
       },

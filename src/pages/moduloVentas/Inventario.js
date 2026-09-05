@@ -15,6 +15,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteExcel";
 import { CondicionCarga } from "../../components/componentesReutilizables/CondicionCarga";
+import { formatMoneda } from "../../utils/currency";
 
 export function Inventario() {
   const [search, setSearch] = useState("");
@@ -67,7 +68,7 @@ export function Inventario() {
               <StickyNote color={"#000000ff"} width={"80px"} height={"80px"} />
             }
             title="Valor Total"
-            value={`S/.${metrics.valorTotal}`}
+            value={formatMoneda(metrics.valorTotal)}
             errorMessage="Error al cargar datos"
           />
 

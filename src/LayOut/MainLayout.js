@@ -1168,7 +1168,6 @@ export const MainLayout = () => {
                 <Route path="MiEmpresa" element={<MiEmpresa />} />
                 <Route path="Integraciones" element={<Integraciones />} />
                 <Route path="ServicioSunat" element={<ServicioSunat />} />
-                <Route path="Mantenimiento" element={<Mantenimiento />} />
                 <Route path="SoporteContacto" element={<SoporteContacto />} />
               </Route>
 

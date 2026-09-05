@@ -18,6 +18,9 @@ import {
 } from "../utils/ThemeColors";
 import { CalendarDays } from "lucide-react";
 
+// Importamos el helper de moneda
+import { formatMoneda } from "../utils/currency";
+
 // Registrar componentes de Chart.js
 Chart.register(BarElement, CategoryScale, LinearScale, Legend, Tooltip);
 
@@ -102,6 +105,12 @@ export function GraficoIngresosEgresos() {
         borderWidth: 1,
         padding: 10,
         cornerRadius: 8,
+        callbacks: {
+          label: function (context) {
+            // Formatear el valor en el tooltip flotante
+            return ` ${context.dataset.label}: ${formatMoneda(context.raw)}`;
+          },
+        },
       },
     },
     scales: {
@@ -123,7 +132,8 @@ export function GraficoIngresosEgresos() {
         ticks: {
           color: isDarkMode ? "#9CA3AF" : "#6B7280",
           callback: function (value) {
-            return `S/ ${value}`;
+            // Formatear los valores en el eje Y
+            return formatMoneda(value);
           },
         },
       },

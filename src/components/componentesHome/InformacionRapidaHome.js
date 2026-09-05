@@ -5,6 +5,7 @@ import { GetAlmacen } from "../../service/serviceAlmacen/GetAlmacen";
 import { getPedidosPendientes } from "../../service/GetPedidosPendientes";
 import { CircleAlert, Clock9, Store, Table } from "lucide-react";
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
+import { formatMoneda } from "../../utils/currency";
 
 export function InformacionRapidaHome() {
   const {
@@ -57,11 +58,10 @@ export function InformacionRapidaHome() {
     .filter((venta) => venta.fechaVenta === hoy)
     .reduce((total, venta) => total + Number(venta.total || 0), 0);
 
-  const ventasHoyFormatted = ventasHoy.toFixed(2);
-
   const mesasArray = Array.isArray(mesas.data) ? mesas.data : [];
-  const mesasOcupadas = mesasArray.filter((mesa) => Number(mesa.estado) === 0)
-    .length;
+  const mesasOcupadas = mesasArray.filter(
+    (mesa) => Number(mesa.estado) === 0,
+  ).length;
   const totalMesas = mesasArray.length;
 
   const productosBajoStock = Array.isArray(almacen)
@@ -83,7 +83,7 @@ export function InformacionRapidaHome() {
               <div>
                 <p className="mb-1 metric-card-title">Ventas Hoy</p>
                 <p className="mb-0 text-dark h2 fw-bold metric-card-value">
-                  S/ {ventasHoyFormatted}
+                  {formatMoneda(ventasHoy)}
                 </p>
               </div>
               <div className="ms-auto metric-icon-badge metric-icon-badge--ventas">

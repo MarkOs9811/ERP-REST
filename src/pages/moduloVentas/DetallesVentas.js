@@ -12,6 +12,7 @@ import {
 import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteExcel";
 import { ListVentas } from "../../components/componentesVentas/ListaVentas";
 import "../../css/estilosVentas/EstilosListaVentas.css";
+import { formatMoneda } from "../../utils/currency";
 
 export function DetallesVentas() {
   const [search, setSearch] = useState("");
@@ -146,7 +147,7 @@ export function DetallesVentas() {
                 <span>
                   <WalletCards size={17} /> Recaudación
                 </span>
-                <strong>S/ {metricas.total.toFixed(2)}</strong>
+                <strong>{formatMoneda(metricas.total)}</strong>
               </div>
               <div className="ventas-kpi">
                 <span>
@@ -158,7 +159,7 @@ export function DetallesVentas() {
                 <span>
                   <CalendarRange size={17} /> Ticket promedio
                 </span>
-                <strong>S/ {metricas.promedio.toFixed(2)}</strong>
+                <strong>{formatMoneda(metricas.promedio)}</strong>
               </div>
             </div>
             <div className="card-body p-0">

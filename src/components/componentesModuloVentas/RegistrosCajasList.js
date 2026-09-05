@@ -3,6 +3,9 @@ import { TablasGenerales } from "../componentesReutilizables/TablasGenerales";
 import { useQuery } from "@tanstack/react-query";
 import { GetRegistrosCajas } from "../../service/accionesVentas/GetRegistrosCajas";
 
+// 🔥 IMPORTAMOS EL HELPER DE MONEDA
+import { formatMoneda } from "../../utils/currency";
+
 export function RegistrosCajasList({ search }) {
   const [registrosCajasFilter, setRegistrosCajasFilter] = useState([]);
 
@@ -27,7 +30,6 @@ export function RegistrosCajasList({ search }) {
       } ${usuario?.empleado?.persona?.apellidos || ""}`.toLowerCase();
 
       const cajaNombre = caja?.nombreCaja?.toLowerCase() || "";
-      // Convierte la fecha a string y también busca por año, mes o día
       const fechaAperturaStr = fechaApertura
         ? fechaApertura.toString().toLowerCase()
         : "";
@@ -57,11 +59,12 @@ export function RegistrosCajasList({ search }) {
         return (
           <span
             style={{
-              backgroundColor: abierta ? "#d1fae5" : "#f3f4f6", // verde suave si abierta, gris claro si cerrada
-              color: abierta ? "#065f46" : "#374151", // verde oscuro / gris oscuro
+              // 🔥 Alineado al Sistema de Diseño Fire Wok
+              backgroundColor: abierta ? "var(--bg-emerald-soft)" : "#f3f4f6",
+              color: abierta ? "var(--fw-emerald)" : "var(--brand-secondary)",
               fontWeight: "600",
               padding: "6px 12px",
-              borderRadius: "12px",
+              borderRadius: "var(--radius-pill)", // Borde redondeado del sistema
               display: "inline-block",
               textTransform: "capitalize",
             }}
@@ -90,21 +93,24 @@ export function RegistrosCajasList({ search }) {
     },
     {
       name: "Monto Inicial",
-      selector: (row) => "S/." + (row.montoInicial ?? ""),
+      // 🔥 USO DEL HELPER
+      selector: (row) => formatMoneda(row.montoInicial),
       sortable: true,
       wrap: true,
       center: true,
     },
     {
       name: "Monto Final",
-      selector: (row) => "S/." + (row.montoFinal ?? ""),
+      // 🔥 USO DEL HELPER
+      selector: (row) => formatMoneda(row.montoFinal),
       sortable: true,
       wrap: true,
       center: true,
     },
     {
       name: "Monto Dejado",
-      selector: (row) => "S/." + (row.montoDejado ?? ""),
+      // 🔥 USO DEL HELPER
+      selector: (row) => formatMoneda(row.montoDejado),
       sortable: true,
       wrap: true,
       center: true,
@@ -138,22 +144,24 @@ export function RegistrosCajasList({ search }) {
       center: true,
     },
   ];
+
   const conditionalRowStyles = [
     {
       when: (row) => row.fechaCierre === null && row.horaCierre === null,
       style: {
-        color: "#065f46",
+        color: "var(--fw-emerald)", // Alineado al diseño
         fontWeight: "bold",
       },
     },
     {
       when: (row) => row.fechaCierre !== null && row.horaCierre !== null,
       style: {
-        backgroundColor: "#f9fafb", // gris claro
-        color: "#374151",
+        backgroundColor: "#f9fafb",
+        color: "var(--text-muted)", // Alineado al diseño
       },
     },
   ];
+
   return (
     <div>
       <TablasGenerales

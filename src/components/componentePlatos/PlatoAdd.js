@@ -14,6 +14,9 @@ import {
 } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 
+// 🔥 IMPORTAMOS EL HELPER DE MONEDA
+import { getMoneda } from "../../utils/currency";
+
 export function PlatoAdd({ handleCloseModal }) {
   // Estado para la lógica de la imagen (separado de useForm)
   const [formData, setFormData] = useState({
@@ -215,7 +218,8 @@ export function PlatoAdd({ handleCloseModal }) {
                 className={`form-control border-start-0 shadow-none ${
                   errors.precio ? "is-invalid" : ""
                 }`}
-                placeholder="S/. 0.00"
+                // 🔥 USO DEL HELPER AQUÍ PARA EL PLACEHOLDER
+                placeholder={`${getMoneda()} 0.00`}
                 {...register("precio", {
                   required: "Requerido",
                   validate: validatePrecio,

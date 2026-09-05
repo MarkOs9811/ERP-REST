@@ -48,6 +48,9 @@ function App() {
     const miEmpresa = JSON.parse(
       localStorage.getItem("empresa") || sessionStorage.getItem("empresa"),
     );
+    const moneda = JSON.parse(
+      localStorage.getItem("moneda") || sessionStorage.getItem("moneda"),
+    );
 
     // Si existe la empresa toma su nombre, si no, usa el default
     document.title = miEmpresa?.nombre || "Administración Rest";

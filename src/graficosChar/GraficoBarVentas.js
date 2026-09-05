@@ -12,6 +12,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { getVentas } from "../service/ObtenerVentasDetalle"; // Asegúrate que la ruta sea correcta
 import { Store } from "lucide-react";
+import { formatMoneda, getMoneda } from "../utils/currency";
 
 // Registrar módulos necesarios para ChartJS
 ChartJS.register(
@@ -105,7 +106,7 @@ const GraficoBarVentas = () => {
       ], // Abreviados para que no se aplasten en pantallas chicas
       datasets: [
         {
-          label: `Ventas ${currentYear} (S/)`,
+          label: `Ventas ${currentYear} (${formatMoneda(0)})`,
           data: roundedTotals,
           // Color Emerald de Fire Wok (con opacidad y borde)
           backgroundColor: isDarkMode
@@ -143,7 +144,7 @@ const GraficoBarVentas = () => {
         displayColors: false, // Oculta el cuadrito de color en el tooltip
         callbacks: {
           label: function (context) {
-            return `Ingresos: S/ ${context.parsed.y}`;
+            return `Ingresos: {getMoneda()} ${context.parsed.y}`;
           },
         },
       },
@@ -170,7 +171,7 @@ const GraficoBarVentas = () => {
           color: isDarkMode ? "#9CA3AF" : "#6B7280",
           font: { family: "'Inter', sans-serif" },
           callback: function (value) {
-            return `S/ ${value}`;
+            return formatMoneda(value);
           },
         },
       },
@@ -230,7 +231,7 @@ const GraficoBarVentas = () => {
             className="fw-bold"
             style={{ color: "var(--fw-emerald)", fontSize: "1.2rem" }}
           >
-            S/ {totalVentas.toFixed(2)}
+            {formatMoneda(totalVentas)}
           </span>
         </div>
       </div>
