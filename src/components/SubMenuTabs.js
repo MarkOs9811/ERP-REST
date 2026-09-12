@@ -18,7 +18,7 @@ import {
   Calendar1Icon,
 } from "lucide-react";
 
-const subMenuGroups = {
+export const subMenuGroups = {
   "/rrhh": [
     { label: "Usuarios", path: "/rrhh", icon: <Users size={16} /> },
     { label: "Nómina", path: "/rrhh/nomina", icon: <Wallet size={16} /> },

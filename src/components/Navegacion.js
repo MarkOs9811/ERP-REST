@@ -15,6 +15,7 @@ import {
 import { useState, useRef, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { GetConfi } from "../service/accionesConfiguracion/GetConfi";
+import { subMenuGroups } from "./SubMenuTabs";
 
 export function Navegacion({ tipoNavegacion = null }) {
   const location = useLocation();
@@ -77,45 +78,13 @@ export function Navegacion({ tipoNavegacion = null }) {
   };
 
   // === BUSCADOR GLOBAL MINIMALISTA ===
-  const searchOptions = [
-    { label: "Dashboard (Inicio)", path: "/" },
-    { label: "POS / Vender", path: "/vender/mesas" },
-    { label: "Delivery", path: "/delivery" },
-    { label: "Delivery asignados", path: "/delivery/pedidosAsignados" },
-    { label: "Repartidores", path: "/delivery/repartidores" },
-    { label: "Zonas y tarifas", path: "/delivery/zonas-y-tarifas" },
-    { label: "Promociones", path: "/delivery/promociones-app" },
-    { label: "Banner", path: "/delivery/banners" },
-    { label: "Reporte Delivery", path: "/delivery/reportes" },
-    { label: "Cocina", path: "/cocina" },
-    { label: "Usuarios (RRHH)", path: "/rrhh" },
-    { label: "Nómina (RRHH)", path: "/rrhh/nomina" },
-    { label: "Ingreso a Planilla", path: "/rrhh/ingreso-a-planilla" },
-    { label: "Asistencia (RRHH)", path: "/rrhh/asistencia" },
-    { label: "Áreas y Cargos", path: "/rrhh/areas-y-cargos" },
-    { label: "Finanzas - Informes", path: "/finanzas/informes-financieros" },
-    { label: "Libro Diario", path: "/finanzas/libro-diario" },
-    { label: "Libro Mayor", path: "/finanzas/libro-mayor" },
-    { label: "Almacenes", path: "/almacen" },
-    { label: "Compras", path: "/almacen/compras" },
-    { label: "Proveedores", path: "/almacen/proveedores" },
-    { label: "Kardex", path: "/almacen/kardex" },
-    { label: "Ventas / Mis Ventas", path: "/ventas" },
-    { label: "Inventario (Ventas)", path: "/ventas/inventario" },
-    { label: "Cajas", path: "/ventas/cajas" },
-    { label: "Mesas", path: "/ventas/mesas" },
-    { label: "Platos", path: "/platos" },
-    { label: "Configuración", path: "/configuracion" },
-    { label: "Clientes", path: "/clientes" },
-    { label: "Lista Clientes", path: "/clientes/lista" },
-    { label: "Feedbacks", path: "/clientes/comentarios" },
-    { label: "Campañas", path: "/clientes/fidelizacion" },
-
-    { label: "mis entregas", path: "/mis-entregas" },
-  ];
+  const searchOptions = Object.values(subMenuGroups)
+    .flat()
+    .map(({ label, path }) => ({ label, path }));
   const isCompressed = useSelector((state) => state.sidebar.isCompressed);
   const [searchTerm, setSearchTerm] = useState("");
   const [showSearchDropdown, setShowSearchDropdown] = useState(false);
+  const [activeSearchIndex, setActiveSearchIndex] = useState(0);
   const searchRef = useRef(null);
 
   useEffect(() => {
@@ -131,6 +100,42 @@ export function Navegacion({ tipoNavegacion = null }) {
   const filteredSearch = searchOptions.filter((opt) =>
     opt.label.toLowerCase().includes(searchTerm.toLowerCase()),
   );
+
+  const selectSearchOption = (option) => {
+    if (!option) return;
+    navigate(option.path);
+    setSearchTerm("");
+    setActiveSearchIndex(0);
+    setShowSearchDropdown(false);
+  };
+
+  const handleSearchKeyDown = (event) => {
+    if (event.key === "Escape") {
+      setShowSearchDropdown(false);
+      return;
+    }
+
+    if (!showSearchDropdown || filteredSearch.length === 0) return;
+
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      setActiveSearchIndex((currentIndex) =>
+        currentIndex === filteredSearch.length - 1 ? 0 : currentIndex + 1,
+      );
+    }
+
+    if (event.key === "ArrowUp") {
+      event.preventDefault();
+      setActiveSearchIndex((currentIndex) =>
+        currentIndex === 0 ? filteredSearch.length - 1 : currentIndex - 1,
+      );
+    }
+
+    if (event.key === "Enter") {
+      event.preventDefault();
+      selectSearchOption(filteredSearch[activeSearchIndex]);
+    }
+  };
   // ===================================
   const {
     data: configEmpresa = [],
@@ -242,11 +247,22 @@ export function Navegacion({ tipoNavegacion = null }) {
               className="form-control shadow-none"
               placeholder="Buscar vista..."
               value={searchTerm}
+              aria-controls="navegacion-resultados-busqueda"
+              aria-activedescendant={
+                filteredSearch[activeSearchIndex]
+                  ? `resultado-busqueda-${activeSearchIndex}`
+                  : undefined
+              }
               onChange={(e) => {
                 setSearchTerm(e.target.value);
+                setActiveSearchIndex(0);
                 setShowSearchDropdown(true);
               }}
-              onFocus={() => setShowSearchDropdown(true)}
+              onFocus={() => {
+                setActiveSearchIndex(0);
+                setShowSearchDropdown(true);
+              }}
+              onKeyDown={handleSearchKeyDown}
             />
             {showSearchDropdown && searchTerm.trim() !== "" && (
               <div
@@ -259,26 +275,24 @@ export function Navegacion({ tipoNavegacion = null }) {
                   overflowY: "auto",
                 }}
               >
-                <ul className="list-unstyled m-0 py-1">
+                <ul
+                  id="navegacion-resultados-busqueda"
+                  className="list-unstyled m-0 py-1"
+                >
                   {filteredSearch.length > 0 ? (
                     filteredSearch.map((item, idx) => (
-                      <li key={idx}>
+                      <li key={item.path}>
                         <button
-                          className="btn btn-sm w-100 text-start px-3 py-2 text-dark bg-transparent border-0"
+                          id={`resultado-busqueda-${idx}`}
+                          type="button"
+                          className={`btn btn-sm w-100 text-start px-3 py-2 border-0 ${
+                            idx === activeSearchIndex
+                              ? "bg-dark text-white"
+                              : "text-dark bg-transparent"
+                          }`}
                           style={{ transition: "background-color 0.2s" }}
-                          onMouseOver={(e) =>
-                            (e.currentTarget.style.backgroundColor =
-                              "rgba(0,0,0,0.04)")
-                          }
-                          onMouseOut={(e) =>
-                            (e.currentTarget.style.backgroundColor =
-                              "transparent")
-                          }
-                          onClick={() => {
-                            navigate(item.path);
-                            setSearchTerm("");
-                            setShowSearchDropdown(false);
-                          }}
+                          onMouseEnter={() => setActiveSearchIndex(idx)}
+                          onClick={() => selectSearchOption(item)}
                         >
                           {item.label}
                         </button>
