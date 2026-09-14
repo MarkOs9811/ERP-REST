@@ -1,0 +1,139 @@
+/* FormAgenteChat.css */
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 500px;
+    width: 100%;
+    background-color: #f8f9fa;
+}
+
+.chat-header {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+    background-color: #fff;
+}
+
+.chat-select {
+    width: 100%;
+    padding: 10px 12px 10px 40px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    outline: none;
+    background-color: #fff;
+}
+
+.chat-agent-selector {
+    position: relative;
+}
+
+.chat-select-icon {
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    width: 18px;
+    height: 18px;
+    color: #198754;
+    pointer-events: none;
+    transform: translateY(-50%);
+}
+
+.chat-box {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.chat-empty-state {
+    text-align: center;
+    color: #6c757d;
+    margin-top: 40px;
+}
+
+.chat-message-row {
+    display: flex;
+    width: 100%;
+}
+
+.chat-user-row {
+    justify-content: flex-end;
+}
+
+.chat-agent-row {
+    justify-content: flex-start;
+}
+
+.chat-bubble {
+    max-width: 85%;
+    padding: 12px;
+    display: flex;
+    gap: 10px;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.chat-user-bubble {
+    background-color: #198754;
+    color: #fff;
+    border-radius: 15px 15px 0 15px;
+}
+
+.chat-agent-bubble {
+    background-color: #fff;
+    color: #333;
+    border: 1px solid #ddd;
+    border-radius: 15px 15px 15px 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.chat-form-container {
+    padding: 15px;
+    border-top: 1px solid #ddd;
+    background-color: #fff;
+    display: flex;
+    gap: 10px;
+}
+
+.chat-input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+}
+
+.chat-btn-submit {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.chat-btn-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.chat-loading-box {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 10px 15px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #6c757d;
+    font-size: 13px;
+    width: fit-content;
+}
+
+.animacion-rotar {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    100% {
+        transform: rotate(360deg);
+    }
+}

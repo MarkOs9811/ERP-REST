@@ -85,6 +85,45 @@
     background-color: rgba(0, 0, 0, 0.05);
 }
 
+.agent-ai-button {
+    position: relative;
+    isolation: isolate;
+    color: #087f6b !important;
+    background: linear-gradient(135deg, rgba(44, 190, 143, 0.12), rgba(32, 157, 196, 0.12)) !important;
+    box-shadow: 0 0 0 1px rgba(32, 169, 164, 0.45),
+        0 0 8px rgba(32, 169, 164, 0.2);
+}
+
+.agent-ai-button::before {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    z-index: -1;
+    border-radius: inherit;
+    background: linear-gradient(135deg, #48c995, #42a9d0);
+    opacity: 0.2;
+    filter: blur(4px);
+    transition: opacity 0.3s ease, filter 0.3s ease;
+}
+
+.agent-ai-button:hover,
+.agent-ai-button:focus-visible {
+    background: linear-gradient(135deg, rgba(44, 190, 143, 0.2), rgba(32, 157, 196, 0.2)) !important;
+    box-shadow: 0 0 0 1px rgba(32, 169, 164, 0.65),
+        0 0 12px rgba(32, 169, 164, 0.3);
+}
+
+.agent-ai-button:hover::before,
+.agent-ai-button:focus-visible::before {
+    opacity: 0.35;
+    filter: blur(5px);
+}
+
+.agent-ai-button:focus-visible {
+    outline: 2px solid rgba(32, 169, 164, 0.55);
+    outline-offset: 3px;
+}
+
 body.dark-theme .ico-header {
     color: #e8eaed;
 }
