@@ -23,12 +23,9 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toggleSidebarMobile } from "../redux/sideBarMobilSlice";
 import { GetNotificacionesPrivadas } from "../service/accionesGenerales/GetNotificacionesPrivada";
 import { PutData } from "../service/CRUD/PutData";
-import { FormAgenteChat } from "./componenteAgentes/FormAgenteChat";
 export function Header({ tipoHeader = null }) {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
-
-  const [modalAgenteAi, setModalAgenteAi] = useState(false);
 
   const empresa =
     JSON.parse(
@@ -240,25 +237,7 @@ export function Header({ tipoHeader = null }) {
               />
             </RippleWrapper>
           ) : null}
-          {/* BOTON PARA AGENTE IA */}
-          <button
-            className="ico-header agent-ai-button btn-icon border-0 rounded-pill d-flex align-items-center justify-content-center"
-            title="Abrir agente IA"
-            aria-label="Abrir agente IA"
-            style={{
-              width: 44,
-              height: 44,
-              padding: 0,
-              transition: "transform var(--transition-bounce)",
-            }}
-            onMouseOver={(e) =>
-              (e.currentTarget.style.transform = "scale(1.1)")
-            }
-            onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
-            onClick={() => setModalAgenteAi(true)}
-          >
-            <Brain size={22} aria-hidden="true" />
-          </button>
+
           {/* BOTON PARA PANTALLA COMPLETA */}
           <button
             className="ico-header btn-icon border-0 rounded-pill d-flex align-items-center justify-content-center"
@@ -407,16 +386,6 @@ export function Header({ tipoHeader = null }) {
             hideFooter={true}
           >
             <PerfilPanel user={user} fotoPerfil={fotoPerfil} />
-          </ModalRight>
-
-          <ModalRight
-            isOpen={modalAgenteAi}
-            onClose={() => setModalAgenteAi(false)}
-            width={"450px"}
-            hideFooter={true}
-            title={"Gestione el sistema"}
-          >
-            <FormAgenteChat />
           </ModalRight>
         </div>
       </nav>

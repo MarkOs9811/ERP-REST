@@ -1,0 +1,153 @@
+/* =========================================
+   BOTÓN FLOTANTE IA (AURA MÁGICA PREMIUM)
+========================================= */
+.agent-ai-button {
+    --agent-ai-icon-size: 26px;
+
+    /* Paleta del Aura IA */
+    --ai-glow-1: #e7e7e7;
+    /* Tu Teal */
+    --ai-glow-2: #c0c0c0;
+    /* Azul brillante */
+    --ai-glow-3: #919191;
+    /* Púrpura sutil de IA */
+
+    position: fixed;
+    isolation: isolate;
+    right: 24px;
+    bottom: 24px;
+    z-index: 1040;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* BLINDAJE ANTI-PÍLDORAS */
+    width: 60px !important;
+    height: 60px !important;
+    min-width: 60px !important;
+    min-height: 60px !important;
+    max-width: 60px !important;
+    max-height: 60px !important;
+    aspect-ratio: 1 / 1 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+
+    color: #202020 !important;
+    /* Borde mucho más elegante que el negro sólido */
+    border: 2px solid rgb(0, 0, 0) !important;
+    border-radius: 50% !important;
+
+    /* Reflejo dinámico más limpio y platinado */
+    background: linear-gradient(110deg, #ffffff 40%, #f4f6f8 50%, #ffffff 60%) !important;
+    background-size: 200% 100% !important;
+    animation: shine-sweep 4s infinite linear;
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    /* Físicas de resorte (cubic-bezier) para que se sienta fluido */
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+    cursor: pointer;
+}
+
+/* 1. EL AURA MÁGICA (Glow animado detrás) */
+.agent-ai-button::before {
+    content: "";
+    position: absolute;
+    inset: -5px;
+    /* Expansión del aura */
+    z-index: -1;
+    border-radius: inherit;
+    /* Un gradiente cónico suave y moderno */
+    background: conic-gradient(from 0deg,
+            var(--ai-glow-1),
+            var(--ai-glow-2),
+            var(--ai-glow-3),
+            var(--ai-glow-2),
+            var(--ai-glow-1));
+    filter: blur(8px);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+/* 2. CAPA DE CRISTAL INTERNA (Para que el aura no se coma el botón) */
+.agent-ai-button::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: inherit;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.8);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.agent-ai-button svg {
+    position: relative;
+    z-index: 1;
+    width: var(--agent-ai-icon-size) !important;
+    height: var(--agent-ai-icon-size) !important;
+    flex-shrink: 0 !important;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.3s ease;
+}
+/* =========================================
+   ESTADOS DE INTERACCIÓN (HOVER / CLICK)
+========================================= */
+
+.agent-ai-button:hover,
+.agent-ai-button:focus-visible {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.1);
+    /* Mantenemos el borde visible en lugar de hacerlo transparente */
+    border-color: rgba(0, 0, 0, 0.568) !important;
+}
+
+/* Encendemos el aura plateada y la hacemos girar */
+.agent-ai-button:hover::before,
+.agent-ai-button:focus-visible::before {
+    opacity: 0.85;
+    animation: agent-ai-spin 3s linear infinite;
+}
+
+.agent-ai-button:hover::after,
+.agent-ai-button:focus-visible::after {
+    opacity: 1;
+}
+
+/* El ícono crece sutilmente pero MANTIENE su color oscuro */
+.agent-ai-button:hover svg {
+    transform: scale(1.15);
+    color: #202020 !important;
+    /* <-- Color negro/oscuro mantenido */
+}
+
+/* Al hacer click, se hunde suavemente */
+.agent-ai-button:active {
+    transform: translateY(0) scale(0.96);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* =========================================
+   ANIMACIONES CLAVE
+========================================= */
+
+/* El reflejo de fondo */
+@keyframes shine-sweep {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* El giro del aura mágica */
+@keyframes agent-ai-spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}

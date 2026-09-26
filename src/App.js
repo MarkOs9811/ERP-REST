@@ -42,6 +42,7 @@ import { LoginAdmin } from "./pageAdmin/LoginAdmin";
 import { LayOutAdmin } from "./LayOut/LayOutAdmin";
 import { AuthProviderAdmin } from "./AuthContextAdmin";
 import { RestablecerPassword } from "./pages/RestablecerPassword";
+import { BotonAgenteAi } from "./components/componentesReutilizables/BotonAgenteAi";
 
 function App() {
   useEffect(() => {
@@ -84,6 +85,7 @@ function App() {
                 element={
                   <CajaProtectedRoute>
                     <ToastContainer />
+                    <BotonAgenteAi />
                     <LayoutPOS>
                       <Routes>
                         <Route path="mesas" element={<MesasList />} />

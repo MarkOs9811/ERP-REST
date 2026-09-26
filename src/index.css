@@ -307,16 +307,6 @@ button:active,
   transform: translateY(0);
 }
 
-/* ========================================================================
-   CONTROL ESTRICTO DE ICONOS GLOBALMENTE
-========================================================================= */
-.btn svg,
-button svg,
-[class*="btn-"] svg:not(.btn-icon svg) {
-  width: 18px !important;
-  height: 18px !important;
-  flex-shrink: 0 !important;
-}
 
 /* ========================================================================
    🔥 NUEVO: CLASE EXCLUSIVA PARA BOTONES REDONDOS DEL POS (+, -, Basurero)

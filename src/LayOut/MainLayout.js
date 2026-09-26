@@ -94,6 +94,7 @@ import { ArrowLeft, X } from "lucide-react";
 import { setSidebarCompressed } from "../redux/sideBarSlice";
 import { toggleSidebarMobile } from "../redux/sideBarMobilSlice";
 import { ReservasMesas } from "../pages/moduloVentas/ReservasMesas";
+import { BotonAgenteAi } from "../components/componentesReutilizables/BotonAgenteAi";
 // NOTA: Asegúrate de importar las acciones correctamente según tus rutas de Redux
 
 export const MainLayout = () => {
@@ -160,6 +161,7 @@ export const MainLayout = () => {
 
   return (
     <div className="p-0 m-0 vh-100 d-flex overflow-hidden">
+      <BotonAgenteAi />
       {showFullLayout && (
         <div className="sidebar-main-wrapper border-0">
           <SideBar />

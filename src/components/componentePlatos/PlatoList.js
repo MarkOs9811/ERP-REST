@@ -184,9 +184,9 @@ export function PlatoList({ search, categoriaActual = null }) {
               color: "var(--text-muted)",
             }}
           >
-            {row.descripcion.length > 80
+            {(row.descripcion || "").length > 80
               ? row.descripcion.substring(0, 80) + "..."
-              : row.descripcion}
+              : row.descripcion || ""}
           </p>
         </div>
       ),

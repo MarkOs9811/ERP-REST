@@ -49,7 +49,10 @@ export function Home() {
                 ></span>
                 {cajaAbierta ? "Caja abierta" : "Caja cerrada"}
               </p>
-              <h5 className="fw-bold mb-2" style={{ color: "var(--text-main)" }}>
+              <h5
+                className="fw-bold mb-2"
+                style={{ color: "var(--text-main)" }}
+              >
                 {nombreCaja}
               </h5>
               <p className="mb-4 text-muted flex-grow-1">
