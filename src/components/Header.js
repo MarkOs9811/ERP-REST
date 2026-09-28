@@ -8,7 +8,6 @@ import { NotificacionesPanel } from "./componentesHeader/NotificacionesPanel";
 import { capitalizeFirstLetter } from "../hooks/FirstLetterUp";
 import {
   Bell,
-  Brain,
   Expand,
   Menu,
   Minimize,

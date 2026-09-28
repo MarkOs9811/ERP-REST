@@ -19,13 +19,6 @@
 /* =========================================
    HEADER (ESTILO APP)
 ========================================= */
-.chat-ai-header {
-    gap: 12px;
-    min-width: 0;
-    padding: 16px 20px;
-    background-color: #f8f9fa;
-    border-bottom: 1px solid #e9ecef;
-}
 
 .chat-ai-title {
     gap: 8px;
@@ -37,14 +30,11 @@
 
 .icon-sparkle {
     color: #10b981;
-    /* Verde esmeralda corporativo */
 }
 
 .chat-agent-selector {
     min-width: 0;
     max-width: 100%;
-    background: #ffffff;
-    border: 1px solid #dee2e6;
     border-radius: 20px;
     padding: 4px 12px;
     gap: 6px;
@@ -81,7 +71,7 @@
     overflow-y: auto;
     overflow-x: hidden;
     padding: 24px;
-    background-color: #ffffff;
+    background-color: #ececec;
 }
 
 .chat-messages-list {
@@ -150,14 +140,12 @@
     overflow-wrap: anywhere;
 }
 
-/* Burbuja Usuario (Estilo iMessage / IA moderna) */
 .bubble-user {
     background: linear-gradient(135deg, #10b981 0%, #059669 100%);
     color: white;
     border-radius: 18px 18px 4px 18px;
 }
 
-/* Burbuja Agente */
 .bubble-agent {
     background-color: #f8f9fa;
     color: #212529;
@@ -192,17 +180,6 @@
 .chat-empty-state p {
     margin: 0;
     font-size: 14px;
-}
-
-.chat-suggestion {
-    margin-top: 16px;
-    background: #e6fcf5;
-    color: #0ca678;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 500;
-    border: 1px dashed #63e6be;
 }
 
 /* =========================================
@@ -362,6 +339,7 @@
         box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
     }
 }
+
 /* =========================================
    SUGGESTION BADGES (CHIPS)
 ========================================= */
@@ -375,7 +353,6 @@
     color: #495057;
     padding: 8px 16px;
     border-radius: 20px;
-    /* Bordes redondeados tipo pastilla */
     font-size: 13px;
     font-weight: 500;
     cursor: pointer;
@@ -385,12 +362,9 @@
 
 .suggestion-badge:hover:not(:disabled) {
     background-color: #e6fcf5;
-    /* Fondo verde esmeralda muy clarito */
     border-color: #10b981;
-    /* Borde verde corporativo */
     color: #0ca678;
     transform: translateY(-2px);
-    /* Se eleva un poquito al hacer hover */
     box-shadow: 0 4px 6px rgba(16, 185, 129, 0.1);
 }
 
@@ -405,5 +379,141 @@
 
 .suggestion-badge:hover:not(:disabled) .text-muted {
     color: #10b981 !important;
-    /* El icono también se pinta de verde */
+}
+
+/* =========================================
+   SELECTOR HORIZONTAL (PILLS) NUEVO
+========================================= */
+.agent-pill {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 20px;
+    padding: 6px;
+    color: #6c757d;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.agent-pill:hover:not(:disabled) {
+    background-color: #f1f3f5;
+    color: #212529;
+}
+
+.agent-pill:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* 🔥 Nombre único para que nada más del ERP lo pise */
+.agent-pill.pill-activa {
+    background-color: #10b981 !important;
+    border-color: #10b981 !important;
+    color: #ffffff !important;
+    padding: 6px 12px;
+    box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
+}
+
+.agent-pill.pill-activa span {
+    font-size: 13px;
+    font-weight: 500;
+    display: inline-block;
+}
+
+.agent-pill:not(.pill-activa) span {
+    display: none;
+}
+
+/* =========================================
+   MODO OSCURO (DARK THEME)
+========================================= */
+body.dark-theme .chat-ai-container {
+    background-color: #1e1e2d;
+    border-color: #2b2b40;
+}
+
+body.dark-theme .chat-ai-header,
+body.dark-theme .chat-ai-footer {
+    background-color: #1e1e2d;
+    border-color: #2b2b40;
+}
+
+body.dark-theme .chat-ai-title {
+    color: #ffffff;
+}
+
+body.dark-theme .chat-agent-selector {
+    background: #151521;
+    border-color: #2b2b40;
+}
+
+body.dark-theme .agent-pill {
+    color: #92929f;
+}
+
+body.dark-theme .agent-pill:hover:not(:disabled) {
+    background-color: #2b2b40;
+    color: #ffffff;
+}
+
+/* Aseguramos el fondo en modo oscuro si está seleccionado */
+body.dark-theme .agent-pill.pill-activa {
+    background-color: #10b981 !important;
+    border-color: #10b981 !important;
+    color: #ffffff !important;
+}
+
+body.dark-theme .chat-ai-body {
+    background-color: #c4c4c4;
+}
+
+body.dark-theme .chat-empty-state {
+    color: #92929f;
+}
+
+body.dark-theme .chat-empty-state h3 {
+    color: #ffffff;
+}
+
+body.dark-theme .empty-icon-wrapper {
+    background: #1e1e2d;
+    color: #494b74;
+}
+
+body.dark-theme .suggestion-badge {
+    background-color: #1e1e2d;
+    border-color: #2b2b40;
+    color: #cdcdde;
+}
+
+body.dark-theme .suggestion-badge:hover:not(:disabled) {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+    border-color: #10b981;
+}
+
+body.dark-theme .bubble-agent {
+    background-color: #1e1e2d;
+    color: #cdcdde;
+    border-color: #2b2b40;
+}
+
+body.dark-theme .avatar-agent {
+    background-color: rgba(16, 185, 129, 0.1);
+}
+
+body.dark-theme .avatar-user {
+    background-color: #2b2b40;
+    color: #cdcdde;
+}
+
+body.dark-theme .input-wrapper {
+    background: #151521;
+    border-color: #2b2b40;
+}
+
+body.dark-theme .chat-input-clean {
+    color: #ffffff;
 }

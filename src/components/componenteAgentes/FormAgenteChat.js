@@ -6,22 +6,55 @@ import {
   ChefHat,
   Loader2,
   SendIcon,
-  ShoppingCart,
+  Store,
   User,
   WalletCards,
   Sparkles,
-  MessageSquareDashed, // <-- Un icono extra para los badges
+  MessageSquareDashed,
 } from "lucide-react";
 import "../../css/estilosAgente/EstilosChatAgente.css";
 import axiosInstance from "../../api/AxiosInstance";
+
+const AGENTES_CONFIG = [
+  { id: "platos", nombre: "Agente Platos", icono: ChefHat, disponible: true },
+  { id: "pos", nombre: "Agente POS", icono: Store, disponible: true },
+  {
+    id: "ventas",
+    nombre: "Agente Ventas",
+    icono: WalletCards,
+    disponible: false,
+  },
+];
+
+const SUGERENCIAS_POR_AGENTE = {
+  platos: [
+    "Sube el precio del Lomo Saltado a 25 soles",
+    "¿Qué platos tienen la palabra pollo?",
+    "Desactiva la chicha morada de la web",
+    "Crea un plato a 35 soles",
+  ],
+  pos: [
+    "¿Cuánto he vendido hoy en mi caja?",
+    "¿Qué mesas están libres?",
+    "Reserva una mesa para mañana a las 8pm",
+    "Abre mi caja con 100 soles",
+  ],
+  ventas: [],
+};
 
 export function FormAgenteChat() {
   const [messages, setMessages] = useState([]);
   const chatEndRef = useRef(null);
 
-  // Añadimos setValue para poder escribir en el input mediante código
-  const { register, handleSubmit, reset, watch, setValue } = useForm();
+  const { register, handleSubmit, reset, watch, setValue } = useForm({
+    defaultValues: { agenteType: "platos", prompt: "" },
+  });
+
   const agenteSeleccionado = watch("agenteType");
+  const agenteInfo =
+    AGENTES_CONFIG.find((ag) => ag.id === agenteSeleccionado) ||
+    AGENTES_CONFIG[0];
+  const sugerenciasActuales = SUGERENCIAS_POR_AGENTE[agenteSeleccionado] || [];
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -56,65 +89,54 @@ export function FormAgenteChat() {
     reset({ prompt: "" });
   };
 
-  // NUEVO: Función para ejecutar la orden al hacer clic en un badge
   const handleBadgeClick = (textoSugerencia) => {
-    setValue("prompt", textoSugerencia); // Llena el input visualmente
-    onSubmit({ prompt: textoSugerencia, agenteType: agenteSeleccionado }); // Lo envía automáticamente
+    setValue("prompt", textoSugerencia);
+    onSubmit({ prompt: textoSugerencia, agenteType: agenteSeleccionado });
   };
 
-  // NUEVO: Lista de sugerencias por defecto
-  const sugerenciasPlatos = [
-    "Sube el precio del Lomo Saltado a 25 soles",
-    "¿Qué platos tienen la palabra pollo?",
-    "Desactiva la chicha morada de la web",
-    "Crea un plato a 35 soles",
-  ];
-
   return (
-    <div className="chat-ai-container d-flex flex-column w-100 h-100 overflow-hidden rounded-0 border-0">
+    <div className="chat-ai-container d-flex flex-column w-100 h-100 border-0">
+      <input type="hidden" {...register("agenteType")} />
+
       {/* HEADER */}
-      <div className="chat-ai-header d-flex flex-wrap flex-shrink-0 justify-content-between align-items-center">
-        <div className="chat-ai-title d-flex align-items-center">
-          <Sparkles className="icon-sparkle" size={20} />
-          <span>Asistente Inteligente</span>
-        </div>
-        <div className="chat-agent-selector d-flex align-items-center">
-          {agenteSeleccionado === "ventas" ? (
-            <ShoppingCart className="selector-icon" size={16} />
-          ) : agenteSeleccionado === "finanzas" ? (
-            <WalletCards className="selector-icon" size={16} />
-          ) : (
-            <ChefHat className="selector-icon" size={16} />
-          )}
-          <select
-            {...register("agenteType")}
-            className="chat-select-clean"
-            defaultValue="platos"
-          >
-            <option value="platos">Agente Platos (Menú)</option>
-            <option value="ventas" disabled>
-              Agente Ventas (Pronto)
-            </option>
-            <option value="finanzas" disabled>
-              Agente Finanzas (Pronto)
-            </option>
-          </select>
+      <div className="card d-flex p-3 rounded-none border-0  justify-content-between align-items-center">
+        <div className="chat-agent-selector  d-flex align-items-center">
+          {AGENTES_CONFIG.map((ag) => {
+            const Icono = ag.icono;
+            const isSelected = agenteSeleccionado === ag.id;
+            return (
+              <button
+                key={ag.id}
+                type="button"
+                disabled={!ag.disponible || chatMutation.isPending}
+                onClick={() => {
+                  setValue("agenteType", ag.id);
+                  setMessages([]);
+                }}
+                title={!ag.disponible ? "Próximamente" : ag.nombre}
+                // AQUI ESTÁ EL CAMBIO: pill-activa en vez de selected
+                className={`agent-pill d-flex  align-items-center px-3 justify-content-center ${isSelected ? "pill-activa" : ""}`}
+              >
+                <Icono size={22} className={isSelected ? "me-1" : ""} />
+                {isSelected && <span>{ag.nombre}</span>}
+              </button>
+            );
+          })}
         </div>
       </div>
 
-      {/* ZONA DE MENSAJES */}
-      <div className="chat-ai-body d-flex flex-column flex-grow-1 overflow-y-auto custom-scrollbar">
+      {/* BODY */}
+      <div className="chat-ai-body d-flex flex-column flex-grow-1 custom-scrollbar ">
         {messages.length === 0 ? (
-          <div className="chat-empty-state d-flex flex-column align-items-center text-center m-auto">
+          <div className="chat-empty-state d-flex flex-column align-items-center text-center">
             <div className="empty-icon-wrapper">
-              <Bot size={48} strokeWidth={1.5} />
+              <agenteInfo.icono size={48} strokeWidth={1.5} />
             </div>
             <h3>¿En qué te ayudo hoy?</h3>
-            <p>Selecciona un agente o usa una de las sugerencias.</p>
+            <p>Selecciona una sugerencia para el {agenteInfo.nombre}.</p>
 
-            {/* NUEVO: Contenedor de Badges */}
-            <div className="chat-suggestions-container mt-4 d-flex flex-wrap justify-content-center gap-2">
-              {sugerenciasPlatos.map((sugerencia, index) => (
+            <div className="chat-suggestions-container d-flex flex-wrap justify-content-center gap-2 mt-3">
+              {sugerenciasActuales.map((sugerencia, index) => (
                 <button
                   key={index}
                   type="button"
@@ -141,13 +163,11 @@ export function FormAgenteChat() {
               >
                 {msg.role === "agent" && (
                   <div className="avatar-agent d-flex align-items-center justify-content-center">
-                    <Bot size={18} />
+                    <agenteInfo.icono size={18} />
                   </div>
                 )}
                 <div
-                  className={`chat-bubble ${
-                    msg.role === "user" ? "bubble-user" : "bubble-agent"
-                  }`}
+                  className={`chat-bubble ${msg.role === "user" ? "bubble-user" : "bubble-agent"}`}
                 >
                   {msg.content}
                 </div>
@@ -162,7 +182,7 @@ export function FormAgenteChat() {
         )}
 
         {chatMutation.isPending && (
-          <div className="chat-row d-flex align-items-end row-agent animate-slide-up">
+          <div className="chat-row d-flex align-items-end row-agent animate-slide-up mt-3 bg-light">
             <div className="avatar-agent d-flex align-items-center justify-content-center pulse-anim">
               <Bot size={18} />
             </div>
@@ -176,29 +196,29 @@ export function FormAgenteChat() {
         <div ref={chatEndRef} />
       </div>
 
-      {/* ZONA DE INPUT */}
+      {/* FOOTER */}
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="chat-ai-footer flex-shrink-0 w-100 bg-light"
+        className="chat-ai-footer flex-shrink-0 w-100 "
       >
-        <div className="input-wrapper d-flex align-items-center w-100 bg-white">
+        <div className="input-wrapper d-flex align-items-center w-100">
           <input
             {...register("prompt")}
             type="text"
             autoComplete="off"
-            disabled={chatMutation.isPending || !agenteSeleccionado}
-            placeholder="Escribe tu instrucción aquí..."
-            className="chat-input-clean form-control border-0 shadow-none"
+            disabled={chatMutation.isPending || !agenteInfo.disponible}
+            placeholder={`Habla con el ${agenteInfo.nombre}...`}
+            className="chat-input-clean flex-grow-1 bg-transparent"
           />
           <button
             type="submit"
-            disabled={chatMutation.isPending || !agenteSeleccionado}
-            className="chat-btn-send btn-icon d-flex align-items-center justify-content-center"
+            disabled={chatMutation.isPending || !agenteInfo.disponible}
+            className="chat-btn-send d-flex align-items-center justify-content-center"
           >
             {chatMutation.isPending ? (
-              <Loader2 size={25} className="animacion-rotar" />
+              <Loader2 size={18} className="animacion-rotar" />
             ) : (
-              <SendIcon sizes={25} />
+              <SendIcon size={18} />
             )}
           </button>
         </div>

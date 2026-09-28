@@ -118,7 +118,7 @@ export function CerrarCaja() {
     },
   });
 
- const handleImprimirCaja = async () => {
+  const handleImprimirCaja = async () => {
     const dataActual = cajaData?.data || cajaData;
     if (!dataActual) {
       ToastAlert("error", "No hay datos registrados en esta caja");
@@ -136,11 +136,14 @@ export function CerrarCaja() {
       fisicoEsperado: dataActual.fisicoEsperado,
       totalesPorMetodo: dataActual.totalesPorMetodo,
       // 🔥 NUEVO: Enviamos el historial de transacciones
-      detallesVenta: dataActual.detallesVenta || [], 
+      detallesVenta: dataActual.detallesVenta || [],
     };
 
     try {
-      const response = await axiosInstance.post("/cajas/imprimirCierre", payload);
+      const response = await axiosInstance.post(
+        "/cajas/imprimirCierre",
+        payload,
+      );
       if (response.data.success) {
         ToastAlert("success", "Imprimiendo Arqueo de Caja...");
       } else {
@@ -168,7 +171,7 @@ export function CerrarCaja() {
 
   const totalesPorMetodo = cajaData?.totalesPorMetodo || {};
 
- const handleCerrarCaja = async (id) => {
+  const handleCerrarCaja = async (id) => {
     const sumaTotalFormatted = parseFloat(fisicoEsperado).toFixed(2);
     const montoDejarFormatted = parseFloat(getValues("montoDejar")).toFixed(2);
 
@@ -642,8 +645,6 @@ export function CerrarCaja() {
                         Imprimir Arqueo
                       </span>
                     </BotonAnimado>
-
-                   
 
                     <BotonAnimado
                       loading={isLoading}
