@@ -74,10 +74,19 @@ export function FormAgenteChat() {
         { role: "agent", content: data.respuesta },
       ]);
     },
-    onError: () => {
+    onError: (error) => {
+      // 🔥 ESTO TE DIRÁ EXACTAMENTE QUÉ ESTÁ PASANDO
+      console.error("💥 Error completo de Axios:", error);
+      console.error("🔍 Respuesta del servidor:", error.response);
+      console.error("🌐 URL intentada:", error.config?.url);
+
+      // Mostrar el mensaje real de error en el chat
+      const mensajeError =
+        error.response?.data?.respuesta || error.message || "Error desconocido";
+
       setMessages((prev) => [
         ...prev,
-        { role: "agent", content: "❌ Error de conexión con el orquestador." },
+        { role: "agent", content: `❌ Error detectado: ${mensajeError}` },
       ]);
     },
   });
@@ -95,11 +104,11 @@ export function FormAgenteChat() {
   };
 
   return (
-    <div className="chat-ai-container d-flex flex-column w-100 h-100 border-0">
+    <div className="chat-ai-container d-flex flex-column w-100 h-100 border-0 rounded-0">
       <input type="hidden" {...register("agenteType")} />
 
       {/* HEADER */}
-      <div className="card d-flex p-3 rounded-none border-0  justify-content-between align-items-center">
+      <div className="card d-flex p-3 rounded-none border-0 rounded-0 justify-content-between align-items-center">
         <div className="chat-agent-selector  d-flex align-items-center">
           {AGENTES_CONFIG.map((ag) => {
             const Icono = ag.icono;
@@ -126,7 +135,7 @@ export function FormAgenteChat() {
       </div>
 
       {/* BODY */}
-      <div className="chat-ai-body d-flex flex-column flex-grow-1 custom-scrollbar ">
+      <div className="chat-ai-body d-flex flex-column flex-grow-1 custom-scrollbar">
         {messages.length === 0 ? (
           <div className="chat-empty-state d-flex flex-column align-items-center text-center">
             <div className="empty-icon-wrapper">

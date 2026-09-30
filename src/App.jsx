@@ -12,8 +12,8 @@ import "./App.css";
 import { AuthProvider, useAuth } from "./AuthContext";
 
 // IMPORTACION DE CONTEXTOS
-import { CajaProtectedRoute } from "../src/components/CajaProtectedRoute";
-import { CajaProvider } from "../src/CajaContext";
+import { CajaProtectedRoute } from "./components/CajaProtectedRoute";
+import { CajaProvider } from "./CajaContext";
 
 import { PrivateRoute } from "./components/PrivateRoute";
 import { ToastContainer } from "react-toastify";

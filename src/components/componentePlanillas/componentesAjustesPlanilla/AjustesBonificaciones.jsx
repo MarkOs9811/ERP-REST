@@ -1,13 +1,10 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Cargando } from "../../componentesReutilizables/Cargando";
 import { TablasGenerales } from "../../componentesReutilizables/TablasGenerales";
-import { CheckCheck, Coins, FileText, Plus } from "lucide-react";
+import { CheckCheck, Coins, Plus } from "lucide-react";
 import { useMemo, useState } from "react";
 import ModalRight from "../../componentesReutilizables/ModalRight";
-import {
-  FormularioAddBonificaciones,
-  FormularioBonificacion,
-} from "./formulariosAjustes/FormularioBonificacion";
+import { FormularioBonificacion } from "./formulariosAjustes/FormularioBonificacion";
 import ModalAlertQuestion from "../../componenteToast/ModalAlertQuestion";
 import axiosInstance from "../../../api/AxiosInstance";
 import ToastAlert from "../../componenteToast/ToastAlert";

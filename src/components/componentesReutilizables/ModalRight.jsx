@@ -39,7 +39,7 @@ const ModalRight = ({
     }
   }, [isOpen, shouldRender]);
 
-  // 🔥 NUEVO: Efecto optimizado para cerrar con la tecla Escape
+  //  Efecto optimizado para cerrar con la tecla Escape
   useEffect(() => {
     const handleEsc = (event) => {
       if (event.key === "Escape" && !isLoading) {
@@ -98,7 +98,7 @@ const ModalRight = ({
 
         {/* CUERPO DEL MODAL */}
         <div
-          className={`modal-right-body m-0 bg-white p-0 overflow-y-auto flex-grow-1 ${
+          className={`modal-right-body  m-0 p-0 overflow-y-auto flex-grow-1 ${
             hideFooter ? "full-height" : "with-footer"
           }`}
         >
@@ -114,7 +114,7 @@ const ModalRight = ({
               type="button"
               className={`btn-cerrar ms-2 ${cancelButtonClassName}`.trim()}
               onClick={onCancel || handleClose}
-              disabled={isLoading} // 🔥 Bloqueamos botón Cancelar
+              disabled={isLoading} //  Bloqueamos botón Cancelar
             >
               {cancelText}
             </button>
@@ -123,7 +123,7 @@ const ModalRight = ({
                 type="button"
                 className={`btn-guardar ms-2 ${submitButtonClassName}`.trim()}
                 onClick={onSubmit}
-                disabled={isLoading || isSubmitDisabled} // 🔥 Bloqueamos botón principal
+                disabled={isLoading || isSubmitDisabled} //  Bloqueamos botón principal
               >
                 {isLoading ? (
                   <>
