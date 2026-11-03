@@ -22,6 +22,8 @@ import { Cargando } from "../componentesReutilizables/Cargando";
 import { BotonMotionGeneral } from "../componentesReutilizables/BotonMotionGeneral";
 import { useRef, useState } from "react";
 import { useGenerarReporte } from "../../hooks/GenerarPdfReporte";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+
 export function PerfilGeneralNomina({ idEmpleado }) {
   const reporteRef = useRef();
   const { data: perfil = [], isLoading } = useQuery({
@@ -42,8 +44,8 @@ export function PerfilGeneralNomina({ idEmpleado }) {
 
   return (
     <div className="perfil-nomina p-3 " ref={reporteRef}>
-      <div className="row g-3">
-        <div className="col-md-12">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+        <div className="md:col-span-12">
           {isLoading ? (
             <div
               className="d-flex justify-content-center align-items-center w-100 bg-light"
@@ -53,12 +55,12 @@ export function PerfilGeneralNomina({ idEmpleado }) {
             </div>
           ) : (
             <>
-              <div className="card d-flex   text-left overflow-hidden p-0 position-relative">
+              <Card className="flex text-left overflow-hidden p-0 relative">
                 <div
-                  className="row g-3 position-relative"
+                  className="grid grid-cols-1 md:grid-cols-12 gap-3 position-relative"
                   style={{ zIndex: 2 }}
                 >
-                  <div className="col-md-2 p-4 d-flex">
+                  <div className="md:col-span-2 p-4 d-flex">
                     <img
                       src={
                         perfil?.usuario?.foto_url
@@ -75,7 +77,7 @@ export function PerfilGeneralNomina({ idEmpleado }) {
                       }}
                     />
                   </div>
-                  <div className="col-md-10 p-4">
+                  <div className="md:col-span-10 p-4">
                     <h5 className="fw-bold mb-0">
                       {perfil?.usuario?.empleado?.persona?.nombre}
                       <span> </span>
@@ -105,7 +107,7 @@ export function PerfilGeneralNomina({ idEmpleado }) {
                       </span>
                     </span>
                   </div>
-                  <div className="col-md-12 d-flex w-100">
+                  <div className="md:col-span-12 d-flex w-100">
                     <div className="ms-auto d-flex gap-3 mx-3">
                       <BotonMotionGeneral
                         text="Editar Perfil"
@@ -140,10 +142,10 @@ export function PerfilGeneralNomina({ idEmpleado }) {
                     backgroundSize: "100%",
                   }}
                 ></div>
-                <div className="col-md-12 p-4">
-                  <div className="row g-3">
-                    <div className="col-md-3">
-                      <div className="card border p-3 h-100">
+                <div className="md:col-span-12 p-4">
+                  <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+                    <div className="md:col-span-3">
+                      <Card className="border p-3 h-full">
                         <div className="d-flex align-items-center justify-content-between w-100">
                           <div>
                             <small>Días trabajados</small>
@@ -161,10 +163,10 @@ export function PerfilGeneralNomina({ idEmpleado }) {
                           </div>
                           <Calendar size={60} />
                         </div>
-                      </div>
+                      </Card>
                     </div>
-                    <div className="col-md-3">
-                      <div className="card border p-3 h-100">
+                    <div className="md:col-span-3">
+                      <Card className="border p-3 h-full">
                         <div className="d-flex align-items-center justify-content-between w-100">
                           <div>
                             <small>Salario Base</small>
@@ -181,10 +183,10 @@ export function PerfilGeneralNomina({ idEmpleado }) {
                           </div>
                           <span className="h1">S/.</span>
                         </div>
-                      </div>
+                      </Card>
                     </div>
-                    <div className="col-md-3">
-                      <div className="card border p-3 h-100">
+                    <div className="md:col-span-3">
+                      <Card className="border p-3 h-full">
                         <div className="d-flex align-items-center justify-content-between w-100">
                           <div>
                             <small>Vacaciones</small>
@@ -199,10 +201,10 @@ export function PerfilGeneralNomina({ idEmpleado }) {
                           </div>
                           <TreePalm size={60} />
                         </div>
-                      </div>
+                      </Card>
                     </div>
-                    <div className="col-md-3">
-                      <div className="card border p-3 h-100">
+                    <div className="md:col-span-3">
+                      <Card className="border p-3 h-full">
                         <div className="d-flex align-items-center justify-content-between w-100">
                           <div>
                             <small>Tipo Contrato</small>
@@ -216,11 +218,11 @@ export function PerfilGeneralNomina({ idEmpleado }) {
                           </div>
                           <BriefcaseBusiness size={60} />
                         </div>
-                      </div>
+                      </Card>
                     </div>
                   </div>
                 </div>
-              </div>
+              </Card>
             </>
           )}
         </div>
@@ -228,10 +230,10 @@ export function PerfilGeneralNomina({ idEmpleado }) {
       </div>
 
       {/* Bonificaciones y deducciones */}
-      <div className="row g-3 mt-2">
-        <div className="col-md-8">
-          <div className="card   p-3">
-            <div className="card-header d-flex gap-2 align-middle justify-content-left">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mt-2">
+        <div className="md:col-span-8">
+          <Card className="p-3">
+            <CardHeader className="flex gap-2 align-middle justify-content-left">
               <span className="alert  alert-danger text-danger p-2 mb-0">
                 <User size={25} className="text-auto" />
               </span>
@@ -239,16 +241,16 @@ export function PerfilGeneralNomina({ idEmpleado }) {
                 <span className="fw-bold">Información Personal</span>
                 <p className="text-muted small mb-0">Datos </p>
               </h6>
-            </div>
-            <div className="card-body">
-              <div className="row mb-2">
-                <div className="col-md-6 small mb-2">
+            </CardHeader>
+            <CardContent className="">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-4mb-2">
+                <div className="md:col-span-6 small mb-2">
                   <span className="text-muted">Documento:</span>
                   <div>
                     {perfil.usuario?.empleado.persona.documento_identidad}
                   </div>
                 </div>
-                <div className="col-md-6 small mb-2">
+                <div className="md:col-span-6 small mb-2">
                   <span className="text-muted">
                     {" "}
                     <Phone size={15} />
@@ -256,7 +258,7 @@ export function PerfilGeneralNomina({ idEmpleado }) {
                   </span>
                   <div>{perfil?.empleado?.persona?.telefono || "N/A"}</div>
                 </div>
-                <div className="col-md-6 small mb-2">
+                <div className="md:col-span-6 small mb-2">
                   <span className="text-muted d-flex gap-1 align-items-center">
                     <Mail size={15} />
                     <span>Correo:</span>
@@ -267,7 +269,7 @@ export function PerfilGeneralNomina({ idEmpleado }) {
                       "N/A"}
                   </div>
                 </div>
-                <div className="col-md-6 small mb-2">
+                <div className="md:col-span-6 small mb-2">
                   <span className="text-muted d-flex gap-1 align-items-center">
                     <MapPin size={15} />
                     <span>Dirección:</span>
@@ -276,7 +278,7 @@ export function PerfilGeneralNomina({ idEmpleado }) {
                     {perfil.usuario?.empleado?.persona?.direccion || "N/A"}
                   </div>
                 </div>
-                <div className="col-md-6 small mb-2">
+                <div className="md:col-span-6 small mb-2">
                   <span className="text-muted d-flex gap-1 align-items-center">
                     <Calendar size={15} />
                     <span>Fecha Nacimiento:</span>
@@ -287,12 +289,12 @@ export function PerfilGeneralNomina({ idEmpleado }) {
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </div>
-        <div className="col-md-4">
-          <div className="card   p-3 h-100">
-            <div className="card-header d-flex gap-2 align-middle justify-content-left">
+        <div className="md:col-span-4">
+          <Card className="p-3 h-full">
+            <CardHeader className="flex gap-2 align-middle justify-content-left">
               <span className="alert  alert-success text-danger p-2 mb-0">
                 <TrendingUp className="me-1 text-success" size={25} />
               </span>
@@ -300,8 +302,8 @@ export function PerfilGeneralNomina({ idEmpleado }) {
                 <span className="fw-bold">Bonificaciones</span>
                 <p className="text-muted small mb-0"> </p>
               </h6>
-            </div>
-            <div className="card-body">
+            </CardHeader>
+            <CardContent className="">
               <ul className="list-group list-group-flush">
                 {perfil.bonificaciones && perfil.bonificaciones.length > 0 ? (
                   perfil.bonificaciones.map((d, idx) => (
@@ -328,13 +330,13 @@ export function PerfilGeneralNomina({ idEmpleado }) {
                   </li>
                 )}
               </ul>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </div>
 
-        <div className="col-md-8">
-          <div className="card   p-3">
-            <div className="card-header d-flex gap-2 align-middle justify-content-left">
+        <div className="md:col-span-8">
+          <Card className="p-3">
+            <CardHeader className="flex gap-2 align-middle justify-content-left">
               <span className="alert  alert-danger text-danger p-2 mb-0">
                 <BriefcaseBusiness size={25} className="text-auto" />
               </span>
@@ -342,15 +344,15 @@ export function PerfilGeneralNomina({ idEmpleado }) {
                 <span className="fw-bold">Información Laboral</span>
                 <p className="text-muted small mb-0">Básico </p>
               </h6>
-            </div>
-            <div className="card-body">
-              <div className="row mb-2">
-                <div className="col-md-6 small mb-2">
+            </CardHeader>
+            <CardContent className="">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-4mb-2">
+                <div className="md:col-span-6 small mb-2">
                   <span className="text-muted">Cargo</span>
                   <div>{perfil.usuario?.empleado.cargo.nombre}</div>
                 </div>
 
-                <div className="col-md-6 small mb-2">
+                <div className="md:col-span-6 small mb-2">
                   <span className="text-muted d-flex gap-1 align-items-center">
                     <Clock size={15} />
                     <span>Horario</span>
@@ -361,11 +363,11 @@ export function PerfilGeneralNomina({ idEmpleado }) {
                       "N/A"}
                   </div>
                 </div>
-                <div className="col-md-6 small mb-2">
+                <div className="md:col-span-6 small mb-2">
                   <span className="text-muted">Área:</span>
                   <div>{perfil?.usuario?.empleado?.area?.nombre || "N/A"}</div>
                 </div>
-                <div className="col-md-6 small mb-2">
+                <div className="md:col-span-6 small mb-2">
                   <span className="text-muted d-flex gap-1 align-items-center">
                     <MapPin size={15} />
                     <span>Salario Base</span>
@@ -374,7 +376,7 @@ export function PerfilGeneralNomina({ idEmpleado }) {
                     S/. {perfil.usuario?.empleado?.salario || "N/A"}
                   </div>
                 </div>
-                <div className="col-md-6 small mb-2">
+                <div className="md:col-span-6 small mb-2">
                   <span className="text-muted d-flex gap-1 align-items-center">
                     <span>Tipo de Contrato</span>
                   </span>
@@ -383,12 +385,12 @@ export function PerfilGeneralNomina({ idEmpleado }) {
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </div>
-        <div className="col-md-4">
-          <div className="card   p-3 h-100">
-            <div className="card-header d-flex gap-2 align-middle justify-content-left">
+        <div className="md:col-span-4">
+          <Card className="p-3 h-full">
+            <CardHeader className="flex gap-2 align-middle justify-content-left">
               <span className="alert  alert-danger text-danger p-2 mb-0">
                 <TrendingDown className="me-1 text-danger" size={25} />
               </span>
@@ -396,8 +398,8 @@ export function PerfilGeneralNomina({ idEmpleado }) {
                 <span className="fw-bold">Deducciones</span>
                 <p className="text-muted small mb-0"> </p>
               </h6>
-            </div>
-            <div className="card-body">
+            </CardHeader>
+            <CardContent className="">
               <ul className="list-group list-group-flush">
                 {perfil.deducciones && perfil.deducciones.length > 0 ? (
                   perfil.deducciones.map((d, idx) => (
@@ -414,16 +416,16 @@ export function PerfilGeneralNomina({ idEmpleado }) {
                   </li>
                 )}
               </ul>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
 
       {/* Pagos */}
-      <div className="row g-3 mt-2">
-        <div className="col-md-8">
-          <div className="card   p-3">
-            <div className="card-header d-flex gap-2 align-middle justify-content-left">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mt-2">
+        <div className="md:col-span-8">
+          <Card className="p-3">
+            <CardHeader className="flex gap-2 align-middle justify-content-left">
               <span className="alert  alert-danger text-danger p-2 mb-0">
                 <CreditCardIcon size={25} className="text-auto" />
               </span>
@@ -433,8 +435,8 @@ export function PerfilGeneralNomina({ idEmpleado }) {
                   Historial de pagos realizados{" "}
                 </p>
               </h6>
-            </div>
-            <div className="card-body">
+            </CardHeader>
+            <CardContent className="">
               <div className="table-responsive">
                 <table className="table table-bordered table-hover">
                   <thead className="table-light">
@@ -468,12 +470,12 @@ export function PerfilGeneralNomina({ idEmpleado }) {
                   </tbody>
                 </table>
               </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </div>
-        <div className="col-md-4">
-          <div
-            className="card   p-3 h-100"
+        <div className="md:col-span-4">
+          <Card
+            className="p-3 h-full"
             style={{
               background:
                 "linear-gradient(135deg, #494e52ff 0%, #252525ff 100%)",
@@ -482,8 +484,8 @@ export function PerfilGeneralNomina({ idEmpleado }) {
               boxShadow: "0 4px 24px rgba(21,102,156,0.10)",
             }}
           >
-            <div
-              className="card-header d-flex gap-2 align-middle justify-content-left bg-transparent "
+            <CardHeader
+              className="flex gap-2 align-middle justify-content-left bg-transparent"
               style={{ background: "transparent" }}
             >
               <span
@@ -498,8 +500,8 @@ export function PerfilGeneralNomina({ idEmpleado }) {
                 </span>
                 <p className="text-light small mb-0">Detalle mensual</p>
               </h6>
-            </div>
-            <div className="card-body">
+            </CardHeader>
+            <CardContent className="">
               <ul className="list-group list-group-flush bg-transparent">
                 <li
                   className="list-group-item d-flex justify-content-between align-items-center bg-transparent "
@@ -538,8 +540,8 @@ export function PerfilGeneralNomina({ idEmpleado }) {
                   </span>
                 </li>
               </ul>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>

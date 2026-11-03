@@ -10,6 +10,7 @@ import ModalAlertQuestion from "../componenteToast/ModalAlertQuestion";
 import { PutData } from "../../service/CRUD/PutData";
 import ModalRight from "../componentesReutilizables/ModalRight";
 import { DetallesEntregas } from "./entregas/DetallesEntregas";
+import { Button } from "../ui/button";
 
 export function ListaPedidosAsignados() {
   const formRiderRef = useRef(null);
@@ -137,24 +138,24 @@ export function ListaPedidosAsignados() {
           {/* Condición 1: Estado 54 (Asignado) -> Muestra Cambiar y Quitar */}
           {row.estado_pedido === 54 && (
             <>
-              <button
+              <Button
                 className="btn btn-outline-dark my-2 me-2" // Añadí 'me-2' para separar los botones si están en la misma línea
                 onClick={() => {
                   setDataPedido(row);
                   setModalAsignarRider(true);
                 }}
-              >
+               variant="default">
                 Cambiar
-              </button>
-              <button
+              </Button>
+              <Button
                 className="btn-eliminar px-3"
                 onClick={() => {
                   setModalQuestion(true);
                   setDataPedido(row);
                 }}
-              >
+               variant="destructive">
                 Quitar
-              </button>
+              </Button>
             </>
           )}
 
@@ -165,15 +166,15 @@ export function ListaPedidosAsignados() {
 
           {/* Condición 3: Estado 6 (Entregado) -> Ver detalles */}
           {row.estado_pedido === 6 && (
-            <button
+            <Button
               className="btn-ver my-2 d-flex align-items-center gap-1"
               onClick={() => {
                 setDataPedido(row);
                 setModalDetallesVenta(true);
               }}
-            >
+             variant="outline">
               <Eye size={16} /> Detalles
-            </button>
+            </Button>
           )}
         </div>
       ),

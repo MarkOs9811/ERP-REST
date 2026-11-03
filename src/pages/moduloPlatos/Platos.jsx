@@ -9,6 +9,9 @@ import { PlatoList } from "../../components/componentePlatos/PlatoList";
 import ModalRight from "../../components/componentesReutilizables/ModalRight";
 import { PlatoAdd } from "../../components/componentePlatos/PlatoAdd";
 import { PlatoMasVendido } from "../../components/componentesHome/PlatosMasVendidos";
+import { Button } from "../../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 
 export function Platos() {
   const [search, setSearch] = useState("");
@@ -19,15 +22,15 @@ export function Platos() {
   );
 
   return (
-    <div className="row g-3 ">
-      <div className="col-md-12 col-lg-12">
+    <div className="grid grid-cols-1 md:grid-cols-12 gap-3 ">
+      <div className="md:col-span-12 col-lg-12">
         <CondicionCarga isLoading={upDateList} isError={null}>
-          <div className="card  h-100 py-2">
-            <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center mb-2">
+          <Card className="h-full py-2">
+            <CardHeader className="border-bottom-0 flex flex-col flex-md-row justify-between items-center mb-2">
               <div className="d-flex align-items-center">
-                <h4 className="card-title mb-0 titulo-card-especial">
+                <CardTitle asChild><h4 className="mb-0 titulo-card-especial">
                   Panel de Menú
-                </h4>
+                </h4></CardTitle>
                 <span className="badge-header ms-2">Platos</span>
               </div>
               <div className="overflow-auto">
@@ -49,36 +52,36 @@ export function Platos() {
                   />
                 </div>
 
-                <button
+                <Button
                   type="button"
                   className="btn btn-outline-dark px-3"
                   onClick={() => GetReporteExcel("/reportePlatosTodos")}
-                >
+                 variant="default">
                   <FileText size={20} />
                   Reporte
-                </button>
+                </Button>
 
-                <button
+                <Button
                   type="button"
                   className="btn btn-dark px-3"
                   onClick={() => setShowModal(true)}
-                >
+                 variant="default">
                   <Plus size={20} />
                   Crear
-                </button>
+                </Button>
               </div>
-            </div>
-            <div className="card-body p-0">
+            </CardHeader>
+            <CardContent className="p-0">
               <PlatoList
                 search={search}
                 upDateList={upDateList}
                 categoriaActual={categoriaActual}
               />
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </CondicionCarga>
       </div>
-      <div className="col-md-12">
+      <div className="md:col-span-12">
         <PlatoMasVendido />
       </div>
 

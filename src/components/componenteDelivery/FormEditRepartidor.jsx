@@ -9,6 +9,7 @@ import {
   validateDNI,
   validateTelefono,
 } from "../../hooks/InputHandlers";
+import { Button } from "../ui/button";
 
 export function FormEditRepartidor({ onClose, repartidor }) {
   const queryClient = useQueryClient();
@@ -74,7 +75,7 @@ export function FormEditRepartidor({ onClose, repartidor }) {
       <h6 className="fw-bold mb-3 mt-2 text-dark border-bottom pb-2">
         Datos Personales
       </h6>
-      <div className="row g-3 mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-4">
         <div className="col-12">
           <label className="form-label fw-medium text-dark small">
             <span className="">
@@ -173,7 +174,7 @@ export function FormEditRepartidor({ onClose, repartidor }) {
       <h6 className="fw-bold mb-3 text-dark border-bottom pb-2">
         Información Adicional
       </h6>
-      <div className="row g-3 mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-4">
         <div className="col-12">
           <label className="form-label fw-medium text-dark small">
             Correo Electrónico (Opcional)
@@ -214,17 +215,17 @@ export function FormEditRepartidor({ onClose, repartidor }) {
 
       {/* Controles del Footer */}
       <div className="mt-auto d-flex justify-content-end gap-2 border-top p-3">
-        <button
+        <Button
           type="button"
           className="btn-cerrar-modal"
           onClick={onClose}
           disabled={isSubmitting}
-        >
+         variant="default">
           Cancelar
-        </button>
-        <button type="submit" className="btn-guardar" disabled={isSubmitting}>
+        </Button>
+        <Button type="submit" className="btn-guardar" disabled={isSubmitting} variant="default">
           {isSubmitting ? "Actualizando..." : "Actualizar Repartidor"}
-        </button>
+        </Button>
       </div>
     </form>
   );

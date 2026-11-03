@@ -14,6 +14,8 @@ import { BotonMotionGeneral } from "../../componentesReutilizables/BotonMotionGe
 import { useNavigate } from "react-router-dom";
 import { useRef, useState } from "react";
 import { useGenerarReporte } from "../../../hooks/GenerarPdfReporte";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+
 
 export function ReporteIngresoVentas() {
   const navigate = useNavigate();
@@ -57,8 +59,8 @@ export function ReporteIngresoVentas() {
   return (
     <div className="p-0 m-0">
       <div className="container-fluid bg-light p-4">
-        <div className="row g-3">
-          <div className="col-md-12 d-flex justify-content-auto ms-auto">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+          <div className="md:col-span-12 d-flex justify-content-auto ms-auto">
             <div className="">
               <h5>Reporte</h5>
             </div>
@@ -87,11 +89,15 @@ export function ReporteIngresoVentas() {
             </div>
           </div>
         </div>
-        <div ref={reporteRef} id="reporte-ingresos-ventas" className="row g-3">
-          <div className="col-md-12 d-flex gap-3">
-            <div className="col-md-3">
-              <div className="card  h-100">
-                <div className="card-header my-2 d-flex gap-2 align-middle justify-content-left">
+        <div
+          ref={reporteRef}
+          id="reporte-ingresos-ventas"
+          className="grid grid-cols-1 md:grid-cols-12 gap-3"
+        >
+          <div className="md:col-span-12 d-flex gap-3">
+            <div className="md:col-span-3">
+              <Card className="h-full">
+                <CardHeader className="my-2 flex gap-2 align-middle justify-content-left">
                   <span className="alert border-0 alert-success text-success p-2 mb-0">
                     <TrendingUp size={25} />
                   </span>
@@ -99,17 +105,17 @@ export function ReporteIngresoVentas() {
                     <span className="fw-bold">Total de ingresos</span>
                     <p className="text-muted small mb-0"></p>
                   </h6>
-                </div>
-                <div className="card-body p-2">
+                </CardHeader>
+                <CardContent className="p-2">
                   <p className="h1 text-center">
                     S/. {sumaIngresos.toFixed(2)}
                   </p>
-                </div>
-              </div>
+                </CardContent>
+              </Card>
             </div>
-            <div className="col-md-3">
-              <div className="card  ">
-                <div className="card-header my-2 d-flex gap-2 align-middle justify-content-left">
+            <div className="md:col-span-3">
+              <Card className="">
+                <CardHeader className="my-2 flex gap-2 align-middle justify-content-left">
                   <span className="alert border-0 alert-danger text-danger p-2 mb-0">
                     <TrendingDown size={25} />
                   </span>
@@ -117,61 +123,61 @@ export function ReporteIngresoVentas() {
                     <span className="fw-bold">Total de egresos</span>
                     <p className="text-muted small mb-0"></p>
                   </h6>
-                </div>
-                <div className="card-body p-2">
+                </CardHeader>
+                <CardContent className="p-2">
                   <p className="h1 text-center">S/. {sumaEgresos.toFixed(2)}</p>
-                </div>
-              </div>
+                </CardContent>
+              </Card>
             </div>
           </div>
-          <div className="col-md-12">
-            <div className="row g-3">
-              <div className="col-md-4">
-                <div className="card  h-100 rounded">
+          <div className="md:col-span-12">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+              <div className="md:col-span-4">
+                <Card className="h-full rounded">
                   <GraficoCuentasPorCobrar />
 
                   <div
-                    className="row w-100 g-3 mx-auto justify-content-center align-items-center m-0"
+                    className="grid grid-cols-1 md:grid-cols-12 gap-4w-100 g-3 mx-auto justify-content-center align-items-center m-0"
                     style={{ minHeight: "120px" }}
                   >
-                    <div className="col-md-6 d-flex justify-content-center align-items-center">
-                      <div className="card border w-100">
-                        <div
-                          className="card-body d-flex flex-column justify-content-center align-items-center"
+                    <div className="md:col-span-6 d-flex justify-content-center align-items-center">
+                      <Card className="border w-full">
+                        <CardContent
+                          className="flex flex-col justify-center items-center"
                           style={{ minHeight: "80px" }}
                         >
                           <small>Deudas Cobrados</small>
                           <p className="text-center mb-0 text-primary  h4">
                             S/. {montoPagado.toFixed(2)}
                           </p>
-                        </div>
-                      </div>
+                        </CardContent>
+                      </Card>
                     </div>
-                    <div className="col-md-6 d-flex justify-content-center align-items-center">
-                      <div className="card border w-100">
-                        <div
-                          className="card-body d-flex flex-column justify-content-center align-items-center"
+                    <div className="md:col-span-6 d-flex justify-content-center align-items-center">
+                      <Card className="border w-full">
+                        <CardContent
+                          className="flex flex-col justify-center items-center"
                           style={{ minHeight: "80px" }}
                         >
                           <small>Total Prestamos</small>
                           <p className="text-center mb-0 text-dark h4">
                             S/. {montoRestante.toFixed(2)}
                           </p>
-                        </div>
-                      </div>
+                        </CardContent>
+                      </Card>
                     </div>
                   </div>
-                </div>
+                </Card>
               </div>
-              <div className="col-md-4">
-                <div className="card   h-100 rounded">
+              <div className="md:col-span-4">
+                <Card className="h-full rounded">
                   <GraficoMetodoPago />
-                </div>
+                </Card>
               </div>
-              <div className="col-md-4">
-                <div className="card   h-100 rounded p-3">
+              <div className="md:col-span-4">
+                <Card className="h-full rounded p-3">
                   <PlatoMasVendido />
-                </div>
+                </Card>
               </div>
             </div>
           </div>

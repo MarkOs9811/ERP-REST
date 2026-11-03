@@ -1,5 +1,6 @@
 import { StarHalfIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { Button } from "../ui/button";
 
 export function BannerFidelizacion({
   botonAction,
@@ -24,17 +25,17 @@ export function BannerFidelizacion({
         puntos por cada compra.
       </p>
 
-      <button
+      <Button
         onClick={() => {
           botonAction === "crear"
             ? setModalAddCampaña(true)
             : navigate("/clientes/fidelizacion");
         }}
         // Actualizamos las clases del botón
-        className="fw-btn-action fw-btn-strawberry mt-auto w-100"
-      >
+        className="fw-btn-action fw-btn-strawberry mt-auto w-full"
+       variant="default">
         {botonAction === "crear" ? "Crear Campaña" : "Ver Campañas"}
-      </button>
+      </Button>
     </div>
   );
 }

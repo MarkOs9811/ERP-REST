@@ -1,5 +1,7 @@
 import { Globe, ShoppingBag, Utensils } from "lucide-react";
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
+import { Card } from "@/components/ui/card";
+
 
 export function VentasTipo({ load, error, errorLoad, ventasList }) {
   const isError = error ?? errorLoad;
@@ -73,23 +75,22 @@ export function VentasTipo({ load, error, errorLoad, ventasList }) {
 
   return (
     <CondicionCarga isLoading={load} isError={isError}>
-      <div className="card p-3 h-100">
-        <h6 className="fw-bold mb-3" style={{ color: "var(--text-main)" }}>
+      <Card className="h-full rounded-xl border border-border bg-card p-4 text-card-foreground">
+        <h2 className="mb-4 text-base font-semibold">
           Ventas por tipo
-        </h6>
-        <div className="d-flex flex-column gap-3">
+        </h2>
+        <div className="flex flex-col gap-3">
         {tarjetasStats.map((stat) => (
           <div
             key={stat.id}
-            className="d-flex border align-items-center p-3"
+            className="flex items-center gap-3 rounded-lg border border-border p-3"
             style={{
-              backgroundColor: "var(--bg-muted)",
-              borderRadius: "var(--radius-md)",
+              backgroundColor: "var(--bg-muted, hsl(var(--muted)))",
             }}
           >
             {/* Ícono */}
             <div
-              className="d-flex align-items-center justify-content-center rounded-circle me-3 flex-shrink-0"
+              className="flex size-12 shrink-0 items-center justify-center rounded-full"
               style={{
                 width: "48px",
                 height: "48px",
@@ -100,9 +101,9 @@ export function VentasTipo({ load, error, errorLoad, ventasList }) {
             </div>
 
             {/* Textos (flex-grow-1 empuja el número hacia la derecha automáticamente) */}
-            <div className="d-flex flex-column flex-grow-1">
+            <div className="flex min-w-0 flex-1 flex-col">
               <span
-                className="fw-bold m-0"
+                className="font-semibold"
                 style={{ color: "var(--text-main)" }}
               >
                 {stat.titulo}
@@ -116,7 +117,7 @@ export function VentasTipo({ load, error, errorLoad, ventasList }) {
 
             {/* Valor (Número final) */}
             <div
-              className="fs-4 fw-bold m-0"
+              className="text-2xl font-bold"
               style={{ color: "var(--text-main)" }}
             >
               {stat.valor}
@@ -124,7 +125,7 @@ export function VentasTipo({ load, error, errorLoad, ventasList }) {
           </div>
         ))}
         </div>
-      </div>
+      </Card>
     </CondicionCarga>
   );
 }

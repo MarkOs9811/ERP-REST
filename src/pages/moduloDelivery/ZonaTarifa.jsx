@@ -21,6 +21,9 @@ import { FormAddConfigTarifa } from "../../components/componenteDelivery/FormAdd
 import { FormEditConfigTarifa } from "../../components/componenteDelivery/FormEditConfigTarifa";
 import { PutData } from "../../service/CRUD/PutData";
 import { DeleteData } from "../../service/CRUD/DeleteData";
+import { Button } from "../../components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+
 
 export function ZonaTarifa() {
   const {
@@ -69,16 +72,16 @@ export function ZonaTarifa() {
 
   return (
     <div className="container-fluid p-0">
-      <div className="card rounded-4">
+      <Card className="rounded-2xl">
         {/* HEADER DE LA VISTA */}
-        <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-3">
+        <CardHeader className="border-bottom-0 flex flex-col flex-md-row justify-between items-center gap-2 p-3">
           <div className="d-flex align-items-center">
-            <h4 className="card-title mb-0 titulo-card-especial">
+            <CardTitle asChild><h4 className="mb-0 titulo-card-especial">
               Zonas y Tarifas
               <span className="badge-header ms-2">
                 {sedes?.length || 0} sedes
               </span>
-            </h4>
+            </h4></CardTitle>
           </div>
 
           <div className="d-flex  gap-2 mt-3 mt-md-0 align-items-center ms-auto">
@@ -90,16 +93,16 @@ export function ZonaTarifa() {
                 className="form-control"
               />
             </div>
-            <button className="btn btn-outline-dark d-flex gap-2">
+            <Button className="btn btn-outline-dark d-flex gap-2" variant="default">
               <FileText size={20} />
               <span className="d-none d-sm-inline">Reporte</span>
-            </button>
+            </Button>
           </div>
-        </div>
+        </CardHeader>
 
         {/* BODY CON EL LISTADO DE SEDES Y SUS CONFIGURACIONES */}
-        <div className="card-body p-4">
-          <div className="row g-4">
+        <CardContent className="p-4">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
             {isLoading ? (
               <div className="col-12 text-center py-5">
                 <div className="spinner-border" role="status">
@@ -150,9 +153,9 @@ export function ZonaTarifa() {
 
                 return (
                   <div className="col-12 col-xl-6" key={sede.id}>
-                    <div className={`card h-100 sede-config-card `}>
+                    <Card className={`h-full sede-config-card`}>
                       {/* Cabecera de la Tarjeta */}
-                      <div className="card-header bg-transparent border-bottom px-4 py-3 d-flex justify-content-between align-items-center">
+                      <CardHeader className="bg-transparent border-b px-4 py-3 flex justify-between items-center">
                         <div>
                           <h5 className="mb-1 fw-bold text-dark">
                             {sede.nombre}
@@ -167,10 +170,10 @@ export function ZonaTarifa() {
                         >
                           {config?.estado == 1 ? "Activa" : "Inactiva"}
                         </span>
-                      </div>
+                      </CardHeader>
 
                       {/* Cuerpo de la Tarjeta */}
-                      <div className="card-body px-4 py-2">
+                      <CardContent className="px-4 py-2">
                         {config ? (
                           <div className="d-flex flex-column">
                             {/* NUEVO: HORARIO Y DÍAS DE ATENCIÓN (Diseño sin colores BS) */}
@@ -355,22 +358,22 @@ export function ZonaTarifa() {
                               Esta sede no tiene costos ni tiempos definidos
                               aún.
                             </p>
-                            <button
+                            <Button
                               className="btn-principal rounded-pill px-4"
                               onClick={() => {
                                 setSedeForAdd(sede);
                                 setIsModalAddOpen(true);
                               }}
-                            >
+                             variant="default">
                               Configurar Sede
-                            </button>
+                            </Button>
                           </div>
                         )}
-                      </div>
+                      </CardContent>
 
                       {/* Pie de la Tarjeta */}
-                      <div className="card-footer bg-transparent border-top px-4 py-3 d-flex gap-2">
-                        <button
+                      <CardFooter className="bg-transparent border-t px-4 py-3 flex gap-2">
+                        <Button
                           className="btn btn-outline-dark d-flex justify-content-center align-items-center gap-2 fw-medium"
                           disabled={!config}
                           onClick={() => {
@@ -379,14 +382,14 @@ export function ZonaTarifa() {
                               setIsModalEditOpen(true);
                             }
                           }}
-                        >
+                         variant="default">
                           <Settings size={15} />
                           Ajustes
-                        </button>
+                        </Button>
 
                         {config && (
                           <div className="d-flex ms-auto gap-2">
-                            <button
+                            <Button
                               className="btn-desactivar d-flex justify-content-center align-items-center"
                               title={
                                 config.estado == 1
@@ -397,30 +400,30 @@ export function ZonaTarifa() {
                                 setConfigAccion(config);
                                 setShowModalActivar(true);
                               }}
-                            >
+                             variant="default">
                               <PowerOff size={16} />
-                            </button>
-                            <button
+                            </Button>
+                            <Button
                               className="btn btn-outline-danger d-flex justify-content-center align-items-center"
                               title="Eliminar Configuración"
                               onClick={() => {
                                 setConfigDelete(config);
                                 setShowModalEliminar(true);
                               }}
-                            >
+                             variant="destructive">
                               <Trash2 size={16} />
-                            </button>
+                            </Button>
                           </div>
                         )}
-                      </div>
-                    </div>
+                      </CardFooter>
+                    </Card>
                   </div>
                 );
               })
             )}
           </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
       {/* MODAL AGREGAR */}
       <ModalRight

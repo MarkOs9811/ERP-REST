@@ -5,6 +5,7 @@ import ToastAlert from "../componenteToast/ToastAlert";
 import axiosInstance from "../../api/AxiosInstance";
 import { GetCategoria } from "../../service/serviceAlmacen/GetCategoria";
 import { GetUnidades } from "../../service/serviceAlmacen/GetUnidades";
+import { Button } from "../ui/button";
 
 export function FormEditarInventario({ data, onCancel }) {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -106,7 +107,7 @@ export function FormEditarInventario({ data, onCancel }) {
 
       const response = await axiosInstance.post(
         `/inventario/${data.id}`,
-        formData
+        formData,
       );
 
       if (response.data.success) {
@@ -130,7 +131,7 @@ export function FormEditarInventario({ data, onCancel }) {
       onSubmit={handleSubmit(onSubmit, (errors) => console.log(errors))}
       className="p-4"
     >
-      <div className="row g-3">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
         <div className="image flex">
           <div className="image-preview m-auto">
             {watch("fotoActual") ? (
@@ -189,7 +190,7 @@ export function FormEditarInventario({ data, onCancel }) {
         </div>
 
         {/* Precio */}
-        <div className="col-md-6">
+        <div className="md:col-span-6">
           <label className="form-label small text-muted">Precio</label>
           <input
             type="number"
@@ -206,7 +207,7 @@ export function FormEditarInventario({ data, onCancel }) {
         </div>
 
         {/* Stock */}
-        <div className="col-md-6">
+        <div className="md:col-span-6">
           <label className="form-label small text-muted">Stock</label>
           <input
             type="number"
@@ -222,7 +223,7 @@ export function FormEditarInventario({ data, onCancel }) {
         </div>
 
         {/* Categoría */}
-        <div className="col-md-6">
+        <div className="md:col-span-6">
           <label className="form-label small text-muted">Categoría</label>
           <select
             className="form-select form-select-sm rounded-lg shadow-sm"
@@ -243,7 +244,7 @@ export function FormEditarInventario({ data, onCancel }) {
         </div>
 
         {/* Unidad */}
-        <div className="col-md-6">
+        <div className="md:col-span-6">
           <label className="form-label small text-muted">Unidad</label>
           <select
             className="form-select form-select-sm rounded-lg shadow-sm"
@@ -262,7 +263,7 @@ export function FormEditarInventario({ data, onCancel }) {
         </div>
 
         {/* Estado */}
-        <div className="col-md-6">
+        <div className="md:col-span-6">
           <label className="form-label small text-muted">Estado</label>
           <select
             className="form-select form-select-sm rounded-lg shadow-sm"
@@ -307,19 +308,19 @@ export function FormEditarInventario({ data, onCancel }) {
         </div>
       </div>
       <div className="modal-right-footer gap-2">
-        <button
+        <Button
           type="button"
           className="btn-cerrar-modal"
           onClick={(e) => {
             e.preventDefault(); // evita submit por si acaso
             onCancel();
           }}
-        >
+         variant="default">
           Cancelar
-        </button>
-        <button type="submit" className="btn-guardar">
+        </Button>
+        <Button type="submit" className="btn-guardar" variant="default">
           Actualizar
-        </button>
+        </Button>
       </div>
     </form>
   );

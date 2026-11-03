@@ -14,6 +14,9 @@ import {
   WandSparkles,
   WandSparklesIcon,
 } from "lucide-react";
+import { Button } from "../../ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 
 export function NuevoCombo({ onClose, onSuccess, estadoOpenAi }) {
   const {
@@ -178,7 +181,7 @@ export function NuevoCombo({ onClose, onSuccess, estadoOpenAi }) {
       {/* Selects por categoría */}
       <div className="row">
         {Object.entries(opciones).map(([categoria, items]) => (
-          <div className="col-md-6 mb-3" key={categoria}>
+          <div className="md:col-span-6 mb-3" key={categoria}>
             <label className="form-label d-flex align-items-center">
               {iconos[categoria]} {categoria}
             </label>
@@ -210,12 +213,12 @@ export function NuevoCombo({ onClose, onSuccess, estadoOpenAi }) {
                 className="badge rounded-pill bg-primary d-flex align-items-center px-3 py-2"
               >
                 {item}
-                <button
+                <Button
                   type="button"
                   onClick={() => removeItem(item)}
                   className="btn btn-sm btn-close btn-close-white ms-2"
                   aria-label="Cerrar"
-                ></button>
+                 variant="default"></Button>
               </span>
             ))}
             {selectedItems.length === 0 && (
@@ -228,18 +231,18 @@ export function NuevoCombo({ onClose, onSuccess, estadoOpenAi }) {
         {/* Ítems generados por IA */}
         <>
           {estadoOpenAi?.estado === 1 && (
-            <div className="card p-2 border">
+            <Card className="p-2 border">
               {/* Botón IA */}
-              <div className="card-header">
+              <CardHeader className="">
                 <div className="d-flex justify-content-start align-items-center mb-4 flex-column">
-                  <button
+                  <Button
                     type="button"
                     className={`btn d-flex align-items-center ${
                       bloqueado ? "btn-secondary disabled" : "btn-outline-dark"
                     }`}
                     onClick={handleGenerarCombo}
                     disabled={bloqueado}
-                  >
+                   variant="default">
                     {bloqueado ? (
                       <>
                         <span
@@ -255,14 +258,14 @@ export function NuevoCombo({ onClose, onSuccess, estadoOpenAi }) {
                         Deja que la IA lo cree
                       </>
                     )}
-                  </button>
+                  </Button>
                   <small className="text-muted fst-italic mt-1">
                     Intenta crear el combo con la inteligencia artificial
                   </small>
                 </div>
-              </div>
+              </CardHeader>
 
-              <div className="card-body">
+              <CardContent className="">
                 {bloqueado ? (
                   <div className="d-flex flex-column align-items-center py-4">
                     <Cargando />
@@ -270,31 +273,31 @@ export function NuevoCombo({ onClose, onSuccess, estadoOpenAi }) {
                 ) : isError ? (
                   <div className="alert alert-danger">
                     Hubo un error al obtener el combo.
-                    <button
+                    <Button
                       type="button"
                       className="btn btn-sm btn-danger mt-2"
                       onClick={handleGenerarCombo}
                       disabled={bloqueado}
-                    >
+                     variant="destructive">
                       Reintentar
-                    </button>
+                    </Button>
                   </div>
                 ) : dataComboAi?.nombre ? (
                   <div className="mb-4">
-                    <h5 className="card-title">{dataComboAi.nombre}</h5>
-                    <p className="card-text">{dataComboAi.descripcion}</p>
+                    <CardTitle asChild><h5 className="">{dataComboAi.nombre}</h5></CardTitle>
+                    <p className="">{dataComboAi.descripcion}</p>
 
                     <div className="d-flex flex-wrap gap-2">
                       {selectedItems.map((nombre, index) => (
                         <span key={index} className="badge bg-primary">
                           {nombre}
-                          <button
+                          <Button
                             onClick={(e) => {
                               e.preventDefault();
                               removeItem(nombre);
                             }}
                             className="btn-close btn-close-white ms-2"
-                          />
+                           variant="default"/>
                         </span>
                       ))}
                     </div>
@@ -308,24 +311,24 @@ export function NuevoCombo({ onClose, onSuccess, estadoOpenAi }) {
                     Presiona el botón para generar un combo
                   </p>
                 )}
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           )}
         </>
       </div>
 
       {/* Botón de envío */}
       <div className="text-end d-flex gap-3">
-        <button
+        <Button
           type="button"
           className="btn-cerrar-modal"
           onClick={() => onClose()}
-        >
+         variant="default">
           Cerrar
-        </button>
-        <button type="submit" className="btn-guardar">
+        </Button>
+        <Button type="submit" className="btn-guardar" variant="default">
           Crear Combo
-        </button>
+        </Button>
       </div>
     </form>
   );

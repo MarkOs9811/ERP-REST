@@ -4,6 +4,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, Save, Info } from "lucide-react";
 import axiosInstance from "../../../api/AxiosInstance";
 import ToastAlert from "../../componenteToast/ToastAlert";
+import { Button } from "../../ui/button";
 
 export default function FormAddReservarMesa({
   volverALista,
@@ -148,7 +149,7 @@ export default function FormAddReservarMesa({
           </span>
         </div>
 
-        <div className="row mb-4">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-4mb-4">
           <div className="col-6">
             <label className="small fw-bold  mb-1  d-block">Fecha *</label>
             <input
@@ -167,7 +168,7 @@ export default function FormAddReservarMesa({
           </div>
         </div>
 
-        <div className="row mb-4">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-4mb-4">
           <div className="col-8">
             <label className="small fw-bold  mb-1  d-block">Mesa *</label>
             <select
@@ -231,20 +232,20 @@ export default function FormAddReservarMesa({
       </div>
 
       <div className="p-3 border-top d-flex justify-content-between flex-shrink-0">
-        <button
+        <Button
           type="button"
           className="btn-cerrar  d-flex align-items-center gap-2 px-3 fw-bold text-dark shadow-sm"
           onClick={volverALista}
           disabled={loading}
-        >
+         variant="default">
           <ArrowLeft size={16} /> Volver
-        </button>
+        </Button>
         {/* Cambié el color del botón para que combine con el botón "Comenzar a vender" de tu dashboard */}
-        <button
+        <Button
           type="submit"
           className="btn-guardar d-flex align-items-center gap-2 px-4 fw-bold shadow-sm"
           disabled={loading}
-        >
+         variant="default">
           {loading ? (
             "Procesando..."
           ) : (
@@ -252,7 +253,7 @@ export default function FormAddReservarMesa({
               <Save size={16} /> {reservaToEdit ? "Actualizar" : "Guardar"}
             </>
           )}
-        </button>
+        </Button>
       </div>
     </form>
   );

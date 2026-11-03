@@ -21,6 +21,9 @@ import { DeleteData } from "../../service/CRUD/DeleteData";
 import { CondicionCarga } from "../../components/componentesReutilizables/CondicionCarga";
 import { FormEditPromocion } from "../../components/componenteDelivery/FormEditPromocion";
 import ModalAlertQuestion from "../../components/componenteToast/ModalAlertQuestion";
+import { Button } from "../../components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+
 
 export function Promociones() {
   // Estado para controlar los modales y el registro seleccionado
@@ -76,16 +79,16 @@ export function Promociones() {
 
   return (
     <div className="container-fluid p-0">
-      <div className="card   rounded-4">
+      <Card className="rounded-2xl">
         {/* HEADER DE LA VISTA */}
-        <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-3">
+        <CardHeader className="border-bottom-0 flex flex-col flex-md-row justify-between items-center gap-2 p-3">
           <div className="d-flex align-items-center">
-            <h4 className="card-title mb-0 titulo-card-especial">
+            <CardTitle asChild><h4 className="mb-0 titulo-card-especial">
               Promociones App
               <span className="badge-header ms-2 ">
                 {promociones?.length || 0} registradas
               </span>
-            </h4>
+            </h4></CardTitle>
           </div>
 
           <div className="d-flex  gap-2 mt-3 mt-md-0 align-items-center ms-auto">
@@ -98,35 +101,35 @@ export function Promociones() {
               />
             </div>
 
-            <button
+            <Button
               className="btn btn-outline-dark px-3 d-flex gap-2"
               title="Reporte"
-            >
+             variant="default">
               <FileText size={20} />
               <span className="d-none d-sm-inline">Reporte</span>
-            </button>
+            </Button>
 
             {/* BOTÓN QUE ABRE EL MODAL */}
-            <button
+            <Button
               className="btn btn-dark px-3 d-flex gap-2"
               title="Crear Promoción"
               onClick={() => setIsModalOpen(true)}
-            >
+             variant="default">
               <Plus size={20} />
               <span className="">Crear </span>
-            </button>
+            </Button>
           </div>
-        </div>
+        </CardHeader>
 
         {/* BODY (GALERÍA DE PROMOCIONES REALES) */}
-        <div className="card-body p-4">
+        <CardContent className="p-4">
           <CondicionCarga isLoading={isLoading} error={error} mode="cards">
-            <div className="row g-4">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
               {Array.isArray(promociones) &&
                 promociones.map((promo, index) => (
                   <div className="col-12 col-md-6 col-xl-3" key={promo.id}>
-                    <div
-                      className={`card h-100 promo-card  border-secondary overflow-hidden animacion-cascada ${
+                    <Card
+                      className={`h-full promo-card border-secondary overflow-hidden animacion-cascada${
                         promo.estado === 1 ? "" : "inactiva"
                       }`}
                       style={{ animationDelay: `${index * 0.1}s` }}
@@ -148,7 +151,7 @@ export function Promociones() {
                       </div>
 
                       {/* Info de la Promo */}
-                      <div className="card-body p-4 pb-2">
+                      <CardContent className="p-4 pb-2">
                         <div className="d-flex align-items-center gap-2 mb-1">
                           <Tag
                             size={18}
@@ -194,21 +197,21 @@ export function Promociones() {
                               : "Sin fecha"}
                           </div>
                         </div>
-                      </div>
+                      </CardContent>
 
                       {/* Acciones */}
-                      <div className="card-footer bg-light border-top-0 p-3 d-flex justify-content-end gap-2">
-                        <button
+                      <CardFooter className="bg-muted border-top-0 p-3 flex justify-end gap-2">
+                        <Button
                           className="btn-editar"
                           title="Editar Promoción"
                           onClick={() => {
                             setPromocionSelected(promo);
                             setIsModalEditOpen(true);
                           }}
-                        >
+                         variant="secondary">
                           <Edit2 size={16} />
-                        </button>
-                        <button
+                        </Button>
+                        <Button
                           className={
                             promo.estado === 1
                               ? "btn-desactivar"
@@ -219,27 +222,27 @@ export function Promociones() {
                             setPromoAccion(promo);
                             setShowModalActivar(true);
                           }}
-                        >
+                         variant="default">
                           <PowerOff size={16} />
-                        </button>
-                        <button
+                        </Button>
+                        <Button
                           className="btn-eliminar"
                           title="Eliminar Promoción"
                           onClick={() => {
                             setPromoDelete(promo);
                             setShowModalEliminar(true);
                           }}
-                        >
+                         variant="destructive">
                           <Trash2 size={16} />
-                        </button>
-                      </div>
-                    </div>
+                        </Button>
+                      </CardFooter>
+                    </Card>
                   </div>
                 ))}
             </div>
           </CondicionCarga>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
       {/* AQUÍ INVOCAMOS TU MODAL RIGHT PARA AGREGAR */}
       <ModalRight

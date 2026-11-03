@@ -14,6 +14,7 @@ import { useQuery } from "@tanstack/react-query";
 import { GetSedes } from "../../service/accionesAreasCargos/GetSedes";
 import { useEffect, useState } from "react";
 import ToastAlert from "../componenteToast/ToastAlert";
+import { Button } from "../ui/button";
 
 export function PerfilPanel({ user, fotoPerfil }) {
   const navigate = useNavigate();
@@ -134,59 +135,59 @@ export function PerfilPanel({ user, fotoPerfil }) {
       {/* 🔸 Menú */}
       <ul className="list-unstyled px-4 mt-3">
         <li className="mb-3">
-          <button
+          <Button
             className="btn w-100 justify-content-start d-flex align-items-center gap-3 fw-medium pb-2 border-bottom border-light"
             onClick={() => navigate("/")}
-          >
+           variant="default">
             <House
               style={{ color: "var(--brand-primary)" }}
               height="20px"
               width="20px"
             />
             Panel Principal
-          </button>
+          </Button>
         </li>
 
         <li className="mb-3">
-          <button
+          <Button
             className="btn w-100 justify-content-start d-flex align-items-center gap-3 fw-medium pb-2 border-bottom border-light"
             onClick={() => navigate("/configuracion/MiPerfil")}
-          >
+           variant="default">
             <User
               style={{ color: "var(--brand-primary)" }}
               height="20px"
               width="20px"
             />
             Mi Perfil
-          </button>
+          </Button>
         </li>
 
         <li className="mb-3">
-          <button
+          <Button
             className="btn w-100 justify-content-start d-flex align-items-center gap-3 fw-medium pb-2 border-bottom border-light"
             onClick={() => navigate("/rr.hh/asistencia")}
-          >
+           variant="default">
             <ShieldCheck
               style={{ color: "var(--brand-primary)" }}
               height="20px"
               width="20px"
             />
             Mis Asistencias
-          </button>
+          </Button>
         </li>
 
         <li className="mb-3">
-          <button
+          <Button
             className="btn w-100 justify-content-start d-flex align-items-center gap-3 fw-medium pb-2 border-bottom border-light"
             onClick={() => navigate("/configuracion")}
-          >
+           variant="default">
             <UserRoundCog
               style={{ color: "var(--brand-primary)" }}
               height="20px"
               width="20px"
             />
             Configuración Global
-          </button>
+          </Button>
         </li>
       </ul>
       {/* 🔸 Selector de sede */}
@@ -250,14 +251,14 @@ export function PerfilPanel({ user, fotoPerfil }) {
 
       <div className="px-4 pb-4 d-flex mt-auto">
         {/* 🔸 Botón de cerrar sesión */}
-        <button
+        <Button
           className="btn btn-danger w-100 d-flex align-items-center justify-content-center mb-0 shadow-sm"
           onClick={cerrarSession}
           style={{ borderRadius: "10px" }}
-        >
+         variant="destructive">
           <LogOut className="me-2" height="20px" width="20px" color="#fff" />
           Cerrar sesión
-        </button>
+        </Button>
       </div>
     </div>
   );

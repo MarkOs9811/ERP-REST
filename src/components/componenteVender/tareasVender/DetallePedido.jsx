@@ -1,5 +1,8 @@
 import { ChevronLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { Button } from "../../ui/button";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+
 
 export function DetallePedido({
   preVentas,
@@ -21,8 +24,8 @@ export function DetallePedido({
   };
   const subTotal = (totalPreventa - igv).toFixed(2);
   return (
-    <div className="card border h-100 ">
-      <div className="card-header d-flex align-items-center justify-content-center">
+    <Card className="border h-full">
+      <CardHeader className="flex items-center justify-center">
         <div className="d-flex g-0 flex-column">
           <h6 className="align-middle me-2 my-0 small">Cuenta </h6>
           <h2 className=" fw-bold align-middle text-success my-0">
@@ -34,7 +37,7 @@ export function DetallePedido({
           </h2>
         </div>
 
-        <button
+        <Button
           className="btn btn-outline-dark ms-auto"
           onClick={() =>
             estadoTipoVenta === "llevar"
@@ -43,12 +46,12 @@ export function DetallePedido({
                 ? handleVolverPedidoWeb()
                 : handleVolverPreVenta()
           }
-        >
+         variant="default">
           <ChevronLeft />
           Volver
-        </button>
-      </div>
-      <div className="card-body">
+        </Button>
+      </CardHeader>
+      <CardContent className="">
         {preVentas.length > 0 ? (
           <>
             <div className="tabla-scroll"></div>
@@ -85,8 +88,8 @@ export function DetallePedido({
             No hay productos en esta mesa.
           </p>
         )}
-      </div>
-      <div className="card-footer card-footer-column mt-auto">
+      </CardContent>
+      <CardFooter className="card-footer-column mt-auto">
         {/* Total */}
         <div className=" pt-3">
           <div className="d-flex justify-content-between align-items-center">
@@ -118,7 +121,7 @@ export function DetallePedido({
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      </CardFooter>
+    </Card>
   );
 }

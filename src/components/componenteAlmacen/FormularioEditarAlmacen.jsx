@@ -7,6 +7,9 @@ import { GetCategoria } from "../../service/serviceAlmacen/GetCategoria";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { GetUnidades } from "../../service/serviceAlmacen/GetUnidades";
 import { GetProveedores } from "../../service/GetProveedores";
+import { Button } from "../ui/button";
+import { Card } from "@/components/ui/card";
+
 
 export function FormularioEditarAlmacen({ data, onCancel }) {
   const queryClient = useQueryClient();
@@ -89,13 +92,13 @@ export function FormularioEditarAlmacen({ data, onCancel }) {
 
   return (
     <div className="bg-light p-3">
-      <form
+      <Card asChild><form
         onSubmit={handleSubmit(onSubmitForm)}
-        className="card shadow-sm p-3"
+        className="shadow-sm p-3"
       >
         <div className="row">
           {/* ID */}
-          <div className="col-md-6 mb-3">
+          <div className="md:col-span-6 mb-3">
             <input
               type="hidden"
               className={`form-control ${errors.id ? "is-invalid" : ""}`}
@@ -105,7 +108,7 @@ export function FormularioEditarAlmacen({ data, onCancel }) {
           </div>
 
           {/* Nombre del Producto */}
-          <div className="col-md-12 mb-3">
+          <div className="md:col-span-12 mb-3">
             <label className="form-label " htmlFor="nombreProducto">
               Nombre del Producto*
             </label>
@@ -127,7 +130,7 @@ export function FormularioEditarAlmacen({ data, onCancel }) {
           </div>
 
           {/* Marca */}
-          <div className="col-md-6 mb-3">
+          <div className="md:col-span-6 mb-3">
             <label className="form-label ">Marca*</label>
             <input
               type="text"
@@ -142,7 +145,7 @@ export function FormularioEditarAlmacen({ data, onCancel }) {
           </div>
 
           {/* Stock */}
-          <div className="col-md-6 mb-3">
+          <div className="md:col-span-6 mb-3">
             <label className="form-label ">Stock*</label>
             <input
               type="number"
@@ -166,7 +169,7 @@ export function FormularioEditarAlmacen({ data, onCancel }) {
           </div>
 
           {/* Precio Unitario */}
-          <div className="col-md-6 mb-3">
+          <div className="md:col-span-6 mb-3">
             <label className="form-label ">Precio Unitario (S/.)*</label>
             <input
               type="number"
@@ -194,7 +197,7 @@ export function FormularioEditarAlmacen({ data, onCancel }) {
           </div>
 
           {/* Unidad de Medida */}
-          <div className="col-md-6 mb-3">
+          <div className="md:col-span-6 mb-3">
             <label className="form-label ">Unidad de Medida*</label>
             <select
               className={`form-select ${errors.unidad ? "is-invalid" : ""}`}
@@ -216,7 +219,7 @@ export function FormularioEditarAlmacen({ data, onCancel }) {
           </div>
 
           {/* Categoría */}
-          <div className="col-md-6 mb-3">
+          <div className="md:col-span-6 mb-3">
             <label className="form-label ">Categoría*</label>
             <select
               className={`form-select ${errors.categoria ? "is-invalid" : ""}`}
@@ -238,7 +241,7 @@ export function FormularioEditarAlmacen({ data, onCancel }) {
           </div>
 
           {/* Proveedor */}
-          <div className="col-md-6 mb-3">
+          <div className="md:col-span-6 mb-3">
             <label className="form-label ">Proveedor*</label>
             <select
               className={`form-select ${errors.proveedor ? "is-invalid" : ""}`}
@@ -260,7 +263,7 @@ export function FormularioEditarAlmacen({ data, onCancel }) {
           </div>
 
           {/* Presentación */}
-          <div className="col-md-6 mb-3">
+          <div className="md:col-span-6 mb-3">
             <label className="form-label gap-2 ">
               <Box size={16} />
               Presentación*
@@ -287,7 +290,7 @@ export function FormularioEditarAlmacen({ data, onCancel }) {
           </div>
 
           {/* Fecha de Vencimiento */}
-          <div className="col-md-6 mb-3">
+          <div className="md:col-span-6 mb-3">
             <label className="form-label ">
               <Calendar size={16} />
               Fecha de Vencimiento*
@@ -314,7 +317,7 @@ export function FormularioEditarAlmacen({ data, onCancel }) {
           </div>
 
           {/* Registro Sanitario */}
-          <div className="col-md-6 mb-3">
+          <div className="md:col-span-6 mb-3">
             <label className="form-label ">
               <CardSimIcon size={16} />
               Registro Sanitario*
@@ -338,14 +341,14 @@ export function FormularioEditarAlmacen({ data, onCancel }) {
         </div>
 
         <div className="d-flex justify-content-end mt-3 gap-3">
-          <button type="button" className="btn-cerrar-modal" onClick={onCancel}>
+          <Button type="button" className="btn-cerrar-modal" onClick={onCancel} variant="default">
             Cancelar
-          </button>
-          <button type="submit" className="btn-guardar">
+          </Button>
+          <Button type="submit" className="btn-guardar" variant="default">
             Guardar Cambios
-          </button>
+          </Button>
         </div>
-      </form>
+      </form></Card>
     </div>
   );
 }

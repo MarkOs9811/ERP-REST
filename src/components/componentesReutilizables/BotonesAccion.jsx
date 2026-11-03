@@ -1,27 +1,34 @@
 import { Eye, Pencil, Trash2, X } from "lucide-react";
+import { Button } from "../ui/button";
 
 export const BtnVer = ({ onClick, disabled = false, title = "Ver" }) => (
-  <button
-    className="btn btn-ver btn-icon mx-1 my-2 d-inline-flex align-items-center justify-content-center"
+  <Button
+    type="button"
+    variant="outline"
+    size="icon-sm"
+    className="mx-1 my-2"
     onClick={onClick}
     disabled={disabled}
-    data-bs-toggle="tooltip"
     title={title}
+    aria-label={title}
   >
-    <Eye size={18} />
-  </button>
+    <Eye className="size-[18px]" />
+  </Button>
 );
 
 export const BtnEditar = ({ onClick, disabled = false, title = "Editar" }) => (
-  <button
-    className="btn btn-editar btn-icon mx-1 my-2 d-inline-flex align-items-center justify-content-center"
+  <Button
+    type="button"
+    variant="secondary"
+    size="icon-sm"
+    className="mx-1 my-2"
     onClick={onClick}
     disabled={disabled}
-    data-bs-toggle="tooltip"
     title={title}
+    aria-label={title}
   >
-    <Pencil size={18} />
-  </button>
+    <Pencil className="size-[18px]" />
+  </Button>
 );
 
 export const BtnEliminar = ({
@@ -29,39 +36,38 @@ export const BtnEliminar = ({
   disabled = false,
   title = "Eliminar",
 }) => (
-  <button
-    className="btn btn-eliminar btn-icon mx-1 my-2 d-inline-flex align-items-center justify-content-center"
+  <Button
+    type="button"
+    variant="destructive"
+    size="icon-sm"
+    className="mx-1 my-2"
     onClick={onClick}
     disabled={disabled}
-    data-bs-toggle="tooltip"
     title={title}
+    aria-label={title}
   >
-    <Trash2 size={18} />
-  </button>
+    <Trash2 className="size-[18px]" />
+  </Button>
 );
 
-// 🔥 NUEVO BOTÓN AGREGADO
 export const BtnCerrar = ({
   onClick,
   disabled = false,
   title = "Cerrar Modal",
 }) => (
-  <button
+  <Button
     type="button"
-    className="btn btn-cerrar btn-icon d-inline-flex align-items-center justify-content-center"
+    variant="default"
+    size="icon-sm"
     onClick={onClick}
     disabled={disabled}
-    aria-label="Close"
-    data-bs-toggle="tooltip"
+    aria-label={title}
     title={title}
   >
-    <X size={18} />
-  </button>
+    <X className="size-[18px]" />
+  </Button>
 );
 
-/**
- * Componente para mostrar un grupo de botones de acción
- */
 export const BotonesAccionGrupo = ({
   onVer = null,
   onEditar = null,
@@ -70,7 +76,7 @@ export const BotonesAccionGrupo = ({
   disabledEditar = false,
   disabledEliminar = false,
 }) => (
-  <div className="d-flex gap-2">
+  <div className="flex gap-2">
     {onVer && <BtnVer onClick={onVer} disabled={disabledVer} />}
     {onEditar && <BtnEditar onClick={onEditar} disabled={disabledEditar} />}
     {onEliminar && (

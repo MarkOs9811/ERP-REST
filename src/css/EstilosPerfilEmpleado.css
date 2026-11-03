@@ -1,4 +1,4 @@
-.perfil-nomina .card {
+.perfil-nomina [data-slot="card"] {
     border-radius: 1rem;
 }
 

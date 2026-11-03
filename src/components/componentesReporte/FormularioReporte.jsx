@@ -2,6 +2,8 @@ import { useForm } from "react-hook-form";
 import BotonAnimado from "../componentesReutilizables/BotonAnimado";
 import RippleWrapper from "../componentesReutilizables/RippleWrapper";
 import { FileTextIcon } from "lucide-react";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+
 
 const getTodayDate = () => {
   const today = new Date();
@@ -33,17 +35,17 @@ export default function FormularioReporte({
 
   return (
     <div className="col-lg-4 col-sm-12">
-      <div className="card border  h-100 p-0 py-2">
-        <div className="card-header py-2 px-3 border-bottom ">
+      <Card className="border h-full p-0 py-2">
+        <CardHeader className="py-2 px-3 border-b">
           <p className="h6 mb-0">{titulo}</p>
-        </div>
+        </CardHeader>
 
         {/* Ya no usamos onSubmit en la etiqueta <form> */}
         <form>
-          <div className="card-body py-3 px-3">
+          <CardContent className="py-3 px-3">
             <input type="hidden" {...register("tipo")} />
 
-            <div className="row g-2">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-2">
               <div className="col-6">
                 <label htmlFor="fechaInicio" className="form-label small mb-1">
                   Fecha Inicio
@@ -90,10 +92,10 @@ export default function FormularioReporte({
                 )}
               </div>
             </div>
-          </div>
+          </CardContent>
 
           {/* Footer con los botones */}
-          <div className="card-footer px-3  bg-white border-top d-flex justify-content-end gap-2">
+          <CardFooter className="px-3 bg-background border-t flex justify-end gap-2">
             {estadoIntegracionGoogle?.estado === 1 ? (
               // VISUALIZACIÓN CUANDO GOOGLE ESTÁ INTEGRADO (Muestra ambas opciones)
               <>
@@ -152,9 +154,9 @@ export default function FormularioReporte({
                 </BotonAnimado>
               </RippleWrapper>
             )}
-          </div>
+          </CardFooter>
         </form>
-      </div>
+      </Card>
     </div>
   );
 }

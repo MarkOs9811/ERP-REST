@@ -14,6 +14,9 @@ import {
 } from "lucide-react";
 import "../../css/estilosAgente/EstilosChatAgente.css";
 import axiosInstance from "../../api/AxiosInstance";
+import { Button } from "../ui/button";
+import { Card } from "@/components/ui/card";
+
 
 const AGENTES_CONFIG = [
   { id: "platos", nombre: "Agente Platos", icono: ChefHat, disponible: true },
@@ -108,13 +111,13 @@ export function FormAgenteChat() {
       <input type="hidden" {...register("agenteType")} />
 
       {/* HEADER */}
-      <div className="card d-flex p-3 rounded-none border-0 rounded-0 justify-content-between align-items-center">
+      <Card className="flex p-3 rounded-none border-0 rounded-0 justify-between items-center">
         <div className="chat-agent-selector  d-flex align-items-center">
           {AGENTES_CONFIG.map((ag) => {
             const Icono = ag.icono;
             const isSelected = agenteSeleccionado === ag.id;
             return (
-              <button
+              <Button
                 key={ag.id}
                 type="button"
                 disabled={!ag.disponible || chatMutation.isPending}
@@ -125,14 +128,14 @@ export function FormAgenteChat() {
                 title={!ag.disponible ? "Próximamente" : ag.nombre}
                 // AQUI ESTÁ EL CAMBIO: pill-activa en vez de selected
                 className={`agent-pill d-flex  align-items-center px-3 justify-content-center ${isSelected ? "pill-activa" : ""}`}
-              >
+               variant="default">
                 <Icono size={22} className={isSelected ? "me-1" : ""} />
                 {isSelected && <span>{ag.nombre}</span>}
-              </button>
+              </Button>
             );
           })}
         </div>
-      </div>
+      </Card>
 
       {/* BODY */}
       <div className="chat-ai-body d-flex flex-column flex-grow-1 custom-scrollbar">
@@ -146,16 +149,16 @@ export function FormAgenteChat() {
 
             <div className="chat-suggestions-container d-flex flex-wrap justify-content-center gap-2 mt-3">
               {sugerenciasActuales.map((sugerencia, index) => (
-                <button
+                <Button
                   key={index}
                   type="button"
                   onClick={() => handleBadgeClick(sugerencia)}
                   className="suggestion-badge d-flex align-items-center"
                   disabled={chatMutation.isPending}
-                >
+                 variant="default">
                   <MessageSquareDashed size={14} className="me-2 text-muted" />
                   {sugerencia}
-                </button>
+                </Button>
               ))}
             </div>
           </div>
@@ -219,17 +222,17 @@ export function FormAgenteChat() {
             placeholder={`Habla con el ${agenteInfo.nombre}...`}
             className="chat-input-clean flex-grow-1 bg-transparent"
           />
-          <button
+          <Button
             type="submit"
             disabled={chatMutation.isPending || !agenteInfo.disponible}
             className="chat-btn-send d-flex align-items-center justify-content-center"
-          >
+           variant="default">
             {chatMutation.isPending ? (
               <Loader2 size={18} className="animacion-rotar" />
             ) : (
               <SendIcon size={18} />
             )}
-          </button>
+          </Button>
         </div>
       </form>
     </div>

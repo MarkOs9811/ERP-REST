@@ -19,6 +19,9 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { GetMesasAll } from "../../service/accionesVentas/GetMesasAll";
 import ModalAlertQuestion from "../../components/componenteToast/ModalAlertQuestion";
 import { DeleteData } from "../../service/CRUD/DeleteData";
+import { Button } from "../../components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+
 
 export function Mesas() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -59,12 +62,12 @@ export function Mesas() {
   };
 
   return (
-    <div className="row g-3">
-      <div className="col-md-12">
-        <div className="card ">
-          <div className="card-header d-flex justify-content-between align-items-center border-0">
+    <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+      <div className="md:col-span-12">
+        <Card className="">
+          <CardHeader className="flex justify-between items-center border-0">
             <h4 className="mb-0">Gestión de Mesas</h4>
-            <button
+            <Button
               className="btn-principal "
               title="Agregar nueva mesa"
               onClick={() => {
@@ -72,13 +75,13 @@ export function Mesas() {
                 setSelectedMesa(null);
                 setModalOpen(true);
               }}
-            >
+             variant="default">
               <Plus size={18} />
               Agregar Mesa
-            </button>
-          </div>
+            </Button>
+          </CardHeader>
 
-          <div className="card-body p-4">
+          <CardContent className="p-4">
             {/* --- INICIO: Manejo de Estados de Carga/Error (¡MUY IMPORTANTE!) --- */}
             {isLoading && (
               <div className="text-center p-5">
@@ -96,7 +99,7 @@ export function Mesas() {
             )}
 
             {!isLoading && !isError && (
-              <div className="row g-3">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
                 {/* Mensaje si no hay mesas */}
                 {dummyMesas.length === 0 ? (
                   <div className="col-12 text-center p-5">
@@ -107,9 +110,9 @@ export function Mesas() {
                 ) : (
                   // Ahora 'dummyMesas' SÍ es un array y .map() funcionará
                   dummyMesas.map((mesa) => (
-                    <div key={mesa.id} className="col-md-3 col-lg-2">
-                      <div className="card h-100  border">
-                        <div className="card-body text-center d-flex flex-column p-3">
+                    <div key={mesa.id} className="md:col-span-3 col-lg-2">
+                      <Card className="h-full border">
+                        <CardContent className="text-center flex flex-col p-3">
                           {/* Icono de Estado */}
                           {mesa?.estado == 1 ? (
                             <CheckCircle
@@ -126,9 +129,9 @@ export function Mesas() {
                           )}
 
                           {/* Info */}
-                          <h5 className="card-title mt-2 mb-1">
+                          <CardTitle asChild><h5 className="mt-2 mb-1">
                             Mesa N° {mesa?.numero}
-                          </h5>
+                          </h5></CardTitle>
                           <div>
                             <span
                               className={`badge w-auto ${
@@ -149,10 +152,10 @@ export function Mesas() {
                               Piso: {mesa?.piso}
                             </small>
                           </div>
-                        </div>
+                        </CardContent>
                         {/* Footer de Acciones */}
-                        <div className="card-footer d-flex justify-content-center gap-2">
-                          <button
+                        <CardFooter className="flex justify-center gap-2">
+                          <Button
                             className="btn-editar btn-icon btn-sm"
                             title={
                               mesa?.estado == 0
@@ -172,10 +175,10 @@ export function Mesas() {
                               setSelectedMesa(mesa);
                               setModalOpen(true);
                             }}
-                          >
+                           variant="secondary">
                             <Edit2 size={16} />
-                          </button>
-                          <button
+                          </Button>
+                          <Button
                             className="btn-eliminar btn-icon btn-sm"
                             title={
                               mesa?.estado == 0
@@ -194,18 +197,18 @@ export function Mesas() {
                               setQuestionModalDelete(true);
                               setDataMesa(mesa);
                             }}
-                          >
+                           variant="destructive">
                             <Trash2 size={16} />
-                          </button>
-                        </div>
-                      </div>
+                          </Button>
+                        </CardFooter>
+                      </Card>
                     </div>
                   ))
                 )}
               </div>
             )}
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* --- Renderizado del Modal (Sin cambios) --- */}

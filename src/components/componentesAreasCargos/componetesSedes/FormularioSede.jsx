@@ -4,6 +4,7 @@ import { BotonMotionGeneral } from "../../componentesReutilizables/BotonMotionGe
 import { useQueryClient } from "@tanstack/react-query";
 import { PutData } from "../../../service/CRUD/PutData";
 import { PostData } from "../../../service/CRUD/PostData";
+import { Button } from "../../ui/button";
 
 /**
  * Formulario para Crear o Editar una Sede.
@@ -178,19 +179,19 @@ export function FormularioSede({ onClose, sede }) {
       </div>
 
       <div className="d-flex justify-content-end gap-2 mt-auto">
-        <button
+        <Button
           type="button"
           className="btn-cerrar"
           onClick={onClose}
           disabled={isSubmitting || loading}
-        >
+         variant="default">
           Cancelar
-        </button>
-        <button
+        </Button>
+        <Button
           type="submit"
           className="btn-guardar"
           disabled={isSubmitting || loading}
-        >
+         variant="default">
           {isEditMode
             ? loading
               ? "Actualizando..."
@@ -198,7 +199,7 @@ export function FormularioSede({ onClose, sede }) {
             : loading
               ? "Guardando..."
               : "Guardar"}
-        </button>
+        </Button>
       </div>
     </form>
   );

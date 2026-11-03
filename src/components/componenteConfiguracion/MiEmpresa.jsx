@@ -9,6 +9,9 @@ import { Cargando } from "../componentesReutilizables/Cargando";
 import ModalRight from "../componentesReutilizables/ModalRight";
 import FormConfiguracionEmpresa from "./confiIntegraciones/FormConfiguracionEmpresa";
 import { UtensilsCrossed, Store, Settings2 } from "lucide-react";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+
 
 export function MiEmpresa() {
   const [logoActual, setLogoActual] = useState(null);
@@ -151,11 +154,11 @@ export function MiEmpresa() {
   return (
     <div className="w-100 p-3">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="row g-3 mb-4">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-4">
           {/* Columna Logo y carga */}
-          <div className="col-md-4 col-sm-12">
-            <div
-              className="card p-4 d-flex flex-column justify-content-center align-items-center h-100"
+          <div className="md:col-span-4 col-sm-12">
+            <Card
+              className="p-4 flex flex-col justify-center items-center h-full"
               style={{ borderRadius: "var(--radius-lg)" }}
             >
               <h4
@@ -223,7 +226,7 @@ export function MiEmpresa() {
                       Haz clic o arrastra aquí para cargar el logo
                     </p>
                   )}
-                  <button
+                  <Button
                     type="button"
                     className="btn btn-sm fw-semibold"
                     style={{
@@ -232,19 +235,19 @@ export function MiEmpresa() {
                       border: "1px solid var(--fw-saffron)",
                       borderRadius: "var(--radius-sm)",
                     }}
-                  >
+                   variant="default">
                     Seleccionar archivo
-                  </button>
+                  </Button>
                 </div>
                 <p className="text-danger small mt-1">{errors.logo?.message}</p>
               </div>
-            </div>
+            </Card>
           </div>
 
           {/* Columna datos */}
-          <div className="col-md-8 col-sm-12">
-            <div
-              className="card p-4 h-100"
+          <div className="md:col-span-8 col-sm-12">
+            <Card
+              className="p-4 h-full"
               style={{
                 borderRadius: "var(--radius-lg)",
                 backgroundColor: "var(--bg-card)",
@@ -256,8 +259,8 @@ export function MiEmpresa() {
               >
                 Datos Generales
               </h5>
-              <div className="row g-3">
-                <div className="col-md-6">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+                <div className="md:col-span-6">
                   <label
                     htmlFor="ruc"
                     className="form-label small fw-semibold"
@@ -274,7 +277,7 @@ export function MiEmpresa() {
                   />
                   <p className="text-danger small m-0">{errors.ruc?.message}</p>
                 </div>
-                <div className="col-md-6">
+                <div className="md:col-span-6">
                   <label
                     htmlFor="nombre"
                     className="form-label small fw-semibold"
@@ -295,7 +298,7 @@ export function MiEmpresa() {
                     {errors.nombre?.message}
                   </p>
                 </div>
-                <div className="col-md-6">
+                <div className="md:col-span-6">
                   <label
                     htmlFor="correo"
                     className="form-label small fw-semibold"
@@ -321,7 +324,7 @@ export function MiEmpresa() {
                     {errors.correo?.message}
                   </p>
                 </div>
-                <div className="col-md-6">
+                <div className="md:col-span-6">
                   <label
                     htmlFor="numero"
                     className="form-label small fw-semibold"
@@ -369,17 +372,17 @@ export function MiEmpresa() {
                 </div>
               </div>
               <div className="mt-auto pt-4 d-flex justify-content-end">
-                <button type="submit" className="btn-guardar px-4">
+                <Button type="submit" className="btn-guardar px-4" variant="default">
                   Guardar Cambios
-                </button>
+                </Button>
               </div>
-            </div>
+            </Card>
           </div>
         </div>
       </form>
 
       {/* Sección Configuraciones Extras */}
-      <div className="row g-3 align-items-stretch">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 align-items-stretch">
         {isLoading && (
           <div className="col-12 text-center py-4">
             <Cargando />
@@ -411,16 +414,16 @@ export function MiEmpresa() {
 
               return (
                 <div key={item.id} className="col-12 col-sm-6 col-lg-4 d-flex">
-                  <div className="card ">
-                    <div className="card-header border-0 px-5 pt-5">
+                  <Card className="">
+                    <CardHeader className="border-0 px-5 pt-5">
                       <h5
                         className="fw-bold mb-1"
                         style={{ color: "var(--text-main)" }}
                       >
                         {item.nombre}
                       </h5>
-                    </div>
-                    <div className="card-body mb-auto d-flex flex-column align-items-center px-5 p-0">
+                    </CardHeader>
+                    <CardContent className="mb-auto flex flex-col items-center px-5 p-0">
                       <p
                         className="small mb-3"
                         style={{ color: "var(--text-muted)" }}
@@ -452,9 +455,9 @@ export function MiEmpresa() {
                       >
                         Modo actual: {visuals.label}
                       </span>
-                    </div>
-                    <div className="card-footer bg-transparent border-0 p-3 d-flex justify-content-end">
-                      <button
+                    </CardContent>
+                    <CardFooter className="bg-transparent border-0 p-3 flex justify-end">
+                      <Button
                         type="button"
                         className="btn-generico px-3"
                         onClick={() => {
@@ -462,12 +465,12 @@ export function MiEmpresa() {
                           setTituloModal(item.nombre);
                           setData(item);
                         }}
-                      >
+                       variant="default">
                         <Settings2 size={18} />
                         Configurar
-                      </button>
-                    </div>
-                  </div>
+                      </Button>
+                    </CardFooter>
+                  </Card>
                 </div>
               );
             }
@@ -475,7 +478,7 @@ export function MiEmpresa() {
             // TARJETA GENÉRICA
             return (
               <div key={item.id} className="col-12 col-sm-6 col-lg-4 d-flex">
-                <div className="card w-100 p-4  d-flex flex-column ">
+                <Card className="w-full p-4 flex flex-col">
                   <div className="mb-auto">
                     <h5
                       className="fw-bold mb-2"
@@ -490,7 +493,7 @@ export function MiEmpresa() {
                       {item.descripcion}
                     </p>
                   </div>
-                  <button
+                  <Button
                     type="button"
                     className="btn-generico"
                     onClick={() => {
@@ -498,11 +501,11 @@ export function MiEmpresa() {
                       setTituloModal(item.nombre);
                       setData(item);
                     }}
-                  >
+                   variant="default">
                     <Settings2 size={18} className="" />
                     Configuración
-                  </button>
-                </div>
+                  </Button>
+                </Card>
               </div>
             );
           })}

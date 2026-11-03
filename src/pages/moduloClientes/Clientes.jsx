@@ -2,6 +2,9 @@ import { FileText, Plus, Search, X } from "lucide-react";
 import { ListaClientes } from "../../components/componenteCliente/ListaClientes";
 import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteExcel";
 import { useState } from "react";
+import { Button } from "../../components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+
 
 export function Clientes() {
   const [busqueda, setBusqueda] = useState("");
@@ -33,8 +36,8 @@ export function Clientes() {
     busqueda || filtros.fechaDesde || filtros.fechaHasta;
 
   return (
-    <div className="card">
-      <div className="card-header d-flex flex-wrap gap-3 align-items-center">
+    <Card className="">
+      <CardHeader className="flex flex-wrap gap-3 items-center">
         <div>
           <h4 className="fw-bold text-fw-main mb-1">Lista de clientes</h4>
           <p className="text-fw-muted mb-0">
@@ -52,21 +55,21 @@ export function Clientes() {
               onChange={(e) => setBusqueda(e.target.value)}
             />
             {busqueda && (
-              <button
+              <Button
                 className="btn-limpiar-search"
                 onClick={limpiarBusqueda}
                 title="Limpiar búsqueda"
-              >
+               variant="default">
                 <X size={16} />
-              </button>
+              </Button>
             )}
           </div>
 
-          <button
+          <Button
             className={`btn ${mostrarFiltros ? "btn-info" : "btn-outline-dark"} px-3`}
             title="Filtros de fecha de compra"
             onClick={() => setMostrarFiltros(!mostrarFiltros)}
-          >
+           variant="default">
             <svg
               width="18"
               height="18"
@@ -81,25 +84,25 @@ export function Clientes() {
               />
             </svg>
             <span className="d-none d-sm-inline">Filtros</span>
-          </button>
+          </Button>
 
-          <button
+          <Button
             className="btn-principal px-3"
             title="Generar Reporte Completo"
             onClick={() => GetReporteExcel("/reporteClientes")}
-          >
+           variant="default">
             <FileText size={18} />
             <span className="d-none d-sm-inline">Reporte</span>
-          </button>
+          </Button>
         </div>
-      </div>
+      </CardHeader>
 
       {mostrarFiltros && (
-        <div
-          className="card-header border-top"
+        <CardHeader
+          className="border-t"
           style={{ backgroundColor: "#f8f9fa" }}
         >
-          <div className="row g-3 align-items-end">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-3 align-items-end">
             <div className="col-12 col-sm-6">
               <label className="form-label small fw-bold mb-2">
                 Última compra desde:
@@ -130,21 +133,21 @@ export function Clientes() {
 
             {hayFiltrosActivos && (
               <div className="col-12">
-                <button
+                <Button
                   className="btn btn-sm btn-outline-danger"
                   onClick={limpiarFiltros}
-                >
+                 variant="destructive">
                   Limpiar filtros
-                </button>
+                </Button>
               </div>
             )}
           </div>
-        </div>
+        </CardHeader>
       )}
 
-      <div className="card-body p-0">
+      <CardContent className="p-0">
         <ListaClientes busqueda={busqueda} filtros={filtros} />
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

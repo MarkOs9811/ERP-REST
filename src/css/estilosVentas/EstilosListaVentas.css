@@ -12,14 +12,14 @@ background-color: var(--fw-saffron);
 	padding: 0 0.75rem;
 }
 
-.ventas-root .card {
+.ventas-root [data-slot="card"] {
 	overflow: hidden;
 	background: var(--bg-surface) !important;
 	border-color: var(--border-card) !important;
 	box-shadow: var(--shadow-soft);
 }
 
-.ventas-root .card-header {
+.ventas-root [data-slot="card-header"] {
 	padding: 1.35rem 1.5rem 1.15rem !important;
 	background: var(--bg-surface) !important;
 }
@@ -134,13 +134,13 @@ body.dark-theme .ventas-root .ventas-kpi {
 	border-color: var(--fw-border);
 }
 
-body.dark-theme .ventas-root .card-header,
-body.dark-theme .ventas-root .card {
+body.dark-theme .ventas-root [data-slot="card-header"],
+body.dark-theme .ventas-root [data-slot="card"] {
 	background: var(--bg-surface) !important;
 }
 
 @media (max-width: 991px) {
-	.ventas-root .card-header {
+	.ventas-root [data-slot="card-header"] {
 		align-items: stretch !important;
 	}
 
@@ -163,7 +163,7 @@ body.dark-theme .ventas-root .card {
 		padding: 0;
 	}
 
-	.ventas-root .card-header {
+	.ventas-root [data-slot="card-header"] {
 		padding: 1rem !important;
 	}
 

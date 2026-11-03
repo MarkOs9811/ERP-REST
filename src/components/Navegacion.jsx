@@ -1,8 +1,5 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import "../css/NavegacionEstilos.css";
 
-import { useDispatch, useSelector } from "react-redux";
-import { toggleSidebar } from "../redux/sideBarSlice";
 import {
   CookingPotIcon,
   Megaphone,
@@ -11,11 +8,13 @@ import {
   BikeIcon,
   Search,
   Package,
+  ChevronRight,
 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { GetConfi } from "../service/accionesConfiguracion/GetConfi";
 import { subMenuGroups } from "./SubMenuTabs";
+import { Button } from "./ui/button";
 
 export function Navegacion({ tipoNavegacion = null }) {
   const location = useLocation();
@@ -71,17 +70,10 @@ export function Navegacion({ tipoNavegacion = null }) {
     ajustes: "Ajustes",
   };
 
-  const dispatch = useDispatch();
-
-  const handleSideBar = () => {
-    dispatch(toggleSidebar());
-  };
-
   // === BUSCADOR GLOBAL MINIMALISTA ===
   const searchOptions = Object.values(subMenuGroups)
     .flat()
     .map(({ label, path }) => ({ label, path }));
-  const isCompressed = useSelector((state) => state.sidebar.isCompressed);
   const [searchTerm, setSearchTerm] = useState("");
   const [showSearchDropdown, setShowSearchDropdown] = useState(false);
   const [activeSearchIndex, setActiveSearchIndex] = useState(0);
@@ -139,8 +131,6 @@ export function Navegacion({ tipoNavegacion = null }) {
   // ===================================
   const {
     data: configEmpresa = [],
-    isLoading: isLoadingConfig,
-    isError: isErrorConfig,
   } = useQuery({
     queryKey: ["confiEmpresa"],
     queryFn: GetConfi,
@@ -155,38 +145,27 @@ export function Navegacion({ tipoNavegacion = null }) {
 
   const claveVenta = configTipoVenta?.clave;
   const esComida = claveVenta === "restaurante";
+  const actionButtonClass =
+    "inline-flex h-9 items-center justify-center gap-2 rounded-lg border border-border bg-background px-2.5 text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:px-3";
+
   return (
-    <div
-      className={`
-        nav-navegacion   mb-3 ${navegacionAnchura ? "mx-3" : "mx-0"} ${
-          isCompressed ? "compressedNavegacion" : ""
-        }
-      `}
-    >
+    <div className={`mb-3 w-full ${navegacionAnchura ? "px-3" : "px-0"}`}>
       <nav
-        aria-label="breadcrumb"
-        className="d-flex justify-content-between align-items-center w-100 flex-wrap border-none "
-        style={{
-          minHeight: "50px",
-          height: "auto",
-        }}
+        aria-label="Navegación de la página"
+        className="flex min-h-[50px] w-full flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-border/60 px-3 py-2 sm:px-4"
       >
-        <div className="d-flex align-items-center ">
+        <div className="flex min-w-0 items-center">
           {/* Breadcrumbs */}
-          <div
-            className="d-flex align-items-center breadcrumb-nav ms-3 "
-            style={{ gap: 8 }}
-          >
+          <div className="flex min-w-0 flex-wrap items-center gap-1.5 text-sm">
             {pathnames.length === 0 ? (
-              <span className="fw-semibold" style={{ color: "#222" }}>
+              <span className="font-medium text-foreground">
                 {routeNames[""]}
               </span>
             ) : (
               <>
                 <Link
                   to="/"
-                  className="text-decoration-none fw-semibold small"
-                  style={{ color: "#222" }}
+                  className="font-medium text-muted-foreground transition-colors hover:text-foreground"
                 >
                   {routeNames[""]}
                 </Link>
@@ -194,25 +173,23 @@ export function Navegacion({ tipoNavegacion = null }) {
                   const to = `/${pathnames.slice(0, index + 1).join("/")}`;
                   const isLast = index === pathnames.length - 1;
                   return (
-                    <span key={to} className="d-flex align-items-center small">
-                      <span
-                        className="mx-2"
-                        style={{ color: "#b0b0b0", fontSize: 18 }}
-                      >
-                        •
-                      </span>
+                    <span
+                      key={to}
+                      className="flex min-w-0 items-center gap-1.5"
+                    >
+                      <ChevronRight
+                        size={14}
+                        aria-hidden="true"
+                        className="shrink-0 text-muted-foreground/60"
+                      />
                       {isLast ? (
-                        <span
-                          className="fw-semibold"
-                          style={{ color: "#7a7a7a", opacity: 0.7 }}
-                        >
+                        <span className="truncate font-medium text-foreground">
                           {routeNames[pathname] || pathname}
                         </span>
                       ) : (
                         <Link
                           to={to}
-                          className="text-decoration-none fw-semibold"
-                          style={{ color: "#222" }}
+                          className="truncate font-medium text-muted-foreground transition-colors hover:text-foreground"
                         >
                           {routeNames[pathname] || pathname}
                         </Link>
@@ -226,25 +203,21 @@ export function Navegacion({ tipoNavegacion = null }) {
         </div>
 
         {/* --- CONTENEDOR DERECHO (Buscador + Acciones) --- */}
-        <div className="d-flex align-items-center flex-wrap justify-content-end gap-2 pe-3 mt-2 mt-sm-0">
+        <div className="ml-auto flex flex-wrap items-center justify-end gap-1.5 sm:gap-2">
           {/* --- BUSCADOR MINIMALISTA --- */}
           <div
-            className="d-none d-md-block position-relative me-2"
+            className="relative hidden w-[220px] md:block"
             ref={searchRef}
-            style={{ width: "220px" }}
           >
             <Search
-              size={15}
-              className="text-muted position-absolute"
-              style={{
-                top: "50%",
-                left: "85%",
-                transform: "translateY(-50%)",
-              }}
+              size={16}
+              aria-hidden="true"
+              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
             />
             <input
               type="text"
-              className="form-control shadow-none"
+              aria-label="Buscar vista"
+              className="h-9 w-full rounded-lg border border-input bg-background pl-9 pr-3 text-sm text-foreground shadow-sm outline-none transition placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40"
               placeholder="Buscar vista..."
               value={searchTerm}
               aria-controls="navegacion-resultados-busqueda"
@@ -266,40 +239,35 @@ export function Navegacion({ tipoNavegacion = null }) {
             />
             {showSearchDropdown && searchTerm.trim() !== "" && (
               <div
-                className="position-absolute bg-white shadow border rounded-3 w-100 mt-1"
-                style={{
-                  top: "100%",
-                  left: 0,
-                  zIndex: 1050,
-                  maxHeight: "250px",
-                  overflowY: "auto",
-                }}
+                className="absolute left-0 top-full z-50 mt-1 max-h-[250px] w-full overflow-y-auto rounded-lg border border-border bg-popover py-1 text-popover-foreground shadow-md"
               >
                 <ul
                   id="navegacion-resultados-busqueda"
-                  className="list-unstyled m-0 py-1"
+                  role="listbox"
+                  className="m-0 list-none p-0"
                 >
                   {filteredSearch.length > 0 ? (
                     filteredSearch.map((item, idx) => (
                       <li key={item.path}>
-                        <button
+                        <Button
                           id={`resultado-busqueda-${idx}`}
                           type="button"
-                          className={`btn btn-sm w-100 text-start px-3 py-2 border-0 ${
+                          role="option"
+                          aria-selected={idx === activeSearchIndex}
+                          className={`w-full px-3 py-2 text-left text-sm transition-colors ${
                             idx === activeSearchIndex
-                              ? "bg-dark text-white"
-                              : "text-dark bg-transparent"
+                              ? "bg-accent text-accent-foreground"
+                              : "text-foreground hover:bg-accent/70"
                           }`}
-                          style={{ transition: "background-color 0.2s" }}
                           onMouseEnter={() => setActiveSearchIndex(idx)}
                           onClick={() => selectSearchOption(item)}
-                        >
+                         variant="default">
                           {item.label}
-                        </button>
+                        </Button>
                       </li>
                     ))
                   ) : (
-                    <li className="px-3 py-2 text-muted small text-center">
+                    <li className="px-3 py-2 text-center text-sm text-muted-foreground">
                       Sin resultados
                     </li>
                   )}
@@ -308,77 +276,83 @@ export function Navegacion({ tipoNavegacion = null }) {
             )}
           </div>
           {/* 1. Asistencia */}
-          <button
-            className="btn btn-outline-dark d-flex align-items-center gap-1 px-2 p-1 px-md-3"
+          <Button
+            type="button"
+            className={actionButtonClass}
             onClick={() => navigate("/marcarAsistencia")}
             title="Asistencia" // El title ayuda a que en celular, si lo mantienen presionado, diga qué es
-          >
-            <UserRoundCheck size={20} />
-            <span className="d-none d-md-inline">Asistencia</span>
-          </button>
+           variant="default">
+            <UserRoundCheck size={17} />
+            <span className="hidden sm:inline">Asistencia</span>
+          </Button>
           {/* 2. Eventos */}
           {rolesLocalStorage.some((r) => r.nombre === "incidencias") && (
-            <button
-              className="btn btn-outline-dark d-flex align-items-center gap-1 px-2 p-1 px-md-3"
+            <Button
+              type="button"
+              className={actionButtonClass}
               onClick={() => navigate("/incidencias")}
               title="Eventos"
-            >
-              <Megaphone size={20} className="text-auto" />
-              <span className="d-none d-md-inline">Eventos</span>
-            </button>
+             variant="default">
+              <Megaphone size={17} />
+              <span className="hidden sm:inline">Eventos</span>
+            </Button>
           )}
           {/* PARA MIS ENTREGAS DEL DELIVERY CONDUCTOR */}
           {rolesLocalStorage.some((r) => r.nombre === "mis entregas") && (
-            <button
-              className="btn btn-outline-dark d-flex align-items-center gap-1 px-2 p-1 px-md-3"
+            <Button
+              type="button"
+              className={actionButtonClass}
               onClick={() => navigate("/mis-entregas")}
               title="Mis Entregas"
-            >
-              <Package size={20} className="text-auto" />
-              <span className="d-none d-md-inline">Mis Entregas</span>
-            </button>
+             variant="default">
+              <Package size={17} />
+              <span className="hidden sm:inline">Mis Entregas</span>
+            </Button>
           )}
 
           {/* 3. Pedidos Delivery (NUEVO - Solo visible para delivery y administradores) */}
           {["delivery", "conductor", "administrador"].includes(
             rol?.empleado?.cargo?.nombre,
           ) && (
-            <button
-              className="btn btn-outline-dark d-flex align-items-center gap-1 px-2 p-1 px-md-3"
+            <Button
+              type="button"
+              className={actionButtonClass}
               onClick={() => navigate("/pedidosDelivery")}
               title="Pedidos Delivery"
-            >
-              <BikeIcon size={20} />
-              <span className="d-none d-md-inline">Pedidos</span>
-            </button>
+             variant="default">
+              <BikeIcon size={17} />
+              <span className="hidden sm:inline">Pedidos</span>
+            </Button>
           )}
           {/* 4. POS (Oculto estrictamente para roles que no abren caja usando palabras clave) */}
           {!esRolBloqueadoParaCaja && (
-            <button
-              className="btn-guardar d-flex align-items-center gap-1 px-2 p-1 px-md-3"
+            <Button
+              type="button"
+              className="inline-flex h-9 items-center justify-center gap-2 rounded-lg bg-primary px-2.5 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:px-3"
               onClick={() => {
                 esComida
                   ? navigate("/vender/mesas")
                   : navigate("/vender/ventasLlevar/");
               }}
               title="Abrir ventas"
-            >
-              <StoreIcon size={20} />
-              <span className="d-none d-md-inline">Vender</span>
-            </button>
+             variant="default">
+              <StoreIcon size={17} />
+              <span className="hidden sm:inline">Vender</span>
+            </Button>
           )}
           {/* 5. Cocina */}
           {["cocinero", "administrador"].includes(
             rol?.empleado?.cargo?.nombre,
           ) && (
-            <button
-              className="btn btn-outline-dark d-flex align-items-center gap-1 px-2 p-1 px-md-3"
+            <Button
+              type="button"
+              className={actionButtonClass}
               onClick={() => navigate("/cocina")}
               title="Cocina"
-            >
-              <CookingPotIcon size={20} className="text-auto" />
-              <span className="d-none d-md-inline">Cocina</span>
-            </button>
+             variant="default">
+              <CookingPotIcon size={17} />
+              <span className="hidden sm:inline">Cocina</span>
+            </Button>
           )}
         </div>
       </nav>

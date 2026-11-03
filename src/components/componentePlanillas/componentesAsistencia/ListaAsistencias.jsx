@@ -25,6 +25,9 @@ import { TablasGenerales } from "../../componentesReutilizables/TablasGenerales"
 import { CondicionCarga } from "../../componentesReutilizables/CondicionCarga";
 import { BotonMotionGeneral } from "../../componentesReutilizables/BotonMotionGeneral";
 import { GetReporteExcel } from "../../../service/accionesReutilizables/GetReporteExcel";
+import { Button } from "../../ui/button";
+import { CardContent, CardFooter } from "@/components/ui/card";
+
 
 // --- HELPERS ---
 const formatDate = (dateString) => {
@@ -85,7 +88,7 @@ export function ListaAsistencia({ onClose }) {
       const apellidoDB = item.empleado?.apellidos || "";
       const nombreCompleto = `${nombreDB} ${apellidoDB}`.toLowerCase();
       const coincideNombre = nombreCompleto.includes(
-        filtroNombre.toLowerCase()
+        filtroNombre.toLowerCase(),
       );
 
       return coincideFecha && coincideEstado && coincideNombre;
@@ -97,13 +100,13 @@ export function ListaAsistencia({ onClose }) {
     return {
       total: dataFiltrada.length,
       puntuales: dataFiltrada.filter((i) =>
-        ["asistio", "puntual"].includes(i.estadoAsistencia?.toLowerCase())
+        ["asistio", "puntual"].includes(i.estadoAsistencia?.toLowerCase()),
       ).length,
       tardanzas: dataFiltrada.filter(
-        (i) => i.estadoAsistencia?.toLowerCase() === "tardanza"
+        (i) => i.estadoAsistencia?.toLowerCase() === "tardanza",
       ).length,
       faltas: dataFiltrada.filter(
-        (i) => i.estadoAsistencia?.toLowerCase() === "falta"
+        (i) => i.estadoAsistencia?.toLowerCase() === "falta",
       ).length,
     };
   }, [dataFiltrada]);
@@ -214,19 +217,19 @@ export function ListaAsistencia({ onClose }) {
         <h6 className="m-0 fw-bold d-flex align-items-center gap-2">
           <CalendarCheck size={20} /> Gestión de Asistencias
         </h6>
-        <button
+        <Button
           className="btn-principal"
           onClick={() => refetch()}
           title="Recargar datos"
-        >
+         variant="default">
           <RefreshCw size={16} className={isRefetching ? "spin-anim" : ""} />
           <span>{isRefetching ? "Cargando..." : "Actualizar"}</span>
-        </button>
+        </Button>
       </div>
 
-      <div className="card-body p-4 border-0 ">
+      <CardContent className="p-4 border-0">
         {/* BARRA DE FILTROS */}
-        <div className="row g-2 mb-4">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-2 mb-4">
           {/* Buscador Nombre */}
           <div className="col-12 col-md-3">
             <div className="input-group">
@@ -291,12 +294,12 @@ export function ListaAsistencia({ onClose }) {
 
           {/* Botón Limpiar */}
           <div className="col-6 col-md-2">
-            <button
+            <Button
               className="btn-modern btn-outline w-100"
               onClick={handleLimpiar}
-            >
+             variant="default">
               <FilterX size={16} /> Limpiar
-            </button>
+            </Button>
           </div>
         </div>
 
@@ -373,10 +376,10 @@ export function ListaAsistencia({ onClose }) {
             />
           </CondicionCarga>
         </div>
-      </div>
+      </CardContent>
 
       {/* FOOTER */}
-      <div className="card-footer p-3 d-flex justify-content-between align-items-center border-0 ">
+      <CardFooter className="p-3 flex justify-between items-center border-0">
         {/* BOTÓN EXCEL CONECTADO AL SERVICIO */}
         <BotonMotionGeneral
           text="Exportar Excel"
@@ -386,10 +389,10 @@ export function ListaAsistencia({ onClose }) {
           classDefault="btn-modern btn-excel text-center align-items-center gap-1 p-2 w-auto me-auto"
         />
 
-        <button className="btn-cerrar-modal w-auto" onClick={onClose}>
+        <Button className="btn-cerrar-modal w-auto" onClick={onClose} variant="default">
           <X size={18} /> Cerrar Vista
-        </button>
-      </div>
+        </Button>
+      </CardFooter>
     </div>
   );
 }

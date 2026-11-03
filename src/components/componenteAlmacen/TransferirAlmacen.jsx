@@ -20,6 +20,9 @@ import {
   Trash2,
 } from "lucide-react";
 import ToastAlert from "../componenteToast/ToastAlert";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 
 export function TransferirAlmacen() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -112,11 +115,11 @@ export function TransferirAlmacen() {
   }, [searchTerm, dataAlmacen]);
 
   return (
-    <div className="row g-3">
+    <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
       <div className="col-lg-4 col-md-4 col-sm-12">
-        <div className="card border h-100">
-          <div className="card-header d-flex align-items-center">
-            <p className="card-title">Almacen</p>
+        <Card className="border h-full">
+          <CardHeader className="flex items-center">
+            <CardTitle asChild><p className="">Almacen</p></CardTitle>
             <div className="ms-auto position-relative d-flex">
               <Search className="position-absolute   my-2 text-muted ms-2" />
               <input
@@ -131,10 +134,10 @@ export function TransferirAlmacen() {
                 }}
               />
             </div>
-          </div>
+          </CardHeader>
 
-          <div
-            className="card-body p-2 overflow-auto m-0 bg-light"
+          <CardContent
+            className="p-2 overflow-auto m-0 bg-muted"
             style={{ maxHeight: "calc(100vh - 340px)" }}
           >
             {isLoading ? (
@@ -205,26 +208,26 @@ export function TransferirAlmacen() {
                 ))}
               </ul>
             )}
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
       <div className="col-lg-4 col-md-4 col-sm-12">
-        <div className="card h-100 border">
-          <div className="card-header d-flex">
-            <p className="card-title">
+        <Card className="h-full border">
+          <CardHeader className="flex">
+            <CardTitle asChild><p className="">
               Seleccionados ({seleccionados?.length})
-            </p>
+            </p></CardTitle>
             <div className="ms-auto">
-              <button
+              <Button
                 className="btn btn-sm btn-outline-danger"
                 onClick={() => dispatch(clearProductoSelececcionado())}
-              >
+               variant="destructive">
                 Borrar todo
-              </button>
+              </Button>
             </div>
-          </div>
-          <div
-            className="card-body overflow-auto bg-light"
+          </CardHeader>
+          <CardContent
+            className="overflow-auto bg-muted"
             style={{ maxHeight: "calc(100vh - 340px)" }}
           >
             {seleccionados?.length === 0 ? (
@@ -240,7 +243,7 @@ export function TransferirAlmacen() {
                   >
                     <div className="d-flex align-items-center gap-2">
                       {/* Botón eliminar, oculto hasta hover */}
-                      <button
+                      <Button
                         className="btn btn-sm btn-outline-danger p-1"
                         onClick={(e) => {
                           e.stopPropagation();
@@ -248,9 +251,9 @@ export function TransferirAlmacen() {
                             removeProductoSeleccionado({ id: item?.id }),
                           );
                         }}
-                      >
+                       variant="destructive">
                         <Trash2 />
-                      </button>
+                      </Button>
 
                       <div className="d-flex flex-column">
                         <span className="fw-bold text-secondary">
@@ -265,22 +268,22 @@ export function TransferirAlmacen() {
 
                     <div className="d-flex align-items-center justify-content-center gap-3">
                       <div className="btn-group" role="group">
-                        <button
+                        <Button
                           className="btn btn-outline-dark btn-sm p-2"
                           onClick={(e) => {
                             e.stopPropagation();
                             dispatch(removeItem({ id: item?.id }));
                           }}
                           disabled={item?.cantidad <= 1}
-                        >
+                         variant="default">
                           <Minus size={18} />
-                        </button>
+                        </Button>
 
                         <span className="badge bg-light text-secondary border px-3 py-2">
                           {item?.cantidad}
                         </span>
 
-                        <button
+                        <Button
                           className="btn btn-outline-primary btn-sm p-2"
                           onClick={(e) => {
                             e.stopPropagation();
@@ -302,9 +305,9 @@ export function TransferirAlmacen() {
                               ? "Cantidad máxima alcanzada"
                               : "Aumentar cantidad"
                           }
-                        >
+                         variant="default">
                           <PlusIcon size={18} />
-                        </button>
+                        </Button>
                       </div>
 
                       <div className="d-flex flex-column text-end">
@@ -320,18 +323,18 @@ export function TransferirAlmacen() {
                 ))}
               </ul>
             )}
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
       <div className="col-lg-4 col-md-4 col-sm-12">
-        <div className="card border h-100">
-          <div className="card-header border-bottom">
-            <p className="card-title">Destino</p>
-          </div>
-          <div className="card-body bg-light">
+        <Card className="border h-full">
+          <CardHeader className="border-b">
+            <CardTitle asChild><p className="">Destino</p></CardTitle>
+          </CardHeader>
+          <CardContent className="bg-muted">
             <DestinoTransferir />
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

@@ -3,6 +3,9 @@ import axiosInstance from "../../api/AxiosInstance";
 import ToastAlert from "../componenteToast/ToastAlert";
 import { AlertCircle, FileSignature, ShieldCheck } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
+import { Button } from "../ui/button";
+import { CardContent, CardFooter } from "@/components/ui/card";
+
 
 export function FormularioFirmarDoc() {
   const queryClient = useQueryClient();
@@ -51,7 +54,7 @@ export function FormularioFirmarDoc() {
 
   return (
     <div>
-      <div className="card-body p-4">
+      <CardContent className="p-4">
         <form
           onSubmit={handleSubmit(onSubmit)}
           encType="multipart/form-data"
@@ -128,28 +131,28 @@ export function FormularioFirmarDoc() {
           </div>
 
           <div className="d-flex justify-content-end mt-4">
-            <button
+            <Button
               type="submit"
               className="btn-guardar btn-lg align-items-centershadow"
               disabled={isSubmitting}
-            >
+             variant="default">
               <FileSignature size={20} />
               {isSubmitting ? (
                 <span className="ms-2">Firmando...</span>
               ) : (
                 <span className="ms-2">Firmar</span>
               )}
-            </button>
+            </Button>
           </div>
         </form>
-      </div>
-      <div className="card-footer bg-light rounded-bottom-4 py-3 text-center">
+      </CardContent>
+      <CardFooter className="bg-muted rounded-bottom-4 py-3 text-center">
         <span className="text-muted">
           <ShieldCheck className="me-1 text-success" />
           Solo se permite PDF y firma en imagen. Todos los campos son
           obligatorios.
         </span>
-      </div>
+      </CardFooter>
     </div>
   );
 }

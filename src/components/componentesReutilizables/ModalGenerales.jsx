@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "../../css/ModalAlertQuestion.css";
 import ReactDOM from "react-dom";
 import { X } from "lucide-react";
+import { Button } from "../ui/button";
 
 function ModalGenerales({
   show,
@@ -55,16 +56,18 @@ function ModalGenerales({
           height: height,
           maxWidth: "95vw",
           maxHeight: "95vh",
+          backgroundColor: "var(--bg-surface, #ffffff)",
+          color: "var(--text-main, #0f172a)",
         }}
       >
-        <button
+        <Button
           onClick={handleCloseModal}
           className="fw-modal-close-btn btn-icon"
           aria-label="Cerrar"
           disabled={isLoading}
-        >
+         variant="default">
           <X size={20} />
-        </button>
+        </Button>
 
         {mensaje && (
           <div className="fw-modal-header text-center">
@@ -83,18 +86,18 @@ function ModalGenerales({
 
         {showButtons && (
           <div className="fw-modal-actions">
-            <button
+            <Button
               onClick={handleCloseModal}
               className="btn-cerrar-modal"
               disabled={!handleAccion || isLoading}
-            >
+             variant="default">
               {textCancel}
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={handleConfirm}
               className={`btn fw-modal-btn fw-modal-btn-confirm ${btnConfirmColor}`}
               disabled={isLoading}
-            >
+             variant="default">
               {isLoading ? (
                 <>
                   <span
@@ -107,7 +110,7 @@ function ModalGenerales({
               ) : (
                 textConfirm
               )}
-            </button>
+            </Button>
           </div>
         )}
       </div>

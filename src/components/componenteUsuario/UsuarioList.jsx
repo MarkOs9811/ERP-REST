@@ -18,6 +18,7 @@ import {
   BtnEliminar,
   BtnVer,
 } from "../componentesReutilizables/BotonesAccion";
+import { Button } from "../ui/button";
 
 // LOS PROPS SON PARAMETROS QUE SE ESTA RECIEBIENDO EN ESTA FUNCTION COMO "SEARCH" Y "UPDATELIST"
 export function UsuariosList({ search, updateList }) {
@@ -340,15 +341,15 @@ export function UsuariosList({ search, updateList }) {
                 />
               </>
             ) : (
-              <button
+              <Button
                 className="btn btn-outline-success btn-sm"
                 onClick={() =>
                   handleActivarClick(row.id, row.empleado?.persona?.nombre)
                 }
                 title="Reactivar usuario"
-              >
+               variant="default">
                 <FontAwesomeIcon icon={faPowerOff} /> Activar
-              </button>
+              </Button>
             )}
           </div>
         );

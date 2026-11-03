@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form"; // 1. Importar
 import { Type, Calendar, Save, AlertTriangle, XCircle } from "lucide-react";
 import ToastAlert from "../../../componenteToast/ToastAlert";
 import axiosInstance from "../../../../api/AxiosInstance";
+import { Button } from "../../../ui/button";
 
 // (Asumo que axiosInstance y ToastAlert están importados)
 // import { axiosInstance } from "ruta/hacia/axiosConfig";
@@ -48,7 +49,7 @@ export function FormularioEditarPeriodo({ onClose, dataPeriodo }) {
     try {
       const response = await axiosInstance.put(
         `/periodoNomina/${dataPeriodo.id}`,
-        data
+        data,
       );
 
       if (response.data.success) {
@@ -77,7 +78,7 @@ export function FormularioEditarPeriodo({ onClose, dataPeriodo }) {
     <div className="p-4">
       {/* 5. Usamos handleSubmit de RHF */}
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="row g-3">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
           {/* 1. Nombre del Periodo */}
           <div className="col-12">
             <div className="mb-3">
@@ -108,7 +109,7 @@ export function FormularioEditarPeriodo({ onClose, dataPeriodo }) {
           </div>
 
           {/* 2. Fecha de Inicio */}
-          <div className="col-md-6">
+          <div className="md:col-span-6">
             <div className="mb-3">
               <label className="form-label">
                 <strong>Fecha de Inicio</strong>
@@ -136,7 +137,7 @@ export function FormularioEditarPeriodo({ onClose, dataPeriodo }) {
           </div>
 
           {/* 3. Fecha Fin (Corte) */}
-          <div className="col-md-6">
+          <div className="md:col-span-6">
             <div className="mb-3">
               <label className="form-label">
                 <strong>Fecha Fin (Corte)</strong>
@@ -181,20 +182,20 @@ export function FormularioEditarPeriodo({ onClose, dataPeriodo }) {
 
         {/* Botones de Acción */}
         <div className="d-flex justify-content-end mt-4 gap-2">
-          <button
+          <Button
             type="button"
             className="btn-cerrar-modal"
             onClick={onClose}
             disabled={isSubmitting}
-          >
+           variant="default">
             <XCircle size={18} className="" />
             Cancelar
-          </button>
-          <button
+          </Button>
+          <Button
             type="submit"
             className="btn-guardar"
             disabled={isSubmitting} // 7. Usamos isSubmitting
-          >
+           variant="default">
             {isSubmitting ? (
               <span
                 className="spinner-border spinner-border-sm me-2"
@@ -205,7 +206,7 @@ export function FormularioEditarPeriodo({ onClose, dataPeriodo }) {
               <Save size={18} className="me-2" />
             )}
             Guardar Cambios
-          </button>
+          </Button>
         </div>
       </form>
     </div>

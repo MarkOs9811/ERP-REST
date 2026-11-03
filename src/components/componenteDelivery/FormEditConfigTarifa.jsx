@@ -3,6 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { Clock, HeartHandshake } from "lucide-react";
 import { PutData } from "../../service/CRUD/PutData";
+import { Button } from "../ui/button";
 
 // Lista de días para renderizar los checkboxes
 const DIAS_SEMANA = [
@@ -163,7 +164,7 @@ export function FormEditConfigTarifa({ onClose, configuracion }) {
       </div>
 
       {/* Horas */}
-      <div className="row g-3 mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-4">
         <div className="col-6">
           <label className="form-label fw-medium text-dark small">
             Hora Apertura
@@ -211,7 +212,7 @@ export function FormEditConfigTarifa({ onClose, configuracion }) {
       <h6 className="fw-bold mb-3 mt-2 text-dark border-bottom pb-2">
         Tarifas de Delivery
       </h6>
-      <div className="row g-3 mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-4">
         <div className="col-6">
           <label className="form-label fw-medium text-dark small">
             Costo Base (S/)
@@ -274,7 +275,7 @@ export function FormEditConfigTarifa({ onClose, configuracion }) {
       <h6 className="fw-bold mb-3 text-dark border-bottom pb-2">
         Tiempo de Entrega Estimado
       </h6>
-      <div className="row g-3 mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-4">
         <div className="col-6">
           <label className="form-label fw-medium text-dark small">
             Minutos Min
@@ -355,17 +356,17 @@ export function FormEditConfigTarifa({ onClose, configuracion }) {
 
       {/* Controles del Footer */}
       <div className="mt-auto d-flex justify-content-end gap-2 border-top p-3">
-        <button
+        <Button
           type="button"
           className="btn-cerrar-modal"
           onClick={onClose}
           disabled={isSubmitting}
-        >
+         variant="default">
           Cancelar
-        </button>
-        <button type="submit" className="btn-guardar" disabled={isSubmitting}>
+        </Button>
+        <Button type="submit" className="btn-guardar" disabled={isSubmitting} variant="default">
           {isSubmitting ? "Actualizando..." : "Actualizar Configuración"}
-        </button>
+        </Button>
       </div>
     </form>
   );

@@ -4,6 +4,9 @@ import { Settings2, Save, X } from "lucide-react";
 import axiosInstance from "../../../api/AxiosInstance";
 import ToastAlert from "../../componenteToast/ToastAlert";
 import { useQueryClient } from "@tanstack/react-query";
+import { Button } from "../../ui/button";
+import { CardContent, CardFooter } from "@/components/ui/card";
+
 
 // Tipos de documentos (sin cambios)
 const tiposDocumento = [
@@ -28,7 +31,7 @@ export function AddSerieForm({ cerrarModal }) {
     try {
       const response = await axiosInstance.post(
         "/configuraciones/serieCorrelativo",
-        data
+        data,
       );
 
       if (response.data.success) {
@@ -110,8 +113,8 @@ export function AddSerieForm({ cerrarModal }) {
         onSubmit={handleSubmit(onSubmit)}
         className="h-100 d-flex flex-column"
       >
-        <div className="card-body">
-          <div className="row g-3">
+        <CardContent className="">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
             {/* Campo 1: Tipo de Documento (sin cambios) */}
             <div className="col-12">
               <label
@@ -229,23 +232,23 @@ export function AddSerieForm({ cerrarModal }) {
               )}
             </div>
           </div>
-        </div>
+        </CardContent>
 
         {/* Pie de Página (sin cambios) */}
-        <div className="card-footer d-flex gap-2 justify-content-end bg-light mt-auto border-0">
-          <button
+        <CardFooter className="flex gap-2 justify-end bg-muted mt-auto border-0">
+          <Button
             type="button"
             onClick={() => reset()}
             className="btn-cerrar-modal align-items-center w-auto"
-          >
+           variant="default">
             <X className="me-2" size={16} />
             Limpiar Campos
-          </button>
-          <button type="submit" className="btn-guardar align-items-center ">
+          </Button>
+          <Button type="submit" className="btn-guardar align-items-center " variant="default">
             <Save className="me-2" size={16} />
             Guardar Serie
-          </button>
-        </div>
+          </Button>
+        </CardFooter>
       </form>
     </div>
   );

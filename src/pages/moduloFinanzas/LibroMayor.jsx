@@ -13,6 +13,9 @@ import {
 import { PostData } from "../../service/CRUD/PostData";
 import { useState } from "react";
 import ModalAlertQuestion from "../../components/componenteToast/ModalAlertQuestion";
+import { Button } from "../../components/ui/button";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+
 
 export function LibroMayor() {
   const queryClient = useQueryClient();
@@ -68,96 +71,96 @@ export function LibroMayor() {
 
   return (
     <div>
-      <div className="row g-3">
-        <div className="col-md-12">
-          <div className="card">
-            <div className="card-header p-3 border-0 d-flex align-items-center">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+        <div className="md:col-span-12">
+          <Card className="">
+            <CardHeader className="p-3 border-0 flex items-center">
               <BookText
                 color={"var(--fw-strawberry)"}
                 height="45px"
                 width="45px"
               />
-              <p className="h4 card-title ms-2 mb-0">Libro Mayor</p>
+              <CardTitle asChild><p className="h4 ms-2 mb-0">Libro Mayor</p></CardTitle>
               <div className="d-flex ms-auto">
-                <button
+                <Button
                   className="btn ms-auto mx-2 d-flex align-items-center p-2"
                   style={{
                     border: "1px solid var(--fw-border)",
                     backgroundColor: "var(--bg-card)",
                     color: "var(--text-main)",
                   }}
-                >
+                 variant="default">
                   <ClipboardType className={"mx-2"} />
                   Generar Reporte
-                </button>
+                </Button>
               </div>
-            </div>
-          </div>
+            </CardHeader>
+          </Card>
         </div>
 
-        <div className="col-md-12">
-          <div className="card p-2">
-            <div className="row g-3 p-2">
-              <div className="col-md-4">
+        <div className="md:col-span-12">
+          <Card className="p-2">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-3 p-2">
+              <div className="md:col-span-4">
                 <div className="fw-libro-resumen-card">
                   <small>Total Debitos</small>
                   <h4>S/. {totalDebitos.toFixed(2)}</h4>
                 </div>
               </div>
-              <div className="col-md-4">
+              <div className="md:col-span-4">
                 <div className="fw-libro-resumen-card">
                   <small>Total Creditos</small>
                   <h4>S/. {totalCreditos.toFixed(2)}</h4>
                 </div>
               </div>
-              <div className="col-md-4">
+              <div className="md:col-span-4">
                 <div className="fw-libro-resumen-card fw-libro-balance-card">
                   <small>Balance</small>
                   <h4>S/. {balance.toFixed(2)}</h4>
                 </div>
               </div>
             </div>
-          </div>
+          </Card>
         </div>
 
-        <div className="col-md-12">
+        <div className="md:col-span-12">
           <CardResultadoEjercicio
             registroEjercicio={registroEjercicio}
             resultado={resultado}
           />
         </div>
 
-        <div className="col-md-12">
-          <div className="card py-2 border-0 p-2">
+        <div className="md:col-span-12">
+          <Card className="py-2 border-0 p-2">
             <div className="d-flex justify-content-between align-items-center p-3">
               <h5 className="mb-0">Cuentas Contables</h5>
               <div className="d-flex" role="group">
-                <button
+                <Button
                   className="btn p-2 d-flex align-items-center mx-1"
                   style={{ fontSize: "1rem" }}
                   onClick={() => setModalQuestion(true)}
                   disabled={loadingCierre}
-                >
+                 variant="default">
                   {loadingCierre ? (
                     <span className="spinner-border spinner-border-sm me-2"></span>
                   ) : (
                     <ClipboardTypeIcon className={"mx-2"} />
                   )}
                   {loadingCierre ? "Calculando..." : "Balance y Cierre"}
-                </button>
-                <button
+                </Button>
+                <Button
                   className="btn p-2 d-flex align-items-center mx-1"
                   style={{ fontSize: "1rem" }}
-                >
+                 variant="default">
                   <ExternalLink className={"mx-2"} />
                   Aperturar Cuentas
-                </button>
-                <button
+                </Button>
+                <Button
                   className="btn p-2 d-flex align-items-center mx-1"
                   style={{ fontSize: "1.2rem" }}
-                >
+                 variant="default">
                   <ExternalLinkIcon />
-                </button>
+                </Button>
               </div>
             </div>
             {isLoading && (
@@ -180,7 +183,7 @@ export function LibroMayor() {
             )}
 
             {!isLoading && !isError && !sinMovimientos && (
-              <div className="row gap-3 p-3 ">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-4gap-3 p-3 ">
                 {Object.entries(movimientos).map(([nombreCuenta, items]) => (
                   <CardCuentaContable
                     key={nombreCuenta}
@@ -190,7 +193,7 @@ export function LibroMayor() {
                 ))}
               </div>
             )}
-          </div>
+          </Card>
         </div>
       </div>
 

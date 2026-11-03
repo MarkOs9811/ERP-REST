@@ -2,6 +2,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "../../css/ModalAlertActivar.css"; // Importar CSS correctamente
 import { useQueryClient } from "@tanstack/react-query";
 import ReactDOM from "react-dom";
+import { Button } from "../ui/button";
 
 function ModalAlertActivar({
   show,
@@ -40,11 +41,11 @@ function ModalAlertActivar({
           {nombre || "Nombre no disponible"}
         </h4>
         <div>
-          <button
+          <Button
             onClick={handleConfirm}
             className="btn-activarToast mx-2"
             disabled={isLoading}
-          >
+           variant="default">
             {isLoading ? (
               <>
                 <span
@@ -57,14 +58,14 @@ function ModalAlertActivar({
             ) : (
               "Confirmar"
             )}
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={handleCloseModal}
             className="btn-cancelar"
             disabled={isLoading}
-          >
+           variant="default">
             {isLoading ? "Espere..." : "Cancelar"}
-          </button>
+          </Button>
         </div>
       </div>
     </div>,

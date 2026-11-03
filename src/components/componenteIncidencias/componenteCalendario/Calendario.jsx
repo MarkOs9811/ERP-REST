@@ -17,6 +17,8 @@ import {
   CircleAlert,
   User,
 } from "lucide-react";
+import { Card } from "@/components/ui/card";
+
 
 /**
  * Función Helper para obtener el componente del icono
@@ -196,7 +198,7 @@ const Calendario = ({ eventos }) => {
   };
 
   return (
-    <div className="card p-4">
+    <Card className="p-4">
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView="timeGridWeek"
@@ -234,7 +236,7 @@ const Calendario = ({ eventos }) => {
         themeSystem="standard" // <-- Usamos standard para aplicar nuestro CSS
         eventClick={handleEventClick} // <-- Refactorizado
       />
-    </div>
+    </Card>
   );
 };
 

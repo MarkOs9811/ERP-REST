@@ -20,6 +20,8 @@ import {
   Info,
   CalendarDays,
 } from "lucide-react";
+import { Card } from "@/components/ui/card";
+
 
 ChartJS.register(
   LineElement,
@@ -308,13 +310,13 @@ export function GraficoIAhome() {
   const hasError = isErrorVentas || isErrorVentasIA;
 
   return (
-    <div className="card  overflow-hidden w-100">
+    <Card className="w-full overflow-hidden rounded-xl border border-border bg-card text-card-foreground">
       <CondicionCarga isLoading={isLoadingVentasIA} isError={isErrorVentasIA}>
-        <div className="px-3 pt-3">
-          <div className="d-flex justify-content-between align-items-center gap-3 mb-2">
-            <div className="d-flex align-items-center gap-3">
+        <div className="px-4 pt-4">
+          <div className="mb-2 flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
               <span
-                className="rounded-circle p-2 me-2"
+                className="flex size-11 shrink-0 items-center justify-center rounded-full"
                 style={{
                   background: "var(--bg-emerald-soft)",
                   color: "var(--fw-emerald)",
@@ -323,26 +325,25 @@ export function GraficoIAhome() {
                 <ChartNoAxesCombined size={24} />
               </span>
               <div>
-                <h5 className="mb-1 fw-bold text-dark">
+                <h2 className="mb-1 text-base font-semibold text-foreground sm:text-lg">
                   Ventas de los últimos 7 días y Predicción IA
-                </h5>
-                <p className="mb-0 text-muted small">
+                </h2>
+                <p className="mb-0 text-sm text-muted-foreground">
                   Histórico vs. pronóstico (próximos 7 días)
                 </p>
               </div>
             </div>
 
             <div
-              className="d-flex align-items-center justify-content-center rounded-3 border bg-light text-secondary"
-              style={{ width: 38, height: 38 }}
+              className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-border bg-muted text-muted-foreground"
             >
               <CalendarDays size={18} />
             </div>
           </div>
         </div>
 
-        <div className="px-3 pt-3">
-          <div className="row g-3">
+        <div className="px-4 pt-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
             {[
               {
                 label: "Ventas Reales (7 días)",
@@ -372,19 +373,19 @@ export function GraficoIAhome() {
                 bg: "#f4ebff",
               },
             ].map((item) => (
-              <div key={item.label} className="col-12 col-md-6 col-xl-3">
-                <div
-                  className="card  h-100 rounded-4"
+              <div key={item.label} className="min-w-0">
+                <Card
+                  className="h-full rounded-xl border border-border p-3"
                   style={{ background: item.bg }}
                 >
-                  <div className="card-body py-3 px-3">
-                    <div className="d-flex justify-content-between align-items-center gap-2">
-                      <div className="small fw-bold text-dark">
+                  <div>
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="text-sm font-semibold text-foreground">
                         {item.label}
                       </div>
                       {item.delta && (
                         <span
-                          className="small fw-bold"
+                          className="text-xs font-semibold"
                           style={{ color: item.color }}
                         >
                           {item.delta}
@@ -393,65 +394,67 @@ export function GraficoIAhome() {
                     </div>
 
                     <div
-                      className="mt-3 fw-bold text-dark"
+                      className="mt-3 font-bold text-foreground"
                       style={{ fontSize: "1.1rem" }}
                     >
                       {item.value}
                     </div>
 
                     {item.sub && (
-                      <div className="mt-1 small text-muted">{item.sub}</div>
+                      <div className="mt-1 text-xs text-muted-foreground">
+                        {item.sub}
+                      </div>
                     )}
                   </div>
-                </div>
+                </Card>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="px-3 py-3">
-          <div className="row g-3">
-            <div className="col-12 col-lg-6">
-              <div className="card border h-100 rounded-4">
-                <div className="card-header bg-light border-0 d-flex align-items-center gap-2 py-3">
+        <div className="px-4 py-4">
+          <div className="grid grid-cols-1 gap-3 xl:grid-cols-2">
+            <div className="min-w-0">
+              <Card className="h-full overflow-hidden rounded-xl border border-border">
+                <div className="flex items-center gap-2 border-b border-border bg-muted/50 px-4 py-3">
                   <span
-                    className="rounded-circle d-inline-block"
+                    className="inline-block size-3 rounded-full"
                     style={{ width: 12, height: 12, background: "#22c55e" }}
                   />
-                  <span className="fw-bold text-dark">Ventas Reales</span>
+                  <span className="font-semibold text-foreground">Ventas Reales</span>
                 </div>
-                <div style={{ height: "340px" }} className="card-body">
+                <div style={{ height: "340px" }} className="p-4">
                   {hasError ? (
-                    <p className="text-center text-danger mb-0">
+                    <p className="mb-0 text-center text-destructive">
                       Error al cargar los datos del gráfico.
                     </p>
                   ) : !dataReady ? (
-                    <p className="text-center text-muted mb-0">
+                    <p className="mb-0 text-center text-muted-foreground">
                       Cargando datos del gráfico...
                     </p>
                   ) : (
                     <Line data={realChartData} options={chartOptions("S/")} />
                   )}
                 </div>
-              </div>
+              </Card>
             </div>
 
-            <div className="col-12 col-lg-6">
-              <div className="card border h-100 rounded-4">
-                <div className="card-header bg-light border-0 d-flex align-items-center gap-2 py-3">
+            <div className="min-w-0">
+              <Card className="h-full overflow-hidden rounded-xl border border-border">
+                <div className="flex items-center gap-2 border-b border-border bg-muted/50 px-4 py-3">
                   <span
-                    className="rounded-circle d-inline-block"
+                    className="inline-block size-3 rounded-full"
                     style={{ width: 12, height: 12, background: "#ef4444" }}
                   />
-                  <span className="fw-bold text-dark">Predicción IA</span>
+                  <span className="font-semibold text-foreground">Predicción IA</span>
                 </div>
-                <div style={{ height: "340px" }} className="card-body">
+                <div style={{ height: "340px" }} className="p-4">
                   {hasError ? (
-                    <p className="text-center text-danger mb-0">
+                    <p className="mb-0 text-center text-destructive">
                       Error al cargar los datos del gráfico.
                     </p>
                   ) : !dataReady ? (
-                    <p className="text-center text-muted mb-0">
+                    <p className="mb-0 text-center text-muted-foreground">
                       Cargando datos del gráfico...
                     </p>
                   ) : (
@@ -461,30 +464,30 @@ export function GraficoIAhome() {
                     />
                   )}
                 </div>
-              </div>
+              </Card>
             </div>
           </div>
         </div>
 
-        <div className="px-3 pb-3">
-          <div className="row g-3">
-            <div className="col-12 col-lg-6">
-              <div
-                className="card  d-flex align-items-start gap-3 p-3"
+        <div className="px-4 pb-4">
+          <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+            <div className="min-w-0">
+              <Card
+                className="flex items-start gap-3 rounded-xl border border-border p-4"
                 style={{ background: "#ecfeff" }}
               >
                 <div
-                  className="d-flex align-items-center justify-content-center rounded-3"
+                  className="flex shrink-0 items-center justify-center rounded-lg"
                   style={{ background: "#dff8ec", width: 40, height: 40 }}
                 >
                   <Lightbulb size={20} color="#0f766e" />
                 </div>
                 <div>
-                  <div className="fw-bold text-dark mb-1">
+                  <div className="mb-1 font-semibold text-foreground">
                     ¿Cómo interpretarlo?
                   </div>
                   <div
-                    className="text-secondary small"
+                    className="text-sm leading-relaxed text-muted-foreground"
                     style={{ lineHeight: 1.6 }}
                   >
                     Los datos reales muestran las ventas efectivas de los
@@ -492,26 +495,26 @@ export function GraficoIAhome() {
                     días con un rango de confianza.
                   </div>
                 </div>
-              </div>
+              </Card>
             </div>
 
-            <div className="col-12 col-lg-6">
-              <div
-                className="card  d-flex align-items-start gap-3 p-3"
+            <div className="min-w-0">
+              <Card
+                className="flex items-start gap-3 rounded-xl border border-border p-4"
                 style={{ background: "#f5f3ff" }}
               >
                 <div
-                  className="d-flex align-items-center justify-content-center rounded-3"
+                  className="flex shrink-0 items-center justify-center rounded-lg"
                   style={{ background: "#ede9fe", width: 40, height: 40 }}
                 >
                   <Info size={20} color="#7c3aed" />
                 </div>
                 <div>
-                  <div className="fw-bold text-dark mb-1">
+                  <div className="mb-1 font-semibold text-foreground">
                     Información clave
                   </div>
                   <ul
-                    className="mb-0 ps-3 text-secondary small"
+                    className="mb-0 list-disc pl-5 text-sm leading-relaxed text-muted-foreground"
                     style={{ lineHeight: 1.7 }}
                   >
                     <li>
@@ -524,11 +527,11 @@ export function GraficoIAhome() {
                     </li>
                   </ul>
                 </div>
-              </div>
+              </Card>
             </div>
           </div>
         </div>
       </CondicionCarga>
-    </div>
+    </Card>
   );
 }

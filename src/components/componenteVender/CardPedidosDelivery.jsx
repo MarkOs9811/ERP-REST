@@ -17,6 +17,7 @@ import { useReactToPrint } from "react-to-print";
 import { TicketPedidosWeb } from "./TiketsType/TicketPedidosWeb";
 import ModalGenerales from "../componentesReutilizables/ModalGenerales";
 import { FormAsignarRider } from "../componenteDelivery/FormAsignarider";
+import { Button } from "../ui/button";
 
 const CardPedidoDelivery = ({ pedido, onOpenModal }) => {
   const formRiderRef = useRef(null);
@@ -66,12 +67,12 @@ const CardPedidoDelivery = ({ pedido, onOpenModal }) => {
       icono: <AlarmClock color="#ffc100" size={16} />,
       botones: (
         <div className="d-flex flex-column align-items-center justify-content-center gap-2 w-100 h-100">
-          <button
+          <Button
             className="btn-generico w-0 px-2 rounded-2"
             title="Notificar al cliente"
-          >
+           variant="default">
             <Megaphone size={18} />
-          </button>
+          </Button>
         </div>
       ),
     },
@@ -80,7 +81,7 @@ const CardPedidoDelivery = ({ pedido, onOpenModal }) => {
       icono: <AlarmClock color="#0e4988" size={16} />,
       botones: (
         <div className="d-flex flex-column align-items-center justify-content-center gap-2 w-100 h-100">
-          <button
+          <Button
             className="btn-generico w-0 px-2 rounded-2"
             onClick={(e) => {
               e.stopPropagation(); // Buena práctica
@@ -88,9 +89,9 @@ const CardPedidoDelivery = ({ pedido, onOpenModal }) => {
             }}
             type="button"
             title="Imprimir Ticket"
-          >
+           variant="default">
             <Printer size={18} />
-          </button>
+          </Button>
           <div style={{ display: "none" }}>
             <TicketPedidosWeb ref={componentRef} dataActual={datosVenta} />
           </div>
@@ -106,25 +107,25 @@ const CardPedidoDelivery = ({ pedido, onOpenModal }) => {
           {/* LÓGICA APLICADA AQUÍ: Solo mostrar si NO está pagado */}
           {pedido.estado_pago !== "pagado" && (
             <>
-              <button
+              <Button
                 type="button"
                 className="btn-generico w-0 px-2 rounded-2"
                 onClick={handleRealizarPago}
                 title="Procesar Pago"
-              >
+               variant="default">
                 <CheckCheckIcon size={18} />
-              </button>
+              </Button>
 
-              <button
+              <Button
                 className="btn-generico w-0 px-2 rounded-2"
                 onClick={(e) => {
                   e.stopPropagation();
                   ImprimirPedidoWeb();
                 }}
                 title="Imprimir Ticket"
-              >
+               variant="default">
                 <PrinterIcon size={18} />
-              </button>
+              </Button>
               <div style={{ display: "none" }}>
                 <TicketPedidosWeb ref={componentRef} dataActual={datosVenta} />
               </div>
@@ -157,7 +158,7 @@ const CardPedidoDelivery = ({ pedido, onOpenModal }) => {
         }`,
       }}
     >
-      <div className="row g-0 w-100 m-0">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-0 w-100 m-0">
         {/* Columna Izquierda (Texto) */}
         <div
           className="col-7 col-md-7 p-3 d-flex flex-column justify-content-center"

@@ -40,7 +40,7 @@ export function DashboardDelivery() {
       {/* =========================================
           SECCIÓN DE KPIs (TARJETAS AURA)
           ========================================= */}
-      <div className="row g-4">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
         {/* KPI Delivery (Web) */}
         <div className="col-12 col-md-6">
           <div className="fw-kpi-card kpi-web-aura border">

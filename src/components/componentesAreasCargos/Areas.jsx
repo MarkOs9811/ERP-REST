@@ -12,6 +12,8 @@ import ToastAlert from "../componenteToast/ToastAlert";
 import axiosInstance from "../../api/AxiosInstance";
 import { LayoutGrid, Plus, PlusIcon } from "lucide-react";
 import { BotonMotionGeneral } from "../componentesReutilizables/BotonMotionGeneral";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+
 
 export function Areas() {
   const [modalAddAreas, setModalAddArea] = useState();
@@ -70,8 +72,8 @@ export function Areas() {
     reset();
   };
   return (
-    <div className="card  ">
-      <div className="card-header  d-flex align-items-center justify-content-between">
+    <Card className="">
+      <CardHeader className="flex items-center justify-between">
         <div className="d-flex gap-2 align-items-center">
           <div className="p-2 alert alert-primary rounded-lg mb-0">
             <LayoutGrid className="text-danger" size={20} />
@@ -88,10 +90,10 @@ export function Areas() {
           fullWidth={true}
           onClick={() => setModalAddArea(true)}
         />
-      </div>
-      <div className="card-body">
-        <div className="row g-4">
-          <div className="col-md-6">
+      </CardHeader>
+      <CardContent className="">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+          <div className="md:col-span-6">
             <div className="h-100  rounded  border">
               <h5 className="fw-bold mb-3 text-center border-bottom p-4">
                 Distribución de Personal
@@ -108,7 +110,7 @@ export function Areas() {
                 )}
             </div>
           </div>
-          <div className="col-md-6">
+          <div className="md:col-span-6">
             <div className="list-group ">
               {isLoadingList && <Cargando />}
               {isErrorList && (
@@ -145,7 +147,7 @@ export function Areas() {
             </div>
           </div>
         </div>
-      </div>
+      </CardContent>
 
       <ModalRight
         isOpen={modalAddAreas}
@@ -164,6 +166,6 @@ export function Areas() {
           trigger={trigger}
         />
       </ModalRight>
-    </div>
+    </Card>
   );
 }

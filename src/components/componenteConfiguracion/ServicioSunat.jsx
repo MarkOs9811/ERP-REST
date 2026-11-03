@@ -14,6 +14,9 @@ import { AddSerieForm } from "./confiIntegraciones/AddSerieForm";
 import ModalAlertActivar from "../componenteToast/ModalAlertActivar";
 import ModalGeneral from "../componenteToast/ModalGeneral";
 import { EditFormSerie } from "./confiIntegraciones/EditFormSerie";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+
 
 export function ServicioSunat() {
   const [modalRightSunat, setModalRightSunat] = useState(false);
@@ -240,7 +243,7 @@ export function ServicioSunat() {
             ✔ Por defecto
           </span>
         ) : (
-          <button
+          <Button
             onClick={() => {
               setModalQuestionActivar(row?.id);
               setDataSerie(row);
@@ -253,9 +256,9 @@ export function ServicioSunat() {
               cursor: "pointer",
               fontSize: "12px",
             }}
-          >
+           variant="default">
             Establecer
-          </button>
+          </Button>
         ),
     },
     {
@@ -276,7 +279,7 @@ export function ServicioSunat() {
       center: true,
       cell: (row) => (
         <div className="d-flex gap-2 m-2">
-          <button
+          <Button
             type="button"
             className="btn-editar"
             disabled={row.usado == 1}
@@ -289,12 +292,12 @@ export function ServicioSunat() {
               setModalEditarSerie(true);
               setDataEditSerie(row);
             }}
-          >
+           variant="secondary">
             <Pen size={15} />
-          </button>
+          </Button>
 
           {row.estado == 1 ? (
-            <button
+            <Button
               type="button"
               onClick={() => {
                 setQuestionDesactivar(row);
@@ -307,20 +310,20 @@ export function ServicioSunat() {
                   : "Desactivar Serie"
               }
               className="btn-eliminar"
-            >
+             variant="destructive">
               <Trash size={15} />
-            </button>
+            </Button>
           ) : (
-            <button
+            <Button
               onClick={() => {
                 setQuestionEstado(true);
                 setDataActivar(row);
               }}
               title="Activar Serie"
               className="btn-activar btn-sm w-auto"
-            >
+             variant="default">
               <PowerIcon size={"auto"} />
-            </button>
+            </Button>
           )}
         </div>
       ),
@@ -348,8 +351,8 @@ export function ServicioSunat() {
   return (
     <div className="container w-100 p-3 d-flex gap-4 align-items-stretch flex-wrap flex-column">
       {/* Card de información SUNAT */}
-      <div
-        className="card p-4 shadow-sm flex-grow-1"
+      <Card
+        className="p-4 shadow-sm flex-grow-1"
         style={{ borderRadius: 18 }}
       >
         <div className="d-flex align-items-center mb-3">
@@ -407,37 +410,37 @@ export function ServicioSunat() {
         </div>
 
         <div className="d-flex">
-          <button
+          <Button
             className="btn btn-sm btn-outline-dark ms-auto"
             onClick={() => setModalRightSunat(true)}
-          >
+           variant="default">
             Configurar
-          </button>
+          </Button>
         </div>
-      </div>
-      <div className="card shadow-sm py-2">
-        <div className="card-header align-items-center d-flex justify-content-left">
+      </Card>
+      <Card className="shadow-sm py-2">
+        <CardHeader className="items-center flex justify-content-left">
           <File size={30} className="text-danger me-2" />
           <span className="fw-semibold h5">
             Información de Serie y correlativo
           </span>
           <div className="ms-auto">
-            <button
+            <Button
               type="button"
               className="btn-principal btn-icon"
               onClick={() => setModalAddSerieCorr(true)}
-            >
+             variant="default">
               <PlusIcon />
-            </button>
+            </Button>
           </div>
-        </div>
-        <div className="card-body p-0">
+        </CardHeader>
+        <CardContent className="p-0">
           <TablasGenerales
             columnas={columasSerieCorr}
             datos={confiSerieCorrelativo}
           />
-        </div>
-      </div>
+        </CardContent>
+      </Card>
       {/* MODAL PARA ACTUALIZAR LA CONFIGURACION DE INTEGRACION DE SUNAT */}
       <ModalRight
         isOpen={modalRightSunat}

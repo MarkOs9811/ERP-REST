@@ -4,6 +4,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import axiosInstance from "../../api/AxiosInstance";
 import ToastAlert from "../componenteToast/ToastAlert";
+import { Button } from "../ui/button";
 
 export function FormEditPromocion({ onClose, platos, promocionSelected }) {
   const queryClient = useQueryClient();
@@ -183,7 +184,7 @@ export function FormEditPromocion({ onClose, platos, promocionSelected }) {
       </div>
 
       {/* Fila de Precios y Descuentos */}
-      <div className="row g-3 mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-4">
         <div className="col-6">
           <label className="form-label fw-medium text-dark">
             Descuento (%)
@@ -244,7 +245,7 @@ export function FormEditPromocion({ onClose, platos, promocionSelected }) {
       </div>
 
       {/* Fechas de Vigencia */}
-      <div className="row g-3 mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-4">
         <div className="col-6">
           <label className="form-label fw-medium text-dark">Fecha Inicio</label>
           <div className="input-group ">
@@ -336,17 +337,17 @@ export function FormEditPromocion({ onClose, platos, promocionSelected }) {
 
       {/* Controles del Footer */}
       <div className="mt-auto d-flex justify-content-end gap-2 border-top p-3">
-        <button
+        <Button
           type="button"
           className="btn-cerrar-modal"
           onClick={onClose}
           disabled={isSubmitting}
-        >
+         variant="default">
           Cancelar
-        </button>
-        <button type="submit" className="btn-guardar" disabled={isSubmitting}>
+        </Button>
+        <Button type="submit" className="btn-guardar" disabled={isSubmitting} variant="default">
           {isSubmitting ? "Actualizando..." : "Actualizar Promoción"}
-        </button>
+        </Button>
       </div>
     </form>
   );

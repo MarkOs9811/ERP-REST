@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import ToastAlert from "../../componenteToast/ToastAlert";
 import axiosInstance from "../../../api/AxiosInstance";
 import { CheckCircle, XCircle } from "lucide-react";
+import { Button } from "../../ui/button";
 
 export function TesseractFormIntegracion({ dataIntegracion }) {
   const tesseractConfig =
@@ -39,7 +40,7 @@ export function TesseractFormIntegracion({ dataIntegracion }) {
           rutaEjecutable: data.rutaEjecutable.trim(),
           rutaCarpetaIdioma: data.rutaCarpetaIdioma.trim(),
           codigoIdioma: data.codigoIdioma.trim(),
-        }
+        },
       );
       if (response.data.success) {
         ToastAlert("success", "Configuración guardada con éxito");
@@ -65,12 +66,12 @@ export function TesseractFormIntegracion({ dataIntegracion }) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="p-3">
       <div class="card  border mb-3 rounded-4 overflow-hidden">
-        <div class="row g-0">
-          <div class="col-md-12 d-flex align-items-center justify-content-center bg-light position-relative">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-0">
+          <div class="md:col-span-12 d-flex align-items-center justify-content-center bg-light position-relative">
             <div class="animate-icon"></div>
           </div>
 
-          <div class="col-md-12 p-4">
+          <div class="md:col-span-12 p-4">
             <h3 class="fw-bold text-primary mb-3">¿Qué es Tesseract OCR?</h3>
             <p class="text-muted">
               <strong>Tesseract OCR</strong> es una herramienta de
@@ -197,26 +198,26 @@ export function TesseractFormIntegracion({ dataIntegracion }) {
       {/* Botones */}
       <div className="d-flex justify-content-end gap-2">
         {!isEditing ? (
-          <button
+          <Button
             type="button"
             className="btn-editar"
             onClick={() => setIsEditing(true)}
-          >
+           variant="secondary">
             Editar
-          </button>
+          </Button>
         ) : (
           <>
-            <button
+            <Button
               type="button"
               className="btn-cancelar"
               onClick={() => setIsEditing(false)}
               disabled={loading}
-            >
+             variant="default">
               Cancelar
-            </button>
-            <button type="submit" className="btn-guardar" disabled={loading}>
+            </Button>
+            <Button type="submit" className="btn-guardar" disabled={loading} variant="default">
               {loading ? "Guardando..." : "Guardar"}
-            </button>
+            </Button>
           </>
         )}
       </div>

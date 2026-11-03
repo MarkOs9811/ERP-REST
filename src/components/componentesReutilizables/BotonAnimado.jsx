@@ -1,5 +1,6 @@
 import { CheckCheck } from "lucide-react";
 import "../../css/EstiloBotonMotion.css";
+import { Button } from "../ui/button";
 
 const BotonAnimado = ({
   children,
@@ -31,13 +32,13 @@ const BotonAnimado = ({
   };
 
   return (
-    <button
+    <Button
       className={clasesFinal}
       type={type}
       onClick={type === "button" ? handleClick : undefined}
       disabled={isBtnDisabled} // 5. Bloqueo nativo HTML
       {...props}
-    >
+     variant="default">
       {loading ? (
         <div className="d-flex align-items-center justify-content-center">
           <div
@@ -56,7 +57,7 @@ const BotonAnimado = ({
         icon
       )}
       {children}
-    </button>
+    </Button>
   );
 };
 

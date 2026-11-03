@@ -6,7 +6,6 @@ import { faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { TablasGenerales } from "../componentesReutilizables/TablasGenerales";
-import { Alert } from "react-bootstrap";
 import ModalAlertQuestion from "../componenteToast/ModalAlertQuestion";
 import {
   BtnEditar,
@@ -18,6 +17,7 @@ import ModalAlertActivar from "../componenteToast/ModalAlertActivar";
 import ModalRight from "../componentesReutilizables/ModalRight";
 import { FormEditarInventario } from "./FormEditarInventario";
 import { AlertCircle, Eye, EyeIcon } from "lucide-react";
+import { Button } from "../ui/button";
 
 export function InventarioList({ search }) {
   const [inventario, setInvetario] = useState([]);
@@ -171,28 +171,28 @@ export function InventarioList({ search }) {
                   title="Eliminar Producto"
                 />
 
-                <button
+                <Button
                   className=" btn-desactivar"
                   onClick={() => {
                     setQuestionEliminar(true);
                     setdataProducto(row);
                   }}
                   title="Ocultar producto"
-                >
+                 variant="default">
                   <FontAwesomeIcon icon={faEyeSlash} />
-                </button>
+                </Button>
               </>
             ) : (
-              <button
+              <Button
                 className="btn btn-activar"
                 title="Activar el producto"
                 onClick={() => {
                   setQuestionActivar(true);
                   setdataProducto(row);
                 }}
-              >
+               variant="default">
                 <EyeIcon />
-              </button>
+              </Button>
             )}
           </div>
         );

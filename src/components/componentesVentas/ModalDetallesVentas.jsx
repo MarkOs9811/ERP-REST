@@ -4,6 +4,7 @@ import { useReactToPrint } from "react-to-print";
 import { useRef } from "react";
 import "../../css/estilosVentas/EstilosDetallesVentas.css"; // <-- Importamos los estilos Fire Wok
 import { formatearFecha } from "../../utils/formatearFechas";
+import { Button } from "../ui/button";
 
 export function ModalDetallesVentas({ dataVentas }) {
   const {
@@ -80,7 +81,7 @@ export function ModalDetallesVentas({ dataVentas }) {
       </div>
 
       {/* Grid de Información General */}
-      <div className="row fw-info-grid">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-4fw-info-grid">
         <div className="col-12 col-md-6 d-flex flex-column fw-info-col">
           <span className="fw-label">Fecha</span>
           <span className="fw-value">{formatearFecha(created_at)}</span>
@@ -174,10 +175,10 @@ export function ModalDetallesVentas({ dataVentas }) {
 
       {/* Acciones */}
       <div className="d-flex justify-content-end fw-actions-section">
-        <button onClick={() => handlePrint()} className="fw-btn-print">
+        <Button onClick={() => handlePrint()} className="fw-btn-print" variant="default">
           <Printer size={18} />
           <span>Imprimir Ticket</span>
-        </button>
+        </Button>
 
         <div style={{ display: "none" }}>
           <TicketImpresion ref={componentRef} venta={ventaParaImpresion} />

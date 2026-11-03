@@ -2,6 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { User, Phone, Mail, Hash, Car } from "lucide-react";
 import { PostData } from "../../service/CRUD/PostData";
+import { Button } from "../ui/button";
 
 export function FormAddRepartidor({ onClose }) {
   const queryClient = useQueryClient();
@@ -31,7 +32,7 @@ export function FormAddRepartidor({ onClose }) {
       email: data.email,
       placa: data.placa,
       cargo: "delivery", // Se asume por tu filtro en el frontend
-      estado: 1 // Por defecto activo al crear
+      estado: 1, // Por defecto activo al crear
     };
 
     const exito = await PostData("delivery/repartidores", payload);
@@ -43,12 +44,19 @@ export function FormAddRepartidor({ onClose }) {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="d-flex flex-column h-100 p-4">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="d-flex flex-column h-100 p-4"
+    >
       {/* DATOS PERSONALES */}
-      <h6 className="fw-bold mb-3 mt-2 text-dark border-bottom pb-2">Datos Personales</h6>
-      <div className="row g-3 mb-4">
+      <h6 className="fw-bold mb-3 mt-2 text-dark border-bottom pb-2">
+        Datos Personales
+      </h6>
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-4">
         <div className="col-12">
-          <label className="form-label fw-medium text-dark small">Nombres</label>
+          <label className="form-label fw-medium text-dark small">
+            Nombres
+          </label>
           <div className="input-group shadow-sm">
             <span className="input-group-text bg-white">
               <User size={16} className="text-muted" />
@@ -60,11 +68,15 @@ export function FormAddRepartidor({ onClose }) {
               {...register("nombres", { required: "Campo obligatorio" })}
             />
           </div>
-          {errors.nombres && <span className="text-danger small">{errors.nombres.message}</span>}
+          {errors.nombres && (
+            <span className="text-danger small">{errors.nombres.message}</span>
+          )}
         </div>
 
         <div className="col-12">
-          <label className="form-label fw-medium text-dark small">Apellidos</label>
+          <label className="form-label fw-medium text-dark small">
+            Apellidos
+          </label>
           <div className="input-group shadow-sm">
             <span className="input-group-text bg-white">
               <User size={16} className="text-muted" />
@@ -76,11 +88,17 @@ export function FormAddRepartidor({ onClose }) {
               {...register("apellidos", { required: "Campo obligatorio" })}
             />
           </div>
-          {errors.apellidos && <span className="text-danger small">{errors.apellidos.message}</span>}
+          {errors.apellidos && (
+            <span className="text-danger small">
+              {errors.apellidos.message}
+            </span>
+          )}
         </div>
-        
+
         <div className="col-6">
-          <label className="form-label fw-medium text-dark small">DNI / Documento</label>
+          <label className="form-label fw-medium text-dark small">
+            DNI / Documento
+          </label>
           <div className="input-group shadow-sm">
             <span className="input-group-text bg-white">
               <Hash size={16} className="text-muted" />
@@ -92,11 +110,15 @@ export function FormAddRepartidor({ onClose }) {
               {...register("dni", { required: "Campo obligatorio" })}
             />
           </div>
-          {errors.dni && <span className="text-danger small">{errors.dni.message}</span>}
+          {errors.dni && (
+            <span className="text-danger small">{errors.dni.message}</span>
+          )}
         </div>
 
         <div className="col-6">
-          <label className="form-label fw-medium text-dark small">Teléfono</label>
+          <label className="form-label fw-medium text-dark small">
+            Teléfono
+          </label>
           <div className="input-group shadow-sm">
             <span className="input-group-text bg-white">
               <Phone size={16} className="text-muted" />
@@ -108,15 +130,21 @@ export function FormAddRepartidor({ onClose }) {
               {...register("telefono", { required: "Campo obligatorio" })}
             />
           </div>
-          {errors.telefono && <span className="text-danger small">{errors.telefono.message}</span>}
+          {errors.telefono && (
+            <span className="text-danger small">{errors.telefono.message}</span>
+          )}
         </div>
       </div>
 
       {/* DATOS DE CONTACTO & VEHÍCULO */}
-      <h6 className="fw-bold mb-3 text-dark border-bottom pb-2">Información Adicional</h6>
-      <div className="row g-3 mb-4">
+      <h6 className="fw-bold mb-3 text-dark border-bottom pb-2">
+        Información Adicional
+      </h6>
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-4">
         <div className="col-12">
-          <label className="form-label fw-medium text-dark small">Correo Electrónico (Opcional)</label>
+          <label className="form-label fw-medium text-dark small">
+            Correo Electrónico (Opcional)
+          </label>
           <div className="input-group shadow-sm">
             <span className="input-group-text bg-white">
               <Mail size={16} className="text-muted" />
@@ -131,7 +159,9 @@ export function FormAddRepartidor({ onClose }) {
         </div>
 
         <div className="col-12">
-          <label className="form-label fw-medium text-dark small">Placa de Vehículo (Moto/Auto)</label>
+          <label className="form-label fw-medium text-dark small">
+            Placa de Vehículo (Moto/Auto)
+          </label>
           <div className="input-group shadow-sm mb-1">
             <span className="input-group-text bg-white">
               <Car size={16} className="text-muted" />
@@ -151,17 +181,17 @@ export function FormAddRepartidor({ onClose }) {
 
       {/* Controles del Footer */}
       <div className="mt-auto d-flex justify-content-end gap-2 border-top p-3">
-        <button
+        <Button
           type="button"
           className="btn-cerrar-modal"
           onClick={onClose}
           disabled={isSubmitting}
-        >
+         variant="default">
           Cancelar
-        </button>
-        <button type="submit" className="btn-guardar" disabled={isSubmitting}>
+        </Button>
+        <Button type="submit" className="btn-guardar" disabled={isSubmitting} variant="default">
           {isSubmitting ? "Guardando..." : "Guardar Repartidor"}
-        </button>
+        </Button>
       </div>
     </form>
   );

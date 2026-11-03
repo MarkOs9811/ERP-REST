@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axiosInstance from "../../api/AxiosInstance";
 import ToastAlert from "../componenteToast/ToastAlert";
 import { X } from "lucide-react";
+import { Button } from "../ui/button";
 
 export function CategoriaEditar({
   handleCloseModal,
@@ -59,16 +60,16 @@ export function CategoriaEditar({
       </div>
       {/* Botones */}
       <div className="d-flex justify-content-end my-3">
-        <button
+        <Button
           type="button"
           className="btn-cerrar-modal btn-cerrar me-2"
           onClick={handleCloseModal}
-        >
+         variant="default">
           <X /> Cerrar
-        </button>
-        <button type="submit" className="btn-guardar">
+        </Button>
+        <Button type="submit" className="btn-guardar" variant="default">
           <i className="fas fa-save"></i> Guardar Cambios
-        </button>
+        </Button>
       </div>
     </form>
   );

@@ -1,4 +1,7 @@
 import { useForm } from "react-hook-form";
+import { Button } from "../ui/button";
+import { Card } from "@/components/ui/card";
+
 
 export function SoporteContacto() {
   const {
@@ -16,8 +19,8 @@ export function SoporteContacto() {
 
   return (
     <div className="w-100 p-3">
-      <div
-        className="card border p-4"
+      <Card
+        className="border p-4"
         style={{ maxWidth: 600, margin: "0 auto", borderRadius: 18 }}
       >
         <h3 className="fw-bold mb-3" style={{ color: "#5a7a98" }}>
@@ -84,9 +87,9 @@ export function SoporteContacto() {
             <div className="text-danger small">{errors.mensaje?.message}</div>
           </div>
           <div className="d-flex justify-content-end">
-            <button type="submit" className="btn-sm btn-guardar fw-bold">
+            <Button type="submit" className="btn-sm btn-guardar fw-bold" variant="default">
               Enviar mensaje
-            </button>
+            </Button>
           </div>
           {isSubmitSuccessful && (
             <div className="alert alert-success mt-3 py-2 px-3">
@@ -99,7 +102,7 @@ export function SoporteContacto() {
           También puedes escribirnos a <b>marcosparitorres@gmail.com</b> o
           llamarnos al <b>+51 970435527</b>
         </div>
-      </div>
+      </Card>
     </div>
   );
 }

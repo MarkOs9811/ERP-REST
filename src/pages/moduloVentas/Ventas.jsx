@@ -20,11 +20,11 @@ import GraficoLineaEjemplo from "../../graficosChar/GraficoLineVentas";
 import GraficoLineaDayVentas from "../../graficosChar/GraficoLineDayVentas";
 import GraficoMetodoPago from "../../graficosChar/GraficoMetodoPago";
 
-// IMPORTAMOS EL HELPER DE MONEDA
-
-// Estilos
+// Estilos y Utilidades
 import "../../css/EstilosVentas.css";
 import { formatMoneda } from "../../utils/currency";
+import { Button } from "../../components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 /* =================================================================================
    1. SUB-COMPONENTE REUTILIZABLE: Tarjeta KPI
@@ -38,14 +38,14 @@ const KpiCard = ({
   esPositivo,
 }) => {
   return (
-    <div
-      className="card p-3 d-flex flex-column justify-content-between h-100"
+    <Card
+      className="p-3 flex flex-col justify-between h-full"
       style={{ backgroundColor: "var(--bg-card)", minHeight: "140px" }}
     >
-      <div className="d-flex align-items-center gap-2 mb-3">
+      <div className="flex items-center gap-2 mb-3">
         {/* Ícono Circular */}
         <span
-          className="rounded-circle p-3"
+          className="rounded-full p-3 flex items-center justify-center"
           style={{
             backgroundColor: `var(--bg-${colorClass}-soft)`,
             color: `var(--fw-${colorClass})`,
@@ -56,7 +56,7 @@ const KpiCard = ({
 
         {/* Porcentaje */}
         <span
-          className="ms-auto fw-bold d-flex align-items-center gap-1"
+          className="ml-auto font-bold flex items-center gap-1"
           style={{ fontSize: "0.9rem", color: `var(--fw-${colorClass})` }}
         >
           {esPositivo ? <TrendingUp size={16} /> : <TrendingDown size={16} />}
@@ -68,13 +68,13 @@ const KpiCard = ({
       {/* Textos */}
       <div>
         <span
-          className="text-muted fw-bold"
-          style={{ fontSize: "0.85rem", display: "block", marginBottom: "4px" }}
+          className="text-muted font-bold block mb-1"
+          style={{ fontSize: "0.85rem" }}
         >
           {titulo}
         </span>
         <h3
-          className="fw-bold mb-0"
+          className="font-bold mb-0"
           style={{
             fontSize: "1.3rem",
             color:
@@ -83,11 +83,10 @@ const KpiCard = ({
                 : "var(--text-main)",
           }}
         >
-          {/*      USO DEL HELPER AQUÍ */}
           {formatMoneda(monto)}
         </h3>
       </div>
-    </div>
+    </Card>
   );
 };
 
@@ -110,7 +109,6 @@ export function Ventas() {
     const ventas = Array.isArray(ventasData) ? ventasData : [];
     const now = new Date();
 
-    // Fechas clave
     const hoy = {
       dia: now.getDate(),
       mes: now.getMonth(),
@@ -129,21 +127,18 @@ export function Ventas() {
       const fecha = new Date(venta.created_at);
       const monto = parseFloat(venta.total || 0);
 
-      // Sumar Mes Actual
       if (
         fecha.getMonth() + 1 === mesActual &&
         fecha.getFullYear() === anioActual
       ) {
         totalMesActual += monto;
       }
-      // Sumar Mes Pasado
       if (
         fecha.getMonth() + 1 === mesPasado &&
         fecha.getFullYear() === anioMesPasado
       ) {
         totalMesPasado += monto;
       }
-      // Sumar Hoy
       if (
         fecha.getDate() === hoy.dia &&
         fecha.getMonth() === hoy.mes &&
@@ -172,149 +167,144 @@ export function Ventas() {
 
   // --- C. RENDERIZADO DE LA INTERFAZ ---
   return (
-    <div className="ventas-root container-fluid p-0">
-      <div className="row g-4">
-        {/* ================= FILA 1: KPIs PRINCIPALES (General) ================= */}
-        <div className="col-12">
-          <div className="row g-3">
-            {/* Ventas Hoy */}
-            <div className="col-12 col-md-6 col-lg-3">
-              <CondicionCarga isLoading={isLoading} isError={isError}>
-                <div className="card py-2 h-100 ">
-                  <div className="card-body d-flex flex-column justify-content-center">
-                    <div className="d-flex justify-content-between align-items-start mb-2">
-                      <p className="fw-bold m-0">Ventas Hoy</p>
-                      <div>
-                        {" "}
-                        <button
-                          type="button"
-                          className="btn-informativo"
-                          onClick={() =>
-                            GetReporteExcel(
-                              "/reporteVentasHOY",
-                              null,
-                              null,
-                              "Ventas_Hoy",
-                            )
-                          }
-                          title="Descargar Reporte"
-                        >
-                          <FileText />
-                          Reporte
-                        </button>
-                      </div>
-                    </div>
-                    <p
-                      className="totalVentasTitulo mb-0"
-                      style={{ fontSize: "2rem" }}
+    <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+      {/* ================= FILA 1: KPIs PRINCIPALES (General) ================= */}
+      <div className="col-span-full">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+          {/* Ventas Hoy */}
+          <div className="col-span-12 md:col-span-6 lg:col-span-3">
+            <CondicionCarga isLoading={isLoading} isError={isError}>
+              <Card className="py-2 h-full">
+                <CardContent className="flex flex-col justify-center">
+                  <div className="flex justify-between items-start mb-2">
+                    <p className="font-bold m-0">Ventas Hoy</p>
+                    <Button
+                      type="button"
+                      className="btn-informativo"
+                      onClick={() =>
+                        GetReporteExcel(
+                          "/reporteVentasHOY",
+                          null,
+                          null,
+                          "Ventas_Hoy",
+                        )
+                      }
+                      title="Descargar Reporte"
+                      variant="default"
                     >
-                      {/*      USO DEL HELPER AQUÍ */}
-                      {formatMoneda(metricas.hoy)}
-                    </p>
+                      <FileText />
+                      Reporte
+                    </Button>
                   </div>
-                </div>
-              </CondicionCarga>
-            </div>
+                  <p
+                    className="totalVentasTitulo mb-0"
+                    style={{ fontSize: "2rem" }}
+                  >
+                    {formatMoneda(metricas.hoy)}
+                  </p>
+                </CardContent>
+              </Card>
+            </CondicionCarga>
+          </div>
 
-            {/* Este Mes */}
-            <div className="col-12 col-md-6 col-lg-3">
-              <CondicionCarga
-                isLoading={isLoading}
-                isError={isError}
-                mode="single-card"
-              >
-                <KpiCard
-                  titulo="Este Mes"
-                  monto={metricas.mesActual}
-                  porcentaje={metricas.crecimientoPct}
-                  icono={Store}
-                  colorClass="emerald"
-                  esPositivo={true}
-                />
-              </CondicionCarga>
-            </div>
+          {/* Este Mes */}
+          <div className="col-span-12 md:col-span-6 lg:col-span-3">
+            <CondicionCarga
+              isLoading={isLoading}
+              isError={isError}
+              mode="single-card"
+            >
+              <KpiCard
+                titulo="Este Mes"
+                monto={metricas.mesActual}
+                porcentaje={metricas.crecimientoPct}
+                icono={Store}
+                colorClass="emerald"
+                esPositivo={true}
+              />
+            </CondicionCarga>
+          </div>
 
-            {/* Mes Pasado */}
-            <div className="col-12 col-md-6 col-lg-3">
-              <CondicionCarga
-                isLoading={isLoading}
-                isError={isError}
-                mode="single-card"
-              >
-                <KpiCard
-                  titulo="Mes Pasado"
-                  monto={metricas.mesPasado}
-                  porcentaje={metricas.mensualPct}
-                  icono={CalendarFold}
-                  colorClass="saffron"
-                  esPositivo={true}
-                />
-              </CondicionCarga>
-            </div>
+          {/* Mes Pasado */}
+          <div className="col-span-12 md:col-span-6 lg:col-span-3">
+            <CondicionCarga
+              isLoading={isLoading}
+              isError={isError}
+              mode="single-card"
+            >
+              <KpiCard
+                titulo="Mes Pasado"
+                monto={metricas.mesPasado}
+                porcentaje={metricas.mensualPct}
+                icono={CalendarFold}
+                colorClass="saffron"
+                esPositivo={true}
+              />
+            </CondicionCarga>
+          </div>
 
-            {/* Diferencia */}
-            <div className="col-12 col-md-6 col-lg-3">
-              <CondicionCarga
-                isLoading={isLoading}
-                isError={isError}
-                mode="single-card"
-              >
-                <KpiCard
-                  titulo="Diferencia"
-                  monto={metricas.diferencia}
-                  porcentaje={metricas.crecimientoPct}
-                  icono={
-                    metricas.esDiferenciaPositiva ? TrendingUp : TrendingDown
-                  }
-                  colorClass={
-                    metricas.esDiferenciaPositiva ? "emerald" : "strawberry"
-                  }
-                  esPositivo={metricas.esDiferenciaPositiva}
-                />
-              </CondicionCarga>
-            </div>
+          {/* Diferencia */}
+          <div className="col-span-12 md:col-span-6 lg:col-span-3">
+            <CondicionCarga
+              isLoading={isLoading}
+              isError={isError}
+              mode="single-card"
+            >
+              <KpiCard
+                titulo="Diferencia"
+                monto={metricas.diferencia}
+                porcentaje={metricas.crecimientoPct}
+                icono={
+                  metricas.esDiferenciaPositiva ? TrendingUp : TrendingDown
+                }
+                colorClass={
+                  metricas.esDiferenciaPositiva ? "emerald" : "strawberry"
+                }
+                esPositivo={metricas.esDiferenciaPositiva}
+              />
+            </CondicionCarga>
           </div>
         </div>
+      </div>
 
-        {/* ================= FILA 2: PROTAGONISTAS ================= */}
-        <div className="col-12 col-lg-8">
-          <CondicionCarga isLoading={isLoading} isError={isError}>
-            <div className="card p-4 h-100">
-              <GraficoBarVentas />
-            </div>
-          </CondicionCarga>
-        </div>
+      {/* ================= FILA 2: PROTAGONISTAS ================= */}
+      <div className="col-span-12 lg:col-span-8">
+        <CondicionCarga isLoading={isLoading} isError={isError}>
+          <Card className="p-4 h-full">
+            <GraficoBarVentas />
+          </Card>
+        </CondicionCarga>
+      </div>
 
-        <div className="col-12 col-lg-4">
-          <CondicionCarga isLoading={isLoading} isError={isError}>
-            <PlatoMasVendido />
-          </CondicionCarga>
-        </div>
+      <div className="col-span-12 lg:col-span-4">
+        <CondicionCarga isLoading={isLoading} isError={isError}>
+          <PlatoMasVendido />
+        </CondicionCarga>
+      </div>
 
-        {/* ================= FILA 3: ANÁLISIS DETALLADO ================= */}
-        <div className="col-12 col-lg-6">
-          <CondicionCarga isLoading={isLoading} isError={isError}>
-            <div className="card p-4 h-100 m-0">
-              <GraficoLineaEjemplo />
-            </div>
-          </CondicionCarga>
-        </div>
+      {/* ================= FILA 3: ANÁLISIS DETALLADO ================= */}
+      <div className="col-span-12 lg:col-span-6">
+        <CondicionCarga isLoading={isLoading} isError={isError}>
+          <Card className="p-4 h-full m-0">
+            <GraficoLineaEjemplo />
+          </Card>
+        </CondicionCarga>
+      </div>
 
-        <div className="col-12 col-lg-3">
-          <CondicionCarga isLoading={isLoading} isError={isError}>
-            <div className="card p-4 h-100 m-0">
-              <GraficoLineaDayVentas />
-            </div>
-          </CondicionCarga>
-        </div>
+      <div className="col-span-12 lg:col-span-3">
+        <CondicionCarga isLoading={isLoading} isError={isError}>
+          <Card className="p-4 h-full m-0">
+            <GraficoLineaDayVentas />
+          </Card>
+        </CondicionCarga>
+      </div>
 
-        <div className="col-12 col-lg-3">
-          <CondicionCarga isLoading={isLoading} isError={isError}>
-            <div className="card h-100 p-4">
-              <GraficoMetodoPago />
-            </div>
-          </CondicionCarga>
-        </div>
+      <div className="col-span-12 lg:col-span-3">
+        <CondicionCarga isLoading={isLoading} isError={isError}>
+          <Card className="h-full p-4">
+            <GraficoMetodoPago />
+          </Card>
+        </CondicionCarga>
       </div>
     </div>
   );

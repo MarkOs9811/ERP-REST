@@ -1,5 +1,6 @@
 import { Controller } from "react-hook-form";
 import { capitalizeFirstLetter } from "../../../hooks/FirstLetterUp";
+import { Button } from "../../ui/button";
 
 export function FormularioAddHorasExtras({
   onSubmit,
@@ -80,13 +81,13 @@ export function FormularioAddHorasExtras({
                   usuario.empleado.persona.apellidos.toLowerCase(),
                 )}
               </span>
-              <button
+              <Button
                 type="button"
                 className="btn-close btn-close-dark ms-2"
                 aria-label="Eliminar"
                 onClick={() => removeUsuario(usuario.id)}
                 style={{ fontSize: "10px" }}
-              ></button>
+               variant="default"></Button>
             </span>
           ))}
         </div>
@@ -146,9 +147,9 @@ export function FormularioAddHorasExtras({
         </div>
       </div>
 
-      <button type="submit" className="btn-guardar ">
+      <Button type="submit" className="btn-guardar " variant="default">
         Registrar
-      </button>
+      </Button>
     </form>
   );
 }

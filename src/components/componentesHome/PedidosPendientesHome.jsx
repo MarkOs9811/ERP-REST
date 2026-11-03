@@ -1,4 +1,6 @@
 import { ShoppingCart } from "lucide-react";
+import { Button } from "../ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 
 export function PedidosPendientesHome() {
@@ -20,9 +22,9 @@ export function PedidosPendientesHome() {
   };
 
   return (
-    <div className="col-md-4">
-      <div className="card h-100">
-        <div className="card-body">
+    <div className="md:col-span-4">
+      <Card className="h-full">
+        <CardContent className="">
           <h5 className="text-dark mb-3 d-flex align-items-center">
             <ShoppingCart
               color={"var(--dark-red)"}
@@ -52,15 +54,15 @@ export function PedidosPendientesHome() {
                 </div>
                 <div className="d-flex justify-content-between mt-1">
                   <small className="text-muted">Tiempo: {pedido.tiempo}</small>
-                  <button className="btn btn-sm btn-outline-primary">
+                  <Button className="btn btn-sm btn-outline-primary" variant="default">
                     Ver detalle
-                  </button>
+                  </Button>
                 </div>
               </div>
             ))}
           </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

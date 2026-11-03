@@ -31,6 +31,9 @@ import ListReservas from "../componentesVentas/reservasMesas/ListReservas";
 import FormAddReservarMesa from "../componentesVentas/reservasMesas/FormAddReservarMesa";
 import { BadgeComponent } from "../componentesReutilizables/BadgeComponent";
 import echoEvents from "../../api/echoEvents";
+import { Button } from "../ui/button";
+import { Card } from "@/components/ui/card";
+
 
 const TiempoOcupacion = ({ fechaApertura }) => {
   const [minutos, setMinutos] = useState(0);
@@ -205,22 +208,22 @@ export function MesasList() {
   const mesasReservadas = listaMesas.filter((mesa) => mesa.estado === 2).length;
 
   return (
-    <div className="card mesas-map m-0 h-100 overflow-auto p-3">
+    <Card className="mesas-map m-0 h-full overflow-auto p-3">
       {/* HEADER PRINCIPAL */}
       <div className="d-flex flex-wrap gap-3 justify-content-between align-items-center mb-3 px-2">
         <div className="d-flex align-items-center gap-3">
           <h3 className="m-0 fw-bold" style={{ color: "var(--text-main)" }}>
             Mapa de Mesas
           </h3>
-          <button
+          <Button
             className="btn btn-sm btn-outline-dark d-flex align-items-center gap-2 rounded-pill px-3"
             onClick={() => {
               setVistaReserva("lista"); // Siempre abrimos primero la lista
               setModalReservasOpen(true);
             }}
-          >
+           variant="default">
             <CalendarDays size={16} /> Reservas
-          </button>
+          </Button>
         </div>
 
         <div className="mesa-status-summary d-flex align-items-center gap-3 bg-white px-3 py-2 rounded-pill border">
@@ -253,7 +256,7 @@ export function MesasList() {
       {/* RENDERIZADO DE PÍLDORAS PARA EL FILTRO POR PISO */}
       <div className="d-flex gap-2 px-2 mb-3 overflow-auto pb-1">
         {pisosUnicos.map((piso) => (
-          <button
+          <Button
             key={piso}
             type="button"
             className={`mesa-floor-filter badge rounded-pill px-3 py-2 border transition-smooth ${
@@ -263,15 +266,15 @@ export function MesasList() {
             }`}
             style={{ cursor: "pointer", fontSize: "0.85rem" }}
             onClick={() => setFiltroPiso(piso)}
-          >
+           variant="default">
             {piso === "Todos" ? "Todos los Pisos" : `Piso ${piso}`}
-          </button>
+          </Button>
         ))}
       </div>
 
       <CondicionCarga isLoading={loading} isError={error} mode="cards">
         <div className="p-1">
-          <div className="row g-3">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
             {mesasFiltradas.map((mesa) => (
               <div key={mesa.id} className="col-6 col-md-4 col-lg-3 col-xl-2">
                 <div
@@ -371,7 +374,7 @@ export function MesasList() {
                           style={{ fontSize: "0.85rem" }}
                         >
                           <li>
-                            <button
+                            <Button
                               className="dropdown-item d-flex align-items-center gap-2 py-2"
                               onClick={(e) => {
                                 e.stopPropagation();
@@ -381,16 +384,16 @@ export function MesasList() {
                                 });
                                 setModalTransferir(true);
                               }}
-                            >
+                             variant="default">
                               <ArrowRightLeft size={15} className="text-dark" />{" "}
                               Trasladar Mesa
-                            </button>
+                            </Button>
                           </li>
                           <li>
                             <hr className="dropdown-divider my-1" />
                           </li>
                           <li>
-                            <button
+                            <Button
                               className="dropdown-item d-flex align-items-center gap-2 py-2 text-danger"
                               onClick={(e) => {
                                 e.stopPropagation();
@@ -400,9 +403,9 @@ export function MesasList() {
                                 });
                                 setModalQuestion(true);
                               }}
-                            >
+                             variant="default">
                               <Trash2 size={15} /> Anular Pedido
-                            </button>
+                            </Button>
                           </li>
                         </ul>
                       </div>
@@ -425,13 +428,13 @@ export function MesasList() {
                         <div className="d-flex align-items-center gap-1 flex-wrap">
                           <BadgeComponent
                             label={`PED-${mesa?.preventas?.[0]?.idPedido}`}
-                            className=" small px-2"
+                            className="text-xs px-2"
                             variant="secondary"
                           />
                           {mesa.estado_cocina !== null &&
                             mesa.estado_cocina !== undefined && (
                               <BadgeComponent
-                                className="small px-2 "
+                                className="text-xs px-2"
                                 label={
                                   mesa.estado_cocina === 0
                                     ? "En espera"
@@ -549,7 +552,7 @@ export function MesasList() {
                         <div className="mesa-action-label flex-grow-1 text-danger justify-content-center fw-bold py-1">
                           <Eye size={15} className="me-1" /> VER PEDIDO
                         </div>
-                        <button
+                        <Button
                           className="btn btn-outline-secondary d-flex align-items-center justify-content-center"
                           style={{
                             width: "35px",
@@ -560,9 +563,9 @@ export function MesasList() {
                             handleImprimirPrecuentaRapida(e, mesa)
                           }
                           title="Imprimir Pre-cuenta"
-                        >
+                         variant="default">
                           <PrinterIcon size={15} />
-                        </button>
+                        </Button>
                       </div>
                     )}
 
@@ -633,6 +636,6 @@ export function MesasList() {
           />
         )}
       </ModalRight>
-    </div>
+    </Card>
   );
 }

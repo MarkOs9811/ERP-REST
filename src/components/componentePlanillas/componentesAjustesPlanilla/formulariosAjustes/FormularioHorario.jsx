@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { useQueryClient } from "@tanstack/react-query";
 import axiosInstance from "../../../../api/AxiosInstance";
 import ToastAlert from "../../../componenteToast/ToastAlert";
+import { Button } from "../../../ui/button";
 
 export function FormularioHorario({ onClose, isEdit, dataEdit = null }) {
   const [loadingSave, setLoadingSave] = useState(false);
@@ -107,26 +108,26 @@ export function FormularioHorario({ onClose, isEdit, dataEdit = null }) {
 
       {/* 6. Botones dinámicos */}
       <div className="d-flex justify-content-end gap-2">
-        <button
+        <Button
           type="button"
           className="btn-cerrar-modal"
           onClick={onClose}
           title="Cerrar formulario"
-        >
+         variant="default">
           Cancelar
-        </button>
-        <button
+        </Button>
+        <Button
           type="Submit"
           className="btn-guardar"
           title={isEditMood ? "Actualizar horario" : "Guardar horario"}
           disabled={loadingSave}
-        >
+         variant="default">
           {loadingSave ? (
             <span className="load"></span>
           ) : (
             <span>{isEditMood ? "Actualizar" : "Guardar"}</span>
           )}
-        </button>
+        </Button>
       </div>
     </form>
   );

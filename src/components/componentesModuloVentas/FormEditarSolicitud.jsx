@@ -14,6 +14,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { GetCategoria } from "../../service/serviceAlmacen/GetCategoria";
 import { GetAreas } from "../../service/GetAreas";
 import { GetUnidades } from "../../service/serviceAlmacen/GetUnidades";
+import { Button } from "../ui/button";
 
 export function FormEditarSolicitud({ dataSolicitud, onClose }) {
   const queryClient = useQueryClient();
@@ -113,8 +114,8 @@ export function FormEditarSolicitud({ dataSolicitud, onClose }) {
         className="d-flex flex-column flex-grow-1 h-100"
         style={{ minHeight: 0 }}
       >
-        <div className="row g-3">
-          <div className="col-md-6">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+          <div className="md:col-span-6">
             <label className="form-label ">
               <Tag size={18} /> Producto
             </label>
@@ -134,7 +135,7 @@ export function FormEditarSolicitud({ dataSolicitud, onClose }) {
               </div>
             )}
           </div>
-          <div className="col-md-3">
+          <div className="md:col-span-3">
             <label className="form-label ">
               <Hash size={18} /> Cantidad
             </label>
@@ -151,7 +152,7 @@ export function FormEditarSolicitud({ dataSolicitud, onClose }) {
               <div className="invalid-feedback">{errors.cantidad.message}</div>
             )}
           </div>
-          <div className="col-md-3">
+          <div className="md:col-span-3">
             <label className="form-label ">
               <ListChecks size={18} /> Unidad
             </label>
@@ -174,7 +175,7 @@ export function FormEditarSolicitud({ dataSolicitud, onClose }) {
               <div className="invalid-feedback">{errors.idUnidad.message}</div>
             )}
           </div>
-          <div className="col-md-6">
+          <div className="md:col-span-6">
             <label className="form-label ">
               <Tag size={18} /> Categoría
             </label>
@@ -201,7 +202,7 @@ export function FormEditarSolicitud({ dataSolicitud, onClose }) {
               </div>
             )}
           </div>
-          <div className="col-md-6">
+          <div className="md:col-span-6">
             <label className="form-label ">
               <Tag size={18} /> Marca
             </label>
@@ -212,7 +213,7 @@ export function FormEditarSolicitud({ dataSolicitud, onClose }) {
               placeholder="Marca"
             />
           </div>
-          <div className="col-md-6">
+          <div className="md:col-span-6">
             <label className="form-label ">
               <FileEdit size={18} /> Motivo
             </label>
@@ -223,7 +224,7 @@ export function FormEditarSolicitud({ dataSolicitud, onClose }) {
               placeholder="Motivo"
             />
           </div>
-          <div className="col-md-6">
+          <div className="md:col-span-6">
             <label className="form-label ">
               <FileEdit size={18} /> Descripción
             </label>
@@ -236,7 +237,7 @@ export function FormEditarSolicitud({ dataSolicitud, onClose }) {
               placeholder="Descripción"
             />
           </div>
-          <div className="col-md-4">
+          <div className="md:col-span-4">
             <label className="form-label ">Precio estimado</label>
             <input
               type="number"
@@ -248,7 +249,7 @@ export function FormEditarSolicitud({ dataSolicitud, onClose }) {
               placeholder="Precio estimado"
             />
           </div>
-          <div className="col-md-4">
+          <div className="md:col-span-4">
             <label className="form-label ">
               <FileEdit size={18} /> Prioridad
             </label>
@@ -267,7 +268,7 @@ export function FormEditarSolicitud({ dataSolicitud, onClose }) {
               <div className="invalid-feedback">{errors.prioridad.message}</div>
             )}
           </div>
-          <div className="col-md-4">
+          <div className="md:col-span-4">
             <label className="form-label ">
               <FileEdit size={18} /> Uso previsto
             </label>
@@ -280,7 +281,7 @@ export function FormEditarSolicitud({ dataSolicitud, onClose }) {
               placeholder="Uso previsto"
             />
           </div>
-          <div className="col-md-6">
+          <div className="md:col-span-6">
             <label className="form-label ">
               <User size={18} /> Solicitante
             </label>
@@ -300,7 +301,7 @@ export function FormEditarSolicitud({ dataSolicitud, onClose }) {
               </div>
             )}
           </div>
-          <div className="col-md-6">
+          <div className="md:col-span-6">
             <label className="form-label ">
               <Mail size={18} /> Email
             </label>
@@ -324,7 +325,7 @@ export function FormEditarSolicitud({ dataSolicitud, onClose }) {
               </div>
             )}
           </div>
-          <div className="col-md-6">
+          <div className="md:col-span-6">
             <label className="form-label ">
               <Phone size={18} /> Teléfono
             </label>
@@ -335,7 +336,7 @@ export function FormEditarSolicitud({ dataSolicitud, onClose }) {
               placeholder="Teléfono"
             />
           </div>
-          <div className="col-md-6">
+          <div className="md:col-span-6">
             <label className="form-label ">
               <Tag size={18} /> Área
             </label>
@@ -359,7 +360,7 @@ export function FormEditarSolicitud({ dataSolicitud, onClose }) {
         </div>
         <div className="mt-auto pt-3">
           <div className="d-flex justify-content-end gap-2">
-            <button
+            <Button
               type="button"
               className="btn-cerrar-modal"
               onClick={() => {
@@ -367,16 +368,16 @@ export function FormEditarSolicitud({ dataSolicitud, onClose }) {
                 onClose && onClose();
               }}
               disabled={isSubmitting}
-            >
+             variant="default">
               Cancelar
-            </button>
-            <button
+            </Button>
+            <Button
               type="submit"
               className="btn-guardar align-items-center gap-2"
               disabled={isSubmitting}
-            >
+             variant="default">
               <FileEdit size={18} /> Guardar Cambios
-            </button>
+            </Button>
           </div>
         </div>
       </form>

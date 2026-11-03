@@ -5,6 +5,9 @@ import { useNavigate } from "react-router-dom";
 import ToastAlert from "../../components/componenteToast/ToastAlert";
 import axiosInstance from "../../api/AxiosInstance";
 import { handlePrecioInput, validatePrecio } from "../../hooks/InputHandlers";
+import { Button } from "../../components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+
 
 export function RealizarSolicitud() {
   const navigate = useNavigate();
@@ -90,7 +93,7 @@ export function RealizarSolicitud() {
         id="form-solicitud"
         className="flex-column p-3"
       >
-        <div className="card d-flex align-content-center mb-3">
+        <Card className="flex align-content-center mb-3">
           <div className="d-flex p-3">
             <div>
               <h5>Solicitud de productos</h5>
@@ -99,25 +102,25 @@ export function RealizarSolicitud() {
               </small>
             </div>
             <div className="ms-auto">
-              <button
+              <Button
                 className="btn btn-outline-dark btn-sm"
                 onClick={() => handleVolver()}
-              >
+               variant="default">
                 Volver
-              </button>
+              </Button>
             </div>
           </div>
-        </div>
-        <div className="card-body container">
+        </Card>
+        <CardContent className="container">
           {/* Información del Solicitante */}
-          <div className="card mb-3 border ">
-            <div className="card-header border-0 ">
+          <Card className="mb-3 border">
+            <CardHeader className="border-0">
               <div>
                 <p className="h5">Información del Solicitante</p>
               </div>
-            </div>
-            <div className="card-body">
-              <div className="row g-3">
+            </CardHeader>
+            <CardContent className="">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
                 <div className="col-lg-6 col-sm-12">
                   <div className="mb-3">
                     <label htmlFor="nombre_solicitante" className="form-label ">
@@ -170,7 +173,7 @@ export function RealizarSolicitud() {
                 </div>
               </div>
 
-              <div className="row g-3">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
                 <div className="col-lg-6 col-sm-12">
                   <div className="mb-3">
                     <label htmlFor="correo_electronico" className="form-label ">
@@ -226,16 +229,16 @@ export function RealizarSolicitud() {
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
 
           {/* Detalles del Producto/Activo Solicitado */}
-          <div className="card mb-3 border ">
-            <div className="card-header border-0">
+          <Card className="mb-3 border">
+            <CardHeader className="border-0">
               <p className="h5">Detalles del Producto/Activo Solicitado</p>
-            </div>
-            <div className="card-body">
-              <div className="row g-3">
+            </CardHeader>
+            <CardContent className="">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
                 <div className="col-lg-6 col-sm-12">
                   <div className="mb-3">
                     <label htmlFor="nombre_producto" className="form-label ">
@@ -305,7 +308,7 @@ export function RealizarSolicitud() {
                 )}
               </div>
 
-              <div className="row g-3">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
                 <div className="col-lg-4 col-sm-12">
                   <div className="mb-3">
                     <label htmlFor="cantidad" className="form-label ">
@@ -410,16 +413,16 @@ export function RealizarSolicitud() {
                   )}
                 </div>
               </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
 
           {/* {USO PREVISTO}            */}
 
-          <div className="card mb-3 border ">
-            <div className="card-header border-0">
+          <Card className="mb-3 border">
+            <CardHeader className="border-0">
               <p className="h5">Justificacion</p>
-            </div>
-            <div className="card-body">
+            </CardHeader>
+            <CardContent className="">
               <div className="col-lg-12 mb-3">
                 <label htmlFor="motivo" className="form-label ">
                   Motivo de la solicitud
@@ -484,15 +487,15 @@ export function RealizarSolicitud() {
                   </div>
                 )}
               </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
           {/* Botón de Envío */}
-          <div className="card p-4  d-flex justify-content-center">
-            <button type="submit" className="btn-guardar me-auto">
+          <Card className="p-4 flex justify-center">
+            <Button type="submit" className="btn-guardar me-auto" variant="default">
               Guardar Solicitud
-            </button>
-          </div>
-        </div>
+            </Button>
+          </Card>
+        </CardContent>
       </form>
     </div>
   );

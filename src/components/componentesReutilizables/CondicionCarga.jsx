@@ -26,10 +26,10 @@ export function CondicionCarga({
     // === MODO: GRID DE TARJETAS (Para listados completos como Mesas) ===
     if (mode === "cards") {
       return (
-        <div className="row g-3 ">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="col-12 col-md-6 col-lg-3">
-              <div className="skeleton-card p-3">
+            <div key={i} className="min-w-0">
+              <div className="skeleton-card min-h-32 rounded-xl p-3">
                 <div className="skeleton-bar skeleton-title"></div>
                 <div className="skeleton-bar skeleton-text"></div>
                 <div className="skeleton-bar skeleton-text-short"></div>
@@ -44,11 +44,11 @@ export function CondicionCarga({
     // === MODO: DEFAULT (SPINNER) ===
     return (
       <div
-        className="d-flex flex-column align-items-center justify-content-center p-5 w-100 p-2"
+        className="flex min-h-[200px] w-full flex-col items-center justify-center p-5"
         style={{ minHeight: "200px" }}
       >
         <div className="modern-spinner"></div>
-        <span className="mt-3 text-muted fw-bold small text-uppercase letter-spacing-2">
+        <span className="mt-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
           Cargando...
         </span>
       </div>
@@ -57,11 +57,11 @@ export function CondicionCarga({
 
   if (isError) {
     return (
-      <div className="alert alert-danger d-flex align-items-start m-0 p-3 shadow-sm border-0 rounded-3">
-        <AlertTriangle className="me-2 flex-shrink-0 mt-1" size={18} />
+      <div className="m-0 flex items-start gap-2 rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-destructive shadow-sm">
+        <AlertTriangle className="mt-1 shrink-0" size={18} />
         <div>
-          <div className="fw-bold small">No se pudo cargar la información</div>
-          <div className="small mt-1">{errorMessage}</div>
+          <div className="text-sm font-semibold">No se pudo cargar la información</div>
+          <div className="mt-1 text-sm">{errorMessage}</div>
         </div>
       </div>
     );

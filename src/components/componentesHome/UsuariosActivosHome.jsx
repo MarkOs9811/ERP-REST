@@ -5,6 +5,9 @@ import { useNavigate } from "react-router-dom"; // Importa useNavigate
 import { capitalizeFirstLetter } from "../../hooks/FirstLetterUp";
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
 import { UserRound } from "lucide-react";
+import { Button } from "../ui/button";
+import { Card } from "@/components/ui/card";
+
 
 export function UsuariosActivosHome() {
   const navigate = useNavigate(); // Inicializa useNavigate
@@ -24,45 +27,39 @@ export function UsuariosActivosHome() {
 
   return (
     <CondicionCarga isLoading={isLoadingUsuarios} isError={isErrorUsuarios}>
-      <div className="card h-100 p-0 overflow-auto">
-        <div className="card-header bg-transparent d-flex align-items-center gap-2 p-3 border-bottom">
+      <Card className="h-full overflow-auto rounded-xl border border-border bg-card p-0 text-card-foreground">
+        <div className="flex items-center gap-3 border-b border-border p-4">
           <span
-            className="p-2 rounded-circle text-white d-inline-flex"
+            className="inline-flex rounded-full p-2 text-white"
             style={{ background: "var(--fw-strawberry)" }}
           >
             <UserRound size={18} />
           </span>
           <div>
-            <h6 className="fw-bold mb-0" style={{ color: "var(--text-main)" }}>
+            <h2 className="mb-0 text-sm font-semibold">
               Usuarios activos
-            </h6>
-            <p className="text-muted small mb-0">
+            </h2>
+            <p className="mb-0 text-xs text-muted-foreground">
               {listaAsistenciaHoy.length} en asistencia hoy
             </p>
           </div>
         </div>
-        <div className="p-3">
+        <div className="p-4">
           {listaAsistenciaHoy.length > 0 ? (
             <>
-              <ul className="list-unstyled mb-0">
+              <ul className="m-0 list-none p-0">
                 {listaAsistenciaHoy.slice(0, 4).map((usuario) => (
                   <li
                     key={usuario.id}
-                    className="d-flex align-items-center py-2"
+                    className="flex items-center gap-3 border-b border-border/60 py-2 last:border-0"
                   >
                     <img
                       src={`${usuario.empleado?.empleado?.usuario?.foto_url}`}
                       alt="Foto de perfil"
-                      style={{
-                        width: "50px",
-                        height: "50px",
-                        borderRadius: "50%",
-                        border: "2px solid var(--fw-border)",
-                        marginRight: "15px",
-                      }}
+                      className="size-11 rounded-full border-2 border-border object-cover"
                     />
-                    <div style={{ flex: 1 }}>
-                      <p className="fw-bold mb-0 text-dark">
+                    <div className="min-w-0 flex-1">
+                      <p className="mb-0 truncate text-sm font-semibold text-foreground">
                         {capitalizeFirstLetter(
                           (usuario?.empleado?.nombre || "").toLowerCase(),
                         )}{" "}
@@ -75,28 +72,26 @@ export function UsuariosActivosHome() {
                 ))}
               </ul>
               {listaAsistenciaHoy.length > 4 && (
-                <div className="d-flex align-items-center mt-2">
-                  <p className="text-muted mb-0">
+                <div className="mt-3 flex items-center gap-2">
+                  <p className="mb-0 text-sm text-muted-foreground">
                     +{listaAsistenciaHoy.length - 4} más...
                   </p>
-                  <button
-                    className="btn btn-link text-primary ms-2 p-0"
+                  <Button
+                    className="p-0 text-sm font-semibold text-primary hover:underline"
                     onClick={() => navigate("/rr.hh/asistencia")}
-                    style={{
-                      textDecoration: "none",
-                      fontWeight: "bold",
-                    }}
-                  >
+                   variant="default">
                     Ver todos
-                  </button>
+                  </Button>
                 </div>
               )}
             </>
           ) : (
-            <p className="text-muted">No hay usuarios activos hoy.</p>
+            <p className="mb-0 text-sm text-muted-foreground">
+              No hay usuarios activos hoy.
+            </p>
           )}
         </div>
-      </div>
+      </Card>
     </CondicionCarga>
   );
 }

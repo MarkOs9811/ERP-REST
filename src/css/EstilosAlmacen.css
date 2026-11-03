@@ -20,7 +20,7 @@
     border: 1px solid #00b652!important;
 }
 
-.transfer-layout .card-title {
+.transfer-layout [data-slot="card-title"] {
     margin-bottom: 0;
     font-weight: 700;
 }

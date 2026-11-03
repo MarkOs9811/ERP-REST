@@ -14,6 +14,9 @@ import axiosInstance from "../api/AxiosInstance";
 import ModalGenerales from "../components/componentesReutilizables/ModalGenerales";
 import ToastAlert from "../components/componenteToast/ToastAlert";
 import { BadgeComponent } from "../components/componentesReutilizables/BadgeComponent";
+import { Button } from "../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 
 // Función para generar un código aleatorio de 6 caracteres
 const generarCodigoAleatorio = () => {
@@ -147,7 +150,7 @@ export function ConfiguracionGeneral() {
             <BadgeComponent
               label={codigoSeguridad}
               variant="danger"
-              className="user-select-all fs-6 px-2"
+              className="select-all text-base px-2"
             />
           )}
         </label>
@@ -185,14 +188,14 @@ export function ConfiguracionGeneral() {
               disabled={reiniciarMutation.isPending}
               autoFocus
             />
-            <button
+            <Button
               className="btn btn-outline-secondary"
               type="button"
               onClick={() => setShowPassword(!showPassword)}
               disabled={reiniciarMutation.isPending}
-            >
+             variant="default">
               {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-            </button>
+            </Button>
           </div>
         </div>
       )}
@@ -216,28 +219,28 @@ export function ConfiguracionGeneral() {
   );
 
   return (
-    <div className="card border-danger mb-4 shadow-sm">
-      <div className="card-header bg-danger text-white d-flex align-items-center gap-2 py-3">
+    <Card className="border-danger mb-4 shadow-sm">
+      <CardHeader className="bg-danger text-white flex items-center gap-2 py-3">
         <AlertTriangle size={20} />
-        <h5 className="card-title m-0 fw-bold">
+        <CardTitle asChild><h5 className="m-0 fw-bold">
           Zona de Peligro: Reinicio del Sistema
-        </h5>
-      </div>
-      <div className="card-body">
-        <p className="card-text text-muted mb-4">
+        </h5></CardTitle>
+      </CardHeader>
+      <CardContent className="">
+        <p className="text-muted mb-4">
           Utiliza esta opción únicamente para restablecer el sistema a su estado
           de fábrica antes de entregarlo a un nuevo cliente. Se vaciarán todas
           las transacciones y empresas, pero se mantendrán las configuraciones
           estructurales.
         </p>
-        <button
+        <Button
           className="btn btn-danger d-flex align-items-center gap-2 fw-medium px-4"
           onClick={() => setShowModal(true)}
-        >
+         variant="destructive">
           <RotateCcw size={18} />
           Reiniciar Base de Datos
-        </button>
-      </div>
+        </Button>
+      </CardContent>
 
       <ModalGenerales
         show={showModal}
@@ -259,6 +262,6 @@ export function ConfiguracionGeneral() {
           }
         `}</style>
       </ModalGenerales>
-    </div>
+    </Card>
   );
 }

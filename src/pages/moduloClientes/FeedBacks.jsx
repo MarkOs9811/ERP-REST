@@ -3,6 +3,8 @@ import { ListaFeedBacks } from "../../components/componenteCliente/ListaFeedBack
 import { GetFeedBackIndicadores } from "../../service/accionesClientes/GetFeedBacks";
 import { formatearNumeroCompacto } from "../../utils/formatearNumeroCompacto";
 import { CondicionCarga } from "../../components/componentesReutilizables/CondicionCarga";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+
 
 export function FeedBack() {
   const {
@@ -18,22 +20,22 @@ export function FeedBack() {
   const indicadores = respuestaIndicadores.data || {};
 
   return (
-    <div className="card ">
-      <div className="card-header">
+    <Card className="">
+      <CardHeader className="">
         <div>
           <h4 className="fw-bold text-fw-main mb-1">FeedBacks</h4>
           <p className="text-fw-muted mb-0">
             Aquí puedes ver los comentarios de tus clientes.
           </p>
         </div>
-      </div>
+      </CardHeader>
 
-      <div className="card-body">
+      <CardContent className="">
         <CondicionCarga isLoading={isLoading} isError={isError}>
-          <div className="row g-3 mb-4">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-4">
             {/* Tarjeta 1: Promedio */}
-            <div className="col-md-4">
-              <div className="card d-flex flex-row align-items-center gap-3 p-3 h-100">
+            <div className="md:col-span-4">
+              <Card className="flex flex-row items-center gap-3 p-3 h-full">
                 <div className="leftDetalle">
                   <p
                     className="fw-bold mb-0"
@@ -48,12 +50,12 @@ export function FeedBack() {
                     Promedio de estrellas
                   </span>
                 </div>
-              </div>
+              </Card>
             </div>
 
             {/* Tarjeta 2: Total de Feedbacks */}
-            <div className="col-md-4">
-              <div className="card d-flex flex-row align-items-center gap-3 p-3 h-100">
+            <div className="md:col-span-4">
+              <Card className="flex flex-row items-center gap-3 p-3 h-full">
                 <div className="leftDetalle">
                   <p
                     className="fw-bold mb-0"
@@ -70,12 +72,12 @@ export function FeedBack() {
                   <h4 className="fw-bold m-0 text-secondary">Comentarios</h4>
                   <span className="small m-0 text-muted">Total de reseñas</span>
                 </div>
-              </div>
+              </Card>
             </div>
 
             {/* Tarjeta para la palabra que más se repite */}
-            <div className="col-md-4">
-              <div className="card d-flex flex-row align-items-center gap-3 p-3 h-100">
+            <div className="md:col-span-4">
+              <Card className="flex flex-row items-center gap-3 p-3 h-full">
                 <div className="leftDetalle">
                   <p
                     className="fw-bold mb-0 text-truncate"
@@ -95,19 +97,19 @@ export function FeedBack() {
                     Palabra más usada
                   </span>
                 </div>
-              </div>
+              </Card>
             </div>
           </div>
         </CondicionCarga>
 
         <div className="row">
-          <div className="col-md-12">
-            <div className="card d-flex flex-column gap-3 p-3">
+          <div className="md:col-span-12">
+            <Card className="flex flex-col gap-3 p-3">
               <ListaFeedBacks />
-            </div>
+            </Card>
           </div>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

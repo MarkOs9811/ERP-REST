@@ -16,6 +16,9 @@ import { fetchCajaClose } from "./pages/modulosVender/CerrarCaja";
 import { useQuery } from "@tanstack/react-query";
 import { GetConfi } from "./service/accionesConfiguracion/GetConfi";
 import { HoraLive } from "./utils/HoraLive";
+import { Button } from "./components/ui/button";
+import { CardHeader } from "@/components/ui/card";
+
 
 export default function LayoutPOS({ children }) {
   const navigate = useNavigate();
@@ -58,7 +61,7 @@ export default function LayoutPOS({ children }) {
   return (
     <div className="w-100 p-0 pb-3 overflow-hidden d-flex flex-column h-100">
       {/* HEADER LIMPIO SIN BORDES INVENTADOS */}
-      <div className="card-header p-0 m-0 rounded-0 d-flex flex-column flex-md-row align-items-stretch align-items-md-center bg-white shadow-sm">
+      <CardHeader className="p-0 m-0 rounded-0 flex flex-col flex-md-row items-stretch align-items-md-center bg-background shadow-sm">
         {/* ========================================================= */}
         {/* LADO IZQUIERDO: Exactamente con tu diseño original */}
         {/* ========================================================= */}
@@ -209,35 +212,35 @@ export default function LayoutPOS({ children }) {
               cargo?.empleado?.cargo?.nombre,
             ) &&
               caja?.estado === "abierto" && (
-                <button
+                <Button
                   onClick={(e) => {
                     e.preventDefault();
                     navigate("/vender/cerrarCaja");
                   }}
                   className="pos-action-link cerrar-caja d-flex align-items-center gap-2 text-decoration-none h-100"
-                >
+                 variant="default">
                   <LockKeyhole
                     className="text-auto pos-icon"
                     height="18px"
                     width="18px"
                   />
                   <span className="pos-btn-text text-nowrap">Cerrar Caja</span>
-                </button>
+                </Button>
               )}
 
-            <button
+            <Button
               onClick={(e) => {
                 e.preventDefault();
                 navigate("/");
               }}
               className="pos-action-link salir d-flex align-items-center gap-2 text-decoration-none h-100"
-            >
+             variant="default">
               <LogOut className="pos-icon" height="18px" width="18px" />
               <span className="pos-btn-text text-nowrap">Salir</span>
-            </button>
+            </Button>
           </div>
         </div>
-      </div>
+      </CardHeader>
 
       {/* Contenido dinámico */}
       <div className="contenedor-scroll p-3 flex-grow-1">{children}</div>

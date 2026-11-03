@@ -3,6 +3,9 @@ import { Eye, Save, AlertTriangle, CalendarCheck } from "lucide-react";
 import axiosInstance from "../../../../api/AxiosInstance";
 import ToastAlert from "../../../componenteToast/ToastAlert";
 import { useQueryClient } from "@tanstack/react-query";
+import { Button } from "../../../ui/button";
+import { CardContent } from "@/components/ui/card";
+
 
 const formatearFecha = (fecha) => {
   const anio = fecha.getFullYear();
@@ -62,7 +65,9 @@ export function FormularioGenerarPeriodo({ onClose, ultimoCorteReal = null }) {
       return setError("El día de corte debe estar entre 1 y 31.");
     }
     if (!fechaInicio) {
-      return setError("Debe especificar la 'Fecha de Inicio del Primer Periodo'.");
+      return setError(
+        "Debe especificar la 'Fecha de Inicio del Primer Periodo'.",
+      );
     }
 
     let actualInicio;
@@ -79,11 +84,11 @@ export function FormularioGenerarPeriodo({ onClose, ultimoCorteReal = null }) {
     // Iteramos HASTA que el año de inicio supere el año límite seleccionado
     while (actualInicio.getFullYear() <= anioLimite && safeguard < 24) {
       safeguard++;
-      
+
       let mesCorte = actualInicio.getMonth();
       let anioCorte = actualInicio.getFullYear();
 
-      // REGLA CLAVE: Si el día de inicio ya es mayor o igual al día de corte, 
+      // REGLA CLAVE: Si el día de inicio ya es mayor o igual al día de corte,
       // el fin de periodo pasa obligatoriamente al siguiente mes.
       if (actualInicio.getDate() >= diaCorte) {
         mesCorte += 1;
@@ -102,7 +107,10 @@ export function FormularioGenerarPeriodo({ onClose, ultimoCorteReal = null }) {
       }
 
       // Solo guardamos el periodo si toca el año que el usuario quiere generar
-      if (actualInicio.getFullYear() === anioLimite || actualFin.getFullYear() === anioLimite) {
+      if (
+        actualInicio.getFullYear() === anioLimite ||
+        actualFin.getFullYear() === anioLimite
+      ) {
         periodosGenerados.push({
           nombrePeriodo: `${getMesNombre(actualFin.getMonth())} ${actualFin.getFullYear()}`,
           fecha_inicio: formatearFecha(actualInicio),
@@ -117,7 +125,9 @@ export function FormularioGenerarPeriodo({ onClose, ultimoCorteReal = null }) {
     }
 
     if (periodosGenerados.length === 0) {
-      setError("No se generaron periodos. La fecha seleccionada ya supera el año a generar.");
+      setError(
+        "No se generaron periodos. La fecha seleccionada ya supera el año a generar.",
+      );
       return;
     }
 
@@ -128,10 +138,15 @@ export function FormularioGenerarPeriodo({ onClose, ultimoCorteReal = null }) {
     setLoading(true);
 
     try {
-      const response = await axiosInstance.post("/periodoNomina", { periodosPreview });
+      const response = await axiosInstance.post("/periodoNomina", {
+        periodosPreview,
+      });
 
       if (response.data.success) {
-        ToastAlert("success", response.data.message || "Se registró correctamente");
+        ToastAlert(
+          "success",
+          response.data.message || "Se registró correctamente",
+        );
         queryClient.invalidateQueries(["listaPeriodosNomina"]);
         onClose(); // Cierra el modal
       }
@@ -146,15 +161,18 @@ export function FormularioGenerarPeriodo({ onClose, ultimoCorteReal = null }) {
             const mensajeError = data.errors[primerErrorKey][0];
             return ToastAlert("error", `Validación: ${mensajeError}`);
           } catch (e) {
-            return ToastAlert("error", "Error de validación. Revise los datos.");
+            return ToastAlert(
+              "error",
+              "Error de validación. Revise los datos.",
+            );
           }
-        } 
-        
+        }
+
         // Excepción de tu Catch genérico
-        if (data.error && typeof data.error === 'string') {
+        if (data.error && typeof data.error === "string") {
           return ToastAlert("error", data.error);
-        } 
-        
+        }
+
         if (data.message) {
           return ToastAlert("error", data.message);
         }
@@ -174,11 +192,11 @@ export function FormularioGenerarPeriodo({ onClose, ultimoCorteReal = null }) {
 
   return (
     <div className="p-3">
-      <div className="card-body">
+      <CardContent className="">
         <form onSubmit={handleGenerarPreview}>
-          <div className="row g-3">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
             {/* 1. Año a Generar */}
-            <div className="col-md-12">
+            <div className="md:col-span-12">
               <div className="mb-3">
                 <label className="form-label">
                   <strong>Año a Generar</strong>
@@ -198,7 +216,7 @@ export function FormularioGenerarPeriodo({ onClose, ultimoCorteReal = null }) {
             </div>
 
             {/* 2. NUEVO CAMPO: Fecha de Inicio */}
-            <div className="col-md-12">
+            <div className="md:col-span-12">
               <div className="mb-3">
                 <label className="form-label">
                   <strong>Fecha de Inicio del Primer Periodo</strong>
@@ -219,7 +237,7 @@ export function FormularioGenerarPeriodo({ onClose, ultimoCorteReal = null }) {
             </div>
 
             {/* 3. Frecuencia */}
-            <div className="col-md-6">
+            <div className="md:col-span-6">
               <div className="mb-3">
                 <label className="form-label">
                   <strong>Frecuencia</strong>
@@ -238,7 +256,7 @@ export function FormularioGenerarPeriodo({ onClose, ultimoCorteReal = null }) {
             </div>
 
             {/* 4. Día de Corte */}
-            <div className="col-md-6">
+            <div className="md:col-span-6">
               <div className="mb-3">
                 <label className="form-label">
                   <strong>Día de Corte (1-31)</strong>
@@ -267,10 +285,10 @@ export function FormularioGenerarPeriodo({ onClose, ultimoCorteReal = null }) {
           )}
 
           <div className="d-grid d-md-block">
-            <button type="submit" className="btn-principal">
+            <Button type="submit" className="btn-principal" variant="default">
               <Eye size={18} className="me-2" />
               Previsualizar Periodos
-            </button>
+            </Button>
           </div>
         </form>
 
@@ -305,12 +323,12 @@ export function FormularioGenerarPeriodo({ onClose, ultimoCorteReal = null }) {
             </ul>
 
             <div className="d-grid gap-2 d-md-flex justify-content-end mt-4">
-              <button
+              <Button
                 type="button"
                 className="btn-guardar"
                 onClick={handleGuardarPeriodos}
                 disabled={loading}
-              >
+               variant="default">
                 {loading ? (
                   <div>
                     <span className="load">Cargando...</span>
@@ -321,18 +339,18 @@ export function FormularioGenerarPeriodo({ onClose, ultimoCorteReal = null }) {
                     Confirmar y Guardar
                   </>
                 )}
-              </button>
-              <button
+              </Button>
+              <Button
                 type="button"
                 className=" btn-cerrar-modal ms-md-2"
                 onClick={onClose}
-              >
+               variant="default">
                 Cancelar
-              </button>
+              </Button>
             </div>
           </div>
         )}
-      </div>
+      </CardContent>
     </div>
   );
 }

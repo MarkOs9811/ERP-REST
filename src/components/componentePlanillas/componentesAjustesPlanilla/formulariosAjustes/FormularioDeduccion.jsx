@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import axiosInstance from "../../../../api/AxiosInstance"; // Ajusta esta ruta
 import ToastAlert from "../../../componenteToast/ToastAlert"; // Ajusta esta ruta
 import { useQueryClient } from "@tanstack/react-query";
+import { Button } from "../../../ui/button";
 
 export function FormularioDeduccion({ onClose, isEdit, dataEdit = null }) {
   const [loadingSave, setLoadingSave] = useState(false);
@@ -128,20 +129,20 @@ export function FormularioDeduccion({ onClose, isEdit, dataEdit = null }) {
       <hr className="my-4" />
 
       <div className="d-flex justify-content-end gap-2">
-        <button
+        <Button
           type="button"
           className="btn-cerrar-modal"
           onClick={onClose}
           title="Cerrar formulario"
-        >
+         variant="default">
           Cancelar
-        </button>
-        <button
+        </Button>
+        <Button
           type="Submit"
           className="btn-guardar"
           title={isEditMood ? "Actualizar deducción" : "Guardar deducción"}
           disabled={loadingSave}
-        >
+         variant="default">
           {loadingSave ? (
             <span
               className="spinner-border spinner-border-sm"
@@ -151,7 +152,7 @@ export function FormularioDeduccion({ onClose, isEdit, dataEdit = null }) {
           ) : (
             <span>{isEditMood ? "Actualizar" : "Guardar"}</span>
           )}
-        </button>
+        </Button>
       </div>
     </form>
   );

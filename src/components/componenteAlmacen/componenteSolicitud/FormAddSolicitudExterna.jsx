@@ -7,6 +7,7 @@ import { GetUnidades } from "../../../service/serviceAlmacen/GetUnidades";
 import axiosInstance from "../../../api/AxiosInstance";
 import { GetAreas } from "../../../service/GetAreas";
 import ToastAlert from "../../componenteToast/ToastAlert";
+import { Button } from "../../ui/button";
 
 export function FormAddSolicitudExterna({ onClose }) {
   const {
@@ -133,7 +134,7 @@ export function FormAddSolicitudExterna({ onClose }) {
         <h6 className="fw-bold text-dark mb-3">Datos del solicitante</h6>
 
         <div className="row">
-          <div className="col-md-6 mb-3 position-relative">
+          <div className="md:col-span-6 mb-3 position-relative">
             <label className="form-label d-flex align-items-center gap-2">
               <StoreIcon size={18} />
               Area <span className="text-danger">*</span>
@@ -160,7 +161,7 @@ export function FormAddSolicitudExterna({ onClose }) {
           </div>
 
           {/* Nombre del solicitante */}
-          <div className="col-md-6 mb-3">
+          <div className="md:col-span-6 mb-3">
             <label className="form-label">
               Nombre del solicitante <span className="text-danger">*</span>
             </label>
@@ -185,7 +186,7 @@ export function FormAddSolicitudExterna({ onClose }) {
           </div>
 
           {/* Correo electrónico */}
-          <div className="col-md-6 mb-3">
+          <div className="md:col-span-6 mb-3">
             <label className="form-label">
               Correo electrónico <span className="text-danger">*</span>
             </label>
@@ -210,7 +211,7 @@ export function FormAddSolicitudExterna({ onClose }) {
           </div>
 
           {/* Teléfono */}
-          <div className="col-md-6 mb-3">
+          <div className="md:col-span-6 mb-3">
             <label className="form-label">
               Teléfono <span className="text-danger">*</span>
             </label>
@@ -236,7 +237,7 @@ export function FormAddSolicitudExterna({ onClose }) {
 
         <div className="row">
           {/* Proveedor */}
-          <div className="col-md-6 mb-3 position-relative">
+          <div className="md:col-span-6 mb-3 position-relative">
             <label className="form-label d-flex align-items-center gap-2">
               <TruckIcon size={18} />
               Proveedor <span className="text-danger">*</span>
@@ -262,7 +263,7 @@ export function FormAddSolicitudExterna({ onClose }) {
           </div>
 
           {/* Unidad de medida */}
-          <div className="col-md-6 mb-3 position-relative">
+          <div className="md:col-span-6 mb-3 position-relative">
             <label className="form-label d-flex align-items-center gap-2">
               <Tag size={18} />
               Unidad de medida <span className="text-danger">*</span>
@@ -292,7 +293,7 @@ export function FormAddSolicitudExterna({ onClose }) {
           </div>
 
           {/* Marca */}
-          <div className="col-md-6 mb-3">
+          <div className="md:col-span-6 mb-3">
             <label className="form-label">
               Marca del producto <span className="text-danger">*</span>
             </label>
@@ -311,7 +312,7 @@ export function FormAddSolicitudExterna({ onClose }) {
           </div>
 
           {/* Cantidad */}
-          <div className="col-md-3 mb-3">
+          <div className="md:col-span-3 mb-3">
             <label className="form-label">
               Cantidad <span className="text-danger">*</span>
             </label>
@@ -331,7 +332,7 @@ export function FormAddSolicitudExterna({ onClose }) {
           </div>
 
           {/* Precio estimado */}
-          <div className="col-md-3 mb-3">
+          <div className="md:col-span-3 mb-3">
             <label className="form-label">
               Precio estimado (S/.) <span className="text-danger">*</span>
             </label>
@@ -436,7 +437,7 @@ export function FormAddSolicitudExterna({ onClose }) {
         {/* ===================== 🚦 PRIORIDAD ===================== */}
         <h6 className="fw-bold text-dark mt-4 mb-3">Prioridad</h6>
 
-        <div className="col-md-4 mb-4">
+        <div className="md:col-span-4 mb-4">
           <select
             className={`form-select ${errors.prioridad ? "is-invalid" : ""}`}
             {...register("prioridad", { required: "Campo obligatorio" })}
@@ -456,7 +457,7 @@ export function FormAddSolicitudExterna({ onClose }) {
 
         <div className="row">
           {/* Firma del solicitante */}
-          <div className="col-md-6 mb-3">
+          <div className="md:col-span-6 mb-3">
             <label className="form-label d-flex align-items-center gap-2">
               <PenLine size={18} />
               Firma del solicitante <span className="text-danger">*</span>
@@ -479,7 +480,7 @@ export function FormAddSolicitudExterna({ onClose }) {
           </div>
 
           {/* Firma del administrador */}
-          <div className="col-md-6 mb-3">
+          <div className="md:col-span-6 mb-3">
             <label className="form-label d-flex align-items-center gap-2">
               <PenLine size={18} />
               Firma del administrador <span className="text-danger">*</span>
@@ -504,21 +505,21 @@ export function FormAddSolicitudExterna({ onClose }) {
 
         {/* ===================== 🔘 BOTONES ===================== */}
         <div className="mt-4 d-flex justify-content-end gap-2">
-          <button
+          <Button
             type="button"
             className="btn-cerrar"
             disabled={isLoadingSave}
             onClick={onClose}
-          >
+           variant="default">
             Cancelar
-          </button>
-          <button
+          </Button>
+          <Button
             type="submit"
             className="btn-guardar"
             disabled={isLoadingSave}
-          >
+           variant="default">
             {isLoadingSave ? "Guardando..." : "Guardar Solicitud"}
-          </button>
+          </Button>
         </div>
       </form>
     </div>

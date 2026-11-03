@@ -13,6 +13,8 @@ import ToastAlert from "../componenteToast/ToastAlert";
 import { EditCargo } from "./componentesCargo/EditCargo";
 import { LayoutGrid, Plus } from "lucide-react";
 import { BotonMotionGeneral } from "../componentesReutilizables/BotonMotionGeneral";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+
 
 export function Cargos() {
   const [modalAddCargo, setModalAddCargo] = useState(false);
@@ -81,8 +83,8 @@ export function Cargos() {
     reset();
   };
   return (
-    <div className="card">
-      <div className="card-header  d-flex align-items-center justify-content-between">
+    <Card className="">
+      <CardHeader className="flex items-center justify-between">
         <div className="d-flex gap-2 align-items-center">
           <div className="p-2 alert alert-primary rounded-lg mb-0">
             <LayoutGrid className="text-danger" size={20} />
@@ -99,8 +101,8 @@ export function Cargos() {
           fullWidth={true}
           onClick={() => setModalAddCargo(true)}
         />
-      </div>
-      <div className="card-body p-4">
+      </CardHeader>
+      <CardContent className="p-4">
         {isLoading && <Cargando />}
         {isError && (
           <div>
@@ -131,7 +133,7 @@ export function Cargos() {
             </div>
           ))}
         </div>
-      </div>
+      </CardContent>
       <ModalRight
         isOpen={modalAddCargo}
         onClose={handleCancel}
@@ -169,6 +171,6 @@ export function Cargos() {
           data={cargoSeleccionado}
         />
       </ModalRight>
-    </div>
+    </Card>
   );
 }

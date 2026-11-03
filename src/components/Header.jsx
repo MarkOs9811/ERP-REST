@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-import "../App.css";
-import "../css/EstilosPanelHeader.css";
 import RippleWrapper from "./componentesReutilizables/RippleWrapper";
 import { PerfilPanel } from "./componentesHeader/PerfilPanel";
 import { NotificacionesPanel } from "./componentesHeader/NotificacionesPanel";
@@ -14,7 +12,7 @@ import {
   Moon,
   SunMediumIcon,
 } from "lucide-react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { toggleSidebar } from "../redux/sideBarSlice";
 import ModalRight from "./componentesReutilizables/ModalRight";
 import { BadgeComponent } from "./componentesReutilizables/BadgeComponent";
@@ -22,6 +20,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toggleSidebarMobile } from "../redux/sideBarMobilSlice";
 import { GetNotificacionesPrivadas } from "../service/accionesGenerales/GetNotificacionesPrivada";
 import { PutData } from "../service/CRUD/PutData";
+import { Button } from "./ui/button";
 export function Header({ tipoHeader = null }) {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
@@ -87,7 +86,8 @@ export function Header({ tipoHeader = null }) {
   const toggleTheme = () => {
     const newTheme = darkMode ? "light" : "dark";
     setDarkMode(!darkMode);
-    document.body.classList.toggle("dark-theme", !darkMode);
+    // Usa "dark" en lugar de "dark-theme" y aplícalo a <html>
+    document.documentElement.classList.toggle("dark", !darkMode);
     localStorage.setItem("theme", newTheme);
   };
 
@@ -114,9 +114,8 @@ export function Header({ tipoHeader = null }) {
   }, []);
   // ==========================
 
-  const isCompressed = useSelector((state) => state.sidebar.isCompressed);
   // Aplica el tema al cargar
-  React.useEffect(() => {
+  useEffect(() => {
     if (darkMode) {
       document.body.classList.add("dark-theme");
     } else {
@@ -133,80 +132,67 @@ export function Header({ tipoHeader = null }) {
   };
 
   return (
-    <div
-      className={`header-menu ${anchuraHeader ? "m-0" : ""} ${isCompressed ? "compressedHeader" : ""}`}
-    >
-      {" "}
-      <nav className=" d-flex flex-nowrap align-items-center justify-content-between p-2 m-0">
-        <div className="d-flex align-items-center justify-content-center gap-2 mx-3 ">
-          {/* Botón para comprimir/expandir Sidebar */}
-          <button
-            className={`ico-header border-0 ${anchuraHeader ? "d-none" : "d-none d-md-inline-flex"} rounded-pill align-items-center justify-content-center bg-transparent`}
-            title="Contraer Menú"
-            onClick={() => dispatch(toggleSidebar())}
-            style={{
-              width: 44,
-              height: 44,
-              padding: 0,
-              transition: "transform var(--transition-bounce)",
-            }}
-            onMouseOver={(e) =>
-              (e.currentTarget.style.transform = "scale(1.1)")
-            }
-            onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
-          >
-            <Menu className={`text-muted `} height="24px" width="24px" />
-          </button>
-          <button
-            className={`${anchuraHeader ? "d-none" : "d-inline-flex d-md-none"} menu-ico-header-celular border-0 align-items-center justify-content-center`}
-            title="Contraer Menú"
-            onClick={() => dispatch(toggleSidebarMobile())}
-          >
-            <Menu height="24px" width="24px" />
-          </button>
+    <header className="z-30 w-full shrink-0 border-b border-border bg-background text-foreground">
+      <nav
+        aria-label="Barra superior"
+        className="flex min-h-16 w-full flex-wrap items-center justify-between gap-x-3 gap-y-2 px-3 py-2 sm:px-4"
+      >
+        <div className="flex min-w-0 items-center gap-2">
+          {!anchuraHeader && (
+            <Button
+              type="button"
+              aria-label="Contraer o expandir menú"
+              title="Contraer o expandir menú"
+              onClick={() => dispatch(toggleSidebar())}
+              className="hidden size-10 shrink-0 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:inline-flex"
+              variant="ghost"
+            >
+              <Menu size={21} />
+            </Button>
+          )}
+          {!anchuraHeader && (
+            <Button
+              type="button"
+              aria-label="Abrir menú"
+              title="Abrir menú"
+              onClick={() => dispatch(toggleSidebarMobile())}
+              className="inline-flex size-9 shrink-0 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:hidden"
+              variant="ghost"
+            >
+              <Menu size={20} />
+            </Button>
+          )}
 
-          <div className="logo-empresa d-flex align-items-center ">
-            {cargo?.empleado?.cargo?.nombre === "atencion al cliente" ? (
+          {cargo?.empleado?.cargo?.nombre === "atencion al cliente" &&
+            fotoEmpresa && (
               <img
                 src={fotoEmpresa}
-                alt="logo empresa"
-                className="img-fluid"
-                style={{
-                  maxWidth: "40px",
-                  borderRadius: "50%",
-                  height: "40px",
-                  objectFit: "cover",
-                }}
+                alt="Logo de la empresa"
+                className="size-9 shrink-0 rounded-full border border-border object-cover"
               />
-            ) : (
-              ""
             )}
-          </div>
-          <div className="d-flex flex-column">
-            <h6 className="text-muted fw-bold mb-0">
-              {cargo?.empleado?.cargo?.nombre === "atencion al cliente"
-                ? capitalizeFirstLetter(empresa?.nombre)
-                : ""}
-            </h6>
-            Bienvenido
-            <span className="small text-muted mb-0">
+          <div className="flex min-w-0 flex-col leading-tight">
+            {cargo?.empleado?.cargo?.nombre === "atencion al cliente" && (
+              <span className="truncate text-sm font-semibold">
+                {capitalizeFirstLetter(empresa?.nombre)}
+              </span>
+            )}
+            <span className="text-sm font-medium">Bienvenido</span>
+            <span className="truncate text-xs text-muted-foreground">
               {capitalizeFirstLetter(cargo?.empleado?.cargo?.nombre)}
             </span>
           </div>
         </div>
 
-        {/* Icono de usuario */}
-        {/* Contenedor del usuario en la barra de navegación */}
-        <div className="navbar-right d-flex align-items-center ms-auto gap-2 p-0 m-0">
-          {/* BOTÓN VER WEB - SOLO PARA ADMINISTRADOR */}
+        <div className="ml-auto flex min-w-0 flex-wrap items-center justify-end gap-1 sm:gap-2">
           {fotoPerfilLocal &&
             cargo?.empleado?.cargo?.nombre === "administrador" && (
               <RippleWrapper>
                 <BadgeComponent
                   clickable={true}
                   label="Ver Web"
-                  variant="info"
-                  className="cursor-pointer px-2 "
+                  variant="default"
+                  className="cursor-pointer px-2"
                   onClick={() =>
                     window.open(
                       "https://lustrous-cupcake-b9cf4a.netlify.app/",
@@ -221,7 +207,7 @@ export function Header({ tipoHeader = null }) {
               <BadgeComponent
                 label={capitalizeFirstLetter(fotoPerfilLocal?.sede?.nombre)}
                 variant="danger"
-                className="cursor-pointer px-2"
+                className="hidden cursor-pointer px-2 sm:inline-flex"
               />
             </RippleWrapper>
           )}
@@ -232,148 +218,74 @@ export function Header({ tipoHeader = null }) {
               <BadgeComponent
                 label={cajaDetalles.nombre}
                 variant="success"
-                className="cursor-pointer px-2"
+                className="hidden cursor-pointer px-2 sm:inline-flex"
               />
             </RippleWrapper>
           ) : null}
 
-          {/* BOTON PARA PANTALLA COMPLETA */}
-          <button
-            className="ico-header btn-icon border-0 rounded-pill d-flex align-items-center justify-content-center"
+          <Button
+            type="button"
+            variant="ghost"
+            aria-label={
+              isFullscreen ? "Salir de pantalla completa" : "Pantalla completa"
+            }
             title={
               isFullscreen ? "Salir de pantalla completa" : "Pantalla completa"
             }
-            style={{
-              width: 44,
-              height: 44,
-              padding: 0,
-              transition: "transform var(--transition-bounce)",
-            }}
-            onMouseOver={(e) =>
-              (e.currentTarget.style.transform = "scale(1.1)")
-            }
-            onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
             onClick={toggleFullscreen}
+            className="cursor-pointer inline-flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
-            {isFullscreen ? (
-              <Minimize size={22} className="text-auto" />
-            ) : (
-              <Expand size={22} className="text-auto" />
-            )}
-          </button>
-          {/* BOTON PARA CAMBIAR DE TEMA - SIEMPRE VISIBLE */}
-          <button
-            className="ico-header btn-icon border-0 rounded-pill d-flex align-items-center justify-content-center"
+            {isFullscreen ? <Minimize size={19} /> : <Expand size={19} />}
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            aria-label="Cambiar tema"
             title="Cambiar tema"
-            style={{
-              width: 44,
-              height: 44,
-              padding: 0,
-              transition: "transform var(--transition-bounce)",
-            }}
-            onMouseOver={(e) =>
-              (e.currentTarget.style.transform = "scale(1.1)")
-            }
-            onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
             onClick={toggleTheme}
+            className="cursor-pointer inline-flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
-            {darkMode ? (
-              <Moon
-                className="text-auto"
-                height="22px"
-                width="22px"
-                style={{ verticalAlign: "middle" }}
-              />
-            ) : (
-              <SunMediumIcon
-                className="text-auto"
-                height="22px"
-                width="22px"
-                style={{ verticalAlign: "middle" }}
-              />
-            )}
-          </button>
-          {/* Botón de Notificaciones - SIEMPRE VISIBLE */}
-          <button
-            className="ico-header btn-icon border-0 d-flex align-items-center justify-content-center position-relative"
-            style={{
-              width: 44,
-              height: 44,
-              padding: 0,
-              transition: "transform var(--transition-bounce)",
-            }}
-            onMouseOver={(e) =>
-              (e.currentTarget.style.transform = "scale(1.1)")
-            }
-            onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
+            {darkMode ? <Moon size={19} /> : <SunMediumIcon size={20} />}
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            aria-label="Ver notificaciones"
+            title="Notificaciones"
             onClick={() => {
               setShowNotificaciones(true);
               verNoticificaciones();
             }}
+            className="cursor-pointer relative inline-flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
-            <Bell
-              className="text-auto"
-              height="22px"
-              width="22px"
-              style={{ cursor: "pointer" }}
-            />
+            <Bell size={19} />
             {notificacionesCount > 0 && (
-              <span
-                className="position-absolute badge rounded-pill bg-danger"
-                style={{
-                  fontSize: "0.72rem",
-                  minWidth: 17,
-                  height: 17,
-                  padding: 0,
-                  right: 4,
-                  top: 4,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-
-                  zIndex: 2,
-                }}
-              >
+              <span className="absolute -right-0.5 -top-0.5 flex h-4.25 min-w-4.25 items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-semibold leading-none text-white">
                 {obtenerTextoNotificacion()}
               </span>
             )}
-          </button>
+          </Button>
 
-          <div
-            className="ico-header btn-icon border-0 rounded-pill d-flex align-items-center justify-content-center"
-            style={{
-              width: 44,
-              height: 44,
-              padding: 0,
-              transition: "transform var(--transition-bounce)",
-            }}
-            onMouseOver={(e) =>
-              (e.currentTarget.style.transform = "scale(1.1)")
-            }
-            onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
+          <Button
+            type="button"
+            aria-label="Abrir perfil"
+            title="Mi perfil"
+            variant="ghost"
             onClick={() => setShowPerfilPanel(true)}
+            className="cursor-pointer inline-flex size-9 items-center justify-center overflow-hidden rounded-full border border-border bg-muted transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             {fotoPerfil && (
-              <img
-                src={fotoPerfil}
-                alt="Mi foto"
-                className="img-fluid w-100"
-                style={{
-                  width: 32,
-                  height: 32,
-                  borderRadius: "50%",
-                  objectFit: "cover",
-                }}
-              />
+              <img src={fotoPerfil} alt="" className="size-full object-cover" />
             )}
-          </div>
+          </Button>
+
           <ModalRight
             isOpen={showNotificaciones}
             onClose={() => setShowNotificaciones(false)}
             width={"350px"}
             hideFooter={true}
             title={"Notificaciones"}
-            icono={<Bell className="text-muted" />}
+            icono={<Bell className="text-muted-foreground" />}
           >
             <NotificacionesPanel />
           </ModalRight>
@@ -388,6 +300,6 @@ export function Header({ tipoHeader = null }) {
           </ModalRight>
         </div>
       </nav>
-    </div>
+    </header>
   );
 }

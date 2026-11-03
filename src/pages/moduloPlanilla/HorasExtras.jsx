@@ -25,6 +25,9 @@ import {
 import { FormularioEditHorasExtras } from "../../components/componentePlanillas/componentesHorasExtras/FormularioEditHorasExtras";
 import ModalAlertQuestion from "../../components/componenteToast/ModalAlertQuestion";
 import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteExcel";
+import { Button } from "../../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 
 export function HorasExtras() {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -298,24 +301,24 @@ export function HorasExtras() {
         <div>
           {row.estado == 1 ? (
             <>
-              <button className="btn-ver btn-sm" title="Ver detalles">
+              <Button className="btn-ver btn-sm" title="Ver detalles" variant="outline">
                 <EyeIcon className="text-auto" />
-              </button>
+              </Button>
             </>
           ) : (
             <>
               <div className="d-flex gap-2">
-                <button
+                <Button
                   className="btn-editar"
                   title="Editar Hora extra"
                   onClick={() => {
                     setDataEditHorasExtras(row);
                     setModalEditHoraExtras(true);
                   }}
-                >
+                 variant="secondary">
                   <Pencil className="text-auto" />
-                </button>
-                <button
+                </Button>
+                <Button
                   className="btn-eliminar"
                   title="Eliminar registro"
                   disabled={loading}
@@ -323,13 +326,13 @@ export function HorasExtras() {
                     setDataEditHorasExtras(row);
                     setModalEliminarHoraExtra(true);
                   }}
-                >
+                 variant="destructive">
                   {loading ? (
                     <span className="loading text-dark"></span>
                   ) : (
                     <Trash2 className="text-auto" />
                   )}
-                </button>
+                </Button>
               </div>
             </>
           )}
@@ -340,12 +343,12 @@ export function HorasExtras() {
 
   return (
     <div>
-      <div className="card shadow-sm pb-2">
-        <div className="card-header  d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-3">
+      <Card className="shadow-sm pb-2">
+        <CardHeader className="flex flex-col flex-md-row justify-between items-center gap-2 p-3">
           <div className="d-flex align-items-center">
-            <h4 className="card-title mb-0 titulo-card-especial">
+            <CardTitle asChild><h4 className="mb-0 titulo-card-especial">
               Panel de Horas Extras
-            </h4>
+            </h4></CardTitle>
             <span className="badge-header ms-2">Registros</span>
           </div>
           <div className="d-flex  gap-2 mt-3 mt-md-0 align-items-center ms-auto">
@@ -358,30 +361,30 @@ export function HorasExtras() {
                 onChange={(e) => setFiltro(e.target.value)}
               />
             </div>
-            <button
+            <Button
               className="btn btn-outline-dark px-3"
               title="Reporte"
               onClick={() => GetReporteExcel("/reporteHorasExtras")}
-            >
+             variant="default">
               <FileText size={18} />
               Reporte
-            </button>
-            <button
+            </Button>
+            <Button
               className="btn btn-dark px-3"
               title="Agregar"
               onClick={() => {
                 setIsModalOpen(true);
               }}
-            >
+             variant="default">
               <Plus size={18} />
               Agregar
-            </button>
+            </Button>
           </div>
-        </div>
-        <div className="card-body p-0">
+        </CardHeader>
+        <CardContent className="p-0">
           <TablasGenerales columnas={columnas} datos={datosFiltrados} />
-        </div>
-      </div>
+        </CardContent>
+      </Card>
       <ModalRight
         isOpen={isModalOpen}
         onClose={() => {

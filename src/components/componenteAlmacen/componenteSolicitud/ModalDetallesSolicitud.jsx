@@ -9,6 +9,8 @@ import {
   UserRoundIcon,
 } from "lucide-react";
 import { BadgeComponent } from "../../componentesReutilizables/BadgeComponent";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+
 
 export function ModalDetallesSolicitud({ data }) {
   if (!data) return null;
@@ -17,16 +19,16 @@ export function ModalDetallesSolicitud({ data }) {
 
   return (
     <div className="solicitud-detalle-wrap container-fluid p-3 p-md-4">
-      <div className="row g-3">
-        <div className="col-md-6">
-          <div className="card border h-100 solicitud-detalle-card">
-            <div className="card-header solicitud-detalle-card-header">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+        <div className="md:col-span-6">
+          <Card className="border h-full solicitud-detalle-card">
+            <CardHeader className="solicitud-detalle-card-header">
               <p className="h6 mt-1 mb-0 d-flex align-items-center gap-2">
                 <FileAxis3D className="text-auto me-2" />
                 Información General
               </p>
-            </div>
-            <div className="card-body d-flex flex-column align-items-center justify-content-center text-center gap-1">
+            </CardHeader>
+            <CardContent className="flex flex-col items-center justify-center text-center gap-1">
               <span className="solicitud-avatar-icon">
                 <UserRoundIcon
                   className="text-auto"
@@ -49,18 +51,18 @@ export function ModalDetallesSolicitud({ data }) {
               <small id="detalleCelular" className="text-muted mt-2">
                 {data?.celular}
               </small>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </div>
 
-        <div className="col-md-6">
-          <div className="card border h-100 solicitud-detalle-card">
-            <div className="card-header solicitud-detalle-card-header">
+        <div className="md:col-span-6">
+          <Card className="border h-full solicitud-detalle-card">
+            <CardHeader className="solicitud-detalle-card-header">
               <p className="h6 mt-1 mb-0 d-flex align-items-center gap-2">
                 <Box className="text-auto me-2" /> Detalles del Producto
               </p>
-            </div>
-            <div className="card-body solicitud-info-list">
+            </CardHeader>
+            <CardContent className="solicitud-info-list">
               <p>
                 <strong>Producto:</strong>{" "}
                 <span id="detalleProducto">{data?.nombre_producto}</span>
@@ -77,18 +79,18 @@ export function ModalDetallesSolicitud({ data }) {
                 <strong>Cantidad:</strong>{" "}
                 <span id="detalleCantidad">{data?.cantidad}</span>
               </p>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </div>
 
-        <div className="col-md-12">
-          <div className="card border h-100 solicitud-detalle-card">
-            <div className="card-header solicitud-detalle-card-header">
+        <div className="md:col-span-12">
+          <Card className="border h-full solicitud-detalle-card">
+            <CardHeader className="solicitud-detalle-card-header">
               <p className="h6 mt-1 mb-0 d-flex align-items-center gap-2">
                 <Info className="text-auto me-2" /> Información Adicional
               </p>
-            </div>
-            <div className="card-body solicitud-info-list">
+            </CardHeader>
+            <CardContent className="solicitud-info-list">
               <p>
                 <strong>Motivo:</strong>{" "}
                 <span id="detalleMotivo">{data?.motivo || "-"}</span>
@@ -127,8 +129,8 @@ export function ModalDetallesSolicitud({ data }) {
                   {data?.fecha_solicitud || data?.created_at || "-"}
                 </span>
               </p>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>

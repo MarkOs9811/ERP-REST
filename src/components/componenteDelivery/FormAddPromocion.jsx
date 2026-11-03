@@ -4,6 +4,7 @@ import ToastAlert from "../componenteToast/ToastAlert";
 import { useQueryClient } from "@tanstack/react-query";
 import axiosInstance from "../../api/AxiosInstance";
 import { useForm } from "react-hook-form";
+import { Button } from "../ui/button";
 
 export function FormAddPromocion({ onClose, platos }) {
   const queryClient = useQueryClient();
@@ -156,7 +157,7 @@ export function FormAddPromocion({ onClose, platos }) {
       </div>
 
       {/* Fila de Precios y Descuentos */}
-      <div className="row g-3 mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-4">
         <div className="col-6">
           <label className="form-label fw-medium text-dark d-flex align-items-center gap-1">
             <Percent size={16} className="text-muted" />
@@ -208,7 +209,7 @@ export function FormAddPromocion({ onClose, platos }) {
       </div>
 
       {/* Fechas de Vigencia */}
-      <div className="row g-3 mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-4">
         <div className="col-6">
           <label className="form-label fw-medium text-dark d-flex align-items-center gap-1">
             <Calendar size={16} className="text-muted" />
@@ -284,17 +285,17 @@ export function FormAddPromocion({ onClose, platos }) {
 
       {/* Controles del Footer */}
       <div className="mt-auto d-flex justify-content-end gap-2 border-top pt-3">
-        <button
+        <Button
           type="button"
           className="btn-cerrar-modal"
           onClick={onClose}
           disabled={isSubmitting}
-        >
+         variant="default">
           Cancelar
-        </button>
-        <button type="submit" className="btn-guardar" disabled={isSubmitting}>
+        </Button>
+        <Button type="submit" className="btn-guardar" disabled={isSubmitting} variant="default">
           {isSubmitting ? "Guardando..." : "Guardar Promoción"}
-        </button>
+        </Button>
       </div>
     </form>
   );

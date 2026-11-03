@@ -4,6 +4,9 @@ import { useForm } from "react-hook-form";
 import { handlePrecioInput, validatePrecio } from "../../hooks/InputHandlers";
 import axiosInstance from "../../api/AxiosInstance";
 import ToastAlert from "../componenteToast/ToastAlert";
+import { Button } from "../ui/button";
+import { Card } from "@/components/ui/card";
+
 
 export function PlatoEditar({ dataPlato, handleCloseModal }) {
   const [fotoPreview, setFotoPreview] = useState(null);
@@ -134,7 +137,7 @@ export function PlatoEditar({ dataPlato, handleCloseModal }) {
   });
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="p-4">
-      <div className="card d-flex bg-transparent p-3 mb-3">
+      <Card className="flex bg-transparent p-3 mb-3">
         <label htmlFor="foto" className="form-label">
           Foto Plato
         </label>
@@ -162,13 +165,13 @@ export function PlatoEditar({ dataPlato, handleCloseModal }) {
                 Haz clic o arrastra para cargar el logo
               </p>
             )}
-            <button type="button" className="btn btn-outline-dark mt-2">
+            <Button type="button" className="btn btn-outline-dark mt-2" variant="default">
               Seleccionar archivo
-            </button>
+            </Button>
           </div>
           <p className="text-danger">{errors.foto?.message}</p>
         </div>
-      </div>
+      </Card>
 
       <div className="row">
         <div className="col-6">
@@ -259,16 +262,16 @@ export function PlatoEditar({ dataPlato, handleCloseModal }) {
         )}
       </div>
       <div className="d-flex justify-content-center mt-4 gap-2">
-        <button
+        <Button
           type="button"
           className="btn-cerrar px-3"
           onClick={handleCloseModal}
-        >
+         variant="default">
           Cerrar
-        </button>
-        <button className="btn-guardar" type="input" disabled={isSubmitting}>
+        </Button>
+        <Button className="btn-guardar" type="input" disabled={isSubmitting} variant="default">
           {isSubmitting ? "Guardando..." : "Guardar Cambios"}
-        </button>
+        </Button>
       </div>
     </form>
   );

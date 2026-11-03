@@ -3,6 +3,9 @@ import { useForm } from "react-hook-form";
 import { useQueryClient } from "@tanstack/react-query";
 import axiosInstance from "../../api/AxiosInstance";
 import ToastAlert from "../../components/componenteToast/ToastAlert";
+import { Button } from "../../components/ui/button";
+import { Card } from "@/components/ui/card";
+
 
 export function FormularioEmpresaAdmin({ dataEmpresa = null, onClose }) {
   const isEditMode = Boolean(dataEmpresa);
@@ -69,7 +72,7 @@ export function FormularioEmpresaAdmin({ dataEmpresa = null, onClose }) {
       // Si el usuario cancela, volvemos a la imagen original o vacío
       setSelectedFile(null);
       setPreviewUrl(
-        dataEmpresa?.logo ? `${BASE_URL}/storage/${dataEmpresa.logo}` : ""
+        dataEmpresa?.logo ? `${BASE_URL}/storage/${dataEmpresa.logo}` : "",
       );
     }
   };
@@ -126,7 +129,7 @@ export function FormularioEmpresaAdmin({ dataEmpresa = null, onClose }) {
         } else {
           ToastAlert(
             "error",
-            err.response.data.message || "Error de validación"
+            err.response.data.message || "Error de validación",
           );
         }
         return;
@@ -134,7 +137,7 @@ export function FormularioEmpresaAdmin({ dataEmpresa = null, onClose }) {
 
       ToastAlert(
         "error",
-        err.response?.data?.message || "Error al guardar la empresa"
+        err.response?.data?.message || "Error al guardar la empresa",
       );
     }
   };
@@ -144,7 +147,7 @@ export function FormularioEmpresaAdmin({ dataEmpresa = null, onClose }) {
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <div className="mb-3 d-flex flex-column gap-3 align-items-start">
           {/* Preview de la imagen */}
-          <div className="card m-auto bg-white p-2 border rounded-pill overflow-hidden">
+          <Card className="m-auto bg-background p-2 border rounded-full overflow-hidden">
             <div
               className="rounded-pill position-relative"
               style={{
@@ -167,7 +170,7 @@ export function FormularioEmpresaAdmin({ dataEmpresa = null, onClose }) {
                 <span className="small text-muted">Sin img</span>
               )}
             </div>
-          </div>
+          </Card>
 
           <div className="flex-grow-1 w-100">
             <label className="form-label small d-block">Logo / Foto</label>
@@ -238,7 +241,7 @@ export function FormularioEmpresaAdmin({ dataEmpresa = null, onClose }) {
         </div>
 
         <div className="row">
-          <div className="col-md-6 mb-3">
+          <div className="md:col-span-6 mb-3">
             <label className="form-label small">RUC*</label>
             <input
               type="text"
@@ -257,7 +260,7 @@ export function FormularioEmpresaAdmin({ dataEmpresa = null, onClose }) {
             )}
           </div>
 
-          <div className="col-md-6 mb-3">
+          <div className="md:col-span-6 mb-3">
             <label className="form-label small">Teléfono*</label>
             <input
               type="tel"
@@ -295,17 +298,17 @@ export function FormularioEmpresaAdmin({ dataEmpresa = null, onClose }) {
         </div>
 
         <div className="d-flex justify-content-end gap-2">
-          <button
+          <Button
             type="button"
             className="btn-cerrar-modal"
             onClick={onClose}
             disabled={isSubmitting}
-          >
+           variant="default">
             Cancelar
-          </button>
-          <button type="submit" className="btn-guardar" disabled={isSubmitting}>
+          </Button>
+          <Button type="submit" className="btn-guardar" disabled={isSubmitting} variant="default">
             {isEditMode ? "Actualizar Empresa" : "Crear Empresa"}
-          </button>
+          </Button>
         </div>
       </form>
     </div>

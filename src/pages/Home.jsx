@@ -13,6 +13,9 @@ import { DashboardMesas } from "../components/componentesHome/DashboardMesas";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { StoreIcon } from "lucide-react";
+import { Button } from "../components/ui/button";
+import { Card } from "@/components/ui/card";
+
 
 export function Home() {
   const {
@@ -32,74 +35,71 @@ export function Home() {
   const nombreCaja = caja?.nombre || caja?.nombreCaja || "Sin caja";
 
   return (
-    <div className="container-fluid home-shell py-3">
-      <div className="row g-3 mb-3 align-items-stretch">
-        <div className="col-12 col-lg-8">
+    <div className="home-shell mx-auto w-full max-w-[1600px] space-y-4 px-3 py-3 sm:px-4">
+      <div className="grid grid-cols-1 items-stretch gap-3 lg:grid-cols-12">
+        <div className="min-w-0 lg:col-span-8">
           <CabeceraHome cajaAbierta={!!cajaAbierta} />
         </div>
-        <div className="col-12 col-lg-4">
-          <div className="card h-100 overflow-hidden p-4 home-caja-card position-relative">
+        <div className="min-w-0 lg:col-span-4">
+          <Card className="home-caja-card relative h-full min-h-55 overflow-hidden rounded-xl border border-border bg-card p-4 text-card-foreground">
             <div className="hero-decoration"></div>
-            <div className="position-relative z-1 d-flex flex-column h-100">
-              <p className="mb-2 fw-medium text-muted d-flex align-items-center gap-2">
+            <div className="relative z-1 flex h-full flex-col">
+              <p className="mb-2 flex items-center gap-2 font-medium text-muted-foreground">
                 <span
-                  className={`status-dot rounded-circle ${
-                    cajaAbierta ? "bg-success" : "bg-secondary"
+                  className={`status-dot rounded-full ${
+                    cajaAbierta ? "bg-emerald-500" : "bg-slate-400"
                   }`}
                 ></span>
                 {cajaAbierta ? "Caja abierta" : "Caja cerrada"}
               </p>
-              <h5
-                className="fw-bold mb-2"
-                style={{ color: "var(--text-main)" }}
-              >
+              <h2 className="mb-2 text-xl font-bold text-foreground">
                 {nombreCaja}
-              </h5>
-              <p className="mb-4 text-muted flex-grow-1">
+              </h2>
+              <p className="mb-4 flex-1 text-sm text-muted-foreground">
                 {cajaAbierta
                   ? "¡Buen trabajo! Mantén el control de tus ventas."
                   : "Caja cerrada. Abre la caja para comenzar a vender."}
               </p>
-              <button
-                className={`btn-principal btn-lg px-4 py-2 fw-bold shadow-sm d-flex align-items-center justify-content-center gap-2 w-100 ${
+              <Button
+                className={`btn-principal flex w-full items-center justify-center gap-2 rounded-lg px-4 py-3 font-semibold shadow-sm transition ${
                   cajaAbierta ? "btn-ir-a-caja" : "btn-abrir-caja"
                 }`}
                 onClick={() =>
                   navigate(cajaAbierta ? "/vender/mesas" : "/abrirCaja")
                 }
-              >
+               variant="default">
                 <StoreIcon size={20} />
                 <span>{cajaAbierta ? "Ir a Caja" : "Abrir Caja"}</span>
-              </button>
+              </Button>
             </div>
-          </div>
+          </Card>
         </div>
       </div>
 
-      <section className="mb-3">
+      <section>
         <InformacionRapidaHome />
       </section>
 
-      <div className="row g-3 mb-3">
-        <div className="col-12 col-xl-8">
+      <div className="grid grid-cols-1 gap-3 xl:grid-cols-12">
+        <div className="min-w-0 xl:col-span-8">
           <DashboardMesas />
         </div>
-        <div className="col-12 col-xl-4">
-          <div className="d-flex flex-column gap-3 h-100">
+        <div className="min-w-0 xl:col-span-4">
+          <div className="flex h-full flex-col gap-3">
             <CarouselMarketingHome />
             <VentasTipo
               ventasList={ventasList}
               load={loadingVentas}
               errorLoad={errorVentas}
             />
-            <div className="flex-grow-1">
+            <div className="flex-1">
               <UsuariosActivosHome />
             </div>
           </div>
         </div>
       </div>
 
-      <section className="mb-3">
+      <section>
         <PlatoMasVendido />
       </section>
 

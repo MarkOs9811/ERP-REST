@@ -5,6 +5,7 @@ import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
 import { obtenerTiempoRelativo } from "../../utils/formatoFechas";
 import "../../css/estilosClientes/EstilosFeedBack.css";
 import { Star } from "lucide-react";
+import { Button } from "../ui/button";
 
 // Componente de Ítem Individual para mantenibilidad
 const FeedbackItem = ({ row }) => {
@@ -102,23 +103,23 @@ export function ListaFeedBacks() {
         <div className="overflow-hidden justify-content-center py-4 border-top">
           <nav>
             <ul className="pagination mb-0 gap-2">
-              <button
+              <Button
                 className="btn btn-outline-secondary btn-sm"
                 disabled={paginaActual === 1}
                 onClick={() => setPaginaActual((p) => p - 1)}
-              >
+               variant="default">
                 Anterior
-              </button>
+              </Button>
               <span className="align-self-center mx-2 small text-muted">
                 Página {paginaActual} de {meta.last_page}
               </span>
-              <button
+              <Button
                 className="btn btn-outline-secondary btn-sm"
                 disabled={paginaActual === meta.last_page}
                 onClick={() => setPaginaActual((p) => p + 1)}
-              >
+               variant="default">
                 Siguiente
-              </button>
+              </Button>
             </ul>
           </nav>
         </div>

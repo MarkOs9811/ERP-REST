@@ -3,6 +3,9 @@ import { FlujoCaja } from "../../components/componentesFinanzas/FlujoCaja";
 import { ResumenActivosPasivos } from "../../components/componentesFinanzas/ResumenActivosPasivos";
 import { Calculator, ChartColumnBig, PlusIcon } from "lucide-react";
 import { useMemo, useState } from "react";
+import { Button } from "../../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 
 export function Presupuestos() {
   const [modoVista, setModoVista] = useState("total");
@@ -24,10 +27,10 @@ export function Presupuestos() {
 
   return (
     <div>
-      <div className="row g-3">
-        <div className="col-md-12">
-          <div className="card  py-2">
-            <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-3">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+        <div className="md:col-span-12">
+          <Card className="py-2">
+            <CardHeader className="border-bottom-0 flex flex-col flex-md-row justify-between items-center gap-2 p-3">
               <div className="d-flex align-items-center">
                 <Calculator
                   color={"var(--fw-strawberry)"}
@@ -36,9 +39,9 @@ export function Presupuestos() {
                   className="me-2"
                 />
                 <div>
-                  <h4 className="card-title mb-0 titulo-card-especial">
+                  <CardTitle asChild><h4 className="mb-0 titulo-card-especial">
                     Presupuestos
-                  </h4>
+                  </h4></CardTitle>
                   <small
                     className="fw-flow-description"
                     style={{ fontWeight: "normal" }}
@@ -50,36 +53,36 @@ export function Presupuestos() {
               </div>
 
               <div className="d-flex flex-wrap gap-2 mt-3 mt-md-0 align-items-center ms-auto">
-                <button
+                <Button
                   className="btn px-3"
                   style={{
                     border: "1px solid var(--fw-border)",
                     backgroundColor: "var(--bg-card)",
                     color: "var(--text-main)",
                   }}
-                >
+                 variant="default">
                   <PlusIcon size={18} />
                   Registrar Saldo
-                </button>
+                </Button>
 
-                <button
+                <Button
                   className="btn px-3"
                   style={{
                     border: "1px solid var(--fw-border)",
                     backgroundColor: "var(--bg-emerald-soft)",
                     color: "var(--fw-emerald)",
                   }}
-                >
+                 variant="default">
                   <PlusIcon size={18} />
                   Crear Presupuesto
-                </button>
+                </Button>
               </div>
-            </div>
-          </div>
+            </CardHeader>
+          </Card>
         </div>
-        <div className="col-md-12 d-flex  w-100 gap-3">
-          <div className="card p-3 w-100 ">
-            <div className="card-header border-0 d-flex align-items-center justify-content-between p-3 ">
+        <div className="md:col-span-12 d-flex  w-100 gap-3">
+          <Card className="p-3 w-full">
+            <CardHeader className="border-0 flex items-center justify-between p-3">
               <div className="d-flex align-items-center">
                 <ChartColumnBig
                   color="var(--fw-emerald)"
@@ -100,7 +103,7 @@ export function Presupuestos() {
                 role="group"
                 aria-label="Botones de Flujo de Caja"
               >
-                <button
+                <Button
                   type="button"
                   className="btn"
                   style={{
@@ -115,10 +118,10 @@ export function Presupuestos() {
                         : "var(--text-main)",
                   }}
                   onClick={() => setModoVista("total")}
-                >
+                 variant="default">
                   <i className="fas fa-calculator"></i> Total
-                </button>
-                <button
+                </Button>
+                <Button
                   type="button"
                   className="btn"
                   title="Ultimo Mes"
@@ -134,11 +137,11 @@ export function Presupuestos() {
                         : "var(--text-main)",
                   }}
                   onClick={() => setModoVista("mes")}
-                >
+                 variant="default">
                   <i className="fas fa-calendar-alt"></i> Por Mes
-                </button>
+                </Button>
               </div>
-            </div>
+            </CardHeader>
 
             <div className="px-3 pb-2 d-flex justify-content-end align-items-center gap-2">
               {modoVista === "mes" && (
@@ -157,20 +160,20 @@ export function Presupuestos() {
               )}
             </div>
 
-            <div className="card-body p-0">
+            <CardContent className="p-0">
               <FlujoCaja modoVista={modoVista} selectedMonth={selectedMonth} />
-            </div>
-          </div>
-          <div className="card  py-2 w-50">
-            <div className="card-header border-0 p-3 d-flex align-items-center ">
+            </CardContent>
+          </Card>
+          <Card className="py-2 w-50">
+            <CardHeader className="border-0 p-3 flex items-center">
               <div className="d-flex align-items-center">
-                <p className="h4 card-title ms-2 mb-0">Activos y Pasivos</p>
+                <CardTitle asChild><p className="h4 ms-2 mb-0">Activos y Pasivos</p></CardTitle>
               </div>
-            </div>
-            <div className="card-body">
+            </CardHeader>
+            <CardContent className="">
               <ResumenActivosPasivos />
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>

@@ -6,14 +6,16 @@ import {
   WalletMinimal,
   Warehouse,
 } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+
 
 export function AccesosRapidos() {
   return (
     <div className="container">
-      <div className="card h-100 d-flex">
-        <div className="card-body d-flex">
+      <Card className="h-full flex">
+        <CardContent className="flex">
           <h5 className="text-dark mb-3">Accesos Rápidos</h5>
-          <div className="row g-2 text-dark ">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-2 text-dark ">
             {[
               {
                 icon: (
@@ -63,8 +65,8 @@ export function AccesosRapidos() {
               </div>
             ))}
           </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

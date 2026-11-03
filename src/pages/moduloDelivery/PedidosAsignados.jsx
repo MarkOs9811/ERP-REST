@@ -1,19 +1,21 @@
 import { ListaPedidosAsignados } from "../../components/componenteDelivery/ListaPedidosAsignados";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+
 
 export function PedidosAsignados() {
   return (
     <div className="container-fluid p-0">
-      <div className="card ">
-        <div className="card-header d-flex flex-column align-items-start">
-          <h4 className="card-title">Pedidos en ruta</h4>
-          <h6 className="card-subtitle mb-2 text-muted">
+      <Card className="">
+        <CardHeader className="flex flex-col items-start">
+          <CardTitle asChild><h4 className="">Pedidos en ruta</h4></CardTitle>
+          <CardDescription asChild><h6 className="mb-2 text-muted">
             Aquí puedes gestionar los pedidos asignados a los repartidores.
-          </h6>
-        </div>
-        <div className="card-body p-0">
+          </h6></CardDescription>
+        </CardHeader>
+        <CardContent className="p-0">
           <ListaPedidosAsignados />
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

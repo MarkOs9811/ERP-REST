@@ -14,6 +14,8 @@ import { ModalCuerpo } from "../../components/componenteVender/cuerpoModalRight/
 import { CheckCheck, CookingPot, Hourglass } from "lucide-react";
 import { getPedidosListos } from "../../service/GetPedidosListos";
 import CardPedidoDelivery from "../../components/componenteVender/CardPedidosDelivery";
+import { Card } from "@/components/ui/card";
+
 
 export function PedidosWeb() {
   const queryClient = useQueryClient();
@@ -186,7 +188,7 @@ export function PedidosWeb() {
             colError: isErrorListos,
           },
         ].map(({ key, title, border, icon, colLoading, colError }) => (
-          <div key={key} className="card kanban-col py-2">
+          <Card key={key} className="kanban-col py-2">
             <div
               className=" kanban-column flex-grow-1 h-100 d-flex flex-column bg-white"
               style={{
@@ -255,7 +257,7 @@ export function PedidosWeb() {
                 )}
               </Droppable>
             </div>
-          </div>
+          </Card>
         ))}
       </div>
 

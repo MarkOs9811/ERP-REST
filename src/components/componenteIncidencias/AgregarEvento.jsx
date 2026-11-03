@@ -13,6 +13,7 @@ import {
   SquaresExclude,
   TextIcon,
 } from "lucide-react";
+import { Button } from "../ui/button";
 
 export function AgregarEvento() {
   const queryClient = useQueryClient();
@@ -120,8 +121,8 @@ export function AgregarEvento() {
             Fecha y hora
           </h6>
 
-          <div className="row g-3">
-            <div className="col-md-6">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+            <div className="md:col-span-6">
               <label className="form-label fw-bold">Inicio *</label>
               <div className="input-group">
                 <span className="input-group-text">
@@ -143,7 +144,7 @@ export function AgregarEvento() {
               )}
             </div>
 
-            <div className="col-md-6">
+            <div className="md:col-span-6">
               <label className="form-label fw-bold">Fin *</label>
               <div className="input-group">
                 <span className="input-group-text">
@@ -196,13 +197,13 @@ export function AgregarEvento() {
                     })}
                   />
                   {fields.length > 1 && (
-                    <button
+                    <Button
                       type="button"
                       onClick={() => remove(index)}
                       className="btn btn-outline-danger"
-                    >
+                     variant="destructive">
                       <i className="bi bi-trash"></i>
-                    </button>
+                    </Button>
                   )}
                 </div>
                 {errors.attendees?.[index] && (
@@ -214,24 +215,24 @@ export function AgregarEvento() {
               </div>
             ))}
 
-            <button
+            <Button
               type="button"
               onClick={() => append("")}
               className="btn btn-outline-primary mt-2"
-            >
+             variant="default">
               <i className="bi bi-plus-circle me-2"></i>
               Agregar invitado
-            </button>
+            </Button>
           </div>
         </div>
 
         {/* Botón de envío */}
         <div className="d-grid">
-          <button
+          <Button
             type="submit"
             disabled={isSubmitting}
             className="btn-guardar py-2 w-100"
-          >
+           variant="default">
             {isSubmitting ? (
               <>
                 <span
@@ -247,7 +248,7 @@ export function AgregarEvento() {
                 Guardar
               </>
             )}
-          </button>
+          </Button>
         </div>
       </form>
     </div>

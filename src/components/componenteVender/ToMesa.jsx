@@ -27,6 +27,9 @@ import BotonAnimado from "../componentesReutilizables/BotonAnimado";
 import { BuscadorPlatos } from "./tareasVender/BuscadorPlatos";
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
 import { ImprimirTicket } from "./tareasVender/ImprimiTIcket";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+
 
 export function ToMesa() {
   const id = useSelector((state) => state.mesa.idPreventaMesa);
@@ -141,10 +144,10 @@ export function ToMesa() {
 
   return (
     <div className="h-100 bg-transparent">
-      <div className="row h-100 g-3">
-        <div className="col-md-4 col-lg-3 h-100">
-          <div className="card  flex-grow-1 h-100 d-flex flex-column overflow-hidden">
-            <div className="card-header bg-white border-bottom py-3">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-4h-100 g-3">
+        <div className="md:col-span-4 col-lg-3 h-100">
+          <Card className="flex-grow-1 h-full flex flex-col overflow-hidden">
+            <CardHeader className="bg-background border-b py-3">
               <div className="d-flex align-items-center w-100 gap-2">
                 <select
                   className="form-select"
@@ -164,24 +167,24 @@ export function ToMesa() {
                 </select>
 
                 <div className="d-flex gap-2 ms-auto">
-                  <button
+                  <Button
                     className="btn-eliminar btn-icon flex-shrink-0"
                     title="Limpiar Pedido"
                     onClick={handleLimpiarMesa}
-                  >
+                   variant="destructive">
                     <FontAwesomeIcon icon={faTrashCan} />
-                  </button>
+                  </Button>
 
-                  <button
+                  <Button
                     className="btn-cerrar btn-icon flex-shrink-0"
                     onClick={handleVolverToMesas}
-                  >
+                   variant="default">
                     <FontAwesomeIcon icon={faArrowLeft} />
-                  </button>
+                  </Button>
                 </div>
               </div>
-            </div>
-            <div className="card-body overflow-auto p-0 d-flex flex-column ">
+            </CardHeader>
+            <CardContent className="overflow-auto p-0 flex flex-col">
               {pedido.mesas[id] && pedido.mesas[id].items.length > 0 ? (
                 <div className="overflow-auto  rounded-none">
                   <table className="table table-borderless align-middle mb-0 bg-transparent">
@@ -228,28 +231,28 @@ export function ToMesa() {
                                 margin: "0 auto",
                               }}
                             >
-                              <button
+                              <Button
                                 className="btn-informativo btn-icon border-0 text-dark p-0"
                                 style={{ width: "22px" }}
                                 onClick={() =>
                                   handleRemovePlatoPreventa(item.id)
                                 }
-                              >
+                               variant="default">
                                 <Minus size={14} />
-                              </button>
+                              </Button>
                               <span
                                 className="mx-1  fw-bold"
                                 style={{ fontSize: "0.85rem" }}
                               >
                                 {item.cantidad}
                               </span>
-                              <button
+                              <Button
                                 className="btn-informativo btn-icon border-0 text-dark p-0"
                                 style={{ width: "22px" }}
                                 onClick={() => handleAddPlatoPreventa(item)}
-                              >
+                               variant="default">
                                 <Plus size={14} />
-                              </button>
+                              </Button>
                             </div>
                           </td>
                           <td
@@ -259,14 +262,14 @@ export function ToMesa() {
                             S/. {Number(item.cantidad * item.precio).toFixed(2)}
                           </td>
                           <td className="text-center py-2 bg-transparent">
-                            <button
+                            <Button
                               className="btn-eliminar btn-icon rounded-pill mx-2 p-0 border-0"
                               onClick={() =>
                                 handleRemovePlatoPreventa(item.id, true)
                               }
-                            >
+                             variant="destructive">
                               <Trash2 size={14} />
-                            </button>
+                            </Button>
                           </td>
                         </tr>
                       ))}
@@ -279,10 +282,10 @@ export function ToMesa() {
                   <p className="text-muted small">Mesa vacía</p>
                 </div>
               )}
-            </div>
+            </CardContent>
 
-            <div
-              className="card-footer  border-top p-3 shadow-lg bg-white"
+            <CardFooter
+              className="border-t p-3 shadow-lg bg-background"
               style={{ zIndex: 10 }}
             >
               <ImprimirTicket
@@ -331,13 +334,13 @@ export function ToMesa() {
               >
                 REALIZAR PEDIDO
               </BotonAnimado>
-            </div>
-          </div>
+            </CardFooter>
+          </Card>
         </div>
 
-        <div className="col-md-8 col-lg-9 h-100">
-          <div className="card d-flex flex-grow-1 flex-column h-100 p-0 m-0 overflow-auto">
-            <div className="card-header bg-white border-bottom  py-3 px-3 m-0 d-flex align-items-center gap-3 flex-wrap">
+        <div className="md:col-span-8 col-lg-9 h-100">
+          <Card className="flex flex-grow-1 flex-col h-full p-0 m-0 overflow-auto">
+            <CardHeader className="bg-background border-b py-3 px-3 m-0 flex items-center gap-3 flex-wrap">
               <div>
                 <h6 className="d-flex align-items-center gap-2 flex-shrink-0">
                   <Hamburger size={28} /> Menú de Platos
@@ -357,14 +360,14 @@ export function ToMesa() {
                   clearSearch={setSearchTerm}
                 />
               </div>
-            </div>
+            </CardHeader>
 
             <CondicionCarga
               isLoading={loadinPlatos}
               isError={errorPlatos}
               mode="cards"
             >
-              <div className="card-body p-2  contenedor-platos overflow-x-hidden m-auto ">
+              <CardContent className="p-2 contenedor-platos overflow-x-hidden m-auto">
                 {productos
                   .filter((producto) => {
                     const matchCat =
@@ -391,9 +394,9 @@ export function ToMesa() {
                       />
                     );
                   })}
-              </div>
+              </CardContent>
             </CondicionCarga>
-          </div>
+          </Card>
         </div>
       </div>
     </div>

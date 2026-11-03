@@ -6,6 +6,9 @@ import axiosInstance from "../../../api/AxiosInstance";
 import { useQueryClient } from "@tanstack/react-query";
 import ModalAlertQuestion from "../../componenteToast/ModalAlertQuestion";
 import { FormularioAddMetodo } from "../formularios/FormularioAddMetodo";
+import { Button } from "../../ui/button";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
+
 
 const MetodoPago = ({ metodos, onToggle }) => {
   const [modalAddMetodoPago, setModalAddMetodoPago] = useState(false);
@@ -50,19 +53,19 @@ const MetodoPago = ({ metodos, onToggle }) => {
     }
   };
   return (
-    <div className="col-md-4">
-      <div className="card  ">
-        <div className="card-body">
+    <div className="md:col-span-4">
+      <Card className="">
+        <CardContent className="">
           <div className="d-flex justify-content-between align-items-center">
-            <h6 className="card-title mb-0 fw-bold">Métodos de Pago</h6>
-            <button
+            <CardTitle asChild><h6 className="mb-0 fw-bold">Métodos de Pago</h6></CardTitle>
+            <Button
               type="button"
               className="btn-principal btn-icon btn-sm"
               title="Agregar Método"
               onClick={() => setModalAddMetodoPago(true)}
-            >
+             variant="default">
               <Plus className="text-auto" />
-            </button>
+            </Button>
           </div>
           <ul className="list-unstyled mt-3">
             {metodos.map((metodo) => (
@@ -75,16 +78,16 @@ const MetodoPago = ({ metodos, onToggle }) => {
                   <small className="text-muted">Nº {metodo.id}</small>
                 </div>
                 <div className="d-flex gap-2">
-                  <button
+                  <Button
                     type="button"
                     className="btn-eliminar btn-icon rounded-5 "
                     onClick={() => {
                       setModalQuestion(true);
                       setDataMetodo(metodo);
                     }}
-                  >
+                   variant="destructive">
                     <Trash2 size={18} />
-                  </button>
+                  </Button>
                   <div
                     className="form-check form-switch m-0"
                     style={{ minWidth: 40 }}
@@ -101,8 +104,8 @@ const MetodoPago = ({ metodos, onToggle }) => {
               </li>
             ))}
           </ul>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
       <ModalAlertQuestion
         show={metodoQuestion}

@@ -1,29 +1,33 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useForm, Controller } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import axios from "axios";
-import { useForm } from "react-hook-form";
-import "../css/EstilosLogin.css";
-import ToastAlert from "../components/componenteToast/ToastAlert";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faExclamationCircle,
-  faUnlockKeyhole,
-  faArrowLeft,
-} from "@fortawesome/free-solid-svg-icons";
-import { faUser, faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+
+// Contextos, Redux y Utils
 import { useAuth } from "../AuthContext";
 import { abrirCaja } from "../redux/cajaSlice";
-import { useDispatch } from "react-redux";
 import { Cargando } from "../components/componentesReutilizables/Cargando";
 import axiosInstance from "../api/AxiosInstance";
+import ToastAlert from "../components/componenteToast/ToastAlert";
+
+// Componentes UI de shadcn
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // --- Estados para alternar vistas y mostrar el Badge ---
+  // Estados para alternar vistas
   const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [badgeMessage, setBadgeMessage] = useState({ type: "", text: "" });
 
@@ -35,14 +39,13 @@ export const Login = () => {
     handleSubmit,
     reset,
     clearErrors,
+    control,
     formState: { errors },
   } = useForm();
 
   const { login } = useAuth();
 
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
   const toggleView = (showForgot) => {
     setIsForgotPassword(showForgot);
@@ -55,20 +58,13 @@ export const Login = () => {
   const onSubmitLogin = async (data) => {
     setLoading(true);
     try {
-      // const response = await axios.post("http://127.0.0.1:8000/api/login", {
-        //   //"https://erp-api-production-c7d4.up.railway.app/api/login",
-        // const response = await axios.post("http://192.168.100.5:8000/api/login", {
-        const response = await axios.post("http://erp-api.test/api/login", {
+      const response = await axios.post("http://127.0.0.1:8000/api/login", {
         email: data.email,
         password: data.password,
       });
-      // AGREGA ESTAS 4 LÍNEAS AQUÍ:
 
       if (response.data.token) {
-        // 1. Enviamos el valor del checkbox a tu AuthContext
         login(response.data.token, response.data.user, data.rememberMe);
-
-        // 2. Definimos dónde vamos a guardar el resto de la info (Local o Session)
         const storage = data.rememberMe ? localStorage : sessionStorage;
 
         const cajaData = {
@@ -78,7 +74,6 @@ export const Login = () => {
             response.data?.caja?.caja?.estadoCaja === 1 ? "abierto" : "cerrado",
         };
 
-        // 3. Guardamos TODO en la bóveda elegida
         storage.setItem("roles", JSON.stringify(response.data.roles));
         storage.setItem("caja", JSON.stringify(cajaData));
         storage.setItem(
@@ -94,10 +89,7 @@ export const Login = () => {
         dispatch(abrirCaja(cajaData));
 
         ToastAlert("success", "Inicio de sesión exitoso");
-
-        setTimeout(() => {
-          navigate("/");
-        }, 2000);
+        setTimeout(() => navigate("/"), 2000);
       } else {
         ToastAlert(
           "error",
@@ -106,53 +98,44 @@ export const Login = () => {
         setLoading(false);
       }
     } catch (err) {
-      // Extraemos el mensaje de forma segura para evitar el toast vacío
       let errorMsg = "Error al conectar con el servidor";
-
       if (err.response) {
         if (typeof err.response.data === "string") {
-          // Si Laravel devuelve una vista HTML genérica (ej. un 500 o un 429 nativo)
           errorMsg = `Error del servidor (Código HTTP ${err.response.status})`;
         } else {
-          // Si devuelve un JSON, buscamos 'message', luego 'error', o el código
           errorMsg =
             err.response.data.message ||
             err.response.data.error ||
             `Ocurrió un error (HTTP ${err.response.status})`;
         }
       }
-
       ToastAlert("error", errorMsg);
       setLoading(false);
     }
   };
 
+  // --- Lógica de Recuperación de Contraseña ---
   const onForgotSubmit = async (data) => {
     setLoading(true);
     setBadgeMessage({ type: "", text: "" });
 
     try {
-      // await axiosInstance.post("http://127.0.0.1:8000/api/forgot-password", {
       await axiosInstance.post("http://erp-api.test/api/forgot-password", {
         email: data.resetEmail,
       });
-
       ToastAlert("success", "Enlace enviado exitosamente.");
       setBadgeMessage({
         type: "success",
-        text: "¡Listo! Hemos enviado un enlace de recuperación. Por favor, revisa tu bandeja de entrada (y la carpeta de spam).",
+        text: "Enlace de recuperación enviado. Revisa tu bandeja de entrada.",
       });
       reset();
     } catch (err) {
-      let errorMsg =
-        "No se pudo conectar con el servidor. Verifica tu conexión.";
-
+      let errorMsg = "No se pudo conectar con el servidor.";
       if (err.response?.status === 422 && err.response?.data?.errors?.email) {
         errorMsg = err.response.data.errors.email[0];
       } else if (err.response?.data?.message) {
         errorMsg = err.response.data.message;
       }
-
       ToastAlert("error", errorMsg);
       setBadgeMessage({ type: "error", text: errorMsg });
     } finally {
@@ -161,235 +144,229 @@ export const Login = () => {
   };
 
   return (
-    <div className="login-container-wrapper">
+    <main className="flex min-h-screen flex-col items-center justify-center bg-zinc-50 p-4 text-zinc-900 md:p-8">
       <ToastContainer />
-      <div className="login-container-grid">
-        {/* === COLUMNA IZQUIERDA === */}
-        <div className="login-left-panel">
-          <div className="login-left-panel-content">
-            <div className="login-brand-pill">ERP</div>
-            <h1 className="login-brand-title">Bienvenido</h1>
-            <p className="login-brand-subtitle">
-              Gestiona tu restaurante de forma eficiente.
-            </p>
-            <div className="login-brand-badges">
-              <span>Pedidos</span>
-              <span>Inventario</span>
-              <span>Caja</span>
-            </div>
-          </div>
-        </div>
 
-        {/* === COLUMNA DERECHA (FORMULARIOS) === */}
-        <div className="login-right-panel">
-          {!isForgotPassword ? (
-            <form onSubmit={handleSubmit(onSubmitLogin)} className="login-form">
-              <div className="login-form-body">
-                <div className="login-form-header">
-                  <div className="login-brand-pill login-brand-pill--small">
-                    ERP
-                  </div>
-                  <span className="login-form-eyebrow">
-                    Panel de administración
-                  </span>
-                </div>
-                <h2 className="login-title text-center">Iniciar Sesión</h2>
-
-                {/* Input de Usuario */}
-                <div className="input-group-custom">
-                  <FontAwesomeIcon icon={faUser} className="input-icon" />
-                  <input
-                    type="text"
-                    className={`form-control-custom ${errors.email ? "is-invalid" : ""}`}
-                    {...register("email", {
-                      required: "El nombre de usuario o email es obligatorio",
-                      minLength: {
-                        value: 3,
-                        message: "Debe tener al menos 3 caracteres",
-                      },
-                    })}
-                    placeholder="Usuario o Email"
-                  />
-                  {errors.email && (
-                    <div className="invalid-feedback-custom">
-                      <FontAwesomeIcon
-                        icon={faExclamationCircle}
-                        className="me-2"
-                      />
-                      {errors.email.message}
-                    </div>
-                  )}
+      <div className="w-full max-w-4xl">
+        <Card className="flex w-full flex-col overflow-hidden rounded-xl border-zinc-200 shadow-sm md:flex-row md:h-137.5 p-0">
+          {/* COLUMNA IZQUIERDA: FORMULARIOS */}
+          <div className="flex w-full flex-col justify-center bg-white p-8 md:w-1/2 md:p-12">
+            {!isForgotPassword ? (
+              /* --- FORMULARIO DE LOGIN --- */
+              <form
+                onSubmit={handleSubmit(onSubmitLogin)}
+                className="mx-auto flex w-full max-w-90 flex-col justify-center space-y-6"
+              >
+                <div className="flex flex-col space-y-2 text-center mb-2">
+                  <h3 className="text-3xl  font-semibold tracking-tight">
+                    ¡Te damos la bienvenida!
+                  </h3>
+                  <p className="text-sm text-zinc-500">
+                    Inicia sesión para acceder a tu cuenta.
+                  </p>
                 </div>
 
-                {/* Input de Contraseña */}
-                <div className="input-group-custom">
-                  <FontAwesomeIcon
-                    icon={faUnlockKeyhole}
-                    className="input-icon"
-                  />
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    className={`form-control-custom ${errors.password ? "is-invalid" : ""}`}
-                    {...register("password", {
-                      required: "La contraseña es obligatoria",
-                      minLength: {
-                        value: 3,
-                        message:
-                          "La contraseña debe tener al menos 3 caracteres",
-                      },
-                    })}
-                    placeholder="Contraseña"
-                  />
-                  <span
-                    className="password-toggle-icon"
-                    onClick={togglePasswordVisibility}
-                    style={{ cursor: "pointer" }}
-                  >
-                    <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
-                  </span>
-                  {errors.password && (
-                    <div className="invalid-feedback-custom">
-                      <FontAwesomeIcon
-                        icon={faExclamationCircle}
-                        className="me-2"
-                      />
-                      {errors.password.message}
-                    </div>
-                  )}
-                </div>
-
-                {/* Controles Inferiores */}
-                <div className="login-options-row">
-                  {/* Checkbox Recordar Sesión */}
-                  <div className="form-check d-flex align-items-center gap-2 m-0 p-0">
-                    <input
-                      className="form-check-input m-0 shadow-none"
-                      type="checkbox"
-                      id="rememberMe"
-                      style={{ cursor: "pointer" }}
-                      {...register("rememberMe")}
-                    />
-                    <label
-                      className="form-check-label login-remember-label"
-                      htmlFor="rememberMe"
+                <div className="space-y-4">
+                  {/* Correo electrónico */}
+                  <div className="space-y-2">
+                    <Label
+                      htmlFor="login-email"
+                      className={errors.email ? "text-red-500" : ""}
                     >
-                      Recordar sesión
-                    </label>
+                      Correo electrónico
+                    </Label>
+                    <Input
+                      id="login-email"
+                      type="text"
+                      placeholder="usuario@ejemplo.com"
+                      className={`h-9 ${errors.email ? "border-red-500 focus-visible:ring-red-500" : ""}`}
+                      {...register("email", {
+                        required:
+                          "El usuario o correo electrónico es obligatorio",
+                      })}
+                    />
                   </div>
 
-                  {/* Enlace Olvidar Contraseña */}
-                  <span
-                    onClick={() => toggleView(true)}
-                    className="forgot-password-link m-0"
-                  >
-                    ¿Olvidaste tu contraseña?
-                  </span>
-                </div>
-
-                {/* Botón de Ingresar */}
-                <div className="login-submit-wrapper">
-                  <button
-                    type="submit"
-                    className="btn-principal w-100 btn-login-submit"
-                    disabled={loading}
-                  >
-                    {loading ? <Cargando textColor={"white"} /> : "Ingresar"}
-                  </button>
-                </div>
-              </div>
-            </form>
-          ) : (
-            /* --- VISTA DE RECUPERAR CONTRASEÑA --- */
-            <form
-              onSubmit={handleSubmit(onForgotSubmit)}
-              className="login-form"
-            >
-              <div className="login-form-body">
-                <div className="login-form-header login-form-header--back">
-                  <FontAwesomeIcon
-                    icon={faArrowLeft}
-                    className="forgot-back-icon"
-                    onClick={() => toggleView(false)}
-                  />
-                  <div>
-                    <span className="login-form-eyebrow">Recuperación</span>
-                    <h2 className="login-title login-title--compact">
-                      Recuperar Acceso
-                    </h2>
-                  </div>
-                </div>
-
-                <p className="login-help-text">
-                  Ingresa tu correo electrónico y te enviaremos un enlace para
-                  restablecer tu contraseña.
-                </p>
-
-                <div className="input-group-custom">
-                  <FontAwesomeIcon icon={faUser} className="input-icon" />
-                  <input
-                    type="email"
-                    className={`form-control-custom ${errors.resetEmail ? "is-invalid" : ""}`}
-                    {...register("resetEmail", {
-                      required: "Por favor, ingresa tu correo electrónico.",
-                      pattern: {
-                        value:
-                          /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-                        message: "Ingresa un correo electrónico válido",
-                      },
-                    })}
-                    placeholder="Ingresa tu Email"
-                  />
-                  {errors.resetEmail && (
-                    <div className="invalid-feedback-custom">
-                      <FontAwesomeIcon
-                        icon={faExclamationCircle}
-                        className="me-2"
-                      />
-                      {errors.resetEmail.message}
+                  {/* Contraseña y recuperación de acceso */}
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <Label
+                        htmlFor="login-password"
+                        className={errors.password ? "text-red-500" : ""}
+                      >
+                        Contraseña
+                      </Label>
+                      <Button
+                        type="button"
+                        onClick={() => toggleView(true)}
+                        className="text-xs font-medium text-zinc-900 underline-offset-4 hover:underline"
+                       variant="default">
+                        ¿Olvidaste tu contraseña?
+                      </Button>
                     </div>
-                  )}
+                    <div className="relative">
+                      <Input
+                        id="login-password"
+                        type={showPassword ? "text" : "password"}
+                        className={`h-9 pr-10 ${errors.password ? "border-red-500 focus-visible:ring-red-500" : ""}`}
+                        {...register("password", {
+                          required: "La contraseña es obligatoria",
+                        })}
+                      />
+                      <Button
+                        type="button"
+                        onClick={togglePasswordVisibility}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 focus:outline-none"
+                       variant="default">
+                        <FontAwesomeIcon
+                          icon={showPassword ? faEyeSlash : faEye}
+                          className="text-xs"
+                        />
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* Mantener la sesión iniciada */}
+                  <div className="flex items-center space-x-2 pt-1">
+                    <Controller
+                      name="rememberMe"
+                      control={control}
+                      render={({ field }) => (
+                        <Checkbox
+                          id="rememberMe"
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                          className="h-4 w-4"
+                        />
+                      )}
+                    />
+                    <Label
+                      htmlFor="rememberMe"
+                      className="text-xs font-normal cursor-pointer text-zinc-600"
+                    >
+                      Recordar mi sesión
+                    </Label>
+                  </div>
+                </div>
+
+                <Button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full bg-black rounded text-white hover:bg-zinc-800 h-9"
+                 variant="default">
+                  {loading ? <Cargando textColor="white" /> : "Iniciar sesión"}
+                </Button>
+              </form>
+            ) : (
+              /* --- FORMULARIO DE RECUPERACIÓN --- */
+              <form
+                onSubmit={handleSubmit(onForgotSubmit)}
+                className="mx-auto flex w-full max-w-90 flex-col justify-center space-y-6"
+              >
+                <div className="flex flex-col space-y-2 text-center mb-2">
+                  <h1 className="text-2xl font-semibold tracking-tight">
+                    Recupera tu contraseña
+                  </h1>
+                  <p className="text-sm text-zinc-500">
+                    Te enviaremos un enlace para restablecerla.
+                  </p>
+                </div>
+
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label
+                      htmlFor="reset-email"
+                      className={errors.resetEmail ? "text-red-500" : ""}
+                    >
+                      Correo electrónico
+                    </Label>
+                    <Input
+                      id="reset-email"
+                      type="email"
+                      placeholder="usuario@ejemplo.com"
+                      className={`h-9 ${errors.resetEmail ? "border-red-500 focus-visible:ring-red-500" : ""}`}
+                      {...register("resetEmail", {
+                        required: "El correo electrónico es obligatorio",
+                        pattern: {
+                          value:
+                            /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                          message: "El correo electrónico no es válido",
+                        },
+                      })}
+                    />
+                    {errors.resetEmail && (
+                      <span className="text-xs text-red-500">
+                        {errors.resetEmail.message}
+                      </span>
+                    )}
+                  </div>
                 </div>
 
                 {badgeMessage.text && (
-                  <div
-                    className={`alert mt-3 p-3 text-center ${badgeMessage.type === "success" ? "alert-success" : "alert-danger"}`}
-                    style={{
-                      borderRadius: "8px",
-                      fontSize: "0.85rem",
-                      fontWeight: "500",
-                      border: "none",
-                    }}
+                  <Alert
+                    variant={
+                      badgeMessage.type === "success"
+                        ? "default"
+                        : "destructive"
+                    }
+                    className={`py-2 ${badgeMessage.type === "success" ? "border-emerald-200 bg-emerald-50 text-emerald-800" : ""}`}
                   >
-                    <FontAwesomeIcon
-                      icon={
-                        badgeMessage.type === "success"
-                          ? faUnlockKeyhole
-                          : faExclamationCircle
-                      }
-                      className="me-2"
-                    />
-                    {badgeMessage.text}
-                  </div>
+                    <AlertDescription className="text-xs">
+                      {badgeMessage.text}
+                    </AlertDescription>
+                  </Alert>
                 )}
 
-                <div className="login-submit-wrapper">
-                  <button
-                    type="submit"
-                    className="btn-login-submit"
-                    disabled={loading}
-                  >
-                    {loading ? (
-                      <Cargando textColor={"white"} />
-                    ) : (
-                      "Enviar Enlace"
-                    )}
-                  </button>
+                <Button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full bg-black text-white hover:bg-zinc-800 h-9"
+                 variant="default">
+                  {loading ? <Cargando textColor="white" /> : "Enviar enlace"}
+                </Button>
+
+                <div className="text-center text-sm">
+                  <Button
+                    type="button"
+                    onClick={() => toggleView(false)}
+                    className="text-zinc-500 underline underline-offset-4 hover:text-zinc-900"
+                   variant="default">
+                    Volver a iniciar sesión
+                  </Button>
                 </div>
-              </div>
-            </form>
-          )}
-        </div>
+              </form>
+            )}
+          </div>
+
+          {/* COLUMNA DERECHA: IMAGEN (Ajustada para no deformar la tarjeta) */}
+          <div className="hidden w-full bg-zinc-100 md:block md:w-1/2 relative">
+            <img
+              src="../../images/placeholder.jpg"
+              alt="Fondo de login"
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+          </div>
+        </Card>
       </div>
-    </div>
+
+      {/* TEXTO INFERIOR */}
+      <div className="mt-8 text-center text-sm text-zinc-500 max-w-md mx-auto">
+        Al continuar, aceptas nuestros{" "}
+        <a
+          href="#"
+          className="underline underline-offset-4 hover:text-zinc-900"
+        >
+          Términos del servicio
+        </a>{" "}
+        y{" "}
+        <a
+          href="#"
+          className="underline underline-offset-4 hover:text-zinc-900"
+        >
+          Política de privacidad
+        </a>
+        .
+      </div>
+    </main>
   );
 };

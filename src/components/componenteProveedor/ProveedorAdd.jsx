@@ -17,6 +17,7 @@ import {
   limitTelefonoInput,
   validateTelefono,
 } from "../../hooks/InputHandlers";
+import { Button } from "../ui/button";
 
 export function ProveedorAdd({ handleCloseModal }) {
   const {
@@ -86,8 +87,8 @@ export function ProveedorAdd({ handleCloseModal }) {
         <h6 className="fw-bold text-secondary border-bottom pb-2 mb-3">
           Documento y contacto
         </h6>
-        <div className="row g-3">
-          <div className="col-md-4">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+          <div className="md:col-span-4">
             <div className="border rounded p-3 h-100">
               <label
                 htmlFor="tipo_documento"
@@ -120,7 +121,7 @@ export function ProveedorAdd({ handleCloseModal }) {
             </div>
           </div>
 
-          <div className="col-md-4">
+          <div className="md:col-span-4">
             <div className="border rounded p-3 h-100">
               <label
                 htmlFor="numero_documento"
@@ -161,7 +162,7 @@ export function ProveedorAdd({ handleCloseModal }) {
             </div>
           </div>
 
-          <div className="col-md-4">
+          <div className="md:col-span-4">
             <div className="border rounded p-3 h-100">
               <label
                 htmlFor="telefono"
@@ -194,7 +195,7 @@ export function ProveedorAdd({ handleCloseModal }) {
         <h6 className="fw-bold text-secondary border-bottom pb-2 mb-3">
           Información del proveedor
         </h6>
-        <div className="row g-3">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
           <div className="col-12">
             <div className="border rounded p-3">
               <label
@@ -298,12 +299,12 @@ export function ProveedorAdd({ handleCloseModal }) {
       </div>
 
       <div className="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
-        <button type="button" className="btn-cerrar" onClick={handleCloseModal}>
+        <Button type="button" className="btn-cerrar" onClick={handleCloseModal} variant="default">
           Cancelar
-        </button>
-        <button type="submit" className="btn-guardar" disabled={loading}>
+        </Button>
+        <Button type="submit" className="btn-guardar" disabled={loading} variant="default">
           {loading ? "Guardando..." : "Guardar"}
-        </button>
+        </Button>
       </div>
     </form>
   );

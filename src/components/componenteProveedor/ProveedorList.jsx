@@ -3,7 +3,6 @@ import axiosInstance from "../../api/AxiosInstance";
 import ToastAlert from "../componenteToast/ToastAlert";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPowerOff } from "@fortawesome/free-solid-svg-icons";
-import { Modal } from "react-bootstrap";
 import { ProveedorEdit } from "./ProveedorEdit";
 import ModalAlertQuestion from "../componenteToast/ModalAlertQuestion";
 import ModalAlertActivar from "../componenteToast/ModalAlertActivar";
@@ -16,6 +15,7 @@ import {
   BtnEditar,
   BtnEliminar,
 } from "../componentesReutilizables/BotonesAccion";
+import { Button } from "../ui/button";
 
 export function ProveedorList({ search, updateList }) {
   const [filterProveedores, setFilterProveedores] = useState([]);
@@ -207,12 +207,12 @@ export function ProveedorList({ search, updateList }) {
                 />
               </>
             ) : (
-              <button
+              <Button
                 className="btn btn-outline-success"
                 onClick={() => handleQuestionActivar(row.id, row.nombre)}
-              >
+               variant="default">
                 <FontAwesomeIcon icon={faPowerOff} />
-              </button>
+              </Button>
             )}
           </div>
         );

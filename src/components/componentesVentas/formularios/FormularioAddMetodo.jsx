@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { Button } from "../../ui/button";
 
 export function FormularioAddMetodo({ onClose, onSubmit, isLoading }) {
   const {
@@ -24,7 +25,7 @@ export function FormularioAddMetodo({ onClose, onSubmit, isLoading }) {
   return (
     <div className="p-3 bg-transparent">
       <form
-        className="row g-3 align-content-start"
+        className="grid grid-cols-1 md:grid-cols-12 gap-3 align-content-start"
         onSubmit={handleSubmit(submitFormulario)}
       >
         <div className="col-12">
@@ -47,17 +48,17 @@ export function FormularioAddMetodo({ onClose, onSubmit, isLoading }) {
         </div>
 
         <div className="col-12 d-flex justify-content-end align-items-center gap-2 mt-2">
-          <button
+          <Button
             type="button"
             className="btn-cerrar-modal w-auto px-3"
             onClick={onClose}
             disabled={isLoading}
-          >
+           variant="default">
             Cancelar
-          </button>
-          <button type="submit" className="btn-guardar w-auto px-3">
+          </Button>
+          <Button type="submit" className="btn-guardar w-auto px-3" variant="default">
             {isLoading ? "Guardando..." : "Guardar Método"}
-          </button>
+          </Button>
         </div>
       </form>
     </div>

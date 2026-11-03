@@ -2,6 +2,9 @@ import React, { useEffect } from "react";
 import * as LucideIcons from "lucide-react";
 import { useForm } from "react-hook-form";
 import "../../css/estilosDelivery/EstilosBannerEditro.css";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+
 
 const BannerEditor = ({
   initialData,
@@ -103,8 +106,8 @@ const BannerEditor = ({
   };
 
   return (
-    <form className="card p-3 " onSubmit={handleSubmit(onSubmit)}>
-      <div className="card-header editor-header">
+    <Card asChild><form className="p-3" onSubmit={handleSubmit(onSubmit)}>
+      <CardHeader className="editor-header">
         <h3 className="editor-title">
           {isEditing ? "Editando Banner" : "Editor de Diseño"}
         </h3>
@@ -124,16 +127,16 @@ const BannerEditor = ({
             />
           ))}
         </div>
-      </div>
+      </CardHeader>
 
-      <div className="card-body row g-3">
+      <CardContent className="row g-3">
         {/* Información de Contenido */}
-        <div className="col-md-6">
+        <div className="md:col-span-6">
           <label className="form-label">Etiqueta (Tag)</label>
           <input type="text" className="form-control" {...register("tag")} />
         </div>
 
-        <div className="col-md-6">
+        <div className="md:col-span-6">
           <label className="form-label">
             Título <span className="text-danger">*</span>
           </label>
@@ -144,7 +147,7 @@ const BannerEditor = ({
           />
         </div>
 
-        <div className="col-md-6">
+        <div className="md:col-span-6">
           <label className="form-label">Subtítulo</label>
           <input
             type="text"
@@ -153,7 +156,7 @@ const BannerEditor = ({
           />
         </div>
 
-        <div className="col-md-6">
+        <div className="md:col-span-6">
           <label className="form-label">Oferta (Ej: 50% OFF)</label>
           <input
             type="text"
@@ -163,7 +166,7 @@ const BannerEditor = ({
         </div>
 
         {/* Estilización */}
-        <div className="col-md-6">
+        <div className="md:col-span-6">
           <label className="form-label">Tema Base</label>
           <select className="form-select" {...register("theme")}>
             <option value="red">Fire Red</option>
@@ -173,7 +176,7 @@ const BannerEditor = ({
           </select>
         </div>
 
-        <div className="col-md-6">
+        <div className="md:col-span-6">
           <label className="form-label">
             Redondez ({formData.border_radius}rem)
           </label>
@@ -187,7 +190,7 @@ const BannerEditor = ({
           />
         </div>
 
-        <div className="col-md-6">
+        <div className="md:col-span-6">
           <label className="form-label">Icono</label>
           <div className="d-flex gap-2">
             <div className="form-check form-switch">
@@ -211,7 +214,7 @@ const BannerEditor = ({
           </div>
         </div>
 
-        <div className="col-md-6">
+        <div className="md:col-span-6">
           <label className="form-label">Estado</label>
           <div className="form-check form-switch">
             <input
@@ -227,8 +230,8 @@ const BannerEditor = ({
 
         {/* Colores */}
         <div className="col-12 pt-3 border-top">
-          <div className="row g-3">
-            <div className="col-md-3">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+            <div className="md:col-span-3">
               <label className="form-label small">Fondo</label>
               <input
                 type="color"
@@ -236,7 +239,7 @@ const BannerEditor = ({
                 {...register("bg_color")}
               />
             </div>
-            <div className="col-md-3">
+            <div className="md:col-span-3">
               <label className="form-label small">Texto</label>
               <input
                 type="color"
@@ -244,7 +247,7 @@ const BannerEditor = ({
                 {...register("text_color")}
               />
             </div>
-            <div className="col-md-3">
+            <div className="md:col-span-3">
               <label className="form-label small">Gradiente</label>
               <div className="form-check form-switch mb-1">
                 <input
@@ -261,7 +264,7 @@ const BannerEditor = ({
                 />
               )}
             </div>
-            <div className="col-md-3">
+            <div className="md:col-span-3">
               <label className="form-label small">Aura</label>
               <div className="form-check form-switch mb-1">
                 <input
@@ -284,18 +287,18 @@ const BannerEditor = ({
         {/* Acciones */}
         <div className="col-12 pt-4 d-flex gap-2">
           {isEditing && (
-            <button
+            <Button
               type="button"
               className="btn btn-light w-50 py-3 rounded-4"
               onClick={onCancel}
-            >
+             variant="default">
               Cancelar
-            </button>
+            </Button>
           )}
-          <button
+          <Button
             type="submit"
             className={` ${isEditing ? "btn-activar " : "btn-guardar "}   fw-bold`}
-          >
+           variant="default">
             {isEditing ? (
               <>
                 <LucideIcons.Save size={18} className="me-2" /> Actualizar
@@ -305,10 +308,10 @@ const BannerEditor = ({
                 <LucideIcons.Plus size={18} className="me-2" /> Guardar Banner
               </>
             )}
-          </button>
+          </Button>
         </div>
-      </div>
-    </form>
+      </CardContent>
+    </form></Card>
   );
 };
 

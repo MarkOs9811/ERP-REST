@@ -8,7 +8,8 @@ import { useQueryClient } from "@tanstack/react-query";
 
 // <-- CAMBIO: Importamos las nuevas funciones genéricas
 import { PostData } from "../../../service/CRUD/PostData"; // <-- Ajusta la ruta
-import { PutData } from "../../../service/CRUD/PutData"; // <-- Ajusta la ruta
+import { PutData } from "../../../service/CRUD/PutData";
+import { Button } from "../../ui/button"; // <-- Ajusta la ruta
 
 /**
  * Formulario para Agregar o Editar Mesas.
@@ -124,26 +125,26 @@ export function FormularioMesa({ onClose, isEdit, dataEdit = null }) {
 
       {/* Botones de acción */}
       <div className="d-flex justify-content-end gap-2">
-        <button
+        <Button
           type="button"
           className="btn-cerrar-modal"
           onClick={onClose}
           title="Cerrar formulario"
-        >
+         variant="default">
           Cancelar
-        </button>
-        <button
+        </Button>
+        <Button
           type="Submit"
           className="btn-guardar"
           title={isEditMood ? "Actualizar mesa" : "Guardar mesa"}
           disabled={loadingSave}
-        >
+         variant="default">
           {loadingSave ? (
             <span className="load"></span>
           ) : (
             <span>{isEditMood ? "Actualizar" : "Guardar"}</span>
           )}
-        </button>
+        </Button>
       </div>
     </form>
   );

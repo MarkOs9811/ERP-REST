@@ -21,6 +21,9 @@ import { BotonMotionGeneral } from "../../components/componentesReutilizables/Bo
 import { Paso1Personales } from "../../components/componentePlanillas/componentesIngresarNomina/Paso1Personales";
 import { Paso2Laborales } from "../../components/componentePlanillas/componentesIngresarNomina/Paso2Laborales";
 import { Paso3Aportes } from "../../components/componentePlanillas/componentesIngresarNomina/Paso3Aportes";
+import { Button } from "../../components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+
 
 export function IngresoPlanilla() {
   // Extraemos 'trigger' para validar campos manualmente
@@ -178,15 +181,15 @@ export function IngresoPlanilla() {
   };
 
   return (
-    <div className="card container ">
-      <div className="card-header border-0 p-3 d-flex justify-content-between align-items-center">
+    <Card className="container">
+      <CardHeader className="border-0 p-3 flex justify-between items-center">
         <h4>Registro de Nuevo Empleado</h4>
         <span className="badge bg-primary px-3 py-2">
           Paso {pasoActual} de 3
         </span>
-      </div>
+      </CardHeader>
 
-      <div className="card-body px-4 m-0 mt-3">
+      <CardContent className="px-4 m-0 mt-3">
         <form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
           {/* RENDERIZADO CONDICIONAL DE PASOS */}
           {pasoActual === 1 && (
@@ -234,23 +237,23 @@ export function IngresoPlanilla() {
 
           {/* CONTROLES DE NAVEGACIÓN */}
           <div className="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
-            <button
+            <Button
               type="button"
               className="btn btn-outline-secondary d-flex align-items-center"
               onClick={retrocederPaso}
               disabled={pasoActual === 1}
-            >
+             variant="default">
               <ArrowLeft size={18} className="me-2" /> Atrás
-            </button>
+            </Button>
 
             {pasoActual < 3 ? (
-              <button
+              <Button
                 type="button"
                 className="btn-guardar d-flex align-items-center px-4"
                 onClick={avanzarPaso}
-              >
+               variant="default">
                 Siguiente <ArrowRight size={18} className="ms-2" />
-              </button>
+              </Button>
             ) : (
               <BotonMotionGeneral
                 type="submit"
@@ -262,7 +265,7 @@ export function IngresoPlanilla() {
             )}
           </div>
         </form>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

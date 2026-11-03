@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "../../api/AxiosInstance";
+import { Button } from "../../components/ui/button";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
+
 
 export function IAMoodle() {
   // Estado para capturar el mensaje natural del usuario
@@ -43,12 +46,12 @@ export function IAMoodle() {
   };
 
   return (
-    <div className="card shadow-sm border-0">
-      <div className="card-body">
-        <h5 className="card-title text-primary fw-bold mb-3">
+    <Card className="shadow-sm border-0">
+      <CardContent className="">
+        <CardTitle asChild><h5 className="text-primary fw-bold mb-3">
           Asistente IA para Moodle
-        </h5>
-        <p className="card-text text-muted mb-4">
+        </h5></CardTitle>
+        <p className="text-muted mb-4">
           Pregúntale a la IA sobre los estudiantes, cursos o calificaciones en
           lenguaje natural.
         </p>
@@ -63,11 +66,11 @@ export function IAMoodle() {
             onChange={(e) => setMensaje(e.target.value)}
             onKeyDown={handleKeyDown}
           />
-          <button
+          <Button
             className="btn btn-primary px-4"
             onClick={() => consultarCursos()}
             disabled={cargando || !mensaje.trim()} // Desactiva si está cargando o el input está vacío
-          >
+           variant="default">
             {cargando ? (
               <>
                 <span
@@ -80,7 +83,7 @@ export function IAMoodle() {
             ) : (
               "Preguntar"
             )}
-          </button>
+          </Button>
         </div>
 
         {isError && (
@@ -100,7 +103,7 @@ export function IAMoodle() {
             </div>
           </div>
         )}
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

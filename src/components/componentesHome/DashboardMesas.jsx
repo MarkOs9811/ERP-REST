@@ -5,6 +5,9 @@ import "../../css/EstilosHome.css";
 import { Clock, Cookie, Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { Button } from "../ui/button";
+import { Card } from "@/components/ui/card";
+
 const TiempoOcupacion = ({ fechaApertura }) => {
   const [minutos, setMinutos] = useState(0);
 
@@ -30,8 +33,8 @@ const TiempoOcupacion = ({ fechaApertura }) => {
 
   return (
     <span
-      className={`small d-flex align-items-center gap-1 fw-bold ${
-        esDemorado ? "text-danger" : "text-muted"
+      className={`flex items-center gap-1 text-xs font-semibold ${
+        esDemorado ? "text-destructive" : "text-muted-foreground"
       }`}
     >
       <Clock size={13} /> {minutos} min
@@ -55,11 +58,11 @@ export function DashboardMesas() {
   const listaMesas = Array.isArray(mesas) ? mesas : mesas?.data || [];
 
   return (
-    <div className="salon-container card m-0 h-100 p-3">
-      <div className="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-3">
-        <div className="d-flex align-items-center gap-2">
+    <Card className="salon-container m-0 flex h-full min-h-[300px] flex-col rounded-xl border border-border bg-card p-4 text-card-foreground">
+      <div className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex flex-wrap items-center gap-3">
           <span
-            className="rounded-circle p-2"
+            className="flex size-10 shrink-0 items-center justify-center rounded-full"
             style={{
               background: "var(--bg-emerald-soft)",
               color: "var(--fw-emerald)",
@@ -68,20 +71,22 @@ export function DashboardMesas() {
             <Cookie size={22} />
           </span>
           <div>
-            <h5 className="fw-bold mb-0">Salón de mesas</h5>
-            <small className="text-muted">{listaMesas.length} mesas</small>
+            <h2 className="mb-0 text-base font-semibold">Salón de mesas</h2>
+            <p className="mb-0 text-xs text-muted-foreground">
+              {listaMesas.length} mesas
+            </p>
           </div>
-          <button
+          <Button
             type="button"
             onClick={() => navigate("/ventas/mesas")}
-            className="btn-principal ms-2"
-          >
+            className="btn-principal inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm"
+           variant="default">
             <Plus size={16} />{" "}
             {listaMesas.length === 0 ? "Crear Mesas" : "Gestionar Mesas"}
-          </button>
+          </Button>
         </div>
 
-        <div className="d-flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2">
           <span className="status-badge badge-libre">
             <span className="dot dot-libre"></span> LIBRE (
             {listaMesas.filter((m) => Number(m.estado) === 1).length})
@@ -98,25 +103,29 @@ export function DashboardMesas() {
 
       {/* --- GRID VISUAL --- */}
       <CondicionCarga isLoading={loading} isError={error} mode="cards">
-        <div className="card-body p-0 home-salon-grid">
+        <div className="home-salon-grid min-h-0 flex-1">
           {listaMesas.length === 0 && !loading && (
-            <div className="alert alert-warning text-center mb-0">
+            <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 p-4 text-center text-sm text-amber-800 dark:text-amber-300">
               No se encontraron mesas.
             </div>
           )}
 
-          <div className="row g-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 2xl:grid-cols-3">
             {listaMesas.map((mesa) => {
               const isLibre = Number(mesa.estado) === 1;
               const statusClass = isLibre ? "libre" : "ocupado";
 
               return (
-                <div className="col-12 col-md-6 col-lg-3" key={mesa.id}>
-                  <div
-                    className={`card p-3 mesa-card-flat card-${statusClass} w-100 text-start h-100`}
+                <div className="min-w-0" key={mesa.id}>
+                  <Card
+                    className={`mesa-card-flat flex h-full min-h-32 w-full flex-col rounded-lg border p-3 text-left text-foreground${
+                      isLibre
+                        ? "border-emerald-500/40 bg-emerald-500/5"
+                        : "border-rose-500/40 bg-rose-500/5"
+                    }`}
                   >
-                    <div className="d-flex justify-content-between align-items-center mb-3 w-100">
-                      <span className="mesa-capacidad-flat small text-muted">
+                    <div className="mb-3 flex w-full items-center justify-between">
+                      <span className="mesa-capacidad-flat text-xs text-muted-foreground">
                         CAPACIDAD: {mesa.capacidad}p
                       </span>
                       <span className={`dot dot-${statusClass}`}></span>
@@ -124,12 +133,12 @@ export function DashboardMesas() {
 
                     <h4 className="mesa-numero-flat">Mesa {mesa.numero}</h4>
 
-                    <div className="mesa-footer-flat mt-4 w-100">
+                    <div className="mesa-footer-flat mt-auto w-full pt-4">
                       {Number(mesa.estado) === 0 && (
-                        <div className="mesa-total-preview mt-2 d-flex flex-column gap-1">
-                          <div className="d-flex justify-content-between align-items-center">
+                        <div className="mesa-total-preview mt-2 flex flex-col gap-1">
+                          <div className="flex items-center justify-between gap-2">
                             <span
-                              className="text-muted small"
+                              className="text-xs text-muted-foreground"
                               style={{
                                 fontSize: "0.65rem",
                                 fontWeight: "700",
@@ -144,19 +153,19 @@ export function DashboardMesas() {
                               />
                             )}
                           </div>
-                          <span className="fw-bold fs-6">
+                          <span className="text-base font-bold">
                             S/ {Number(mesa.total || 0).toFixed(2)}
                           </span>
                         </div>
                       )}
                     </div>
-                  </div>
+                  </Card>
                 </div>
               );
             })}
           </div>
         </div>
       </CondicionCarga>
-    </div>
+    </Card>
   );
 }

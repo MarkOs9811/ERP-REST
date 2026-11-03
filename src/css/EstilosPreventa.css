@@ -23,14 +23,14 @@
 /* hace que el card de la izquierda tenga una estructura flexible */
 /* 1️⃣ Asegura que la columna llene toda la altura de la fila */
 /* Hace que el card sea flexible en altura */
-.col-md-3>.card {
+.col-md-3>[data-slot="card"] {
   display: flex;
   flex-direction: column;
   height: 100%;
 }
 
 /* El cuerpo del card ocupa el espacio restante entre header y footer */
-.card-body {
+[data-slot="card-content"] {
   flex: 1;
 }
 

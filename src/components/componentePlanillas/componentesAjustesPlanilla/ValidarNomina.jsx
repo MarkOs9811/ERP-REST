@@ -15,6 +15,7 @@ import {
 import ToastAlert from "../../componenteToast/ToastAlert";
 import { TablasGenerales } from "../../componentesReutilizables/TablasGenerales";
 import axiosInstance from "../../../api/AxiosInstance";
+import { Button } from "../../ui/button";
 
 // --- API Helpers (Sin cambios) ---
 const fetchDatosParaResolver = async () => {
@@ -121,9 +122,9 @@ export function ValidarNomina({ onClose }) {
           </div>
         </div>
         <div className="modal-footer">
-          <button className="btn-cerrar-modal" onClick={onClose} disabled>
+          <Button className="btn-cerrar-modal" onClick={onClose} disabled variant="default">
             Cancelar
-          </button>
+          </Button>
         </div>
       </>
     );
@@ -153,9 +154,9 @@ export function ValidarNomina({ onClose }) {
           </div>
         </div>
         <div className="modal-footer">
-          <button className="btn-cerrar-modal" onClick={onClose}>
+          <Button className="btn-cerrar-modal" onClick={onClose} variant="default">
             Cancelar
-          </button>
+          </Button>
         </div>
       </>
     );
@@ -175,9 +176,9 @@ export function ValidarNomina({ onClose }) {
           </div>
         </div>
         <div className="modal-footer">
-          <button className="btn-cerrar-modal" onClick={onClose}>
+          <Button className="btn-cerrar-modal" onClick={onClose} variant="default">
             Cancelar
-          </button>
+          </Button>
         </div>
       </>
     );
@@ -250,14 +251,14 @@ export function ValidarNomina({ onClose }) {
       name: "Acciones",
       cell: (row) => (
         // HTML <button>
-        <button
+        <Button
           type="button"
           className="btn btn-outline-danger btn-sm"
           disabled={estaSoloEnVistaPrevia}
           title="Excluir Adelanto"
-        >
+         variant="destructive">
           <MinusCircle size={16} />
-        </button>
+        </Button>
       ),
       ignoreRowClick: true,
       allowOverflow: true,
@@ -347,19 +348,19 @@ export function ValidarNomina({ onClose }) {
           <div className="d-flex gap-2">
             {estaAbierto && (
               // HTML <button>
-              <button
+              <Button
                 type="button"
                 className="btn btn-dark"
                 onClick={handleIniciarValidacion}
                 disabled={iniciando}
-              >
+               variant="default">
                 <PlayCircle size={18} className="me-1" />
                 {iniciando ? "Iniciando..." : "Comenzar Validación"}
-              </button>
+              </Button>
             )}
             {estaEnValidacion && (
               // HTML <button>
-              <button
+              <Button
                 type="button"
                 className="btn btn-success"
                 onClick={handleGenerarPagos}
@@ -369,10 +370,10 @@ export function ValidarNomina({ onClose }) {
                     ? "Debe confirmar que todas las incidencias están resueltas"
                     : "Generar pago final y cerrar periodo"
                 }
-              >
+               variant="default">
                 <CheckCircle size={18} className="me-1" />
                 {pagando ? "Procesando..." : "Generar Pagos"}
-              </button>
+              </Button>
             )}
           </div>
         </div>
@@ -386,55 +387,55 @@ export function ValidarNomina({ onClose }) {
             role="tablist"
           >
             <li className="nav-item" role="presentation">
-              <button
+              <Button
                 className={`nav-link text-dark ${
                   activeTab === "asistencias" ? "active" : ""
                 }`}
                 onClick={() => setActiveTab("asistencias")}
                 type="button"
                 role="tab"
-              >
+               variant="default">
                 <Clock size={16} className="me-1" /> Asistencias (
                 {asistencias.length})
-              </button>
+              </Button>
             </li>
             <li className="nav-item" role="presentation">
-              <button
+              <Button
                 className={`nav-link text-dark ${
                   activeTab === "adelantos" ? "active" : ""
                 }`}
                 onClick={() => setActiveTab("adelantos")}
                 type="button"
                 role="tab"
-              >
+               variant="default">
                 S/. Adelantos ({adelantos.length})
-              </button>
+              </Button>
             </li>
             <li className="nav-item" role="presentation">
-              <button
+              <Button
                 className={`nav-link text-dark ${
                   activeTab === "horasExtra" ? "active" : ""
                 }`}
                 onClick={() => setActiveTab("horasExtra")}
                 type="button"
                 role="tab"
-              >
+               variant="default">
                 <Briefcase size={16} className="me-1" /> Horas Extra (
                 {horasExtra.length})
-              </button>
+              </Button>
             </li>
             <li className="nav-item" role="presentation">
-              <button
+              <Button
                 className={`nav-link text-dark ${
                   activeTab === "vacaciones" ? "active" : ""
                 }`}
                 onClick={() => setActiveTab("vacaciones")}
                 type="button"
                 role="tab"
-              >
+               variant="default">
                 <CalendarCheck size={16} className="me-1" /> Vacaciones (
                 {vacaciones.length})
-              </button>
+              </Button>
             </li>
           </ul>
 
@@ -581,13 +582,13 @@ export function ValidarNomina({ onClose }) {
 
       {/* Footer del Modal (Sin cambios) */}
       <div className="modal-footer p-3">
-        <button
+        <Button
           className="btn-cerrar-modal"
           onClick={onClose}
           disabled={iniciando || pagando}
-        >
+         variant="default">
           Cancelar
-        </button>
+        </Button>
       </div>
     </>
   );

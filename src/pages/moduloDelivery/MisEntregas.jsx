@@ -1,14 +1,16 @@
 import { ListaMisEntregas } from "../../components/componenteDelivery/ListaMisEntregas";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+
 
 export function MisEntregas() {
   return (
-    <div className="card">
-      <div className="card-header">
+    <Card className="">
+      <CardHeader className="">
         <h3>Mis entregas</h3>
-      </div>
-      <div className="card-body p-0">
+      </CardHeader>
+      <CardContent className="p-0">
         <ListaMisEntregas />
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

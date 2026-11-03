@@ -6,6 +6,9 @@ import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteE
 import ModalRight from "../../components/componentesReutilizables/ModalRight";
 import { CondicionCarga } from "../../components/componentesReutilizables/CondicionCarga";
 import { ProveedorList } from "../../components/componenteProveedor/ProveedorList";
+import { Button } from "../../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 
 export function Proveedores() {
   const [search, setSearch] = useState("");
@@ -20,15 +23,15 @@ export function Proveedores() {
 
   return (
     <div>
-      <div className="row g-3">
-        <div className="col-md-12">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+        <div className="md:col-span-12">
           <CondicionCarga isLoading={updateList} isError={null}>
-            <div className="card  mb-4 rounded-4">
-              <div className="card-header border-bottom-0 d-flex justify-content-between align-items-center">
+            <Card className="mb-4 rounded-2xl">
+              <CardHeader className="border-bottom-0 flex justify-between items-center">
                 <div className="d-flex align-items-center">
-                  <h4 className="card-title mb-0 titulo-card-especial">
+                  <CardTitle asChild><h4 className="mb-0 titulo-card-especial">
                     Panel de Proveedores
-                  </h4>
+                  </h4></CardTitle>
                   <span className="badge-header ms-2">Activos</span>
                 </div>
 
@@ -44,7 +47,7 @@ export function Proveedores() {
                     />
                   </div>
 
-                  <button
+                  <Button
                     type="button"
                     className="btn btn-outline-dark px-3"
                     onClick={() =>
@@ -55,24 +58,24 @@ export function Proveedores() {
                         "Proveedores",
                       )
                     }
-                  >
+                   variant="default">
                     <FileText size={18} />
                     Reporte
-                  </button>
+                  </Button>
 
-                  <button
+                  <Button
                     className="btn btn-dark px-4"
                     onClick={() => handleAddProveedor()}
-                  >
+                   variant="default">
                     <Plus size={18} />
                     Agregar
-                  </button>
+                  </Button>
                 </div>
-              </div>
-              <div className="card-body p-0">
+              </CardHeader>
+              <CardContent className="p-0">
                 <ProveedorList search={search} updateList={updateList} />
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           </CondicionCarga>
         </div>
       </div>

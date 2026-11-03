@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Search, Bell, User, LogOut } from "lucide-react";
 import "../cssAdmin/estilosCuerpoAdmin.css";
 import { useAuth } from "../AuthContextAdmin";
+import { Button } from "../components/ui/button";
 
 export const AdminHeader = () => {
   const { logout } = useAuth(); // Asumo que `user` también viene del contexto
@@ -33,18 +34,18 @@ export const AdminHeader = () => {
         />
       </div>
       <div className="d-flex ms-auto me-3 gap-2">
-        <button title="Notificaciones" className="btn btn-light">
+        <Button title="Notificaciones" className="btn btn-light" variant="default">
           <Bell size={20} />
-        </button>
+        </Button>
         {/* Aquí puedes tener un menú desplegable de usuario */}
-        <button title="Perfil de usuario" className="btn btn-light">
+        <Button title="Perfil de usuario" className="btn btn-light" variant="default">
           <User size={20} />
-        </button>
-        <button onClick={handleLogout} className="btn btn-danger">
+        </Button>
+        <Button onClick={handleLogout} className="btn btn-danger" variant="destructive">
           <LogOut size={18} style={{ marginRight: "8px" }} />{" "}
           {/* Ícono al lado del texto */}
           Cerrar Sesión
-        </button>
+        </Button>
       </div>
     </header>
   );

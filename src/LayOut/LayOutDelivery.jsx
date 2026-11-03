@@ -5,6 +5,8 @@ import { PlatoMasVendido } from "../components/componentesHome/PlatosMasVendidos
 import { VentasTipo } from "../components/componentesHome/VentasTipo";
 import { useQuery } from "@tanstack/react-query";
 import { getVentas } from "../service/ObtenerVentasDetalle";
+import { Card } from "@/components/ui/card";
+
 
 export function LayOutDelivery() {
   useEffect(() => {
@@ -32,22 +34,22 @@ export function LayOutDelivery() {
   });
   return (
     <div className="container">
-      <div className="row g-3 overflow-hidden">
-        <div className="col-md-12">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 overflow-hidden">
+        <div className="md:col-span-12">
           <InformacionRapidaHome />
         </div>
-        <div className="col-md-10">
-          <div className="row ">
-            <div className="col-md-12">
-              <div className="card p-2 shadow-sm h-100">
+        <div className="md:col-span-10">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+            <div className="md:col-span-12">
+              <Card className="p-2 shadow-sm h-full">
                 <PlatoMasVendido />
-              </div>
+              </Card>
             </div>
           </div>
         </div>
-        <div className="col-md-2">
-          <div className="row g-3">
-            <div className="col-md-12">
+        <div className="md:col-span-2">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+            <div className="md:col-span-12">
               <VentasTipo
                 ventasList={ventasList}
                 load={loadingVentas}

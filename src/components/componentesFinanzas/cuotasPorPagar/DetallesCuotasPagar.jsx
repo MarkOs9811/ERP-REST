@@ -11,6 +11,9 @@ import ModalGeneral from "../../componenteToast/ModalGeneral";
 import axiosInstance from "../../../api/AxiosInstance";
 import ToastAlert from "../../componenteToast/ToastAlert";
 import { useQueryClient } from "@tanstack/react-query";
+import { Button } from "../../ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+
 
 export function DetallesCuotasPagar({ data, refetch, modalClose }) {
   const [alertConfirmarPago, setAlertConfirmarPago] = useState(false);
@@ -91,8 +94,8 @@ export function DetallesCuotasPagar({ data, refetch, modalClose }) {
   return (
     <div className="p-3">
       {/* Cabecera principal */}
-      <div className="card shadow-sm mb-4 border-0">
-        <div className="card-body pb-2">
+      <Card className="shadow-sm mb-4 border-0">
+        <CardContent className="pb-2">
           <div className="d-flex justify-content-between align-items-center mb-2">
             <div>
               <h4 className="fw-bold mb-1">Proveedor</h4>
@@ -109,8 +112,8 @@ export function DetallesCuotasPagar({ data, refetch, modalClose }) {
               {data.estado.charAt(0).toUpperCase() + data.estado.slice(1)}
             </span>
           </div>
-          <div className="row g-3 mb-2">
-            <div className="col-md-3">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-2">
+            <div className="md:col-span-3">
               <div className="bg-light border rounded p-3 h-100 d-flex flex-column align-items-start">
                 <span className="mb-1">
                   <FileText size={20} className="me-1 text-danger" />
@@ -119,7 +122,7 @@ export function DetallesCuotasPagar({ data, refetch, modalClose }) {
                 <span className="fs-4 fw-bold ">S/. {data.monto}</span>
               </div>
             </div>
-            <div className="col-md-3">
+            <div className="md:col-span-3">
               <div className=" border bg-opacity-10 rounded p-3 h-100 d-flex flex-column align-items-start">
                 <span className="mb-1">
                   <CheckCircle2 size={20} className="me-1 text-danger" /> Monto
@@ -128,7 +131,7 @@ export function DetallesCuotasPagar({ data, refetch, modalClose }) {
                 <span className="fs-4 fw-bold ">S/. {data.monto_pagado}</span>
               </div>
             </div>
-            <div className="col-md-3">
+            <div className="md:col-span-3">
               <div className="border bg-opacity-10 rounded p-3 h-100 d-flex flex-column align-items-start">
                 <span className="mb-1 ">
                   <CalendarDays size={20} className="me-1 text-danger" /> Fecha
@@ -139,7 +142,7 @@ export function DetallesCuotasPagar({ data, refetch, modalClose }) {
                 </span>
               </div>
             </div>
-            <div className="col-md-3">
+            <div className="md:col-span-3">
               <div className="bg-danger border bg-opacity-10 rounded p-3 h-100 d-flex flex-column align-items-start">
                 <span className="mb-1 text-danger fw-bold">
                   <CalendarCheck size={20} className="me-1" /> Fecha de Fin
@@ -150,8 +153,8 @@ export function DetallesCuotasPagar({ data, refetch, modalClose }) {
               </div>
             </div>
           </div>
-          <div className="row g-3 mb-2">
-            <div className="col-md-4">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-2">
+            <div className="md:col-span-4">
               <div className=" border rounded p-3 h-100 d-flex flex-column align-items-left">
                 <div className="d-flex gap-2">
                   <ListOrdered size={22} className="mb-1 t" />
@@ -160,7 +163,7 @@ export function DetallesCuotasPagar({ data, refetch, modalClose }) {
                 <span className="fs-4 fw-bold">{data.cuotas}</span>
               </div>
             </div>
-            <div className="col-md-4">
+            <div className="md:col-span-4">
               <div className=" border rounded p-3 h-100 d-flex flex-column align-items-left">
                 <div className="d-flex gap-2">
                   <CheckCircle2 size={22} className="mb-1 " />
@@ -170,7 +173,7 @@ export function DetallesCuotasPagar({ data, refetch, modalClose }) {
                 <span className="fs-4 fw-bold">{data.cuotas_pagadas}</span>
               </div>
             </div>
-            <div className="col-md-4">
+            <div className="md:col-span-4">
               <div className=" border rounded p-3 h-100 d-flex flex-column align-items-left">
                 <div className="d-flex gap-2">
                   <CalendarDays size={22} className="mb-1 " />
@@ -183,16 +186,16 @@ export function DetallesCuotasPagar({ data, refetch, modalClose }) {
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
       {/* Tabla de cuotas programadas */}
-      <div className="card shadow-sm border  p-3">
-        <div className="card-header rounded-top">
+      <Card className="shadow-sm border p-3">
+        <CardHeader className="rounded-top">
           <CalendarDays size={20} className="mb-1 me-2" />
           <span className="fw-bold fs-5">Cuotas Programadas</span>
-        </div>
-        <div className="card-body p-0">
+        </CardHeader>
+        <CardContent className="p-0">
           <div className="table-responsive">
             <table className="table align-middle mb-0">
               <thead>
@@ -246,19 +249,19 @@ export function DetallesCuotasPagar({ data, refetch, modalClose }) {
                       <td>{cuota.fecha_pagada ? cuota.fecha_pagada : "-"}</td>
                       <td>
                         {cuota.estado === "pagado" ? (
-                          <button className="btn btn-outline-success btn-sm fw-bold">
+                          <Button className="btn btn-outline-success btn-sm fw-bold" variant="default">
                             Ver Declarado
-                          </button>
+                          </Button>
                         ) : (
-                          <button
+                          <Button
                             className="btn btn-danger btn-sm fw-bold"
                             onClick={() => {
                               setAlertConfirmarPago(true);
                               setDataPago(cuota);
                             }}
-                          >
+                           variant="destructive">
                             Registrar Pago
-                          </button>
+                          </Button>
                         )}
                       </td>
                     </tr>
@@ -273,19 +276,19 @@ export function DetallesCuotasPagar({ data, refetch, modalClose }) {
               </tbody>
             </table>
           </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
-      <div className="card my-3 p-3">
-        <button
+      <Card className="my-3 p-3">
+        <Button
           type="button"
           className="btn-guardar "
           style={{ width: "250px" }}
           onClick={() => descargarDetalles(data.id)}
-        >
+         variant="default">
           <FileDown className="text-auto" /> Descargar Detalles
-        </button>
-      </div>
+        </Button>
+      </Card>
 
       <ModalGeneral
         show={alertConfirmarPago}
@@ -294,7 +297,7 @@ export function DetallesCuotasPagar({ data, refetch, modalClose }) {
         handleAccion={() => hanldleRealizarPago(dataPago.id)}
         idProceso={dataPago.id}
       >
-        <div className="card border m-3 text-left">
+        <Card className="border m-3 text-left">
           {dataPago ? (
             <div className="p-3 text-left">
               <h5 className="fw-bold mb-3">Detalles del Pago</h5>
@@ -316,7 +319,7 @@ export function DetallesCuotasPagar({ data, refetch, modalClose }) {
               </p>
             </div>
           ) : null}
-        </div>
+        </Card>
       </ModalGeneral>
     </div>
   );

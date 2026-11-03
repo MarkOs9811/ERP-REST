@@ -6,6 +6,9 @@ import { ContenedorPrincipal } from "../../components/componentesReutilizables/C
 import { FileText, Plus, Search } from "lucide-react";
 import { useState } from "react";
 import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteExcel";
+import { Button } from "../../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 export function Almacen() {
   const [updateList, setUpdateList] = useState(false);
   const [search, setSearch] = useState("");
@@ -18,13 +21,13 @@ export function Almacen() {
   };
   return (
     <div>
-      <div className="card  d-flex  py-2  ">
-        <div className="card-header border-bottom-0 d-flex justify-content-between align-items-center">
+      <Card className="flex py-2">
+        <CardHeader className="border-bottom-0 flex justify-between items-center">
           <div className="module-table-toolbar">
             <div className="module-table-title-group">
-              <h4 className="card-title mb-0 titulo-card-especial">
+              <CardTitle asChild><h4 className="mb-0 titulo-card-especial">
                 Panel de Almacen
-              </h4>
+              </h4></CardTitle>
               <span className="badge-header">ítems</span>
             </div>
 
@@ -41,32 +44,32 @@ export function Almacen() {
               </div>
 
               <div className="module-table-buttons">
-                <button
+                <Button
                   type="button"
                   className="btn btn-outline-dark px-3 d-inline-flex align-items-center gap-2"
                   onClick={() => GetReporteExcel("/reporteAlmacenTodo")}
-                >
+                 variant="default">
                   <FileText size={18} />
                   Reporte
-                </button>
-                <button
+                </Button>
+                <Button
                   className="btn-principal px-3 d-inline-flex align-items-center gap-2"
                   onClick={() => handleAgregar()}
-                >
+                 variant="default">
                   <Plus size={18} />
                   Agregar
-                </button>
+                </Button>
               </div>
             </div>
           </div>
-        </div>
-        <div
-          className="card-body overflow-y-auto overflow-x-hidden p-0 pe-2"
+        </CardHeader>
+        <CardContent
+          className="overflow-y-auto overflow-x-hidden p-0 pe-2"
           style={{ height: "calc(100vh - 280px)" }}
         >
           <AlmacenList search={search} updateList={updateList} />
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

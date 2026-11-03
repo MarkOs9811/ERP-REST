@@ -20,6 +20,8 @@ import ModalRight from "../componentesReutilizables/ModalRight";
 import { ModalDetallesVentas } from "./ModalDetallesVentas";
 import { BtnVer } from "../componentesReutilizables/BotonesAccion";
 import { BadgeComponent } from "../componentesReutilizables/BadgeComponent";
+import { Card } from "@/components/ui/card";
+
 
 export function ListVentas({ search, ventas }) {
   const [modalDetallesVenta, setModalDetallesVenta] = useState(false);
@@ -357,7 +359,7 @@ export function ListVentas({ search, ventas }) {
   ];
 
   return (
-    <div className="card shadow-none border-0">
+    <Card className="shadow-none border-0">
       {isLoading && <Cargando />}
       {isError && <div className="error">Error al cargar ventas</div>}
       <TablasGenerales columnas={columns} datos={filteredVentas} />
@@ -372,6 +374,6 @@ export function ListVentas({ search, ventas }) {
       >
         <ModalDetallesVentas dataVentas={dataVentas} />
       </ModalRight>
-    </div>
+    </Card>
   );
 }

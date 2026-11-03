@@ -3,6 +3,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "../../css/ModalAlertQuestion.css";
 import { useQueryClient } from "@tanstack/react-query";
 import ReactDOM from "react-dom";
+import { Button } from "../ui/button";
 
 function ModalAlertQuestion({
   show,
@@ -55,7 +56,7 @@ function ModalAlertQuestion({
 
         <div className="d-flex justify-content-center mt-4">
           {/* Botón Confirmar */}
-          <button
+          <Button
             onClick={handleConfirm}
             className="btn-eliminar mx-2"
             disabled={isLoading}
@@ -63,7 +64,7 @@ function ModalAlertQuestion({
               opacity: isLoading ? 0.7 : 1,
               cursor: isLoading ? "not-allowed" : "pointer",
             }}
-          >
+           variant="destructive">
             {isLoading ? (
               <div className="d-flex align-items-center gap-2">
                 <span
@@ -76,10 +77,10 @@ function ModalAlertQuestion({
             ) : (
               "Confirmar"
             )}
-          </button>
+          </Button>
 
           {/* Botón Cancelar */}
-          <button
+          <Button
             onClick={handleCloseModal}
             className="btn-cancelar mx-2"
             disabled={isLoading}
@@ -87,9 +88,9 @@ function ModalAlertQuestion({
               opacity: isLoading ? 0.7 : 1,
               cursor: isLoading ? "not-allowed" : "pointer",
             }}
-          >
+           variant="default">
             {isLoading ? "Espere..." : "Cancelar"}
-          </button>
+          </Button>
         </div>
       </div>
     </div>,

@@ -378,7 +378,7 @@ export function DetallesPago() {
 
   return (
     <div className=" h-100 bg-transparent ">
-      <div className="row h-100 g-3">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-4h-100 g-3">
         <div className="col-lg-3 col-md-4 col-sm-6 col-12 d-flex flex-column h-100">
           <DetallePedido
             idMesa={idMesa}

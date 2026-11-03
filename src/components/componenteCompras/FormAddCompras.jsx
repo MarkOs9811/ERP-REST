@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import axiosInstance from "../../api/AxiosInstance";
 import ToastAlert from "../componenteToast/ToastAlert";
 import { GetProveedores } from "../../service/GetProveedores";
+import { Button } from "../ui/button";
 
 export function FormAddCompras() {
   const queryClient = useQueryClient();
@@ -210,9 +211,9 @@ export function FormAddCompras() {
 
         {/* Botón */}
         <div className="d-grid">
-          <button type="submit" className="btn-guardar">
+          <Button type="submit" className="btn-guardar" variant="default">
             Registrar Compra
-          </button>
+          </Button>
         </div>
       </form>
     </div>

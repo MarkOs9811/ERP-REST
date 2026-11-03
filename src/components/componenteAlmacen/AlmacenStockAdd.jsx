@@ -2,6 +2,7 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import ToastAlert from "../componenteToast/ToastAlert";
 import { useState } from "react";
+import { Button } from "../ui/button";
 export function AlmacenStockAdd({
   handleCloseModal,
   producto,
@@ -55,7 +56,7 @@ export function AlmacenStockAdd({
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       if (response.data.status === "success") {
@@ -105,8 +106,8 @@ export function AlmacenStockAdd({
         </div>
 
         {/* Categoría, Unidad de medida, Proveedor */}
-        <div className="row g-2">
-          <div className="col-md-4">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-2">
+          <div className="md:col-span-4">
             <label
               htmlFor="productoCategoria"
               className="form-label small text-secondary"
@@ -117,7 +118,7 @@ export function AlmacenStockAdd({
               <option>{producto.categoria.nombre || "Sin categoría"}</option>
             </select>
           </div>
-          <div className="col-md-4">
+          <div className="md:col-span-4">
             <label
               htmlFor="productoUnidad"
               className="form-label small text-secondary"
@@ -128,7 +129,7 @@ export function AlmacenStockAdd({
               <option>{producto.unidad.nombre || "Sin unidad"}</option>
             </select>
           </div>
-          <div className="col-md-4">
+          <div className="md:col-span-4">
             <label
               htmlFor="productoProveedor"
               className="form-label small text-secondary"
@@ -247,16 +248,16 @@ export function AlmacenStockAdd({
 
         {/* Botones */}
         <div className="d-flex justify-content-end">
-          <button
+          <Button
             type="button"
             className="btn-cerrar-modal me-2 rounded-pill"
             onClick={handleCloseModal}
-          >
+           variant="default">
             <i className="fas fa-times"></i> Cerrar
-          </button>
-          <button type="submit" className="btn-guardar rounded-pill">
+          </Button>
+          <Button type="submit" className="btn-guardar rounded-pill" variant="default">
             <i className="fas fa-save"></i> Firmar y actualizar
-          </button>
+          </Button>
         </div>
       </form>
     </div>

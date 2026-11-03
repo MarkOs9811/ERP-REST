@@ -1,6 +1,9 @@
 import { MinusIcon, PlusIcon } from "lucide-react";
 
 import "../../css/EstilosPlatosTodo.css";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+
 export const CardPlatos = ({
   item,
   isSelected,
@@ -10,15 +13,15 @@ export const CardPlatos = ({
   capitalizeFirstLetter,
 }) => {
   return (
-    <div
-      className={`float-left card-platillo card overflow-auto m-2 ${
+    <Card
+      className={`float-left card-platillo overflow-auto m-2${
         isSelected ? "selected" : ""
       }`}
     >
       <img
         src={item.foto_url}
         alt={item.nombre}
-        className="card-img-top"
+        className="w-full"
         onError={(e) => {
           e.target.src = "/images/img-default.jpg";
         }}
@@ -28,7 +31,7 @@ export const CardPlatos = ({
           objectFit: "cover",
         }}
       />
-      <div className="card-body">
+      <CardContent className="">
         <span
           className=" text-danger mb-1 d-block opacity-75"
           style={{ fontSize: "0.73rem" }}
@@ -42,44 +45,44 @@ export const CardPlatos = ({
         <span className="rounded-pill  px-2 fw-bold precioCard ">
           S/. {item.precio}
         </span>
-      </div>
-      <div className="card-footer border-0 w-100 p-1 d-flex bg-transparent justify-content-between">
+      </CardContent>
+      <CardFooter className="border-0 w-full p-1 flex bg-transparent justify-between">
         {isSelected ? (
           <>
-            <button
+            <Button
               type="button"
               className="btn-accionesPlatos btn-disminuir mx-1"
               onClick={() => handleRemove(item.id)}
-            >
+             variant="default">
               <span className="me-2">
                 <MinusIcon className={"text-auto"} />
               </span>
               1
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
               className="btn-accionesPlatos btn-añadir mx-1"
               onClick={() => handleAdd(item)}
-            >
+             variant="default">
               <span className="me-2">
                 <PlusIcon className={"text-auto"} />
               </span>
               1
-            </button>
+            </Button>
           </>
         ) : (
-          <button
+          <Button
             type="button"
             className="btn-accionesPlatos btn-añadir w-100"
             onClick={() => handleAdd(item)}
-          >
+           variant="default">
             <span className="me-2">
               <PlusIcon className={"text-auto"} />
             </span>
             Agregar
-          </button>
+          </Button>
         )}
-      </div>
-    </div>
+      </CardFooter>
+    </Card>
   );
 };

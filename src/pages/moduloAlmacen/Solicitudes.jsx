@@ -4,6 +4,9 @@ import { SolicitudesLista } from "../../components/componenteAlmacen/Solicitudes
 import { Plus, Search } from "lucide-react";
 import ModalRight from "../../components/componentesReutilizables/ModalRight";
 import { FormAddSolicitudExterna } from "../../components/componenteAlmacen/componenteSolicitud/FormAddSolicitudExterna";
+import { Button } from "../../components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+
 
 export function Solicitudes() {
   const [showModalAdd, setShowModalAdd] = useState(false);
@@ -12,8 +15,8 @@ export function Solicitudes() {
 
   return (
     <div>
-      <div className="card shadow-sm py-2">
-        <div className="card-header  d-flex flex-column border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+      <Card className="shadow-sm py-2">
+        <CardHeader className="flex flex-col border-bottom-0 flex flex-col flex-md-row justify-between items-center gap-2">
           <div className="d-flex flex-column">
             <h4 className="m-0">Panel de Solicitudes</h4>
             <div>
@@ -33,20 +36,20 @@ export function Solicitudes() {
                 onChange={(e) => setSearch(e.target.value)}
               />
             </div>
-            <button
+            <Button
               className="btn btn-dark px-4"
               onClick={setShowModalAdd}
               title="Realiza una solicitud"
-            >
+             variant="default">
               <Plus size={18} />
               Agregar
-            </button>
+            </Button>
           </div>
-        </div>
-        <div className="card-body p-0">
+        </CardHeader>
+        <CardContent className="p-0">
           <SolicitudesLista search={search} updateList={updateList} />
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
       <ModalRight
         isOpen={showModalAdd}

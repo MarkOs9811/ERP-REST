@@ -22,6 +22,7 @@ import { GetPedidosEnCamino } from "../../service/GetPedidosEnCamino";
 import ModalGenerales from "../../components/componentesReutilizables/ModalGenerales";
 import { GetPedidosAsignados } from "../../service/GetPedidosAsignados";
 import { useGeolocalizacion } from "../../hooks/useGeolocalizacion";
+import { Button } from "../../components/ui/button";
 
 // Importación del Modal General
 
@@ -159,7 +160,7 @@ export function PedidosRider() {
         className="d-flex mb-4 p-1 rounded-pill shadow-sm bg-white"
         style={{ border: "1px solid #eef0f2" }}
       >
-        <button
+        <Button
           className={`btn flex-grow-1 fw-bold rounded-pill border-0 transition-all ${
             activeTab === "recoger" ? "shadow-sm" : "bg-transparent text-muted"
           }`}
@@ -170,15 +171,15 @@ export function PedidosRider() {
             padding: "10px 0",
           }}
           onClick={() => setActiveTab("recoger")}
-        >
+         variant="default">
           <Package className="me-2" size={18} style={{ marginBottom: "2px" }} />
           Asignados
           <span className="badge bg-white text-dark ms-2 rounded-pill px-2">
             {listaRecoger.length}
           </span>
-        </button>
+        </Button>
 
-        <button
+        <Button
           className={`btn flex-grow-1 fw-bold rounded-pill border-0 transition-all ${
             activeTab === "camino"
               ? "shadow-sm bg-dark text-white"
@@ -186,7 +187,7 @@ export function PedidosRider() {
           }`}
           style={{ padding: "10px 0" }}
           onClick={() => setActiveTab("camino")}
-        >
+         variant="default">
           <Bike className="me-2" size={18} style={{ marginBottom: "2px" }} />
           En Moto
           <span
@@ -194,7 +195,7 @@ export function PedidosRider() {
           >
             {listaCamino.length}
           </span>
-        </button>
+        </Button>
       </div>
 
       {/* --- LISTA DE PEDIDOS --- */}
@@ -221,14 +222,14 @@ export function PedidosRider() {
                     onOpenModal={() => handleAbrirDetalle(pedido)}
                   />
                   <div className="p-3 bg-white border-top border-light">
-                    <button
+                    <Button
                       className="btn-generico w-100 fw-bold rounded-pill py-2 shadow-sm d-flex justify-content-center align-items-center gap-2"
                       onClick={() => solicitarCambioEstado(pedido.id, 55)}
-                    >
+                     variant="default">
                       <Bike size={20} />
                       Iniciar Ruta
                       <ArrowRight size={18} className="ms-1" />
-                    </button>
+                    </Button>
                   </div>
                 </div>
               ))
@@ -259,7 +260,7 @@ export function PedidosRider() {
                     onOpenModal={() => handleAbrirDetalle(pedido)}
                   />
                   <div className="p-3 bg-white border-top border-light d-flex gap-3">
-                    <button
+                    <Button
                       className="btn flex-grow-1 fw-bold rounded-pill py-2 d-flex justify-content-center align-items-center gap-2"
                       style={{
                         backgroundColor: "#f1f3f5",
@@ -267,10 +268,10 @@ export function PedidosRider() {
                         border: "none",
                       }}
                       onClick={() => handleAbrirDetalle(pedido)}
-                    >
+                     variant="default">
                       <MapPin size={18} /> Ver Mapa
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                       className="btn flex-grow-1 fw-bold rounded-pill py-2 d-flex justify-content-center align-items-center gap-2 shadow-sm"
                       style={{
                         backgroundColor: "#212529",
@@ -278,9 +279,9 @@ export function PedidosRider() {
                         border: "none",
                       }}
                       onClick={() => solicitarCambioEstado(pedido.id, 6)}
-                    >
+                     variant="default">
                       <CheckCircle2 size={18} /> Entregado
-                    </button>
+                    </Button>
                   </div>
                 </div>
               ))
@@ -313,7 +314,7 @@ export function PedidosRider() {
               style={{ zIndex: 10 }}
             >
               {activeTab === "recoger" ? (
-                <button
+                <Button
                   className="btn w-100 fw-bold py-3 rounded-pill shadow-sm d-flex justify-content-center align-items-center gap-2"
                   style={{
                     background: "#ff3a3a",
@@ -321,12 +322,12 @@ export function PedidosRider() {
                     border: "none",
                   }}
                   onClick={() => solicitarCambioEstado(selectedPedido.id, 55)}
-                >
+                 variant="default">
                   <Bike size={20} />
                   Iniciar Ruta de Entrega
-                </button>
+                </Button>
               ) : (
-                <button
+                <Button
                   className="btn w-100 fw-bold py-3 rounded-pill shadow-sm d-flex justify-content-center align-items-center gap-2"
                   style={{
                     background: "#212529",
@@ -334,10 +335,10 @@ export function PedidosRider() {
                     border: "none",
                   }}
                   onClick={() => solicitarCambioEstado(selectedPedido.id, 6)}
-                >
+                 variant="default">
                   <CheckCircle2 size={20} />
                   Confirmar Entrega
-                </button>
+                </Button>
               )}
             </div>
           </div>

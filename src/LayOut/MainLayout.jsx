@@ -68,7 +68,7 @@ import { DashboardDelivery } from "../pages/moduloDelivery/DashboardDelivery";
 import { Repartidores } from "../pages/moduloDelivery/Repartidores";
 import { ZonaTarifa } from "../pages/moduloDelivery/ZonaTarifa";
 import { Promociones } from "../pages/moduloDelivery/Promociones";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { SubMenuTabs } from "../components/SubMenuTabs";
 import { IAMoodle } from "../pages/moduloIAmoodle/IAMoodle";
 import { DetallesVentas } from "../pages/moduloVentas/DetallesVentas";
@@ -90,24 +90,15 @@ import { LayOutMozo } from "./LayOutMozo";
 // IMPORTAMOS LA FUNCIÓN DEL DICCIONARIO
 import { getCargosPermitidos } from "../utils/diccionarioRoles";
 // IMPORTAMOS ÍCONOS EXTRA PARA LA CABECERA MÓVIL
-import { ArrowLeft, X } from "lucide-react";
-import { setSidebarCompressed } from "../redux/sideBarSlice";
-import { toggleSidebarMobile } from "../redux/sideBarMobilSlice";
 import { ReservasMesas } from "../pages/moduloVentas/ReservasMesas";
 import { BotonAgenteAi } from "../components/componentesReutilizables/BotonAgenteAi";
 // NOTA: Asegúrate de importar las acciones correctamente según tus rutas de Redux
 
 export const MainLayout = () => {
-  const dispatch = useDispatch();
-
   // 1. OBTENCIÓN DE ESTADOS Y DATOS LOCALES
   const isCompressed = useSelector(
     (state) => state.sidebar?.isCompressed || false,
   );
-  const isCompressedMobile = useSelector(
-    (state) => state.sidebarMobile?.isCompressedMobile || false,
-  );
-
   const user =
     JSON.parse(
       localStorage.getItem("user") || sessionStorage.getItem("user"),
@@ -116,6 +107,7 @@ export const MainLayout = () => {
     JSON.parse(
       localStorage.getItem("empresa") || sessionStorage.getItem("empresa"),
     ) || {};
+  const setupStep = Number(empresa?.setup_steps ?? 0) || 0;
 
   // 2. IDENTIFICACIÓN DEL ROL (CARGO)
   const cargoUsuario = user?.empleado?.cargo?.nombre?.toLowerCase();
@@ -136,10 +128,10 @@ export const MainLayout = () => {
   const showHeader = !esRolEspecial;
 
   // 3. BARRA DE PROGRESO DE CONFIGURACIÓN DE LA EMPRESA
-  const [step, setStep] = useState((empresa?.setup_steps || 0) < 5);
-  const [showWelcome, setShowWelcome] = useState(empresa?.setup_steps == 0);
+  const [step, setStep] = useState(setupStep < 5);
+  const [showWelcome, setShowWelcome] = useState(setupStep === 0);
 
-  const currentStep = Number(empresa.setup_steps) || 0;
+  const currentStep = setupStep;
   const totalSteps = 5;
   const rawPercentage = ((currentStep + 1) / totalSteps) * 100;
   const progressPercentage = Math.min(100, rawPercentage);
@@ -160,47 +152,24 @@ export const MainLayout = () => {
   };
 
   return (
-    <div className="p-0 m-0 vh-100 d-flex overflow-hidden">
+    <div className="flex h-dvh w-full overflow-hidden bg-muted/40">
       <BotonAgenteAi />
       {showFullLayout && (
-        <div className="sidebar-main-wrapper border-0">
+        <div className="sidebar-main-wrapper shrink-0">
           <SideBar />
         </div>
       )}
 
       {showFullLayout && (
         <div
-          className={`submenu-secundario-wrapper border-0 bg-white 
-            ${isCompressed ? "subMenuComprimido" : ""} 
-            ${isCompressedMobile && !isCompressed ? "mobile-submenu-active" : ""}`}
+          className={`submenu-secundario-wrapper relative z-30 hidden h-full shrink-0 flex-col overflow-hidden border-r border-sidebar-border bg-sidebar text-sidebar-foreground transition-[width,opacity] duration-300 ease-in-out md:flex
+            ${isCompressed ? "subMenuComprimido w-0 min-w-0 opacity-0" : "w-64 min-w-64 opacity-100"}`}
         >
-          {/* =========================================
-              CABECERA MÓVIL DEL SUBMENÚ (SOLO MÓVILES)
-              ========================================= */}
-          <div
-            className="d-flex d-md-none align-items-center justify-content-between p-3 border-bottom shadow-sm"
-            style={{ backgroundColor: "#f8fafc" }}
-          >
-            <button
-              className="btn btn-light d-flex align-items-center gap-2 fw-bold text-dark border-0 rounded-pill px-3 "
-              onClick={() => dispatch(setSidebarCompressed(true))}
-            >
-              <ArrowLeft size={18} /> Volver
-            </button>
-            <button
-              className="btn btn-light rounded-circle p-2 d-flex align-items-center justify-content-center"
-              onClick={() => dispatch(toggleSidebarMobile())}
-              style={{ width: "35px", height: "35px" }}
-            >
-              <X size={18} />
-            </button>
-          </div>
-
           <SubMenuTabs />
         </div>
       )}
 
-      <div className="content-wrapper d-flex flex-column flex-grow-1 overflow-hidden">
+      <div className="content-wrapper flex min-w-0 flex-1 flex-col overflow-hidden">
         {!showHeader && <Header tipoHeader={esRolEspecial} />}
         {showFullLayout && <Header tipoHeader={esRolEspecial} />}
 
@@ -221,7 +190,7 @@ export const MainLayout = () => {
 
         {!showHeader && <Navegacion tipoNavegacion={esRolEspecial} />}
 
-        <div className="flex-grow-1 overflow-auto overflow-x-hidden contenedor-scroll-principal p-3">
+        <div className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto bg-muted/40 px-3 py-4 sm:px-4 lg:px-5">
           <ContenedorPrincipal>
             <ToastContainer />
             <Routes>
@@ -1199,26 +1168,17 @@ export const MainLayout = () => {
           showButtons={false}
           width="900px"
         >
-          <div
-            className="w-100 bg-light position-relative"
-            style={{
-              height: "8px",
-              borderTopLeftRadius: "calc(0.3rem - 1px)",
-              borderTopRightRadius: "calc(0.3rem - 1px)",
-              overflow: "hidden",
-            }}
-          >
+          <div className="relative h-2 w-full overflow-hidden rounded-full bg-muted">
             <div
-              className="h-100 bg-primary transition-all"
+              className="h-full rounded-full transition-[width] duration-500 ease-in-out"
               style={{
                 width: `${progressPercentage}%`,
-                transition: "width 0.5s ease-in-out",
                 background:
                   "linear-gradient(90deg, #d31919ff 0%, #ff5f5fff 100%)",
               }}
             ></div>
           </div>
-          {empresa.setup_steps == 0 && (
+          {currentStep === 0 && (
             <>
               {showWelcome ? (
                 <StepBienvenida onStart={() => setShowWelcome(false)} />
@@ -1227,18 +1187,14 @@ export const MainLayout = () => {
               )}
             </>
           )}
-          {empresa.setup_steps == 1 && (
+          {currentStep === 1 && (
             <StepAreaCargo onFinish={() => setStep(false)} />
           )}
-          {empresa.setup_steps == 2 && (
-            <StepCaja onFinish={() => setStep(false)} />
-          )}
-          {empresa.setup_steps == 3 && (
+          {currentStep === 2 && <StepCaja onFinish={() => setStep(false)} />}
+          {currentStep === 3 && (
             <StepPlatosProductos onFinish={() => setStep(false)} />
           )}
-          {empresa.setup_steps == 4 && (
-            <StepUsuario onFinish={() => setStep(false)} />
-          )}
+          {currentStep === 4 && <StepUsuario onFinish={() => setStep(false)} />}
         </ModalGenerales>
       </div>
     </div>

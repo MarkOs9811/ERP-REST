@@ -15,6 +15,9 @@ import ModalAlertActivar from "../../componenteToast/ModalAlertActivar";
 import axiosInstance from "../../../api/AxiosInstance";
 import ToastAlert from "../../componenteToast/ToastAlert";
 import { SpinnerCargando } from "../../componentesReutilizables/SpinnerCargando";
+import { Button } from "../../ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+
 
 export function AjustesDeducciones() {
   const queryClient = useQueryClient();
@@ -162,7 +165,7 @@ export function AjustesDeducciones() {
               />
             </>
           ) : (
-            <button
+            <Button
               className="btn-activar"
               title="acivar"
               disabled={loadingActivar}
@@ -170,13 +173,13 @@ export function AjustesDeducciones() {
                 setModalActivarDedu(true);
                 setDataDeduccion(row);
               }}
-            >
+             variant="default">
               {loadingActivar ? (
                 <SpinnerCargando />
               ) : (
                 <Check className="text-auto" size={"auto"} />
               )}
-            </button>
+            </Button>
           )}
         </div>
       ),
@@ -186,8 +189,8 @@ export function AjustesDeducciones() {
     },
   ];
   return (
-    <div className="card  h-100 py-2">
-      <div className="card-header d-flex justify-content-between align-items-center p-2 border-bottom">
+    <Card className="h-full py-2">
+      <CardHeader className="flex justify-between items-center p-2 border-b">
         <h4 className=" mb-0">
           <CircleMinus className="text-auto" /> Deducciones
         </h4>
@@ -200,7 +203,7 @@ export function AjustesDeducciones() {
           />
         </div>
 
-        <button
+        <Button
           className="btn-principal btn-icon mx-2"
           title="Agregar"
           onClick={() => {
@@ -208,13 +211,13 @@ export function AjustesDeducciones() {
             setEditarDeduccion(false);
             setDataDeduccion([]);
           }}
-        >
+         variant="default">
           <Plus className="text-auto" />
-        </button>
-      </div>
-      <div className="card-body p-0">
+        </Button>
+      </CardHeader>
+      <CardContent className="p-0">
         <TablasGenerales columnas={columnas} datos={bonificacionFiltrada} />
-      </div>
+      </CardContent>
 
       <ModalRight
         isOpen={modalAddDeduccion}
@@ -248,6 +251,6 @@ export function AjustesDeducciones() {
         handleActivar={handleActivarDeduccion}
         handleCloseModal={() => setModalActivarDedu(false)}
       />
-    </div>
+    </Card>
   );
 }

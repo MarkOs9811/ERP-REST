@@ -21,6 +21,7 @@ import ToastAlert from "../componenteToast/ToastAlert";
 import axiosInstance from "../../api/AxiosInstance";
 import { useQueryClient } from "@tanstack/react-query";
 import { useDropzone } from "react-dropzone";
+import { Button } from "../ui/button";
 
 export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
   const [formData, setFormData] = useState({
@@ -233,14 +234,14 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
                 Haz clic en el círculo para subir una imagen.
               </p>
               {fotoPreview && (
-                <button
+                <Button
                   type="button"
                   onClick={removePhoto}
                   className="btn btn-sm btn-outline-danger py-0 px-2"
                   style={{ fontSize: "0.75rem" }}
-                >
+                 variant="destructive">
                   <Trash2Icon size={12} className="me-1" /> Quitar foto
-                </button>
+                </Button>
               )}
               {errors.fotoPerfil && (
                 <div className="text-danger small mt-1">
@@ -252,9 +253,9 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
           {/* SECCIÓN : INFORMACIÓN PERSONAL */}
           <h6 className={sectionTitleStyle}>Información Personal</h6>
 
-          <div className="row g-3 mb-3">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-3">
             {/* Tipo Doc */}
-            <div className="col-md-5">
+            <div className="md:col-span-5">
               <label className={labelStyle}>Tipo Doc.</label>
               <div className="input-group">
                 <span className="input-group-text bg-white text-muted">
@@ -278,7 +279,7 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
             </div>
 
             {/* Num Documento */}
-            <div className="col-md-7">
+            <div className="md:col-span-7">
               <label className={labelStyle}>Número Documento</label>
               <div className="input-group">
                 <span className="input-group-text bg-white text-muted">
@@ -295,7 +296,7 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
             </div>
 
             {/* Nombres */}
-            <div className="col-md-6">
+            <div className="md:col-span-6">
               <label className={labelStyle}>Nombres</label>
               <div className="input-group">
                 <span className="input-group-text bg-white text-muted">
@@ -314,7 +315,7 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
             </div>
 
             {/* Apellidos */}
-            <div className="col-md-6">
+            <div className="md:col-span-6">
               <label className={labelStyle}>Apellidos</label>
               <div className="input-group">
                 <span className="input-group-text bg-white text-muted">
@@ -336,7 +337,7 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
           {/* SECCIÓN 2: CUENTA Y ACCESO */}
           <h6 className={sectionTitleStyle}>Cuenta y Acceso</h6>
 
-          <div className="row g-3 mb-3">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-3">
             <div className="col-12">
               <label className={labelStyle}>Correo Electrónico</label>
               <div className="input-group">
@@ -362,9 +363,9 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
           {/* SECCIÓN 3: DATOS LABORALES */}
           <h6 className={sectionTitleStyle}>Datos Laborales</h6>
 
-          <div className="row g-3">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
             {/* Sede */}
-            <div className="col-md-6">
+            <div className="md:col-span-6">
               <label className={labelStyle}>Sede</label>
               <div className="input-group">
                 <span className="input-group-text bg-white text-muted">
@@ -388,7 +389,7 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
             </div>
 
             {/* Área */}
-            <div className="col-md-6">
+            <div className="md:col-span-6">
               <label className={labelStyle}>Área</label>
               <div className="input-group">
                 <span className="input-group-text bg-white text-muted">
@@ -412,7 +413,7 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
             </div>
 
             {/* Cargo */}
-            <div className="col-md-6">
+            <div className="md:col-span-6">
               <label className={labelStyle}>Cargo</label>
               <div className="input-group">
                 <span className="input-group-text bg-white text-muted">
@@ -434,7 +435,7 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
             </div>
 
             {/* Horario */}
-            <div className="col-md-6">
+            <div className="md:col-span-6">
               <label className={labelStyle}>Horario</label>
               <div className="input-group">
                 <span className="input-group-text bg-white text-muted">
@@ -458,7 +459,7 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
             </div>
 
             {/* Salario */}
-            <div className="col-md-6">
+            <div className="md:col-span-6">
               <label className={labelStyle}>Salario</label>
               <div className="input-group">
                 <span className="input-group-text bg-white text-muted">
@@ -477,22 +478,22 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
 
           {/* BOTONES DE ACCIÓN */}
           <div className="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
-            <button
+            <Button
               type="button"
               className="btn-cerrar-modal d-flex align-items-center gap-2"
               onClick={handleCloseModal}
-            >
+             variant="default">
               <X size={18} /> Cancelar
-            </button>
+            </Button>
 
-            <button
+            <Button
               type="submit"
               className="btn-guardar d-flex align-items-center gap-2"
               disabled={loading}
-            >
+             variant="default">
               <Save size={18} />
               {loading ? "Guardando..." : "Actualizar Usuario"}
-            </button>
+            </Button>
           </div>
         </>
       )}

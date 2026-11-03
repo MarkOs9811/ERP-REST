@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import axiosInstance from "../../../api/AxiosInstance";
 import ToastAlert from "../../componenteToast/ToastAlert";
 import { useQueryClient } from "@tanstack/react-query";
+import { Button } from "../../ui/button";
 
 export function EditCombo({ dataCombo }) {
   const queryCliente = useQueryClient();
@@ -106,9 +107,9 @@ export function EditCombo({ dataCombo }) {
         </div>
 
         {/* Botón */}
-        <button type="submit" className="btn-guardar">
+        <Button type="submit" className="btn-guardar" variant="default">
           Guardar Cambios
-        </button>
+        </Button>
       </form>
     </div>
   );

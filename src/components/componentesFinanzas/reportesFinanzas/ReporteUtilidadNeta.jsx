@@ -16,6 +16,8 @@ import { getVentas } from "../../../service/ObtenerVentasDetalle";
 import { GetCompras } from "../../../service/GetCompras";
 import { GraficoIngresosEgresos } from "../../../graficosChar/GraficoIngresosEgresos";
 import { Cargando } from "../../componentesReutilizables/Cargando";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+
 
 export function ReporteUtilidadNeta() {
   const reporteRef = useRef();
@@ -122,9 +124,9 @@ export function ReporteUtilidadNeta() {
 
   return (
     <div className="p-4 ">
-      <div className="row g-3 mb-3 mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-3 mb-4">
         {/* Botón de reporte */}
-        <div className="col-md-12 d-flex justify-content-auto ms-auto">
+        <div className="md:col-span-12 d-flex justify-content-auto ms-auto">
           <div>
             <h5>Informe</h5>
           </div>
@@ -146,13 +148,13 @@ export function ReporteUtilidadNeta() {
           </div>
         </div>
       </div>
-      <div className="row g-3 mb-3">
-        <div className="col-md-12" ref={reporteRef}>
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-3">
+        <div className="md:col-span-12" ref={reporteRef}>
           {/* Tarjetas resumen */}
-          <div className="col-md-12 mb-2">
-            <div className="row g-3 mb-3">
-              <div className="col-md-3">
-                <div className="card  rounded-3 p-3 h-100">
+          <div className="md:col-span-12 mb-2">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-3">
+              <div className="md:col-span-3">
+                <Card className="rounded-xl p-3 h-full">
                   {loadingVentas ? (
                     <div>
                       <Cargando />
@@ -169,10 +171,10 @@ export function ReporteUtilidadNeta() {
                       </h4>
                     </>
                   )}
-                </div>
+                </Card>
               </div>
-              <div className="col-md-3">
-                <div className="card  rounded-3 p-3 h-100">
+              <div className="md:col-span-3">
+                <Card className="rounded-xl p-3 h-full">
                   {loadingCompras ? (
                     <div>
                       <Cargando />
@@ -190,10 +192,10 @@ export function ReporteUtilidadNeta() {
                       </h4>
                     </>
                   )}
-                </div>
+                </Card>
               </div>
-              <div className="col-md-3">
-                <div className="card  rounded-3 p-3 h-100">
+              <div className="md:col-span-3">
+                <Card className="rounded-xl p-3 h-full">
                   <div className="d-flex align-items-center gap-2 mb-2">
                     <TrendingUp className="text-dark" size={28} />
                     <span className="fw-bold text-dark">Utilidad Neta</span>
@@ -201,10 +203,10 @@ export function ReporteUtilidadNeta() {
                   <h4 className="fw-bold text-dark mb-0">
                     S/ {utilidadNeta.toFixed(2)}
                   </h4>
-                </div>
+                </Card>
               </div>
-              <div className="col-md-3">
-                <div className="card  rounded-3 p-3 h-100">
+              <div className="md:col-span-3">
+                <Card className="rounded-xl p-3 h-full">
                   <div className="d-flex align-items-center gap-2 mb-2">
                     <Percent className="text-dark" size={28} />
                     <span className="fw-bold text-dark">
@@ -212,26 +214,26 @@ export function ReporteUtilidadNeta() {
                     </span>
                   </div>
                   <h4 className="fw-bold text-dark mb-0">{margen}%</h4>
-                </div>
+                </Card>
               </div>
             </div>
           </div>
 
           {/* Desglose financiero */}
-          <div className="col-md-12 mb-2">
-            <div className="card  rounded-3 p-3">
+          <div className="md:col-span-12 mb-2">
+            <Card className="rounded-xl p-3">
               <div className="d-flex align-items-center gap-2 mb-4">
                 <BarChart2 className="text-dark" size={22} />
                 <span className="fw-bold text-dark">Desglose Financiero</span>
               </div>
-              <div className="row text-center">
-                <div className="col-md-4">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-4text-center">
+                <div className="md:col-span-4">
                   <span className="text-muted">Ventas Totales del Periodo</span>
                   <h5 className="fw-bold text-dark">
                     S/ {totalVentas.toFixed(2)}
                   </h5>
                 </div>
-                <div className="col-md-4">
+                <div className="md:col-span-4">
                   <span className="text-muted">
                     Compras Totales del Periodo
                   </span>
@@ -239,7 +241,7 @@ export function ReporteUtilidadNeta() {
                     S/ {totalCompras.toFixed(2)}
                   </h5>
                 </div>
-                <div className="col-md-4">
+                <div className="md:col-span-4">
                   <span className="text-muted">Costos Operativos</span>
                   <h5 className="fw-bold text-dark">
                     S/ {costosOperativos.toFixed(2)}
@@ -247,26 +249,26 @@ export function ReporteUtilidadNeta() {
                 </div>
               </div>
               <hr />
-              <div className="row text-center">
-                <div className="col-md-6">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-4text-center">
+                <div className="md:col-span-6">
                   <span className="text-muted">Utilidad Bruta</span>
                   <h5 className="fw-bold text-dark">
                     S/ {utilidadBruta.toFixed(2)}
                   </h5>
                 </div>
-                <div className="col-md-6">
+                <div className="md:col-span-6">
                   <span className="text-muted">Utilidad Neta</span>
                   <h5 className="fw-bold text-dark">
                     S/ {utilidadNeta.toFixed(2)}
                   </h5>
                 </div>
               </div>
-            </div>
+            </Card>
           </div>
 
           {/* Comparativa mensual */}
-          <div className="col-md-12 mb-2">
-            <div className="card  rounded-3 p-3">
+          <div className="md:col-span-12 mb-2">
+            <Card className="rounded-xl p-3">
               <div className="d-flex align-items-center gap-2 mb-4">
                 <BarChart2 className="text-dark" size={22} />
                 <span className="fw-bold text-dark">Comparativa Mensual</span>
@@ -303,13 +305,13 @@ export function ReporteUtilidadNeta() {
                   </tbody>
                 </table>
               </div>
-            </div>
+            </Card>
           </div>
 
           {/* Gráfico */}
-          <div className="col-md-12 gap-3">
-            <div className="card p-3 ">
-              <div className="card-header d-flex gap-2 align-middle justify-content-left p-3">
+          <div className="md:col-span-12 gap-3">
+            <Card className="p-3">
+              <CardHeader className="flex gap-2 align-middle justify-content-left p-3">
                 <span className="alert alert-primary text-primary p-2 mb-0">
                   <PieChart size={25} />
                 </span>
@@ -317,11 +319,11 @@ export function ReporteUtilidadNeta() {
                   <span className="fw-bold">Gráfico de ingresos y egresos</span>
                   <p className="text-muted small mb-0">Cada mes</p>
                 </h6>
-              </div>
-              <div className="card-body">
+              </CardHeader>
+              <CardContent className="">
                 <GraficoIngresosEgresos />
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>

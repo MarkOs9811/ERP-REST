@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { Eye, EyeOff, Save, X, CheckCircle, AlertCircle } from "lucide-react";
 import axiosInstance from "../../../api/AxiosInstance";
 import ToastAlert from "../../componenteToast/ToastAlert";
+import { Button } from "../../ui/button";
 
 export function FormPassChange({ onClose }) {
   const {
@@ -95,15 +96,15 @@ export function FormPassChange({ onClose }) {
                 required: "La contraseña actual es obligatoria",
               })}
             />
-            <button
+            <Button
               className="btn border-0 bg-transparent text-muted position-absolute top-50 end-0 translate-middle-y shadow-none"
               type="button"
               onClick={() => setShowCurrent(!showCurrent)}
               style={{ zIndex: 10, paddingRight: "12px" }}
               tabIndex="-1"
-            >
+             variant="default">
               {showCurrent ? <EyeOff size={18} /> : <Eye size={18} />}
-            </button>
+            </Button>
           </div>
           {/* Mensaje de validación debajo */}
           {errors.current_password && (
@@ -141,15 +142,15 @@ export function FormPassChange({ onClose }) {
                 },
               })}
             />
-            <button
+            <Button
               className="btn border-0 bg-transparent text-muted position-absolute top-50 end-0 translate-middle-y shadow-none"
               type="button"
               onClick={() => setShowNew(!showNew)}
               style={{ zIndex: 10, paddingRight: "12px" }}
               tabIndex="-1"
-            >
+             variant="default">
               {showNew ? <EyeOff size={18} /> : <Eye size={18} />}
-            </button>
+            </Button>
           </div>
           {/* Mensajes de validación debajo */}
           {errors.new_password ? (
@@ -204,19 +205,19 @@ export function FormPassChange({ onClose }) {
 
       {/* Footer */}
       <div className="p-3 border-top d-flex justify-content-end bg-light flex-shrink-0">
-        <button
+        <Button
           type="button"
           className="btn-cerrar me-2"
           onClick={onClose}
           disabled={mutation.isPending}
-        >
+         variant="default">
           <X size={18} className="me-1" /> Cancelar
-        </button>
-        <button
+        </Button>
+        <Button
           type="submit"
           className="btn-guardar d-flex align-items-center"
           disabled={mutation.isPending}
-        >
+         variant="default">
           {mutation.isPending ? (
             <>
               <span
@@ -231,7 +232,7 @@ export function FormPassChange({ onClose }) {
               Guardar Contraseña
             </>
           )}
-        </button>
+        </Button>
       </div>
     </form>
   );

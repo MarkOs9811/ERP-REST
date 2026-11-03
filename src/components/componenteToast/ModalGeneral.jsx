@@ -1,5 +1,6 @@
 import "../../css/ModalAlertQuestion.css";
 import ReactDOM from "react-dom";
+import { Button } from "../ui/button";
 
 function ModalGeneral({
   show,
@@ -39,12 +40,12 @@ function ModalGeneral({
             </div>
           )}
           <div>
-            <button onClick={handleConfirm} className="btn btn-danger mx-2">
+            <Button onClick={handleConfirm} className="btn btn-danger mx-2" variant="destructive">
               Confirmar
-            </button>
-            <button onClick={handleCloseModal} className="btn btn-secondary">
+            </Button>
+            <Button onClick={handleCloseModal} className="btn btn-secondary" variant="default">
               Cancelar
-            </button>
+            </Button>
           </div>
         </div>
       </div>,

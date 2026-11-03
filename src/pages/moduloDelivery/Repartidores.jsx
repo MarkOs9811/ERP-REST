@@ -22,6 +22,9 @@ import { FormEditRepartidor } from "../../components/componenteDelivery/FormEdit
 import { PutData } from "../../service/CRUD/PutData";
 import { DeleteData } from "../../service/CRUD/DeleteData";
 import { useNavigate } from "react-router-dom";
+import { Button } from "../../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 
 export function Repartidores() {
   const {
@@ -65,16 +68,16 @@ export function Repartidores() {
 
   return (
     <div className="container-fluid p-0">
-      <div className="card rounded-4">
+      <Card className="rounded-2xl">
         {/* HEADER DE LA VISTA */}
-        <div className="card-header border-0 ">
+        <CardHeader className="border-0">
           <div className="d-flex align-items-center">
-            <h4 className="card-title mb-0 titulo-card-especial">
+            <CardTitle asChild><h4 className="mb-0 titulo-card-especial">
               Panel de Repartidores
               <span className="badge-header ms-2">
                 {usuariosRepartidores.length} activos
               </span>
-            </h4>
+            </h4></CardTitle>
           </div>
 
           <div className="d-flex  gap-2  align-items-center ">
@@ -86,29 +89,29 @@ export function Repartidores() {
                 className="form-control"
               />
             </div>
-            <button
+            <Button
               className="btn btn-outline-dark d-flex gap-2"
               title="Generar Reporte Completo"
-            >
+             variant="default">
               <FileText size={20} />
               <span className="d-none d-sm-inline">Reporte</span>
-            </button>
-            <button
+            </Button>
+            <Button
               className="btn btn-outline-dark d-flex gap-2"
               title="Agregar Nuevo Repartidor"
               onClick={() => {
                 navigate("/rrhh");
               }}
-            >
+             variant="default">
               <Plus size={20} />
               <span className="d-none d-sm-inline">Agregar</span>
-            </button>
+            </Button>
           </div>
-        </div>
+        </CardHeader>
 
         {/* BODY CON EL LISTADO HORIZONTAL (GRID DE BOOTSTRAP 5) */}
-        <div className="card-body p-4">
-          <div className="row g-3">
+        <CardContent className="p-4">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
             {isLoading ? (
               <div className="col-12 text-center py-5">
                 <div className="spinner-border text-primary" role="status">
@@ -134,9 +137,9 @@ export function Repartidores() {
               usuariosRepartidores.map((repartidor) => (
                 /* AQUÍ ESTÁ LA CLAVE: col-md-6 (2 por fila en tablet) col-xl-4 o col-xl-3 (3 o 4 por fila en desktop) */
                 <div className="col-12 col-md-6 col-xl-4" key={repartidor.id}>
-                  <div className="card h-100  bg-white ">
+                  <Card className="h-full bg-background">
                     {/* Rejilla interna simplificada con Flexbox puro */}
-                    <div className="card-body p-3 d-flex align-items-center gap-3">
+                    <CardContent className="p-3 flex items-center gap-3">
                       {/* 1. Avatar fijo a la izquierda */}
                       <div className="position-relative flex-shrink-0">
                         <div className="avatar-circle-horizontal overflow-hidden">
@@ -211,17 +214,17 @@ export function Repartidores() {
 
                       {/* 3. Acciones alineadas a la derecha */}
                       <div className="d-flex justify-content-center align-items-center flex-shrink-0 gap-2">
-                        <button
+                        <Button
                           className="btn-editar p-2"
                           title="Editar Repartidor"
                           onClick={() => {
                             setRepartidorSelected(repartidor);
                             setIsModalEditOpen(true);
                           }}
-                        >
+                         variant="secondary">
                           <Edit2 size={18} />
-                        </button>
-                        <button
+                        </Button>
+                        <Button
                           className={` btn-sm  p-2 ${repartidor.estado == 1 ? "btn-eliminar" : "btn-activar"}`}
                           title={
                             repartidor.estado == 1
@@ -232,22 +235,22 @@ export function Repartidores() {
                             setRepartidorAccion(repartidor);
                             setShowModalActivar(true);
                           }}
-                        >
+                         variant="destructive">
                           {repartidor.estado == 0 ? (
                             <Power size={18} />
                           ) : (
                             <PowerOff size={18} />
                           )}
-                        </button>
+                        </Button>
                       </div>
-                    </div>
-                  </div>
+                    </CardContent>
+                  </Card>
                 </div>
               ))
             )}
           </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
       {/* MODAL PARA EDITAR REPARTIDOR */}
       <ModalRight

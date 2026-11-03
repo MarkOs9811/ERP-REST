@@ -12,6 +12,8 @@ import {
 import { Bar } from "react-chartjs-2";
 import { TrendingUp } from "lucide-react";
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
+import { Card } from "@/components/ui/card";
+
 
 // 2. Registramos los módulos de Chart.js
 ChartJS.register(
@@ -143,8 +145,8 @@ export function GraficoVentasDelivery({ ventasList, load, errorLoad }) {
 
   return (
     <CondicionCarga isLoading={load} isError={errorLoad}>
-      <div
-        className="card shadow-sm border rounded-4 p-4 h-100 w-100"
+      <Card
+        className="shadow-sm border rounded-2xl p-4 h-full w-full"
         style={{ backgroundColor: "var(--bg-card)" }}
       >
         <div className="d-flex align-items-center mb-4">
@@ -170,7 +172,7 @@ export function GraficoVentasDelivery({ ventasList, load, errorLoad }) {
         <div style={{ position: "relative", width: "100%", height: "300px" }}>
           <Bar data={data} options={options} />
         </div>
-      </div>
+      </Card>
     </CondicionCarga>
   );
 }

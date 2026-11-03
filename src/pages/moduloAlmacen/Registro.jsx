@@ -1,20 +1,22 @@
 import { AlmacenRegister } from "../../components/componenteAlmacen/AlmacenRegister";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 
 export function Registro() {
   return (
     <div>
-      <div className="card my-0 flex-grow-1 h-100 d-flex flex-column py-2 m-0 shadow-sm">
-        <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-3">
+      <Card className="my-0 flex-grow-1 h-full flex flex-col py-2 m-0 shadow-sm">
+        <CardHeader className="border-bottom-0 flex flex-col flex-md-row justify-between items-center gap-2 p-3">
           <div className="d-flex align-items-center">
-            <h4 className="card-title mb-0 titulo-card-especial">
+            <CardTitle asChild><h4 className="mb-0 titulo-card-especial">
               Registro de activos/productos
-            </h4>
+            </h4></CardTitle>
           </div>
-        </div>
-        <div className="card-body">
+        </CardHeader>
+        <CardContent className="">
           <AlmacenRegister />
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

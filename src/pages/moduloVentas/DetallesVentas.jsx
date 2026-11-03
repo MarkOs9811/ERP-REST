@@ -13,6 +13,9 @@ import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteE
 import { ListVentas } from "../../components/componentesVentas/ListaVentas";
 import "../../css/estilosVentas/EstilosListaVentas.css";
 import { formatMoneda } from "../../utils/currency";
+import { Button } from "../../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 
 export function DetallesVentas() {
   const [search, setSearch] = useState("");
@@ -74,12 +77,12 @@ export function DetallesVentas() {
       {/* Lista de ventas */}
       <div className="col-12">
         <CondicionCarga isLoading={isLoading} isError={isError}>
-          <div className="card  py-2 shadow-none">
-            <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-start align-md-items-center gap-3 p-4">
+          <Card className="py-2 shadow-none">
+            <CardHeader className="border-bottom-0 flex flex-col flex-md-row justify-between items-start align-md-items-center gap-3 p-4">
               <div className="d-flex align-items-center">
-                <h4 className="card-title mb-0 titulo-card-especial">
+                <CardTitle asChild><h4 className="mb-0 titulo-card-especial">
                   Panel de Ventas
-                </h4>
+                </h4></CardTitle>
                 <span className="badge-header ms-2">Registros</span>
               </div>
 
@@ -125,7 +128,7 @@ export function DetallesVentas() {
                     setSearch("");
                   }}
                 />
-                <button
+                <Button
                   type="button"
                   className="btn-principal"
                   onClick={() => {
@@ -136,12 +139,12 @@ export function DetallesVentas() {
                     // Pasamos null a las fechas y "Ventas" al parámetro 'tipo'
                     GetReporteExcel(urlReporte, null, null, "Ventas");
                   }}
-                >
+                 variant="default">
                   <FileText size={18} />
                   Reporte
-                </button>
+                </Button>
               </div>
-            </div>
+            </CardHeader>
             <div className="ventas-kpi-grid px-4 pb-3">
               <div className="ventas-kpi">
                 <span>
@@ -162,10 +165,10 @@ export function DetallesVentas() {
                 <strong>{formatMoneda(metricas.promedio)}</strong>
               </div>
             </div>
-            <div className="card-body p-0">
+            <CardContent className="p-0">
               <ListVentas search={search} ventas={ventasFiltradas} />
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </CondicionCarga>
       </div>
     </div>

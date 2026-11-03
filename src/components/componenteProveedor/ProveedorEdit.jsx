@@ -18,6 +18,7 @@ import {
   limitTelefonoInput,
   validateTelefono,
 } from "../../hooks/InputHandlers";
+import { Button } from "../ui/button";
 
 export function ProveedorEdit({
   dataProveedor,
@@ -112,8 +113,8 @@ export function ProveedorEdit({
 
         <div className="proveedor-section mb-4">
           <div className="proveedor-section-title">Documento y contacto</div>
-          <div className="row g-3 proveedor-grid-top">
-            <div className="col-md-4">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-3 proveedor-grid-top">
+            <div className="md:col-span-4">
               <div className="proveedor-field proveedor-card-field h-100">
                 <label htmlFor="tipo_documento" className="proveedor-label">
                   <FontAwesomeIcon icon={faIdCard} /> Tipo de Documento
@@ -146,7 +147,7 @@ export function ProveedorEdit({
               </div>
             </div>
 
-            <div className="col-md-4">
+            <div className="md:col-span-4">
               <div className="proveedor-field proveedor-card-field h-100">
                 <label htmlFor="numero_documento" className="proveedor-label">
                   <FontAwesomeIcon icon={faIdCard} /> Número de Documento
@@ -189,7 +190,7 @@ export function ProveedorEdit({
               </div>
             </div>
 
-            <div className="col-md-4">
+            <div className="md:col-span-4">
               <div className="proveedor-field proveedor-card-field h-100">
                 <label htmlFor="telefono" className="proveedor-label">
                   <FontAwesomeIcon icon={faPhone} /> Teléfono
@@ -222,7 +223,7 @@ export function ProveedorEdit({
           <div className="proveedor-section-title">
             Información del proveedor
           </div>
-          <div className="row g-3">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
             <div className="col-12">
               <div className="proveedor-field proveedor-card-field">
                 <label htmlFor="nombre" className="proveedor-label">
@@ -322,16 +323,16 @@ export function ProveedorEdit({
         </div>
 
         <div className="d-flex justify-content-end gap-2 mt-4 proveedor-form-actions">
-          <button
+          <Button
             type="button"
             className="btn-cerrar-modal"
             onClick={handleCloseModal}
-          >
+           variant="default">
             Cancelar
-          </button>
-          <button type="submit" className="btn-guardar" disabled={loading}>
+          </Button>
+          <Button type="submit" className="btn-guardar" disabled={loading} variant="default">
             {loading ? "Guardando..." : "Guardar cambios"}
-          </button>
+          </Button>
         </div>
       </form>
     </div>

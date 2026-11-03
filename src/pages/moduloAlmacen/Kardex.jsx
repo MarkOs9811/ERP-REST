@@ -6,6 +6,9 @@ import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteE
 import { CondicionCarga } from "../../components/componentesReutilizables/CondicionCarga";
 import { useQuery } from "@tanstack/react-query";
 import "../../css/estilosAlmacen/EstilosKardexModerno.css";
+import { Button } from "../../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 export function Kardex() {
   const [search, setSearch] = useState("");
 
@@ -34,10 +37,10 @@ export function Kardex() {
 
   return (
     <div className="kardex-page">
-      <div className="row g-3">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
         <div className="col-sm-12 col-md-6">
           <CondicionCarga isLoading={isLoading} isError={isError}>
-            <div className="card kardex-kpi-card kardex-kpi-card-entrada  h-100">
+            <Card className="kardex-kpi-card kardex-kpi-card-entrada h-full">
               <div className="kardex-kpi-icon-wrap">
                 <ArrowUp
                   className="kardex-kpi-icon"
@@ -49,22 +52,22 @@ export function Kardex() {
                 <p className="kardex-kpi-value mb-0">{totalEntradas}</p>
               </div>
               <div className="kardex-kpi-action">
-                <button
+                <Button
                   type="button"
                   className="btn btn-ver kardex-export-btn"
                   onClick={() => handleReporteEntrada()}
                   title="Exportar entradas a Excel"
-                >
+                 variant="outline">
                   <FileText size={18} />
-                </button>
+                </Button>
               </div>
-            </div>
+            </Card>
           </CondicionCarga>
         </div>
 
         <div className="col-sm-12 col-md-6">
           <CondicionCarga isLoading={isLoading} isError={isError}>
-            <div className="card kardex-kpi-card kardex-kpi-card-salida  h-100">
+            <Card className="kardex-kpi-card kardex-kpi-card-salida h-full">
               <div className="kardex-kpi-icon-wrap">
                 <ArrowDown
                   className="kardex-kpi-icon"
@@ -76,27 +79,27 @@ export function Kardex() {
                 <p className="kardex-kpi-value mb-0">{totalSalidas}</p>
               </div>
               <div className="kardex-kpi-action">
-                <button
+                <Button
                   type="button"
                   className="btn btn-ver kardex-export-btn"
                   onClick={() => handleReporteSalida()}
                   title="Exportar salidas a Excel"
-                >
+                 variant="outline">
                   <FileText size={18} />
-                </button>
+                </Button>
               </div>
-            </div>
+            </Card>
           </CondicionCarga>
         </div>
 
-        <div className="col-md-12">
+        <div className="md:col-span-12">
           <CondicionCarga isLoading={isLoading} isError={isError}>
-            <div className="card kardex-panel-card  py-2">
-              <div className="card-header border-bottom-0 d-flex justify-content-between align-items-center gap-2 flex-wrap kardex-panel-header">
+            <Card className="kardex-panel-card py-2">
+              <CardHeader className="border-bottom-0 flex justify-between items-center gap-2 flex-wrap kardex-panel-header">
                 <div className="d-flex align-items-center gap-2 flex-wrap">
-                  <h4 className="card-title mb-0 titulo-card-especial kardex-panel-title">
+                  <CardTitle asChild><h4 className="mb-0 titulo-card-especial kardex-panel-title">
                     Kardex de Movimientos
-                  </h4>
+                  </h4></CardTitle>
                   <span className="badge-header kardex-panel-badge">
                     Total: {totalMovimientos}
                   </span>
@@ -113,11 +116,11 @@ export function Kardex() {
                     />
                   </div>
                 </div>
-              </div>
-              <div className="card-body p-0 kardex-table-zone">
+              </CardHeader>
+              <CardContent className="p-0 kardex-table-zone">
                 <KardexList search={search} />
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           </CondicionCarga>
         </div>
       </div>

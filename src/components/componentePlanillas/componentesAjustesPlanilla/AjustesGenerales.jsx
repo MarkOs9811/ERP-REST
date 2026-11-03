@@ -3,6 +3,9 @@ import { useQuery } from "@tanstack/react-query";
 import { FileCog, FileText, Plus, CalendarDays, Edit } from "lucide-react";
 import { GetAjustePlanilla } from "../../../service/accionesPlanilla/GetAjustePlanilla";
 import { CondicionCarga } from "../../componentesReutilizables/CondicionCarga";
+import { Button } from "../../ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+
 
 export function AjustesGenerales() {
   const {
@@ -22,44 +25,44 @@ export function AjustesGenerales() {
   console.log("Ajustes:", settings);
 
   return (
-    <div className="card shadow-sm h-100">
-      <div className="card-header d-flex justify-content-between align-items-center p-3 border-bottom">
+    <Card className="shadow-sm h-full">
+      <CardHeader className="flex justify-between items-center p-3 border-b">
         <h5 className=" mb-0">
           <FileCog className="text-auto" /> Ajustes Generales Planilla
         </h5>
         <div className="d-flex ms-auto mx-2">
           <input type="text" placeholder="Buscar..." className="form-control" />
         </div>
-        <button className="btn btn-sm btn-outline-dark" title="Reporte">
+        <Button className="btn btn-sm btn-outline-dark" title="Reporte" variant="default">
           <FileText className="me-1 text-auto" />
           Reporte
-        </button>
-        <button className="btn btn-sm btn-outline-dark mx-2" title="Agregar">
+        </Button>
+        <Button className="btn btn-sm btn-outline-dark mx-2" title="Agregar" variant="default">
           <Plus className=" text-auto" />
-        </button>
-      </div>
+        </Button>
+      </CardHeader>
 
       {/* El CondicionCarga maneja el estado de carga y error.
         Dentro, mostramos los ajustes si existen.
       */}
       <CondicionCarga isLoading={isLoading} isError={isError}>
-        <div className="card-body p-4">
+        <CardContent className="p-4">
           {settings ? (
             <div className="row">
               {/* Sección: Día de Pago */}
-              <div className="col-md-3">
+              <div className="md:col-span-3">
                 <div className="p-3 border rounded shadow-sm bg-light h-100">
                   <div className="d-flex justify-content-between align-items-center mb-2">
                     <h6 className="mb-0 fw-bold d-flex align-items-center">
                       <CalendarDays className="me-2 text-muted" size={20} />
                       Día de Pago
                     </h6>
-                    <button
+                    <Button
                       className="btn btn-sm btn-outline-secondary"
                       title="Editar Día de Pago"
-                    >
+                     variant="default">
                       <Edit size={16} />
-                    </button>
+                    </Button>
                   </div>
                   <hr />
                   <div className="text-center">
@@ -75,19 +78,19 @@ export function AjustesGenerales() {
               </div>
 
               {/* Sección: Plantilla de Contrato */}
-              <div className="col-md-9">
+              <div className="md:col-span-9">
                 <div className="p-3 border rounded shadow-sm h-100">
                   <div className="d-flex justify-content-between align-items-center mb-2">
                     <h6 className="mb-0 fw-bold d-flex align-items-center">
                       <FileText className="me-2 text-muted" size={20} />
                       Plantilla de Contrato
                     </h6>
-                    <button
+                    <Button
                       className="btn btn-sm btn-outline-secondary"
                       title="Editar Plantilla"
-                    >
+                     variant="default">
                       <Edit size={16} />
-                    </button>
+                    </Button>
                   </div>
                   <hr />
                   {/* Usamos un textarea para mostrar texto largo (plantilla)
@@ -115,8 +118,8 @@ export function AjustesGenerales() {
               </p>
             </div>
           )}
-        </div>
+        </CardContent>
       </CondicionCarga>
-    </div>
+    </Card>
   );
 }

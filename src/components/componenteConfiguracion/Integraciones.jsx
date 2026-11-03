@@ -23,6 +23,9 @@ import { TesseractFormIntegracion } from "./confiIntegraciones/TesseractFormInte
 
 import "../../css/estilosConfiguracion/EstiloIntegraciones.css";
 import { GeminiFormIntegracion } from "./confiIntegraciones/GeminiFormIntegracion";
+import { Button } from "../ui/button";
+import { Card } from "@/components/ui/card";
+
 
 // Función para retornar el icono según el nombre
 function getIcon(nombre) {
@@ -127,10 +130,10 @@ export function Integraciones() {
 
   return (
     <div className="container w-100 p-3">
-      <div className="row g-3">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
         {integraciones.map((item) => (
-          <div className="col-md-4 col-xl-6 col-sm-12" key={item.id}>
-            <div className="card  p-4 h-100" style={{ borderRadius: 18 }}>
+          <div className="md:col-span-4 col-xl-6 col-sm-12" key={item.id}>
+            <Card className="p-4 h-full" style={{ borderRadius: 18 }}>
               <div className="d-flex align-items-center mb-2">
                 <div className="me-3">{getIcon(item.nombre)}</div>
                 <div className="flex-grow-1">
@@ -159,7 +162,7 @@ export function Integraciones() {
               </div>
               <div className="text-muted small mb-2">{item.descripcion}</div>
               <div className="d-flex justify-content-end">
-                <button
+                <Button
                   type="button"
                   className="btn btn-outline-dark btn-sm"
                   disabled={!switches[item.id]}
@@ -168,11 +171,11 @@ export function Integraciones() {
                     setTituloModal(item.nombre);
                     setData(item);
                   }}
-                >
+                 variant="default">
                   Configurar
-                </button>
+                </Button>
               </div>
-            </div>
+            </Card>
           </div>
         ))}
       </div>

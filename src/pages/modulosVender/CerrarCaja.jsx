@@ -31,6 +31,9 @@ import { ModalDetallesVentas } from "../../components/componentesVentas/ModalDet
 import { GetMetodosPago } from "../../service/accionesVentas/GetMetodosPago";
 
 import "../../css/EstilosCerrarCaja.css";
+import { Button } from "../../components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+
 
 export const fetchCajaClose = async (cajaId) => {
   try {
@@ -289,23 +292,23 @@ export function CerrarCaja() {
 
   return (
     <div className="container d-flex align-items-center justify-content-center ">
-      <div className="card h-100 overflow-auto border">
-        <div className="card-header p-3 border-bottom d-flex align-content-center align-items-center bg-white">
+      <Card className="h-full overflow-auto border">
+        <CardHeader className="p-3 border-b flex align-content-center items-center bg-background">
           <h5 className="titulo-card-especial mb-0">Arqueo y Cierre de Caja</h5>
           <div className="badge px-3 py-2 ms-auto bg-dark border">
             <span className="h5 mb-0 text-white">{caja?.nombre}</span>
           </div>
-        </div>
+        </CardHeader>
 
-        <div className="card-body p-4 h-100 ">
-          <div className="row g-4 h-100">
+        <CardContent className="p-4 h-full">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 h-100">
             {/* LADO IZQUIERDO: Tarjetas y Tabla */}
-            <div className="col-md-8 h-100">
-              <div className="row g-3">
+            <div className="md:col-span-8 h-100">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
                 {/* TARJETA 1 (Fondo Inicial) */}
-                <div className="col-md-4">
-                  <div
-                    className="card h-100"
+                <div className="md:col-span-4">
+                  <Card
+                    className="h-full"
                     style={{
                       backgroundColor: "#ffffff",
                       border: "1px solid #eaeaea",
@@ -315,7 +318,7 @@ export function CerrarCaja() {
                         "radial-gradient(circle at top left, rgba(74, 105, 189, 0.08) 0%, transparent 70%)",
                     }}
                   >
-                    <div className="card-body p-4 d-flex flex-column justify-content-between">
+                    <CardContent className="p-4 flex flex-col justify-between">
                       <div className="d-flex justify-content-between align-items-start mb-3">
                         <div
                           className="d-flex align-items-center justify-content-center rounded-circle"
@@ -343,14 +346,14 @@ export function CerrarCaja() {
                           S/. {Number(cajaData?.montoInicial || 0).toFixed(2)}
                         </h3>
                       </div>
-                    </div>
-                  </div>
+                    </CardContent>
+                  </Card>
                 </div>
 
                 {/* TARJETA 2 (Efectivo Físico) */}
-                <div className="col-md-4">
-                  <div
-                    className="card h-100"
+                <div className="md:col-span-4">
+                  <Card
+                    className="h-full"
                     style={{
                       backgroundColor: "#ffffff",
                       border: "1px solid #eaeaea",
@@ -360,7 +363,7 @@ export function CerrarCaja() {
                         "radial-gradient(circle at top left, rgba(196, 69, 105, 0.08) 0%, transparent 70%)",
                     }}
                   >
-                    <div className="card-body p-4 d-flex flex-column justify-content-between">
+                    <CardContent className="p-4 flex flex-col justify-between">
                       <div className="d-flex justify-content-between align-items-start mb-3">
                         <div
                           className="d-flex align-items-center justify-content-center rounded-circle"
@@ -388,14 +391,14 @@ export function CerrarCaja() {
                           S/. {fisicoEsperado}
                         </h3>
                       </div>
-                    </div>
-                  </div>
+                    </CardContent>
+                  </Card>
                 </div>
 
                 {/* TARJETA 3 (Monto Vendido Total) */}
-                <div className="col-md-4">
-                  <div
-                    className="card h-100"
+                <div className="md:col-span-4">
+                  <Card
+                    className="h-full"
                     style={{
                       backgroundColor: "#ffffff",
                       border: "1px solid #eaeaea",
@@ -405,7 +408,7 @@ export function CerrarCaja() {
                         "radial-gradient(circle at top left, rgba(34, 190, 55, 0.08) 0%, transparent 70%)",
                     }}
                   >
-                    <div className="card-body p-4 d-flex flex-column justify-content-between">
+                    <CardContent className="p-4 flex flex-col justify-between">
                       <div className="d-flex justify-content-between align-items-start mb-3">
                         <div
                           className="d-flex align-items-center justify-content-center rounded-circle"
@@ -433,13 +436,13 @@ export function CerrarCaja() {
                           S/. {Number(cajaData?.totalVenta || 0).toFixed(2)}
                         </h3>
                       </div>
-                    </div>
-                  </div>
+                    </CardContent>
+                  </Card>
                 </div>
 
                 {/* DESGLOSE POR MÉTODO DE PAGO */}
-                <div className="col-md-12">
-                  <div className="card border bg-white p-3">
+                <div className="md:col-span-12">
+                  <Card className="border bg-background p-3">
                     <div className="d-flex align-items-center mb-3">
                       <PieChart className="text-secondary me-2" size={18} />
                       <h6 className="fw-bold mb-0 text-secondary">
@@ -470,13 +473,13 @@ export function CerrarCaja() {
                         </p>
                       )}
                     </div>
-                  </div>
+                  </Card>
                 </div>
 
                 {/* TABLA DE VENTAS */}
-                <div className="col-md-12">
-                  <div className="card border py-2 bg-white">
-                    <div className="card-header bg-white border-bottom-0 pb-3">
+                <div className="md:col-span-12">
+                  <Card className="border py-2 bg-background">
+                    <CardHeader className="bg-background border-bottom-0 pb-3">
                       <p className="fw-bold text-secondary mb-2">
                         Historial de Transacciones
                       </p>
@@ -493,16 +496,16 @@ export function CerrarCaja() {
                           />
                         </div>
                         <div className="filtro-metodos">
-                          <button
+                          <Button
                             type="button"
                             className={metodoFiltro === "TODOS" ? "activo" : ""}
                             onClick={() => setMetodoFiltro("TODOS")}
-                          >
+                           variant="default">
                             Todos
-                          </button>
+                          </Button>
 
                           {dataMetodos.map((metodo) => (
-                            <button
+                            <Button
                               key={metodo.id || metodo.nombre}
                               type="button"
                               className={
@@ -512,29 +515,29 @@ export function CerrarCaja() {
                                   : ""
                               }
                               onClick={() => setMetodoFiltro(metodo.nombre)}
-                            >
+                             variant="default">
                               {metodo.nombre}
-                            </button>
+                            </Button>
                           ))}
                         </div>
                       </div>
-                    </div>
+                    </CardHeader>
 
-                    <div className="card-body p-0 border-top">
+                    <CardContent className="p-0 border-t">
                       <TablasGenerales
                         datos={ventasFiltradas}
                         columnas={columns}
                       />
-                    </div>
-                  </div>
+                    </CardContent>
+                  </Card>
                 </div>
               </div>
             </div>
 
             {/* LADO DERECHO: Detalles y Acciones */}
-            <div className="col-md-4 h-100">
-              <div className="card border  h-100 d-flex flex-column">
-                <div className="card-header border-bottom  p-3">
+            <div className="md:col-span-4 h-100">
+              <Card className="border h-full flex flex-col">
+                <CardHeader className="border-b p-3">
                   <div className="d-flex align-items-center">
                     <div className=" alert alert-danger rounded p-2 me-3">
                       <CreditCard className="text-danger" size={20} />
@@ -546,9 +549,9 @@ export function CerrarCaja() {
                       <p className="text-muted small mb-0">Auditoría de caja</p>
                     </div>
                   </div>
-                </div>
+                </CardHeader>
 
-                <div className="card-body d-flex flex-column p-3">
+                <CardContent className="flex flex-col p-3">
                   {/* Información de Apertura */}
                   <div className="bg-light rounded p-3 mb-4 border">
                     <div className="d-flex flex-column mb-3 border-bottom pb-2">
@@ -658,11 +661,11 @@ export function CerrarCaja() {
                       </span>
                     </BotonAnimado>
                   </div>
-                </div>
-              </div>
+                </CardContent>
+              </Card>
             </div>
           </div>
-        </div>
+        </CardContent>
 
         <ModalAlertQuestion
           show={openModal}
@@ -682,7 +685,7 @@ export function CerrarCaja() {
         >
           <ModalDetallesVentas dataVentas={dataVentas} />
         </ModalRight>
-      </div>
+      </Card>
     </div>
   );
 }

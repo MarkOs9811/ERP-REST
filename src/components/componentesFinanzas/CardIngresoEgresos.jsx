@@ -12,6 +12,8 @@ import { getThemeColors, hexToRgb, toRgba } from "../../utils/ThemeColors";
 
 //  IMPORTAMOS EL HELPER
 import { formatMoneda } from "../../utils/currency";
+import { Card } from "@/components/ui/card";
+
 
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Filler);
 
@@ -59,11 +61,11 @@ export function CardIngresoEgresos({ sumaIngresos, sumaEgresos }) {
 
   return (
     <div className="col-12">
-      <div className="row g-3">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
         {/* CARD INGRESOS */}
         <div className="col-12 col-lg-6">
-          <div
-            className="card p-3 h-100 d-flex flex-column justify-content-between position-relative overflow-hidden"
+          <Card
+            className="p-3 h-full flex flex-col justify-between relative overflow-hidden"
             style={{
               backgroundColor: "var(--bg-card)",
               border: "1px solid var(--fw-border)",
@@ -114,13 +116,13 @@ export function CardIngresoEgresos({ sumaIngresos, sumaEgresos }) {
                 {formatMoneda(sumaIngresos)}
               </h3>
             </div>
-          </div>
+          </Card>
         </div>
 
         {/* CARD EGRESOS */}
         <div className="col-12 col-lg-6">
-          <div
-            className="card p-3 h-100 d-flex flex-column justify-content-between position-relative overflow-hidden"
+          <Card
+            className="p-3 h-full flex flex-col justify-between relative overflow-hidden"
             style={{
               backgroundColor: "var(--bg-card)",
               border: "1px solid var(--fw-border)",
@@ -171,7 +173,7 @@ export function CardIngresoEgresos({ sumaIngresos, sumaEgresos }) {
                 {formatMoneda(sumaEgresos)}
               </h3>
             </div>
-          </div>
+          </Card>
         </div>
       </div>
     </div>

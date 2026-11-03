@@ -11,6 +11,9 @@ import {
 } from "lucide-react";
 import ToastAlert from "../../componenteToast/ToastAlert";
 import { ConsultarDocumento } from "../../../service/accionesVender/ConsultaDocumentos";
+import { Button } from "../../ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+
 
 export function RealizarPago({
   totalPreventa,
@@ -115,18 +118,18 @@ export function RealizarPago({
   };
 
   return (
-    <div className="card flex-grow-1 d-flex flex-column h-100 border overflow-auto">
-      <div className="card-header bg-white py-3">
+    <Card className="flex-grow-1 flex flex-col h-full border overflow-auto">
+      <CardHeader className="bg-background py-3">
         <h5 className="mb-0 fw-bold">Resumen</h5>
-      </div>
+      </CardHeader>
 
       <form
         onSubmit={handleSubmit(onSubmit)}
         onKeyDown={handleKeyDown} // 🔥 Escuchamos el Enter en todo el formulario
         className="d-flex flex-column h-100 overflow-hidden"
       >
-        <div
-          className="card-body overflow-auto p-3"
+        <CardContent
+          className="overflow-auto p-3"
           style={{ maxHeight: "calc(100vh - 250px)" }}
         >
           {/* ========================================== */}
@@ -270,7 +273,7 @@ export function RealizarPago({
 
             <div className="d-flex gap-1 mt-1 flex-wrap">
               {billetes.map((monto, index) => (
-                <button
+                <Button
                   key={index}
                   type="button"
                   className="badge rounded-pill bg-light text-dark border p-1 px-2 fw-medium"
@@ -286,9 +289,9 @@ export function RealizarPago({
                     (e.target.style.backgroundColor = "#f8fafc")
                   }
                   onClick={() => setValue("pagoCon", monto)}
-                >
+                 variant="default">
                   {index === 0 ? "EXACTO" : `S/ ${monto.toFixed(2)}`}
-                </button>
+                </Button>
               ))}
             </div>
           </div>
@@ -347,7 +350,7 @@ export function RealizarPago({
               ></textarea>
             </div>
           </div>
-        </div>
+        </CardContent>
 
         {/* ========================================== */}
         {/* TOTALES Y BOTÓN (Fijos al fondo) */}
@@ -383,6 +386,6 @@ export function RealizarPago({
           </div>
         </div>
       </form>
-    </div>
+    </Card>
   );
 }

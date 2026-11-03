@@ -16,6 +16,9 @@ import { EllipsisVerticalIcon } from "lucide-react";
 import { EstadoIntegraciones } from "../../hooks/EstadoIntegraciones";
 import { EditCombo } from "./combos/EditCombo";
 import { BadgeComponent } from "../componentesReutilizables/BadgeComponent";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+
 
 export function CombosList() {
   const [search, setSearch] = useState("");
@@ -125,8 +128,8 @@ export function CombosList() {
   if (isErrorOpen) return <p>Error: {error.message}</p>;
 
   return (
-    <div className="card  h-100">
-      <div className="card-header border-0  d-flex justify-content-between align-items-center mb-2">
+    <Card className="h-full">
+      <CardHeader className="border-0 flex justify-between items-center mb-2">
         <h4 className="mb-0">Combos</h4>
         <div className="d-flex align-items-center gap-2">
           <div className="d-flex flex-wrap">
@@ -142,22 +145,22 @@ export function CombosList() {
             />
           </div>
           <div className="d-flex align-items-center ">
-            <button
+            <Button
               className=" btn btn-dark btn-sm rounded-pill "
               onClick={() => {
                 setIsModalOpen(true);
                 refetchSunat();
               }}
-            >
+             variant="default">
               <FontAwesomeIcon icon={faPlus} color={"auto"} />
               Nuevo Combo
-            </button>
+            </Button>
           </div>
         </div>
-      </div>
+      </CardHeader>
 
-      <div
-        className="card-body"
+      <CardContent
+        className=""
         style={{ overflowY: "auto", minHeight: "450px" }}
         ref={cardBodyRef}
       >
@@ -168,10 +171,10 @@ export function CombosList() {
         ) : filteredCombos.length === 0 ? (
           <p>No se encontraron combos.</p>
         ) : (
-          <div className="row d-flex">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-4d-flex">
             {visibleCombos.map((combo) => (
-              <div className="col-md-2 mb-3" key={combo.id}>
-                <div className="card h-100 p-0 m-0 border position-relative overflow-hidden">
+              <div className="md:col-span-2 mb-3" key={combo.id}>
+                <Card className="h-full p-0 m-0 border relative overflow-hidden">
                   {/* Overlay bloqueado si combo está inactivo */}
                   {combo.estado == 0 && (
                     <div
@@ -186,7 +189,7 @@ export function CombosList() {
                       <span className="text-white mb-2 fw-bold">
                         No disponible
                       </span>
-                      <button
+                      <Button
                         className="btn btn-light btn-sm"
                         title="Activar Combo"
                         type="button"
@@ -195,12 +198,12 @@ export function CombosList() {
                           setNombreCombo(combo.nombre);
                           setIdActivarCombo(combo.id);
                         }}
-                      >
+                       variant="default">
                         Activar
-                      </button>
+                      </Button>
                     </div>
                   )}
-                  <div className="card-header m-0 p-0">
+                  <CardHeader className="m-0 p-0">
                     <img
                       src={
                         combo.foto_url
@@ -212,33 +215,33 @@ export function CombosList() {
                       height={"auto"}
                     />
                     <div className="dropdown position-absolute top-0  left-100">
-                      <button
+                      <Button
                         className="btn p-0 m-0"
                         type="button"
                         id="dropdownMenu2"
                         data-bs-toggle="dropdown"
                         aria-expanded="false"
-                      >
+                       variant="default">
                         <EllipsisVerticalIcon className="text-auto" />
-                      </button>
+                      </Button>
                       <ul
                         className="dropdown-menu dropdown-menu-bottom"
                         aria-labelledby="dropdownMenu2"
                       >
                         <li>
-                          <button
+                          <Button
                             className="dropdown-item"
                             type="button"
                             onClick={() => {
                               setModalEditCombo(true);
                               setDataCombo(combo);
                             }}
-                          >
+                           variant="default">
                             Editar
-                          </button>
+                          </Button>
                         </li>
                         <li>
-                          <button
+                          <Button
                             className="dropdown-item"
                             type="button"
                             onClick={() => {
@@ -246,24 +249,24 @@ export function CombosList() {
                               setNombreCombo(combo.nombre);
                               setIdEliminar(combo.id);
                             }}
-                          >
+                           variant="default">
                             Desactivar Combo
-                          </button>
+                          </Button>
                         </li>
                       </ul>
                     </div>
-                  </div>
-                  <div className="card-body position-relative d-flex p-3">
+                  </CardHeader>
+                  <CardContent className="relative flex p-3">
                     <div>
-                      <p className="card-title h6 fw-bold">
+                      <CardTitle asChild><p className="h6 fw-bold">
                         {capitalizeFirstLetter(combo.nombre)}
-                      </p>
-                      <small className="card-text">{combo.descripcion}</small>
+                      </p></CardTitle>
+                      <small className="">{combo.descripcion}</small>
                     </div>
-                  </div>
+                  </CardContent>
 
-                  <div
-                    className="card-footer bg-white d-flex justify-content-between align-items-center flex-column position-relative"
+                  <CardFooter
+                    className="bg-background flex justify-between items-center flex-col relative"
                     style={{ zIndex: 2, backgroundColor: "rgba(0, 0, 0, 0.1)" }}
                   >
                     {/* solucionar error */}
@@ -271,16 +274,16 @@ export function CombosList() {
                       <BadgeComponent
                         label={`S/ ${combo.precio}`}
                         variant={"info"}
-                        className="fw-bold border-black"
+                        className="font-bold border-black"
                       />
                     </span>
-                  </div>
-                </div>
+                  </CardFooter>
+                </Card>
               </div>
             ))}
           </div>
         )}
-      </div>
+      </CardContent>
       <ModalRight
         isOpen={isModalOpen}
         onClose={() => {
@@ -329,6 +332,6 @@ export function CombosList() {
         handleCloseModal={() => setModalActivar(false)}
         tipo={"combo"}
       />
-    </div>
+    </Card>
   );
 }

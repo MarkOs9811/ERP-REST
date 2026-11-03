@@ -8,6 +8,9 @@ import ToastAlert from "../componenteToast/ToastAlert";
 import { KeyIcon } from "lucide-react";
 import ModalRight from "../componentesReutilizables/ModalRight";
 import { FormPassChange } from "./formularios/FormPassChange";
+import { Button } from "../ui/button";
+import { Card } from "@/components/ui/card";
+
 
 export const MiPerfil = () => {
   const queryClient = useQueryClient();
@@ -118,11 +121,11 @@ export const MiPerfil = () => {
 
   return (
     <div className="w-100 p-3">
-      <div className="row g-3">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
         {/* Perfil lateral */}
-        <div className="col-md-4 ">
-          <div
-            className="card border  p-4 h-100"
+        <div className="md:col-span-4 ">
+          <Card
+            className="border p-4 h-full"
             style={{
               borderRadius: 20,
               background: "#fff",
@@ -197,7 +200,7 @@ export const MiPerfil = () => {
               onChange={onFileChange}
             />
             <div className="d-flex flex-column gap-2 w-100">
-              <button
+              <Button
                 className="btn w-50 mx-auto"
                 type="button"
                 onClick={handleFotoClick}
@@ -208,34 +211,34 @@ export const MiPerfil = () => {
                   fontWeight: 500,
                   cursor: editable ? "pointer" : "not-allowed",
                 }}
-              >
+               variant="default">
                 Cambiar foto
-              </button>
-              <button
+              </Button>
+              <Button
                 className="btn-principal w-50 mx-auto"
                 onClick={() => setModalPass(true)}
-              >
+               variant="default">
                 <KeyIcon />
                 Cambiar contraseña
-              </button>
+              </Button>
             </div>
-          </div>
+          </Card>
         </div>
 
         {/* Formulario de datos */}
-        <div className="col-md-8">
-          <form
+        <div className="md:col-span-8">
+          <Card asChild><form
             onSubmit={handleSubmit(onSubmit)} // Conectamos handleSubmit
-            className="card border  p-4 h-100"
+            className="border p-4 h-100"
             style={{ borderRadius: 20, background: "#fff" }}
           >
             <div className="d-flex justify-content-between align-items-center border-bottom mb-3">
               <p className="h4">Mi Información</p>
             </div>
 
-            <div className="row g-3">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
               {/* Datos personales con Register */}
-              <div className="col-md-6">
+              <div className="md:col-span-6">
                 <label className="text-secondary small">Nombre</label>
                 <input
                   className={`form-control ${
@@ -251,7 +254,7 @@ export const MiPerfil = () => {
                 )}
               </div>
 
-              <div className="col-md-6">
+              <div className="md:col-span-6">
                 <label className="text-secondary small">Apellidos</label>
                 <input
                   className={`form-control ${
@@ -269,7 +272,7 @@ export const MiPerfil = () => {
                 )}
               </div>
 
-              <div className="col-md-6">
+              <div className="md:col-span-6">
                 <label className="text-secondary small">
                   Fecha de nacimiento
                 </label>
@@ -281,7 +284,7 @@ export const MiPerfil = () => {
                 />
               </div>
 
-              <div className="col-md-6">
+              <div className="md:col-span-6">
                 <label className="text-secondary small">
                   Tipo de documento
                 </label>
@@ -292,7 +295,7 @@ export const MiPerfil = () => {
                 />
               </div>
 
-              <div className="col-md-6">
+              <div className="md:col-span-6">
                 <label className="text-secondary small">
                   Documento de identidad
                 </label>
@@ -303,7 +306,7 @@ export const MiPerfil = () => {
                 />
               </div>
 
-              <div className="col-md-6">
+              <div className="md:col-span-6">
                 <label className="text-secondary small">Teléfono</label>
                 <input
                   className="form-control"
@@ -322,7 +325,7 @@ export const MiPerfil = () => {
               </div>
 
               {/* Ubicación (Solo lectura por ahora, o podrías hacer selects si quisieras editarlos) */}
-              <div className="col-md-4">
+              <div className="md:col-span-4">
                 <label className="text-secondary small">Departamento</label>
                 <input
                   className="form-control"
@@ -330,7 +333,7 @@ export const MiPerfil = () => {
                   disabled
                 />
               </div>
-              <div className="col-md-4">
+              <div className="md:col-span-4">
                 <label className="text-secondary small">Provincia</label>
                 <input
                   className="form-control"
@@ -338,7 +341,7 @@ export const MiPerfil = () => {
                   disabled
                 />
               </div>
-              <div className="col-md-4">
+              <div className="md:col-span-4">
                 <label className="text-secondary small">Distrito</label>
                 <input
                   className="form-control"
@@ -348,42 +351,42 @@ export const MiPerfil = () => {
               </div>
 
               {/* Datos laborales (Visualización) */}
-              <div className="card border p-3 mb-3">
+              <Card className="border p-3 mb-3">
                 {/* ... (Todo tu bloque de datos laborales igual que antes) ... */}
                 <div className="h6 text-muted mb-3">
                   Información del Empleado
                 </div>
-                <div className="row g-3">
-                  <div className="col-md-4">
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+                  <div className="md:col-span-4">
                     <div className="text-secondary small mb-1">Salario</div>
                     <div className="fw-semibold">{empleado.salario || "-"}</div>
                   </div>
-                  <div className="col-md-4">
+                  <div className="md:col-span-4">
                     <div className="text-secondary small mb-1">Cargo</div>
                     <div className="fw-semibold">
                       {empleado.cargo?.nombre || "-"}
                     </div>
                   </div>
-                  <div className="col-md-4">
+                  <div className="md:col-span-4">
                     <div className="text-secondary small mb-1">Área</div>
                     <div className="fw-semibold">
                       {empleado.area?.nombre || "-"}
                     </div>
                   </div>
                 </div>
-              </div>
+              </Card>
             </div>
 
             <div className="d-flex justify-content-end mt-4">
-              <button
+              <Button
                 className="btn-guardar" // Asegúrate de tener una clase para esto
                 type="submit"
                 disabled={!editable}
-              >
+               variant="default">
                 Guardar Cambios
-              </button>
+              </Button>
             </div>
-          </form>
+          </form></Card>
         </div>
       </div>
 

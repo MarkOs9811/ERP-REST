@@ -9,6 +9,7 @@ import ReactDOM from "react-dom";
 import "../../../css/TransferirToMesa.css";
 // Ajusta la ruta de tu BotonConfirmar si es necesario
 import BotonConfirmar from "../../componentesReutilizables/BotonConfirmar";
+import { Button } from "../../ui/button";
 
 export function TransferirToMesa({ show, handleCloseModal, idMesa, mesa }) {
   const [mesasFree, setMesasFree] = useState([]);
@@ -92,13 +93,13 @@ export function TransferirToMesa({ show, handleCloseModal, idMesa, mesa }) {
               <div className="dot"></div> {mesasFree.length} Disponibles
             </div>
           </div>
-          <button
+          <Button
             className="btn-close-circle btn-icon"
             onClick={handleCloseModal}
             disabled={loading}
-          >
+           variant="default">
             <X size={20} color="#666" />
-          </button>
+          </Button>
         </div>
 
         <div className="transfer-visual-container">
@@ -164,14 +165,14 @@ export function TransferirToMesa({ show, handleCloseModal, idMesa, mesa }) {
               Confirmar Cambio
             </BotonConfirmar>
 
-            <button
+            <Button
               className="btn-cancel-transfer w-100 mt-2"
               type="button"
               onClick={handleCloseModal}
               disabled={loading}
-            >
+             variant="default">
               Mantener en mesa actual
-            </button>
+            </Button>
           </div>
         </form>
       </div>

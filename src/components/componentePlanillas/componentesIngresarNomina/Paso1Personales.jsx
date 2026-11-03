@@ -9,6 +9,9 @@ import {
   Upload,
   UserCircle,
 } from "lucide-react";
+import { Button } from "../../ui/button";
+import { Card } from "@/components/ui/card";
+
 
 export function Paso1Personales({
   register,
@@ -46,9 +49,9 @@ export function Paso1Personales({
   };
 
   return (
-    <div className="row g-3">
-      <div className="col-md-12">
-        <div className="card border p-4">
+    <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+      <div className="md:col-span-12">
+        <Card className="border p-4">
           <h5 className="mb-4">Paso 1: Datos Personales</h5>
 
           {/* FOTO DE PERFIL */}
@@ -80,13 +83,13 @@ export function Paso1Personales({
                 strokeWidth={1}
               />
             )}
-            <button
+            <Button
               type="button"
               className="btn-generico btn-sm"
               onClick={() => fileInputRef.current.click()}
-            >
+             variant="default">
               <Upload size={16} className="me-2" /> Seleccionar Imagen
-            </button>
+            </Button>
             <input
               type="hidden"
               {...register("fotoPerfil", {
@@ -102,7 +105,7 @@ export function Paso1Personales({
 
           {/* DATOS PERSONALES */}
           <div className="row">
-            <div className="col-md-5 mb-3">
+            <div className="md:col-span-5 mb-3">
               <label className="form-label small fw-semi-bold text-muted">
                 <FileText size={16} className="me-1" /> Tipo Documento
               </label>
@@ -128,7 +131,7 @@ export function Paso1Personales({
               )}
             </div>
 
-            <div className="col-md-7 mb-3">
+            <div className="md:col-span-7 mb-3">
               <label className="form-label small fw-semi-bold text-muted">
                 Número de Documento
               </label>
@@ -337,7 +340,7 @@ export function Paso1Personales({
               placeholder="Correo Electrónico"
             />
           </div>
-        </div>
+        </Card>
       </div>
     </div>
   );

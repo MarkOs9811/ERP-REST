@@ -3,6 +3,7 @@ import { Store, UtensilsCrossed, CheckCircle2 } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import axiosInstance from "../../../api/AxiosInstance";
 import ToastAlert from "../../componenteToast/ToastAlert";
+import { Button } from "../../ui/button";
 
 export default function FormConfiguracionEmpresa({ configuracion, onClose }) {
   const queryClient = useQueryClient();
@@ -161,16 +162,16 @@ export default function FormConfiguracionEmpresa({ configuracion, onClose }) {
         </div>
 
         <div className="mt-auto d-flex justify-content-end gap-2">
-          <button
+          <Button
             type="button"
             className="btn btn-light px-4 fw-semibold"
             onClick={onClose}
-          >
+           variant="default">
             Cancelar
-          </button>
-          <button type="submit" className="btn-guardar px-4" disabled={loading}>
+          </Button>
+          <Button type="submit" className="btn-guardar px-4" disabled={loading} variant="default">
             {loading ? "Guardando..." : "Aplicar Cambios"}
-          </button>
+          </Button>
         </div>
       </form>
     );
@@ -195,16 +196,16 @@ export default function FormConfiguracionEmpresa({ configuracion, onClose }) {
       </div>
 
       <div className="mt-auto d-flex justify-content-end gap-2">
-        <button
+        <Button
           type="button"
           className="btn btn-light px-4 fw-semibold"
           onClick={onClose}
-        >
+         variant="default">
           Cancelar
-        </button>
-        <button type="submit" className="btn-guardar px-4" disabled={loading}>
+        </Button>
+        <Button type="submit" className="btn-guardar px-4" disabled={loading} variant="default">
           {loading ? "Guardando..." : "Guardar Cambios"}
-        </button>
+        </Button>
       </div>
     </form>
   );

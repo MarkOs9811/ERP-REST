@@ -9,6 +9,9 @@ import {
   Store,
 } from "lucide-react";
 import { PutData } from "../../service/CRUD/PutData";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+
 
 export function StepCaja({ onFinish }) {
   const navigate = useNavigate();
@@ -38,9 +41,9 @@ export function StepCaja({ onFinish }) {
     setLoading(false);
   };
   return (
-    <div className="card p-0 text-center border-0 shadow-sm animate-fade-in overflow-hidden">
+    <Card className="p-0 text-center border-0 shadow-sm animate-fade-in overflow-hidden">
       {/* 1. CARD HEADER: Tema Dorado (Dinero) */}
-      <div className="card-header py-4 position-relative border-0 m-0">
+      <CardHeader className="py-4 relative border-0 m-0">
         {/* Fondo degradado suave Ámbar/Dorado */}
         <div
           className="position-absolute top-0 start-0 w-100 h-100 p-0"
@@ -73,10 +76,10 @@ export function StepCaja({ onFinish }) {
             </div>
           </div>
         </div>
-      </div>
+      </CardHeader>
 
       {/* 2. CARD BODY */}
-      <div className="card-body pt-5 pb-4 px-4">
+      <CardContent className="pt-5 pb-4 px-4">
         {/* Título */}
         <h3 className="fw-bold text-dark mb-3 mt-2">Crea tu Punto de Venta</h3>
 
@@ -112,7 +115,7 @@ export function StepCaja({ onFinish }) {
         {/* 4. Botones de Acción */}
         <div className="d-flex gap-3 justify-content-center align-items-center mb-2">
           {/* Botón Principal (Estilo Dorado/Ámbar) */}
-          <button
+          <Button
             type="button"
             onClick={() => cambiarEstado(3)}
             className="btn-guardar w-auto text-white btn-lg px-5 py-3 rounded-pill shadow d-inline-flex align-items-center gap-2"
@@ -125,16 +128,16 @@ export function StepCaja({ onFinish }) {
               (e.currentTarget.style.transform = "scale(1.05)")
             }
             onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
-          >
+           variant="default">
             Ir a Crear Caja
             <ArrowRight size={20} />
-          </button>
+          </Button>
         </div>
 
         <div className="mt-4 text-muted small">
           Paso 3 de 5 para completar la configuración
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

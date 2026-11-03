@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import AxiosInstance from "../api/AxiosInstance";
 import ToastAlert from "../components/componenteToast/ToastAlert";
+import { Button } from "../components/ui/button";
 
 export function LoginAdmin() {
   const navigate = useNavigate();
@@ -116,14 +117,14 @@ export function LoginAdmin() {
           )}
         </div>
 
-        <button
+        <Button
           type="submit"
           style={styles.button}
           disabled={isLoading || isSubmitting || !isValid}
           aria-busy={isLoading}
-        >
+         variant="default">
           {isLoading ? "Ingresando..." : "Iniciar Sesión"}
-        </button>
+        </Button>
       </form>
     </div>
   );

@@ -16,6 +16,7 @@ import { useQueryClient } from "@tanstack/react-query";
 
 // 🔥 IMPORTAMOS EL HELPER DE MONEDA
 import { getMoneda } from "../../utils/currency";
+import { Button } from "../ui/button";
 
 export function PlatoAdd({ handleCloseModal }) {
   // Estado para la lógica de la imagen (separado de useForm)
@@ -155,9 +156,9 @@ export function PlatoAdd({ handleCloseModal }) {
         </div>
 
         {/* --- Grid de Campos --- */}
-        <div className="row g-3">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
           {/* Categoría */}
-          <div className="col-md-6">
+          <div className="md:col-span-6">
             <label className="form-label text-muted small fw-bold">
               Categoría
             </label>
@@ -186,7 +187,7 @@ export function PlatoAdd({ handleCloseModal }) {
           </div>
 
           {/* Nombre */}
-          <div className="col-md-6">
+          <div className="md:col-span-6">
             <label className="form-label text-muted small fw-bold">
               Nombre del Plato
             </label>
@@ -208,7 +209,7 @@ export function PlatoAdd({ handleCloseModal }) {
           </div>
 
           {/* Precio */}
-          <div className="col-md-12">
+          <div className="md:col-span-12">
             <label className="form-label text-muted small fw-bold">
               Precio Unitario
             </label>
@@ -259,19 +260,19 @@ export function PlatoAdd({ handleCloseModal }) {
 
         {/* --- Footer de Botones --- */}
         <div className="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
-          <button
+          <Button
             type="button"
             className="btn-cerrar px-4 rounded-pill"
             onClick={handleCloseModal}
-          >
+           variant="default">
             Cancelar
-          </button>
-          <button
+          </Button>
+          <Button
             type="submit"
             className="btn-guardar btn-dark px-4 rounded-pill"
-          >
+           variant="default">
             Guardar Plato
-          </button>
+          </Button>
         </div>
       </form>
     </div>

@@ -1,4 +1,7 @@
 import { ChartNoAxesCombined, Lock } from "lucide-react";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader } from "@/components/ui/card";
+
 
 export function CardCuentaContable({ nombreCuenta, items }) {
   if (!Array.isArray(items) || items.length === 0) {
@@ -10,14 +13,14 @@ export function CardCuentaContable({ nombreCuenta, items }) {
   const cuentaCerrada = cuenta.estado === 0;
 
   return (
-    <div className="col-md-3  rounded border h-100">
-      <div
-        className={`card card-cuentasContables  position-relative ${
+    <div className="md:col-span-3  rounded border h-100">
+      <Card
+        className={`card-cuentasContables relative${
           cuentaCerrada ? "cuenta-cerrada" : ""
         }`}
       >
         <div className={cuentaCerrada ? "cuenta-bloqueada-contenido" : ""}>
-          <div className="card-header d-flex justify-content-between align-items-center rounded-0 card-cuenta-libro">
+          <CardHeader className="flex justify-between items-center rounded-0 card-cuenta-libro">
             <div
               className="d-flex align-items-center"
               style={{
@@ -31,17 +34,17 @@ export function CardCuentaContable({ nombreCuenta, items }) {
               <small className="fw-libro-subtitle fw-bold me-2">Grupo</small>
             </div>
             <div className="text-center flex-grow-1">
-              <p className="card-subtitle fw-flow-description mb-0">
+              <CardDescription asChild><p className="fw-flow-description mb-0">
                 {cuenta.codigo}
-              </p>
+              </p></CardDescription>
               <h6 className="mb-0">{nombreCuenta}</h6>
             </div>
             <div style={{ width: 30 }}></div>
-          </div>
-          <div className="card-body registrosCuenta-Cuerpo">
+          </CardHeader>
+          <CardContent className="registrosCuenta-Cuerpo">
             <div className="row">
               <div
-                className="col-md-6"
+                className="md:col-span-6"
                 style={{ borderRight: "2px solid var(--text-main)" }}
               >
                 <h6>DEBE</h6>
@@ -53,7 +56,7 @@ export function CardCuentaContable({ nombreCuenta, items }) {
                   </div>
                 ))}
               </div>
-              <div className="col-md-6 text-end">
+              <div className="md:col-span-6 text-end">
                 <h6>HABER</h6>
                 {items.map((item, idx) => (
                   <div className="mb-2" key={idx}>
@@ -64,19 +67,19 @@ export function CardCuentaContable({ nombreCuenta, items }) {
                 ))}
               </div>
             </div>
-          </div>
-          <div className="card-footer text-muted">
+          </CardContent>
+          <CardFooter className="text-muted-foreground">
             <div className="row">
-              <div className="col-md-6">
+              <div className="md:col-span-6">
                 <strong>Total:</strong> S/{" "}
                 {items.reduce((acc, i) => acc + Number(i.debe), 0).toFixed(2)}
               </div>
-              <div className="col-md-6 text-end">
+              <div className="md:col-span-6 text-end">
                 <strong>Total:</strong> S/{" "}
                 {items.reduce((acc, i) => acc + Number(i.haber), 0).toFixed(2)}
               </div>
             </div>
-          </div>
+          </CardFooter>
         </div>
         {/* Overlay para cuenta cerrada */}
         {cuentaCerrada ? (
@@ -89,36 +92,36 @@ export function CardCuentaContable({ nombreCuenta, items }) {
                 lock
               </span>
               <h2 style={{ color: "var(--text-main)" }}>Cuenta Cerrada</h2>
-              <button
+              <Button
                 type="button"
                 className="btn btn-aperturarCuenta btn-sm"
                 title="Aperturar Cuenta"
-              >
+               variant="default">
                 <span className="material-symbols-outlined">open_in_new</span>
-              </button>
+              </Button>
             </div>
           </div>
         ) : (
-          <div className="row gap-2">
-            <div className="col-md-12 text-center">
-              <button
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-4gap-2">
+            <div className="md:col-span-12 text-center">
+              <Button
                 type="button"
                 className="btn-eliminar btn-sm m-2"
                 title="Cerrar Cuenta"
-              >
+               variant="destructive">
                 <Lock />
-              </button>
-              <button
+              </Button>
+              <Button
                 type="button"
                 className="btn-principal btn-sm m-2"
                 title="Reporte"
-              >
+               variant="default">
                 <ChartNoAxesCombined />
-              </button>
+              </Button>
             </div>
           </div>
         )}
-      </div>
+      </Card>
     </div>
   );
 }

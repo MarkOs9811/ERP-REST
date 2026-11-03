@@ -13,6 +13,9 @@ import {
   PiggyBank, // Reemplazo para "savings"
   Wallet, // Reemplazo para "account_balance_wallet"
 } from "lucide-react";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+
 
 export function CardResultadoEjercicio({ registroEjercicio, resultado }) {
   if (!registroEjercicio) {
@@ -32,8 +35,8 @@ export function CardResultadoEjercicio({ registroEjercicio, resultado }) {
   };
 
   return (
-    <div className="card p-2 border">
-      <div className="card-header bg-transparent border-bottom-0 pb-0">
+    <Card className="p-2 border">
+      <CardHeader className="bg-transparent border-bottom-0 pb-0">
         <div className="d-flex justify-content-between align-items-center flex-wrap gap-2">
           <div>
             <h5 className="mb-1 d-flex align-items-center gap-2">
@@ -50,7 +53,7 @@ export function CardResultadoEjercicio({ registroEjercicio, resultado }) {
             </small>
           </div>
           <div className="d-flex gap-2">
-            <button
+            <Button
               className="btn p-2 d-flex align-items-center gap-2"
               style={{
                 border: "1px solid var(--fw-border)",
@@ -58,10 +61,10 @@ export function CardResultadoEjercicio({ registroEjercicio, resultado }) {
                 color: "var(--text-main)",
               }}
               title="Registros de balances"
-            >
+             variant="default">
               <History size={16} /> Balances anteriores
-            </button>
-            <button
+            </Button>
+            <Button
               className="btn p-2 d-flex align-items-center gap-2"
               style={{
                 fontSize: "1rem",
@@ -70,25 +73,25 @@ export function CardResultadoEjercicio({ registroEjercicio, resultado }) {
                 color: "var(--fw-emerald)",
               }}
               title="Realizar Balance"
-            >
+             variant="default">
               <Scale size={16} /> Nuevo Balance
-            </button>
+            </Button>
           </div>
         </div>
-      </div>
+      </CardHeader>
 
-      <div className="card-body">
-        <p className="card-text fw-flow-description d-flex align-items-center gap-2">
+      <CardContent className="">
+        <p className="fw-flow-description d-flex align-items-center gap-2">
           <Info size={16} />
           Resultados del ejercicio para la temporada{" "}
           {registroEjercicio.temporada}.
         </p>
 
-        <div className="row g-3 mt-2">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mt-2">
           {/* Ingresos */}
-          <div className="col-md-6">
-            <div className="card p-3 position-relative overflow-hidden h-100 fw-libro-ingresos-card">
-              <p className="card-text fw-libro-positive d-flex align-items-center gap-2 mb-1">
+          <div className="md:col-span-6">
+            <Card className="p-3 relative overflow-hidden h-full fw-libro-ingresos-card">
+              <p className="fw-libro-positive d-flex align-items-center gap-2 mb-1">
                 <ArrowUp size={20} />
                 <strong>Ingresos:</strong>
               </p>
@@ -108,13 +111,13 @@ export function CardResultadoEjercicio({ registroEjercicio, resultado }) {
                   bottom: -10,
                 }}
               />
-            </div>
+            </Card>
           </div>
 
           {/* Gastos */}
-          <div className="col-md-6">
-            <div className="card p-3 position-relative overflow-hidden h-100 fw-libro-gastos-card">
-              <p className="card-text fw-libro-negative d-flex align-items-center gap-2 mb-1">
+          <div className="md:col-span-6">
+            <Card className="p-3 relative overflow-hidden h-full fw-libro-gastos-card">
+              <p className="fw-libro-negative d-flex align-items-center gap-2 mb-1">
                 <ArrowDown size={20} />
                 <strong>Gastos:</strong>
               </p>
@@ -134,7 +137,7 @@ export function CardResultadoEjercicio({ registroEjercicio, resultado }) {
                   bottom: -10,
                 }}
               />
-            </div>
+            </Card>
           </div>
         </div>
 
@@ -161,7 +164,7 @@ export function CardResultadoEjercicio({ registroEjercicio, resultado }) {
             </span>
           </span>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

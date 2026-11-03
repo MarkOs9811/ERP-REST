@@ -8,6 +8,9 @@ import ModalAlertQuestion from "../../components/componenteToast/ModalAlertQuest
 import ToastAlert from "../../components/componenteToast/ToastAlert";
 import FormAddReservarMesa from "../../components/componentesVentas/reservasMesas/FormAddReservarMesa";
 import { GetMesasVender } from "../../service/accionesVender/GetMesasVender";
+import { Button } from "../../components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+
 
 // ✅ Importamos el formulario
 
@@ -72,10 +75,10 @@ export function ReservasMesas() {
   );
 
   return (
-    <div className="card overflow-hidden">
+    <Card className="overflow-hidden">
       {vistaReserva === "lista" ? (
         <>
-          <div className="card-header d-flex justify-content-between align-items-center">
+          <CardHeader className="flex justify-between items-center">
             <h4 className="mb-0">Reservas de mesas</h4>
             <div className="d-flex gap-2">
               <div className="input-group input-group-sm">
@@ -87,20 +90,20 @@ export function ReservasMesas() {
                   style={{ boxShadow: "none" }}
                 />
               </div>
-              <button
+              <Button
                 className="btn-principal d-flex align-items-center gap-1"
                 onClick={() => {
                   setReservaEdit(null); // Limpiamos edición = "Nueva Reserva"
                   setVistaReserva("formulario"); // Cambiamos la vista
                 }}
-              >
+               variant="default">
                 <Plus size={16} />
                 Nuevo
-              </button>
+              </Button>
             </div>
-          </div>
+          </CardHeader>
 
-          <div className="card-body p-0">
+          <CardContent className="p-0">
             {reservasFiltradas.length === 0 ? (
               <div className="d-flex flex-column align-items-center justify-content-center py-5 text-muted h-100">
                 <CalendarDays size={40} className="mb-2 opacity-50" />
@@ -109,9 +112,12 @@ export function ReservasMesas() {
                 </p>
               </div>
             ) : (
-              <div className="row g-3 p-3">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-3 p-3">
                 {reservasFiltradas.map((reserva) => (
-                  <div key={reserva.id} className="col-md-3 col-sm-6 col-lg-3">
+                  <div
+                    key={reserva.id}
+                    className="md:col-span-3 col-sm-6 col-lg-3"
+                  >
                     <CardReservas
                       reserva={reserva}
                       setModalDelete={setModalDelete}
@@ -124,11 +130,11 @@ export function ReservasMesas() {
                 ))}
               </div>
             )}
-          </div>
+          </CardContent>
         </>
       ) : (
         /* ✅ Integración del Formulario */
-        <div className="card-body p-0">
+        <CardContent className="p-0">
           {/* Se le da una altura para que el overflow-auto del formulario funcione bien */}
           <FormAddReservarMesa
             reservaToEdit={reservaEdit}
@@ -138,7 +144,7 @@ export function ReservasMesas() {
               setReservaEdit(null);
             }}
           />
-        </div>
+        </CardContent>
       )}
 
       {/* Modal de eliminación */}
@@ -153,6 +159,6 @@ export function ReservasMesas() {
           setModalDelete({ show: false, id: null, nombre: "" })
         }
       />
-    </div>
+    </Card>
   );
 }

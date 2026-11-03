@@ -3,6 +3,8 @@ import { useForm } from "react-hook-form";
 import BotonAnimado from "../componentesReutilizables/BotonAnimado";
 import RippleWrapper from "../componentesReutilizables/RippleWrapper";
 import { FileText, FileTextIcon } from "lucide-react";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+
 
 export default function FormularioReporte({
   titulo,
@@ -19,11 +21,11 @@ export default function FormularioReporte({
 
   return (
     <div className="col-lg-4 col-sm-12">
-      <div className="card border shadow-sm h-100">
-        <div className="card-header text-center p-3">
+      <Card className="border shadow-sm h-full">
+        <CardHeader className="text-center p-3">
           <p className="h5">{titulo}</p>
-        </div>
-        <div className="card-body">
+        </CardHeader>
+        <CardContent className="">
           <form onSubmit={handleSubmit(onSubmit)}>
             <input
               type="hidden"
@@ -58,8 +60,8 @@ export default function FormularioReporte({
               </>
             </div>
           </form>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

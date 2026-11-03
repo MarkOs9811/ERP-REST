@@ -12,6 +12,9 @@ import {
 import { PostData } from "../../service/CRUD/PostData";
 import { useState } from "react";
 import ModalAlertQuestion from "../../components/componenteToast/ModalAlertQuestion";
+import { Button } from "../../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 // Importa tu componente de modal personalizado
 
 export function LibroDiario() {
@@ -80,10 +83,10 @@ export function LibroDiario() {
 
   return (
     <div>
-      <div className="row g-3">
-        <div className="col-md-12">
-          <div className="card  py-2">
-            <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-3">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+        <div className="md:col-span-12">
+          <Card className="py-2">
+            <CardHeader className="border-bottom-0 flex flex-col flex-md-row justify-between items-center gap-2 p-3">
               <div className="d-flex align-items-center">
                 <BookText
                   color={"var(--fw-strawberry)"}
@@ -91,31 +94,31 @@ export function LibroDiario() {
                   width="45px"
                   className="me-2"
                 />
-                <h4 className="card-title mb-0 titulo-card-especial">
+                <CardTitle asChild><h4 className="mb-0 titulo-card-especial">
                   Libro Diario
-                </h4>
+                </h4></CardTitle>
               </div>
               <div className="d-flex flex-wrap gap-2 mt-3 mt-md-0 align-items-center ms-auto">
                 {/* BOTÓN 1: CIERRE VENTAS */}
-                <button
+                <Button
                   className="btn btn-outline-dark px-3"
                   onClick={() => setModalCierreVentas(true)} // Abre el modal
                   disabled={loadingVentas}
-                >
+                 variant="default">
                   {loadingVentas ? (
                     <span className="spinner-border spinner-border-sm me-2"></span>
                   ) : (
                     <ArchiveX size={18} className="me-1" />
                   )}
                   Cierre Ventas
-                </button>
+                </Button>
 
                 {/* BOTÓN 2: CARGA LIBRO MAYOR */}
-                <button
+                <Button
                   className="btn btn-dark px-3"
                   onClick={() => setModalCargaMayor(true)} // Abre el modal
                   disabled={loadingCarga}
-                >
+                 variant="default">
                   {loadingCarga ? (
                     <span
                       className="spinner-border spinner-border-sm me-2"
@@ -126,28 +129,28 @@ export function LibroDiario() {
                     <BookOpenCheck size={18} className="me-1" />
                   )}
                   {loadingCarga ? " Procesando..." : " Cargar Libro Mayor"}
-                </button>
+                </Button>
 
-                <button className="btn btn-outline-dark px-3">
+                <Button className="btn btn-outline-dark px-3" variant="default">
                   <ClipboardType size={18} className="me-1" />
                   Reporte
-                </button>
+                </Button>
               </div>
-            </div>
-          </div>
+            </CardHeader>
+          </Card>
         </div>
 
         {/* ... Resto del renderizado de la tabla de asientos (sin cambios) ... */}
-        <div className="col-md-12">
+        <div className="md:col-span-12">
           {/* ... Código de la card de asientos ... */}
-          <div className="card  py-2">
-            <div className="card-header p-3">
-              <p className="h4 card-title mb-0">Asientos contables</p>
-            </div>
-            <div className="card-body">
+          <Card className="py-2">
+            <CardHeader className="p-3">
+              <CardTitle asChild><p className="h4 mb-0">Asientos contables</p></CardTitle>
+            </CardHeader>
+            <CardContent className="">
               {isLoading && <p>Cargando asientos...</p>}
               {isError && <p>Error: {error.message}</p>}
-              <div className="row g-3">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
                 {asientos.map((asiento) => {
                   // Filtrar detalles por tipo
                   const debeDetalles = (asiento.detalles || []).filter(
@@ -162,24 +165,24 @@ export function LibroDiario() {
                   );
 
                   return (
-                    <div className="col-md-6" key={asiento.id}>
-                      <div className="card mb-2 shadow-card border  card-asientosContables position-relative">
+                    <div className="md:col-span-6" key={asiento.id}>
+                      <Card className="mb-2 shadow-card border card-asientosContables relative">
                         {/* Dropdown de acciones */}
                         <div className="dropdown position-absolute top-0 end-0 mt-2 me-2 z-index-10">
-                          <button
+                          <Button
                             className="btn"
                             type="button"
                             data-bs-toggle="dropdown"
                             aria-expanded="false"
-                          >
+                           variant="default">
                             <EllipsisVertical className="text-auto" />
-                          </button>
+                          </Button>
                           <ul className="dropdown-menu">
                             {asiento.estado == 0 ? (
                               <li>
-                                <button className="dropdown-item">
+                                <Button className="dropdown-item" variant="default">
                                   Eliminar asiento
-                                </button>
+                                </Button>
                               </li>
                             ) : (
                               <li>
@@ -190,7 +193,7 @@ export function LibroDiario() {
                             )}
                           </ul>
                         </div>
-                        <div className="card-body">
+                        <CardContent className="">
                           <div className="d-flex justify-content-between align-items-center mb-3">
                             <p
                               className={`badge p-2 rounded-circle ${
@@ -211,7 +214,7 @@ export function LibroDiario() {
                           </div>
                           <div className="row">
                             {/* DEBE */}
-                            <div className="col-md-6 pe-md-3">
+                            <div className="md:col-span-6 pe-md-3">
                               <h6 className="fw-bold text-center">DEBE</h6>
                               <hr />
                               {Array.from({ length: maxRows }).map((_, i) =>
@@ -244,7 +247,7 @@ export function LibroDiario() {
                               )}
                             </div>
                             {/* HABER */}
-                            <div className="col-md-6 ps-md-3 border-start border-secondary">
+                            <div className="md:col-span-6 ps-md-3 border-start border-secondary">
                               <h6 className="fw-bold text-center">HABER</h6>
                               <hr />
                               {Array.from({ length: maxRows }).map((_, i) =>
@@ -278,8 +281,8 @@ export function LibroDiario() {
                               )}
                             </div>
                           </div>
-                        </div>
-                      </div>
+                        </CardContent>
+                      </Card>
                     </div>
                   );
                 })}
@@ -291,8 +294,8 @@ export function LibroDiario() {
                   </div>
                 )}
               </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
 

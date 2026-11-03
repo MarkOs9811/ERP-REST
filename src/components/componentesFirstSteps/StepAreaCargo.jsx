@@ -2,6 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Briefcase, Network, Shield, ArrowRight, Users2 } from "lucide-react";
 import { PutData } from "../../service/CRUD/PutData";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+
 
 export function StepAreaCargo({ onFinish }) {
   const navigate = useNavigate();
@@ -30,9 +33,9 @@ export function StepAreaCargo({ onFinish }) {
     setLoading(false);
   };
   return (
-    <div className="card text-center border-0 shadow-sm animate-fade-in overflow-hidden">
+    <Card className="text-center border-0 shadow-sm animate-fade-in overflow-hidden">
       {/* 1. CARD HEADER: Imagen e Identidad Visual */}
-      <div className="card-header bg-light py-4 position-relative border-0">
+      <CardHeader className="bg-muted py-4 relative border-0">
         {/* Fondo decorativo sutil */}
         <div
           className="position-absolute top-0 start-0 w-100 h-100"
@@ -61,10 +64,10 @@ export function StepAreaCargo({ onFinish }) {
             </div>
           </div>
         </div>
-      </div>
+      </CardHeader>
 
       {/* 2. CARD BODY: Contenido */}
-      <div className="card-body pt-5 pb-4 px-4">
+      <CardContent className="pt-5 pb-4 px-4">
         {/* Título */}
         <h3 className="fw-bold text-dark mb-3 mt-2">Define tu Estructura</h3>
 
@@ -100,7 +103,7 @@ export function StepAreaCargo({ onFinish }) {
 
         {/* Botón de Acción */}
         <div className="mb-2">
-          <button
+          <Button
             type="button"
             onClick={() => cambiarEstado(2)}
             className="btn-guardar w-auto btn-lg px-5 py-3 rounded-pill shadow d-inline-flex align-items-center gap-2"
@@ -114,16 +117,16 @@ export function StepAreaCargo({ onFinish }) {
               (e.currentTarget.style.transform = "scale(1.05)")
             }
             onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
-          >
+           variant="default">
             Crear Áreas y Cargos
             <ArrowRight size={20} />
-          </button>
+          </Button>
         </div>
 
         <div className="mt-3 text-muted small">
           Paso 2 de 5 para completar la configuración
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

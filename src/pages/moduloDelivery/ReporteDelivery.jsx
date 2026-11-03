@@ -2,6 +2,8 @@ import { useState } from "react";
 import axiosInstance from "../../api/AxiosInstance";
 import ToastAlert from "../../components/componenteToast/ToastAlert";
 import { FormularioReporteClasico } from "../../components/componentesReporte/FormularioReporteClasico";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+
 
 export function ReporteDelivery() {
   const [fechas, setFechas] = useState([]);
@@ -69,19 +71,19 @@ export function ReporteDelivery() {
 
   return (
     <div className="container-fluid ">
-      <div className="card">
-        <div className="card-header border-0">
+      <Card className="">
+        <CardHeader className="border-0">
           <h4>Reporte de Delivery</h4>
-        </div>
-        <div className="card-body p-3 ">
+        </CardHeader>
+        <CardContent className="p-3">
           <FormularioReporteClasico
             titulo="Reporte de Delivery"
             onSubmit={handleReporte1}
             tipo="pedidosWebRegistros"
             isLoading={loadingTipo === "pedidosWebRegistros"}
           />
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

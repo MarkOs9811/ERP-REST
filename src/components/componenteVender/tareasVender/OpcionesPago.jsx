@@ -20,6 +20,9 @@ import { EstadoIntegraciones } from "../../../hooks/EstadoIntegraciones";
 import { GetMetodosPago } from "../../../service/accionesVentas/GetMetodosPago";
 import { ConsultarDocumento } from "../../../service/accionesVender/ConsultaDocumentos";
 import ToastAlert from "../../componenteToast/ToastAlert";
+import { Button } from "../../ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+
 
 export function OpcionesPago(props) {
   const {
@@ -189,12 +192,12 @@ export function OpcionesPago(props) {
   };
 
   return (
-    <div className="card border flex-grow-1 h-100 d-flex flex-column overflow-auto">
-      <div className="card-header bg-white py-3 border-bottom">
+    <Card className="border flex-grow-1 h-full flex flex-col overflow-auto">
+      <CardHeader className="bg-background py-3 border-b">
         <h5 className="mb-0 fw-bold">Método de pago</h5>
-      </div>
-      <div
-        className="card-body overflow-auto p-3"
+      </CardHeader>
+      <CardContent
+        className="overflow-auto p-3"
         style={{ height: "calc(100vh - 250px)" }}
       >
         {/* ================================================================ */}
@@ -207,7 +210,7 @@ export function OpcionesPago(props) {
             aria-label="Método de Pago"
           >
             {metodosActivos.map((metodo) => (
-              <button
+              <Button
                 key={metodo.id}
                 type="button"
                 className={`boton-opcion-pago p-2 ${
@@ -228,13 +231,13 @@ export function OpcionesPago(props) {
                     refetchSunat();
                   }
                 }}
-              >
+               variant="default">
                 {getIconoMetodo(metodo.nombre)}
                 <span className="fw-medium">
                   {metodo.nombre.charAt(0).toUpperCase() +
                     metodo.nombre.slice(1)}
                 </span>
-              </button>
+              </Button>
             ))}
           </div>
         </div>
@@ -247,7 +250,7 @@ export function OpcionesPago(props) {
             Tipo de Tarjeta
           </label>
           <div className="contenedor-pagos-grid" role="group">
-            <button
+            <Button
               type="button"
               className={`boton-opcion-pago p-2 ${
                 typeTarjeta === "debito"
@@ -255,10 +258,10 @@ export function OpcionesPago(props) {
                   : "btn-outline-dark"
               }`}
               onClick={() => handleTypeTarjeta("debito")}
-            >
+             variant="default">
               <CreditCard size={18} /> Tarjeta Débito
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
               className={`boton-opcion-pago p-2 ${
                 typeTarjeta === "credito"
@@ -266,9 +269,9 @@ export function OpcionesPago(props) {
                   : "btn-outline-dark"
               }`}
               onClick={() => handleTypeTarjeta("credito")}
-            >
+             variant="default">
               <BanknoteArrowDown size={18} /> Tarjeta Crédito
-            </button>
+            </Button>
           </div>
         </div>
 
@@ -281,7 +284,7 @@ export function OpcionesPago(props) {
           </label>
           <div className="contenedor-pagos-grid" role="group">
             {sunatActivo ? (
-              <button
+              <Button
                 type="button"
                 className={`boton-opcion-pago p-2 ${
                   comprobante === "B" ? "btn-seleccionado" : "btn-outline-dark"
@@ -291,9 +294,9 @@ export function OpcionesPago(props) {
                   handleShowDatosClientes(true); // Mostrar datos cliente para boleta si es necesario
                   handleSlectComprobante("B");
                 }}
-              >
+               variant="default">
                 <ReceiptText size={18} /> Boleta
-              </button>
+              </Button>
             ) : (
               <div className="d-flex align-items-center justify-content-center p-2 border rounded bg-light text-muted w-100">
                 <small
@@ -305,7 +308,7 @@ export function OpcionesPago(props) {
               </div>
             )}
 
-            <button
+            <Button
               type="button"
               className={`boton-opcion-pago p-2 ${
                 comprobante === "S" ? "btn-seleccionado" : "btn-outline-dark"
@@ -315,12 +318,12 @@ export function OpcionesPago(props) {
                 handleShowDatosClientes(false);
                 handleSlectComprobante("S");
               }}
-            >
+             variant="default">
               <ReceiptText size={18} /> Boleta Simple
-            </button>
+            </Button>
 
             {sunatActivo ? (
-              <button
+              <Button
                 type="button"
                 className={`boton-opcion-pago p-2 ${
                   comprobante === "F" ? "btn-seleccionado" : "btn-outline-dark"
@@ -330,9 +333,9 @@ export function OpcionesPago(props) {
                   handleShowDatosClientes(true);
                   handleSlectComprobante("F");
                 }}
-              >
+               variant="default">
                 <ReceiptText size={18} /> Factura
-              </button>
+              </Button>
             ) : (
               <div className="d-flex align-items-center justify-content-center p-2 border rounded bg-light text-muted w-100">
                 <small
@@ -352,8 +355,8 @@ export function OpcionesPago(props) {
         <div className={`mt-2 ${clienteBoleta ? "d-block" : "d-none"}`}>
           <h6 className="fw-bold mb-3 text-dark">Datos del Cliente (Boleta)</h6>
 
-          <div className="row g-2 mb-2">
-            <div className="col-md-4">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-2 mb-2">
+            <div className="md:col-span-4">
               <label
                 className="small text-muted mb-1"
                 style={{ fontSize: "0.75rem" }}
@@ -376,7 +379,7 @@ export function OpcionesPago(props) {
               </select>
             </div>
 
-            <div className="col-md-8">
+            <div className="md:col-span-8">
               <label
                 className="small text-muted mb-1"
                 style={{ fontSize: "0.75rem" }}
@@ -428,8 +431,8 @@ export function OpcionesPago(props) {
             </div>
           </div>
 
-          <div className="row g-2">
-            <div className="col-md-6">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-2">
+            <div className="md:col-span-6">
               <label
                 className="small text-muted mb-1"
                 style={{ fontSize: "0.75rem" }}
@@ -447,7 +450,7 @@ export function OpcionesPago(props) {
                 }}
               />
             </div>
-            <div className="col-md-6">
+            <div className="md:col-span-6">
               <label
                 className="small text-muted mb-1"
                 style={{ fontSize: "0.75rem" }}
@@ -587,7 +590,7 @@ export function OpcionesPago(props) {
             placeholder="Ej. 3"
           />
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

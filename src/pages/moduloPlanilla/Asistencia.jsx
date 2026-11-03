@@ -30,6 +30,9 @@ import { ListaAsistencia } from "../../components/componentePlanillas/componente
 import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteExcel";
 import { CondicionCarga } from "../../components/componentesReutilizables/CondicionCarga";
 import { TablasGenerales } from "../../components/componentesReutilizables/TablasGenerales";
+import { Button } from "../../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 
 export function Asistencia() {
   const [listAsistencias, setModalListAsistencias] = useState(false);
@@ -173,82 +176,82 @@ export function Asistencia() {
       errorMessage={errorMessage}
     >
       <section className="asistencia-dashboard">
-        <div className="row g-3">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
           {/* Card 1: Total de empleados */}
-          <div className="col-md-3 col-sm-6">
-            <div className="card card-total  h-100">
-              <div className="card-body d-flex justify-content-between align-items-center">
+          <div className="md:col-span-3 col-sm-6">
+            <Card className="card-total h-full">
+              <CardContent className="flex justify-between items-center">
                 <div className="text-white" style={{ fontSize: "2rem" }}>
                   <FontAwesomeIcon icon={faUsers} />
                 </div>
                 <div className="text-end">
-                  <h6 className="card-title text-white mb-1">
+                  <CardTitle asChild><h6 className="text-white mb-1">
                     Total de empleados
-                  </h6>
+                  </h6></CardTitle>
                   <p className="mb-0 h2 text-white">{totalEmpleados}</p>
                 </div>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           </div>
 
           {/* Card 2: Empleados Ausentes */}
-          <div className="col-md-3 col-sm-6">
-            <div className="card card-ausentes  h-100">
-              <div className="card-body d-flex justify-content-between align-items-center">
+          <div className="md:col-span-3 col-sm-6">
+            <Card className="card-ausentes h-full">
+              <CardContent className="flex justify-between items-center">
                 <div className="text-white" style={{ fontSize: "2rem" }}>
                   <FontAwesomeIcon icon={faUserSlash} />
                 </div>
                 <div className="text-end">
-                  <h6 className="card-title text-white mb-1">
+                  <CardTitle asChild><h6 className="text-white mb-1">
                     Empleados Ausentes
-                  </h6>
+                  </h6></CardTitle>
                   <p className="mb-0 h2 text-white">{empleadosAusentes}</p>
                 </div>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           </div>
 
           {/* Card 3: Empleados A tiempo */}
-          <div className="col-md-3 col-sm-6">
-            <div className="card card-tiempo  h-100">
-              <div className="card-body d-flex justify-content-between align-items-center">
+          <div className="md:col-span-3 col-sm-6">
+            <Card className="card-tiempo h-full">
+              <CardContent className="flex justify-between items-center">
                 <div className="text-white" style={{ fontSize: "2rem" }}>
                   <FontAwesomeIcon icon={faUserCheck} />
                 </div>
                 <div className="text-end">
-                  <h6 className="card-title text-white mb-1">
+                  <CardTitle asChild><h6 className="text-white mb-1">
                     Empleados A tiempo
-                  </h6>
+                  </h6></CardTitle>
                   <p className="mb-0 h2 text-white">{empleadosATiempo}</p>
                 </div>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           </div>
 
           {/* Card 4: Empleados en tardanza */}
-          <div className="col-md-3 col-sm-6">
-            <div className="card card-tardanza  h-100">
-              <div className="card-body d-flex justify-content-between align-items-center">
+          <div className="md:col-span-3 col-sm-6">
+            <Card className="card-tardanza h-full">
+              <CardContent className="flex justify-between items-center">
                 <div className="text-white" style={{ fontSize: "2rem" }}>
                   <FontAwesomeIcon icon={faClock} />
                 </div>
                 <div className="text-end">
-                  <h6 className="card-title text-white mb-1">
+                  <CardTitle asChild><h6 className="text-white mb-1">
                     Empleados en tardanza
-                  </h6>
+                  </h6></CardTitle>
                   <p className="mb-0 h2 text-white">{empleadosTardanza}</p>
                 </div>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           </div>
 
-          <div className="col-md-8 col-sm-12">
-            <div className="card  h-100">
-              <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-3">
+          <div className="md:col-span-8 col-sm-12">
+            <Card className="h-full">
+              <CardHeader className="border-bottom-0 flex flex-col flex-md-row justify-between items-center gap-2 p-3">
                 <div className="d-flex align-items-center">
-                  <h4 className="card-title mb-0 titulo-card-especial">
+                  <CardTitle asChild><h4 className="mb-0 titulo-card-especial">
                     Panel de Asistencia
-                  </h4>
+                  </h4></CardTitle>
                   <span className="badge-header ms-2">Hoy</span>
                 </div>
                 <div className="d-flex align-items-center  gap-2 mt-3 mt-md-0">
@@ -260,40 +263,40 @@ export function Asistencia() {
                       className="form-control"
                     />
                   </div>
-                  <button
+                  <Button
                     className="btn-generico px-3"
                     onClick={() => GetReporteExcel("/reporteAsistenciaHoy")}
-                  >
+                   variant="default">
                     <FileText size={18} />
                     Reporte
-                  </button>
+                  </Button>
                 </div>
-              </div>
-              <div className="card-body p-0">
+              </CardHeader>
+              <CardContent className="p-0">
                 <TablasGenerales columns={columnas} data={listaAsistenciaHoy} />
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           </div>
 
-          <div className="col-md-4 col-sm-12">
-            <div className="card  h-100">
-              <div className="card-header d-flex justify-content-between align-items-center p-3">
+          <div className="md:col-span-4 col-sm-12">
+            <Card className="h-full">
+              <CardHeader className="flex justify-between items-center p-3">
                 <p className="h4 mb-0">
                   <ChartColumnBig className="me-2 color-auto" />
                   Gráfico de Asistencias
                 </p>
-              </div>
-              <div className="card-body h-100">
+              </CardHeader>
+              <CardContent className="h-full">
                 <div style={{ height: "100%" }}>
                   <GraficoEstadoAsistencia asistenciaHoy={asistenciaHoy} />
                 </div>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           </div>
 
-          <div className="col-md-12 col-sm-12">
-            <div className="card  h-100" style={{ minHeight: "600px" }}>
-              <div className="card-header p-3">
+          <div className="md:col-span-12 col-sm-12">
+            <Card className="h-full" style={{ minHeight: "600px" }}>
+              <CardHeader className="p-3">
                 <div className="d-flex justify-content-between align-items-center">
                   <p className="h4 mb-0">
                     <CalendarCheck className="me-2 color-auto" />
@@ -301,21 +304,21 @@ export function Asistencia() {
                   </p>
                 </div>
                 <div className="ms-auto">
-                  <button
+                  <Button
                     className="btn-generico  ms-auto"
                     onClick={() => setModalListAsistencias(true)}
-                  >
+                   variant="default">
                     <Eye className="me-1 text-auto" />
                     Ver Asistencias
-                  </button>
+                  </Button>
                 </div>
-              </div>
-              <div className="card-body h-100">
+              </CardHeader>
+              <CardContent className="h-full">
                 <div style={{ height: "100%" }}>
                   <GraficoAsistenciasMensual datosPorMes={datosPorMes} />
                 </div>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
 

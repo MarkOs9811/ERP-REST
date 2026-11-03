@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { useForm } from "react-hook-form";
-import "../css/EstilosLogin.css"; // Usa tus mismos estilos
 import ToastAlert from "../components/componenteToast/ToastAlert";
 import { ToastContainer } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,6 +11,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import { Cargando } from "../components/componentesReutilizables/Cargando";
+import { Button } from "../components/ui/button";
 
 export const RestablecerPassword = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -167,17 +167,17 @@ export const RestablecerPassword = () => {
             </div>
 
             <div className="d-grid mt-4">
-              <button
+              <Button
                 type="submit"
                 className="btn-login-submit"
                 disabled={loading}
-              >
+               variant="default">
                 {loading ? (
                   <Cargando textColor={"white"} />
                 ) : (
                   "Guardar Contraseña"
                 )}
-              </button>
+              </Button>
             </div>
           </form>
         </div>

@@ -9,6 +9,9 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { PutData } from "../../service/CRUD/PutData";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+
 
 export function StepUsuario({ onFinish }) {
   const navigate = useNavigate();
@@ -56,9 +59,9 @@ export function StepUsuario({ onFinish }) {
   };
 
   return (
-    <div className="card p-0 text-center border-0 rounded-0 shadow-sm animate-fade-in overflow-hidden">
+    <Card className="p-0 text-center border-0 rounded-0 shadow-sm animate-fade-in overflow-hidden">
       {/* 1. CARD HEADER: Tema Púrpura (Equipo/Admin) */}
-      <div className="card-header py-4 position-relative border-0 m-0">
+      <CardHeader className="py-4 relative border-0 m-0">
         {/* Fondo degradado suave Violeta/Lila */}
         <div
           className="position-absolute top-0 start-0 w-100 h-100 p-0"
@@ -92,10 +95,10 @@ export function StepUsuario({ onFinish }) {
             </div>
           </div>
         </div>
-      </div>
+      </CardHeader>
 
       {/* 2. CARD BODY */}
-      <div className="card-body pt-5 pb-4 px-4">
+      <CardContent className="pt-5 pb-4 px-4">
         {/* Título */}
         <h3 className="fw-bold text-dark mb-3 mt-2">Tu Equipo de Trabajo</h3>
 
@@ -141,7 +144,7 @@ export function StepUsuario({ onFinish }) {
         {/* 4. Botones de Acción (Principal y Secundario) */}
         <div className="d-flex flex-column flex-sm-row gap-3 justify-content-center align-items-center mb-2">
           {/* Opción A: Crear Usuario (Principal) */}
-          <button
+          <Button
             type="button"
             className="btn-guardar w-auto text-white btn-lg px-5 py-3 rounded-pill shadow d-inline-flex align-items-center gap-2"
             style={{
@@ -154,27 +157,27 @@ export function StepUsuario({ onFinish }) {
               (e.currentTarget.style.transform = "scale(1.05)")
             }
             onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
-          >
+           variant="default">
             Crear Usuario
             <ArrowRight size={20} />
-          </button>
+          </Button>
         </div>
 
         {/* Opción B: Omitir (Secundario/Link) */}
         <div className="mt-3">
-          <button
+          <Button
             onClick={handleSkip}
             className="btn text-primary text-decoration-none small"
             disabled={loading}
-          >
+           variant="default">
             {loading
               ? "Finalizando..."
               : "No tengo personal por ahora, finalizar configuración"}
-          </button>
+          </Button>
         </div>
 
         <div className="mt-3 text-muted small">Paso 5 de 5 - Último paso</div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

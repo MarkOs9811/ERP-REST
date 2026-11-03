@@ -11,6 +11,8 @@ import "../../css/EstilosFinanzas.css";
 
 // 🔥 IMPORTAMOS EL HELPER DE MONEDA GLOBAL
 import { formatMoneda } from "../../utils/currency";
+import { Card, CardContent } from "@/components/ui/card";
+
 
 export function InformesFinancieros() {
   const { data: dataInformes = [] } = useQuery({
@@ -44,7 +46,7 @@ export function InformesFinancieros() {
 
   return (
     <div className="finanzas-root container-fluid p-0">
-      <div className="row g-3">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
         <div className="col-12">
           <CardIngresoEgresos
             sumaIngresos={sumaIngresos}
@@ -53,67 +55,67 @@ export function InformesFinancieros() {
         </div>
 
         <div className="col-12 col-lg-8">
-          <div className="card p-4 h-100 finanzas-card">
-            <div className="card-body p-0">
+          <Card className="p-4 h-full finanzas-card">
+            <CardContent className="p-0">
               <GraficoIngresosEgresos />
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </div>
 
         <div className="col-12 col-lg-4">
-          <div className="card p-4 h-100 finanzas-card">
-            <div className="card-body p-0 d-flex flex-column justify-content-center">
+          <Card className="p-4 h-full finanzas-card">
+            <CardContent className="p-0 flex flex-col justify-center">
               <GraficoCuentasPorCobrar />
-              <div className="row g-3 mx-auto justify-content-center align-items-center m-0 w-100 finanzas-kpi-mini-grid">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mx-auto justify-content-center align-items-center m-0 w-100 finanzas-kpi-mini-grid">
                 <div className="col-6 d-flex justify-content-center align-items-center">
-                  <div className="card border w-100 finanzas-mini-card finanzas-mini-card-pagado">
-                    <div className="card-body d-flex flex-column justify-content-center align-items-center">
+                  <Card className="border w-full finanzas-mini-card finanzas-mini-card-pagado">
+                    <CardContent className="flex flex-col justify-center items-center">
                       <small>Deudas Cobradas</small>
                       <p className="text-center mb-0 h4">
                         {/*  USO DEL HELPER */}
                         {formatMoneda(montoPagado)}
                       </p>
-                    </div>
-                  </div>
+                    </CardContent>
+                  </Card>
                 </div>
                 <div className="col-6 d-flex justify-content-center align-items-center">
-                  <div className="card border w-100 finanzas-mini-card finanzas-mini-card-restante">
-                    <div className="card-body d-flex flex-column justify-content-center align-items-center">
+                  <Card className="border w-full finanzas-mini-card finanzas-mini-card-restante">
+                    <CardContent className="flex flex-col justify-center items-center">
                       <small>Saldo Pendiente</small>
                       <p className="text-center mb-0 h4">
                         {/*  USO DEL HELPER */}
                         {formatMoneda(montoRestante)}
                       </p>
-                    </div>
-                  </div>
+                    </CardContent>
+                  </Card>
                 </div>
               </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </div>
 
         <div className="col-12 col-lg-6">
-          <div className="card p-4 h-100 finanzas-card">
-            <div className="card-body p-0">
+          <Card className="p-4 h-full finanzas-card">
+            <CardContent className="p-0">
               <GraficoVentasContado />
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </div>
 
         <div className="col-12 col-lg-3">
-          <div className="card p-4 h-100 finanzas-card">
-            <div className="card-body p-0">
+          <Card className="p-4 h-full finanzas-card">
+            <CardContent className="p-0">
               <GraficoPagoEmpleados />
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </div>
 
         <div className="col-12 col-lg-3">
-          <div className="card p-4 h-100 finanzas-card">
-            <div className="card-body p-0">
+          <Card className="p-4 h-full finanzas-card">
+            <CardContent className="p-0">
               <GraficoEgresosMensuales />
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>

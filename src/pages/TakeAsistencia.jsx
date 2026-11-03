@@ -5,6 +5,9 @@ import { ToastContainer } from "react-toastify";
 import ToastAlert from "../components/componenteToast/ToastAlert";
 import { ClockPlus, DoorOpenIcon, LogOut } from "lucide-react";
 import { HoraLive } from "../utils/HoraLive";
+import { Button } from "../components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+
 
 export function TakeAsistencia() {
   const [loading, setLoading] = useState(false); // 🔥 Control de peticiones concurrentes
@@ -95,8 +98,8 @@ export function TakeAsistencia() {
 
   return (
     <div className="d-flex justify-content-center align-items-center">
-      <div className="card my-3 p-4 rounded-4 justify-content-center ">
-        <div className="card-header bg-white border-0 text-center mb-3 d-flex flex-column align-items-center gap-2 p-3">
+      <Card className="my-3 p-4 rounded-2xl justify-center">
+        <CardHeader className="bg-background border-0 text-center mb-3 flex flex-col items-center gap-2 p-3">
           <h4 className="fw-bold text-main mb-1">
             <ClockPlus className="me-2" /> Registro de Asistencia
           </h4>
@@ -108,9 +111,9 @@ export function TakeAsistencia() {
               <HoraLive />
             </p>
           </div>
-        </div>
+        </CardHeader>
 
-        <div className="card-body">
+        <CardContent className="">
           <div className="mb-4">
             <label htmlFor="dni" className="small">
               DNI del Empleado
@@ -139,29 +142,29 @@ export function TakeAsistencia() {
           </div>
 
           <div className="d-flex justify-content-between gap-3">
-            <button
+            <Button
               type="button"
               className="btn-guardar w-100"
               style={{ backgroundColor: "var(--fw-emerald)" }}
               onClick={registrarEntrada}
               disabled={loading}
-            >
+             variant="default">
               <DoorOpenIcon height="20px" width="20px" className="me-2" />
               {loading ? "Procesando..." : "Entrada"}
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
               className="btn-eliminar w-100"
               style={{ backgroundColor: "var(--fw-strawberry)" }}
               onClick={registrarSalida}
               disabled={loading}
-            >
+             variant="destructive">
               <LogOut height="20px" width="20px" className="me-2" />
               {loading ? "Procesando..." : "Salida"}
-            </button>
+            </Button>
           </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
       <ToastContainer />
     </div>

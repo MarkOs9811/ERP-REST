@@ -7,6 +7,7 @@ import ToastAlert from "../../componenteToast/ToastAlert";
 import ModalAlertQuestion from "../../componenteToast/ModalAlertQuestion"; // Asegúrate de que la ruta sea correcta
 
 import { CardReservas } from "./CardReservas";
+import { Button } from "../../ui/button";
 
 export default function ListReservas({ irAFormulario }) {
   const queryClient = useQueryClient();
@@ -64,12 +65,12 @@ export default function ListReservas({ irAFormulario }) {
           <span className="fw-bold text-dark small">
             {reservasFiltradas.length} Reservas Programadas
           </span>
-          <button
+          <Button
             className="btn-principal btn-sm d-flex align-items-center gap-1 rounded-pill px-3 shadow-sm"
             onClick={() => irAFormulario(null)} // null = Crear nueva
-          >
+           variant="default">
             <Plus size={14} /> Nueva
-          </button>
+          </Button>
         </div>
 
         <div className="d-flex gap-2">
@@ -98,7 +99,7 @@ export default function ListReservas({ irAFormulario }) {
               <p className="mb-0">No hay reservas para esta fecha</p>
             </div>
           ) : (
-            <div className="row g-3 p-3">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-3 p-3">
               {reservasFiltradas.map((reserva) => (
                 <CardReservas
                   key={reserva.id}

@@ -298,12 +298,12 @@
     border-color: var(--fw-onyx);
 }
 
-.cocina-columna .card-header,
-.cocina-columna .card-footer {
+.cocina-columna [data-slot="card-header"],
+.cocina-columna [data-slot="card-footer"] {
     padding: 0.7rem 0.8rem;
 }
 
-.cocina-columna .card-footer {
+.cocina-columna [data-slot="card-footer"] {
     gap: 0.4rem;
 }
 

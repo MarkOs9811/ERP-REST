@@ -7,6 +7,7 @@ import { GetVerificacionCaja } from "../service/accionesVender/GetVerificacionCa
 import { useDispatch } from "react-redux";
 import { abrirCaja } from "../redux/cajaSlice";
 import { ArrowLeft, LockKeyhole } from "lucide-react";
+import { Button } from "./ui/button";
 
 export const CajaProtectedRoute = ({ children }) => {
   const { user } = useAuth();
@@ -114,9 +115,9 @@ export const CajaProtectedRoute = ({ children }) => {
               No hay ninguna caja abierta en la sucursal en este momento. Por
               favor, espera a que Administración aperture el turno.
             </p>
-            <button className="my-4 btn-generico" onClick={() => navigate("/")}>
+            <Button className="my-4 btn-generico" onClick={() => navigate("/")} variant="default">
               <ArrowLeft /> Volver al Inicio
-            </button>
+            </Button>
           </div>
         </div>
       );

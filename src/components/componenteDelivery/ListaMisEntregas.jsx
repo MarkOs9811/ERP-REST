@@ -7,6 +7,7 @@ import { TablasGenerales } from "../componentesReutilizables/TablasGenerales";
 import { Cargando } from "../componentesReutilizables/Cargando";
 import ModalRight from "../componentesReutilizables/ModalRight";
 import { DetallesEntregas } from "./entregas/DetallesEntregas";
+import { Button } from "../ui/button";
 
 export function ListaMisEntregas() {
   const {
@@ -118,15 +119,15 @@ export function ListaMisEntregas() {
       name: "Acciones",
       cell: (row) => (
         <div>
-          <button
+          <Button
             className="btn-ver my-2 d-flex align-items-center gap-1"
             onClick={() => {
               setDataPedido(row);
               setModalDetallesVenta(true);
             }}
-          >
+           variant="outline">
             <Eye size={16} /> Detalles
-          </button>
+          </Button>
         </div>
       ),
       button: true,

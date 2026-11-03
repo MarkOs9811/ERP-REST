@@ -16,6 +16,9 @@ import {
 import { useProcesarPagoWeb } from "../../../hooks/VenderDeliveryHook/UseProcesarPagoWeb";
 import { useRiderTracking } from "../../../hooks/useRiderTracking";
 import { MapaRiderCliente } from "../../MapaRiderCliente";
+import { Button } from "../../ui/button";
+import { Card, CardFooter, CardHeader } from "@/components/ui/card";
+
 
 export function ModalFooter({ selectedPedido }) {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -75,7 +78,7 @@ export function ModalFooter({ selectedPedido }) {
 
   return (
     <>
-      <div className="card-footer d-flex justify-content-between align-items-center flex-wrap gap-2">
+      <CardFooter className="flex justify-between items-center flex-wrap gap-2">
         {/* --- ESTADO DEL PEDIDO --- */}
         <div
           className="badge p-2 d-flex align-items-center"
@@ -127,9 +130,9 @@ export function ModalFooter({ selectedPedido }) {
 
           {/* ESTADO 3: PENDIENTE */}
           {selectedPedido.estado_pedido === 3 && (
-            <button className="btn-principal p-1" title="Notificar al cliente">
+            <Button className="btn-principal p-1" title="Notificar al cliente" variant="default">
               <Megaphone />
-            </button>
+            </Button>
           )}
 
           {/* ESTADO 4: EN PROCESO */}
@@ -137,14 +140,14 @@ export function ModalFooter({ selectedPedido }) {
             <>
               {!estaPagado && (
                 <>
-                  <button
+                  <Button
                     className="btn-principal p-1"
                     onClick={ImprimirPedidoWeb}
                     type="button"
                     title="Imprimir Ticket"
-                  >
+                   variant="default">
                     <Printer />
-                  </button>
+                  </Button>
                   <div style={{ display: "none" }}>
                     <TicketPedidosWeb
                       ref={componentRef}
@@ -162,22 +165,22 @@ export function ModalFooter({ selectedPedido }) {
             <>
               {!estaPagado && (
                 <>
-                  <button
+                  <Button
                     type="button"
                     className="btn-principal p-1"
                     onClick={handleRealizarPago}
                     title="Procesar Pago"
-                  >
+                   variant="default">
                     <CheckCheck /> Pagar
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     className="btn-principal p-1"
                     onClick={ImprimirPedidoWeb}
                     type="button"
                     title="Imprimir Ticket"
-                  >
+                   variant="default">
                     <Printer />
-                  </button>
+                  </Button>
                   <div style={{ display: "none" }}>
                     <TicketPedidosWeb
                       ref={componentRef}
@@ -190,15 +193,15 @@ export function ModalFooter({ selectedPedido }) {
             </>
           )}
         </div>
-      </div>
+      </CardFooter>
 
       {/* ======================================================= */}
       {/* 🗺️ SECCIÓN DEL MAPA (CON URLS CORREGIDAS) 🗺️ */}
       {/* ======================================================= */}
       {tieneUbicacion ? (
-        <div className="card m-2 overflow-hidden border-0 shadow-sm">
+        <Card className="m-2 overflow-hidden border-0 shadow-sm">
           {/* Encabezado del mapa (Se mantiene igual) */}
-          <div className="card-header bg-light py-2 d-flex justify-content-between align-items-center">
+          <CardHeader className="bg-muted py-2 flex justify-between items-center">
             <span className="fw-bold text-secondary d-flex align-items-center gap-2">
               <MapPin size={16} /> Ubicación de Entrega
             </span>
@@ -206,7 +209,7 @@ export function ModalFooter({ selectedPedido }) {
               Lat: {parseFloat(selectedPedido.latitud).toFixed(4)}, Lon:{" "}
               {parseFloat(selectedPedido.longitud).toFixed(4)}
             </small>
-          </div>
+          </CardHeader>
 
           <div className="position-relative">
             {/* 🚀 AQUÍ REEMPLAZAMOS EL IFRAME POR NUESTRO NUEVO COMPONENTE 🚀 */}
@@ -234,7 +237,7 @@ export function ModalFooter({ selectedPedido }) {
               </a>
             </div>
           </div>
-        </div>
+        </Card>
       ) : (
         // Si es delivery pero no mandó ubicación (o es recojo en tienda)
         selectedPedido.tipo_entrega === "delivery" && (

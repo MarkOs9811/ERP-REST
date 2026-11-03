@@ -5,6 +5,9 @@ import { useForm } from "react-hook-form";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import ModalRight from "../../componentesReutilizables/ModalRight";
+import { Button } from "../../ui/button";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
+
 
 const UnidadMedida = ({ unidades, onToggle }) => {
   const [modalAddMetodoPago, setModalAddUnidadMedida] = useState(false);
@@ -36,18 +39,18 @@ const UnidadMedida = ({ unidades, onToggle }) => {
   };
 
   return (
-    <div className="col-md-12 h-100">
-      <div className="card shadow-sm border h-100">
-        <div className="card-body">
+    <div className="md:col-span-12 h-100">
+      <Card className="shadow-sm border h-full">
+        <CardContent className="">
           <div className="d-flex justify-content-between align-items-center">
-            <p className="card-title mb-0 h5">Unidades de Medida</p>
-            <button
+            <CardTitle asChild><p className="mb-0 h5">Unidades de Medida</p></CardTitle>
+            <Button
               className="btn btn-light"
               title="Agregar Unidad"
               onClick={() => setModalAddUnidadMedida(true)}
-            >
+             variant="default">
               <PlusIcon className="text-auto" />
-            </button>
+            </Button>
           </div>
           <ul className="list-group mt-3">
             {unidades.map((unidad) => (
@@ -86,17 +89,17 @@ const UnidadMedida = ({ unidades, onToggle }) => {
               </li>
             ))}
           </ul>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
       <ModalRight
         isOpen={modalAddMetodoPago}
         onClose={() => setModalAddUnidadMedida(false)}
         title="Agregar Unidad Medida"
         hideFooter={true}
       >
-        <div className="card d-flex h-100 bg-transparent">
-          <form
-            className="card-body row g-3"
+        <Card className="flex h-full bg-transparent">
+          <CardContent asChild><form
+            className="row g-3"
             onSubmit={handleSubmit(handleSubmitMetodo)}
           >
             <div className="col-12">
@@ -120,12 +123,12 @@ const UnidadMedida = ({ unidades, onToggle }) => {
             </div>
 
             <div className="col-12 text-end">
-              <button type="submit" className="btn-guardar">
+              <Button type="submit" className="btn-guardar" variant="default">
                 Guardar
-              </button>
+              </Button>
             </div>
-          </form>
-        </div>
+          </form></CardContent>
+        </Card>
       </ModalRight>
     </div>
   );

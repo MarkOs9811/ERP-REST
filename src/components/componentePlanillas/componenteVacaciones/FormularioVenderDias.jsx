@@ -1,4 +1,7 @@
 import { capitalizeFirstLetter } from "../../../hooks/FirstLetterUp";
+import { Button } from "../../ui/button";
+import { Card } from "@/components/ui/card";
+
 
 export function FormularioVenderDias({
   onSubmitVender,
@@ -11,7 +14,7 @@ export function FormularioVenderDias({
   return (
     <form onSubmit={handleSubmit(onSubmitVender)}>
       {/* Mostrar la imagen del usuario */}
-      <div className="card d-flex flex-row align-items-center p-3 border mb-3">
+      <Card className="flex flex-row items-center p-3 border mb-3">
         {/* Imagen del usuario */}
         <div className="me-3">
           {vacacionesId.usuario?.fotoPerfil ? (
@@ -61,8 +64,8 @@ export function FormularioVenderDias({
               : "Cargo no disponible"}
           </small>
         </div>
-      </div>
-      <div className="card border p-3 mb-3">
+      </Card>
+      <Card className="border p-3 mb-3">
         <div className="flex-grow-1">
           <h6 className="text-muted">
             <span> Dias Totales </span>
@@ -92,7 +95,7 @@ export function FormularioVenderDias({
               : ""}
           </h6>
         </div>
-      </div>
+      </Card>
 
       {/* Input para los días a vender */}
       <div className="form-floating mb-3">
@@ -116,9 +119,9 @@ export function FormularioVenderDias({
       </div>
 
       {/* Botón para confirmar */}
-      <button type="submit" className="btn-guardar p-3 w-100">
+      <Button type="submit" className="btn-guardar p-3 w-100" variant="default">
         Confirmar Venta
-      </button>
+      </Button>
     </form>
   );
 }

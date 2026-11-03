@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Minus, Plus, Repeat, Trash2 } from "lucide-react";
+import { Button } from "../../ui/button";
 
 export const FilaPlatoUnificado = ({
   item,
@@ -114,27 +115,27 @@ export const FilaPlatoUnificado = ({
             {/* 💡 NUEVO: Usamos isReadOnly para ocultar los controles */}
             {!isReadOnly ? (
               <div className="d-flex align-items-center bg-white  rounded-pill px-1 ">
-                <button
+                <Button
                   className="btn-informativo btn-icon p-0"
                   onClick={() => handleCambioLocal(-1)}
                   disabled={
                     loadingUpdate ===
                     (tipo === "nuevo" ? item.id : item.idPlato)
                   }
-                >
+                 variant="default">
                   <Minus size={14} />
-                </button>
+                </Button>
                 <span className="mx-2 fw-bold small">{cantidadLocal}</span>
-                <button
+                <Button
                   className="btn-informativo btn-icon p-0"
                   onClick={() => handleCambioLocal(1)}
                   disabled={
                     loadingUpdate ===
                     (tipo === "nuevo" ? item.id : item.idPlato)
                   }
-                >
+                 variant="default">
                   <Plus size={14} />
-                </button>
+                </Button>
               </div>
             ) : (
               <span
@@ -147,27 +148,27 @@ export const FilaPlatoUnificado = ({
         )}
         {isSplitMode && canSelect && isSelected && (
           <div className="d-flex align-items-center bg-primary bg-opacity-10 border border-primary rounded-pill px-1">
-            <button
+            <Button
               className="btn-informativo btn-icon text-primary border-none p-0"
               onClick={(e) => {
                 e.stopPropagation();
                 onChangeSplitQty(item.id, -1, item.cantidad);
               }}
-            >
+             variant="default">
               <Minus size={14} />
-            </button>
+            </Button>
             <span className="mx-2 fw-bold small text-primary border-none">
               {cantidadSeleccionada} / {item.cantidad}
             </span>
-            <button
+            <Button
               className="btn-informativo btn-icon text-primary border-none p-0"
               onClick={(e) => {
                 e.stopPropagation();
                 onChangeSplitQty(item.id, 1, item.cantidad);
               }}
-            >
+             variant="default">
               <Plus size={14} />
-            </button>
+            </Button>
           </div>
         )}
       </div>
@@ -185,17 +186,17 @@ export const FilaPlatoUnificado = ({
         </span>
         {/* 💡 NUEVO: Ocultamos el tacho de basura si está cocinando o entregado */}
         {!isSplitMode && !isReadOnly && (
-          <button
+          <Button
             className="btn-eliminar btn-icon  p-0 mx-3"
             onClick={() => onDelete(item.id)}
             disabled={loadingDelete === item.id}
-          >
+           variant="destructive">
             {loadingDelete === item.id ? (
               <Repeat size={16} className="spinner-spin" />
             ) : (
               <Trash2 size={16} />
             )}
-          </button>
+          </Button>
         )}
       </div>
     </div>

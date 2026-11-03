@@ -4,6 +4,8 @@ import ModalReportes from "../../components/componentesReutilizables/ModalReport
 import axiosInstance from "../../api/AxiosInstance";
 import ToastAlert from "../../components/componenteToast/ToastAlert";
 import { EstadoIntegraciones } from "../../hooks/EstadoIntegraciones";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+
 
 export function ReportesVentas() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -91,11 +93,11 @@ export function ReportesVentas() {
   if (isError) return <p>Error: {error.message}</p>;
 
   return (
-    <div className="card ">
-      <div className="card-header m-0 border-0 ">
+    <Card className="">
+      <CardHeader className="m-0 border-0">
         <h4 className="">Reportes</h4>
-      </div>
-      <div className="card-body row g-3 mb-4">
+      </CardHeader>
+      <CardContent className="row g-3 mb-4">
         <FormularioReporte
           titulo="Reporte de Ventas"
           onSubmitGoogle={handleReporteGoogle}
@@ -135,7 +137,7 @@ export function ReportesVentas() {
           tipo="compras"
           estadoIntegracionGoogle={estadoGoogleConfig}
         />
-      </div>
+      </CardContent>
 
       {/* Modal para mostrar la hoja de cálculo */}
       <ModalReportes
@@ -147,6 +149,6 @@ export function ReportesVentas() {
         data={fechas}
         tamaño="modal-xl"
       />
-    </div>
+    </Card>
   );
 }

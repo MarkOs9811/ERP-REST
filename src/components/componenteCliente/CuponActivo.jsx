@@ -3,6 +3,7 @@ import { Tag, AlertCircle, Circle } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { GetCampañaPromos } from "../../service/accionesClientes/GetCampañaPromos";
+import { Button } from "../ui/button";
 
 export function CuponActivoHome() {
   const navigate = useNavigate();
@@ -28,14 +29,14 @@ export function CuponActivoHome() {
 
   if (isLoading || isError) {
     return (
-      <div className="fw-promo-card align-items-center justify-content-center text-center">
+      <div className="fw-promo-card card-cupon items-center justify-center text-center">
         {isLoading ? (
           <div
-            className="spinner-border text-secondary mb-2"
+            className="mb-2 size-8 animate-spin rounded-full border-4 border-muted border-t-primary"
             role="status"
           ></div>
         ) : (
-          <AlertCircle size={32} className="text-danger mb-2" />
+          <AlertCircle size={32} className="mb-2 text-destructive" />
         )}
         <span className="fw-promo-text">
           {isLoading ? "Cargando..." : "Error de conexión"}
@@ -49,18 +50,18 @@ export function CuponActivoHome() {
   if (!campanaActiva) {
     return (
       // Nota la clase extra "card-cupon"
-      <div className="fw-promo-card card-cupon align-items-center justify-content-center text-center">
-        <Tag size={40} className="mb-3 text-muted opacity-50" />
-        <h4 className="fw-promo-title mb-2">Sin Campañas</h4>
+      <div className="fw-promo-card card-cupon items-center justify-center text-center">
+        <Tag size={40} className="mb-3 text-muted-foreground opacity-50" />
+        <h2 className="fw-promo-title mb-2">Sin Campañas</h2>
         <p className="fw-promo-text mb-4">
           Crea una promoción para premiar a tus clientes.
         </p>
-        <button
+        <Button
           onClick={() => navigate("/clientes/fidelizacion")}
-          className="fw-btn-action fw-btn-emerald w-100 mt-auto"
-        >
+          className="fw-btn-action fw-btn-emerald mt-auto w-full"
+         variant="default">
           + Nueva Campaña
-        </button>
+        </Button>
       </div>
     );
   }
@@ -68,11 +69,11 @@ export function CuponActivoHome() {
   return (
     // Nota la clase extra "card-cupon"
     <div className="fw-promo-card card-cupon">
-      <div className="d-flex justify-content-between align-items-center mb-3">
+      <div className="mb-3 flex items-center justify-between gap-2">
         <span className="fw-badge fw-badge-emerald">
           <Tag size={14} /> Campaña Activa
         </span>
-        <span className="small text-muted">
+        <span className="text-xs text-muted-foreground">
           {listaCampañas.length} disponibles
         </span>
       </div>
@@ -86,23 +87,23 @@ export function CuponActivoHome() {
           : "Beneficio especial activo"}
       </p>
 
-      <div className="d-flex align-items-center justify-content-between mb-3 bg-light p-2 rounded">
-        <span className="small text-muted fw-bold">Cupón:</span>
+      <div className="mb-3 flex items-center justify-between gap-2 rounded-lg bg-muted p-2">
+        <span className="text-xs font-bold text-muted-foreground">Cupón:</span>
         <span className="fw-promo-code">
           {campanaActiva.codigo_cupon || "CUPON"}
         </span>
       </div>
 
-      <div className="d-flex justify-content-between align-items-center mt-auto border-top pt-3">
+      <div className="mt-auto flex items-center justify-between gap-3 border-t border-border pt-3">
         <div>
-          <span className="d-block small text-muted">Vence el:</span>
-          <span className="fw-bold text-dark">
+          <span className="block text-xs text-muted-foreground">Vence el:</span>
+          <span className="font-bold text-foreground">
             {formatearFecha(campanaActiva.fecha_fin)}
           </span>
         </div>
-        <div className="text-end">
+        <div className="text-right">
           <span
-            className="d-flex align-items-center gap-1 fw-bold"
+            className="flex items-center gap-1 font-bold"
             style={{ color: "var(--fw-emerald, #10b981)", fontSize: "0.9rem" }}
           >
             <Circle size={10} fill="currentColor" /> Activo

@@ -3,6 +3,8 @@ import { GetPedidosWsp } from "../service/GetPedidosWsp";
 import "../css/EstilosPedidosWsp.css";
 import { useNavigate } from "react-router-dom";
 import { useCallback } from "react";
+import { Card } from "@/components/ui/card";
+
 
 export function PedidosWsp() {
   const navigate = useNavigate(); // ✅ Mantenerlo en la raíz
@@ -31,7 +33,7 @@ export function PedidosWsp() {
   );
 
   return (
-    <div className="card shadow-sm contenedor-pedidosWsp h-100">
+    <Card className="shadow-sm contenedor-pedidosWsp h-full">
       <div className="header-bandeja">
         <img src="/images/wsp.png" width={30} alt="WhatsApp" /> Pedidos WhatsApp
       </div>
@@ -80,6 +82,6 @@ export function PedidosWsp() {
             })
         )}
       </div>
-    </div>
+    </Card>
   );
 }

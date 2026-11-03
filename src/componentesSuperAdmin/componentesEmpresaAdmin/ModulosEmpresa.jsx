@@ -14,6 +14,9 @@ import { GetRoles } from "../../service/accionesAreasCargos/GetRoles";
 import ToastAlert from "../../components/componenteToast/ToastAlert";
 import axiosInstance from "../../api/AxiosInstance";
 import { BotonMotionGeneral } from "../../components/componentesReutilizables/BotonMotionGeneral";
+import { Button } from "../../components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+
 
 export function ModulosEmpresa({ onClose, dataEmpresa }) {
   // Solo necesitamos el ID para trabajar de forma independiente
@@ -64,7 +67,7 @@ export function ModulosEmpresa({ onClose, dataEmpresa }) {
     mutationFn: async (payload) => {
       const res = await axiosInstance.post(
         `/superadmin/empresas/${empresaId}/modulos`,
-        payload
+        payload,
       );
       return res.data;
     },
@@ -128,14 +131,14 @@ export function ModulosEmpresa({ onClose, dataEmpresa }) {
             <span className="fw-bold text-dark">{empresaFresca?.nombre}</span>
           </div>
         </div>
-        <button className="btn-principal" onClick={onClose}>
+        <Button className="btn-principal" onClick={onClose} variant="default">
           Cerrar
-        </button>
+        </Button>
       </div>
 
-      <div className="row g-4">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
         {/* COLUMNA IZQUIERDA: CONTRATADOS */}
-        <div className="col-md-7 pe-md-4 border-end">
+        <div className="md:col-span-7 pe-md-4 border-end">
           <div className="d-flex align-items-center justify-content-between mb-3">
             <h6 className="fw-bold text-success mb-0 d-flex align-items-center gap-2">
               <CheckCircle size={16} /> Contratados ({activos.length})
@@ -143,32 +146,32 @@ export function ModulosEmpresa({ onClose, dataEmpresa }) {
           </div>
 
           {activos.length === 0 ? (
-            <div className="card border-0 shadow-sm py-5 text-center">
+            <Card className="border-0 shadow-sm py-5 text-center">
               <div className="text-muted opacity-50 mb-2">
                 <PackageOpen size={40} className="mx-auto" />
               </div>
               <small className="text-muted">Sin módulos asignados.</small>
-            </div>
+            </Card>
           ) : (
             <div className="d-flex flex-column gap-3">
               {activos.map((rol) => (
-                <div key={rol.id} className="card border">
-                  <div className="card-body py-2 px-3">
+                <Card key={rol.id} className="border">
+                  <CardContent className="py-2 px-3">
                     <div className="d-flex justify-content-between align-items-center mb-2">
                       <span className="fw-bold text-dark small">
                         {rol.nombre}
                       </span>
-                      <button
+                      <Button
                         className="btn-eliminar p-0"
                         onClick={() => handleDetach(rol.id)}
                         disabled={loadingId === rol.id}
-                      >
+                       variant="destructive">
                         {loadingId === rol.id ? (
                           <Loader2 size={14} className="animate-spin" />
                         ) : (
                           <Trash2 size={14} />
                         )}
-                      </button>
+                      </Button>
                     </div>
 
                     {/* Configuración Pivot */}
@@ -184,7 +187,7 @@ export function ModulosEmpresa({ onClose, dataEmpresa }) {
                             handleUpdatePivot(
                               rol.id,
                               "estado",
-                              e.target.checked ? 1 : 0
+                              e.target.checked ? 1 : 0,
                             )
                           }
                         />
@@ -209,21 +212,21 @@ export function ModulosEmpresa({ onClose, dataEmpresa }) {
                             handleUpdatePivot(
                               rol.id,
                               "fecha_expiracion",
-                              e.target.value
+                              e.target.value,
                             )
                           }
                         />
                       </div>
                     </div>
-                  </div>
-                </div>
+                  </CardContent>
+                </Card>
               ))}
             </div>
           )}
         </div>
 
         {/* COLUMNA DERECHA: DISPONIBLES */}
-        <div className="col-md-5 ps-md-4">
+        <div className="md:col-span-5 ps-md-4">
           <h6 className="fw-bold text-primary mb-3 d-flex align-items-center gap-2">
             <PlusCircle size={16} /> Catálogo ({disponibles.length})
           </h6>
@@ -237,11 +240,11 @@ export function ModulosEmpresa({ onClose, dataEmpresa }) {
             }}
           >
             {disponibles.map((rol) => (
-              <div
+              <Card
                 key={rol.id}
-                className="card border-0 bg-white shadow-sm hover-shadow transition-all"
+                className="border-0 bg-background shadow-sm hover-shadow transition-all"
               >
-                <div className="card-body py-2 px-3 d-flex justify-content-between align-items-center">
+                <CardContent className="py-2 px-3 flex justify-between items-center">
                   <span
                     className="text-dark fw-medium small text-uppercase"
                     style={{ fontSize: "0.8rem" }}
@@ -249,12 +252,12 @@ export function ModulosEmpresa({ onClose, dataEmpresa }) {
                     {rol.nombre}
                   </span>
 
-                  <button
+                  <Button
                     className="btn-principal btn-sm rounded-pill py-0 px-3"
                     style={{ fontSize: "0.7rem", height: "24px" }}
                     onClick={() => handleAttach(rol.id)}
                     disabled={loadingId === rol.id}
-                  >
+                   variant="default">
                     {loadingId === rol.id ? (
                       <Loader2 size={12} className="animate-spin" />
                     ) : (
@@ -263,9 +266,9 @@ export function ModulosEmpresa({ onClose, dataEmpresa }) {
                         Agregar
                       </>
                     )}
-                  </button>
-                </div>
-              </div>
+                  </Button>
+                </CardContent>
+              </Card>
             ))}
             {disponibles.length === 0 && (
               <div className="alert alert-success small py-2">

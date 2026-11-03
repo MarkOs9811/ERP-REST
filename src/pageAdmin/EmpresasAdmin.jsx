@@ -16,6 +16,9 @@ import ModalRight from "../components/componentesReutilizables/ModalRight";
 import { FormularioEmpresaAdmin } from "../componentesSuperAdmin/componentesEmpresaAdmin/FormularioEmpresaAdmin";
 import { DashboardEmpresa } from "../componentesSuperAdmin/componentesEmpresaAdmin/DashboardEmpresa";
 import { ModulosEmpresa } from "../componentesSuperAdmin/componentesEmpresaAdmin/ModulosEmpresa";
+import { Button } from "../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 
 export function EmpresasAdmin() {
   const [filtro, setFiltro] = useState("");
@@ -104,13 +107,13 @@ export function EmpresasAdmin() {
       minWidth: "220px",
       cell: (row) =>
         !row.userAdmin ? (
-          <button
+          <Button
             className="btn btn-outline-primary btn-sm d-flex align-items-center gap-1"
             onClick={() => console.log("Click en asignar", row)}
-          >
+           variant="default">
             <Plus size={16} />
             Asignar Usuario
-          </button>
+          </Button>
         ) : (
           <span className="text-dark">{row.userAdmin}</span>
         ),
@@ -135,75 +138,75 @@ export function EmpresasAdmin() {
       width: "80px",
       cell: (row) => (
         <div className="dropdown m-2">
-          <button
+          <Button
             className="btn bg-transparent btn-sm text-dark"
             type="button"
             data-bs-toggle="dropdown"
             aria-expanded="false"
             data-bs-boundary="window"
             data-bs-popper-config='{"strategy":"fixed"}'
-          >
+           variant="default">
             <MoreVertical size={18} />
-          </button>
+          </Button>
 
           <ul className="dropdown-menu dropdown-menu-end shadow border-0">
             {/* --- Opciones si está ACTIVO --- */}
             {row.estado == 1 ? (
               <>
                 <li>
-                  <button
+                  <Button
                     className="btn-editar dropdown-item align-items-center gap-2"
                     onClick={() => {
                       setFormularioAbierto(true);
                       setDataEmpresa(row);
                     }}
-                  >
+                   variant="secondary">
                     <Pen size={16} /> Editar
-                  </button>
+                  </Button>
                 </li>
                 <li>
-                  <button
+                  <Button
                     className="btn-principal dropdown-item align-items-center gap-2"
                     onClick={() => {
                       setDataEmpresa(row);
                       setDashboardEmpresa(true);
                     }}
-                  >
+                   variant="default">
                     <Eye size={16} /> Ver Detalles
-                  </button>
+                  </Button>
                 </li>
                 <li>
-                  <button
+                  <Button
                     className="btn-principal dropdown-item align-items-center gap-2"
                     onClick={() => {
                       setModulosEmpresa(true);
                       setDataEmpresa(row);
                     }}
-                  >
+                   variant="default">
                     <LayoutDashboard size={16} /> Ver Módulos
-                  </button>
+                  </Button>
                 </li>
                 <li>
                   <hr className="dropdown-divider" />
                 </li>
                 <li>
-                  <button className="btn-eliminar dropdown-item align-items-center gap-2 text-danger">
+                  <Button className="btn-eliminar dropdown-item align-items-center gap-2 text-danger" variant="destructive">
                     <Trash2 size={16} /> Eliminar
-                  </button>
+                  </Button>
                 </li>
               </>
             ) : (
               /* --- Opciones si está INACTIVO --- */
               <>
                 <li>
-                  <button className="btn-activar dropdown-item align-items-center gap-2 text-success">
+                  <Button className="btn-activar dropdown-item align-items-center gap-2 text-success" variant="default">
                     <Check size={16} /> Activar Empresa
-                  </button>
+                  </Button>
                 </li>
                 <li>
-                  <button className="btn-principal dropdown-item align-items-center gap-2">
+                  <Button className="btn-principal dropdown-item align-items-center gap-2" variant="default">
                     <LayoutDashboard size={16} /> Ver Módulos
-                  </button>
+                  </Button>
                 </li>
               </>
             )}
@@ -213,9 +216,9 @@ export function EmpresasAdmin() {
     },
   ];
   return (
-    <div className="card  border py-2">
-      <div className="card-header d-flex ">
-        <h3 className="card-title">Listado de Empresas</h3>
+    <Card className="border py-2">
+      <CardHeader className="flex">
+        <CardTitle asChild><h3 className="">Listado de Empresas</h3></CardTitle>
         <div className="d-flex ms-auto gap-2">
           <input
             type="text"
@@ -234,10 +237,10 @@ export function EmpresasAdmin() {
             }}
           />
         </div>
-      </div>
-      <div className="card-body p-0">
+      </CardHeader>
+      <CardContent className="p-0">
         <TablasGenerales datos={empresasFiltradas} columnas={columnas} />
-      </div>
+      </CardContent>
 
       <ModalRight
         isOpen={formularioAbierto}
@@ -276,6 +279,6 @@ export function EmpresasAdmin() {
           <ModulosEmpresa dataEmpresa={dataEmpresa} onClose={handleClose} />
         )}
       </ModalRight>
-    </div>
+    </Card>
   );
 }

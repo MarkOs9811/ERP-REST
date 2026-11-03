@@ -13,6 +13,9 @@ import { Plus, Search } from "lucide-react";
 import { RegistrosCajasList } from "../../components/componentesModuloVentas/RegistrosCajasList";
 import { GetCajas } from "../../service/accionesVentas/GetCajas";
 import { CondicionCarga } from "../../components/componentesReutilizables/CondicionCarga";
+import { Button } from "../../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 
 export function Cajas() {
   const [search, setSearch] = useState("");
@@ -89,35 +92,35 @@ export function Cajas() {
   });
 
   return (
-    <div className="row g-3">
+    <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
       <div className="col-lg-12 col-sm-12">
         <CondicionCarga
           isLoading={isLoading}
           isError={isError}
           mode="single-card"
         >
-          <div className="card  ">
-            <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+          <Card className="">
+            <CardHeader className="border-bottom-0 flex flex-col flex-md-row justify-between items-center gap-2">
               <div className="d-flex align-items-center">
-                <h4 className="card-title mb-0 ">Panel de Cajas</h4>
+                <CardTitle asChild><h4 className="mb-0">Panel de Cajas</h4></CardTitle>
                 <span className="badge-header ms-2">Registro</span>
               </div>
               <div className="d-flex align-items-center flex-wrap gap-2 mt-3 mt-md-0">
-                <button
+                <Button
                   type="button"
                   className="btn-principal px-3"
                   onClick={() => setModalAddCaja(true)}
-                >
+                 variant="default">
                   <Plus size={18} />
                   Abrir Caja
-                </button>
+                </Button>
               </div>
-            </div>
+            </CardHeader>
 
-            <div className="card-body p-4 mb-3">
+            <CardContent className="p-4 mb-3">
               <CajasList />
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </CondicionCarga>
       </div>
       <div className="col-lg-12 col-sm-12">
@@ -126,12 +129,12 @@ export function Cajas() {
           isError={isError}
           mode="single-card"
         >
-          <div className="card  overflow-hidden">
-            <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+          <Card className="overflow-hidden">
+            <CardHeader className="border-bottom-0 flex flex-col flex-md-row justify-between items-center gap-2">
               <div className="d-flex align-items-center">
-                <h4 className="card-title mb-0 titulo-card-especial">
+                <CardTitle asChild><h4 className="mb-0 titulo-card-especial">
                   Registros Caja
-                </h4>
+                </h4></CardTitle>
                 <span className="badge-header ms-2">Historial</span>
               </div>
 
@@ -167,11 +170,11 @@ export function Cajas() {
                   style={{ maxWidth: "180px" }}
                 />
               </div>
-            </div>
-            <div className="card-body p-0">
+            </CardHeader>
+            <CardContent className="p-0">
               <RegistrosCajasList search={search} />
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </CondicionCarga>
       </div>
       <ModalRight

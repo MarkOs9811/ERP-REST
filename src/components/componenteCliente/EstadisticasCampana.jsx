@@ -35,8 +35,8 @@ export function EstadisticasCampana({ campana }) {
       {/* Sección 1: Detalles del Cupón */}
       <div className="mb-4">
         <h6 className="fw-bold text-secondary mb-3">Información del Cupón</h6>
-        <div className="row g-3">
-          <div className="col-md-6">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+          <div className="md:col-span-6">
             <div className="info-card bg-light rounded p-3">
               <div className="d-flex align-items-center gap-2 mb-2">
                 <Ticket size={16} className="text-secondary" />
@@ -47,7 +47,7 @@ export function EstadisticasCampana({ campana }) {
               </p>
             </div>
           </div>
-          <div className="col-md-6">
+          <div className="md:col-span-6">
             <div className="info-card bg-light rounded p-3">
               <div className="d-flex align-items-center gap-2 mb-2">
                 <CircleDollarSign size={16} className="text-secondary" />
@@ -66,9 +66,9 @@ export function EstadisticasCampana({ campana }) {
       {/* Sección 2: Condiciones */}
       <div className="mb-4">
         <h6 className="fw-bold text-secondary mb-3">Condiciones</h6>
-        <div className="row g-3">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
           {campana.monto_minimo_compra > 0 && (
-            <div className="col-md-6">
+            <div className="md:col-span-6">
               <div className="info-card bg-light rounded p-3">
                 <div className="d-flex align-items-center gap-2 mb-2">
                   <CircleDollarSign size={16} className="text-secondary" />
@@ -82,7 +82,7 @@ export function EstadisticasCampana({ campana }) {
               </div>
             </div>
           )}
-          <div className="col-md-6">
+          <div className="md:col-span-6">
             <div className="info-card bg-light rounded p-3">
               <div className="d-flex align-items-center gap-2 mb-2">
                 <CalendarDays size={16} className="text-secondary" />
@@ -102,8 +102,8 @@ export function EstadisticasCampana({ campana }) {
         <h6 className="fw-bold text-secondary mb-3">Estadísticas de Uso</h6>
 
         {/* Barras de Estadísticas */}
-        <div className="row g-3 mb-4">
-          <div className="col-md-6">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-4">
+          <div className="md:col-span-6">
             <div className="stat-card bg-light rounded p-3">
               <div className="d-flex align-items-center justify-content-between mb-2">
                 <div className="d-flex align-items-center gap-2">
@@ -127,7 +127,7 @@ export function EstadisticasCampana({ campana }) {
             </div>
           </div>
 
-          <div className="col-md-6">
+          <div className="md:col-span-6">
             <div
               className={`stat-card rounded p-3 ${isAgotado ? "bg-danger-subtle" : "bg-light"}`}
             >

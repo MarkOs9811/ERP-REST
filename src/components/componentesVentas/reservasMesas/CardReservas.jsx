@@ -6,6 +6,9 @@ import {
   Users2,
   UtensilsCrossed,
 } from "lucide-react";
+import { Button } from "../../ui/button";
+import { Card } from "@/components/ui/card";
+
 
 export function CardReservas({
   reserva,
@@ -13,23 +16,23 @@ export function CardReservas({
   irAFormulario = () => {},
 }) {
   return (
-    <div
+    <Card
       key={reserva.id}
-      className="card w-100 h-100"
+      className="w-full h-full"
       style={{ borderLeft: "4px solid #ef4444!important" }} // Un rojo/coral sutil que combina con tu UI
     >
       <div className="p-3 position-relative">
         {/* Botones de Acción */}
         <div className="position-absolute top-0 end-0 m-2 d-flex gap-1">
-          <button
+          <Button
             className="btn-editar btn-icon p-1 hover-dark"
             style={{ background: "transparent" }}
             title="Editar Reserva"
             onClick={() => irAFormulario(reserva)} // Mandamos el objeto para editar
-          >
+           variant="secondary">
             <PencilIcon size={15} />
-          </button>
-          <button
+          </Button>
+          <Button
             className="btn-eliminar btn-icon p-1"
             style={{ background: "transparent" }}
             title="Anular Reserva"
@@ -40,9 +43,9 @@ export function CardReservas({
                 nombre: reserva.nombre_cliente,
               })
             }
-          >
+           variant="destructive">
             <Trash2Icon size={15} />
-          </button>
+          </Button>
         </div>
 
         <h6 className="m-0 fw-bold d-flex align-items-center gap-2 mb-3 pe-5 text-dark">
@@ -77,6 +80,6 @@ export function CardReservas({
           </div>
         )}
       </div>
-    </div>
+    </Card>
   );
 }

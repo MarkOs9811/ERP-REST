@@ -2,6 +2,7 @@ import { PrinterCheck } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import axiosInstance from "../../../api/AxiosInstance";
 import ToastAlert from "../../componenteToast/ToastAlert";
+import { Button } from "../../ui/button";
 
 export function BotonImprimirComanda({ dataPedido }) {
   // Definimos la mutación con React Query
@@ -81,7 +82,7 @@ export function BotonImprimirComanda({ dataPedido }) {
 
   return (
     <div>
-      <button
+      <Button
         type="button"
         onClick={handleImprimir}
         disabled={imprimirMutation.isPending}
@@ -90,14 +91,14 @@ export function BotonImprimirComanda({ dataPedido }) {
         style={{
           cursor: imprimirMutation.isPending ? "not-allowed" : "pointer",
         }}
-      >
+       variant="default">
         <PrinterCheck
           size={16}
           className={
             imprimirMutation.isPending ? "spinner-border spinner-border-sm" : ""
           }
         />
-      </button>
+      </Button>
     </div>
   );
 }

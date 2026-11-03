@@ -1,6 +1,9 @@
 import { useAuth } from "../AuthContext";
 import { useNavigate } from "react-router-dom";
 import { ChefHat, ArrowRight } from "lucide-react";
+import { Button } from "../components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+
 
 export function LayOutCocina() {
   const { user } = useAuth();
@@ -13,15 +16,15 @@ export function LayOutCocina() {
       className="container d-flex align-items-center justify-content-center"
       style={{ minHeight: "85vh" }}
     >
-      <div
-        className="card overflow-hidden"
+      <Card
+        className="overflow-hidden"
         style={{
           maxWidth: 650,
           width: "100%",
           borderRadius: 20,
         }}
       >
-        <div className="card-body p-5 text-center">
+        <CardContent className="p-5 text-center">
           {/* Icono */}
           <div
             className="mx-auto d-flex align-items-center justify-content-center rounded-circle mb-3"
@@ -43,15 +46,15 @@ export function LayOutCocina() {
             </p>
           </div>
 
-          <button
+          <Button
             className="btn-principal d-inline-flex align-items-center gap-2 px-4 py-3"
             onClick={() => navigate("/cocina")}
-          >
+           variant="default">
             Revisar pedidos
             <ArrowRight size={20} />
-          </button>
-        </div>
-      </div>
+          </Button>
+        </CardContent>
+      </Card>
     </div>
   );
 }

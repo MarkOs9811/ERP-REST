@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { GetCategoriasPlatosTrue } from "../../../service/accionesVender/GetCategoriasPlatosTrue";
 import { GetCategoria } from "../../../service/GetCategoria";
+import { Button } from "../../ui/button";
 
 export function CategoriaPlatos({ claveVenta = "", clearSearch }) {
   const dispatch = useDispatch();
@@ -43,18 +44,18 @@ export function CategoriaPlatos({ claveVenta = "", clearSearch }) {
       {isError && !isLoading && <p className="error-message mb-0">{isError}</p>}
 
       {/* Botón TODO al inicio (usualmente es mejor UX tenerlo primero) */}
-      <button
+      <Button
         className={`rounded-pill border-0 py-1 px-3 text-nowrap flex-shrink-0 ${
           estadoCategoria == "todo" ? "categoriaSelect" : "bg-light text-dark"
         }`}
         onClick={() => handleFiltrarCategoria(`todo`)}
-      >
+       variant="default">
         Todo
-      </button>
+      </Button>
 
       {/* Mostrar las categorías */}
       {categorias.map((categoria) => (
-        <button
+        <Button
           key={categoria.id}
           /* 🔥 CAMBIO AQUÍ: text-nowrap (el texto no se rompe) y flex-shrink-0 (el botón no se aplasta) */
           className={`rounded-pill border-0 py-1 px-3 text-nowrap flex-shrink-0 ${
@@ -63,9 +64,9 @@ export function CategoriaPlatos({ claveVenta = "", clearSearch }) {
               : "bg-light text-dark"
           }`}
           onClick={() => handleFiltrarCategoria(`${categoria.nombre}`)}
-        >
+         variant="default">
           {capitalizeFirstLetter(categoria.nombre)}
-        </button>
+        </Button>
       ))}
 
       {!isLoading && !isError && categorias.length === 0 && (

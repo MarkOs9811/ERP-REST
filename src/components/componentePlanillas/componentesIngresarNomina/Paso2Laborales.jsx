@@ -1,5 +1,7 @@
 import React from "react";
 import { Briefcase, Calendar, Clock } from "lucide-react";
+import { Card } from "@/components/ui/card";
+
 
 export function Paso2Laborales({
   register,
@@ -19,7 +21,7 @@ export function Paso2Laborales({
   };
 
   return (
-    <div className="card p-4 border">
+    <Card className="p-4 border">
       <h5 className="mb-4" style={{ color: "#15669c" }}>
         Paso 2: Detalles del contrato
       </h5>
@@ -144,6 +146,6 @@ export function Paso2Laborales({
           />
         </div>
       </div>
-    </div>
+    </Card>
   );
 }

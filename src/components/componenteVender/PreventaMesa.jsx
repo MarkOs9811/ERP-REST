@@ -49,6 +49,9 @@ import { faClipboardList } from "@fortawesome/free-solid-svg-icons";
 import { FilaPlatoUnificado } from "./tareasVender/FilaPlatoUnificado";
 import { BadgeComponent } from "../componentesReutilizables/BadgeComponent";
 import { ImprimirTicket } from "./tareasVender/ImprimiTIcket";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+
 
 export function PreventaMesa() {
   const idMesa = useSelector((state) => state.mesa.idPreventaMesa);
@@ -447,13 +450,13 @@ export function PreventaMesa() {
 
   return (
     <div className="h-100 bg-transparent">
-      <div className="row g-3 h-100">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 h-100">
         <div className="col-lg-4 h-100">
-          <div
-            className={`card  h-100 d-flex flex-column overflow-hidden ${isSplitMode ? "border-dark border-2" : ""}`}
+          <Card
+            className={`h-full flex flex-col overflow-hidden${isSplitMode ? "border-dark border-2" : ""}`}
           >
-            <div
-              className={`card-header p-3 d-flex flex-column gap-2 ${isSplitMode ? "bg-warning" : ""}`}
+            <CardHeader
+              className={`p-3 flex flex-col gap-2${isSplitMode ? "bg-warning" : ""}`}
             >
               {/* 1. CONTENEDOR SUPERIOR (Título y Botón) */}
               <div className="d-flex justify-content-between align-items-center w-100">
@@ -463,7 +466,7 @@ export function PreventaMesa() {
                     {isSplitMode ? "Separar Cuenta" : `Mesa ${mesaNumero}`}
                     <BadgeComponent
                       label={`PED-${preventas?.[0]?.idPedido}`}
-                      className="small px-2"
+                      className="text-xs px-2"
                       variant="secondary"
                     />
                   </h5>
@@ -474,12 +477,12 @@ export function PreventaMesa() {
                   </small>
                 </div>
 
-                <button
+                <Button
                   className={`btn btn-sm rounded-pill px-3 ${
                     isSplitMode ? "btn-white text-dark" : "btn-outline-dark"
                   }`}
                   onClick={isSplitMode ? toggleSplitMode : handleVolverMesas}
-                >
+                 variant="default">
                   {isSplitMode ? (
                     <>
                       <XCircle size={16} className="me-1" /> Cancelar
@@ -489,11 +492,11 @@ export function PreventaMesa() {
                       <ChevronLeft size={16} className="me-1" /> Volver
                     </>
                   )}
-                </button>
+                </Button>
               </div>
-            </div>
+            </CardHeader>
 
-            <div className="card-body overflow-auto p-2  d-flex flex-column gap-1">
+            <CardContent className="overflow-auto p-2 flex flex-col gap-1">
               {/* POR CONFIRMAR */}
               {itemsCarrito.length > 0 && (
                 <div
@@ -585,9 +588,9 @@ export function PreventaMesa() {
                   ))}
                 </div>
               )}
-            </div>
+            </CardContent>
 
-            <div className="card-footer bg-white border-top shadow-lg pt-3 pb-2 px-3">
+            <CardFooter className="bg-background border-t shadow-lg pt-3 pb-2 px-3">
               <ImprimirTicket
                 itemsCarrito={itemsCarrito}
                 imprimirTicket={imprimirTicket}
@@ -661,44 +664,44 @@ export function PreventaMesa() {
 
               {!isSplitMode && itemsCarrito.length === 0 && (
                 <div className="col-12 mb-2">
-                  <button
+                  <Button
                     className="btn-principal w-100 fw-bold shadow-sm rounded-pill p-3"
                     onClick={toggleSplitMode}
                     disabled={granTotal === 0}
-                  >
+                   variant="default">
                     <Scissors size={18} className="me-2" /> SEPARAR CUENTA
-                  </button>
+                  </Button>
                 </div>
               )}
 
               {!isSplitMode && (
-                <div className="row g-2">
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-2">
                   <div className="col-4">
-                    <button
+                    <Button
                       className="btn btn-outline-dark w-100 btn-sm rounded-pill"
                       onClick={handleTranferirToMesa}
-                    >
+                     variant="default">
                       <Repeat size={16} /> Mover
-                    </button>
+                    </Button>
                   </div>
                   <div className="col-4">
-                    <button
+                    <Button
                       className="btn btn-outline-dark w-100 btn-sm rounded-pill"
                       onClick={handleImprimirTicket}
                       disabled={isPrinting}
-                    >
+                     variant="default">
                       <Printer size={16} />{" "}
                       {isPrinting ? "Imprimiendo..." : "Ticket"}
-                    </button>
+                    </Button>
                   </div>
                   <div className="col-4">
-                    <button
+                    <Button
                       className="btn btn-outline-danger w-100 btn-sm rounded-pill"
                       onClick={handleCancelarPedidosQuestion}
                       disabled={platosEntregados.length > 0 || isAnulando}
-                    >
+                     variant="destructive">
                       <BanIcon size={16} /> Anular
-                    </button>
+                    </Button>
                   </div>
                   <div className="col-12 mt-2">
                     <div
@@ -748,14 +751,14 @@ export function PreventaMesa() {
                   </div>
                 </div>
               )}
-            </div>
-          </div>
+            </CardFooter>
+          </Card>
         </div>
         <div
           className={`col-lg-8 h-100 ${isSplitMode ? "opacity-50 pe-none" : ""}`}
         >
-          <div className="card d-flex flex-grow-1 flex-column h-100 p-0 m-0 overflow-auto">
-            <div className="card-header bg-white border-bottom  py-3 px-3 m-0 d-flex align-items-center gap-3 flex-wrap">
+          <Card className="flex flex-grow-1 flex-col h-full p-0 m-0 overflow-auto">
+            <CardHeader className="bg-background border-b py-3 px-3 m-0 flex items-center gap-3 flex-wrap">
               <div>
                 <h6 className="d-flex align-items-center gap-2 flex-shrink-0">
                   <Hamburger size={28} /> Menú de Platos
@@ -774,13 +777,13 @@ export function PreventaMesa() {
                   clearSearch={setSearchTerm}
                 />
               </div>
-            </div>
+            </CardHeader>
             <CondicionCarga
               isLoading={loadinPlatos}
               isError={errorPlatos}
               mode="cards"
             >
-              <div className="card-body p-2  contenedor-platos overflow-x-hidden m-auto ">
+              <CardContent className="p-2 contenedor-platos overflow-x-hidden m-auto">
                 {productos
                   .filter((p) => {
                     const matchCategoria =
@@ -802,9 +805,9 @@ export function PreventaMesa() {
                       esComida={"restaurante"}
                     />
                   ))}
-              </div>
+              </CardContent>
             </CondicionCarga>
-          </div>
+          </Card>
         </div>
       </div>
       <div style={{ display: "none" }}>

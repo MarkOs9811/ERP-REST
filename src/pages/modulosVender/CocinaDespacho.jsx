@@ -25,6 +25,9 @@ import axiosInstance from "../../api/AxiosInstance";
 import echoEvents from "../../api/echoEvents";
 
 import "../../css/EstilosCocina.css";
+import { Button } from "../../components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+
 
 const estados = {
   0: { texto: "En espera", variant: "warning" },
@@ -161,12 +164,12 @@ function TarjetaPedido({ pedido }) {
   const botonBloqueadoGlobal = mutacionesCambiandoEstado > 0;
 
   return (
-    <div
-      className={`card overflow-hidden mb-3 ${esListo ? "border-success opacity-75" : ""}`}
+    <Card
+      className={`overflow-hidden mb-3${esListo ? "border-success opacity-75" : ""}`}
     >
       {/* ... (Tu Header y Body se mantienen exactamente igual) ... */}
-      <div
-        className={`card-header d-flex justify-content-between align-items-center ${esListo ? "bg-white border-bottom" : esEnPreparacion ? "cocina-header-preparacion" : "cocina-header-espera"}`}
+      <CardHeader
+        className={`flex justify-between items-center${esListo ? "bg-background border-b" : esEnPreparacion ? "cocina-header-preparacion" : "cocina-header-espera"}`}
       >
         <div className="d-flex align-items-center gap-2">
           <span className="badge bg-white text-dark border px-2 py-1">
@@ -191,9 +194,9 @@ function TarjetaPedido({ pedido }) {
           variant={estados[pedido.estado]?.variant}
           label={estados[pedido.estado]?.texto}
         />
-      </div>
+      </CardHeader>
 
-      <div className="card-body p-0 pt-2 pb-2">
+      <CardContent className="p-0 pt-2 pb-2">
         <ul className="list-group list-group-flush border-0">
           {platos.map((plato, idx) => (
             <li
@@ -213,15 +216,15 @@ function TarjetaPedido({ pedido }) {
             </li>
           ))}
         </ul>
-      </div>
+      </CardContent>
 
-      <div className="card-footer bg-transparent border-0 d-flex align-items-center gap-2 px-3 pb-3">
-        <button
+      <CardFooter className="bg-transparent border-0 flex items-center gap-2 px-3 pb-3">
+        <Button
           className={`cocina-btn-imprimir btn-icon ${esListo ? "cocina-btn-imprimir-listo" : esEnPreparacion ? "cocina-btn-imprimir-preparacion" : "cocina-btn-imprimir-espera"} ${mutationImprimir.isPending ? "opacity-50" : ""}`}
           title="Imprimir Ticket"
           onClick={handleImprimirPedidoCocina}
           disabled={mutationImprimir.isPending}
-        >
+         variant="default">
           {mutationImprimir.isPending ? (
             <div
               className="spinner-border spinner-border-sm"
@@ -230,7 +233,7 @@ function TarjetaPedido({ pedido }) {
           ) : (
             <PrinterIcon size={18} />
           )}
-        </button>
+        </Button>
 
         <BotonAnimado
           className={`ms-auto cocina-btn-accion ${esListo ? "cocina-btn-accion-listo" : esEnPreparacion ? "cocina-btn-accion-preparacion" : "cocina-btn-accion-espera"}`}
@@ -253,8 +256,8 @@ function TarjetaPedido({ pedido }) {
               ? "Marcar Listo"
               : "Reabrir"}
         </BotonAnimado>
-      </div>
-    </div>
+      </CardFooter>
+    </Card>
   );
 }
 
@@ -320,14 +323,14 @@ export function CocinaDespacho() {
           <div className="cocina-filter-bar mb-3 d-flex align-items-center justify-content-between gap-3">
             <div className="d-flex gap-2">
               {filtroOpciones.map((option) => (
-                <button
+                <Button
                   key={option.value}
                   type="button"
                   className={`cocina-filter-btn fw-bold ${filtroTipo === option.value ? "cocina-filter-btn-active" : ""}`}
                   onClick={() => setFiltroTipo(option.value)}
-                >
+                 variant="default">
                   {option.label}
-                </button>
+                </Button>
               ))}
             </div>
 
@@ -362,8 +365,8 @@ export function CocinaDespacho() {
             /* ESTRUCTURA KANBAN USANDO TU CSS GRID (.cocina-columnas) */
             <div className="cocina-columnas">
               {/* Columna: En Espera */}
-              <div className=" card overflow-hidden">
-                <div className="card-header d-flex justify-content-between align-items-center mb-3 px-4">
+              <Card className="overflow-hidden">
+                <CardHeader className="flex justify-between items-center mb-3 px-4">
                   <div className="d-flex">
                     {" "}
                     <span className="me-3">
@@ -377,20 +380,20 @@ export function CocinaDespacho() {
                   <span className="cocina-badge-warning  btn-icon">
                     {pedidosEnEspera.length}
                   </span>
-                </div>
-                <div className="card-body cocina-col-body px-3">
+                </CardHeader>
+                <CardContent className="cocina-col-body px-3">
                   {pedidosEnEspera.map((pedido, i) => (
                     <TarjetaPedido
                       key={`espera-${pedido.id}-${i}`}
                       pedido={pedido}
                     />
                   ))}
-                </div>
-              </div>
+                </CardContent>
+              </Card>
 
               {/* Columna: En Preparación */}
-              <div className="card overflow-hidden">
-                <div className="card-header d-flex justify-content-between align-items-center mb-3 px-4">
+              <Card className="overflow-hidden">
+                <CardHeader className="flex justify-between items-center mb-3 px-4">
                   <div className="d-flex">
                     <span className="me-3">
                       <FlameIcon />
@@ -403,20 +406,20 @@ export function CocinaDespacho() {
                   <span className="cocina-badge-preparacion  btn-icon">
                     {pedidosEnPreparacion.length}
                   </span>
-                </div>
-                <div className="card-body cocina-col-body px-3">
+                </CardHeader>
+                <CardContent className="cocina-col-body px-3">
                   {pedidosEnPreparacion.map((pedido, i) => (
                     <TarjetaPedido
                       key={`prep-${pedido.id}-${i}`}
                       pedido={pedido}
                     />
                   ))}
-                </div>
-              </div>
+                </CardContent>
+              </Card>
 
               {/* Columna: Listo */}
-              <div className="card overflow-hidden">
-                <div className="card-header d-flex justify-content-between align-items-center mb-3 px-4">
+              <Card className="overflow-hidden">
+                <CardHeader className="flex justify-between items-center mb-3 px-4">
                   <div className="d-flex">
                     {" "}
                     <span className="me-3">
@@ -430,16 +433,16 @@ export function CocinaDespacho() {
                   <span className="cocina-badge-listo btn-icon ">
                     {pedidosListos.length}
                   </span>
-                </div>
-                <div className="card-body cocina-col-body px-3 ">
+                </CardHeader>
+                <CardContent className="cocina-col-body px-3">
                   {pedidosListos.map((pedido, i) => (
                     <TarjetaPedido
                       key={`listo-${pedido.id}-${i}`}
                       pedido={pedido}
                     />
                   ))}
-                </div>
-              </div>
+                </CardContent>
+              </Card>
             </div>
           )}
         </div>

@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import BotonAnimado from "../../componentesReutilizables/BotonAnimado";
 import { BotonMotionGeneral } from "../../componentesReutilizables/BotonMotionGeneral";
+import { Button } from "../../ui/button";
 
 export function GoogleFormIntegracion({ dataIntegracion }) {
   const googleConfig =
@@ -230,18 +231,18 @@ export function GoogleFormIntegracion({ dataIntegracion }) {
             </>
           ) : (
             <>
-              <button
+              <Button
                 type="button"
                 className="btn-cerrar-modal"
                 onClick={() => setIsEditing(false)}
                 disabled={loading}
-              >
+               variant="default">
                 Cancelar
-              </button>
+              </Button>
 
-              <button type="submit" className="btn-guardar" disabled={loading}>
+              <Button type="submit" className="btn-guardar" disabled={loading} variant="default">
                 {loading ? "Guardando..." : "Guardar"}
-              </button>
+              </Button>
             </>
           )}
         </div>

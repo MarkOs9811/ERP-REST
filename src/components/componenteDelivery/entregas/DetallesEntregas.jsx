@@ -12,6 +12,8 @@ import {
   Coins,
 } from "lucide-react";
 import { BadgeComponent } from "../../componentesReutilizables/BadgeComponent";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+
 
 export function DetallesEntregas({ dataVentas }) {
   // Validación de seguridad por si la data llega vacía
@@ -52,9 +54,9 @@ export function DetallesEntregas({ dataVentas }) {
     dataVentas.detallesPedido || dataVentas.detalles_pedido || [];
 
   return (
-    <div className="card border-0 rounded-0 bg-transparent">
+    <Card className="border-0 rounded-0 bg-transparent">
       {/* HEADER */}
-      <div className="card-header border-bottom d-flex justify-content-between align-items-center py-3">
+      <CardHeader className="border-b flex justify-between items-center py-3">
         <h5 className="mb-0 fw-bold d-flex align-items-center text-secondary">
           <Package size={20} className="me-2 text-dark" />
           Pedido #{dataVentas.codigo_pedido || dataVentas.id}
@@ -65,11 +67,11 @@ export function DetallesEntregas({ dataVentas }) {
           variant={colorVariante}
           icon={IconoBadge}
         />
-      </div>
+      </CardHeader>
 
       {/* BODY */}
-      <div className="card-body">
-        <div className="row g-4">
+      <CardContent className="">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
           {/* Columna Izquierda: Cliente */}
           <div className="col-12 col-md-6">
             <h6
@@ -220,10 +222,10 @@ export function DetallesEntregas({ dataVentas }) {
             </div>
           )}
         </div>
-      </div>
+      </CardContent>
 
       {/* FOOTER: Total del pedido */}
-      <div className="card-footer bg-light border-top d-flex justify-content-between align-items-center p-4">
+      <CardFooter className="bg-muted border-t flex justify-between items-center p-4">
         <span
           className="fw-bold text-muted text-uppercase"
           style={{ fontSize: "0.9rem", letterSpacing: "1px" }}
@@ -233,7 +235,7 @@ export function DetallesEntregas({ dataVentas }) {
         <h3 className="mb-0 fw-bold text-success d-flex align-items-center">
           S/ {Number(dataVentas.total).toFixed(2)}
         </h3>
-      </div>
-    </div>
+      </CardFooter>
+    </Card>
   );
 }

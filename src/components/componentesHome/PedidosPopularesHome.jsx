@@ -1,13 +1,15 @@
 import { Soup } from "lucide-react";
+import { CardContent } from "@/components/ui/card";
+
 
 export function PedidosPopularesHome() {
   const metrics = {
     platosPopulares: ["Lomo Saltado", "Ceviche", "Arroz con Pollo"],
   };
   return (
-    <div className="col-md-2">
+    <div className="md:col-span-2">
       <div className="dashboard-card h-100">
-        <div className="card-body">
+        <CardContent className="">
           <h5 className="text-dark mb-3 d-flex align-items-center">
             <Soup
               color={"var(--primary-red)"}
@@ -30,7 +32,7 @@ export function PedidosPopularesHome() {
               </li>
             ))}
           </ul>
-        </div>
+        </CardContent>
       </div>
     </div>
   );

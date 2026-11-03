@@ -1,6 +1,7 @@
 import { Controller } from "react-hook-form";
 import { capitalizeFirstLetter } from "../../../hooks/FirstLetterUp";
 import { validatePrecio } from "../../../hooks/InputHandlers";
+import { Button } from "../../ui/button";
 
 export function FormularioAdelantoSueldo({
   onSubmit,
@@ -82,20 +83,20 @@ export function FormularioAdelantoSueldo({
                   usuario.empleado.persona.apellidos.toLowerCase(),
                 )}
               </span>
-              <button
+              <Button
                 type="button"
                 className="btn-close btn-close-dark ms-2"
                 aria-label="Eliminar"
                 onClick={() => removeUsuario(usuario.id)}
                 style={{ fontSize: "10px" }}
-              ></button>
+               variant="default"></Button>
             </span>
           ))}
         </div>
       )}
 
-      <div className="row g-2">
-        <div className="col-md-6 col-sm-12">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-2">
+        <div className="md:col-span-6 col-sm-12">
           <div className=" mb-3">
             <label htmlFor="fecha" className="form-label">
               Fecha
@@ -119,7 +120,7 @@ export function FormularioAdelantoSueldo({
             )}
           </div>
         </div>
-        <div className="col-md-6 col-sm-12">
+        <div className="md:col-span-6 col-sm-12">
           <div className=" mb-3">
             <label htmlFor="monto" className="form-label">
               Monto
@@ -201,12 +202,12 @@ export function FormularioAdelantoSueldo({
         </div>
       </div>
       <div className="d-flex  border-top p-3 gap-2">
-        <button type="button" className="btn-cerrar" onClick={onClose}>
+        <Button type="button" className="btn-cerrar" onClick={onClose} variant="default">
           Cancelar
-        </button>
-        <button type="submit" className="btn-guardar">
+        </Button>
+        <Button type="submit" className="btn-guardar" variant="default">
           Registrar
-        </button>
+        </Button>
       </div>
     </form>
   );

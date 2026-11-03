@@ -1,7 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { getVentas } from "../../service/ObtenerVentasDetalle";
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
-import { Award } from "lucide-react"; // Cambié el icono al de tu diseño
+import { Award } from "lucide-react";
+import { Card } from "@/components/ui/card";
+ // Cambié el icono al de tu diseño
 
 export function PlatoMasVendido() {
   const {
@@ -77,85 +79,77 @@ export function PlatoMasVendido() {
 
   return (
     <CondicionCarga isLoading={isLoadingVentas} isError={isErrorVentas}>
-      <div className="card  rounded-4 p-4 h-100">
+      <Card className="h-full rounded-xl border border-border bg-card p-4 text-card-foreground">
         {/* CABECERA */}
-        <div className="d-flex justify-content-between align-items-center mb-2">
+        <div className="mb-2 flex items-center justify-between">
           <div>
-            <h5 className="fw-bold  d-flex align-items-center gap-2 mb-1">
-              <Award className="text-warning" size={24} />
+            <h2 className="mb-1 flex items-center gap-2 text-base font-semibold">
+              <Award className="text-amber-500" size={24} />
               Platos más Vendidos
-            </h5>
-            <p className="text-muted small mb-0">
+            </h2>
+            <p className="mb-0 text-sm text-muted-foreground">
               Platos más pedidos este mes.
             </p>
           </div>
         </div>
 
         {top3Platos.length === 0 ? (
-          <div className="text-muted text-center py-5">
+          <div className="py-12 text-center text-sm text-muted-foreground">
             No hay órdenes este mes.
           </div>
         ) : (
           <>
             {/* SECCIÓN TOP 3 (TARJETAS GRANDES) */}
-            <div className="row g-3 mt-3">
+            <div className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-3">
               {top3Platos.map(
                 ([plato, { cantidad, foto, precio, categoria }], index) => (
-                  <div className="col-12 col-md-4" key={index}>
-                    <div className="card h-100 border rounded-4 position-relative">
+                  <div className="min-w-0" key={index}>
+                    <Card className="relative flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card">
                       {/* Badge de Ranking Flotante */}
                       <span
-                        className={`position-absolute top-0 start-100 translate-middle badge rounded-circle p-2 fs-6 shadow-sm ${
+                        className={`absolute right-0 top-0 z-[1] flex size-8 translate-x-1/4 -translate-y-1/4 items-center justify-center rounded-full p-2 text-sm font-bold text-white shadow-sm ${
                           index === 0
-                            ? "bg-danger"
+                            ? "bg-rose-600"
                             : index === 1
-                              ? "bg-warning text-dark"
-                              : "bg-secondary"
+                              ? "bg-amber-500 text-slate-950"
+                              : "bg-slate-500"
                         }`}
-                        style={{
-                          zIndex: 1,
-                          width: "32px",
-                          height: "32px",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}
                       >
                         #{index + 1}
                       </span>
 
                       {/* Imagen y Categoría */}
-                      <div className="position-relative">
+                      <div className="relative">
                         <img
                           src={
                             foto || "https://placehold.co/300x200?text=Plato"
                           }
-                          className="card-img-top rounded-top-4"
+                          className="h-40 w-full object-cover"
                           alt={plato}
                           style={{ height: "160px", objectFit: "cover" }}
                         />
-                        <span className="position-absolute bottom-0 start-0 m-2 badge bg-dark bg-opacity-75 rounded-pill px-3">
+                        <span className="absolute bottom-2 left-2 rounded-full bg-slate-950/75 px-3 py-1 text-xs font-medium text-white">
                           {categoria}
                         </span>
                       </div>
 
-                      <div className="card-body d-flex flex-column">
-                        <h6 className="fw-bold text-dark text-truncate mb-1">
+                      <div className="flex flex-1 flex-col p-4">
+                        <h3 className="mb-1 truncate text-sm font-semibold text-foreground">
                           {plato}
-                        </h6>
-                        <div className="d-flex justify-content-between align-items-center mb-3">
-                          <small className="text-muted">
+                        </h3>
+                        <div className="mb-3 flex items-center justify-between gap-2">
+                          <span className="text-xs text-muted-foreground">
                             {cantidad} órdenes registradas
-                          </small>
+                          </span>
                           <span
-                            className="fw-bold"
+                            className="font-bold"
                             style={{ color: "var(--fw-emerald, #10b981)" }}
                           >
                             S/ {parseFloat(precio).toFixed(2)}
                           </span>
                         </div>
                       </div>
-                    </div>
+                    </Card>
                   </div>
                 ),
               )}
@@ -163,48 +157,41 @@ export function PlatoMasVendido() {
 
             {/* SECCIÓN MENÚ SECUNDARIO (El resto de platos) */}
             {menuSecundario.length > 0 && (
-              <div className="mt-4">
+              <div className="mt-6">
                 <h6
-                  className="text-muted fw-bold mb-3"
+                  className="mb-3 text-xs font-bold tracking-widest text-muted-foreground"
                   style={{ letterSpacing: "2px", fontSize: "0.8rem" }}
                 >
                   MENÚ SECUNDARIO
                 </h6>
-                <div className="d-flex gap-3 overflow-x-auto pb-2 custom-scrollbar">
+                <div className="flex gap-3 overflow-x-auto pb-2">
                   {menuSecundario.map(
                     ([plato, { cantidad, foto, precio }], index) => (
-                      <div
-                        className="card border rounded-4 flex-shrink-0"
-                        style={{ width: "260px" }}
+                      <Card
+                        className="w-64 shrink-0 rounded-xl border border-border bg-card"
                         key={index}
                       >
-                        <div className="card-body p-2 d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center gap-2 overflow-hidden">
+                        <div className="flex items-center justify-between gap-2 p-2">
+                          <div className="flex min-w-0 items-center gap-2 overflow-hidden">
                             <img
                               src={
                                 foto ||
                                 "https://placehold.co/100x100?text=Plato"
                               }
-                              className="rounded-3"
+                              className="size-12 shrink-0 rounded-lg object-cover"
                               alt={plato}
-                              style={{
-                                width: "50px",
-                                height: "50px",
-                                objectFit: "cover",
-                              }}
                             />
-                            <div className="d-flex flex-column text-truncate">
+                            <div className="flex min-w-0 flex-col">
                               <h6
-                                className="fw-bold mb-0 text-truncate"
+                                className="mb-0 truncate text-sm font-semibold"
                                 style={{
                                   fontSize: "0.9rem",
-                                  maxWidth: "100px",
                                 }}
                               >
                                 {plato}
                               </h6>
                               <small
-                                className="text-muted"
+                                className="text-xs text-muted-foreground"
                                 style={{ fontSize: "0.75rem" }}
                               >
                                 {cantidad} órdenes
@@ -212,10 +199,10 @@ export function PlatoMasVendido() {
                             </div>
                           </div>
 
-                          <div className="d-flex align-items-center gap-2">
-                            <div className="d-flex flex-column align-items-end">
+                          <div className="flex items-center gap-2">
+                            <div className="flex flex-col items-end">
                               <span
-                                className="fw-bold text-dark"
+                                className="font-semibold text-foreground"
                                 style={{ fontSize: "0.9rem" }}
                               >
                                 S/ {parseFloat(precio).toFixed(2)}
@@ -223,7 +210,7 @@ export function PlatoMasVendido() {
                             </div>
                           </div>
                         </div>
-                      </div>
+                      </Card>
                     ),
                   )}
                 </div>
@@ -231,7 +218,7 @@ export function PlatoMasVendido() {
             )}
           </>
         )}
-      </div>
+      </Card>
     </CondicionCarga>
   );
 }

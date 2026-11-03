@@ -2,6 +2,7 @@ import { useState } from "react";
 import { NotificarPedido } from "../../../service/accionesReutilizables/NotificarPedido";
 import ToastAlert from "../../componenteToast/ToastAlert";
 import { MegaphoneIcon } from "lucide-react";
+import { Button } from "../../ui/button";
 
 const NotificacionBtn = ({ pedido }) => {
   const [loading, setLoading] = useState(false);
@@ -34,15 +35,15 @@ const NotificacionBtn = ({ pedido }) => {
   };
 
   return (
-    <button
+    <Button
       type="button"
       className="btn-generico w-0 px-2 rounded-2"
       disabled={loading}
       title="Notificar al cliente"
       onClick={() => handleNotificar()}
-    >
+     variant="default">
       <MegaphoneIcon size={18} />
-    </button>
+    </Button>
   );
 };
 

@@ -12,6 +12,9 @@ import { FormEditCaja } from "./accionesCaja/FormEditCaja";
 import { useState } from "react";
 import { EllipsisVertical } from "lucide-react";
 import { BadgeComponent } from "../componentesReutilizables/BadgeComponent";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+
 
 export function CajasList({ search }) {
   const [modalEliminarCaja, setModalEliminarCaja] = useState(false);
@@ -109,26 +112,26 @@ export function CajasList({ search }) {
   };
 
   return (
-    <div className="row g-3 m-0 w-100">
+    <div className="grid grid-cols-1 md:grid-cols-12 gap-3 m-0 w-100">
       {Array.isArray(cajas) && cajas.length > 0 ? (
         cajas.map((item) => (
           <div className="col-lg-3 col-md-4 col-sm-12">
-            <div className="card  w-100" key={item.id}>
-              <div className="card-header">
+            <Card className="w-full" key={item.id}>
+              <CardHeader className="">
                 <p className="h4">{capitalizeFirstLetter(item.nombreCaja)}</p>
                 <div
                   className="dropdown"
                   style={{ position: "absolute", top: "10px", right: "10px" }}
                 >
-                  <button
+                  <Button
                     className="btn-generico btn-icon btn-sm"
                     type="button"
                     id={`dropdownMenuButton-${item.id}`}
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
-                  >
+                   variant="default">
                     <EllipsisVertical className="text-auto" size={18} />
-                  </button>
+                  </Button>
 
                   <ul
                     className="dropdown-menu dropdown-menu-end"
@@ -136,48 +139,48 @@ export function CajasList({ search }) {
                     style={{ zIndex: 1050 }}
                   >
                     <li>
-                      <button
+                      <Button
                         className="dropdown-item text-start"
                         type="button"
                         onClick={() => {
                           setModalEditarCaja(true);
                           setDataCaja(item);
                         }}
-                      >
+                       variant="default">
                         Editar
-                      </button>
+                      </Button>
                     </li>
                     {item.estado === 1 ? (
                       <li>
-                        <button
+                        <Button
                           className="dropdown-item text-start"
                           type="button"
                           onClick={() => {
                             setModalEliminarCaja(true);
                             setDataCaja(item);
                           }}
-                        >
+                         variant="default">
                           Desactivar
-                        </button>
+                        </Button>
                       </li>
                     ) : (
                       <li>
-                        <button
+                        <Button
                           className="dropdown-item text-start"
                           type="button"
                           onClick={() => {
                             setModalActivarCaja(true);
                             setDataCaja(item);
                           }}
-                        >
+                         variant="default">
                           Activar
-                        </button>
+                        </Button>
                       </li>
                     )}
                   </ul>
                 </div>
-              </div>
-              <div className="card-body d-flex">
+              </CardHeader>
+              <CardContent className="flex">
                 <BadgeComponent
                   label={
                     item.estado === 1
@@ -195,8 +198,8 @@ export function CajasList({ search }) {
                   }
                 />
                 <span className="ms-auto">{item.sedes?.nombre}</span>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           </div>
         ))
       ) : (

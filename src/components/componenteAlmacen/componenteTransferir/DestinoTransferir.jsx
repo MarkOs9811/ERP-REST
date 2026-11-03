@@ -6,6 +6,9 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import ToastAlert from "../../componenteToast/ToastAlert";
 import axiosInstance from "../../../api/AxiosInstance";
 import { clearProductoSelececcionado } from "../../../redux/productoTransferirSlice";
+import { Button } from "../../ui/button";
+import { CardContent } from "@/components/ui/card";
+
 
 export function DestinoTransferir() {
   const [archivo, setArchivo] = useState(null);
@@ -138,7 +141,7 @@ export function DestinoTransferir() {
   };
 
   return (
-    <div className="card-body">
+    <CardContent className="">
       <div className="d-flex justify-content-between align-items-center gap-2 p-2 mb-3 border rounded bg-light small fw-semibold text-secondary">
         <span>{productoSeleccionado.length} productos</span>
         <span>{totalUnidades} unidades</span>
@@ -185,15 +188,15 @@ export function DestinoTransferir() {
           </div>
         )}
       </div>
-      <button
+      <Button
         className="btn-guardar w-100 p-3"
         onClick={handleConfirmar}
         disabled={
           loading || !idDestino || !archivo || productoSeleccionado.length === 0
         }
-      >
+       variant="default">
         {loading ? "Transfiriendo..." : "Transferir"}
-      </button>
-    </div>
+      </Button>
+    </CardContent>
   );
 }

@@ -23,6 +23,9 @@ import ToastAlert from "../componenteToast/ToastAlert";
 import ModalRight from "../componentesReutilizables/ModalRight";
 import { FormEditarCampañas } from "./FormEditarCampañas";
 import { EstadisticasCampana } from "./EstadisticasCampana";
+import { Button } from "../ui/button";
+import { Card } from "@/components/ui/card";
+
 
 export function ListaCampañas() {
   const [campanaSeleccionada, setCampanaSeleccionada] = useState(null);
@@ -96,7 +99,7 @@ export function ListaCampañas() {
   ];
 
   return (
-    <div className="card border-0 p-3 bg-transparent">
+    <Card className="border-0 p-3 bg-transparent">
       <h3 className="mb-4 fw-bold text-dark">Campañas Activas</h3>
 
       <div className="campanas-grid">
@@ -109,9 +112,9 @@ export function ListaCampañas() {
             const isDraft = !campana.estado;
 
             return (
-              <div
+              <Card
                 key={campana.id || index}
-                className="card overflow-hidden rounded-5 bg-white"
+                className="overflow-hidden rounded-5 bg-background"
               >
                 {/* Cabecera con degradado */}
                 <div className={`campana-header ${gradientClass}`}>
@@ -123,37 +126,37 @@ export function ListaCampañas() {
 
                     {/* DROPDOWN DE ACCIONES */}
                     <div className="dropdown">
-                      <button
+                      <Button
                         className="btn btn-link text-white p-0 border-0"
                         data-bs-toggle="dropdown"
                         aria-expanded="false"
-                      >
+                       variant="default">
                         <MoreHorizontal size={20} />
-                      </button>
+                      </Button>
                       <ul className="dropdown-menu dropdown-menu-end shadow-sm border-0">
                         <li>
-                          <button
+                          <Button
                             className="dropdown-item d-flex align-items-center gap-2"
                             onClick={() => handleEdit(campana)}
-                          >
+                           variant="default">
                             <Edit size={16} className="text-secondary" />
                             Editar
-                          </button>
+                          </Button>
                         </li>
                         <li>
                           <hr className="dropdown-divider" />
                         </li>
                         <li>
-                          <button
+                          <Button
                             className="dropdown-item d-flex align-items-center gap-2 text-danger"
                             onClick={() => {
                               setShowDeleteModal(true);
                               setCampanaSeleccionada(campana);
                             }}
-                          >
+                           variant="default">
                             <Trash2 size={16} />
                             Eliminar
-                          </button>
+                          </Button>
                         </li>
                       </ul>
                     </div>
@@ -270,14 +273,14 @@ export function ListaCampañas() {
                   })()}
 
                   {/* Botón Acción */}
-                  <button
+                  <Button
                     className="btn btn-outline-dark w-100 fw-bold d-flex align-items-center justify-content-center gap-2 campana-btn-action"
                     onClick={() => handleVerEstadisticas(campana)}
-                  >
+                   variant="default">
                     Ver Estadísticas <ChevronRight size={16} />
-                  </button>
+                  </Button>
                 </div>
-              </div>
+              </Card>
             );
           })
         )}
@@ -331,6 +334,6 @@ export function ListaCampañas() {
       >
         <EstadisticasCampana campana={campanaStats} />
       </ModalRight>
-    </div>
+    </Card>
   );
 }

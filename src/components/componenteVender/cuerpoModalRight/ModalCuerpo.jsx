@@ -1,9 +1,11 @@
 import { capitalizeFirstLetter } from "../../../hooks/FirstLetterUp";
+import { CardContent } from "@/components/ui/card";
+
 
 export function ModalCuerpo({ selectedPedido }) {
   console.log("Pedido seleccionado en ModalCuerpo:", selectedPedido);
   return (
-    <div className="card-body p-0">
+    <CardContent className="p-0">
       <ul className=" m-3">
         {selectedPedido?.detalles_pedido?.length > 0 ? (
           <>
@@ -64,6 +66,6 @@ export function ModalCuerpo({ selectedPedido }) {
           </li>
         )}
       </ul>
-    </div>
+    </CardContent>
   );
 }

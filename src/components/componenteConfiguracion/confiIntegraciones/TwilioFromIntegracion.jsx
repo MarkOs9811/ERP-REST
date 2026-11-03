@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import ToastAlert from "../../componenteToast/ToastAlert";
 import axiosInstance from "../../../api/AxiosInstance";
 import { CheckCircle, XCircle } from "lucide-react";
+import { Button } from "../../ui/button";
 
 export function TwilioFromIntegracion({ dataIntegracion }) {
   const twilioConfig =
@@ -157,24 +158,24 @@ export function TwilioFromIntegracion({ dataIntegracion }) {
         {/* Botones */}
         <div className="d-flex justify-content-end gap-2">
           {!isEditing ? (
-            <button
+            <Button
               type="button" // 👈 evita submit
               className="btn-editar"
               onClick={() => setIsEditing(true)}
-            >
+             variant="secondary">
               Editar
-            </button>
+            </Button>
           ) : (
             <>
-              <button
+              <Button
                 type="button"
                 className="btn-cancelar"
                 onClick={() => setIsEditing(false)}
                 disabled={loading}
-              >
+               variant="default">
                 Cancelar
-              </button>
-              <button type="submit" className="btn-guardar" disabled={loading}>
+              </Button>
+              <Button type="submit" className="btn-guardar" disabled={loading} variant="default">
                 {loading ? (
                   <>
                     <span
@@ -187,7 +188,7 @@ export function TwilioFromIntegracion({ dataIntegracion }) {
                 ) : (
                   "Guardar"
                 )}
-              </button>
+              </Button>
             </>
           )}
         </div>

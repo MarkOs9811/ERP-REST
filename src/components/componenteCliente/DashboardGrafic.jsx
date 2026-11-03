@@ -13,6 +13,9 @@ import { TablasGenerales } from "../componentesReutilizables/TablasGenerales";
 import "../../css/estilosClientes/DashboardCliente.css";
 import { useNavigate } from "react-router-dom";
 import { ListaFeedBacks } from "./ListaFeedBacks";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+
 
 // 1. Utilidades
 const formatSoles = (monto) => {
@@ -53,7 +56,7 @@ const UserAvatar = ({ foto, nombre }) => {
 const KpiCard = ({ icon, trendType, trendValue, title, value, colorClass }) => {
   const isUp = trendType === "up";
   return (
-    <div className="card  p-4 h-100 border rounded-4">
+    <Card className="p-4 h-full border rounded-2xl">
       <div className="d-flex justify-content-between align-items-start mb-4">
         <div
           className={`bg-fw-${colorClass}-soft text-fw-${colorClass} rounded-fw-md d-flex align-items-center justify-content-center`}
@@ -76,7 +79,7 @@ const KpiCard = ({ icon, trendType, trendValue, title, value, colorClass }) => {
         <p className="text-fw-muted small mb-1 fw-semibold">{title}</p>
         <h3 className="mb-0 fw-bold text-fw-main">{value}</h3>
       </div>
-    </div>
+    </Card>
   );
 };
 
@@ -155,9 +158,9 @@ export function DashboardGrafic() {
   return (
     <div className="p-0">
       {/* SECCIÓN 1: KPIs Grid */}
-      <div className="row g-3 mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-4">
         <CondicionCarga isLoading={isLoading} isError={isError} mode="cards">
-          <div className="col-md-3">
+          <div className="md:col-span-3">
             <KpiCard
               icon={<span className="fw-bold h5 mb-0 text-center">S/</span>} // <- MODIFICACIÓN AQUÍ
               colorClass="emerald"
@@ -168,7 +171,7 @@ export function DashboardGrafic() {
             />
           </div>
 
-          <div className="col-md-3">
+          <div className="md:col-span-3">
             <KpiCard
               icon={<Users size={24} />}
               colorClass="saffron"
@@ -179,7 +182,7 @@ export function DashboardGrafic() {
             />
           </div>
 
-          <div className="col-md-3">
+          <div className="md:col-span-3">
             <KpiCard
               icon={<ShoppingCart size={24} />}
               colorClass="strawberry"
@@ -190,7 +193,7 @@ export function DashboardGrafic() {
             />
           </div>
 
-          <div className="col-md-3">
+          <div className="md:col-span-3">
             <KpiCard
               icon={<TrendingUp size={24} />}
               colorClass="emerald"
@@ -208,9 +211,9 @@ export function DashboardGrafic() {
           isError={isError}
           mode="single-card"
         >
-          <div className="col-md-8">
-            <div className="card">
-              <div className="card-header align-baseline d-flex justify-content-center">
+          <div className="md:col-span-8">
+            <Card className="">
+              <CardHeader className="items-baseline flex justify-center">
                 <h6 className="fw-bold text-fw-main">
                   {" "}
                   <UsersRoundIcon className="me-2" />
@@ -218,30 +221,30 @@ export function DashboardGrafic() {
                 </h6>
 
                 <div className="ms-auto">
-                  <button
+                  <Button
                     className="btn btn-outline-dark"
                     onClick={() => navegacion("/clientes/lista")}
-                  >
+                   variant="default">
                     Ver todos
-                  </button>
+                  </Button>
                 </div>
-              </div>
-              <div className="card-body p-0">
+              </CardHeader>
+              <CardContent className="p-0">
                 <TablasGenerales columnas={columnas} datos={top_clientes} />
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           </div>
-          <div className="col-md-4">
-            <div className="card rounded-3">
-              <div className="card-header justify-content-left d-flex align-baseline">
+          <div className="md:col-span-4">
+            <Card className="rounded-xl">
+              <CardHeader className="justify-content-left flex items-baseline">
                 <h6 className="fw-bold  text-fw-main">
                   <MessageSquareHeartIcon /> Comentarios Recientes
                 </h6>
-              </div>
-              <div className="card-body p-0 overflow-hidden py-2">
+              </CardHeader>
+              <CardContent className="p-0 overflow-hidden py-2">
                 <ListaFeedBacks />
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           </div>
         </CondicionCarga>
       </div>

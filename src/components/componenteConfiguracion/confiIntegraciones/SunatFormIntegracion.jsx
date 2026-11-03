@@ -3,6 +3,9 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axiosInstance from "../../../api/AxiosInstance";
 import ToastAlert from "../../componenteToast/ToastAlert";
+import { Button } from "../../ui/button";
+import { Card } from "@/components/ui/card";
+
 
 export function SunatFormIntegracion({ data }) {
   const defaultValues = data
@@ -77,8 +80,8 @@ export function SunatFormIntegracion({ data }) {
     data?.valor4?.trim() !== "";
 
   return (
-    <div
-      className="card border-0  p-4 flex-grow-1"
+    <Card
+      className="border-0 p-4 flex-grow-1"
       style={{ borderRadius: 18 }}
     >
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -210,15 +213,15 @@ export function SunatFormIntegracion({ data }) {
 
         {/* Botón */}
         <div className="d-flex justify-content-end">
-          <button
+          <Button
             type="submit"
             className="btn-guardar"
             disabled={!activo || loading}
-          >
+           variant="default">
             {loading ? "Guardando..." : "Guardar Cambios"}
-          </button>
+          </Button>
         </div>
       </form>
-    </div>
+    </Card>
   );
 }

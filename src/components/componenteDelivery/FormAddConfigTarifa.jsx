@@ -2,6 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { Clock, HeartHandshake, CalendarDays } from "lucide-react";
 import { PostData } from "../../service/CRUD/PostData";
+import { Button } from "../ui/button";
 
 // Lista de días para renderizar los checkboxes
 const DIAS_SEMANA = [
@@ -109,7 +110,7 @@ export function FormAddConfigTarifa({ onClose, sedeId }) {
       </div>
 
       {/* Horas */}
-      <div className="row g-3 mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-4">
         <div className="col-6">
           <label className="form-label fw-medium text-dark small d-flex align-items-center gap-1">
             <Clock size={16} className="text-muted" />
@@ -149,7 +150,7 @@ export function FormAddConfigTarifa({ onClose, sedeId }) {
       <h6 className="fw-bold mb-3 mt-2 text-dark border-bottom pb-2">
         Tarifas de Delivery
       </h6>
-      <div className="row g-3 mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-4">
         <div className="col-6">
           <label className="form-label fw-medium text-dark small d-flex align-items-center gap-1">
             <span className="text-muted fw-bold" style={{ fontSize: "0.9rem" }}>
@@ -197,7 +198,7 @@ export function FormAddConfigTarifa({ onClose, sedeId }) {
       <h6 className="fw-bold mb-3 text-dark border-bottom pb-2">
         Tiempo de Entrega Estimado
       </h6>
-      <div className="row g-3 mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-4">
         <div className="col-6">
           <label className="form-label fw-medium text-dark small d-flex align-items-center gap-1">
             <Clock size={16} className="text-muted" />
@@ -261,21 +262,21 @@ export function FormAddConfigTarifa({ onClose, sedeId }) {
 
       {/* Controles del Footer */}
       <div className="mt-auto d-flex justify-content-end gap-2 border-top pt-3 pb-1">
-        <button
+        <Button
           type="button"
           className="btn-cerrar rounded-pill px-4"
           onClick={onClose}
           disabled={isSubmitting}
-        >
+         variant="default">
           Cancelar
-        </button>
-        <button
+        </Button>
+        <Button
           type="submit"
           className="btn-guardar px-4"
           disabled={isSubmitting}
-        >
+         variant="default">
           {isSubmitting ? "Guardando..." : "Guardar Configuración"}
-        </button>
+        </Button>
       </div>
     </form>
   );

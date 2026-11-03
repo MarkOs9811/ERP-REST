@@ -15,6 +15,9 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { GetConfi } from "../service/accionesConfiguracion/GetConfi";
 import { useNavigate } from "react-router-dom";
 import { Plus } from "lucide-react";
+import { Button } from "../components/ui/button";
+import { Card, CardHeader } from "@/components/ui/card";
+
 
 export function AbrirCaja() {
   const dispatch = useDispatch();
@@ -115,23 +118,23 @@ export function AbrirCaja() {
         className="d-flex justify-content-center align-items-center"
         style={{ minHeight: "80vh" }}
       >
-        <div
-          className="card abrir-caja-container shadow-sm p-4"
+        <Card
+          className="abrir-caja-container shadow-sm p-4"
           style={{ maxWidth: 480, width: "100%" }}
         >
-          <div className="card-header bg-transparent border-0 d-flex justify-content-between align-items-center px-0 pt-0">
+          <CardHeader className="bg-transparent border-0 flex justify-between items-center px-0 pt-0">
             <h4 className="mb-0">
               <FontAwesomeIcon icon={faBoxOpen} className="me-2" />
               Abrir Caja
             </h4>
-            <button
+            <Button
               type="button"
               className="btn-principal mb-0"
               onClick={() => navigate("/ventas/cajas")}
-            >
+             variant="default">
               <Plus size={16} /> Agregar Caja
-            </button>
-          </div>
+            </Button>
+          </CardHeader>
 
           <div className="alert alert-secondary mt-3">
             <FontAwesomeIcon icon={faTriangleExclamation} className="mx-2" />
@@ -209,13 +212,13 @@ export function AbrirCaja() {
               )}
             </div>
 
-            <button
+            <Button
               type="submit"
               className="btn-guardar btn-block w-100"
               disabled={
                 isSubmitting || isLoadingCajas || cajasCerradas.length === 0
               }
-            >
+             variant="default">
               {isSubmitting ? (
                 <Cargando />
               ) : (
@@ -223,9 +226,9 @@ export function AbrirCaja() {
                   <FontAwesomeIcon icon={faCashRegister} /> Abrir Caja
                 </>
               )}
-            </button>
+            </Button>
           </form>
-        </div>
+        </Card>
       </div>
     </div>
   );

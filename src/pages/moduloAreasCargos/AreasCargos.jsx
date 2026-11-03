@@ -2,39 +2,42 @@ import { useState } from "react";
 import { Areas } from "../../components/componentesAreasCargos/Areas";
 import { Cargos } from "../../components/componentesAreasCargos/Cargos";
 import { Sedes } from "../../components/componentesAreasCargos/componetesSedes/Sedes";
+import { Button } from "../../components/ui/button";
+import { Card } from "@/components/ui/card";
+
 
 export function AreasCargo() {
   const [activeTab, setActiveTab] = useState("areas");
 
   return (
-    <div className="card p-4">
+    <Card className="p-4">
       <ul className="nav nav-pills mb-4" id="pills-tab" role="tablist">
         <li className="nav-item" role="presentation">
-          <button
+          <Button
             className={`nav-link ${activeTab === "areas" ? "active fw-bold" : "text-muted"}`}
             onClick={() => setActiveTab("areas")}
             type="button"
-          >
+           variant="default">
             Áreas
-          </button>
+          </Button>
         </li>
         <li className="nav-item" role="presentation">
-          <button
+          <Button
             className={`nav-link ${activeTab === "cargos" ? "active fw-bold" : "text-muted"}`}
             onClick={() => setActiveTab("cargos")}
             type="button"
-          >
+           variant="default">
             Cargos
-          </button>
+          </Button>
         </li>
         <li className="nav-item" role="presentation">
-          <button
+          <Button
             className={`nav-link ${activeTab === "sedes" ? "active fw-bold" : "text-muted"}`}
             onClick={() => setActiveTab("sedes")}
             type="button"
-          >
+           variant="default">
             Sedes
-          </button>
+          </Button>
         </li>
       </ul>
 
@@ -55,6 +58,6 @@ export function AreasCargo() {
           </div>
         )}
       </div>
-    </div>
+    </Card>
   );
 }

@@ -15,6 +15,7 @@ import ModalRight from "../componentesReutilizables/ModalRight";
 import ModalGeneral from "../componenteToast/ModalGeneral";
 import ToastAlert from "../componenteToast/ToastAlert";
 import "../../css/estilosAlmacen/EstilosSolicitudesModal.css";
+import { Button } from "../ui/button";
 
 export function SolicitudesLista({ search, updateList }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -135,13 +136,13 @@ export function SolicitudesLista({ search, updateList }) {
       name: "Acciones",
       grow: 0,
       cell: (row) => (
-        <button
+        <Button
           className="btn-informativo"
           title="Ver Solicitud"
           onClick={() => handleVerSolicitud(row)}
-        >
+         variant="default">
           <FontAwesomeIcon icon={faEye} />
-        </button>
+        </Button>
       ),
     },
     {

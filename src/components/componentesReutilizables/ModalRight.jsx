@@ -4,6 +4,7 @@ import "../../css/EstiloModalRight.css";
 import { capitalizeFirstLetter } from "../../hooks/FirstLetterUp";
 import { X } from "lucide-react";
 import { BtnCerrar } from "./BotonesAccion";
+import { Button } from "../ui/button";
 
 const ModalRight = ({
   isOpen,
@@ -110,21 +111,21 @@ const ModalRight = ({
         {/* Footer fijo (opcional) */}
         {!hideFooter && (
           <div className="modal-right-footer flex-shrink-0">
-            <button
+            <Button
               type="button"
               className={`btn-cerrar ms-2 ${cancelButtonClassName}`.trim()}
               onClick={onCancel || handleClose}
               disabled={isLoading} //  Bloqueamos botón Cancelar
-            >
+             variant="default">
               {cancelText}
-            </button>
+            </Button>
             {showSubmit && (
-              <button
+              <Button
                 type="button"
                 className={`btn-guardar ms-2 ${submitButtonClassName}`.trim()}
                 onClick={onSubmit}
                 disabled={isLoading || isSubmitDisabled} //  Bloqueamos botón principal
-              >
+               variant="default">
                 {isLoading ? (
                   <>
                     <span
@@ -140,7 +141,7 @@ const ModalRight = ({
                     {submitText}
                   </>
                 )}
-              </button>
+              </Button>
             )}
           </div>
         )}

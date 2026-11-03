@@ -1,4 +1,7 @@
 import { useForm } from "react-hook-form";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+
 
 // Función auxiliar para obtener la fecha de hoy en formato YYYY-MM-DD (hora local)
 const getTodayDate = () => {
@@ -27,13 +30,13 @@ export function FormularioReporteClasico({
 
   return (
     <div className="col-lg-4 col-sm-12">
-      <div className="card border shadow-sm h-100 p-0 py-2">
-        <div className="card-header py-2 px-3 border-bottom ">
+      <Card className="border shadow-sm h-full p-0 py-2">
+        <CardHeader className="py-2 px-3 border-b">
           <p className="h6 mb-0">{titulo}</p>
-        </div>
+        </CardHeader>
 
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="card-body py-3 px-3">
+          <CardContent className="py-3 px-3">
             {/* Input oculto */}
             <input
               type="hidden"
@@ -42,7 +45,7 @@ export function FormularioReporteClasico({
               })}
             />
 
-            <div className="row g-2">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-2">
               <div className="col-6">
                 <label htmlFor="fechaInicio" className="form-label small mb-1">
                   Fecha Inicio
@@ -96,14 +99,14 @@ export function FormularioReporteClasico({
                 )}
               </div>
             </div>
-          </div>
+          </CardContent>
 
-          <div className="card-footer bg-transparent border-top d-flex justify-content-end">
-            <button
+          <CardFooter className="bg-transparent border-t flex justify-end">
+            <Button
               type="submit"
               className="btn-generico px-3"
               disabled={isLoading}
-            >
+             variant="default">
               {isLoading ? (
                 <>
                   <span
@@ -116,10 +119,10 @@ export function FormularioReporteClasico({
               ) : (
                 "Generar Reporte"
               )}
-            </button>
-          </div>
+            </Button>
+          </CardFooter>
         </form>
-      </div>
+      </Card>
     </div>
   );
 }

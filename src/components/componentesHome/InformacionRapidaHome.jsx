@@ -6,6 +6,8 @@ import { getPedidosPendientes } from "../../service/GetPedidosPendientes";
 import { CircleAlert, Clock9, Store, Table } from "lucide-react";
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
 import { formatMoneda } from "../../utils/currency";
+import { Card } from "@/components/ui/card";
+
 
 export function InformacionRapidaHome() {
   const {
@@ -69,115 +71,101 @@ export function InformacionRapidaHome() {
     : 0;
 
   const pedidosPendientes = Array.isArray(pedidosWeb) ? pedidosWeb.length : 0;
+  const porcentajeMesas =
+    totalMesas > 0 ? Math.min((mesasOcupadas / totalMesas) * 100, 100) : 0;
+
+  const metricas = [
+    {
+      title: "Ventas hoy",
+      value: formatMoneda(ventasHoy),
+      description: "Ingresos registrados",
+      icon: Store,
+      iconClass: "bg-emerald-500/10 text-emerald-600",
+    },
+    {
+      title: "Mesas ocupadas",
+      value: `${mesasOcupadas}/${totalMesas}`,
+      description: "Ocupación del salón",
+      icon: Table,
+      iconClass: "bg-blue-500/10 text-blue-600",
+      progress: porcentajeMesas,
+    },
+    {
+      title: "Pedidos pendientes",
+      value: pedidosPendientes,
+      description: "En estado pendiente",
+      icon: Clock9,
+      iconClass: "bg-amber-500/10 text-amber-600",
+    },
+    {
+      title: "Alertas de almacén",
+      value: productosBajoStock,
+      description: "Productos con bajo stock",
+      icon: CircleAlert,
+      iconClass: "bg-rose-500/10 text-rose-600",
+    },
+  ];
 
   return (
-    <div className="row g-3">
-      <div className="col-12 col-sm-6 col-xl-3">
-        <CondicionCarga
-          isLoading={isLoadingVentas}
-          isError={isErrorVentas}
-          mode="single-card"
-        >
-          <div className="card h-100 card-difuminada difuminado-ventas overflow-hidden">
-            <div className="card-body d-flex align-items-center">
-              <div>
-                <p className="mb-1 metric-card-title">Ventas Hoy</p>
-                <p className="mb-0 text-dark h2 fw-bold metric-card-value">
-                  {formatMoneda(ventasHoy)}
-                </p>
-              </div>
-              <div className="ms-auto metric-icon-badge metric-icon-badge--ventas">
-                <Store size={32} className="icono-institucional-ventas" />
-              </div>
-            </div>
-          </div>
-        </CondicionCarga>
-      </div>
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 2xl:grid-cols-4">
+      {metricas.map((metrica, index) => {
+        const loading = [
+          isLoadingVentas,
+          isLoadingMesas,
+          isLoadingPedidosWeb,
+          isLoadingAlmacen,
+        ][index];
+        const error = [
+          isErrorVentas,
+          isErrorMesas,
+          isErrorPedidos,
+          isErrorAlmacen,
+        ][index];
+        const Icon = metrica.icon;
 
-      <div className="col-12 col-sm-6 col-xl-3">
-        <CondicionCarga
-          isLoading={isLoadingMesas}
-          isError={isErrorMesas}
-          mode="single-card"
-        >
-          <div className="card h-100 card-difuminada difuminado-mesas overflow-hidden">
-            <div className="card-body d-flex align-items-center">
-              <div className="w-100 me-2">
-                <p className="mb-1 metric-card-title">Mesas Ocupadas</p>
-                <p className="mb-0 text-dark h2 fw-bold metric-card-value">
-                  {mesasOcupadas}/{totalMesas}
+        return (
+          <CondicionCarga
+            key={metrica.title}
+            isLoading={loading}
+            isError={error}
+            mode="single-card"
+          >
+            <Card asChild><article className="flex h-full min-h-36 items-center justify-between gap-3 overflow-hidden rounded-xl border border-border bg-card p-4 text-card-foreground shadow-sm">
+              <div className="min-w-0">
+                <p className="mb-2 text-sm font-medium text-muted-foreground">
+                  {metrica.title}
                 </p>
-                <div className="progress mt-2" style={{ height: "5px" }}>
+                <p className="mb-1 break-words text-2xl font-bold tracking-tight text-foreground">
+                  {metrica.value}
+                </p>
+                <p className="mb-0 text-xs text-muted-foreground">
+                  {metrica.description}
+                </p>
+                {metrica.progress !== undefined && (
                   <div
-                    className="progress-bar barra-institucional-mesas"
-                    style={{
-                      width: `${
-                        totalMesas > 0 ? (mesasOcupadas / totalMesas) * 100 : 0
-                      }%`,
-                    }}
-                  ></div>
-                </div>
+                    className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-muted"
+                    role="progressbar"
+                    aria-label="Ocupación de mesas"
+                    aria-valuenow={Math.round(metrica.progress)}
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                  >
+                    <div
+                      className="h-full rounded-full bg-blue-500 transition-[width]"
+                      style={{ width: `${metrica.progress}%` }}
+                    />
+                  </div>
+                )}
               </div>
-              <div className="ms-auto metric-icon-badge metric-icon-badge--mesas">
-                <Table size={32} className="icono-institucional-mesas" />
-              </div>
-            </div>
-          </div>
-        </CondicionCarga>
-      </div>
-
-      <div className="col-12 col-sm-6 col-xl-3">
-        <CondicionCarga
-          isLoading={isLoadingPedidosWeb}
-          isError={isErrorPedidos}
-          mode="single-card"
-        >
-          <div className="card h-100 card-difuminada difuminado-pedidos overflow-hidden">
-            <div className="card-body d-flex align-items-center">
-              <div>
-                <p className="mb-1 metric-card-title">Pedidos Pendientes</p>
-                <p className="mb-0 text-dark h2 fw-bold metric-card-value">
-                  {pedidosPendientes}
-                </p>
-                <p className="mb-0 small text-muted metric-card-copy">
-                  En estado pendiente
-                </p>
-              </div>
-              <div className="ms-auto metric-icon-badge metric-icon-badge--pedidos">
-                <Clock9 size={32} className="icono-institucional-pedidos" />
-              </div>
-            </div>
-          </div>
-        </CondicionCarga>
-      </div>
-
-      <div className="col-12 col-sm-6 col-xl-3">
-        <CondicionCarga
-          isLoading={isLoadingAlmacen}
-          isError={isErrorAlmacen}
-          mode="single-card"
-        >
-          <div className="card h-100 card-difuminada difuminado-almacen overflow-hidden">
-            <div className="card-body d-flex align-items-center">
-              <div>
-                <p className="mb-1 metric-card-title">Alertas Almacén</p>
-                <p className="mb-0 text-dark h2 fw-bold metric-card-value">
-                  {productosBajoStock}
-                </p>
-                <p className="mb-0 small text-muted metric-card-copy">
-                  Productos en bajo stock
-                </p>
-              </div>
-              <div className="ms-auto metric-icon-badge metric-icon-badge--almacen">
-                <CircleAlert
-                  size={32}
-                  className="icono-institucional-almacen"
-                />
-              </div>
-            </div>
-          </div>
-        </CondicionCarga>
-      </div>
+              <span
+                className={`flex size-12 shrink-0 items-center justify-center rounded-xl ${metrica.iconClass}`}
+              >
+                <Icon size={24} aria-hidden="true" />
+              </span>
+            </article></Card>
+          </CondicionCarga>
+        );
+      })}
     </div>
   );
 }

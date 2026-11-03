@@ -6,6 +6,7 @@ import { Save, SaveAll } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { GetProveedores } from "../../service/GetProveedores";
 import "../../css/AlmacenRegister.css";
+import { Button } from "../ui/button";
 
 export function AlmacenRegister() {
   const {
@@ -105,8 +106,8 @@ export function AlmacenRegister() {
   return (
     <form id="productForm" onSubmit={handleSubmit(onSubmit)}>
       <div className="almacen-card">
-        <div className="row g-3">
-          <div className="col-md-6">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+          <div className="md:col-span-6">
             <div className="almacen-field">
               <label htmlFor="nombreProducto" className="form-label">
                 Nombre Producto/Activo
@@ -128,7 +129,7 @@ export function AlmacenRegister() {
             </div>
           </div>
 
-          <div className="col-md-6">
+          <div className="md:col-span-6">
             <div className="almacen-field">
               <label htmlFor="cantidad" className="form-label">
                 Cantidad
@@ -155,8 +156,8 @@ export function AlmacenRegister() {
           </div>
         </div>
 
-        <div className="row g-3 my-2">
-          <div className="col-md-4">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-3 my-2">
+          <div className="md:col-span-4">
             <div className="almacen-field">
               <label htmlFor="precioUnit" className="form-label">
                 Precio Unitario S/.
@@ -182,7 +183,7 @@ export function AlmacenRegister() {
             </div>
           </div>
 
-          <div className="col-md-4">
+          <div className="md:col-span-4">
             <div className="almacen-field">
               <label htmlFor="descripcion" className="form-label">
                 Descripción
@@ -204,7 +205,7 @@ export function AlmacenRegister() {
             </div>
           </div>
 
-          <div className="col-md-4">
+          <div className="md:col-span-4">
             <div className="almacen-field">
               <label htmlFor="marca" className="form-label">
                 Marca
@@ -225,8 +226,8 @@ export function AlmacenRegister() {
           </div>
         </div>
 
-        <div className="row g-3 my-2">
-          <div className="col-md-4">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-3 my-2">
+          <div className="md:col-span-4">
             <div className="almacen-field">
               <label htmlFor="categoria" className="form-label">
                 Categoría
@@ -253,7 +254,7 @@ export function AlmacenRegister() {
             </div>
           </div>
 
-          <div className="col-md-4 ">
+          <div className="md:col-span-4 ">
             <div className="almacen-field">
               <label htmlFor="unidad" className="form-label">
                 Unidad de Medida
@@ -278,7 +279,7 @@ export function AlmacenRegister() {
             </div>
           </div>
 
-          <div className="col-md-4">
+          <div className="md:col-span-4">
             <div className="almacen-field">
               <label htmlFor="proveedor" className="form-label">
                 Proveedor
@@ -357,13 +358,13 @@ export function AlmacenRegister() {
         </div>
 
         <div className="almacen-footer">
-          <button
+          <Button
             type="submit"
             className="btn-guardar d-inline-flex align-items-center gap-2"
-          >
+           variant="default">
             <SaveAll />
             Guardar Registro
-          </button>
+          </Button>
         </div>
       </div>
     </form>

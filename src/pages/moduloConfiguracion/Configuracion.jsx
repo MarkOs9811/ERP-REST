@@ -9,6 +9,8 @@ import {
 } from "lucide-react";
 
 import { Outlet, Link, useLocation } from "react-router-dom";
+import { Card } from "@/components/ui/card";
+
 
 export function Configuracion() {
   const location = useLocation();
@@ -124,11 +126,11 @@ export function Configuracion() {
 
   return (
     <div>
-      <div className="row g-3">
-        <div className="col-md-12">
-          <div className="row g-2">
-            <div className="col-md-12">
-              <div className="card border-0 h-100">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+        <div className="md:col-span-12">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-2">
+            <div className="md:col-span-12">
+              <Card className="border-0 h-full">
                 <ul className="list-group bg-muted list-group-horizontal text-center border-0 w-100 overflow-auto">
                   {opciones.map((op) => (
                     <Link
@@ -143,9 +145,9 @@ export function Configuracion() {
                     </Link>
                   ))}
                 </ul>
-              </div>
+              </Card>
             </div>
-            <div className="col-md-12">
+            <div className="md:col-span-12">
               <Outlet />
             </div>
           </div>

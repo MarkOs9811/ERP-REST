@@ -18,6 +18,9 @@ import {
   BtnEditar,
   BtnEliminar,
 } from "../componentesReutilizables/BotonesAccion";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+
 
 export function CategoriaList() {
   const [categoria, setCategoria] = useState([]);
@@ -178,19 +181,19 @@ export function CategoriaList() {
   };
 
   return (
-    <div className="card p-0  h-100">
-      <div className="card-header border-0 d-flex justify-content-between align-items-center mb-2">
+    <Card className="p-0 h-full">
+      <CardHeader className="border-0 flex justify-between items-center mb-2">
         <h4 className="mb-0">Categorías</h4>
         <div className="d-flex">
-          <button
+          <Button
             className="btn btn-dark btn-sm rounded-pill px-2 "
             onClick={() => setModalAddCategoria(true)}
-          >
+           variant="default">
             <FontAwesomeIcon icon={faPlus} />
             Nuevo
-          </button>
+          </Button>
         </div>
-      </div>
+      </CardHeader>
 
       {/* Buscador */}
       <div className="mb-3 mx-4">
@@ -212,7 +215,7 @@ export function CategoriaList() {
       </div>
 
       {/* Lista de categorías */}
-      <div className="card-body p-3">
+      <CardContent className="p-3">
         {loadingCategorias ? (
           <div className="text-center p-4">
             <Cargando />
@@ -257,7 +260,7 @@ export function CategoriaList() {
                     title="Eliminar Categoría"
                   />
                 ) : (
-                  <button
+                  <Button
                     data-bs-toggle="tooltip"
                     data-bs-placement="top"
                     title="Activar Categoría"
@@ -265,15 +268,15 @@ export function CategoriaList() {
                     onClick={() =>
                       handleActivar(categoria.id, categoria.nombre)
                     }
-                  >
+                   variant="default">
                     <Check size={18} />
-                  </button>
+                  </Button>
                 )}
               </div>
             </div>
           ))
         )}
-      </div>
+      </CardContent>
 
       {/* Modal para agregar nueva categoría */}
       <ModalRight
@@ -283,8 +286,8 @@ export function CategoriaList() {
         title={"Nueva Categoría"}
       >
         {({ handleClose }) => (
-          <form
-            className="card gap-3 border-0 h-100 bg-transparent p-3"
+          <Card asChild><form
+            className="gap-3 border-0 h-100 bg-transparent p-3"
             onSubmit={handleSubmit(handleRegisterCategoria)}
           >
             <div className="modal-body mb-3">
@@ -306,21 +309,21 @@ export function CategoriaList() {
               )}
             </div>
             <div className="modal-footer gap-2">
-              <button
+              <Button
                 type="button"
                 className="btn-cerrar-modal"
                 onClick={() => {
                   reset();
                   handleClose();
                 }}
-              >
+               variant="default">
                 Cancelar
-              </button>
-              <button type="submit" className="btn-guardar">
+              </Button>
+              <Button type="submit" className="btn-guardar" variant="default">
                 Guardar
-              </button>
+              </Button>
             </div>
-          </form>
+          </form></Card>
         )}
       </ModalRight>
 
@@ -357,6 +360,6 @@ export function CategoriaList() {
         handleActivar={handleActivarCategoria}
         handleCloseModal={handleCloseModalActivar}
       />
-    </div>
+    </Card>
   );
 }

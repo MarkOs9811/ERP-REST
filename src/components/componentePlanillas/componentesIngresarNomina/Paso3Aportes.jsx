@@ -1,5 +1,7 @@
 import React from "react";
 import { CondicionCarga } from "../../componentesReutilizables/CondicionCarga";
+import { Card } from "@/components/ui/card";
+
 
 export function Paso3Aportes({
   register,
@@ -11,7 +13,7 @@ export function Paso3Aportes({
   errorBonificaciones,
 }) {
   return (
-    <div className="card p-4 border">
+    <Card className="p-4 border">
       <h5 className="mb-4" style={{ color: "#15669c" }}>
         Paso 3: Aportes, Deducciones y Bonificaciones
       </h5>
@@ -20,7 +22,7 @@ export function Paso3Aportes({
           isLoading={loadingDeducciones}
           isError={errorDeducciones}
         >
-          <div className="col-md-6 mb-4">
+          <div className="md:col-span-6 mb-4">
             <label className="fw-bold mb-3 border-bottom pb-2 d-block">
               Deducciones
             </label>
@@ -68,7 +70,7 @@ export function Paso3Aportes({
           isLoading={loadingDBonificaciones}
           isError={errorBonificaciones}
         >
-          <div className="col-md-6 mb-4">
+          <div className="md:col-span-6 mb-4">
             <label className="fw-bold mb-3 border-bottom pb-2 d-block">
               Bonificación
             </label>
@@ -92,6 +94,6 @@ export function Paso3Aportes({
           </div>
         </CondicionCarga>
       </div>
-    </div>
+    </Card>
   );
 }

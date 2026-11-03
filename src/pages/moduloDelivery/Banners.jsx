@@ -86,7 +86,7 @@ const Banner = () => {
   return (
     <div className="banner-generator-container p-2">
       <div className="container-fluid">
-        <div className="row ">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
           <div className="col-12">
             <h4 className="generator-title">Generador de Banners</h4>
             <p className="generator-subtitle">
@@ -95,7 +95,7 @@ const Banner = () => {
           </div>
         </div>
 
-        <div className="row g-5">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
           <div className="col-lg-7">
             <BannerEditor
               key={isEditing ? `edit-${config.id}` : "new"}

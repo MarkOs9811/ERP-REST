@@ -1,6 +1,9 @@
 import { Activity } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../AuthContext";
+import { Button } from "../ui/button";
+import { Card } from "@/components/ui/card";
+
 
 export function CabeceraHome({ cajaAbierta = false }) {
   const { user } = useAuth();
@@ -10,42 +13,44 @@ export function CabeceraHome({ cajaAbierta = false }) {
   const hora = new Date().toLocaleTimeString();
 
   return (
-    <div className="h-100">
-        <div
-          className="card rounded-4 overflow-hidden position-relative h-100 home-hero-banner"
-          style={{ backgroundImage: "url('/images/background2.jpg')" }}
-        >
-          <div className="home-banner-overlay"></div>
+    <div className="h-full min-h-[220px]">
+      <Card
+        className="home-hero-banner relative h-full min-h-[220px] overflow-hidden rounded-2xl"
+        style={{ backgroundImage: "url('/images/background2.jpg')" }}
+      >
+        <div className="home-banner-overlay"></div>
 
-          <div className="card-body position-relative p-4 p-lg-5 home-banner-content d-flex flex-column justify-content-between h-100">
-            <div>
-              <span className="home-hero-kicker mb-3">Panel de control</span>
-              <h2 className="mb-2 text-white home-banner-title">
-                <strong>Hola, {nombre}</strong>
-              </h2>
-              <p className="text-white-50 mb-4 mb-lg-0">
-                Revisa ventas, salón y alertas del día desde un solo lugar.
-              </p>
-            </div>
+        <div className="home-banner-content relative z-[2] flex h-full flex-col justify-between p-5 sm:p-8">
+          <div>
+            <span className="mb-3 inline-flex w-fit items-center rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-white">
+              Panel de control
+            </span>
+            <h1 className="home-banner-title mb-2 text-2xl font-bold text-white sm:text-3xl">
+              Hola, {nombre}
+            </h1>
+            <p className="mb-0 max-w-xl text-sm text-white/80 sm:text-base">
+              Revisa ventas, salón y alertas del día desde un solo lugar.
+            </p>
+          </div>
 
-            <div className="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3 mt-4">
-              <button
-                className="btn-eliminar py-3 px-4"
-                onClick={() =>
-                  navigate(cajaAbierta ? "/vender/mesas" : "/abrirCaja")
-                }
-              >
-                Comenzar a vender
-              </button>
-              <div className="d-flex align-items-center home-banner-meta">
-                <Activity color="#fff" size={18} />
-                <small className="opacity-75 ms-2">
-                  {fecha} · Última actualización: {hora}
-                </small>
-              </div>
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <Button
+              className="btn-eliminar rounded-lg px-4 py-3"
+              onClick={() =>
+                navigate(cajaAbierta ? "/vender/mesas" : "/abrirCaja")
+              }
+             variant="destructive">
+              Comenzar a vender
+            </Button>
+            <div className="home-banner-meta flex items-center gap-2 text-sm text-white/80">
+              <Activity color="#fff" size={18} />
+              <span>
+                {fecha} · Última actualización: {hora}
+              </span>
             </div>
           </div>
         </div>
+      </Card>
     </div>
   );
 }

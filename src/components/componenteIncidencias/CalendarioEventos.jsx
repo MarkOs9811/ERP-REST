@@ -5,6 +5,9 @@ import { AgregarEvento } from "./AgregarEvento";
 import { GetEventos } from "../../service/serviceIncidenciasEventos/GetEventos";
 import { useQuery } from "@tanstack/react-query";
 import { Plus, PlusIcon } from "lucide-react";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+
 
 export function CalendarioEventos() {
   const [showModalEvento, setShowModalEvento] = useState(false);
@@ -34,21 +37,21 @@ export function CalendarioEventos() {
   }));
 
   return (
-    <div className="card shadow-sm py-2">
-      <div className="card-header d-flex">
+    <Card className="shadow-sm py-2">
+      <CardHeader className="flex">
         <h4>Calendario de eventos</h4>
         <div className="ms-auto">
-          <button
+          <Button
             className="btn btn-outline-dark"
             onClick={() => setShowModalEvento(true)}
-          >
+           variant="default">
             <PlusIcon className="text-auto" /> Crear Evento
-          </button>
+          </Button>
         </div>
-      </div>
-      <div className="card-body p-0">
+      </CardHeader>
+      <CardContent className="p-0">
         <Calendario eventos={eventosTransformados} />
-      </div>
+      </CardContent>
       <ModalRight
         isOpen={showModalEvento}
         onClose={() => {
@@ -63,6 +66,6 @@ export function CalendarioEventos() {
           <AgregarEvento />
         </div>
       </ModalRight>
-    </div>
+    </Card>
   );
 }

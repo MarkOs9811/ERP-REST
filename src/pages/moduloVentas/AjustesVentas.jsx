@@ -6,6 +6,8 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { GetMetodosPago } from "../../service/accionesVentas/GetMetodosPago";
 import axiosInstance from "../../api/AxiosInstance";
 import ToastAlert from "../../components/componenteToast/ToastAlert";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+
 
 export default function AjustesVentas() {
   const queryClient = useQueryClient();
@@ -41,11 +43,11 @@ export default function AjustesVentas() {
   return (
     <div className="row">
       <div className="col-lg-12">
-        <div className="card">
-          <div className="card-header border-0 ">
+        <Card className="">
+          <CardHeader className="border-0">
             <h4>Ajustes de venta</h4>
-          </div>
-          <div className="card-body">
+          </CardHeader>
+          <CardContent className="">
             {isLoading && <p>Cargando métodos de pago...</p>}
             {isError && <p>Error al cargar métodos de pago.</p>}
             {!isLoading && !isError && (
@@ -54,8 +56,8 @@ export default function AjustesVentas() {
                 onToggle={handleCambiarEstado}
               />
             )}
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

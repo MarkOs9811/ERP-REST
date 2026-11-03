@@ -1,5 +1,8 @@
 import { CreditCard, File, FileDownIcon, ShoppingCart } from "lucide-react";
 import { useEffect } from "react";
+import { Button } from "../ui/button";
+import { Card } from "@/components/ui/card";
+
 
 export function FormEditarCompra({
   onSubmit,
@@ -25,9 +28,9 @@ export function FormEditarCompra({
 
   return (
     <form className="p-4" onSubmit={onSubmit}>
-      <div className="row g-3">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
         {/* Tipo de Compra */}
-        <div className="col-md-12 col-sm-12">
+        <div className="md:col-span-12 col-sm-12">
           {watch("tipoCompra") === "credito" ? (
             <div className="d-flex align-items-center justify-content-between border border-warning rounded-3 p-3 alert-warning-subtle shadow-sm">
               <div className="d-flex align-items-center gap-3">
@@ -56,7 +59,7 @@ export function FormEditarCompra({
         </div>
 
         {/* Proveedor y Usuario */}
-        <div className="col-md-6">
+        <div className="md:col-span-6">
           <label className="form-label small fw-bold">Proveedor</label>
           <input
             type="text"
@@ -65,7 +68,7 @@ export function FormEditarCompra({
             readOnly
           />
         </div>
-        <div className="col-md-6">
+        <div className="md:col-span-6">
           <label className="form-label small fw-bold">Usuario</label>
           <input
             type="text"
@@ -76,7 +79,7 @@ export function FormEditarCompra({
         </div>
 
         {/* N° Compra */}
-        <div className="col-md-6">
+        <div className="md:col-span-6">
           <label className="form-label small fw-bold">N° Compra</label>
           <input
             type="text"
@@ -87,7 +90,7 @@ export function FormEditarCompra({
         </div>
 
         {/* Total Pagado */}
-        <div className="col-md-6">
+        <div className="md:col-span-6">
           <label className="form-label small fw-bold">Total Pagado</label>
           <input
             type="number"
@@ -110,18 +113,18 @@ export function FormEditarCompra({
           />
         </div>
         <div className="col-12">
-          <div className="card border p-0 ">
-            <button className=" border-0 bg-transparent p-3 m-0 d-flex align-items-center gap-2">
+          <Card className="border p-0">
+            <Button className=" border-0 bg-transparent p-3 m-0 d-flex align-items-center gap-2" variant="default">
               <span className="text-muted small fst-italic">
                 <FileDownIcon size={18} className="text-auto" /> Ver el
                 documento de la compra para más detalles.
               </span>
-            </button>
-          </div>
+            </Button>
+          </Card>
         </div>
         <hr></hr>
         {/* Fechas */}
-        <div className="col-md-4">
+        <div className="md:col-span-4">
           <label className="form-label small fw-bold">Fecha de Compra</label>
           <input
             type="text"
@@ -130,7 +133,7 @@ export function FormEditarCompra({
             readOnly
           />
         </div>
-        <div className="col-md-4">
+        <div className="md:col-span-4">
           <label className="form-label small fw-bold">Creación</label>
           <input
             type="text"
@@ -139,7 +142,7 @@ export function FormEditarCompra({
             readOnly
           />
         </div>
-        <div className="col-md-4">
+        <div className="md:col-span-4">
           <label className="form-label small fw-bold">
             Última actualización
           </label>

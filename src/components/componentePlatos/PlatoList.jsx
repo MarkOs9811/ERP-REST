@@ -20,6 +20,7 @@ import { BadgeComponent } from "../componentesReutilizables/BadgeComponent";
 
 // 🔥 IMPORTAMOS EL HELPER DE MONEDA
 import { formatMoneda } from "../../utils/currency";
+import { Button } from "../ui/button";
 
 export function PlatoList({ search, categoriaActual = null }) {
   const queryClient = useQueryClient();
@@ -265,7 +266,7 @@ export function PlatoList({ search, categoriaActual = null }) {
                 />
               </>
             ) : (
-              <button
+              <Button
                 className="btn btn-sm"
                 style={{
                   color: "var(--fw-emerald)",
@@ -279,9 +280,9 @@ export function PlatoList({ search, categoriaActual = null }) {
                   setNombrePlato(row?.nombre);
                   setIdPlatoActivar(row?.id);
                 }}
-              >
+               variant="default">
                 <FontAwesomeIcon icon={faPowerOff} />
-              </button>
+              </Button>
             )}
           </div>
         );

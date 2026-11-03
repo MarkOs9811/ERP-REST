@@ -1,18 +1,21 @@
+
+import { Button } from "../ui/button";
+import { CardContent, CardHeader } from "@/components/ui/card";
 export function AsistenteIaHome() {
   return (
     <div className="ai-assistant-floating">
-      <button
+      <Button
         className="btn btn-primary rounded-pill shadow"
         id="aiAssistantButton"
-      >
+       variant="default">
         <i className="bi bi-robot me-2"></i>Asistente IA
-      </button>
+      </Button>
       <div className="ai-assistant-card" id="aiAssistantCard">
-        <div className="card-header d-flex justify-content-between">
+        <CardHeader className="flex justify-between">
           <span>Asistente del Restaurante</span>
-          <button className="btn btn-sm btn-close" id="closeAssistant"></button>
-        </div>
-        <div className="card-body">
+          <Button className="btn btn-sm btn-close" id="closeAssistant" variant="default"></Button>
+        </CardHeader>
+        <CardContent className="">
           <div className="ai-message ai-response">
             <p>Hola, ¿en qué puedo ayudarte hoy?</p>
             <small className="text-muted">
@@ -25,11 +28,11 @@ export function AsistenteIaHome() {
               className="form-control"
               placeholder="Pregunta al asistente..."
             />
-            <button className="btn btn-outline-primary">
+            <Button className="btn btn-outline-primary" variant="default">
               <i className="bi bi-send"></i>
-            </button>
+            </Button>
           </div>
-        </div>
+        </CardContent>
       </div>
     </div>
   );

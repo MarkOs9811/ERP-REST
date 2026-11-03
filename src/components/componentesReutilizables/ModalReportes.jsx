@@ -1,4 +1,5 @@
 import "../../css/EstilosModalReportes.css";
+import { Button } from "../ui/button";
 
 export default function ModalReportes({
   isOpen,
@@ -35,13 +36,13 @@ export default function ModalReportes({
               </small>
             </div>
 
-            <button
+            <Button
               type="button"
               className="btn-close ms-3"
               data-bs-dismiss="modal"
               aria-label="Close"
               onClick={() => setIsOpen(false)}
-            ></button>
+             variant="default"></Button>
           </div>
           <div className="modal-body p-0">
             {sheetUrl && (

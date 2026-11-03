@@ -14,6 +14,9 @@ import {
   BtnEditar,
   BtnEliminar,
 } from "../../componentesReutilizables/BotonesAccion";
+import { Button } from "../../ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+
 
 export function AjustesBonificaciones() {
   const queryClient = useQueryClient();
@@ -170,7 +173,7 @@ export function AjustesBonificaciones() {
               />
             </>
           ) : (
-            <button
+            <Button
               className="btn-activar btn-sm ms-2"
               title="Activar"
               onClick={() => {
@@ -178,9 +181,9 @@ export function AjustesBonificaciones() {
                 setDataBonificacion(row);
               }}
               disabled={loadingActivar}
-            >
+             variant="default">
               <CheckCheck className="text-auto" size={"auto"} />
-            </button>
+            </Button>
           )}
         </div>
       ),
@@ -189,8 +192,8 @@ export function AjustesBonificaciones() {
     },
   ];
   return (
-    <div className="card  h-100 py-2">
-      <div className="card-header d-flex justify-content-between align-items-center p-2 border-bottom">
+    <Card className="h-full py-2">
+      <CardHeader className="flex justify-between items-center p-2 border-b">
         <h4 className=" mb-0">
           <Coins className="text-auto" /> Bonificaciones
         </h4>
@@ -203,7 +206,7 @@ export function AjustesBonificaciones() {
           />
         </div>
 
-        <button
+        <Button
           className="btn-principal btn-icon mx-2"
           title="Agregar"
           onClick={() => {
@@ -211,13 +214,13 @@ export function AjustesBonificaciones() {
             setModalEditBoni(false);
             setDataBonificacion([]);
           }}
-        >
+         variant="default">
           <Plus className=" text-auto" />
-        </button>
-      </div>
-      <div className="card-body p-0">
+        </Button>
+      </CardHeader>
+      <CardContent className="p-0">
         <TablasGenerales columnas={columnas} datos={bonificacionFiltrada} />
-      </div>
+      </CardContent>
 
       <ModalRight
         isOpen={modalAddBoni}
@@ -251,6 +254,6 @@ export function AjustesBonificaciones() {
         handleActivar={handleActivarBoni}
         handleCloseModal={() => setModalQuestionActivar(false)}
       />
-    </div>
+    </Card>
   );
 }

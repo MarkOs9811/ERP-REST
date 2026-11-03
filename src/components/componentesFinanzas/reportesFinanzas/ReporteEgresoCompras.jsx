@@ -14,6 +14,8 @@ import { GraficoEgresoTodo } from "../../../graficosChar/GraficoEgresosTodo";
 import { BotonMotionGeneral } from "../../componentesReutilizables/BotonMotionGeneral";
 import { useGenerarReporte } from "../../../hooks/GenerarPdfReporte";
 import { useRef, useState } from "react";
+import { Card } from "@/components/ui/card";
+
 
 export function ReporteEgresoCompras() {
   const {
@@ -76,8 +78,8 @@ export function ReporteEgresoCompras() {
   if (isError) return <p>Error al obtener las compras</p>;
   return (
     <div className="p-4 bg-light">
-      <div className="row g-3">
-        <div className="col-md-12 d-flex justify-content-auto ms-auto">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+        <div className="md:col-span-12 d-flex justify-content-auto ms-auto">
           <div className="">
             <h5>Informe</h5>
           </div>
@@ -98,9 +100,13 @@ export function ReporteEgresoCompras() {
             />
           </div>
         </div>
-        <div ref={reporteRef} id="reporte-ingresos-ventas" className="row g-3">
-          <div className="col-md-3 col-sm-12">
-            <div className="card  p-3 d-flex flex-row align-items-center h-100">
+        <div
+          ref={reporteRef}
+          id="reporte-ingresos-ventas"
+          className="grid grid-cols-1 md:grid-cols-12 gap-3"
+        >
+          <div className="md:col-span-3 col-sm-12">
+            <Card className="p-3 flex flex-row items-center h-full">
               <ShoppingCart
                 color="var(--fw-saffron)"
                 width="63px"
@@ -110,11 +116,11 @@ export function ReporteEgresoCompras() {
                 <h5 className="fw-light ">Compras</h5>
                 <h3 className="fw-bold mb-0">{totalCompras}</h3>
               </div>
-            </div>
+            </Card>
           </div>
 
-          <div className="col-md-3 col-sm-12">
-            <div className="card  p-3 d-flex flex-row align-items-center h-100">
+          <div className="md:col-span-3 col-sm-12">
+            <Card className="p-3 flex flex-row items-center h-full">
               <CalendarDays
                 color="var(--fw-emerald)"
                 width="63px"
@@ -124,11 +130,11 @@ export function ReporteEgresoCompras() {
                 <h5 className="fw-light ">Compras del Mes</h5>
                 <h3 className="fw-bold mb-0">{comprasDelMes}</h3>
               </div>
-            </div>
+            </Card>
           </div>
 
-          <div className="col-md-3 col-sm-12">
-            <div className="card  p-3 d-flex flex-row align-items-center h-100">
+          <div className="md:col-span-3 col-sm-12">
+            <Card className="p-3 flex flex-row items-center h-full">
               <BanknoteArrowUp
                 color="var(--fw-strawberry)"
                 width="63px"
@@ -138,22 +144,22 @@ export function ReporteEgresoCompras() {
                 <h5 className="fw-light ">Egresos del Mes</h5>
                 <h3 className="fw-bold mb-0">S/. {totalMontoComprasDelMes}</h3>
               </div>
-            </div>
+            </Card>
           </div>
 
-          <div className="col-md-3 col-sm-12">
-            <div className="card  p-3 d-flex flex-row align-items-center h-100">
+          <div className="md:col-span-3 col-sm-12">
+            <Card className="p-3 flex flex-row items-center h-full">
               <Trophy color="var(--fw-saffron)" width="63px" height="63px" />
               <div className="ms-auto text-end">
                 <h5 className="fw-light ">Proveedor TOP</h5>
                 <h3 className="fw-bold mb-0">{proveedorTop}</h3>
               </div>
-            </div>
+            </Card>
           </div>
-          <div className="col-md-12">
-            <div className="card  p-3">
+          <div className="md:col-span-12">
+            <Card className="p-3">
               <GraficoEgresoTodo />
-            </div>
+            </Card>
           </div>
         </div>
       </div>

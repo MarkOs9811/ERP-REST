@@ -235,7 +235,7 @@ export const FormAsignarRider = forwardRef(
         )}
 
         {/* SELECTOR ABAJO (Tu código exacto, solo corregí el m–0 a m-0) */}
-        <div className="row border rounded p-3 m-0">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-4border rounded p-3 m-0">
           <label className="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wide">
             Asignar a
           </label>

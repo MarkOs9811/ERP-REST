@@ -5,6 +5,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import { TablasGenerales } from "../../components/componentesReutilizables/TablasGenerales";
 import { Eye, FileText, Plus, Search } from "lucide-react";
+import { Button } from "../../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 
 export function ListaTrabajador() {
   const [search, setSearch] = useState("");
@@ -165,21 +168,21 @@ export function ListaTrabajador() {
       name: "Acciones",
       cell: (row) => (
         <div className="d-flex gap-2">
-          <button
+          <Button
             className="btn btn-sm btn-light"
             onClick={() => handleVerDetalles(row.id)}
             title="Ver detalles"
-          >
+           variant="default">
             <Eye color={"auto"} height="20px" width="20px" />
-          </button>
+          </Button>
 
-          <button
+          <Button
             className="btn btn-sm btn-light"
             onClick={() => handleGenerarBoleta(row.id)}
             title="Generar boleta"
-          >
+           variant="default">
             <FileText color={"auto"} height="20px" width="20px" />
-          </button>
+          </Button>
         </div>
       ),
       width: "120px",
@@ -192,12 +195,12 @@ export function ListaTrabajador() {
 
   return (
     <div>
-      <div className="card shadow-sm">
-        <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-3">
+      <Card className="shadow-sm">
+        <CardHeader className="border-bottom-0 flex flex-col flex-md-row justify-between items-center gap-2 p-3">
           <div className="d-flex align-items-center">
-            <h4 className="card-title mb-0 titulo-card-especial">
+            <CardTitle asChild><h4 className="mb-0 titulo-card-especial">
               Panel Planilla
-            </h4>
+            </h4></CardTitle>
             <span className="badge-header">
               {listaTrabajador?.length > 0
                 ? `${listaTrabajador[0].cargo}`
@@ -215,22 +218,22 @@ export function ListaTrabajador() {
                 onChange={(e) => setSearch(e.target.value)}
               />
             </div>
-            <button
+            <Button
               type="button"
               className="btn btn-dark px-3"
               onClick={handleRegistrarEmpleado}
-            >
+             variant="default">
               <Plus size={18} />
               Agregar
-            </button>
+            </Button>
           </div>
-        </div>
+        </CardHeader>
         {isLoading && <p>Cargando Trabajador...</p>}
         {isError && <p>Error al cargar los Trabajador.</p>}
-        <div className="card-body p-0">
+        <CardContent className="p-0">
           <TablasGenerales columnas={columns} datos={listaTrabajador} />
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

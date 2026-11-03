@@ -111,7 +111,7 @@
 }
 
 /* Filtros avanzados */
-.card-header {
+[data-slot="card-header"] {
   transition: all 0.3s ease;
 }
 

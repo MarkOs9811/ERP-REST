@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
+import { Button } from "../ui/button";
 
 export function FormEditarCampañas({ formId, dataCampaña, onSubmitHandler }) {
   const {
@@ -38,9 +39,9 @@ export function FormEditarCampañas({ formId, dataCampaña, onSubmitHandler }) {
 
   return (
     <form id={formId} onSubmit={handleSubmit(onSubmitHandler)}>
-      <div className="row g-3">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
         {/* Fila 1: Nombre y Tipo */}
-        <div className="col-md-8">
+        <div className="md:col-span-8">
           <label className="small fw-bold">Nombre de Campaña</label>
           <input
             type="text"
@@ -52,7 +53,7 @@ export function FormEditarCampañas({ formId, dataCampaña, onSubmitHandler }) {
             <span className="text-danger small">{errors.nombre.message}</span>
           )}
         </div>
-        <div className="col-md-4">
+        <div className="md:col-span-4">
           <label className="small fw-bold">Tipo</label>
           <select className="form-select" {...register("tipo")}>
             <option value="cupon">Cupón</option>
@@ -66,7 +67,7 @@ export function FormEditarCampañas({ formId, dataCampaña, onSubmitHandler }) {
         {/* Fila 2: Configuración del Cupón */}
         {tipoCampana === "cupon" && (
           <>
-            <div className="col-md-4">
+            <div className="md:col-span-4">
               <label className="small fw-bold">Código</label>
               <input
                 type="text"
@@ -75,14 +76,14 @@ export function FormEditarCampañas({ formId, dataCampaña, onSubmitHandler }) {
                 placeholder="VERANO20"
               />
             </div>
-            <div className="col-md-4">
+            <div className="md:col-span-4">
               <label className="small fw-bold">Tipo Descuento</label>
               <select className="form-select" {...register("tipo_descuento")}>
                 <option value="porcentaje">Porcentaje (%)</option>
                 <option value="monto_fijo">Monto Fijo (S/)</option>
               </select>
             </div>
-            <div className="col-md-4">
+            <div className="md:col-span-4">
               <label className="small fw-bold">Valor</label>
               <input
                 type="number"
@@ -96,7 +97,7 @@ export function FormEditarCampañas({ formId, dataCampaña, onSubmitHandler }) {
         )}
 
         {/* Fila 3: Límites de la Campaña */}
-        <div className="col-md-6">
+        <div className="md:col-span-6">
           <label className="small fw-bold">Monto Mínimo Compra (S/)</label>
           <input
             type="number"
@@ -113,7 +114,7 @@ export function FormEditarCampañas({ formId, dataCampaña, onSubmitHandler }) {
             </span>
           )}
         </div>
-        <div className="col-md-6">
+        <div className="md:col-span-6">
           <label className="small fw-bold">Límite de Usos Totales</label>
           <input
             type="number"
@@ -131,7 +132,7 @@ export function FormEditarCampañas({ formId, dataCampaña, onSubmitHandler }) {
         </div>
 
         {/* Fila 4: Vigencia */}
-        <div className="col-md-6">
+        <div className="md:col-span-6">
           <label className="small fw-bold">Fecha Inicio</label>
           <input
             type="date"
@@ -139,7 +140,7 @@ export function FormEditarCampañas({ formId, dataCampaña, onSubmitHandler }) {
             {...register("fecha_inicio", { required: true })}
           />
         </div>
-        <div className="col-md-6">
+        <div className="md:col-span-6">
           <label className="small fw-bold">Fecha Fin</label>
           <input
             type="date"
@@ -149,7 +150,7 @@ export function FormEditarCampañas({ formId, dataCampaña, onSubmitHandler }) {
         </div>
 
         {/* Fila 5: Estado */}
-        <div className="col-md-12">
+        <div className="md:col-span-12">
           <div className="form-check form-switch">
             <input
               className="form-check-input"
@@ -164,9 +165,9 @@ export function FormEditarCampañas({ formId, dataCampaña, onSubmitHandler }) {
         </div>
 
         {/* 🔥 EL TRUCO: Botón submit oculto para que la tecla Enter funcione */}
-        <button type="submit" className="d-none">
+        <Button type="submit" className="d-none" variant="default">
           Guardar Oculto
-        </button>
+        </Button>
       </div>
     </form>
   );

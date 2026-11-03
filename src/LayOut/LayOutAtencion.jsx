@@ -9,6 +9,7 @@ import { getVentas } from "../service/ObtenerVentasDetalle";
 import { DashboardMesas } from "../components/componentesHome/DashboardMesas";
 import { RocketIcon, StoreIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { Button } from "../components/ui/button";
 
 export function LayOutAtencion() {
   useEffect(() => {
@@ -59,40 +60,40 @@ export function LayOutAtencion() {
             <span className="status-dot bg-success rounded-circle"></span>
             ¿Listo para empezar el turno?
           </p>
-          <button
+          <Button
             className="btn-principal btn-lg px-4 py-2 fw-bold shadow-sm d-flex align-items-center gap-2 btn-abrir-caja"
             onClick={() => navigate("/abrirCaja")}
-          >
+           variant="default">
             <StoreIcon size={20} />
             <span>Abrir Caja</span>
-          </button>
+          </Button>
         </div>
       </div>
       {/* FIN CABECERA HERO */}
-      <div className="row g-3 overflow-hidden">
-        <div className="col-md-12">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 overflow-hidden">
+        <div className="md:col-span-12">
           <InformacionRapidaHome />
         </div>
-        <div className="col-md-10">
-          <div className="row gap-3">
-            <div className="col-md-12">
+        <div className="md:col-span-10">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-4gap-3">
+            <div className="md:col-span-12">
               <CabeceraHome
                 ventasList={ventasList}
                 load={loadingVentas}
                 errorLoad={errorVentas}
               />
             </div>
-            <div className="col-md-12">
+            <div className="md:col-span-12">
               <DashboardMesas />
             </div>
-            <div className="col-md-12">
+            <div className="md:col-span-12">
               <PlatoMasVendido />
             </div>
           </div>
         </div>
-        <div className="col-md-2">
-          <div className="row g-3">
-            <div className="col-md-12">
+        <div className="md:col-span-2">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+            <div className="md:col-span-12">
               <VentasTipo
                 ventasList={ventasList}
                 load={loadingVentas}

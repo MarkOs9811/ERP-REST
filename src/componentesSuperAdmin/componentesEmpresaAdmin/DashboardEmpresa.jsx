@@ -2,6 +2,8 @@ import React, { useMemo } from "react";
 import { Users, MapPin, Settings, CheckCircle } from "lucide-react";
 import { capitalizeFirstLetter } from "../../hooks/FirstLetterUp";
 import { BotonMotionGeneral } from "../../components/componentesReutilizables/BotonMotionGeneral";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+
 
 export function DashboardEmpresa({ onClose, dataEmpresa }) {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -37,8 +39,8 @@ export function DashboardEmpresa({ onClose, dataEmpresa }) {
     : [];
 
   return (
-    <div className="card bg-transparent border-0">
-      <div className="card-header d-flex align-items-center justify-content-between rounded-4 border ">
+    <Card className="bg-transparent border-0">
+      <CardHeader className="flex items-center justify-between rounded-2xl border">
         <div className="d-flex align-items-center gap-3">
           <div
             style={{
@@ -83,10 +85,10 @@ export function DashboardEmpresa({ onClose, dataEmpresa }) {
             onClick={() => onClose && onClose()}
           />
         </div>
-      </div>
+      </CardHeader>
 
-      <div className="card-body">
-        <div className="row g-3 mb-3">
+      <CardContent className="">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-3">
           <div className="col-6 col-md-3">
             <div className="p-3 bg-light border rounded-4">
               <div className="d-flex align-items-center justify-content-between">
@@ -144,15 +146,15 @@ export function DashboardEmpresa({ onClose, dataEmpresa }) {
           </div>
         </div>
 
-        <div className="row g-3">
-          <div className="col-md-5">
-            <div className="card border">
-              <div className="card-header d-flex align-items-center justify-content-between">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+          <div className="md:col-span-5">
+            <Card className="border">
+              <CardHeader className="flex items-center justify-between">
                 <strong className="small mb-0">
                   Usuarios ({counts.usuariosCount})
                 </strong>
                 <small className="text-muted">Últimos</small>
-              </div>
+              </CardHeader>
               <ul className="list-group list-group-flush p-2">
                 {usuariosPreview.length === 0 ? (
                   <li className="list-group-item">No hay usuarios</li>
@@ -183,7 +185,7 @@ export function DashboardEmpresa({ onClose, dataEmpresa }) {
                           {capitalizeFirstLetter(u.empleado?.persona?.nombre) +
                             " " +
                             capitalizeFirstLetter(
-                              u.empleado?.persona?.apellidos
+                              u.empleado?.persona?.apellidos,
                             ) || "Sin nombre"}
                         </div>
                         <div className="small text-muted">
@@ -199,17 +201,17 @@ export function DashboardEmpresa({ onClose, dataEmpresa }) {
                   ))
                 )}
               </ul>
-            </div>
+            </Card>
           </div>
 
-          <div className="col-md-7">
-            <div className="card border">
-              <div className="card-header d-flex align-items-center justify-content-between">
+          <div className="md:col-span-7">
+            <Card className="border">
+              <CardHeader className="flex items-center justify-between">
                 <strong className="small mb-0">
                   Configuraciones ({counts.configTotal})
                 </strong>
                 <small className="text-muted">Estado</small>
-              </div>
+              </CardHeader>
 
               <div className="table-responsive p-2">
                 <table className="table mb-0">
@@ -252,28 +254,28 @@ export function DashboardEmpresa({ onClose, dataEmpresa }) {
                   </tbody>
                 </table>
               </div>
-            </div>
+            </Card>
           </div>
         </div>
 
         {/* NUEVA SECCIÓN: SEDES */}
-        <div className="row g-3 mt-3">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mt-3">
           <div className="col-12">
-            <div className="card border">
-              <div className="card-header d-flex align-items-center justify-content-between">
+            <Card className="border">
+              <CardHeader className="flex items-center justify-between">
                 <strong className="small mb-0">
                   Sedes ({Array.isArray(sedes) ? sedes.length : 0})
                 </strong>
                 <small className="text-muted">Detalles</small>
-              </div>
+              </CardHeader>
 
-              <div className="card-body p-2">
+              <CardContent className="p-2">
                 {!Array.isArray(sedes) || sedes.length === 0 ? (
                   <div className="small text-muted p-3">
                     No hay sedes registradas
                   </div>
                 ) : (
-                  <div className="row g-2">
+                  <div className="grid grid-cols-1 md:grid-cols-12 gap-2">
                     {sedes.map((sede) => (
                       <div
                         key={sede.id || sede.nombre || Math.random()}
@@ -306,7 +308,7 @@ export function DashboardEmpresa({ onClose, dataEmpresa }) {
                             <div className="flex-grow-1">
                               <div className="fw-semibold">
                                 {capitalizeFirstLetter(
-                                  sede.nombre || sede.razon || "Sin nombre"
+                                  sede.nombre || sede.razon || "Sin nombre",
                                 )}
                               </div>
                               <div
@@ -342,11 +344,11 @@ export function DashboardEmpresa({ onClose, dataEmpresa }) {
                     ))}
                   </div>
                 )}
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

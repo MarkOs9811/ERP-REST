@@ -3,20 +3,21 @@ import "../../css/EstilosBotonAgenteAi.css";
 import ModalRight from "./ModalRight";
 import { FormAgenteChat } from "../componenteAgentes/FormAgenteChat";
 import { useState } from "react";
+import { Button } from "../ui/button";
 
 export function BotonAgenteAi() {
   const [modalAgenteAi, setModalAgenteAi] = useState(false);
 
   return (
     <div>
-      <button
+      <Button
         className="agent-ai-button d-flex align-items-center justify-content-center overflow-hidden"
         title="Abrir agente IA"
         aria-label="Abrir agente IA"
         onClick={() => setModalAgenteAi(true)}
-      >
+       variant="default">
         <Brain aria-hidden="true" />
-      </button>
+      </Button>
 
       <ModalRight
         isOpen={modalAgenteAi}

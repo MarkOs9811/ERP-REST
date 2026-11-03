@@ -3,6 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 // 1. Importamos los iconos necesarios de Lucide
 import { MapPin, Building2, Store, Users, ArrowRight } from "lucide-react";
 import { PutData } from "../../service/CRUD/PutData";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+
 
 export function StepSede({ onFinish }) {
   const navigate = useNavigate();
@@ -32,8 +35,8 @@ export function StepSede({ onFinish }) {
     setLoading(false);
   };
   return (
-    <div className="card text-center p-3">
-      <div className="card-header">
+    <Card className="text-center p-3">
+      <CardHeader className="">
         {/* 1. Cabecera con Banner Vectorial */}
         <div className="mb-4 d-flex justify-content-center align-items-center">
           {/* Aquí iría tu imagen real. He puesto un placeholder visual. */}
@@ -46,8 +49,8 @@ export function StepSede({ onFinish }) {
             />
           </div>
         </div>
-      </div>
-      <div className="card-body">
+      </CardHeader>
+      <CardContent className="">
         {/* 2. Título y Descripción */}
         <h3 className="fw-bold text-dark mb-3 d-flex align-items-center justify-content-center gap-2">
           <MapPin className="text-danger" size={32} strokeWidth={2.5} />
@@ -82,22 +85,22 @@ export function StepSede({ onFinish }) {
         </div>
 
         {/* 4. Botón de Acción Principal */}
-        <button
+        <Button
           type="button"
           onClick={() => cambiarEstado(1)}
           className="btn-guardar btn-lg px-5 shadow py-2 rounded-pill d-inline-flex align-items-center gap-2 w-auto"
           style={{ transition: "transform 0.2s", textDecoration: "none" }}
           onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
           onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
-        >
+         variant="default">
           Ir a Crear Sede
           <ArrowRight size={20} />
-        </button>
+        </Button>
 
         <div className="mt-3 text-muted small">
           <small>Paso 1 de 5 para completar la configuración</small>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

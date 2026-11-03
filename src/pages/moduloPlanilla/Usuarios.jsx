@@ -6,6 +6,9 @@ import { FileText, FileUserIcon, Plus, Search } from "lucide-react";
 import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteExcel";
 import ModalRight from "../../components/componentesReutilizables/ModalRight";
 import { useNavigate } from "react-router-dom";
+import { Button } from "../../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 
 export function Usuarios() {
   const [showModal, setShowModal] = useState(false);
@@ -14,13 +17,13 @@ export function Usuarios() {
   const navigate = useNavigate();
   return (
     <div>
-      <div className="card ">
-        <div className="card-header  d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-3">
+      <Card className="">
+        <CardHeader className="flex flex-col flex-md-row justify-between items-center gap-2 p-3">
           <div className="d-flex align-items-center">
-            <h4 className="card-title mb-0 titulo-card-especial">
+            <CardTitle asChild><h4 className="mb-0 titulo-card-especial">
               Panel de Usuarios
               <span className="badge-header ms-2">Lista</span>
-            </h4>
+            </h4></CardTitle>
           </div>
 
           <div className="d-flex  gap-2 mt-3 mt-md-0 align-items-center ms-auto">
@@ -35,35 +38,35 @@ export function Usuarios() {
               />
             </div>
 
-            <button
+            <Button
               className="btn btn-outline-dark px-3"
               onClick={() => navigate("/rrhh/ingreso-a-planilla")}
-            >
+             variant="default">
               Planilla
-            </button>
+            </Button>
 
-            <button
+            <Button
               type="button"
               className="btn btn-outline-dark px-3"
               onClick={() => GetReporteExcel("/reporteUsuarios")}
-            >
+             variant="default">
               <FileText size={18} className="me-1" />
               Reporte
-            </button>
+            </Button>
 
-            <button
+            <Button
               className="btn btn-dark px-3"
               onClick={() => setShowModal(true)}
-            >
+             variant="default">
               <Plus size={18} />
               Agregar
-            </button>
+            </Button>
           </div>
-        </div>
-        <div className="card-body cuerpo-tabla p-0">
+        </CardHeader>
+        <CardContent className="cuerpo-tabla p-0">
           <UsuariosList search={search} updateList={updateList} />
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
       <ModalRight
         isOpen={showModal}

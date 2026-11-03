@@ -57,7 +57,7 @@
     box-shadow: none;
 }
 
-.card-difuminada .card-body {
+.card-difuminada [data-slot="card-content"] {
     position: relative;
     z-index: 2;
 }
@@ -368,7 +368,7 @@ body.dark-theme .ai-assistant-card {
     border: 1px solid var(--color-gray-200);
 }
 
-body.dark-theme .ai-assistant-card .card-header {
+body.dark-theme .ai-assistant-card [data-slot="card-header"] {
     background-color: var(--color-gray-50);
     color: var(--color-primary);
 }

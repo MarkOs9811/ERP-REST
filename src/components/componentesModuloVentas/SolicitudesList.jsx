@@ -15,6 +15,7 @@ import {
 import { FormEditarSolicitud } from "./FormEditarSolicitud";
 import { useQuery } from "@tanstack/react-query";
 import { BadgeComponent } from "../componentesReutilizables/BadgeComponent";
+import { Button } from "../ui/button";
 
 export function SolicitudesList({ search }) {
   const [alertEliminar, setAlertEliminar] = useState(false);
@@ -117,10 +118,10 @@ export function SolicitudesList({ search }) {
                 />
               </>
             ) : (
-              <button className="btn btn-guardar w-100">
+              <Button className="btn btn-guardar w-100" variant="default">
                 <CheckCheck className="text-auto" />
                 Revisada
-              </button>
+              </Button>
             )}
           </div>
         );

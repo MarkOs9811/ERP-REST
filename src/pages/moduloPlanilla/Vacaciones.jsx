@@ -21,6 +21,9 @@ import {
 } from "lucide-react";
 import { FormularioVenderDias } from "../../components/componentePlanillas/componenteVacaciones/FormularioVenderDias";
 import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteExcel";
+import { Button } from "../../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 
 export function Vacaciones() {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -340,26 +343,26 @@ export function Vacaciones() {
       cell: (row) => (
         <div className="d-flex gap-2">
           {/* Botón Editar */}
-          <button
+          <Button
             className="btn-editar btn-sm"
             title="Editar vacaciones"
             disabled={row.estado == 1}
-          >
+           variant="secondary">
             <Pencil className="text-auto" size={"auto"} />
-          </button>
+          </Button>
 
           {/* Botón Eliminar */}
-          <button
+          <Button
             className="btn-eliminar btn-sm"
             title="Eliminar"
             disabled={row.estado === 1}
             onClick={() => eliminarVacaciones(row.id)}
-          >
+           variant="destructive">
             <Trash2 className="text-auto" size={"auto"} />
-          </button>
+          </Button>
 
           {/* Botón Vender Días */}
-          <button
+          <Button
             className="btn-principal btn-sm"
             title="Vender Días"
             disabled={row.estado == 1}
@@ -367,21 +370,21 @@ export function Vacaciones() {
               setModalVender(true);
               setVacacionesId(row);
             }}
-          >
+           variant="default">
             <ShoppingBag cclassName="text-auto" size={"auto"} />
-          </button>
+          </Button>
         </div>
       ),
     },
   ];
   return (
     <div>
-      <div className="card shadow-sm pb-2">
-        <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-3">
+      <Card className="shadow-sm pb-2">
+        <CardHeader className="border-bottom-0 flex flex-col flex-md-row justify-between items-center gap-2 p-3">
           <div className="d-flex align-items-center">
-            <h4 className="card-title mb-0 titulo-card-especial">
+            <CardTitle asChild><h4 className="mb-0 titulo-card-especial">
               Panel de Vacaciones
-            </h4>
+            </h4></CardTitle>
             <span className="badge-header ms-2">Registros</span>
           </div>
           <div className="d-flex align-items-center  gap-2 mt-3 mt-md-0">
@@ -394,33 +397,33 @@ export function Vacaciones() {
                 onChange={(e) => setFiltro(e.target.value)}
               />
             </div>
-            <button
+            <Button
               className="btn btn-outline-dark px-3"
               title="Reporte"
               onClick={() => GetReporteExcel("/reporteVacaciones")}
-            >
+             variant="default">
               <FileText size={18} />
               Reporte
-            </button>
-            <button
+            </Button>
+            <Button
               className="btn btn-dark px-3"
               title="Agregar"
               onClick={() => {
                 setIsModalOpen(true);
               }}
-            >
+             variant="default">
               <Plus size={18} />
               Agregar
-            </button>
+            </Button>
           </div>
-        </div>
-        <div className="card-body p-0">
+        </CardHeader>
+        <CardContent className="p-0">
           <TablasGenerales
             columnas={columnas}
             datos={datosFiltradosVacaciones}
           />
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
       <ModalRight
         isOpen={isModalOpen}

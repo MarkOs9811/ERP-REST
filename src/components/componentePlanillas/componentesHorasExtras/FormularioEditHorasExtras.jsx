@@ -4,6 +4,9 @@ import { useQueryClient } from "@tanstack/react-query";
 import { User, Calendar, Clock, DollarSign, FileText } from "lucide-react";
 import axiosInstance from "../../../api/AxiosInstance";
 import ToastAlert from "../../componenteToast/ToastAlert";
+import { Button } from "../../ui/button";
+import { Card } from "@/components/ui/card";
+
 // (BotonMotionGeneral no se usa en este componente, así que lo quité)
 
 export function FormularioEditHorasExtras({ onClose, dataHoraExtras }) {
@@ -55,7 +58,7 @@ export function FormularioEditHorasExtras({ onClose, dataHoraExtras }) {
 
   return (
     <form className="form p-4" onSubmit={handleSubmit(onSubmitEditar)}>
-      <div className="card p-3 mb-3 border bg-light">
+      <Card className="p-3 mb-3 border bg-muted">
         <label className="small fw-bold mb-1 d-flex align-items-center gap-1">
           <User size={16} /> Empleado
         </label>
@@ -69,7 +72,7 @@ export function FormularioEditHorasExtras({ onClose, dataHoraExtras }) {
         <span className="fs-6">
           {dataHoraExtras?.usuario?.empleado.persona.documento_identidad}
         </span>
-      </div>
+      </Card>
 
       <div className="mb-3">
         <label className="form-label small fw-bold">
@@ -129,21 +132,21 @@ export function FormularioEditHorasExtras({ onClose, dataHoraExtras }) {
       </div>
 
       <div className="d-flex gap-2 pt-3 border-top">
-        <button
+        <Button
           type="button"
           className="btn-cerrar-modal"
           onClick={onClose}
           disabled={loading} // Deshabilitar también al cargar
-        >
+         variant="default">
           Cancelar
-        </button>
+        </Button>
 
         {/* --- ¡BOTÓN ACTUALIZADO! --- */}
-        <button
+        <Button
           type="submit" // Corregido: debe ser 'submit'
           className="btn-guardar" // Tu clase CSS personalizada
           disabled={loading}
-        >
+         variant="default">
           {loading ? (
             <>
               <span
@@ -156,7 +159,7 @@ export function FormularioEditHorasExtras({ onClose, dataHoraExtras }) {
           ) : (
             "Actualizar" // Texto normal
           )}
-        </button>
+        </Button>
       </div>
     </form>
   );

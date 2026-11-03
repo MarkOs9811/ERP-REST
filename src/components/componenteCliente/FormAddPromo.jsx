@@ -17,9 +17,9 @@ export function FormAddPromo({ formId, onSubmitHandler }) {
 
   return (
     <form id={formId} onSubmit={handleSubmit(onSubmitHandler)}>
-      <div className="row g-3">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
         {/* Fila 1: Nombre y Tipo */}
-        <div className="col-md-8">
+        <div className="md:col-span-8">
           <label className="small fw-bold">Nombre de Campaña</label>
           <input
             type="text"
@@ -31,7 +31,7 @@ export function FormAddPromo({ formId, onSubmitHandler }) {
             <span className="text-danger small">{errors.nombre.message}</span>
           )}
         </div>
-        <div className="col-md-4">
+        <div className="md:col-span-4">
           <label className="small fw-bold">Tipo</label>
           <select className="form-select" {...register("tipo")}>
             <option value="cupon">Cupón</option>
@@ -45,7 +45,7 @@ export function FormAddPromo({ formId, onSubmitHandler }) {
         {/* Fila 2: Configuración del Cupón */}
         {tipoCampana === "cupon" && (
           <>
-            <div className="col-md-4">
+            <div className="md:col-span-4">
               <label className="small fw-bold">Código</label>
               <input
                 type="text"
@@ -54,14 +54,14 @@ export function FormAddPromo({ formId, onSubmitHandler }) {
                 placeholder="VERANO20"
               />
             </div>
-            <div className="col-md-4">
+            <div className="md:col-span-4">
               <label className="small fw-bold">Tipo Descuento</label>
               <select className="form-select" {...register("tipo_descuento")}>
                 <option value="porcentaje">Porcentaje (%)</option>
                 <option value="monto_fijo">Monto Fijo (S/)</option>
               </select>
             </div>
-            <div className="col-md-4">
+            <div className="md:col-span-4">
               <label className="small fw-bold">Valor</label>
               <input
                 type="number"
@@ -75,7 +75,7 @@ export function FormAddPromo({ formId, onSubmitHandler }) {
         )}
 
         {/* Fila 3: Límites de la Campaña (NUEVO) */}
-        <div className="col-md-6">
+        <div className="md:col-span-6">
           <label className="small fw-bold">Monto Mínimo Compra (S/)</label>
           <input
             type="number"
@@ -92,7 +92,7 @@ export function FormAddPromo({ formId, onSubmitHandler }) {
             </span>
           )}
         </div>
-        <div className="col-md-6">
+        <div className="md:col-span-6">
           <label className="small fw-bold">Límite de Usos Totales</label>
           <input
             type="number"
@@ -110,7 +110,7 @@ export function FormAddPromo({ formId, onSubmitHandler }) {
         </div>
 
         {/* Fila 4: Vigencia */}
-        <div className="col-md-6">
+        <div className="md:col-span-6">
           <label className="small fw-bold">Fecha Inicio</label>
           <input
             type="date"
@@ -118,7 +118,7 @@ export function FormAddPromo({ formId, onSubmitHandler }) {
             {...register("fecha_inicio", { required: true })}
           />
         </div>
-        <div className="col-md-6">
+        <div className="md:col-span-6">
           <label className="small fw-bold">Fecha Fin</label>
           <input
             type="date"

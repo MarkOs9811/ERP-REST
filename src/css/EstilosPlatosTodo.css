@@ -1,7 +1,7 @@
 /* =========================================
    === ESTILOS BASE (Light Mode) ===
    ========================================= */
-.card {
+.card-platillo[data-slot="card"] {
     border-radius: 8px;
 }
 
@@ -33,7 +33,7 @@
 }
 
 
-.card-img-top {
+.card-platillo > img {
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
     overflow: hidden!important;
@@ -320,7 +320,7 @@ body.dark-theme .btn-tienda-add:hover:not(:disabled) {
     }
 
     /* Miniatura perfecta a la izquierda */
-    .card-platillo .card-img-top {
+    .card-platillo > img {
         width: 90px !important;
         height: 90px !important;
         border-radius: var(--radius-sm, 8px) !important;
@@ -329,7 +329,7 @@ body.dark-theme .btn-tienda-add:hover:not(:disabled) {
     }
 
     /* Contenedor de la información */
-    .card-platillo .card-body {
+    .card-platillo [data-slot="card-content"] {
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -361,7 +361,7 @@ body.dark-theme .btn-tienda-add:hover:not(:disabled) {
         border-radius: 4px;
     }
 
-   .card-platillo .card-footer {
+   .card-platillo [data-slot="card-footer"] {
        display: flex !important;
        flex-direction: column !important;
        /* Apilamos los botones si hay + y - */
@@ -376,7 +376,7 @@ body.dark-theme .btn-tienda-add:hover:not(:disabled) {
        padding: 0 10px 0 0 !important;
    }
 
-   .card-platillo .card-footer button {
+   .card-platillo [data-slot="card-footer"] button {
        width: auto !important;
        /* 🔥 CLAVE: Anula el w-100 del botón "Agregar" */
        height: max-content !important;

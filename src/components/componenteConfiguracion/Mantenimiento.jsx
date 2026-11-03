@@ -1,5 +1,7 @@
 import { Settings } from "lucide-react";
 import { useState } from "react";
+import { Card } from "@/components/ui/card";
+
 
 const OPCIONES_BACKUP = [
   {
@@ -62,12 +64,12 @@ export function Mantenimiento() {
 
   return (
     <div className="w-100 p-3">
-      <div className="card shadow-sm p-4" style={{ borderRadius: 18 }}>
+      <Card className="shadow-sm p-4" style={{ borderRadius: 18 }}>
         <h3>Backups y mantenimiento</h3>
 
-        <div className="row g-4">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
           {/* {OPCIONES_BACKUP.map((op) => (
-            <div className="col-md-6" key={op.key}>
+            <div className="md:col-span-6" key={op.key}>
               <div
                 className="card border shadow-sm p-4 h-100"
                 style={{ borderRadius: 18 }}
@@ -109,7 +111,7 @@ export function Mantenimiento() {
         {mensaje && (
           <div className="alert alert-info mt-3 py-2 px-3">{mensaje}</div>
         )}
-      </div>
+      </Card>
     </div>
   );
 }

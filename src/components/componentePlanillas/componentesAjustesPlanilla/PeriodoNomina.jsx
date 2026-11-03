@@ -1,7 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { TablasGenerales } from "../../componentesReutilizables/TablasGenerales";
 import { GetPeriodosNomina } from "../../../service/accionesPlanilla/GetPeriodosNomina";
-import { Spinner, Alert, Button, Modal } from "react-bootstrap";
 import { CondicionCarga } from "../../componentesReutilizables/CondicionCarga";
 import { useMemo, useState } from "react";
 import ModalRight from "../../componentesReutilizables/ModalRight";
@@ -14,6 +13,9 @@ import {
   BtnEditar,
   BtnEliminar,
 } from "../../componentesReutilizables/BotonesAccion";
+import { Button } from "../../ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+
 
 export function PeriodoNomina() {
   const queryClient = useQueryClient();
@@ -185,23 +187,23 @@ export function PeriodoNomina() {
 
   return (
     <CondicionCarga isLoading={isLoading} isError={isError}>
-      <div className="card  py-2">
-        <div className="card-header d-flex justify-content-between align-items-center">
+      <Card className="py-2">
+        <CardHeader className="flex justify-between items-center">
           <h5>Configuración de Periodos de Planilla</h5>
           <div className="d-flex ms-auto gap-2">
             {/* <button className="btn btn-sm btn-success"> + Nuevo Periodo</button> */}
-            <button
+            <Button
               className="btn-principal"
               onClick={() => setModalGenerarPeriodo(true)}
-            >
+             variant="default">
               Generar periodos del año
-            </button>
+            </Button>
           </div>
-        </div>
-        <div className="card-body p-0">
+        </CardHeader>
+        <CardContent className="p-0">
           <TablasGenerales columnas={columnas} datos={dataPeriodo} />
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
       {/* --- MODALES (Sin cambios) --- */}
       <ModalRight

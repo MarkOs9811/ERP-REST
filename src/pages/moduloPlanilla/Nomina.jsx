@@ -23,6 +23,9 @@ import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { TablasGenerales } from "../../components/componentesReutilizables/TablasGenerales";
 import { BadgeComponent } from "../../components/componentesReutilizables/BadgeComponent";
+import { Button } from "../../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 
 export function Nomina() {
   const [modalQuestionPagar, setModalQuestionPagar] = useState(false);
@@ -142,26 +145,26 @@ export function Nomina() {
       name: "Acciones",
       button: true,
       cell: (row) => (
-        <button
+        <Button
           className="btn-principal"
           title="Ver Boleta de Pago"
           onClick={() => console.log("Ver boleta de:", row.id)} // Aquí iría tu función para abrir modal de boleta
-        >
+         variant="default">
           <FileText size={18} />
-        </button>
+        </Button>
       ),
     },
   ];
   return (
     <div>
-      <div className="card py-2">
+      <Card className="py-2">
         {/* HEADER UNIFICADO */}
-        <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-3 ">
+        <CardHeader className="border-bottom-0 flex flex-col flex-md-row justify-between items-center gap-2 p-3">
           <div className="d-flex align-items-center">
-            <h4 className="card-title mb-0 titulo-card-especial">
+            <CardTitle asChild><h4 className="mb-0 titulo-card-especial">
               Gestión de Nómina
               <span className="badge-header ms-2">Periodo: {periodo}</span>
-            </h4>
+            </h4></CardTitle>
           </div>
 
           <div className="d-flex  gap-2 mt-3 mt-md-0 align-items-center ms-auto">
@@ -179,23 +182,23 @@ export function Nomina() {
                 }}
               />
             </div>
-            <button
+            <Button
               className="btn-principal px-3"
               onClick={() => navigate("/rrhh/ajustes")}
-            >
+             variant="default">
               <Eye size={18} className="me-1" /> Ver todos los periodos
-            </button>
+            </Button>
           </div>
-        </div>
+        </CardHeader>
 
-        <div className="card-body p-0">
+        <CardContent className="p-0">
           {/* TABLERO DE RESUMEN MACRO */}
           <div className="border-bottom px-4 py-3">
             <CondicionCarga isLoading={isLoading} isError={isError}>
-              <div className="row g-3">
-                <div className="col-md-4">
-                  <div className="card  h-100 ">
-                    <div className="card-body d-flex align-items-center p-3">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+                <div className="md:col-span-4">
+                  <Card className="h-full">
+                    <CardContent className="flex items-center p-3">
                       <div className="p-3 rounded-circle text-danger me-3">
                         <Users size={24} />
                       </div>
@@ -205,12 +208,12 @@ export function Nomina() {
                           {nominaData?.resumen?.totalEmpleados || 0}
                         </h4>
                       </div>
-                    </div>
-                  </div>
+                    </CardContent>
+                  </Card>
                 </div>
-                <div className="col-md-4">
-                  <div className="card  h-100 ">
-                    <div className="card-body d-flex align-items-center p-3">
+                <div className="md:col-span-4">
+                  <Card className="h-full">
+                    <CardContent className="flex items-center p-3">
                       <div className="p-3 rounded-circle me-3">
                         <span className="fw-bold h5">S/.</span>
                       </div>
@@ -220,18 +223,18 @@ export function Nomina() {
                           S/ {nominaData?.resumen?.totalPagar || "0.00"}
                         </h4>
                       </div>
-                    </div>
-                  </div>
+                    </CardContent>
+                  </Card>
                 </div>
-                <div className="col-md-4">
-                  <div
-                    className={`card  h-100 ${
+                <div className="md:col-span-4">
+                  <Card
+                    className={`h-full${
                       nominaData?.resumen?.estado === "PAGADO"
                         ? "bg-success text-white"
-                        : "bg-warning bg-opacity-10 text-dark"
+                        : "bg-warning bg-opacity-10 text-foreground"
                     }`}
                   >
-                    <div className="card-body d-flex align-items-center p-3">
+                    <CardContent className="flex items-center p-3">
                       <div className="p-3 rounded-circle me-3  bg-opacity-50">
                         {nominaData?.resumen?.estado === "PAGADO" ? (
                           <CheckCircle
@@ -252,8 +255,8 @@ export function Nomina() {
                           {nominaData?.resumen?.estado || "PENDIENTE"}
                         </h4>
                       </div>
-                    </div>
-                  </div>
+                    </CardContent>
+                  </Card>
                 </div>
               </div>
             </CondicionCarga>
@@ -273,7 +276,7 @@ export function Nomina() {
             </div>
 
             <div className="d-flex flex-wrap gap-2">
-              <button
+              <Button
                 className="btn btn-outline-dark px-3"
                 onClick={() =>
                   GetReporteExcel(
@@ -283,28 +286,28 @@ export function Nomina() {
                     "Nomina",
                   )
                 }
-              >
+               variant="default">
                 <FileChartColumnIncreasing size={18} className="me-1" />
                 Reporte
-              </button>
+              </Button>
 
-              <button
+              <Button
                 className="btn-guardar px-3"
                 onClick={() => setModalValidarNomina(true)}
-              >
+               variant="default">
                 <UserRoundCheck size={18} className="me-1" />
                 Validar Periodo
-              </button>
+              </Button>
             </div>
           </div>
 
           {/* TABLA PRINCIPAL */}
-          <div className="card-body p-0">
+          <CardContent className="p-0">
             <CondicionCarga isLoading={isLoading} isError={isError}>
               <TablasGenerales columnas={columns} datos={filteredItems} />
             </CondicionCarga>
-          </div>
-        </div>
+          </CardContent>
+        </CardContent>
 
         {/* --- MODALES (Igual que antes) --- */}
         <ModalRight
@@ -332,7 +335,7 @@ export function Nomina() {
             <p>Esta acción cerrará el mes y generará boletas.</p>
           </div>
         </ModalGeneral>
-      </div>
+      </Card>
     </div>
   );
 }

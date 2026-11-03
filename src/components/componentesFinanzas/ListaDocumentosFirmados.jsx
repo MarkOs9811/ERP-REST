@@ -7,6 +7,9 @@ import { Trash2 } from "lucide-react";
 import axiosInstance from "../../api/AxiosInstance";
 import ToastAlert from "../componenteToast/ToastAlert";
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
+import { Button } from "../ui/button";
+import { CardContent, CardHeader } from "@/components/ui/card";
+
 
 export function ListaDocumentosFirmados() {
   const queryClient = useQueryClient();
@@ -87,16 +90,16 @@ export function ListaDocumentosFirmados() {
     {
       name: "Acciones",
       cell: (row) => (
-        <button
+        <Button
           onClick={() => {
             setHandleEliminar(true);
             setDataDocument(row);
           }}
           className="btn-eliminar d-flex"
           title="Eliminar este documento"
-        >
+         variant="destructive">
           <Trash2 className="text-auto" size={"auto"} />
-        </button>
+        </Button>
       ),
       ignoreRowClick: true,
       allowOverflow: true,
@@ -108,14 +111,14 @@ export function ListaDocumentosFirmados() {
   // 🔹 Renderizamos la tabla usando el componente genérico
   return (
     <div className="">
-      <div className="card-header p-3">
+      <CardHeader className="p-3">
         <h6 className="mb-3 font-bold text-lg">Documentos Firmados</h6>
-      </div>
-      <div className="card-body p-0">
+      </CardHeader>
+      <CardContent className="p-0">
         <CondicionCarga isLoading={isLoading} isError={isError}>
           <TablasGenerales columnas={columnas} datos={dataDocFirmados} />
         </CondicionCarga>
-      </div>
+      </CardContent>
       <ModalAlertQuestion
         show={handleEliminar}
         handleCloseModal={() => setHandleEliminar(false)}

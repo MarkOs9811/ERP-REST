@@ -1,5 +1,6 @@
 import { Controller } from "react-hook-form";
 import { capitalizeFirstLetter } from "../../../hooks/FirstLetterUp";
+import { Button } from "../../ui/button";
 
 export function FormularioVacaciones({
   onSubmitVaca,
@@ -83,13 +84,13 @@ export function FormularioVacaciones({
                   usuario.empleado.persona.apellidos.toLowerCase(),
                 )}
               </span>
-              <button
+              <Button
                 type="button"
                 className="btn-close btn-close-dark ms-2"
                 aria-label="Eliminar"
                 onClick={() => removeUsuario(usuario.id)}
                 style={{ fontSize: "10px" }}
-              ></button>
+               variant="default"></Button>
             </span>
           ))}
         </div>
@@ -201,12 +202,12 @@ export function FormularioVacaciones({
         </div>
       </div>
       <div className="d-flex gap-2 p-3">
-        <button type="button" className="btn-cerrar" onClick={onClose}>
+        <Button type="button" className="btn-cerrar" onClick={onClose} variant="default">
           Cancelar
-        </button>
-        <button type="submit" className="btn-guardar">
+        </Button>
+        <Button type="submit" className="btn-guardar" variant="default">
           Registrar vacaciones
-        </button>
+        </Button>
       </div>
     </form>
   );

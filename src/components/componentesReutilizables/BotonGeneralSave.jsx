@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "../../css/EstiloBotonMotion.css";
+import { Button } from "../ui/button";
 
 export function BotonGeneralSave({
   onClick,
@@ -25,14 +26,14 @@ export function BotonGeneralSave({
   };
 
   return (
-    <button
+    <Button
       type="button"
       className={`fw-btn-base d-inline-flex align-items-center justify-content-center fw-btn-min ${
         bloqueado ? "btn btn-motion-theme disabled opacity-75" : className
       }`}
       onClick={handleClick}
       disabled={bloqueado || disabled}
-    >
+     variant="default">
       {bloqueado ? (
         <>
           <div
@@ -48,6 +49,6 @@ export function BotonGeneralSave({
           {children}
         </>
       )}
-    </button>
+    </Button>
   );
 }

@@ -21,6 +21,9 @@ import {
   Trash2,
   Search,
 } from "lucide-react";
+import { Button } from "../../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 
 export function AdelantoSueldo() {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -232,46 +235,46 @@ export function AdelantoSueldo() {
         <div className="d-flex justify-content-center gap-2">
           {row.estado == 1 ? (
             <>
-              <button
+              <Button
                 className="btn btn-outline-dark"
                 title="Ver detalles"
                 onClick={() => verDetalles(row.id)}
-              >
+               variant="default">
                 <Eye color={"auto"} />
-              </button>
-              <button
+              </Button>
+              <Button
                 className="btn btn-outline-danger"
                 title="Eliminar registro"
                 onClick={() => eliminarAdelantoSueldo(row.id)}
-              >
+               variant="destructive">
                 <Trash2 color={"auto"} />
-              </button>
+              </Button>
             </>
           ) : (
             <>
-              <button
+              <Button
                 className="btn btn-outline-dark"
                 title="Editar Adelanto de Sueldo"
                 onClick={() => getEditAdelantoSueldo(row.id)}
                 data-bs-target="#adelantodeSueldoEditar"
                 data-bs-toggle="modal"
-              >
+               variant="default">
                 <Pencil color={"auto"} />
-              </button>
-              <button
+              </Button>
+              <Button
                 className="btn btn-outline-danger"
                 title="Eliminar registro"
                 onClick={() => eliminarAdelantoSueldo(row.id)}
-              >
+               variant="destructive">
                 <Trash2 color={"auto"} />
-              </button>
-              <button
+              </Button>
+              <Button
                 className="btn btn-pagar btn-outline-success"
                 title="Realizar el pago"
                 onClick={() => confirmarPagoQuestion(row.id)}
-              >
+               variant="default">
                 <BanknoteArrowUp color={"auto"} />
-              </button>
+              </Button>
             </>
           )}
         </div>
@@ -288,12 +291,12 @@ export function AdelantoSueldo() {
 
   return (
     <div>
-      <div className="card pb-2">
-        <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-3">
+      <Card className="pb-2">
+        <CardHeader className="border-bottom-0 flex flex-col flex-md-row justify-between items-center gap-2 p-3">
           <div className="d-flex align-items-center">
-            <h4 className="card-title mb-0 titulo-card-especial">
+            <CardTitle asChild><h4 className="mb-0 titulo-card-especial">
               Panel de Adelantos
-            </h4>
+            </h4></CardTitle>
             <span className="badge-header ms-2">Registros</span>
           </div>
           <div className="d-flex align-items-center  gap-2 mt-3 mt-md-0">
@@ -305,26 +308,26 @@ export function AdelantoSueldo() {
                 className="form-control"
               />
             </div>
-            <button className="btn btn-outline-dark px-3" title="Reporte">
+            <Button className="btn btn-outline-dark px-3" title="Reporte" variant="default">
               <FileText size={18} />
               Reporte
-            </button>
-            <button
+            </Button>
+            <Button
               className="btn btn-dark px-3"
               title="Agregar"
               onClick={() => {
                 setIsModalOpen(true);
               }}
-            >
+             variant="default">
               <Plus size={18} />
               Agregar
-            </button>
+            </Button>
           </div>
-        </div>
-        <div className="card-body p-0">
+        </CardHeader>
+        <CardContent className="p-0">
           <TablasGenerales columnas={columnas} datos={adelantoSueldoList} />
-        </div>
-      </div>
+        </CardContent>
+      </Card>
       <ModalGeneral
         idProceso={adelantoSueldoId}
         show={isModalOpenQuestion}

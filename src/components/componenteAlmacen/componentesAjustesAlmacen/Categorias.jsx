@@ -5,6 +5,9 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import axiosInstance from "../../../api/AxiosInstance";
 import ToastAlert from "../../componenteToast/ToastAlert";
+import { Button } from "../../ui/button";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
+
 
 const Categorias = ({ categorias, onToggle }) => {
   const [modalAddMetodoPago, setModalAddCategoria] = useState(false);
@@ -35,18 +38,18 @@ const Categorias = ({ categorias, onToggle }) => {
     }
   };
   return (
-    <div className="col-md-12">
-      <div className="card shadow-sm border h-100">
-        <div className="card-body">
+    <div className="md:col-span-12">
+      <Card className="shadow-sm border h-full">
+        <CardContent className="">
           <div className="d-flex justify-content-between align-items-center">
-            <p className="card-title mb-0 h5">Categorías</p>
-            <button
+            <CardTitle asChild><p className="mb-0 h5">Categorías</p></CardTitle>
+            <Button
               className="btn btn-light"
               title="Agregar Categoría"
               onClick={() => setModalAddCategoria(true)}
-            >
+             variant="default">
               <PlusIcon className="text-auto" />
-            </button>
+            </Button>
           </div>
           <ul className="list-group border-0 mt-3">
             {categorias.map((cat) => (
@@ -85,17 +88,17 @@ const Categorias = ({ categorias, onToggle }) => {
               </li>
             ))}
           </ul>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
       <ModalRight
         isOpen={modalAddMetodoPago}
         onClose={() => setModalAddCategoria(false)}
         title="Agregar Categoria"
         hideFooter={true}
       >
-        <div className="card d-flex h-100 bg-transparent">
-          <form
-            className="card-body row g-3"
+        <Card className="flex h-full bg-transparent">
+          <CardContent asChild><form
+            className="row g-3"
             onSubmit={handleSubmit(handleSubmitMetodo)}
           >
             <div className="col-12">
@@ -119,12 +122,12 @@ const Categorias = ({ categorias, onToggle }) => {
             </div>
 
             <div className="col-12 text-end">
-              <button type="submit" className="btn-guardar">
+              <Button type="submit" className="btn-guardar" variant="default">
                 Guardar
-              </button>
+              </Button>
             </div>
-          </form>
-        </div>
+          </form></CardContent>
+        </Card>
       </ModalRight>
     </div>
   );

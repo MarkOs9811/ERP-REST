@@ -6,6 +6,9 @@ import "../../css/estilosDelivery/EstiloBannerList.css";
 import { GetData } from "../../service/CRUD/GetData";
 import ToastAlert from "../componenteToast/ToastAlert";
 import ModalAlertQuestion from "../componenteToast/ModalAlertQuestion";
+import { Button } from "../ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+
 
 const BannerList = ({ onEdit }) => {
   const queryClient = useQueryClient();
@@ -86,7 +89,7 @@ const BannerList = ({ onEdit }) => {
 
   return (
     <>
-      <div className="card  p-3">
+      <Card className="p-3">
         <div className="d-flex justify-content-between align-items-center mb-3">
           <h4 className="fw-bold mb-2 d-flex align-items-center gap-2">
             <LucideIcons.LayoutGrid size={20} />
@@ -94,7 +97,7 @@ const BannerList = ({ onEdit }) => {
           </h4>
         </div>
 
-        <div className="card-body list-group list-group-flush">
+        <CardContent className="list-group list-group-flush">
           {Array.isArray(banners) && banners.length > 0 ? (
             banners.map((banner) => (
               <div
@@ -142,17 +145,17 @@ const BannerList = ({ onEdit }) => {
                     />
                   </div>
                   {/* Botón Editar */}
-                  <button
+                  <Button
                     className="btn-editar  "
                     onClick={() => onEdit(banner)}
-                  >
+                   variant="secondary">
                     <LucideIcons.Edit2 size={16} />
-                  </button>
+                  </Button>
 
                   {/* Botón Eliminar (Llama al modal) */}
-                  <button className="btn-eliminar ">
+                  <Button className="btn-eliminar " variant="destructive">
                     <LucideIcons.Trash2 size={16} />
-                  </button>
+                  </Button>
                 </div>
               </div>
             ))
@@ -161,8 +164,8 @@ const BannerList = ({ onEdit }) => {
               No hay banners configurados.
             </div>
           )}
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
       {/* MODAL DE CONFIRMACIÓN */}
       <ModalAlertQuestion

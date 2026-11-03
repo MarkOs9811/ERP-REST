@@ -28,6 +28,9 @@ import {
   validateDNI,
   validateDocumento,
 } from "../../hooks/InputHandlers";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+
 
 export function UsuarioForm({ handleCloseModal }) {
   const queryClient = useQueryClient();
@@ -153,9 +156,9 @@ export function UsuarioForm({ handleCloseModal }) {
 
   // --- 4. RENDER ---
   return (
-    <div className="card border-0 shadow-none bg-transparent p-3">
+    <Card className="border-0 shadow-none bg-transparent p-3">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="card-body p-2">
+        <CardContent className="p-2">
           {/* SECCIÓN 1: FOTO DE PERFIL (Diseño Horizontal Compacto) */}
           <div className="d-flex align-items-center gap-3 mb-4 p-3  rounded-3 border border-dashed">
             <div
@@ -194,14 +197,14 @@ export function UsuarioForm({ handleCloseModal }) {
                 Haz clic en el círculo para subir una imagen.
               </p>
               {fotoPreview && (
-                <button
+                <Button
                   type="button"
                   onClick={removePhoto}
                   className="btn btn-sm btn-outline-danger py-0 px-2"
                   style={{ fontSize: "0.75rem" }}
-                >
+                 variant="destructive">
                   <Trash2 size={12} className="me-1" /> Quitar foto
-                </button>
+                </Button>
               )}
               {errors.fotoPerfil && (
                 <div className="text-danger small mt-1">
@@ -215,9 +218,9 @@ export function UsuarioForm({ handleCloseModal }) {
           <h6 className="text-danger fw-bold text-uppercase small mb-3 border-bottom pb-2">
             Información Personal
           </h6>
-          <div className="row g-3 mb-3">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-3">
             {/* Tipo Documento */}
-            <div className="col-md-4">
+            <div className="md:col-span-4">
               <label className="form-label small fw-semibold text-muted mb-1 d-flex align-items-center gap-1">
                 <IdCard size={16} />
                 Tipo Doc.
@@ -243,7 +246,7 @@ export function UsuarioForm({ handleCloseModal }) {
             </div>
 
             {/* Número Documento */}
-            <div className="col-md-8">
+            <div className="md:col-span-8">
               <label className="form-label small fw-semibold text-muted mb-1 d-flex align-items-center gap-1">
                 <CreditCard size={16} />
                 Número Documento
@@ -270,8 +273,8 @@ export function UsuarioForm({ handleCloseModal }) {
           </div>
 
           {/* Nombres y Apellidos */}
-          <div className="row g-3 mb-3">
-            <div className="col-md-6">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-3">
+            <div className="md:col-span-6">
               <label className="form-label small fw-semibold text-muted mb-1 d-flex align-items-center gap-1">
                 <User size={16} />
                 Nombres
@@ -290,7 +293,7 @@ export function UsuarioForm({ handleCloseModal }) {
                 </span>
               )}
             </div>
-            <div className="col-md-6">
+            <div className="md:col-span-6">
               <label className="form-label small fw-semibold text-muted mb-1 d-flex align-items-center gap-1">
                 <User size={16} />
                 Apellidos
@@ -315,8 +318,8 @@ export function UsuarioForm({ handleCloseModal }) {
           <h6 className="text-danger fw-bold text-uppercase small mt-4 mb-3 border-bottom pb-2">
             Cuenta y Acceso
           </h6>
-          <div className="row g-3 mb-3">
-            <div className="col-md-7">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-3">
+            <div className="md:col-span-7">
               <label className="form-label small fw-semibold text-muted mb-1 d-flex align-items-center gap-1">
                 <Mail size={16} />
                 Correo Electrónico
@@ -342,7 +345,7 @@ export function UsuarioForm({ handleCloseModal }) {
                 </span>
               )}
             </div>
-            <div className="col-md-5">
+            <div className="md:col-span-5">
               <label className="form-label small fw-semibold text-muted mb-1 d-flex align-items-center gap-1">
                 <Lock size={16} />
                 Método Auth
@@ -369,9 +372,9 @@ export function UsuarioForm({ handleCloseModal }) {
           <h6 className="text-danger fw-bold text-uppercase small mt-4 mb-3 border-bottom pb-2">
             Datos Laborales
           </h6>
-          <div className="row g-3 mb-3">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-3">
             {/* Área */}
-            <div className="col-md-6">
+            <div className="md:col-span-6">
               <label className="form-label small fw-semibold text-muted mb-1 d-flex align-items-center gap-1">
                 <Building2 size={16} />
                 Área
@@ -395,7 +398,7 @@ export function UsuarioForm({ handleCloseModal }) {
             </div>
 
             {/* Cargo */}
-            <div className="col-md-6">
+            <div className="md:col-span-6">
               <label className="form-label small fw-semibold text-muted mb-1 d-flex align-items-center gap-1">
                 <Briefcase size={16} />
                 Cargo
@@ -425,7 +428,7 @@ export function UsuarioForm({ handleCloseModal }) {
             </div>
 
             {/* Salario */}
-            <div className="col-md-4">
+            <div className="md:col-span-4">
               <label className="form-label small fw-semibold text-muted mb-1 d-flex align-items-center gap-1">
                 <Banknote size={16} />
                 Salario
@@ -439,7 +442,7 @@ export function UsuarioForm({ handleCloseModal }) {
             </div>
 
             {/* Horario */}
-            <div className="col-md-8">
+            <div className="md:col-span-8">
               <label className="form-label small fw-semibold text-muted mb-1 d-flex align-items-center gap-1">
                 <Clock size={16} />
                 Horario
@@ -464,25 +467,25 @@ export function UsuarioForm({ handleCloseModal }) {
               )}
             </div>
           </div>
-        </div>
+        </CardContent>
 
         {/* FOOTER ACCIONES */}
-        <div className="card-footer border-0 d-flex justify-content-end bg-transparent gap-2 pt-2 pb-0">
-          <button
+        <CardFooter className="border-0 flex justify-end bg-transparent gap-2 pt-2 pb-0">
+          <Button
             type="button"
             className="btn-cerrar  px-4 rounded-3"
             onClick={handleCloseModal}
-          >
+           variant="default">
             Cancelar
-          </button>
-          <button
+          </Button>
+          <Button
             type="submit"
             className="btn-guardar btn-sm px-4 rounded-3 fw-bold"
-          >
+           variant="default">
             Registrar Usuario
-          </button>
-        </div>
+          </Button>
+        </CardFooter>
       </form>
-    </div>
+    </Card>
   );
 }

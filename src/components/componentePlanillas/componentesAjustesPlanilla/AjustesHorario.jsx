@@ -15,6 +15,9 @@ import {
   BtnEliminar,
 } from "../../componentesReutilizables/BotonesAccion";
 import { GetHorariosAll } from "../../../service/accionesPlanilla/GetHorarioAll";
+import { Button } from "../../ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+
 
 export function AjustesHorario() {
   const queryClient = useQueryClient();
@@ -165,7 +168,7 @@ export function AjustesHorario() {
               />
             </>
           ) : (
-            <button
+            <Button
               className="btn-activar"
               title="acivar"
               disabled={loadingActivar}
@@ -173,13 +176,13 @@ export function AjustesHorario() {
                 setModalActivarDedu(true);
                 setDataHorario(row);
               }}
-            >
+             variant="default">
               {loadingActivar ? (
                 <SpinnerCargando />
               ) : (
                 <Check className="text-auto" size={"auto"} />
               )}
-            </button>
+            </Button>
           )}
         </div>
       ),
@@ -189,8 +192,8 @@ export function AjustesHorario() {
     },
   ];
   return (
-    <div className="card  h-100 py-2">
-      <div className="card-header d-flex justify-content-between align-items-center p-2 border-bottom">
+    <Card className="h-full py-2">
+      <CardHeader className="flex justify-between items-center p-2 border-b">
         <h4 className=" mb-0">
           <Timer className="text-auto" /> Horarios
         </h4>
@@ -203,7 +206,7 @@ export function AjustesHorario() {
           />
         </div>
 
-        <button
+        <Button
           className="btn-principal btn-icon mx-2"
           title="Agregar"
           onClick={() => {
@@ -211,13 +214,13 @@ export function AjustesHorario() {
             setEditarHorario(false);
             setDataHorario([]);
           }}
-        >
+         variant="default">
           <Plus className="text-auto" />
-        </button>
-      </div>
-      <div className="card-body p-0">
+        </Button>
+      </CardHeader>
+      <CardContent className="p-0">
         <TablasGenerales columnas={columnas} datos={horariosFiltrados} />
-      </div>
+      </CardContent>
 
       <ModalRight
         isOpen={modalAddHorario}
@@ -260,6 +263,6 @@ export function AjustesHorario() {
         handleActivar={handleActivarDeduccion}
         handleCloseModal={() => setModalActivarDedu(false)}
       />
-    </div>
+    </Card>
   );
 }

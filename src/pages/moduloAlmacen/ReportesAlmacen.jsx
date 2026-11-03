@@ -5,6 +5,8 @@ import { useState } from "react";
 import ModalReportes from "../../components/componentesReutilizables/ModalReportes";
 import { Cargando } from "../../components/componentesReutilizables/Cargando";
 import { EstadoIntegraciones } from "../../hooks/EstadoIntegraciones";
+import { Card } from "@/components/ui/card";
+
 
 export function ReportesAlmacen() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -92,9 +94,9 @@ export function ReportesAlmacen() {
 
   return (
     <div>
-      <div className="card shadow-sm p-3">
+      <Card className="shadow-sm p-3">
         <h3 className="mb-4">Reportes</h3>
-        <div className="row g-3 mb-4">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-4">
           <FormularioReporte
             titulo="Reporte de Almacen"
             onSubmitGoogle={handleReporteGoogle}
@@ -132,7 +134,7 @@ export function ReportesAlmacen() {
             estadoIntegracionGoogle={estadoGoogleConfig}
           />
         </div>
-      </div>
+      </Card>
 
       {loadingTipo && (
         <div className="d-flex justify-content-center">

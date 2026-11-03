@@ -1,7 +1,7 @@
 import { useState } from "react"; // 1. Importamos useState
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { GetSedes } from "../../../service/accionesAreasCargos/GetSedes";
-import { Spinner } from "react-bootstrap"; // Ya no importamos Offcanvas
+import { Spinner } from "../../ui/spinner";
 import {
   Building2,
   CheckCheck,
@@ -18,10 +18,13 @@ import ModalAlertQuestion from "../../componenteToast/ModalAlertQuestion";
 import { PutData } from "../../../service/CRUD/PutData";
 import ModalAlertActivar from "../../componenteToast/ModalAlertActivar";
 import { capitalizeFirstLetter } from "../../../hooks/FirstLetterUp";
+import { Button } from "../../ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 
 const SedesLoading = () => (
   <div className="text-center mt-4">
-    <Spinner animation="border" />
+    <Spinner className="size-8 text-primary" />
     <p className="text-muted mt-2">Cargando sedes...</p>
   </div>
 );
@@ -100,8 +103,8 @@ export function Sedes() {
 
   return (
     <>
-      <div className="card ">
-        <div className="card-header d-flex justify-content-between align-items-center">
+      <Card className="">
+        <CardHeader className="flex justify-between items-center">
           <div className="d-flex gap-2 align-items-center">
             <div className="p-2 alert alert-danger rounded-lg mb-0">
               <Building2 className="text-danger" size={20} />{" "}
@@ -123,11 +126,11 @@ export function Sedes() {
               setShowModal(true);
             }}
           />
-        </div>
-        <div className="card-body">
-          <div className="row g-4">
+        </CardHeader>
+        <CardContent className="">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
             {sedes.map((sede, i) => (
-              <div className="col-md-6 col-lg-4" key={sede?.codigo || i}>
+              <div className="md:col-span-6 col-lg-4" key={sede?.codigo || i}>
                 <SedeCard
                   sede={sede}
                   index={i}
@@ -140,8 +143,8 @@ export function Sedes() {
               </div>
             ))}
           </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
       {showModal && (
         <ModalRight
@@ -218,45 +221,45 @@ function SedeCard({
         setShowModalDesactivar={setShowModalDesactivar}
         setShowModalActivar={setShowModalActivar}
       />
-      <div className="card-body p-3 d-flex flex-column">
+      <CardContent className="p-3 flex flex-col">
         <div className="flex-grow-1">
-          <h5 className="card-title d-flex align-items-center gap-2 mb-3">
+          <CardTitle asChild><h5 className="d-flex align-items-center gap-2 mb-3">
             <Building2 className="text-danger" height="20px" width="20px" />
             <span className="fw-bold">
               {capitalizeFirstLetter(sede?.nombre)}
             </span>
-          </h5>
+          </h5></CardTitle>
           <div className="d-flex flex-column gap-2 mb-3">
-            <span className="card-text d-flex align-items-start gap-2">
+            <span className="d-flex align-items-start gap-2">
               <MapPin className="text-muted mt-1" height="16px" width="16px" />
               <span>{sede?.direccion}</span>
             </span>
-            <span className="card-text d-flex align-items-center gap-2">
+            <span className="d-flex align-items-center gap-2">
               <Phone className="text-muted" height="16px" width="16px" />
               {sede?.telefono}
             </span>
           </div>
-          <p className="card-text mb-3 text-muted small">
+          <p className="mb-3 text-muted small">
             Código: <strong>{sede?.codigo}</strong>
           </p>
         </div>
         <div className="d-flex justify-content-between align-items-center mt-auto pt-3 border-top">
           <SedeStatusBadge estado={sede?.estado} />
           {sede?.estado == 0 && (
-            <button
+            <Button
               className="btn btn-outline-success btn-sm"
               onClick={() => {
                 if (typeof setSedeActual === "function") setSedeActual(sede);
                 if (typeof setShowModalActivar === "function")
                   setShowModalActivar(true);
               }}
-            >
+             variant="default">
               Activar
-            </button>
+            </Button>
           )}
           {isMiSede && <span className="badge bg-danger">Sede Actual</span>}
         </div>
-      </div>
+      </CardContent>
     </div>
   );
 }
@@ -274,23 +277,23 @@ function SedeActionsMenu({
       className="position-absolute top-0 end-0 p-2 dropdown"
       style={{ zIndex: 2 }}
     >
-      <button
+      <Button
         className="btn btn-sm btn-light bg-transparent border-0"
         type="button"
         id={`dropdownMenuButton-${index}`}
         data-bs-toggle="dropdown"
         aria-expanded="false"
         aria-label="Opciones de sede"
-      >
+       variant="default">
         <EllipsisVertical className="text-muted" width="20px" height="20px" />
-      </button>
+      </Button>
       <ul
         className="dropdown-menu dropdown-menu-end"
         aria-labelledby={`dropdownMenuButton-${index}`}
       >
         {sede?.estado == 0 && (
           <li>
-            <button
+            <Button
               className="dropdown-item"
               type="button"
               onClick={(e) => {
@@ -299,26 +302,26 @@ function SedeActionsMenu({
                 if (typeof setShowModalActivar === "function")
                   setShowModalActivar(true);
               }}
-            >
+             variant="default">
               Activar
-            </button>
+            </Button>
           </li>
         )}
         <li>
-          <button
+          <Button
             className="dropdown-item"
             type="button"
             onClick={(e) => {
               e.preventDefault();
               onEdit(sede);
             }}
-          >
+           variant="default">
             Editar
-          </button>
+          </Button>
         </li>
         {sede?.estado == 1 && (
           <li>
-            <button
+            <Button
               className="dropdown-item"
               type="button"
               onClick={(e) => {
@@ -328,9 +331,9 @@ function SedeActionsMenu({
                 if (typeof setShowModalDesactivar === "function")
                   setShowModalDesactivar(true);
               }}
-            >
+             variant="default">
               Desactivar
-            </button>
+            </Button>
           </li>
         )}
       </ul>

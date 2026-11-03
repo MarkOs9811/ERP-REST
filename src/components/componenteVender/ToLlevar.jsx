@@ -34,6 +34,9 @@ import { GetConfi } from "../../service/accionesConfiguracion/GetConfi";
 import { GetInventario } from "../../service/GetInventario";
 import { OffcanvasColaLlevar } from "./tareasVender/OffCanvaColaLlevar";
 import { GetPedidosCocina } from "../../service/accionesVender/GetPedidosCocina";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+
 
 export function ToLlevar() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -146,21 +149,21 @@ export function ToLlevar() {
 
   return (
     <div className="h-100 bg-transparent">
-      <div className="row h-100 g-3">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-4h-100 g-3">
         {/* COLUMNA IZQUIERDA: CUENTA Y DETALLES */}
-        <div className="col-md-4 col-lg-3 h-100">
-          <div className="card  flex-grow-1 h-100 d-flex flex-column  overflow-hidden">
+        <div className="md:col-span-4 col-lg-3 h-100">
+          <Card className="flex-grow-1 h-full flex flex-col overflow-hidden">
             {/* Header: Título y Botón Eliminar (Reubicado) */}
-            <div className="card-header m-0 bg-white border-bottom  d-flex py-3">
+            <CardHeader className="m-0 bg-background border-b flex py-3">
               <div className="d-flex justify-content-between align-items-center w-100">
                 <h5 className="mb-0 fw-bold text-dark">Para Llevar</h5>
                 <div className="d-flex align-items-center gap-2">
-                  <button
+                  <Button
                     className="btn-editar d-flex align-items-center gap-2 position-relative rounded-pill px-3"
                     data-bs-toggle="offcanvas"
                     data-bs-target="#offcanvasColaLlevar"
                     aria-controls="offcanvasColaLlevar"
-                  >
+                   variant="secondary">
                     <ListOrderedIcon size={16} />
                     Cola
                     {pedidosLlevarPendientes?.length > 0 && (
@@ -174,22 +177,22 @@ export function ToLlevar() {
                         {pedidosLlevarPendientes.length}
                       </span>
                     )}
-                  </button>
+                  </Button>
                   {items.length > 0 && (
-                    <button
+                    <Button
                       className="btn-eliminar d-flex align-items-center gap-1"
                       onClick={handleEliminarTodo}
                       title="Limpiar cuenta"
-                    >
+                     variant="destructive">
                       <Trash2 size={16} />
                       <span className="small">Limpiar</span>
-                    </button>
+                    </Button>
                   )}
                 </div>
               </div>
-            </div>
+            </CardHeader>
 
-            <div className="card-body overflow-auto p-0 d-flex flex-column ">
+            <CardContent className="overflow-auto p-0 flex flex-col">
               {/* Lista de Platos */}
 
               {items.length > 0 ? (
@@ -238,28 +241,28 @@ export function ToLlevar() {
                                 margin: "0 auto",
                               }}
                             >
-                              <button
+                              <Button
                                 className="btn-informativo btn-icon btn-link border-0 text-dark p-0"
                                 style={{ width: "22px" }}
                                 onClick={() =>
                                   handleRemovePlatoPreventa(item.id)
                                 }
-                              >
+                               variant="default">
                                 <Minus size={14} />
-                              </button>
+                              </Button>
                               <span
                                 className="fw-bold mx-1"
                                 style={{ fontSize: "0.85rem" }}
                               >
                                 {item.cantidad}
                               </span>
-                              <button
+                              <Button
                                 className="btn-informativo btn-icon btn-link border-0 text-dark p-0"
                                 style={{ width: "22px" }}
                                 onClick={() => handleAddPlatoPreventa(item)}
-                              >
+                               variant="default">
                                 <Plus size={14} />
-                              </button>
+                              </Button>
                             </div>
                           </td>
                           <td
@@ -269,14 +272,14 @@ export function ToLlevar() {
                             S/. {(item.cantidad * item.precio).toFixed(2)}
                           </td>
                           <td className="text-center py-2">
-                            <button
+                            <Button
                               className="btn-eliminar btn-icon   mx-2 p-0 "
                               onClick={() =>
                                 handleRemovePlatoPreventa(item.id, true)
                               }
-                            >
+                             variant="destructive">
                               <Trash2 size={14} />
-                            </button>
+                            </Button>
                           </td>
                         </tr>
                       ))}
@@ -289,11 +292,11 @@ export function ToLlevar() {
                   <p className="small mb-0">La cuenta está vacía</p>
                 </div>
               )}
-            </div>
+            </CardContent>
 
             {/* Footer: Totales y Botón Pagar */}
-            <div
-              className="card-footer bg-white border-top p-3 shadow-lg"
+            <CardFooter
+              className="bg-background border-t p-3 shadow-lg"
               style={{ zIndex: 10 }}
             >
               {/* SECCIÓN NUEVA: Input de Descripción General */}
@@ -338,21 +341,21 @@ export function ToLlevar() {
                 </div>
               </div>
 
-              <button
+              <Button
                 className="btn-guardar w-100 py-3 fw-bold d-flex align-items-center justify-content-center gap-2 shadow-sm"
                 onClick={hanldleRealizarPago}
                 disabled={items.length === 0}
-              >
+               variant="default">
                 <CheckCheckIcon size={20} />
                 COBRAR / ENVIAR
-              </button>
-            </div>
-          </div>
+              </Button>
+            </CardFooter>
+          </Card>
         </div>
         {/* COLUMNA DERECHA: CATÁLOGO (Sin cambios mayores, solo ancho) */}
-        <div className="col-md-8 col-lg-9 h-100 ">
-          <div className="card d-flex flex-grow-1 flex-column h-100 p-0 m-0 overflow-auto">
-            <div className="card-header bg-white border-bottom py-3 px-3 d-flex align-items-center gap-3 flex-wrap">
+        <div className="md:col-span-8 col-lg-9 h-100 ">
+          <Card className="flex flex-grow-1 flex-col h-full p-0 m-0 overflow-auto">
+            <CardHeader className="bg-background border-b py-3 px-3 flex items-center gap-3 flex-wrap">
               <div className="d-flex align-items-center gap-2 flex-shrink-0">
                 {claveVenta === "restaurante" ? (
                   <Hamburger size={28} />
@@ -382,14 +385,14 @@ export function ToLlevar() {
                   clearSearch={setSearchTerm}
                 />
               </div>
-            </div>
+            </CardHeader>
 
             <CondicionCarga
               isLoading={isLoadingProductos}
               isError={isErrorProductos}
               mode="cards"
             >
-              <div className="card-body p-2  contenedor-platos overflow-x-hidden m-auto ">
+              <CardContent className="p-2 contenedor-platos overflow-x-hidden m-auto">
                 {productos
                   .filter((producto) => {
                     const matchCategoria =
@@ -428,9 +431,9 @@ export function ToLlevar() {
                       />
                     );
                   })}
-              </div>
+              </CardContent>
             </CondicionCarga>
-          </div>
+          </Card>
         </div>
       </div>
       <OffcanvasColaLlevar pedidosCola={pedidosLlevar} />

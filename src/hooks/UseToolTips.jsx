@@ -1,10 +1,11 @@
-import { useEffect } from 'react';
-import bootstrap from 'bootstrap/dist/js/bootstrap.bundle';
+import { useEffect } from "react";
 
 export const useTooltips = (dynamicContent) => {
   useEffect(() => {
     // Obtener todos los elementos que tienen tooltips
-    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    const tooltipTriggerList = document.querySelectorAll(
+      '[data-bs-toggle="tooltip"]',
+    );
     const tooltipInstances = [];
 
     // Inicializar tooltips
@@ -14,7 +15,7 @@ export const useTooltips = (dynamicContent) => {
       tooltipInstances.push(tooltipInstance);
 
       // Ocultar el tooltip al salir del botón
-      tooltipTriggerEl.addEventListener('mouseleave', () => {
+      tooltipTriggerEl.addEventListener("mouseleave", () => {
         tooltipInstance.hide();
       });
     });

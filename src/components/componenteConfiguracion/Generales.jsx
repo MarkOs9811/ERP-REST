@@ -14,6 +14,9 @@ import { useNavigate } from "react-router-dom";
 import { GetConfi } from "../../service/accionesConfiguracion/GetConfi";
 import { PutData } from "../../service/CRUD/PutData";
 import { PostData } from "../../service/CRUD/PostData";
+import { Button } from "../ui/button";
+import { Card } from "@/components/ui/card";
+
 
 export function Generales() {
   const navigate = useNavigate();
@@ -120,14 +123,14 @@ export function Generales() {
         <Settings size={22} /> Configuración General
       </h3>
 
-      <div className="row g-4">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
         {/* Card IGV */}
-        <div className="col-md-6">
+        <div className="md:col-span-6">
           <form
             onSubmit={handleSubmitIgv((data) => mutationIgv.mutate(data))}
             className="h-100"
           >
-            <div className="card border p-3">
+            <Card className="border p-3">
               <div className="mb-3 d-flex gap-2 align-items-center">
                 <span
                   className="alert border-0 fw-bold p-2 mb-0"
@@ -171,11 +174,11 @@ export function Generales() {
                 </div>
               </div>
               <div className="d-flex justify-content-end mt-auto">
-                <button
+                <Button
                   type="submit"
                   disabled={mutationIgv.isPending}
                   className="btn-guardar px-3"
-                >
+                 variant="default">
                   {mutationIgv.isPending ? (
                     "Guardando..."
                   ) : (
@@ -183,19 +186,19 @@ export function Generales() {
                       <Save size={18} className="me-2" /> Guardar IGV
                     </>
                   )}
-                </button>
+                </Button>
               </div>
-            </div>
+            </Card>
           </form>
         </div>
 
         {/* Card Moneda */}
-        <div className="col-md-6">
+        <div className="md:col-span-6">
           <form
             onSubmit={handleSubmitMoneda((data) => mutationMoneda.mutate(data))}
             className="h-100"
           >
-            <div className="card border p-3">
+            <Card className="border p-3">
               <div className="mb-3 d-flex gap-2 align-items-center">
                 <span
                   className="alert border-0 fw-bold p-2 mb-0"
@@ -237,11 +240,11 @@ export function Generales() {
                 <span>Moneda actual: </span>"<b>{itemMoneda.clave}</b>"
               </div>
               <div className="d-flex justify-content-end mt-auto">
-                <button
+                <Button
                   type="submit"
                   disabled={mutationMoneda.isPending}
                   className="btn-guardar px-3"
-                >
+                 variant="default">
                   {mutationMoneda.isPending ? (
                     "Guardando..."
                   ) : (
@@ -249,19 +252,19 @@ export function Generales() {
                       <Save size={18} className="me-2" /> Guardar Moneda
                     </>
                   )}
-                </button>
+                </Button>
               </div>
-            </div>
+            </Card>
           </form>
         </div>
 
         {/* Card Zona Horaria */}
-        <div className="col-md-6">
+        <div className="md:col-span-6">
           <form
             onSubmit={handleSubmitZona((data) => mutationZona.mutate(data))}
             className="h-100"
           >
-            <div className="card border p-3">
+            <Card className="border p-3">
               <div className="mb-3 d-flex gap-2 align-items-center">
                 <span
                   className="alert border-0 fw-bold p-2 mb-0"
@@ -313,11 +316,11 @@ export function Generales() {
                 <b>{itemZona.clave}</b>
               </div>
               <div className="d-flex justify-content-end mt-auto">
-                <button
+                <Button
                   type="submit"
                   disabled={mutationZona.isPending}
                   className="btn-guardar px-3"
-                >
+                 variant="default">
                   {mutationZona.isPending ? (
                     "Guardando..."
                   ) : (
@@ -325,15 +328,15 @@ export function Generales() {
                       <Save size={18} className="me-2" /> Guardar Zona
                     </>
                   )}
-                </button>
+                </Button>
               </div>
-            </div>
+            </Card>
           </form>
         </div>
 
         {/* Card Accesos Rápidos: Métodos de Pago */}
-        <div className="col-md-6">
-          <div className="card border p-3">
+        <div className="md:col-span-6">
+          <Card className="border p-3">
             <div className="mb-3 d-flex gap-2 align-items-center">
               <span
                 className="alert border-0 fw-bold p-2 mb-0"
@@ -364,15 +367,15 @@ export function Generales() {
               </p>
             </div>
             <div className="d-flex justify-content-end mt-auto">
-              <button
+              <Button
                 type="button"
                 className="btn-generico d-flex align-items-center gap-2"
                 onClick={() => navigate("/ventas/ajustesVentas")}
-              >
+               variant="default">
                 Configurar Pagos <ExternalLink size={16} />
-              </button>
+              </Button>
             </div>
-          </div>
+          </Card>
         </div>
       </div>
     </div>

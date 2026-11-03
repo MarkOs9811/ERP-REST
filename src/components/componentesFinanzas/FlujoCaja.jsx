@@ -1,5 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { GetPresupuestos } from "../../service/serviceFinanzas/GetPresupuestos";
+import { CardContent } from "@/components/ui/card";
+
 
 const normalizarNumero = (valor) => Number(valor ?? 0);
 
@@ -67,7 +69,7 @@ export function FlujoCaja({ modoVista = "total", selectedMonth = "" }) {
   }
 
   return (
-    <div className="card-body p-3">
+    <CardContent className="p-3">
       <table className="w-100 table-borderless table-hover table-sm">
         <thead>
           <tr>
@@ -188,6 +190,6 @@ export function FlujoCaja({ modoVista = "total", selectedMonth = "" }) {
           </tr>
         </tfoot>
       </table>
-    </div>
+    </CardContent>
   );
 }

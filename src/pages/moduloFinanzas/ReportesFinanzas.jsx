@@ -18,6 +18,9 @@ import { ReporteUtilidadNeta } from "../../components/componentesFinanzas/report
 import { ReportePagosPlanilla } from "../../components/componentesFinanzas/reportesFinanzas/ReportePagosPlanilla";
 import { ReporteCaja } from "../../components/componentesFinanzas/reportesFinanzas/ReporteCaja";
 import { ReporteGeneralFinanzas } from "../../components/componentesFinanzas/reportesFinanzas/ReporteGeneralFinanzas";
+import { Button } from "../../components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+
 
 export function ReportesFinanzas() {
   const [reporteModal, setReporteModal] = useState("");
@@ -71,10 +74,10 @@ export function ReportesFinanzas() {
 
   return (
     <div>
-      <div className="row gap-3">
-        <div className="col-md-12">
-          <div className="card ">
-            <div className="card-body">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-4gap-3">
+        <div className="md:col-span-12">
+          <Card className="">
+            <CardContent className="">
               <h4 className="text-left">
                 <ChartNoAxesCombined
                   color={"var(--fw-strawberry)"}
@@ -87,29 +90,32 @@ export function ReportesFinanzas() {
                 Analiza y controla el estado financiero general del restaurante
                 con reportes dinámicos y gráficos.
               </p>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </div>
-        <div className="col-md-12 ">
+        <div className="md:col-span-12 ">
           <div className="reportes-grid">
             {reportes.map((reporte, index) => (
-              <motion.div key={index} className="card reporte-card">
-                <div className="reporte-icon">{reporte.icono}</div>
-                <h5 className="text-dark text-auto fw-bold">
-                  {reporte.titulo}
-                </h5>
-                <p>{reporte.descripcion}</p>
-                <button
-                  className="btn-guardar"
-                  onClick={() => {
-                    setReporteModal(reporte.dataModal);
-                    setModalReporte(true);
-                    setTituloReporte(reporte.titulo);
-                  }}
-                >
-                  Ver detalles
-                </button>
-              </motion.div>
+              <Card asChild>
+                <motion.div key={index} className="reporte-card">
+                  <div className="reporte-icon">{reporte.icono}</div>
+                  <h5 className="text-dark text-auto fw-bold">
+                    {reporte.titulo}
+                  </h5>
+                  <p>{reporte.descripcion}</p>
+                  <Button
+                    className="btn-guardar"
+                    onClick={() => {
+                      setReporteModal(reporte.dataModal);
+                      setModalReporte(true);
+                      setTituloReporte(reporte.titulo);
+                    }}
+                    variant="default"
+                  >
+                    Ver detalles
+                  </Button>
+                </motion.div>
+              </Card>
             ))}
           </div>
         </div>

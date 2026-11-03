@@ -16,6 +16,9 @@ import { useNavigate } from "react-router-dom";
 import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteExcel";
 import { CondicionCarga } from "../../components/componentesReutilizables/CondicionCarga";
 import { formatMoneda } from "../../utils/currency";
+import { Button } from "../../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 
 export function Inventario() {
   const [search, setSearch] = useState("");
@@ -39,9 +42,9 @@ export function Inventario() {
       };
 
   return (
-    <div className="row g-3 ">
+    <div className="grid grid-cols-1 md:grid-cols-12 gap-3 ">
       <div className="col-lg-12">
-        <div className="row g-3">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
           <MetricCard
             loading={isLoading}
             error={isError}
@@ -87,12 +90,12 @@ export function Inventario() {
       </div>
 
       <div className="col-lg-12">
-        <div className="card  ">
-          <div className="card-header border-bottom-0 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+        <Card className="">
+          <CardHeader className="border-bottom-0 flex flex-col flex-md-row justify-between items-center gap-2">
             <div className="d-flex align-items-center">
-              <h4 className="card-title mb-0 titulo-card-especial">
+              <CardTitle asChild><h4 className="mb-0 titulo-card-especial">
                 Panel de Inventario
-              </h4>
+              </h4></CardTitle>
               <span className="badge-header">Productos</span>
             </div>
 
@@ -108,28 +111,28 @@ export function Inventario() {
                 />
               </div>
 
-              <button
+              <Button
                 type="button"
                 className="btn btn-outline-dark px-3"
                 onClick={() => GetReporteExcel("/reporteInventarioTodo")}
-              >
+               variant="default">
                 <FileText size={18} />
                 Reporte
-              </button>
+              </Button>
 
-              <button
+              <Button
                 className="btn-principal px-3"
                 onClick={() => navigate("/ventas/solicitud/realizarSolicitud")}
-              >
+               variant="default">
                 <Plus size={18} />
                 Solicitar
-              </button>
+              </Button>
             </div>
-          </div>
-          <div className="card-body p-0">
+          </CardHeader>
+          <CardContent className="p-0">
             <InventarioList search={search} />
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
@@ -148,7 +151,7 @@ function MetricCard({
   return (
     <div className="col-sm-12 col-md-3 col-lg-3">
       <CondicionCarga isLoading={loading} isError={error} mode="single-card">
-        <div className="card  p-3">
+        <Card className="p-3">
           <div>
             <span className="position-absolute opacity-90">{icon}</span>
           </div>
@@ -158,7 +161,7 @@ function MetricCard({
             </h4>
             <p className="h1 mb-0">{value}</p>
           </div>
-        </div>
+        </Card>
       </CondicionCarga>
     </div>
   );

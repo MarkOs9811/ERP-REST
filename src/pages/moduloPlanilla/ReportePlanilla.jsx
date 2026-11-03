@@ -6,6 +6,8 @@ import FormularioReporteGeneral from "../../components/componentesReporte/Formul
 import FormularioReportes from "../../components/componentesReporte/FormularioReporte";
 import ModalReportes from "../../components/componentesReutilizables/ModalReportes";
 import { EstadoIntegraciones } from "../../hooks/EstadoIntegraciones";
+import { Card } from "@/components/ui/card";
+
 
 export function ReportePlanilla() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -95,9 +97,9 @@ export function ReportePlanilla() {
 
   return (
     <div>
-      <div className="card p-3">
-        <div className="row g-3 mb-4">
-          <div className="col-md-12">
+      <Card className="p-3">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-4">
+          <div className="md:col-span-12">
             <h3 className="mb-4">Reportes Planilla</h3>
           </div>
 
@@ -151,7 +153,7 @@ export function ReportePlanilla() {
             estadoIntegracionGoogle={estadoGoogleConfig}
           />
         </div>
-      </div>
+      </Card>
 
       {isModalOpen && (
         <ModalReportes
