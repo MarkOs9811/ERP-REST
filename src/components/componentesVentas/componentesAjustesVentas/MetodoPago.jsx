@@ -53,34 +53,34 @@ const MetodoPago = ({ metodos, onToggle }) => {
     }
   };
   return (
-    <div className="md:col-span-4">
+    <div className="col-span-full md:col-span-4">
       <Card className="">
         <CardContent className="">
-          <div className="d-flex justify-content-between align-items-center">
-            <CardTitle asChild><h6 className="mb-0 fw-bold">Métodos de Pago</h6></CardTitle>
+          <div className="flex justify-between items-center">
+            <CardTitle asChild><h6 className="mb-0 font-bold">Métodos de Pago</h6></CardTitle>
             <Button
               type="button"
-              className="btn-principal btn-icon btn-sm"
+              className="btn-principal btn-icon inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 px-3 text-xs"
               title="Agregar Método"
               onClick={() => setModalAddMetodoPago(true)}
              variant="default">
               <Plus className="text-auto" />
             </Button>
           </div>
-          <ul className="list-unstyled mt-3">
+          <ul className="m-0 list-none p-0 mt-3">
             {metodos.map((metodo) => (
               <li
                 key={metodo.id}
-                className="d-flex align-items-center justify-content-between mb-3 py-2 px-2 rounded"
+                className="flex items-center justify-between mb-3 py-2 px-2 rounded"
               >
                 <div>
                   <h6 className="mb-1">{metodo.nombre}</h6>
-                  <small className="text-muted">Nº {metodo.id}</small>
+                  <small className="text-muted-foreground">Nº {metodo.id}</small>
                 </div>
-                <div className="d-flex gap-2">
+                <div className="flex gap-2">
                   <Button
                     type="button"
-                    className="btn-eliminar btn-icon rounded-5 "
+                    className="btn-eliminar btn-icon rounded-xl"
                     onClick={() => {
                       setModalQuestion(true);
                       setDataMetodo(metodo);
@@ -89,11 +89,11 @@ const MetodoPago = ({ metodos, onToggle }) => {
                     <Trash2 size={18} />
                   </Button>
                   <div
-                    className="form-check form-switch m-0"
+                    className="flex items-center gap-2 m-0"
                     style={{ minWidth: 40 }}
                   >
                     <input
-                      className="form-check-input"
+                      className="size-4 shrink-0 rounded border-input accent-primary"
                       type="checkbox"
                       id={`switch-metodo-${metodo.id}`}
                       checked={metodo.estado === 1}

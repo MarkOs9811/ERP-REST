@@ -98,8 +98,8 @@ export function ReportePlanilla() {
   return (
     <div>
       <Card className="p-3">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-4">
-          <div className="md:col-span-12">
+        <div className="grid grid-cols-12 gap-3 mb-4">
+          <div className="col-span-full md:col-span-12">
             <h3 className="mb-4">Reportes Planilla</h3>
           </div>
 

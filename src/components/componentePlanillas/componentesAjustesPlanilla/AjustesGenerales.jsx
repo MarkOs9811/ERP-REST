@@ -6,7 +6,6 @@ import { CondicionCarga } from "../../componentesReutilizables/CondicionCarga";
 import { Button } from "../../ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
-
 export function AjustesGenerales() {
   const {
     data: ajusteData = [],
@@ -27,18 +26,30 @@ export function AjustesGenerales() {
   return (
     <Card className="shadow-sm h-full">
       <CardHeader className="flex justify-between items-center p-3 border-b">
-        <h5 className=" mb-0">
+        <h5 className="mb-0">
           <FileCog className="text-auto" /> Ajustes Generales Planilla
         </h5>
-        <div className="d-flex ms-auto mx-2">
-          <input type="text" placeholder="Buscar..." className="form-control" />
+        <div className="flex mx-2">
+          <input
+            type="text"
+            placeholder="Buscar..."
+            className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+          />
         </div>
-        <Button className="btn btn-sm btn-outline-dark" title="Reporte" variant="default">
+        <Button
+          className="h-8 gap-2 px-3"
+          title="Reporte"
+          variant="ghostOutline"
+        >
           <FileText className="me-1 text-auto" />
           Reporte
         </Button>
-        <Button className="btn btn-sm btn-outline-dark mx-2" title="Agregar" variant="default">
-          <Plus className=" text-auto" />
+        <Button
+          className="shadow h-8 px-3 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border-input bg-background text-foreground hover:bg-accent mx-2"
+          title="Agregar"
+          variant="default"
+        >
+          <Plus className="text-auto" />
         </Button>
       </CardHeader>
 
@@ -48,29 +59,33 @@ export function AjustesGenerales() {
       <CondicionCarga isLoading={isLoading} isError={isError}>
         <CardContent className="p-4">
           {settings ? (
-            <div className="row">
+            <div className="grid grid-cols-12 gap-3">
               {/* Sección: Día de Pago */}
-              <div className="md:col-span-3">
-                <div className="p-3 border rounded shadow-sm bg-light h-100">
-                  <div className="d-flex justify-content-between align-items-center mb-2">
-                    <h6 className="mb-0 fw-bold d-flex align-items-center">
-                      <CalendarDays className="me-2 text-muted" size={20} />
+              <div className="col-span-full md:col-span-3">
+                <div className="p-3 rounded shadow-sm bg-muted h-full">
+                  <div className="flex justify-between items-center mb-2">
+                    <h6 className="mb-0 font-bold flex items-center">
+                      <CalendarDays
+                        className="me-2 text-muted-foreground"
+                        size={20}
+                      />
                       Día de Pago
                     </h6>
                     <Button
-                      className="btn btn-sm btn-outline-secondary"
+                      className="h-8 px-3 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border-input bg-background text-foreground shadow-sm hover:bg-accent hover:text-accent-foreground"
                       title="Editar Día de Pago"
-                     variant="default">
+                      variant="default"
+                    >
                       <Edit size={16} />
                     </Button>
                   </div>
                   <hr />
                   <div className="text-center">
-                    <p className="fs-1 fw-bolder text-dark mb-0">
+                    <p className="text-4xl font-extrabold text-foreground mb-0">
                       {/* Usamos optional chaining (?) por seguridad */}
                       {settings?.diaPago}
                     </p>
-                    <small className="text-muted d-block">
+                    <small className="text-muted-foreground block">
                       Día del mes para procesar los pagos.
                     </small>
                   </div>
@@ -78,17 +93,21 @@ export function AjustesGenerales() {
               </div>
 
               {/* Sección: Plantilla de Contrato */}
-              <div className="md:col-span-9">
-                <div className="p-3 border rounded shadow-sm h-100">
-                  <div className="d-flex justify-content-between align-items-center mb-2">
-                    <h6 className="mb-0 fw-bold d-flex align-items-center">
-                      <FileText className="me-2 text-muted" size={20} />
+              <div className="col-span-full md:col-span-9">
+                <div className="p-3 rounded shadow-sm h-full">
+                  <div className="flex justify-between items-center mb-2">
+                    <h6 className="mb-0 font-bold flex items-center">
+                      <FileText
+                        className="me-2 text-muted-foreground"
+                        size={20}
+                      />
                       Plantilla de Contrato
                     </h6>
                     <Button
-                      className="btn btn-sm btn-outline-secondary"
+                      className="h-8 px-3 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border-input bg-background text-foreground shadow-sm hover:bg-accent hover:text-accent-foreground"
                       title="Editar Plantilla"
-                     variant="default">
+                      variant="default"
+                    >
                       <Edit size={16} />
                     </Button>
                   </div>
@@ -97,7 +116,7 @@ export function AjustesGenerales() {
                     y lo ponemos en readOnly.
                   */}
                   <textarea
-                    className="form-control mt-2"
+                    className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 mt-2"
                     rows="8"
                     value={settings?.contratoText || ""} // || "" para evitar warnings de componente no controlado
                     readOnly
@@ -113,7 +132,7 @@ export function AjustesGenerales() {
           ) : (
             // Mensaje si no se cargan los settings (incluso después de isLoading=false)
             <div className="text-center p-5">
-              <p className="text-muted">
+              <p className="text-muted-foreground">
                 No se encontraron datos de configuración.
               </p>
             </div>

@@ -23,7 +23,6 @@ import ToastAlert from "../componenteToast/ToastAlert";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-
 export function TransferirAlmacen() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredData, setFilteredData] = useState([]);
@@ -115,15 +114,17 @@ export function TransferirAlmacen() {
   }, [searchTerm, dataAlmacen]);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
-      <div className="col-lg-4 col-md-4 col-sm-12">
+    <div className="grid grid-cols-12 gap-3">
+      <div className="lg:col-span-4 md:col-span-4 col-span-full">
         <Card className="border h-full">
           <CardHeader className="flex items-center">
-            <CardTitle asChild><p className="">Almacen</p></CardTitle>
-            <div className="ms-auto position-relative d-flex">
-              <Search className="position-absolute   my-2 text-muted ms-2" />
+            <CardTitle asChild>
+              <p className="">Almacen</p>
+            </CardTitle>
+            <div className="ms-auto relative flex">
+              <Search className="absolute my-2 text-muted-foreground ms-2" />
               <input
-                className="form-control ps-5"
+                className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ps-5"
                 type="search"
                 inputmode="search"
                 placeholder="Buscar..."
@@ -143,19 +144,19 @@ export function TransferirAlmacen() {
             {isLoading ? (
               <Cargando className="py-4" />
             ) : isError ? (
-              <p className="text-secondary py-4 text-center">
+              <p className="text-muted-foreground py-4 text-center">
                 Error al cargar datos
               </p>
             ) : (
-              <ul className="list-group">
+              <ul className="flex flex-col divide-y">
                 {filteredData?.map((item, index) => (
                   <li
                     key={item?.id}
-                    className={`list-group-item d-flex justify-content-between align-items-center border-0 border-bottom position-relative overflow-hidden ${
+                    className={`bg-background px-4 py-3 text-foreground flex justify-between items-center border-0 border-b relative overflow-hidden ${
                       seleccionados.some((sel) => sel.id === item?.id)
                         ? "bg-success-subtle"
                         : ""
-                    } ${Number(item?.cantidad) <= 0 ? "opacity-50 pe-none" : ""}`}
+                    }${Number(item?.cantidad) <= 0 ? "opacity-50 pointer-events-none" : ""}`}
                     onClick={(e) => handleClick(e, item)}
                   >
                     {/* Efecto Ripple (solo para este ítem) */}
@@ -171,36 +172,36 @@ export function TransferirAlmacen() {
                       />
                     )}
 
-                    <div className="d-flex align-items-center gap-2 ">
+                    <div className="flex items-center gap-2">
                       {seleccionados.some((sel) => sel.id === item?.id) ? (
                         <CheckCheck
-                          className="text-success"
+                          className="text-emerald-600 dark:text-emerald-400"
                           width="22px"
                           height="22px"
                           style={{ flexShrink: 0 }}
                         />
                       ) : (
                         <Check
-                          className="text-secondary"
+                          className="text-muted-foreground"
                           width="22px"
                           height="22px"
                           style={{ flexShrink: 0 }}
                         />
                       )}
-                      <div className="d-flex flex-column">
+                      <div className="flex flex-col">
                         <span>{item?.nombre}</span>
 
-                        <small className="text-secondary">
+                        <small className="text-muted-foreground">
                           {item?.marca} / {item?.descripcion} /{" "}
                           {item?.presentacion}
                         </small>
                       </div>
                     </div>
                     <div>
-                      <span className="badge bg-light text-muted me-1">
+                      <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-muted text-muted-foreground me-1">
                         Stock {item?.cantidad}
                       </span>
-                      <span className="badge bg-secondary">
+                      <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-secondary">
                         S/. {item?.precioUnit}
                       </span>
                     </div>
@@ -211,17 +212,18 @@ export function TransferirAlmacen() {
           </CardContent>
         </Card>
       </div>
-      <div className="col-lg-4 col-md-4 col-sm-12">
+      <div className="lg:col-span-4 md:col-span-4 col-span-full">
         <Card className="h-full border">
           <CardHeader className="flex">
-            <CardTitle asChild><p className="">
-              Seleccionados ({seleccionados?.length})
-            </p></CardTitle>
+            <CardTitle asChild>
+              <p className="">Seleccionados ({seleccionados?.length})</p>
+            </CardTitle>
             <div className="ms-auto">
               <Button
-                className="btn btn-sm btn-outline-danger"
+                className="shadow h-8 px-3 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border-destructive bg-background text-destructive hover:bg-destructive/10"
                 onClick={() => dispatch(clearProductoSelececcionado())}
-               variant="destructive">
+                variant="destructive"
+              >
                 Borrar todo
               </Button>
             </div>
@@ -231,60 +233,62 @@ export function TransferirAlmacen() {
             style={{ maxHeight: "calc(100vh - 340px)" }}
           >
             {seleccionados?.length === 0 ? (
-              <p className="text-muted text-center py-4">
+              <p className="text-muted-foreground text-center py-4">
                 No hay items seleccionados
               </p>
             ) : (
-              <ul className="list-group">
+              <ul className="flex flex-col divide-y">
                 {seleccionados.map((item) => (
                   <li
                     key={item?.id}
-                    className="list-group-item d-flex justify-content-between align-items-center position-relative"
+                    className="border-b bg-background px-4 py-3 text-foreground flex justify-between items-center relative"
                   >
-                    <div className="d-flex align-items-center gap-2">
+                    <div className="flex items-center gap-2">
                       {/* Botón eliminar, oculto hasta hover */}
                       <Button
-                        className="btn btn-sm btn-outline-danger p-1"
+                        className="shadow h-8 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border-destructive bg-background text-destructive hover:bg-destructive/10 p-1"
                         onClick={(e) => {
                           e.stopPropagation();
                           dispatch(
                             removeProductoSeleccionado({ id: item?.id }),
                           );
                         }}
-                       variant="destructive">
+                        variant="destructive"
+                      >
                         <Trash2 />
                       </Button>
 
-                      <div className="d-flex flex-column">
-                        <span className="fw-bold text-secondary">
+                      <div className="flex flex-col">
+                        <span className="font-bold text-muted-foreground">
                           {item?.nombre}
                         </span>
-                        <small className="text-muted">
+                        <small className="text-muted-foreground">
                           {item?.marca} / {item?.descripcion} /{" "}
                           {item?.presentacion}
                         </small>
                       </div>
                     </div>
 
-                    <div className="d-flex align-items-center justify-content-center gap-3">
-                      <div className="btn-group" role="group">
+                    <div className="flex items-center justify-center gap-3">
+                      <div className="flex items-center" role="group">
                         <Button
-                          className="btn btn-outline-dark btn-sm p-2"
+                          className="shadow border-input bg-background text-foreground hover:bg-accent inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 text-xs p-2"
                           onClick={(e) => {
                             e.stopPropagation();
                             dispatch(removeItem({ id: item?.id }));
                           }}
                           disabled={item?.cantidad <= 1}
-                         variant="default">
+                          variant="default"
+                        >
                           <Minus size={18} />
                         </Button>
 
-                        <span className="badge bg-light text-secondary border px-3 py-2">
+                        <span className="inline-flex items-center rounded-full text-xs font-semibold transition-colors bg-muted text-muted-foreground px-3 py-2">
                           {item?.cantidad}
                         </span>
 
                         <Button
-                          className="btn btn-outline-primary btn-sm p-2"
+                          className="border border-input bg-background text-foreground shadow-sm hover:bg-accent hover:text-accent-foreground inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 text-xs p-2"
                           onClick={(e) => {
                             e.stopPropagation();
                             dispatch(
@@ -305,16 +309,17 @@ export function TransferirAlmacen() {
                               ? "Cantidad máxima alcanzada"
                               : "Aumentar cantidad"
                           }
-                         variant="default">
+                          variant="default"
+                        >
                           <PlusIcon size={18} />
                         </Button>
                       </div>
 
-                      <div className="d-flex flex-column text-end">
-                        <span className="badge bg-light text-secondary border">
+                      <div className="flex flex-col text-right">
+                        <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-muted text-muted-foreground border">
                           Stock: {item?.stock ?? "--"}
                         </span>
-                        <span className="badge bg-secondary mt-1">
+                        <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-secondary mt-1">
                           S/. {(item?.precioUnit * item?.cantidad).toFixed(2)}
                         </span>
                       </div>
@@ -326,10 +331,12 @@ export function TransferirAlmacen() {
           </CardContent>
         </Card>
       </div>
-      <div className="col-lg-4 col-md-4 col-sm-12">
+      <div className="lg:col-span-4 md:col-span-4 col-span-full">
         <Card className="border h-full">
           <CardHeader className="border-b">
-            <CardTitle asChild><p className="">Destino</p></CardTitle>
+            <CardTitle asChild>
+              <p className="">Destino</p>
+            </CardTitle>
           </CardHeader>
           <CardContent className="bg-muted">
             <DestinoTransferir />

@@ -11,8 +11,6 @@ import {
   CheckCheck,
   PrinterIcon,
   RotateCcw,
-  AlertCircle,
-  Search,
   Timer,
   FlameIcon,
   CheckCheckIcon,
@@ -24,10 +22,15 @@ import ToastAlert from "../../components/componenteToast/ToastAlert";
 import axiosInstance from "../../api/AxiosInstance";
 import echoEvents from "../../api/echoEvents";
 
-import "../../css/EstilosCocina.css";
-import { Button } from "../../components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 
+import { Button } from "../../components/ui/button";
+import { Input } from "../../components/ui/input";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
 
 const estados = {
   0: { texto: "En espera", variant: "warning" },
@@ -149,15 +152,15 @@ function TarjetaPedido({ pedido }) {
   const tipoPedidoInfo = {
     mesa: {
       titulo: `MESA ${pedido?.numeroMesa ?? "?"}`,
-      colorPunto: "var(--fw-strawberry, #ef4444)",
+      colorPunto: "bg-rose-500",
     },
-    llevar: { titulo: "LLEVAR", colorPunto: "var(--fw-teal, #10b981)" },
-    web: { titulo: "DELIVERY", colorPunto: "var(--fw-blue, #3b82f6)" },
+    llevar: { titulo: "LLEVAR", colorPunto: "bg-emerald-500" },
+    web: { titulo: "DELIVERY", colorPunto: "bg-sky-500" },
   };
 
   const { titulo, colorPunto } = tipoPedidoInfo[pedido.tipo_pedido] ?? {
     titulo: "SIN TIPO",
-    colorPunto: "#999",
+    colorPunto: "bg-muted-foreground",
   };
 
   // 🔥 3. Variable que desactiva el botón visualmente si esta u otra tarjeta está procesando
@@ -165,27 +168,25 @@ function TarjetaPedido({ pedido }) {
 
   return (
     <Card
-      className={`overflow-hidden mb-3${esListo ? "border-success opacity-75" : ""}`}
+      className={`mb-0 overflow-hidden rounded-xl border-border/70 bg-card py-0 shadow-none ${
+        esListo ? "opacity-80" : ""
+      }`}
     >
-      {/* ... (Tu Header y Body se mantienen exactamente igual) ... */}
       <CardHeader
-        className={`flex justify-between items-center${esListo ? "bg-background border-b" : esEnPreparacion ? "cocina-header-preparacion" : "cocina-header-espera"}`}
+        className={`flex items-center justify-between gap-2 border-b px-3 py-2 ${
+          esListo
+            ? "bg-emerald-500/5"
+            : esEnPreparacion
+              ? "bg-sky-500/5"
+              : "bg-amber-500/5"
+        }`}
       >
-        <div className="d-flex align-items-center gap-2">
-          <span className="badge bg-white text-dark border px-2 py-1">
+        <div className="flex min-w-0 items-center gap-2">
+          <span className="inline-flex shrink-0 items-center rounded-md border border-border/70 bg-background px-2 py-1 text-[11px] font-semibold text-foreground">
             {generarCodigoReal(pedido)}
           </span>
-          <span
-            className={`cocina-pedido-title text-truncate ${esListo ? "cocina-title-listo" : ""}`}
-          >
-            <span
-              className="rounded-circle d-inline-block me-1"
-              style={{
-                width: "8px",
-                height: "8px",
-                backgroundColor: colorPunto,
-              }}
-            ></span>
+          <span className="flex min-w-0 items-center gap-1.5 truncate text-xs font-medium text-muted-foreground">
+            <span className={`size-1.5 shrink-0 rounded-full ${colorPunto}`} />
             {titulo}
           </span>
         </div>
@@ -196,21 +197,17 @@ function TarjetaPedido({ pedido }) {
         />
       </CardHeader>
 
-      <CardContent className="p-0 pt-2 pb-2">
-        <ul className="list-group list-group-flush border-0">
+      <CardContent className="p-0 py-2">
+        <ul className="m-0 flex list-none flex-col gap-1 p-0">
           {platos.map((plato, idx) => (
             <li
               key={idx}
-              className="list-group-item d-flex border-0 align-items-start py-1 px-3 "
+              className="flex items-start gap-2 px-3 py-1 text-sm text-foreground"
             >
-              <span
-                className={`border p-1 rounded-pill btn-icon fw-bold me-2 mt-1 text-dark`}
-              >
+              <span className="mt-0.5 inline-flex min-w-6 items-center justify-center rounded-md bg-muted px-1.5 py-0.5 text-xs font-semibold tabular-nums text-muted-foreground">
                 {plato.cantidad}
               </span>
-              <span
-                className={`fw-medium ${esListo ? "text-decoration-line-through cocina-text-muted" : "text-dark"}`}
-              >
+              <span className={`min-w-0 flex-1 font-medium ${esListo ? "line-through text-muted-foreground" : ""}`}>
                 {plato.nombre}
               </span>
             </li>
@@ -218,25 +215,27 @@ function TarjetaPedido({ pedido }) {
         </ul>
       </CardContent>
 
-      <CardFooter className="bg-transparent border-0 flex items-center gap-2 px-3 pb-3">
+      <CardFooter className="flex items-center gap-2 border-t border-border/60 bg-transparent px-3 py-2.5">
         <Button
-          className={`cocina-btn-imprimir btn-icon ${esListo ? "cocina-btn-imprimir-listo" : esEnPreparacion ? "cocina-btn-imprimir-preparacion" : "cocina-btn-imprimir-espera"} ${mutationImprimir.isPending ? "opacity-50" : ""}`}
+          className="size-8"
+          size="icon"
           title="Imprimir Ticket"
           onClick={handleImprimirPedidoCocina}
           disabled={mutationImprimir.isPending}
-         variant="default">
+          variant="outline"
+        >
           {mutationImprimir.isPending ? (
             <div
-              className="spinner-border spinner-border-sm"
+              className="inline-block animate-spin rounded-full border-current border-r-transparent size-4 border"
               role="status"
             ></div>
           ) : (
-            <PrinterIcon size={18} />
+            <PrinterIcon className="size-4" />
           )}
         </Button>
 
         <BotonAnimado
-          className={`ms-auto cocina-btn-accion ${esListo ? "cocina-btn-accion-listo" : esEnPreparacion ? "cocina-btn-accion-preparacion" : "cocina-btn-accion-espera"}`}
+          className="ml-auto h-8 rounded-lg px-3 text-xs font-medium"
           onClick={cambiarEstado}
           loading={mutationCambiarEstado.isPending} // El spinner solo gira en la tarjeta cliqueada
           disabled={botonBloqueadoGlobal} // 🔥 Todas las demás tarjetas se bloquean y oscurecen un segundo
@@ -306,6 +305,35 @@ export function CocinaDespacho() {
   const pedidosEnEspera = pedidosFiltrados.filter((p) => p.estado === 0);
   const pedidosEnPreparacion = pedidosFiltrados.filter((p) => p.estado === 2);
   const pedidosListos = pedidosFiltrados.filter((p) => p.estado === 1);
+  const columnas = [
+    {
+      id: "espera",
+      titulo: "En espera",
+      descripcion: "Pedidos nuevos",
+      pedidos: pedidosEnEspera,
+      icono: Timer,
+      iconClass: "bg-amber-500/10 text-amber-700 dark:text-amber-300",
+      countClass: "bg-amber-500/10 text-amber-700 dark:text-amber-300",
+    },
+    {
+      id: "preparacion",
+      titulo: "En preparación",
+      descripcion: "Cocinando ahora",
+      pedidos: pedidosEnPreparacion,
+      icono: FlameIcon,
+      iconClass: "bg-sky-500/10 text-sky-700 dark:text-sky-300",
+      countClass: "bg-sky-500/10 text-sky-700 dark:text-sky-300",
+    },
+    {
+      id: "listos",
+      titulo: "Listos",
+      descripcion: "Para despacho",
+      pedidos: pedidosListos,
+      icono: CheckCheckIcon,
+      iconClass: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
+      countClass: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
+    },
+  ];
 
   useEffect(() => {
     const canalCocina = echoEvents.channel("pedidosEstado");
@@ -316,135 +344,105 @@ export function CocinaDespacho() {
   }, [queryClient]);
 
   return (
-    <div className="h-100">
+    <div className="flex h-full min-h-0 flex-col">
       <CondicionCarga isLoading={isLoading} isError={isError}>
-        <div className="cocina-card-body h-100 p-2">
-          {/* BARRA SUPERIOR (Buscador y Filtros con tu CSS) */}
-          <div className="cocina-filter-bar mb-3 d-flex align-items-center justify-content-between gap-3">
-            <div className="d-flex gap-2">
+        <div className="flex h-full min-h-0 flex-col gap-3 p-1">
+          <div className="flex flex-col gap-3 rounded-xl border border-border/70 bg-card p-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex min-w-0 items-center gap-1 overflow-x-auto">
               {filtroOpciones.map((option) => (
                 <Button
                   key={option.value}
                   type="button"
-                  className={`cocina-filter-btn fw-bold ${filtroTipo === option.value ? "cocina-filter-btn-active" : ""}`}
+                  size="sm"
+                  className="h-8 shrink-0 rounded-lg"
                   onClick={() => setFiltroTipo(option.value)}
-                 variant="default">
+                  variant={filtroTipo === option.value ? "default" : "ghost"}
+                >
                   {option.label}
                 </Button>
               ))}
             </div>
-
-            <div
-              className="d-flex align-items-center gap-3 flex-grow-1"
-              style={{ maxWidth: "450px" }}
-            >
-              {" "}
-              <span
-                className="text-center fw-bold h5"
-                style={{ width: "200px" }}
-              >
-                Total: {`${pedidosFiltrados.length}`}
+            <div className="flex min-w-0 items-center gap-3">
+              <span className="shrink-0 text-xs text-muted-foreground">
+                {pedidosFiltrados.length} pedidos
               </span>
-              <input
-                type="text"
-                className="form-control bg-transparent border-0 ps-0"
-                placeholder="Buscar PED-123 o Mesa 5..."
+              <Input
+                type="search"
+                className="h-9 w-full sm:w-64"
+                placeholder="Buscar pedido o mesa..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(event) => setSearchTerm(event.target.value)}
+                aria-label="Buscar pedido por código o mesa"
               />
             </div>
           </div>
 
-          {pedidosFiltrados.length === 0 ? (
-            <div className="d-flex flex-column align-items-center justify-content-center h-100 text-muted opacity-50 bg-white rounded-4 border border-dashed">
-              <CheckCheck size={50} className="mb-3 text-success" />
-              <h4 className="fw-bold m-0">Cocina al día</h4>
-              <p>No hay pedidos pendientes.</p>
+          <div className="min-h-0 flex-1 overflow-x-auto overflow-y-hidden pb-1">
+            <div className="grid h-full min-w-[900px] grid-cols-3 gap-3">
+              {columnas.map((columna) => {
+                const Icon = columna.icono;
+                return (
+                  <Card
+                    key={columna.id}
+                    className="flex min-h-0 min-w-0 flex-col gap-0 overflow-hidden rounded-xl border-border/70 bg-muted/30 p-0 shadow-none"
+                  >
+                    <CardHeader className="flex flex-row items-center justify-between gap-3 border-b border-border/70 bg-card px-3 py-3">
+                      <div className="flex min-w-0 items-center gap-2.5">
+                        <span
+                          className={`flex size-9 shrink-0 items-center justify-center rounded-lg ${columna.iconClass}`}
+                        >
+                          <Icon className="size-[18px]" />
+                        </span>
+                        <div className="min-w-0">
+                          <h2 className="mb-0 truncate text-sm font-semibold tracking-tight text-foreground">
+                            {columna.titulo}
+                          </h2>
+                          <p className="mb-0 text-xs text-muted-foreground">
+                            {columna.descripcion}
+                          </p>
+                        </div>
+                      </div>
+                      <span
+                        className={`inline-flex min-w-7 items-center justify-center rounded-full px-2 py-1 text-xs font-semibold tabular-nums ${columna.countClass}`}
+                      >
+                        {columna.pedidos.length > 0 && (
+                          <span
+                            className={`mr-1.5 size-1.5 rounded-full ${
+                              columna.id === "espera"
+                                ? "animate-pulse bg-amber-500"
+                                : columna.id === "preparacion"
+                                  ? "bg-sky-500"
+                                  : "bg-emerald-500"
+                            }`}
+                          />
+                        )}
+                        {columna.pedidos.length}
+                      </span>
+                    </CardHeader>
+                    <CardContent className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto p-2">
+                      {columna.pedidos.length ? (
+                        columna.pedidos.map((pedido, index) => (
+                          <TarjetaPedido
+                            key={`${columna.id}-${pedido.id}-${index}`}
+                            pedido={pedido}
+                          />
+                        ))
+                      ) : (
+                        <div className="flex min-h-32 flex-1 flex-col items-center justify-center rounded-lg border border-dashed border-border/70 bg-background/60 px-3 py-6 text-center">
+                          <CheckCheck className="mb-2 size-5 text-muted-foreground/60" />
+                          <p className="mb-0 text-xs text-muted-foreground">
+                            {searchTerm || filtroTipo !== "Todos"
+                              ? "Sin pedidos para estos filtros"
+                              : "No hay pedidos en esta etapa"}
+                          </p>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                );
+              })}
             </div>
-          ) : (
-            /* ESTRUCTURA KANBAN USANDO TU CSS GRID (.cocina-columnas) */
-            <div className="cocina-columnas">
-              {/* Columna: En Espera */}
-              <Card className="overflow-hidden">
-                <CardHeader className="flex justify-between items-center mb-3 px-4">
-                  <div className="d-flex">
-                    {" "}
-                    <span className="me-3">
-                      <Timer />
-                    </span>
-                    <div className="d-flex flex-column">
-                      <h6 className="m-0 fw-bold">En Espera</h6>
-                      <small className="text-muted">Pedidos nuevos</small>
-                    </div>
-                  </div>
-                  <span className="cocina-badge-warning  btn-icon">
-                    {pedidosEnEspera.length}
-                  </span>
-                </CardHeader>
-                <CardContent className="cocina-col-body px-3">
-                  {pedidosEnEspera.map((pedido, i) => (
-                    <TarjetaPedido
-                      key={`espera-${pedido.id}-${i}`}
-                      pedido={pedido}
-                    />
-                  ))}
-                </CardContent>
-              </Card>
-
-              {/* Columna: En Preparación */}
-              <Card className="overflow-hidden">
-                <CardHeader className="flex justify-between items-center mb-3 px-4">
-                  <div className="d-flex">
-                    <span className="me-3">
-                      <FlameIcon />
-                    </span>
-                    <div className="d-flex flex-column">
-                      <h6 className="m-0 fw-bold">En Preparación</h6>
-                      <small className="text-muted">Cocinando ahora</small>
-                    </div>
-                  </div>
-                  <span className="cocina-badge-preparacion  btn-icon">
-                    {pedidosEnPreparacion.length}
-                  </span>
-                </CardHeader>
-                <CardContent className="cocina-col-body px-3">
-                  {pedidosEnPreparacion.map((pedido, i) => (
-                    <TarjetaPedido
-                      key={`prep-${pedido.id}-${i}`}
-                      pedido={pedido}
-                    />
-                  ))}
-                </CardContent>
-              </Card>
-
-              {/* Columna: Listo */}
-              <Card className="overflow-hidden">
-                <CardHeader className="flex justify-between items-center mb-3 px-4">
-                  <div className="d-flex">
-                    {" "}
-                    <span className="me-3">
-                      <CheckCheckIcon />
-                    </span>
-                    <div className="d-flex flex-column">
-                      <h6 className="m-0 fw-bold">Listo</h6>
-                      <small className="text-muted">Para despacho</small>
-                    </div>
-                  </div>
-                  <span className="cocina-badge-listo btn-icon ">
-                    {pedidosListos.length}
-                  </span>
-                </CardHeader>
-                <CardContent className="cocina-col-body px-3">
-                  {pedidosListos.map((pedido, i) => (
-                    <TarjetaPedido
-                      key={`listo-${pedido.id}-${i}`}
-                      pedido={pedido}
-                    />
-                  ))}
-                </CardContent>
-              </Card>
-            </div>
-          )}
+          </div>
         </div>
       </CondicionCarga>
     </div>

@@ -14,6 +14,12 @@ import { EllipsisVertical } from "lucide-react";
 import { BadgeComponent } from "../componentesReutilizables/BadgeComponent";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
 
 export function CajasList({ search }) {
@@ -112,73 +118,54 @@ export function CajasList({ search }) {
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-12 gap-3 m-0 w-100">
+    <div className="grid grid-cols-1 md:grid-cols-12 gap-3 m-0 w-full">
       {Array.isArray(cajas) && cajas.length > 0 ? (
         cajas.map((item) => (
-          <div className="col-lg-3 col-md-4 col-sm-12">
+          <div className="lg:col-span-3 md:col-span-4 col-span-full">
             <Card className="w-full" key={item.id}>
-              <CardHeader className="">
+              <CardHeader className="relative">
                 <p className="h4">{capitalizeFirstLetter(item.nombreCaja)}</p>
-                <div
-                  className="dropdown"
-                  style={{ position: "absolute", top: "10px", right: "10px" }}
-                >
-                  <Button
-                    className="btn-generico btn-icon btn-sm"
-                    type="button"
-                    id={`dropdownMenuButton-${item.id}`}
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                   variant="default">
-                    <EllipsisVertical className="text-auto" size={18} />
-                  </Button>
-
-                  <ul
-                    className="dropdown-menu dropdown-menu-end"
-                    aria-labelledby={`dropdownMenuButton-${item.id}`}
-                    style={{ zIndex: 1050 }}
-                  >
-                    <li>
-                      <Button
-                        className="dropdown-item text-start"
-                        type="button"
-                        onClick={() => {
-                          setModalEditarCaja(true);
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="absolute top-2 right-2"
+                      aria-label={`Acciones de ${item.nombreCaja}`}
+                    >
+                      <EllipsisVertical size={18} />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem
+                      onSelect={() => {
+                        setModalEditarCaja(true);
+                        setDataCaja(item);
+                      }}
+                    >
+                      Editar
+                    </DropdownMenuItem>
+                    {item.estado === 1 ? (
+                      <DropdownMenuItem
+                        onSelect={() => {
+                          setModalEliminarCaja(true);
                           setDataCaja(item);
                         }}
-                       variant="default">
-                        Editar
-                      </Button>
-                    </li>
-                    {item.estado === 1 ? (
-                      <li>
-                        <Button
-                          className="dropdown-item text-start"
-                          type="button"
-                          onClick={() => {
-                            setModalEliminarCaja(true);
-                            setDataCaja(item);
-                          }}
-                         variant="default">
-                          Desactivar
-                        </Button>
-                      </li>
+                      >
+                        Desactivar
+                      </DropdownMenuItem>
                     ) : (
-                      <li>
-                        <Button
-                          className="dropdown-item text-start"
-                          type="button"
-                          onClick={() => {
-                            setModalActivarCaja(true);
-                            setDataCaja(item);
-                          }}
-                         variant="default">
-                          Activar
-                        </Button>
-                      </li>
+                      <DropdownMenuItem
+                        onSelect={() => {
+                          setModalActivarCaja(true);
+                          setDataCaja(item);
+                        }}
+                      >
+                        Activar
+                      </DropdownMenuItem>
                     )}
-                  </ul>
-                </div>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </CardHeader>
               <CardContent className="flex">
                 <BadgeComponent

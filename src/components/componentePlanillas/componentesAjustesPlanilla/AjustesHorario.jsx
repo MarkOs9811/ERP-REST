@@ -18,7 +18,6 @@ import { GetHorariosAll } from "../../../service/accionesPlanilla/GetHorarioAll"
 import { Button } from "../../ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
-
 export function AjustesHorario() {
   const queryClient = useQueryClient();
   const [loadingDelete, setLoadingDelete] = useState(false);
@@ -100,14 +99,17 @@ export function AjustesHorario() {
 
   if (loadingHorarios) {
     return (
-      <div className=" text-primary" role="status">
+      <div className="text-primary" role="status">
         <Cargando />
       </div>
     );
   }
   if (errorHorarios) {
     return (
-      <div className="alert alert-danger" role="alert">
+      <div
+        className="relative w-full rounded-lg px-4 py-3 text-sm border-destructive/30 bg-destructive/10 text-destructive"
+        role="alert"
+      >
         Error al cargar los horarios: {errorHorariosMessage.message}
       </div>
     );
@@ -135,9 +137,13 @@ export function AjustesHorario() {
       cell: (row) => (
         <div>
           {row.estado === 1 ? (
-            <div className="badge bg-success text-white">Activo</div>
+            <div className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-emerald-600 text-white">
+              Activo
+            </div>
           ) : (
-            <div className="badge bg-danger text-white">Inactivo</div>
+            <div className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-destructive text-white">
+              Inactivo
+            </div>
           )}
         </div>
       ),
@@ -147,7 +153,7 @@ export function AjustesHorario() {
     {
       name: "Acciones",
       cell: (row) => (
-        <div className="d-flex justify-content-center">
+        <div className="flex justify-center">
           {row.estado == 1 ? (
             <>
               <BtnEditar
@@ -176,7 +182,8 @@ export function AjustesHorario() {
                 setModalActivarDedu(true);
                 setDataHorario(row);
               }}
-             variant="default">
+              variant="default"
+            >
               {loadingActivar ? (
                 <SpinnerCargando />
               ) : (
@@ -194,14 +201,14 @@ export function AjustesHorario() {
   return (
     <Card className="h-full py-2">
       <CardHeader className="flex justify-between items-center p-2 border-b">
-        <h4 className=" mb-0">
+        <h4 className="mb-0">
           <Timer className="text-auto" /> Horarios
         </h4>
-        <div className="d-flex ms-auto mx-2">
+        <div className="flex mx-2">
           <input
             type="text"
             placeholder="Buscar..."
-            className="form-control"
+            className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
             onChange={(e) => setfitroHorarios(e.target.value)}
           />
         </div>
@@ -214,7 +221,8 @@ export function AjustesHorario() {
             setEditarHorario(false);
             setDataHorario([]);
           }}
-         variant="default">
+          variant="default"
+        >
           <Plus className="text-auto" />
         </Button>
       </CardHeader>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "../../css/Ripple.css";
+
 
 const RippleWrapper = ({ children }) => {
   const [ripples, setRipples] = useState([]);
@@ -27,7 +27,7 @@ const RippleWrapper = ({ children }) => {
 
   return (
     <div
-      className="ripple-wrapper position-relative overflow-hidden d-inline-block "
+      className="ripple-wrapper relative overflow-hidden inline-block"
       onClick={handleClick}
     >
       {children}

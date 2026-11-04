@@ -10,7 +10,6 @@ import { GetProveedores } from "../../service/GetProveedores";
 import { Button } from "../ui/button";
 import { Card } from "@/components/ui/card";
 
-
 export function FormularioEditarAlmacen({ data, onCancel }) {
   const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
@@ -91,264 +90,303 @@ export function FormularioEditarAlmacen({ data, onCancel }) {
   };
 
   return (
-    <div className="bg-light p-3">
-      <Card asChild><form
-        onSubmit={handleSubmit(onSubmitForm)}
-        className="shadow-sm p-3"
-      >
-        <div className="row">
-          {/* ID */}
-          <div className="md:col-span-6 mb-3">
-            <input
-              type="hidden"
-              className={`form-control ${errors.id ? "is-invalid" : ""}`}
-              disabled
-              {...register("id")}
-            />
+    <div className="bg-muted p-3">
+      <Card asChild>
+        <form onSubmit={handleSubmit(onSubmitForm)} className="shadow-sm p-3">
+          <div className="grid grid-cols-12 gap-3">
+            {/* ID */}
+            <div className="col-span-full md:col-span-6 mb-3">
+              <input
+                type="hidden"
+                className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.id ? "border-destructive focus-visible:ring-destructive" : ""}`}
+                disabled
+                {...register("id")}
+              />
+            </div>
+
+            {/* Nombre del Producto */}
+            <div className="col-span-full md:col-span-12 mb-3">
+              <label
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                htmlFor="nombreProducto"
+              >
+                Nombre del Producto*
+              </label>
+              <input
+                id="nombreProducto"
+                type="text"
+                className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.nombre ? "border-destructive focus-visible:ring-destructive" : ""}`}
+                {...register("nombre", {
+                  required: "El nombre del producto es requerido",
+                  minLength: {
+                    value: 3,
+                    message: "El nombre debe tener al menos 3 caracteres",
+                  },
+                })}
+              />
+              {errors.nombre && (
+                <div className="text-sm text-destructive">
+                  {errors.nombre.message}
+                </div>
+              )}
+            </div>
+
+            {/* Marca */}
+            <div className="col-span-full md:col-span-6 mb-3">
+              <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                Marca*
+              </label>
+              <input
+                type="text"
+                className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.marca ? "border-destructive focus-visible:ring-destructive" : ""}`}
+                {...register("marca", {
+                  required: "La marca es requerida",
+                })}
+              />
+              {errors.marca && (
+                <div className="text-sm text-destructive">
+                  {errors.marca.message}
+                </div>
+              )}
+            </div>
+
+            {/* Stock */}
+            <div className="col-span-full md:col-span-6 mb-3">
+              <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                Stock*
+              </label>
+              <input
+                type="number"
+                disabled={true}
+                className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.cantidad ? "border-destructive focus-visible:ring-destructive" : ""}`}
+                {...register("cantidad", {
+                  required: "La cantidad es requerida",
+                  min: {
+                    value: 0,
+                    message: "La cantidad no puede ser negativa",
+                  },
+                })}
+              />
+              {errors.cantidad && (
+                <div className="text-sm text-destructive">
+                  {errors.cantidad.message}
+                </div>
+              )}
+              <small className="text-muted-foreground">
+                El stock no se puede editar directamente. Use la opción de
+                Agregar Stock.
+              </small>
+            </div>
+
+            {/* Precio Unitario */}
+            <div className="col-span-full md:col-span-6 mb-3">
+              <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                Precio Unitario (S/.)*
+              </label>
+              <input
+                type="number"
+                step="0.01"
+                className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+                  errors.precioUnit
+                    ? "border-destructive focus-visible:ring-destructive"
+                    : ""
+                }`}
+                {...register("precioUnit", {
+                  required: "El precio unitario es requerido",
+                  min: {
+                    value: 0,
+                    message: "El precio no puede ser negativo",
+                  },
+                  pattern: {
+                    value: /^\d+(\.\d{1,2})?$/,
+                    message: "Ingrese un precio válido con máximo 2 decimales",
+                  },
+                })}
+              />
+              {errors.precioUnit && (
+                <div className="text-sm text-destructive">
+                  {errors.precioUnit.message}
+                </div>
+              )}
+            </div>
+
+            {/* Unidad de Medida */}
+            <div className="col-span-full md:col-span-6 mb-3">
+              <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                Unidad de Medida*
+              </label>
+              <select
+                className={`h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.unidad ? "border-destructive focus-visible:ring-destructive" : ""}`}
+                {...register("unidad", {
+                  required: "La unidad de medida es requerida",
+                })}
+                defaultValue={data?.unidad?.id || ""} // Agregamos defaultValue
+              >
+                <option value="">Seleccione una unidad</option>
+                {unidadData.map((unidad) => (
+                  <option key={unidad.id} value={unidad.id}>
+                    {unidad.nombre}
+                  </option>
+                ))}
+              </select>
+              {errors.unidad && (
+                <div className="text-sm text-destructive">
+                  {errors.unidad.message}
+                </div>
+              )}
+            </div>
+
+            {/* Categoría */}
+            <div className="col-span-full md:col-span-6 mb-3">
+              <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                Categoría*
+              </label>
+              <select
+                className={`h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.categoria ? "border-destructive focus-visible:ring-destructive" : ""}`}
+                {...register("categoria", {
+                  required: "La categoría es requerida",
+                })}
+                defaultValue={data?.categoria?.id || ""} // Agregamos defaultValue
+              >
+                <option value="">Seleccione una categoría</option>
+                {categoriaData.map((categoria) => (
+                  <option key={categoria.id} value={categoria.id}>
+                    {categoria.nombre}
+                  </option>
+                ))}
+              </select>
+              {errors.categoria && (
+                <div className="text-sm text-destructive">
+                  {errors.categoria.message}
+                </div>
+              )}
+            </div>
+
+            {/* Proveedor */}
+            <div className="col-span-full md:col-span-6 mb-3">
+              <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                Proveedor*
+              </label>
+              <select
+                className={`h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.proveedor ? "border-destructive focus-visible:ring-destructive" : ""}`}
+                {...register("proveedor", {
+                  required: "El proveedor es requerido",
+                })}
+                defaultValue={data?.proveedor?.id || ""} // Agregamos defaultValue
+              >
+                <option value="">Seleccione un proveedor</option>
+                {proveedorData.map((proveedor) => (
+                  <option key={proveedor.id} value={proveedor.id}>
+                    {proveedor.nombre}
+                  </option>
+                ))}
+              </select>
+              {errors.proveedor && (
+                <div className="text-sm text-destructive">
+                  {errors.proveedor.message}
+                </div>
+              )}
+            </div>
+
+            {/* Presentación */}
+            <div className="col-span-full md:col-span-6 mb-3">
+              <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 gap-2">
+                <Box size={16} />
+                Presentación*
+              </label>
+              <input
+                type="text"
+                className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+                  errors.presentacion
+                    ? "border-destructive focus-visible:ring-destructive"
+                    : ""
+                }`}
+                placeholder="Ej: Caja x 12 unidades"
+                {...register("presentacion", {
+                  required: "La presentación es requerida",
+                  minLength: {
+                    value: 3,
+                    message: "La presentación debe tener al menos 3 caracteres",
+                  },
+                })}
+              />
+              {errors.presentacion && (
+                <div className="text-sm text-destructive">
+                  {errors.presentacion.message}
+                </div>
+              )}
+            </div>
+
+            {/* Fecha de Vencimiento */}
+            <div className="col-span-full md:col-span-6 mb-3">
+              <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                <Calendar size={16} />
+                Fecha de Vencimiento*
+              </label>
+              <input
+                type="date"
+                className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+                  errors.fecha_vencimiento
+                    ? "border-destructive focus-visible:ring-destructive"
+                    : ""
+                }`}
+                {...register("fecha_vencimiento", {
+                  required: "La fecha de vencimiento es requerida",
+                  validate: (value) => {
+                    const fecha = new Date(value);
+                    const hoy = new Date();
+                    return fecha > hoy || "La fecha debe ser posterior a hoy";
+                  },
+                })}
+              />
+              {errors.fecha_vencimiento && (
+                <div className="text-sm text-destructive">
+                  {errors.fecha_vencimiento.message}
+                </div>
+              )}
+            </div>
+
+            {/* Registro Sanitario */}
+            <div className="col-span-full md:col-span-6 mb-3">
+              <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                <CardSimIcon size={16} />
+                Registro Sanitario*
+              </label>
+              <input
+                type="text"
+                className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+                  errors.registro_sanitario
+                    ? "border-destructive focus-visible:ring-destructive"
+                    : ""
+                }`}
+                placeholder="Ej: RS-XXXX-XXXXX"
+                {...register("registro_sanitario", {
+                  required: "El registro sanitario es requerido",
+                })}
+              />
+              {errors.registro_sanitario && (
+                <div className="text-sm text-destructive">
+                  {errors.registro_sanitario.message}
+                </div>
+              )}
+            </div>
           </div>
 
-          {/* Nombre del Producto */}
-          <div className="md:col-span-12 mb-3">
-            <label className="form-label " htmlFor="nombreProducto">
-              Nombre del Producto*
-            </label>
-            <input
-              id="nombreProducto"
-              type="text"
-              className={`form-control ${errors.nombre ? "is-invalid" : ""}`}
-              {...register("nombre", {
-                required: "El nombre del producto es requerido",
-                minLength: {
-                  value: 3,
-                  message: "El nombre debe tener al menos 3 caracteres",
-                },
-              })}
-            />
-            {errors.nombre && (
-              <div className="invalid-feedback">{errors.nombre.message}</div>
-            )}
-          </div>
-
-          {/* Marca */}
-          <div className="md:col-span-6 mb-3">
-            <label className="form-label ">Marca*</label>
-            <input
-              type="text"
-              className={`form-control ${errors.marca ? "is-invalid" : ""}`}
-              {...register("marca", {
-                required: "La marca es requerida",
-              })}
-            />
-            {errors.marca && (
-              <div className="invalid-feedback">{errors.marca.message}</div>
-            )}
-          </div>
-
-          {/* Stock */}
-          <div className="md:col-span-6 mb-3">
-            <label className="form-label ">Stock*</label>
-            <input
-              type="number"
-              disabled={true}
-              className={`form-control ${errors.cantidad ? "is-invalid" : ""}`}
-              {...register("cantidad", {
-                required: "La cantidad es requerida",
-                min: {
-                  value: 0,
-                  message: "La cantidad no puede ser negativa",
-                },
-              })}
-            />
-            {errors.cantidad && (
-              <div className="invalid-feedback">{errors.cantidad.message}</div>
-            )}
-            <small className="text-muted">
-              El stock no se puede editar directamente. Use la opción de Agregar
-              Stock.
-            </small>
-          </div>
-
-          {/* Precio Unitario */}
-          <div className="md:col-span-6 mb-3">
-            <label className="form-label ">Precio Unitario (S/.)*</label>
-            <input
-              type="number"
-              step="0.01"
-              className={`form-control ${
-                errors.precioUnit ? "is-invalid" : ""
-              }`}
-              {...register("precioUnit", {
-                required: "El precio unitario es requerido",
-                min: {
-                  value: 0,
-                  message: "El precio no puede ser negativo",
-                },
-                pattern: {
-                  value: /^\d+(\.\d{1,2})?$/,
-                  message: "Ingrese un precio válido con máximo 2 decimales",
-                },
-              })}
-            />
-            {errors.precioUnit && (
-              <div className="invalid-feedback">
-                {errors.precioUnit.message}
-              </div>
-            )}
-          </div>
-
-          {/* Unidad de Medida */}
-          <div className="md:col-span-6 mb-3">
-            <label className="form-label ">Unidad de Medida*</label>
-            <select
-              className={`form-select ${errors.unidad ? "is-invalid" : ""}`}
-              {...register("unidad", {
-                required: "La unidad de medida es requerida",
-              })}
-              defaultValue={data?.unidad?.id || ""} // Agregamos defaultValue
+          <div className="flex justify-end mt-3 gap-3">
+            <Button
+              type="button"
+              className="btn-cerrar-modal"
+              onClick={onCancel}
+              variant="default"
             >
-              <option value="">Seleccione una unidad</option>
-              {unidadData.map((unidad) => (
-                <option key={unidad.id} value={unidad.id}>
-                  {unidad.nombre}
-                </option>
-              ))}
-            </select>
-            {errors.unidad && (
-              <div className="invalid-feedback">{errors.unidad.message}</div>
-            )}
+              Cancelar
+            </Button>
+            <Button type="submit" className="btn-guardar" variant="default">
+              Guardar Cambios
+            </Button>
           </div>
-
-          {/* Categoría */}
-          <div className="md:col-span-6 mb-3">
-            <label className="form-label ">Categoría*</label>
-            <select
-              className={`form-select ${errors.categoria ? "is-invalid" : ""}`}
-              {...register("categoria", {
-                required: "La categoría es requerida",
-              })}
-              defaultValue={data?.categoria?.id || ""} // Agregamos defaultValue
-            >
-              <option value="">Seleccione una categoría</option>
-              {categoriaData.map((categoria) => (
-                <option key={categoria.id} value={categoria.id}>
-                  {categoria.nombre}
-                </option>
-              ))}
-            </select>
-            {errors.categoria && (
-              <div className="invalid-feedback">{errors.categoria.message}</div>
-            )}
-          </div>
-
-          {/* Proveedor */}
-          <div className="md:col-span-6 mb-3">
-            <label className="form-label ">Proveedor*</label>
-            <select
-              className={`form-select ${errors.proveedor ? "is-invalid" : ""}`}
-              {...register("proveedor", {
-                required: "El proveedor es requerido",
-              })}
-              defaultValue={data?.proveedor?.id || ""} // Agregamos defaultValue
-            >
-              <option value="">Seleccione un proveedor</option>
-              {proveedorData.map((proveedor) => (
-                <option key={proveedor.id} value={proveedor.id}>
-                  {proveedor.nombre}
-                </option>
-              ))}
-            </select>
-            {errors.proveedor && (
-              <div className="invalid-feedback">{errors.proveedor.message}</div>
-            )}
-          </div>
-
-          {/* Presentación */}
-          <div className="md:col-span-6 mb-3">
-            <label className="form-label gap-2 ">
-              <Box size={16} />
-              Presentación*
-            </label>
-            <input
-              type="text"
-              className={`form-control ${
-                errors.presentacion ? "is-invalid" : ""
-              }`}
-              placeholder="Ej: Caja x 12 unidades"
-              {...register("presentacion", {
-                required: "La presentación es requerida",
-                minLength: {
-                  value: 3,
-                  message: "La presentación debe tener al menos 3 caracteres",
-                },
-              })}
-            />
-            {errors.presentacion && (
-              <div className="invalid-feedback">
-                {errors.presentacion.message}
-              </div>
-            )}
-          </div>
-
-          {/* Fecha de Vencimiento */}
-          <div className="md:col-span-6 mb-3">
-            <label className="form-label ">
-              <Calendar size={16} />
-              Fecha de Vencimiento*
-            </label>
-            <input
-              type="date"
-              className={`form-control ${
-                errors.fecha_vencimiento ? "is-invalid" : ""
-              }`}
-              {...register("fecha_vencimiento", {
-                required: "La fecha de vencimiento es requerida",
-                validate: (value) => {
-                  const fecha = new Date(value);
-                  const hoy = new Date();
-                  return fecha > hoy || "La fecha debe ser posterior a hoy";
-                },
-              })}
-            />
-            {errors.fecha_vencimiento && (
-              <div className="invalid-feedback">
-                {errors.fecha_vencimiento.message}
-              </div>
-            )}
-          </div>
-
-          {/* Registro Sanitario */}
-          <div className="md:col-span-6 mb-3">
-            <label className="form-label ">
-              <CardSimIcon size={16} />
-              Registro Sanitario*
-            </label>
-            <input
-              type="text"
-              className={`form-control ${
-                errors.registro_sanitario ? "is-invalid" : ""
-              }`}
-              placeholder="Ej: RS-XXXX-XXXXX"
-              {...register("registro_sanitario", {
-                required: "El registro sanitario es requerido",
-              })}
-            />
-            {errors.registro_sanitario && (
-              <div className="invalid-feedback">
-                {errors.registro_sanitario.message}
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div className="d-flex justify-content-end mt-3 gap-3">
-          <Button type="button" className="btn-cerrar-modal" onClick={onCancel} variant="default">
-            Cancelar
-          </Button>
-          <Button type="submit" className="btn-guardar" variant="default">
-            Guardar Cambios
-          </Button>
-        </div>
-      </form></Card>
+        </form>
+      </Card>
     </div>
   );
 }

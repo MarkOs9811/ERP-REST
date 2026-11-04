@@ -20,18 +20,17 @@ import { ValidarNomina } from "../../components/componentePlanillas/componentesA
 import { CondicionCarga } from "../../components/componentesReutilizables/CondicionCarga";
 import { GetNomina } from "../../service/accionesPlanilla/GetNomina";
 import { useQuery } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { TablasGenerales } from "../../components/componentesReutilizables/TablasGenerales";
 import { BadgeComponent } from "../../components/componentesReutilizables/BadgeComponent";
 import { Button } from "../../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
+import { Input } from "@/components/ui/input";
 
 export function Nomina() {
   const [modalQuestionPagar, setModalQuestionPagar] = useState(false);
   const [ModalValidarNomina, setModalValidarNomina] = useState(false);
   const [filterText, setFilterText] = useState(""); // Filtro local para la tabla
-  const navigate = useNavigate();
   // Periodo actual
   const [periodo, setPeriodo] = useState(new Date().toISOString().slice(0, 7));
 
@@ -83,8 +82,8 @@ export function Nomina() {
       grow: 2,
       cell: (row) => (
         <div>
-          <div className="fw-bold">{row.nombre_completo}</div>
-          <small className="text-muted">{row.cargo}</small>
+          <div className="font-bold">{row.nombre_completo}</div>
+          <small className="text-muted-foreground">{row.cargo}</small>
         </div>
       ),
     },
@@ -101,7 +100,7 @@ export function Nomina() {
       sortable: true,
       right: true,
       cell: (row) => (
-        <span className="text-success">
+        <span className="text-emerald-600 dark:text-emerald-400">
           + S/ {parseFloat(row.total_bonificaciones || 0).toFixed(2)}
         </span>
       ),
@@ -112,7 +111,7 @@ export function Nomina() {
       sortable: true,
       right: true,
       cell: (row) => (
-        <span className="text-danger">
+        <span className="text-destructive">
           - S/ {parseFloat(row.total_descuentos || 0).toFixed(2)}
         </span>
       ),
@@ -123,7 +122,7 @@ export function Nomina() {
       sortable: true,
       right: true,
       cell: (row) => (
-        <span className="fw-bold text-dark">
+        <span className="font-bold text-foreground">
           S/ {parseFloat(row.neto_pagar).toFixed(2)}
         </span>
       ),
@@ -149,7 +148,8 @@ export function Nomina() {
           className="btn-principal"
           title="Ver Boleta de Pago"
           onClick={() => console.log("Ver boleta de:", row.id)} // Aquí iría tu función para abrir modal de boleta
-         variant="default">
+          variant="default"
+        >
           <FileText size={18} />
         </Button>
       ),
@@ -159,20 +159,22 @@ export function Nomina() {
     <div>
       <Card className="py-2">
         {/* HEADER UNIFICADO */}
-        <CardHeader className="border-bottom-0 flex flex-col flex-md-row justify-between items-center gap-2 p-3">
-          <div className="d-flex align-items-center">
-            <CardTitle asChild><h4 className="mb-0 titulo-card-especial">
-              Gestión de Nómina
-              <span className="badge-header ms-2">Periodo: {periodo}</span>
-            </h4></CardTitle>
+        <CardHeader className="border-b-0 flex flex-col md:flex-row justify-between items-center gap-2 p-3">
+          <div className="flex items-center">
+            <CardTitle asChild>
+              <h4 className="mb-0 titulo-card-especial">
+                Gestión de Nómina
+                <span className="badge-header ms-2">Periodo: {periodo}</span>
+              </h4>
+            </CardTitle>
           </div>
 
-          <div className="d-flex  gap-2 mt-3 mt-md-0 align-items-center ms-auto">
-            <div className="d-flex gap-2 align-items-center px-3  rounded-pill border">
-              <CalendarDays size={18} className="text-danger" />
+          <div className="flex gap-2 mt-3 md:mt-0 items-center ms-auto">
+            <div className="flex gap-2 items-center px-3 rounded-full border">
+              <CalendarDays size={18} className="text-destructive" />
               <input
                 type="month"
-                className="form-control border-0 p-1 bg-transparent"
+                className="h-9 w-full rounded-md border-input text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 border-0 p-1 bg-transparent"
                 value={periodo}
                 onChange={(e) => setPeriodo(e.target.value)}
                 style={{
@@ -182,76 +184,82 @@ export function Nomina() {
                 }}
               />
             </div>
-            <Button
-              className="btn-principal px-3"
-              onClick={() => navigate("/rrhh/ajustes")}
-             variant="default">
-              <Eye size={18} className="me-1" /> Ver todos los periodos
+            <Button asChild variant="outline" className="gap-2 border-border/70">
+              <Link to="/rrhh/ajustes">
+                <Eye size={18} /> Ver todos los periodos
+              </Link>
             </Button>
           </div>
         </CardHeader>
 
         <CardContent className="p-0">
           {/* TABLERO DE RESUMEN MACRO */}
-          <div className="border-bottom px-4 py-3">
+          <div className="border-b px-4 py-3">
             <CondicionCarga isLoading={isLoading} isError={isError}>
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
-                <div className="md:col-span-4">
+              <div className="grid grid-cols-12 gap-3">
+                <div className="col-span-full md:col-span-4">
                   <Card className="h-full">
                     <CardContent className="flex items-center p-3">
-                      <div className="p-3 rounded-circle text-danger me-3">
+                      <div className="p-3 rounded-full text-destructive me-3">
                         <Users size={24} />
                       </div>
                       <div>
-                        <h6 className="text-muted small mb-0">Empleados</h6>
-                        <h4 className="mb-0 fw-bold text-dark">
+                        <h6 className="text-muted-foreground text-sm mb-0">
+                          Empleados
+                        </h6>
+                        <h4 className="mb-0 font-bold text-foreground">
                           {nominaData?.resumen?.totalEmpleados || 0}
                         </h4>
                       </div>
                     </CardContent>
                   </Card>
                 </div>
-                <div className="md:col-span-4">
+                <div className="col-span-full md:col-span-4">
                   <Card className="h-full">
                     <CardContent className="flex items-center p-3">
-                      <div className="p-3 rounded-circle me-3">
-                        <span className="fw-bold h5">S/.</span>
+                      <div className="p-3 rounded-full me-3">
+                        <span className="font-bold h5">S/.</span>
                       </div>
                       <div>
-                        <h6 className="text-muted small mb-0">Total Nómina</h6>
-                        <h4 className="mb-0 fw-bold text-dark">
+                        <h6 className="text-muted-foreground text-sm mb-0">
+                          Total Nómina
+                        </h6>
+                        <h4 className="mb-0 font-bold text-foreground">
                           S/ {nominaData?.resumen?.totalPagar || "0.00"}
                         </h4>
                       </div>
                     </CardContent>
                   </Card>
                 </div>
-                <div className="md:col-span-4">
+                <div className="col-span-full md:col-span-4">
                   <Card
-                    className={`h-full${
+                    className={`h-full ${
                       nominaData?.resumen?.estado === "PAGADO"
-                        ? "bg-success text-white"
-                        : "bg-warning bg-opacity-10 text-foreground"
+                        ? "bg-emerald-600 text-white"
+                        : "bg-muted/50 text-foreground"
                     }`}
                   >
                     <CardContent className="flex items-center p-3">
-                      <div className="p-3 rounded-circle me-3  bg-opacity-50">
+                      <div className="p-3 rounded-full me-3">
                         {nominaData?.resumen?.estado === "PAGADO" ? (
                           <CheckCircle
                             size={24}
                             className={
                               nominaData?.resumen?.estado === "PAGADO"
-                                ? "text-success"
-                                : "text-dark"
+                                ? "text-emerald-600 dark:text-emerald-400"
+                                : "text-foreground"
                             }
                           />
                         ) : (
-                          <AlertCircle size={24} className="text-warning" />
+                          <AlertCircle
+                            size={24}
+                            className="text-amber-600 dark:text-amber-400"
+                          />
                         )}
                       </div>
                       <div>
-                        <h6 className="small mb-0 opacity-75">Estado</h6>
-                        <h4 className="mb-0 fw-bold">
+                        <h6 className="text-sm mb-0 opacity-75">Estado</h6>
+                        <h4 className="mb-0 font-bold">
                           {nominaData?.resumen?.estado || "PENDIENTE"}
                         </h4>
                       </div>
@@ -263,21 +271,22 @@ export function Nomina() {
           </div>
 
           {/* BARRA DE HERRAMIENTAS DE TABLA */}
-          <div className="px-4 py-3 border-bottom  d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
-            <div className="header-search-container m-0">
-              <Search className="search-icon" />
-              <input
+          <div className="flex flex-col items-stretch justify-between gap-3 border-b border-border/70 px-5 py-5 sm:flex-row sm:items-center">
+            <div className="relative w-full min-w-0 sm:w-64">
+              <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
                 type="text"
                 placeholder="Buscar empleado..."
-                className="form-control"
+                className="h-9 pl-9"
                 value={filterText}
                 onChange={(e) => setFilterText(e.target.value)}
               />
             </div>
 
-            <div className="d-flex flex-wrap gap-2">
+            <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
               <Button
-                className="btn btn-outline-dark px-3"
+                size="lg"
+                className="gap-2 px-3"
                 onClick={() =>
                   GetReporteExcel(
                     `/reporteNomina/${periodo}`,
@@ -286,15 +295,18 @@ export function Nomina() {
                     "Nomina",
                   )
                 }
-               variant="default">
+                variant="ghostOutline"
+              >
                 <FileChartColumnIncreasing size={18} className="me-1" />
                 Reporte
               </Button>
 
               <Button
-                className="btn-guardar px-3"
+                size="lg"
+                className="gap-2 px-3"
                 onClick={() => setModalValidarNomina(true)}
-               variant="default">
+                variant="default"
+              >
                 <UserRoundCheck size={18} className="me-1" />
                 Validar Periodo
               </Button>

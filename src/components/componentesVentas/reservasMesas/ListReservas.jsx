@@ -57,30 +57,31 @@ export default function ListReservas({ irAFormulario }) {
   );
 
   return (
-    <div className="d-flex flex-column h-100 bg-white">
+    <div className="flex flex-col h-full bg-background">
       {" "}
       {/* Fondo blanco limpio */}
-      <div className="p-3 border-bottom flex-shrink-0">
-        <div className="d-flex justify-content-between align-items-center mb-3">
-          <span className="fw-bold text-dark small">
+      <div className="p-3 border-b shrink-0">
+        <div className="flex justify-between items-center mb-3">
+          <span className="font-bold text-foreground text-sm">
             {reservasFiltradas.length} Reservas Programadas
           </span>
           <Button
-            className="btn-principal btn-sm d-flex align-items-center gap-1 rounded-pill px-3 shadow-sm"
+            className="btn-principal justify-center whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 text-xs flex items-center gap-1 rounded-full px-3 shadow-sm"
             onClick={() => irAFormulario(null)} // null = Crear nueva
-           variant="default">
+            variant="default"
+          >
             <Plus size={14} /> Nueva
           </Button>
         </div>
 
-        <div className="d-flex gap-2">
-          <div className="input-group input-group-sm">
-            <span className="input-group-text  border-0 bg-transparent text-muted">
+        <div className="flex gap-2">
+          <div className="flex w-full items-stretch">
+            <span className="inline-flex items-center rounded-md border-input px-3 text-sm border-0 bg-transparent text-muted-foreground">
               <CalendarDays size={14} />
             </span>
             <input
               type="date"
-              className="form-control border-start-0 ps-3 ps-0 bg-light"
+              className="h-9 w-full rounded-md px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 border-s-0 ps-0 bg-muted"
               value={fechaFiltro}
               onChange={(e) => setFechaFiltro(e.target.value)}
               style={{ boxShadow: "none" }}
@@ -89,12 +90,12 @@ export default function ListReservas({ irAFormulario }) {
         </div>
       </div>
       <div
-        className="overflow-x-hidden   reservas-container"
+        className="overflow-x-hidden reservas-container"
         style={{ backgroundColor: "#f8f9fa" }}
       >
         <CondicionCarga isLoading={isLoading} isError={isError} mode="list">
           {reservasFiltradas.length === 0 ? (
-            <div className="d-flex flex-column align-items-center justify-content-center h-100 text-muted opacity-50 py-5">
+            <div className="flex flex-col items-center justify-center h-full text-muted-foreground opacity-50 py-5">
               <Search size={40} className="mb-3" />
               <p className="mb-0">No hay reservas para esta fecha</p>
             </div>

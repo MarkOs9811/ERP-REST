@@ -23,7 +23,7 @@ export function EditCombo({ dataCombo }) {
     try {
       const response = await axiosInstance.put(
         `/combos/${dataCombo.id}`,
-        formData
+        formData,
       );
       if (response.data.success) {
         ToastAlert("success", "Combo actualizado con éxito");
@@ -43,10 +43,12 @@ export function EditCombo({ dataCombo }) {
       <form onSubmit={handleSubmit(onSubmit)}>
         {/* Nombre */}
         <div className="mb-3">
-          <label className="form-label small">Nombre</label>
+          <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm">
+            Nombre
+          </label>
           <input
             type="text"
-            className={`form-control ${errors.nombre ? "is-invalid" : ""}`}
+            className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.nombre ? "border-destructive focus-visible:ring-destructive" : ""}`}
             {...register("nombre", {
               required: "El nombre es obligatorio",
               maxLength: {
@@ -56,16 +58,20 @@ export function EditCombo({ dataCombo }) {
             })}
           />
           {errors.nombre && (
-            <div className="invalid-feedback">{errors.nombre.message}</div>
+            <div className="text-sm text-destructive">
+              {errors.nombre.message}
+            </div>
           )}
         </div>
 
         {/* Descripción */}
         <div className="mb-3">
-          <label className="form-label small ">Descripción</label>
+          <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm">
+            Descripción
+          </label>
           <textarea
             rows="3"
-            className={`form-control ${errors.descripcion ? "is-invalid" : ""}`}
+            className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.descripcion ? "border-destructive focus-visible:ring-destructive" : ""}`}
             {...register("descripcion", {
               required: "La descripción es obligatoria",
               maxLength: {
@@ -75,16 +81,20 @@ export function EditCombo({ dataCombo }) {
             })}
           ></textarea>
           {errors.descripcion && (
-            <div className="invalid-feedback">{errors.descripcion.message}</div>
+            <div className="text-sm text-destructive">
+              {errors.descripcion.message}
+            </div>
           )}
         </div>
 
         {/* Precio */}
         <div className="mb-3">
-          <label className="form-label">Precio</label>
+          <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+            Precio
+          </label>
           <input
             type="text"
-            className={`form-control ${errors.precio ? "is-invalid" : ""}`}
+            className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.precio ? "border-destructive focus-visible:ring-destructive" : ""}`}
             {...register("precio", {
               required: "El precio es obligatorio",
               validate: (value) => {
@@ -102,7 +112,9 @@ export function EditCombo({ dataCombo }) {
           />
 
           {errors.precio && (
-            <div className="invalid-feedback">{errors.precio.message}</div>
+            <div className="text-sm text-destructive">
+              {errors.precio.message}
+            </div>
           )}
         </div>
 

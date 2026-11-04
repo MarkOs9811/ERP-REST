@@ -17,7 +17,6 @@ import { BadgeComponent } from "../components/componentesReutilizables/BadgeComp
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-
 // Función para generar un código aleatorio de 6 caracteres
 const generarCodigoAleatorio = () => {
   return Math.random().toString(36).substring(2, 8).toUpperCase();
@@ -124,10 +123,10 @@ export function ConfiguracionGeneral() {
   };
 
   const renderCuerpoModal = () => (
-    <div className="d-flex flex-column gap-3 m-3">
-      <div className="alert alert-danger d-flex align-items-start gap-2 m-0 border-0 bg-danger bg-opacity-10 text-danger">
-        <AlertTriangle size={24} className="flex-shrink-0 mt-1" />
-        <p className="m-0 small">
+    <div className="flex flex-col gap-3 m-3">
+      <div className="relative w-full rounded-lg px-4 py-3 text-sm border-destructive/30 flex items-start gap-2 m-0 border-0 bg-destructive/10 text-destructive">
+        <AlertTriangle size={24} className="shrink-0 mt-1" />
+        <p className="m-0 text-sm">
           <strong>¡Peligro Inminente!</strong> Esta acción vaciará todas las
           tablas operativas (ventas, pedidos, cajas, etc.) y eliminará las
           empresas registradas. Solo se conservarán los catálogos (ubigeo,
@@ -136,11 +135,14 @@ export function ConfiguracionGeneral() {
       </div>
 
       <div className="form-group mt-2">
-        <label className="fw-bold mb-2 d-flex align-items-center gap-2 flex-wrap">
+        <label className="font-bold mb-2 flex items-center gap-2 flex-wrap">
           {step === 1 ? (
-            <ShieldAlert size={18} className="text-danger" />
+            <ShieldAlert size={18} className="text-destructive" />
           ) : (
-            <ShieldCheck size={18} className="text-success" />
+            <ShieldCheck
+              size={18}
+              className="text-emerald-600 dark:text-emerald-400"
+            />
           )}
           {step === 1
             ? "Para continuar, escribe este código:"
@@ -158,7 +160,7 @@ export function ConfiguracionGeneral() {
         {/* Input con tamaño normal (sin -lg) */}
         <input
           type="text"
-          className={`form-control ${step === 2 ? "is-valid bg-light text-success fw-bold" : ""}`}
+          className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${step === 2 ? "border-emerald-500 focus-visible:ring-emerald-500 bg-muted text-emerald-700 dark:text-emerald-400 font-bold" : ""}`}
           placeholder="Escribe el código aquí..."
           value={inputCodigo}
           onChange={(e) => setInputCodigo(e.target.value.toUpperCase())}
@@ -173,15 +175,15 @@ export function ConfiguracionGeneral() {
           className="form-group mt-1"
           style={{ animation: "fadeIn 0.4s ease-in-out" }}
         >
-          <hr className="text-muted opacity-25 my-3" />
-          <label className="fw-bold mb-2 d-flex align-items-center gap-2">
+          <hr className="text-muted-foreground opacity-25 my-3" />
+          <label className="font-bold mb-2 flex items-center gap-2">
             <Lock size={16} /> Contraseña de SuperAdmin:
           </label>
           {/* Quitamos input-group-lg para que el grupo y el botón mantengan el tamaño normal */}
-          <div className="input-group">
+          <div className="flex w-full items-stretch">
             <input
               type={showPassword ? "text" : "password"}
-              className="form-control"
+              className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
               placeholder="Tu contraseña secreta..."
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -189,11 +191,12 @@ export function ConfiguracionGeneral() {
               autoFocus
             />
             <Button
-              className="btn btn-outline-secondary"
+              className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border-input bg-background text-foreground shadow-sm hover:bg-accent hover:text-accent-foreground"
               type="button"
               onClick={() => setShowPassword(!showPassword)}
               disabled={reiniciarMutation.isPending}
-             variant="default">
+              variant="default"
+            >
               {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
             </Button>
           </div>
@@ -202,13 +205,13 @@ export function ConfiguracionGeneral() {
 
       {reiniciarMutation.isPending && (
         <div className="mt-3">
-          <div className="d-flex justify-content-between mb-1 small fw-bold text-muted">
+          <div className="flex justify-between mb-1 text-sm font-bold text-muted-foreground">
             <span>Eliminando registros de empresas...</span>
             <span>{progreso > 100 ? 100 : progreso}%</span>
           </div>
           <div className="progress" style={{ height: "12px" }}>
             <div
-              className="progress-bar progress-bar-striped progress-bar-animated bg-danger"
+              className="progress-bar progress-bar-striped progress-bar-animated bg-destructive"
               role="progressbar"
               style={{ width: `${progreso}%`, transition: "width 0.4s ease" }}
             ></div>
@@ -219,24 +222,27 @@ export function ConfiguracionGeneral() {
   );
 
   return (
-    <Card className="border-danger mb-4 shadow-sm">
-      <CardHeader className="bg-danger text-white flex items-center gap-2 py-3">
+    <Card className="border-destructive mb-4 shadow-sm">
+      <CardHeader className="bg-destructive text-white flex items-center gap-2 py-3">
         <AlertTriangle size={20} />
-        <CardTitle asChild><h5 className="m-0 fw-bold">
-          Zona de Peligro: Reinicio del Sistema
-        </h5></CardTitle>
+        <CardTitle asChild>
+          <h5 className="m-0 font-bold">
+            Zona de Peligro: Reinicio del Sistema
+          </h5>
+        </CardTitle>
       </CardHeader>
       <CardContent className="">
-        <p className="text-muted mb-4">
+        <p className="text-muted-foreground mb-4">
           Utiliza esta opción únicamente para restablecer el sistema a su estado
           de fábrica antes de entregarlo a un nuevo cliente. Se vaciarán todas
           las transacciones y empresas, pero se mantendrán las configuraciones
           estructurales.
         </p>
         <Button
-          className="btn btn-danger d-flex align-items-center gap-2 fw-medium px-4"
+          className="justify-center whitespace-nowrap rounded-md text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90 flex items-center gap-2 font-medium px-4"
           onClick={() => setShowModal(true)}
-         variant="destructive">
+          variant="destructive"
+        >
           <RotateCcw size={18} />
           Reiniciar Base de Datos
         </Button>
@@ -250,7 +256,11 @@ export function ConfiguracionGeneral() {
         width="520px"
         textConfirm={step === 1 ? "Verificar Código" : "Sí, vaciar sistema"}
         // Tus clases y configuraciones originales de botones
-        btnConfirmColor={step === 1 ? "btn-dark" : "btn-eliminar"}
+        btnConfirmColor={
+          step === 1
+            ? "bg-foreground text-background"
+            : "bg-destructive text-destructive-foreground hover:bg-destructive/90"
+        }
         textCancel="Cancelar"
       >
         {renderCuerpoModal()}

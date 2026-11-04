@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "../../css/EstiloBotonMotion.css";
+
 import { Button } from "../ui/button";
 
 export function BotonGeneralSave({
@@ -28,16 +28,19 @@ export function BotonGeneralSave({
   return (
     <Button
       type="button"
-      className={`fw-btn-base d-inline-flex align-items-center justify-content-center fw-btn-min ${
-        bloqueado ? "btn btn-motion-theme disabled opacity-75" : className
+      className={`fw-btn-base inline-flex items-center justify-center fw-btn-min ${
+        bloqueado
+          ? "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 btn-motion-theme disabled opacity-75"
+          : className
       }`}
       onClick={handleClick}
       disabled={bloqueado || disabled}
-     variant="default">
+      variant="default"
+    >
       {bloqueado ? (
         <>
           <div
-            className="spinner-border spinner-border-sm me-2"
+            className="inline-block animate-spin rounded-full border-current border-r-transparent size-4 me-2"
             role="status"
             aria-hidden="true"
           ></div>

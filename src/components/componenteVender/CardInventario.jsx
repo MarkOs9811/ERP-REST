@@ -1,6 +1,6 @@
 import { MinusIcon, PlusIcon } from "lucide-react";
 
-import "../../css/EstilosPlatosTodo.css";
+
 import { Button } from "../ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 
@@ -14,7 +14,7 @@ export const CardPlatos = ({
 }) => {
   return (
     <Card
-      className={`float-left card-platillo overflow-auto m-2${
+      className={`float-left card-platillo overflow-auto m-2 ${
         isSelected ? "selected" : ""
       }`}
     >
@@ -33,16 +33,16 @@ export const CardPlatos = ({
       />
       <CardContent className="">
         <span
-          className=" text-danger mb-1 d-block opacity-75"
+          className="text-destructive mb-1 block opacity-75"
           style={{ fontSize: "0.73rem" }}
         >
           {capitalizeFirstLetter(item.categoria?.nombre || "Sin categoría")}
         </span>
 
-        <p className="nombre-plato mb-3 fw-bold">
+        <p className="nombre-plato mb-3 font-bold">
           {capitalizeFirstLetter(item.nombre)}
         </p>
-        <span className="rounded-pill  px-2 fw-bold precioCard ">
+        <span className="rounded-full px-2 font-bold precioCard">
           S/. {item.precio}
         </span>
       </CardContent>
@@ -73,7 +73,7 @@ export const CardPlatos = ({
         ) : (
           <Button
             type="button"
-            className="btn-accionesPlatos btn-añadir w-100"
+            className="btn-accionesPlatos btn-añadir w-full"
             onClick={() => handleAdd(item)}
            variant="default">
             <span className="me-2">

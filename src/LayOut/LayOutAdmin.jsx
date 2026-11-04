@@ -10,18 +10,18 @@ import { ContenedorPrincipal } from "../components/componentesReutilizables/Cont
 import { HomeAdmin } from "../pageAdmin/HomeAdmin";
 import { EmpresasAdmin } from "../pageAdmin/EmpresasAdmin";
 // === IMPORTAMOS EL CSS PRINCIPAL ===
-import "../cssAdmin/estilosGeneralesAdmin.css"; // Ruta ajustada si es necesario
+
 import { AdminSidebar } from "../pageAdmin/AdminSideBar";
 import { AdminHeader } from "../pageAdmin/AdminHeader";
 import { ConfiguracionGeneral } from "../pageAdmin/ConfiguracionGeneral";
 
 export const LayOutAdmin = () => {
   return (
-    <div className="d-flex vh-100">
-      <div className="contenedorSideBar h-100 p-0">
+    <div className="flex h-screen">
+      <div className="contenedorSideBar h-full p-0">
         <AdminSidebar />
       </div>
-      <div className=" w-100 h-100 d-flex flex-column p-0 bg-light">
+      <div className="w-full h-full flex flex-col p-0 bg-muted">
         <AdminHeader />
         <div className="py-4">
           <ContenedorPrincipal>

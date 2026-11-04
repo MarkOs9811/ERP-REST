@@ -14,7 +14,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "../../ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
-
 export function DetallesCuotasPagar({ data, refetch, modalClose }) {
   const [alertConfirmarPago, setAlertConfirmarPago] = useState(false);
   const [dataPago, setDataPago] = useState([]);
@@ -96,91 +95,93 @@ export function DetallesCuotasPagar({ data, refetch, modalClose }) {
       {/* Cabecera principal */}
       <Card className="shadow-sm mb-4 border-0">
         <CardContent className="pb-2">
-          <div className="d-flex justify-content-between align-items-center mb-2">
+          <div className="flex justify-between items-center mb-2">
             <div>
-              <h4 className="fw-bold mb-1">Proveedor</h4>
-              <span className="text-secondary">{proveedor}</span>
+              <h4 className="font-bold mb-1">Proveedor</h4>
+              <span className="text-muted-foreground">{proveedor}</span>
             </div>
             <span
-              className={`badge px-3 py-2 fs-6 ${
+              className={`inline-flex items-center rounded-full font-semibold transition-colors px-3 py-2 text-base ${
                 data.estado === "pendiente"
-                  ? "bg-warning text-dark"
-                  : "bg-success text-white"
+                  ? "bg-amber-500 text-foreground"
+                  : "bg-emerald-600 text-white"
               }`}
               style={{ borderRadius: "20px" }}
             >
               {data.estado.charAt(0).toUpperCase() + data.estado.slice(1)}
             </span>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-2">
-            <div className="md:col-span-3">
-              <div className="bg-light border rounded p-3 h-100 d-flex flex-column align-items-start">
+          <div className="grid grid-cols-12 gap-3 mb-2">
+            <div className="col-span-full md:col-span-3">
+              <div className="bg-muted rounded p-3 h-full flex flex-col items-start">
                 <span className="mb-1">
-                  <FileText size={20} className="me-1 text-danger" />
+                  <FileText size={20} className="me-1 text-destructive" />
                   Monto Total
                 </span>
-                <span className="fs-4 fw-bold ">S/. {data.monto}</span>
+                <span className="text-xl font-bold">S/. {data.monto}</span>
               </div>
             </div>
-            <div className="md:col-span-3">
-              <div className=" border bg-opacity-10 rounded p-3 h-100 d-flex flex-column align-items-start">
+            <div className="col-span-full md:col-span-3">
+              <div className="border rounded p-3 h-full flex flex-col items-start">
                 <span className="mb-1">
-                  <CheckCircle2 size={20} className="me-1 text-danger" /> Monto
-                  Pagado
+                  <CheckCircle2 size={20} className="me-1 text-destructive" />{" "}
+                  Monto Pagado
                 </span>
-                <span className="fs-4 fw-bold ">S/. {data.monto_pagado}</span>
+                <span className="text-xl font-bold">
+                  S/. {data.monto_pagado}
+                </span>
               </div>
             </div>
-            <div className="md:col-span-3">
-              <div className="border bg-opacity-10 rounded p-3 h-100 d-flex flex-column align-items-start">
-                <span className="mb-1 ">
-                  <CalendarDays size={20} className="me-1 text-danger" /> Fecha
-                  de Inicio
+            <div className="col-span-full md:col-span-3">
+              <div className="border rounded p-3 h-full flex flex-col items-start">
+                <span className="mb-1">
+                  <CalendarDays size={20} className="me-1 text-destructive" />{" "}
+                  Fecha de Inicio
                 </span>
-                <span className="fs-5 fw-bold ">
+                <span className="text-lg font-bold">
                   {data.fecha_inicio || "No disponible"}
                 </span>
               </div>
             </div>
-            <div className="md:col-span-3">
-              <div className="bg-danger border bg-opacity-10 rounded p-3 h-100 d-flex flex-column align-items-start">
-                <span className="mb-1 text-danger fw-bold">
+            <div className="col-span-full md:col-span-3">
+              <div className="bg-destructive/10 rounded p-3 h-full flex flex-col items-start">
+                <span className="mb-1 text-destructive font-bold">
                   <CalendarCheck size={20} className="me-1" /> Fecha de Fin
                 </span>
-                <span className="fs-5 fw-bold text-danger">
+                <span className="text-lg font-bold text-destructive">
                   {data.fecha_fin || "No disponible"}
                 </span>
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-2">
-            <div className="md:col-span-4">
-              <div className=" border rounded p-3 h-100 d-flex flex-column align-items-left">
-                <div className="d-flex gap-2">
+          <div className="grid grid-cols-12 gap-3 mb-2">
+            <div className="col-span-full md:col-span-4">
+              <div className="border rounded p-3 h-full flex flex-col items-start">
+                <div className="flex gap-2">
                   <ListOrdered size={22} className="mb-1 t" />
                   <span>Cuotas Totales</span>
                 </div>
-                <span className="fs-4 fw-bold">{data.cuotas}</span>
+                <span className="text-xl font-bold">{data.cuotas}</span>
               </div>
             </div>
-            <div className="md:col-span-4">
-              <div className=" border rounded p-3 h-100 d-flex flex-column align-items-left">
-                <div className="d-flex gap-2">
-                  <CheckCircle2 size={22} className="mb-1 " />
+            <div className="col-span-full md:col-span-4">
+              <div className="border rounded p-3 h-full flex flex-col items-start">
+                <div className="flex gap-2">
+                  <CheckCircle2 size={22} className="mb-1" />
                   <span>Cuotas Pagadas</span>
                 </div>
 
-                <span className="fs-4 fw-bold">{data.cuotas_pagadas}</span>
+                <span className="text-xl font-bold">{data.cuotas_pagadas}</span>
               </div>
             </div>
-            <div className="md:col-span-4">
-              <div className=" border rounded p-3 h-100 d-flex flex-column align-items-left">
-                <div className="d-flex gap-2">
-                  <CalendarDays size={22} className="mb-1 " />
+            <div className="col-span-full md:col-span-4">
+              <div className="border rounded p-3 h-full flex flex-col items-start">
+                <div className="flex gap-2">
+                  <CalendarDays size={22} className="mb-1" />
                   <span>Cuotas Restantes</span>
                 </div>
 
-                <span className="fs-4 fw-bold">
+                <span className="text-xl font-bold">
                   {data.cuotas - data.cuotas_pagadas}
                 </span>
               </div>
@@ -190,14 +191,14 @@ export function DetallesCuotasPagar({ data, refetch, modalClose }) {
       </Card>
 
       {/* Tabla de cuotas programadas */}
-      <Card className="shadow-sm border p-3">
-        <CardHeader className="rounded-top">
+      <Card className="shadow-sm p-3">
+        <CardHeader className="rounded-t">
           <CalendarDays size={20} className="mb-1 me-2" />
-          <span className="fw-bold fs-5">Cuotas Programadas</span>
+          <span className="font-bold text-lg">Cuotas Programadas</span>
         </CardHeader>
         <CardContent className="p-0">
-          <div className="table-responsive">
-            <table className="table align-middle mb-0">
+          <div className="w-full overflow-x-auto">
+            <table className="w-full caption-bottom text-sm align-middle mb-0">
               <thead>
                 <tr>
                   <th className="text-center">Cuota</th>
@@ -213,9 +214,9 @@ export function DetallesCuotasPagar({ data, refetch, modalClose }) {
                 data.cuotas_pagar.length > 0 ? (
                   data.cuotas_pagar.map((cuota, idx) => (
                     <tr key={cuota.id}>
-                      <td className="text-center ">
+                      <td className="text-center">
                         <span
-                          className="badge rounded-circle bg-danger text-white fs-6"
+                          className="inline-flex items-center px-2.5 py-0.5 font-semibold transition-colors rounded-full bg-destructive text-white text-base"
                           style={{ width: 32, height: 32, lineHeight: "20px" }}
                         >
                           {cuota.cuotas}
@@ -224,21 +225,21 @@ export function DetallesCuotasPagar({ data, refetch, modalClose }) {
                       <td>
                         <CalendarDays
                           size={16}
-                          className="mb-1 me-1 text-secondary"
+                          className="mb-1 me-1 text-muted-foreground"
                         />
                         {cuota.fecha_pago}
                       </td>
                       <td>
-                        <span className="fw-bold text-success">
+                        <span className="font-bold text-emerald-600 dark:text-emerald-400">
                           S/. {cuota.monto}
                         </span>
                       </td>
                       <td>
                         <span
-                          className={`badge px-3 py-2 small ${
+                          className={`inline-flex items-center rounded-full font-semibold transition-colors px-3 py-2 text-sm ${
                             cuota.estado === "pagado"
-                              ? "bg-success text-white"
-                              : "bg-warning text-dark"
+                              ? "bg-emerald-600 text-white"
+                              : "bg-amber-500 text-foreground"
                           }`}
                           style={{ borderRadius: "20px" }}
                         >
@@ -249,17 +250,21 @@ export function DetallesCuotasPagar({ data, refetch, modalClose }) {
                       <td>{cuota.fecha_pagada ? cuota.fecha_pagada : "-"}</td>
                       <td>
                         {cuota.estado === "pagado" ? (
-                          <Button className="btn btn-outline-success btn-sm fw-bold" variant="default">
+                          <Button
+                            className="shadow border-emerald-600 bg-background text-emerald-700 hover:bg-emerald-50 dark:text-emerald-400 dark:hover:bg-emerald-950 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 px-3 text-xs font-bold"
+                            variant="default"
+                          >
                             Ver Declarado
                           </Button>
                         ) : (
                           <Button
-                            className="btn btn-danger btn-sm fw-bold"
+                            className="bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 px-3 text-xs font-bold"
                             onClick={() => {
                               setAlertConfirmarPago(true);
                               setDataPago(cuota);
                             }}
-                           variant="destructive">
+                            variant="destructive"
+                          >
                             Registrar Pago
                           </Button>
                         )}
@@ -268,7 +273,10 @@ export function DetallesCuotasPagar({ data, refetch, modalClose }) {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={6} className="text-center text-muted">
+                    <td
+                      colSpan={6}
+                      className="text-center text-muted-foreground"
+                    >
                       No hay cuotas registradas.
                     </td>
                   </tr>
@@ -282,10 +290,11 @@ export function DetallesCuotasPagar({ data, refetch, modalClose }) {
       <Card className="my-3 p-3">
         <Button
           type="button"
-          className="btn-guardar "
+          className="btn-guardar"
           style={{ width: "250px" }}
           onClick={() => descargarDetalles(data.id)}
-         variant="default">
+          variant="default"
+        >
           <FileDown className="text-auto" /> Descargar Detalles
         </Button>
       </Card>
@@ -300,7 +309,7 @@ export function DetallesCuotasPagar({ data, refetch, modalClose }) {
         <Card className="border m-3 text-left">
           {dataPago ? (
             <div className="p-3 text-left">
-              <h5 className="fw-bold mb-3">Detalles del Pago</h5>
+              <h5 className="font-bold mb-3">Detalles del Pago</h5>
               <p>
                 <strong>Cuota N°:</strong> {dataPago.numero_cuota}
               </p>
@@ -310,7 +319,7 @@ export function DetallesCuotasPagar({ data, refetch, modalClose }) {
               <p>
                 <strong>Fecha de Pago Programada:</strong> {dataPago.fecha_pago}
               </p>
-              <p className="text-danger">
+              <p className="text-destructive">
                 <strong>Estado:</strong>{" "}
                 {dataPago.estado
                   ? dataPago.estado.charAt(0).toUpperCase() +

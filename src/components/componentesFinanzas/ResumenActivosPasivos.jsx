@@ -21,9 +21,9 @@ export function ResumenActivosPasivos() {
   // let deudas = data?.valorPagar || {};
 
   return (
-    <ul className="list-group bg-dark">
+    <ul className="flex flex-col divide-y bg-foreground">
       <li
-        className="list-group-item bg-auto list-group-item-action p-4"
+        className="relative block border-b bg-background text-foreground bg-auto transition-colors hover:bg-accent hover:text-accent-foreground p-4"
         onClick={() => {
           navigate("/almacen");
           dispatch(subMenuClick("almacen"));
@@ -35,7 +35,7 @@ export function ResumenActivosPasivos() {
         <FontAwesomeIcon icon={faBoxOpen} className="icon-background" />
       </li>
       <li
-        className="list-group-item list-group-item-action p-4"
+        className="relative block border-b bg-background text-foreground transition-colors hover:bg-accent hover:text-accent-foreground p-4"
         onClick={() => {
           navigate("/ventas/inventario");
           dispatch(subMenuClick("ventas"));
@@ -47,7 +47,7 @@ export function ResumenActivosPasivos() {
         <FontAwesomeIcon icon={faShopify} className="icon-background" />
       </li>
       <li
-        className="list-group-item list-group-item-action p-4"
+        className="relative block border-b bg-background text-foreground transition-colors hover:bg-accent hover:text-accent-foreground p-4"
         onClick={() => {
           navigate("/finanzas/cuentas-por-pagar");
           dispatch(subMenuClick("finanzas"));

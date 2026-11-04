@@ -1,8 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../api/AxiosInstance";
-import "../../css/EstilosPreventa.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+
 import { capitalizeFirstLetter } from "../../hooks/FirstLetterUp";
 import ToastAlert from "../componenteToast/ToastAlert";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,6 +18,7 @@ import {
   Minus,
   Notebook,
   Plus,
+  ArrowLeft,
   Trash2,
 } from "lucide-react";
 import { useState } from "react";
@@ -28,8 +27,20 @@ import { BuscadorPlatos } from "./tareasVender/BuscadorPlatos";
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
 import { ImprimirTicket } from "./tareasVender/ImprimiTIcket";
 import { Button } from "../ui/button";
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
-
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { Textarea } from "../ui/textarea";
 
 export function ToMesa() {
   const id = useSelector((state) => state.mesa.idPreventaMesa);
@@ -143,62 +154,74 @@ export function ToMesa() {
   };
 
   return (
-    <div className="h-100 bg-transparent">
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-4h-100 g-3">
-        <div className="md:col-span-4 col-lg-3 h-100">
-          <Card className="flex-grow-1 h-full flex flex-col overflow-hidden">
-            <CardHeader className="bg-background border-b py-3">
-              <div className="d-flex align-items-center w-100 gap-2">
-                <select
-                  className="form-select"
-                  value={id || ""}
-                  onChange={(e) => {
-                    const nuevoId = parseInt(e.target.value);
-                    dispatch(setIdPreventaMesa(nuevoId));
-                  }}
+    <div className="min-h-full bg-transparent lg:h-full lg:min-h-0">
+      <div className="grid min-h-full grid-cols-1 gap-3 lg:h-full lg:min-h-0 lg:grid-cols-12">
+        <div className="order-2 min-h-[28rem] lg:order-2 lg:col-span-4 lg:min-h-0 xl:col-span-3">
+          <Card className="flex h-full min-h-0 flex-col overflow-hidden rounded-xl border-border/70 py-0 shadow-none">
+            <CardHeader className="border-b bg-background px-3 py-3">
+              <div className="flex w-full items-center gap-2">
+                <Select
+                  value={id ? String(id) : undefined}
+                  onValueChange={(value) =>
+                    dispatch(setIdPreventaMesa(parseInt(value, 10)))
+                  }
                 >
-                  {mesasList
-                    .filter((m) => m.estado === 1)
-                    .map((m) => (
-                      <option key={m.id} value={m.id}>
-                        Mesa {m.numero}
-                      </option>
-                    ))}
-                </select>
+                  <SelectTrigger className="min-w-0 flex-1">
+                    <SelectValue placeholder="Seleccionar mesa" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {mesasList
+                      .filter((mesa) => mesa.estado === 1)
+                      .map((mesa) => (
+                        <SelectItem key={mesa.id} value={String(mesa.id)}>
+                          Mesa {mesa.numero}
+                        </SelectItem>
+                      ))}
+                  </SelectContent>
+                </Select>
 
-                <div className="d-flex gap-2 ms-auto">
+                <div className="flex shrink-0 gap-1.5">
                   <Button
-                    className="btn-eliminar btn-icon flex-shrink-0"
+                    size="icon"
+                    className="size-8"
                     title="Limpiar Pedido"
                     onClick={handleLimpiarMesa}
-                   variant="destructive">
-                    <FontAwesomeIcon icon={faTrashCan} />
+                    variant="destructive"
+                    aria-label="Limpiar pedido"
+                  >
+                    <Trash2 className="size-4" />
                   </Button>
 
                   <Button
-                    className="btn-cerrar btn-icon flex-shrink-0"
+                    size="icon"
+                    variant="outline"
+                    className="size-8 border-border/70"
                     onClick={handleVolverToMesas}
-                   variant="default">
-                    <FontAwesomeIcon icon={faArrowLeft} />
+                    aria-label="Volver a mesas"
+                  >
+                    <ArrowLeft className="size-4" />
                   </Button>
                 </div>
               </div>
             </CardHeader>
-            <CardContent className="overflow-auto p-0 flex flex-col">
+            <CardContent className="min-h-0 flex-1 overflow-auto p-0">
               {pedido.mesas[id] && pedido.mesas[id].items.length > 0 ? (
-                <div className="overflow-auto  rounded-none">
-                  <table className="table table-borderless align-middle mb-0 bg-transparent">
-                    <thead className="text-muted small border-bottom ">
+                <div className="overflow-auto rounded-none">
+                  <table className="w-full text-sm [&_th]:border-0 [&_td]:border-0">
+                    <thead className="sticky top-0 border-b bg-background text-xs text-muted-foreground">
                       <tr>
-                        <th scope="col" className="ps-3 fw-normal py-2">
+                        <th scope="col" className="py-2.5 pl-3 text-left font-medium">
                           Desc.
                         </th>
-                        <th scope="col" className="text-center fw-normal py-2">
+                        <th
+                          scope="col"
+                          className="py-2.5 text-center font-medium"
+                        >
                           Cant.
                         </th>
                         <th
                           scope="col"
-                          className="text-end fw-normal py-2 pe-3"
+                          className="py-2.5 pr-3 text-right font-medium"
                         >
                           Total
                         </th>
@@ -206,69 +229,60 @@ export function ToMesa() {
                     </thead>
                     <tbody>
                       {pedido.mesas[id].items.map((item) => (
-                        <tr
-                          key={item.id}
-                          className="border-bottom bg-transparent"
-                        >
-                          <td className="ps-3 py-2 bg-transparent">
-                            <div className="d-flex flex-column">
-                              <span className="fw-bold text-dark small">
+                        <tr key={item.id} className="border-b border-border/50 last:border-0">
+                          <td className="py-2.5 pl-3">
+                            <div className="flex flex-col">
+                              <span className="line-clamp-2 text-sm font-medium text-foreground">
                                 {item.nombre}
                               </span>
-                              <span
-                                className="text-muted"
-                                style={{ fontSize: "0.75rem" }}
-                              >
+                              <span className="text-xs text-muted-foreground">
                                 S/. {Number(item.precio).toFixed(2)}
                               </span>
                             </div>
                           </td>
-                          <td className="py-2 text-center bg-transparent">
-                            <div
-                              className="d-flex align-items-center justify-content-center border rounded-pill  mx-auto px-1"
-                              style={{
-                                width: "fit-content",
-                                margin: "0 auto",
-                              }}
-                            >
+                          <td className="py-2 text-center">
+                            <div className="mx-auto flex w-fit items-center justify-center rounded-lg border border-border/70 bg-background px-0.5">
                               <Button
-                                className="btn-informativo btn-icon border-0 text-dark p-0"
-                                style={{ width: "22px" }}
+                                size="icon-sm"
+                                className="text-muted-foreground"
                                 onClick={() =>
                                   handleRemovePlatoPreventa(item.id)
                                 }
-                               variant="default">
-                                <Minus size={14} />
-                              </Button>
-                              <span
-                                className="mx-1  fw-bold"
-                                style={{ fontSize: "0.85rem" }}
+                                variant="ghost"
+                                aria-label={`Quitar una unidad de ${item.nombre}`}
                               >
+                                <Minus className="size-3.5" />
+                              </Button>
+                              <span className="mx-1 min-w-5 text-sm font-medium tabular-nums">
                                 {item.cantidad}
                               </span>
                               <Button
-                                className="btn-informativo btn-icon border-0 text-dark p-0"
-                                style={{ width: "22px" }}
+                                size="icon-sm"
+                                className="text-muted-foreground"
                                 onClick={() => handleAddPlatoPreventa(item)}
-                               variant="default">
-                                <Plus size={14} />
+                                variant="ghost"
+                                aria-label={`Agregar una unidad de ${item.nombre}`}
+                              >
+                                <Plus className="size-3.5" />
                               </Button>
                             </div>
                           </td>
                           <td
-                            className="text-end  py-2 pe-3 fw-bold text-dark  bg-transparent"
-                            style={{ fontSize: "0.9rem" }}
+                            className="py-2.5 pr-3 text-right font-medium text-foreground"
                           >
                             S/. {Number(item.cantidad * item.precio).toFixed(2)}
                           </td>
-                          <td className="text-center py-2 bg-transparent">
+                          <td className="py-2 text-center pr-2">
                             <Button
-                              className="btn-eliminar btn-icon rounded-pill mx-2 p-0 border-0"
+                              size="icon-sm"
+                              className="size-7"
                               onClick={() =>
                                 handleRemovePlatoPreventa(item.id, true)
                               }
-                             variant="destructive">
-                              <Trash2 size={14} />
+                              variant="destructive"
+                              aria-label={`Eliminar ${item.nombre} del pedido`}
+                            >
+                              <Trash2 className="size-3.5" />
                             </Button>
                           </td>
                         </tr>
@@ -277,41 +291,39 @@ export function ToMesa() {
                   </table>
                 </div>
               ) : (
-                <div className="h-100 d-flex align-items-center justify-content-center opacity-50">
-                  <FileText size={40} className="mb-2" />
-                  <p className="text-muted small">Mesa vacía</p>
+                <div className="flex h-full min-h-40 flex-col items-center justify-center gap-2 text-muted-foreground">
+                  <FileText className="size-8 opacity-50" />
+                  <p className="mb-0 text-sm">Mesa vacía</p>
                 </div>
               )}
             </CardContent>
 
             <CardFooter
-              className="border-t p-3 shadow-lg bg-background"
-              style={{ zIndex: 10 }}
+              className="z-10 flex-col items-stretch gap-3 border-t bg-background p-3"
             >
               <ImprimirTicket
                 itemsCarrito={pedido.mesas[id]?.items}
                 imprimirTicket={imprimirTicket}
                 setImprimirTicket={setImprimirTicket}
               />
-              <div className=" p-3 mb-3">
-                <label className="form-label text-success small fw-bold d-flex align-items-center gap-1">
-                  <Notebook /> Cliente / Notas del Pedido:
+              <div className="space-y-1.5">
+                <label className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+                  <Notebook className="size-3.5" /> Notas del pedido
                 </label>
-                <div className="input-group">
-                  <textarea
-                    className="form-control  bg-light"
-                    rows="2"
-                    placeholder="Ej: Sin sal, término medio, etc."
-                    value={notaPedido}
-                    onChange={(e) => setNotaPedido(e.target.value)}
-                    style={{ resize: "none", fontSize: "0.9rem" }}
-                  />
-                </div>
+                <Textarea
+                  className="min-h-14 resize-none bg-background text-sm"
+                  rows={2}
+                  placeholder="Ej.: sin sal, término medio..."
+                  value={notaPedido}
+                  onChange={(e) => setNotaPedido(e.target.value)}
+                />
               </div>
 
-              <div className="d-flex justify-content-between align-items-center mb-2">
-                <span className="fw-bold">TOTAL</span>
-                <span className="h5 fw-bold text-success mb-0">
+              <div className="flex items-center justify-between gap-3">
+                <span className="text-sm font-medium text-muted-foreground">
+                  Total
+                </span>
+                <span className="text-xl font-semibold tracking-tight text-foreground">
                   S/.{" "}
                   {(
                     pedido.mesas?.[id]?.items?.reduce(
@@ -323,7 +335,7 @@ export function ToMesa() {
               </div>
 
               <BotonAnimado
-                className="btn-guardar py-3 fw-bold btn-block w-100 p-3 shadow-sm"
+                className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 text-sm font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
                 onClick={() => handleAddPlatoPreventaMesas()}
                 loading={
                   addPlatosMutation.isPending || addPlatosMutation.isLoading
@@ -332,29 +344,37 @@ export function ToMesa() {
                   !pedido.mesas[id] || pedido.mesas[id].items.length === 0
                 }
               >
-                REALIZAR PEDIDO
+                Realizar pedido
               </BotonAnimado>
             </CardFooter>
           </Card>
         </div>
 
-        <div className="md:col-span-8 col-lg-9 h-100">
-          <Card className="flex flex-grow-1 flex-col h-full p-0 m-0 overflow-auto">
-            <CardHeader className="bg-background border-b py-3 px-3 m-0 flex items-center gap-3 flex-wrap">
-              <div>
-                <h6 className="d-flex align-items-center gap-2 flex-shrink-0">
-                  <Hamburger size={28} /> Menú de Platos
-                </h6>
+        <div className="order-1 min-h-[34rem] lg:order-1 lg:col-span-8 lg:min-h-0 xl:col-span-9">
+          <Card className="flex h-full min-h-0 flex-col overflow-hidden rounded-xl border-border/70 py-0 shadow-none">
+            <CardHeader className="m-0 flex flex-col items-stretch gap-3 border-b border-border/70 bg-background/90 px-3 py-3 sm:px-4">
+              <div className="flex min-w-0 flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex min-w-0 items-center gap-2.5">
+                  <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                    <Hamburger className="size-4" />
+                  </span>
+                  <div className="min-w-0">
+                    <h2 className="m-0 truncate text-sm font-semibold tracking-tight">
+                      Menú de platos
+                    </h2>
+                    <p className="mb-0 text-xs text-muted-foreground">
+                      Selecciona productos para el pedido
+                    </p>
+                  </div>
+                </div>
+                <div className="min-w-0 w-full sm:max-w-xs">
+                  <BuscadorPlatos
+                    searchTerm={searchTerm}
+                    setSearchTerm={setSearchTerm}
+                  />
+                </div>
               </div>
-
-              <div className="flex-grow-1">
-                <BuscadorPlatos
-                  searchTerm={searchTerm}
-                  setSearchTerm={setSearchTerm}
-                />
-              </div>
-              {/* Categorías */}
-              <div className="overflow-auto d-flex justify-content-lg-end">
+              <div className="min-w-0">
                 <CategoriaPlatos
                   claveVenta={"restaurante"}
                   clearSearch={setSearchTerm}
@@ -367,30 +387,31 @@ export function ToMesa() {
               isError={errorPlatos}
               mode="cards"
             >
-              <CardContent className="p-2 contenedor-platos overflow-x-hidden m-auto">
+              <CardContent className="grid min-h-0 flex-1 grid-cols-2 content-start gap-2.5 overflow-y-auto bg-muted/20 p-3 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 min-[1800px]:grid-cols-6 sm:gap-3">
                 {productos
                   .filter((producto) => {
                     const matchCat =
                       categoriaFiltroPlatos === "todo" ||
-                      producto.categoria.nombre === categoriaFiltroPlatos;
+                      producto.categoria?.nombre === categoriaFiltroPlatos;
                     const matchBus = producto.nombre
                       .toLowerCase()
                       .includes(searchTerm.toLowerCase());
                     return matchCat && matchBus;
                   })
                   .map((producto) => {
-                    const isSelected = pedido.mesas[id]?.items.some(
+                    const itemEnCarrito = pedido.mesas[id]?.items.find(
                       (item) => item.id === producto.id,
                     );
                     return (
                       <CardPlatos
                         key={producto.id}
                         item={producto}
-                        isSelected={isSelected}
+                        isSelected={!!itemEnCarrito}
+                        cantidadEnCarrito={itemEnCarrito?.cantidad || 0}
                         handleAdd={handleAddPlatoPreventa}
                         handleRemove={handleRemovePlatoPreventa}
                         capitalizeFirstLetter={capitalizeFirstLetter}
-                        esComida="resturante"
+                        esComida
                       />
                     );
                   })}

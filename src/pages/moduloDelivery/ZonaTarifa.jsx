@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import "../../css/estilosDelivery/EstilosZonasTarifas.css";
+
 import { GetSedes } from "../../service/accionesAreasCargos/GetSedes";
 
 import ModalRight from "../../components/componentesReutilizables/ModalRight";
@@ -22,8 +22,14 @@ import { FormEditConfigTarifa } from "../../components/componenteDelivery/FormEd
 import { PutData } from "../../service/CRUD/PutData";
 import { DeleteData } from "../../service/CRUD/DeleteData";
 import { Button } from "../../components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 export function ZonaTarifa() {
   const {
@@ -71,31 +77,36 @@ export function ZonaTarifa() {
   };
 
   return (
-    <div className="container-fluid p-0">
-      <Card className="rounded-2xl">
+    <div className="w-full p-0">
+      <Card className="rounded-2xl border border-border/70 bg-card shadow-sm ring-0">
         {/* HEADER DE LA VISTA */}
-        <CardHeader className="border-bottom-0 flex flex-col flex-md-row justify-between items-center gap-2 p-3">
-          <div className="d-flex align-items-center">
-            <CardTitle asChild><h4 className="mb-0 titulo-card-especial">
-              Zonas y Tarifas
-              <span className="badge-header ms-2">
-                {sedes?.length || 0} sedes
-              </span>
-            </h4></CardTitle>
+        <CardHeader className="flex flex-col items-stretch gap-4 border-b border-border/70 px-5 py-5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+          <div className="flex items-center">
+            <CardTitle asChild>
+              <h4 className="mb-0 text-base font-semibold tracking-tight text-foreground">
+                Zonas y Tarifas
+                <span className="ml-2 inline-flex items-center rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
+                  {sedes?.length || 0} sedes
+                </span>
+              </h4>
+            </CardTitle>
           </div>
 
-          <div className="d-flex  gap-2 mt-3 mt-md-0 align-items-center ms-auto">
-            <div className="header-search-container">
-              <Search className="search-icon" />
-              <input
+          <div className="flex w-full flex-col items-stretch gap-2 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center">
+            <div className="relative w-full min-w-0 sm:w-64">
+              <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
                 type="text"
                 placeholder="Buscar sede..."
-                className="form-control"
+                className="h-9 pl-9"
               />
             </div>
-            <Button className="btn btn-outline-dark d-flex gap-2" variant="default">
+            <Button size="lg"
+              className="w-full gap-2 px-3 sm:w-auto"
+              variant="ghostOutline"
+            >
               <FileText size={20} />
-              <span className="d-none d-sm-inline">Reporte</span>
+              <span className="hidden sm:inline">Reporte</span>
             </Button>
           </div>
         </CardHeader>
@@ -104,23 +115,26 @@ export function ZonaTarifa() {
         <CardContent className="p-4">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
             {isLoading ? (
-              <div className="col-12 text-center py-5">
-                <div className="spinner-border" role="status">
-                  <span className="visually-hidden">Cargando...</span>
+              <div className="col-span-full text-center py-5">
+                <div
+                  className="inline-block size-5 animate-spin rounded-full border-2 border-current border-r-transparent"
+                  role="status"
+                >
+                  <span className="sr-only">Cargando...</span>
                 </div>
-                <p className="text-muted mt-2 small">
+                <p className="text-muted-foreground mt-2 text-sm">
                   Cargando configuraciones...
                 </p>
               </div>
             ) : error ? (
-              <div className="col-12">
-                <div className="alert alert-danger shadow-sm border-0 small">
+              <div className="col-span-full">
+                <div className="relative w-full rounded-lg px-4 py-3 border-destructive/30 bg-destructive/10 text-destructive shadow-sm border-0 text-sm">
                   Error al cargar las sedes: {error.message}
                 </div>
               </div>
             ) : sedes?.length == 0 ? (
-              <div className="col-12 text-center py-5">
-                <p className="text-muted fs-5">
+              <div className="col-span-full text-center py-5">
+                <p className="text-muted-foreground text-lg">
                   No hay sedes registradas en la empresa.
                 </p>
               </div>
@@ -152,21 +166,24 @@ export function ZonaTarifa() {
                 }
 
                 return (
-                  <div className="col-12 col-xl-6" key={sede.id}>
+                  <div className="col-span-full xl:col-span-6" key={sede.id}>
                     <Card className={`h-full sede-config-card`}>
                       {/* Cabecera de la Tarjeta */}
                       <CardHeader className="bg-transparent border-b px-4 py-3 flex justify-between items-center">
                         <div>
-                          <h5 className="mb-1 fw-bold text-dark">
+                          <h5 className="mb-1 font-bold text-foreground">
                             {sede.nombre}
                           </h5>
-                          <div className="d-flex align-items-center text-muted small">
-                            <MapPin size={14} className="me-1 text-danger" />
+                          <div className="flex items-center text-muted-foreground text-sm">
+                            <MapPin
+                              size={14}
+                              className="me-1 text-destructive"
+                            />
                             {sede.direccion || "Sin dirección registrada"}
                           </div>
                         </div>
                         <span
-                          className={`badge ${config?.estado == 1 ? "bg-success" : "bg-danger"} text-white border border-${config?.estado == 1 ? "success" : "danger"} border-opacity-25 rounded-pill px-3 py-2`}
+                          className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors ${config?.estado == 1 ? "bg-emerald-600" : "bg-destructive"} text-white border- ${config?.estado == 1 ? "success" : "danger"} rounded-full px-3 py-2`}
                         >
                           {config?.estado == 1 ? "Activa" : "Inactiva"}
                         </span>
@@ -175,7 +192,7 @@ export function ZonaTarifa() {
                       {/* Cuerpo de la Tarjeta */}
                       <CardContent className="px-4 py-2">
                         {config ? (
-                          <div className="d-flex flex-column">
+                          <div className="flex flex-col">
                             {/* NUEVO: HORARIO Y DÍAS DE ATENCIÓN (Diseño sin colores BS) */}
                             <div
                               className="config-item mb-2"
@@ -185,7 +202,7 @@ export function ZonaTarifa() {
                               }}
                             >
                               <div
-                                className="flex-shrink-0"
+                                className="shrink-0"
                                 style={{
                                   backgroundColor: "#f3f4f6",
                                   color: "#374151",
@@ -198,10 +215,10 @@ export function ZonaTarifa() {
                               >
                                 <CalendarDays size={20} strokeWidth={2} />
                               </div>
-                              <div className="w-100 ms-3 d-flex flex-column justify-content-center">
-                                <div className="d-flex justify-content-between align-items-center mb-1">
+                              <div className="w-full ms-3 flex flex-col justify-center">
+                                <div className="flex justify-between items-center mb-1">
                                   <p
-                                    className="mb-0 fw-bold"
+                                    className="mb-0 font-bold"
                                     style={{
                                       fontSize: "0.9rem",
                                       color: "#1f2937",
@@ -228,7 +245,7 @@ export function ZonaTarifa() {
                                       : "--:--"}
                                   </span>
                                 </div>
-                                <div className="d-flex gap-1 flex-wrap mt-1">
+                                <div className="flex gap-1 flex-wrap mt-1">
                                   {diasAtencion.length > 0 ? (
                                     diasAtencion.map((dia, idx) => (
                                       <span
@@ -256,34 +273,34 @@ export function ZonaTarifa() {
 
                             {/* Tarifas Base y Prioridad */}
                             <div className="config-item">
-                              <div className="icon-box icon-box-primary flex-shrink-0">
+                              <div className="icon-box icon-box-primary shrink-0">
                                 <span
-                                  className="fw-bold"
+                                  className="font-bold"
                                   style={{ fontSize: "1.2rem" }}
                                 >
                                   S/
                                 </span>
                               </div>
-                              <div className="w-100 d-flex justify-content-between align-items-center">
+                              <div className="w-full flex justify-between items-center">
                                 <div>
                                   <p
-                                    className="mb-0 fw-medium text-dark"
+                                    className="mb-0 font-medium text-foreground"
                                     style={{ fontSize: "0.9rem" }}
                                   >
                                     Costo de Envío
                                   </p>
-                                  <small className="text-muted">
+                                  <small className="text-muted-foreground">
                                     Tarifa estándar de la sede
                                   </small>
                                 </div>
-                                <div className="text-end">
-                                  <p className="mb-0 fw-bold fs-6">
+                                <div className="text-right">
+                                  <p className="mb-0 font-bold text-base">
                                     S/{" "}
                                     {Number(config.costo_base_delivery).toFixed(
                                       2,
                                     )}
                                   </p>
-                                  <small className="text-muted">
+                                  <small className="text-muted-foreground">
                                     Prioridad: S/{" "}
                                     {Number(config.costo_prioridad).toFixed(2)}
                                   </small>
@@ -293,23 +310,23 @@ export function ZonaTarifa() {
 
                             {/* Tiempos de Entrega */}
                             <div className="config-item">
-                              <div className="icon-box icon-box-warning flex-shrink-0">
+                              <div className="icon-box icon-box-warning shrink-0">
                                 <Clock size={20} strokeWidth={2} />
                               </div>
-                              <div className="w-100 d-flex justify-content-between align-items-center">
+                              <div className="w-full flex justify-between items-center">
                                 <div>
                                   <p
-                                    className="mb-0 fw-medium text-dark"
+                                    className="mb-0 font-medium text-foreground"
                                     style={{ fontSize: "0.9rem" }}
                                   >
                                     Tiempo Estimado (ETA)
                                   </p>
-                                  <small className="text-muted">
+                                  <small className="text-muted-foreground">
                                     Rango de entrega visible en la App
                                   </small>
                                 </div>
-                                <div className="text-end">
-                                  <span className="badge bg-warning text-dark px-2 py-1 fs-6 rounded-3">
+                                <div className="text-right">
+                                  <span className="inline-flex items-center font-semibold transition-colors bg-amber-500 text-foreground px-2 py-1 text-base rounded-md">
                                     {config.tiempo_min} - {config.tiempo_max}{" "}
                                     min
                                   </span>
@@ -318,18 +335,18 @@ export function ZonaTarifa() {
                             </div>
 
                             {/* Propinas Sugeridas */}
-                            <div className="config-item border-bottom-0 pb-1">
-                              <div className="icon-box icon-box-success flex-shrink-0">
+                            <div className="config-item border-b-0 pb-1">
+                              <div className="icon-box icon-box-success shrink-0">
                                 <HeartHandshake size={20} strokeWidth={2} />
                               </div>
-                              <div className="w-100">
+                              <div className="w-full">
                                 <p
-                                  className="mb-1 fw-medium text-dark"
+                                  className="mb-1 font-medium text-foreground"
                                   style={{ fontSize: "0.9rem" }}
                                 >
                                   Propinas Sugeridas
                                 </p>
-                                <div className="d-flex gap-2 flex-wrap">
+                                <div className="flex gap-2 flex-wrap">
                                   {propinas.length > 0 ? (
                                     propinas.map((prop, idx) => (
                                       <span key={idx} className="propina-badge">
@@ -337,7 +354,7 @@ export function ZonaTarifa() {
                                       </span>
                                     ))
                                   ) : (
-                                    <small className="text-muted">
+                                    <small className="text-muted-foreground">
                                       No configurado
                                     </small>
                                   )}
@@ -349,22 +366,23 @@ export function ZonaTarifa() {
                           <div className="text-center py-4">
                             <AlertCircle
                               size={32}
-                              className="text-muted mb-2 opacity-50"
+                              className="text-muted-foreground mb-2 opacity-50"
                             />
-                            <h6 className="text-dark fw-medium">
+                            <h6 className="text-foreground font-medium">
                               Sin configuración general
                             </h6>
-                            <p className="text-muted small mb-3">
+                            <p className="text-muted-foreground text-sm mb-3">
                               Esta sede no tiene costos ni tiempos definidos
                               aún.
                             </p>
                             <Button
-                              className="btn-principal rounded-pill px-4"
+                              className="btn-principal rounded-full px-4"
                               onClick={() => {
                                 setSedeForAdd(sede);
                                 setIsModalAddOpen(true);
                               }}
-                             variant="default">
+                              variant="default"
+                            >
                               Configurar Sede
                             </Button>
                           </div>
@@ -374,7 +392,7 @@ export function ZonaTarifa() {
                       {/* Pie de la Tarjeta */}
                       <CardFooter className="bg-transparent border-t px-4 py-3 flex gap-2">
                         <Button
-                          className="btn btn-outline-dark d-flex justify-content-center align-items-center gap-2 fw-medium"
+                          className="shadow whitespace-nowrap rounded-md text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border-input bg-background text-foreground hover:bg-accent flex justify-center items-center gap-2 font-medium"
                           disabled={!config}
                           onClick={() => {
                             if (config) {
@@ -382,15 +400,16 @@ export function ZonaTarifa() {
                               setIsModalEditOpen(true);
                             }
                           }}
-                         variant="default">
+                          variant="default"
+                        >
                           <Settings size={15} />
                           Ajustes
                         </Button>
 
                         {config && (
-                          <div className="d-flex ms-auto gap-2">
+                          <div className="flex ms-auto gap-2">
                             <Button
-                              className="btn-desactivar d-flex justify-content-center align-items-center"
+                              className="btn-desactivar flex justify-center items-center"
                               title={
                                 config.estado == 1
                                   ? "Desactivar Configuración"
@@ -400,17 +419,19 @@ export function ZonaTarifa() {
                                 setConfigAccion(config);
                                 setShowModalActivar(true);
                               }}
-                             variant="default">
+                              variant="default"
+                            >
                               <PowerOff size={16} />
                             </Button>
                             <Button
-                              className="btn btn-outline-danger d-flex justify-content-center align-items-center"
+                              className="shadow gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border-destructive bg-background text-destructive hover:bg-destructive/10 flex justify-center items-center"
                               title="Eliminar Configuración"
                               onClick={() => {
                                 setConfigDelete(config);
                                 setShowModalEliminar(true);
                               }}
-                             variant="destructive">
+                              variant="destructive"
+                            >
                               <Trash2 size={16} />
                             </Button>
                           </div>

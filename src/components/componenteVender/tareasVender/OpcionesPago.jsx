@@ -23,7 +23,6 @@ import ToastAlert from "../../componenteToast/ToastAlert";
 import { Button } from "../../ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
-
 export function OpcionesPago(props) {
   const {
     handleSelectMetodo,
@@ -170,8 +169,7 @@ export function OpcionesPago(props) {
         <img
           src="/images/yape-logo.png"
           alt="Yape"
-          className="img-fluid rounded-pill"
-          style={{ maxHeight: "24px", marginRight: "8px" }}
+          className="mr-1 size-6 rounded-full object-contain"
         />
       );
     }
@@ -180,32 +178,42 @@ export function OpcionesPago(props) {
         <img
           src="/images/plin-log.png"
           alt="Plin"
-          className="img-fluid rounded-pill"
-          style={{ maxHeight: "24px", marginRight: "8px" }}
+          className="mr-1 size-6 rounded-full object-contain"
         />
       );
     }
-    if (nombreLower === "efectivo") return <Banknote size={18} />;
+    if (nombreLower === "efectivo")
+      return <Banknote className="size-4" aria-hidden="true" />;
     if (nombreLower === "tarjeta" || nombreLower === "tarjeta credito")
-      return <CreditCard size={18} />;
-    return <WalletCards size={18} />;
+      return <CreditCard className="size-4" aria-hidden="true" />;
+    return <WalletCards className="size-4" aria-hidden="true" />;
   };
 
   return (
-    <Card className="border flex-grow-1 h-full flex flex-col overflow-auto">
-      <CardHeader className="bg-background py-3 border-b">
-        <h5 className="mb-0 fw-bold">Método de pago</h5>
+    <Card className="flex h-full min-h-[440px] flex-col gap-0 overflow-hidden rounded-xl border-border/70 bg-card p-0 shadow-none">
+      <CardHeader className="border-b border-border/70 bg-background px-4 py-4">
+        <h2 className="mb-0 text-base font-semibold tracking-tight text-foreground">
+          Método de pago
+        </h2>
+        <p className="mb-0 text-xs text-muted-foreground">
+          Selecciona cómo se realizará el cobro y el comprobante.
+        </p>
       </CardHeader>
-      <CardContent
-        className="overflow-auto p-3"
-        style={{ height: "calc(100vh - 250px)" }}
-      >
+      <CardContent className="min-h-0 flex-1 space-y-5 overflow-y-auto p-4">
         {/* ================================================================ */}
         {/* MÉTODOS DE PAGO PRINCIPALES */}
         {/* ================================================================ */}
-        <div className="mb-4">
+        <section className="space-y-2.5">
+          <div>
+            <h3 className="mb-0 text-sm font-medium text-foreground">
+              Forma de pago
+            </h3>
+            <p className="mb-0 text-xs text-muted-foreground">
+              Elige una opción disponible.
+            </p>
+          </div>
           <div
-            className="contenedor-pagos-grid"
+            className="grid grid-cols-1 gap-2 sm:grid-cols-2"
             role="group"
             aria-label="Método de Pago"
           >
@@ -213,10 +221,10 @@ export function OpcionesPago(props) {
               <Button
                 key={metodo.id}
                 type="button"
-                className={`boton-opcion-pago p-2 ${
+                className={`h-11 justify-start gap-2 rounded-lg border px-3 transition-colors ${
                   metodoSeleccionado === metodo.nombre
-                    ? "btn-seleccionado"
-                    : "btn-outline-dark"
+                    ? "border-primary/40 bg-primary/5 text-foreground ring-1 ring-primary/15"
+                    : "border-border/70 bg-background text-muted-foreground hover:bg-muted hover:text-foreground"
                 }`}
                 onClick={() => {
                   handleSelectMetodo(metodo.nombre);
@@ -231,74 +239,90 @@ export function OpcionesPago(props) {
                     refetchSunat();
                   }
                 }}
-               variant="default">
+                variant="outline"
+              >
                 {getIconoMetodo(metodo.nombre)}
-                <span className="fw-medium">
+                <span className="font-medium">
                   {metodo.nombre.charAt(0).toUpperCase() +
                     metodo.nombre.slice(1)}
                 </span>
               </Button>
             ))}
           </div>
-        </div>
+        </section>
 
         {/* ================================================================ */}
         {/* TARJETAS (DÉBITO / CRÉDITO) */}
         {/* ================================================================ */}
-        <div className={`mb-4 ${tarjetas ? "d-block" : "d-none"}`}>
-          <label className="small text-muted fw-bold mb-2">
-            Tipo de Tarjeta
-          </label>
-          <div className="contenedor-pagos-grid" role="group">
+        <section className={`space-y-2.5 ${tarjetas ? "block" : "hidden"}`}>
+          <div>
+            <h3 className="mb-0 text-sm font-medium text-foreground">
+              Tipo de tarjeta
+            </h3>
+            <p className="mb-0 text-xs text-muted-foreground">
+              Indica si es débito o crédito.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2" role="group">
             <Button
               type="button"
-              className={`boton-opcion-pago p-2 ${
+              className={`h-11 justify-start gap-2 rounded-lg border px-3 ${
                 typeTarjeta === "debito"
-                  ? "btn-seleccionado"
-                  : "btn-outline-dark"
+                  ? "border-primary/40 bg-primary/5 text-foreground ring-1 ring-primary/15"
+                  : "border-border/70 bg-background text-muted-foreground hover:bg-muted hover:text-foreground"
               }`}
               onClick={() => handleTypeTarjeta("debito")}
-             variant="default">
+              variant="outline"
+            >
               <CreditCard size={18} /> Tarjeta Débito
             </Button>
             <Button
               type="button"
-              className={`boton-opcion-pago p-2 ${
+              className={`h-11 justify-start gap-2 rounded-lg border px-3 ${
                 typeTarjeta === "credito"
-                  ? "btn-seleccionado"
-                  : "btn-outline-dark"
+                  ? "border-primary/40 bg-primary/5 text-foreground ring-1 ring-primary/15"
+                  : "border-border/70 bg-background text-muted-foreground hover:bg-muted hover:text-foreground"
               }`}
               onClick={() => handleTypeTarjeta("credito")}
-             variant="default">
+              variant="outline"
+            >
               <BanknoteArrowDown size={18} /> Tarjeta Crédito
             </Button>
           </div>
-        </div>
+        </section>
 
         {/* ================================================================ */}
         {/* TIPO DE COMPROBANTE */}
         {/* ================================================================ */}
-        <div className={`mb-4 ${tipoComporbante ? "d-block" : "d-none"}`}>
-          <label className="small text-muted fw-bold mb-2">
-            Tipo de Comprobante
-          </label>
-          <div className="contenedor-pagos-grid" role="group">
+        <section className={`space-y-2.5 ${tipoComporbante ? "block" : "hidden"}`}>
+          <div>
+            <h3 className="mb-0 text-sm font-medium text-foreground">
+              Comprobante
+            </h3>
+            <p className="mb-0 text-xs text-muted-foreground">
+              Selecciona el documento para esta venta.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2" role="group">
             {sunatActivo ? (
               <Button
                 type="button"
-                className={`boton-opcion-pago p-2 ${
-                  comprobante === "B" ? "btn-seleccionado" : "btn-outline-dark"
+                className={`h-11 justify-start gap-2 rounded-lg border px-3 ${
+                  comprobante === "B"
+                    ? "border-primary/40 bg-primary/5 text-foreground ring-1 ring-primary/15"
+                    : "border-border/70 bg-background text-muted-foreground hover:bg-muted hover:text-foreground"
                 }`}
                 onClick={() => {
                   handleShowFactura(false);
                   handleShowDatosClientes(true); // Mostrar datos cliente para boleta si es necesario
                   handleSlectComprobante("B");
                 }}
-               variant="default">
+                variant="outline"
+              >
                 <ReceiptText size={18} /> Boleta
               </Button>
             ) : (
-              <div className="d-flex align-items-center justify-content-center p-2 border rounded bg-light text-muted w-100">
+              <div className="flex items-center justify-center p-2 rounded bg-muted text-muted-foreground w-full">
                 <small
                   className="text-center"
                   style={{ fontSize: "0.7rem", lineHeight: "1.2" }}
@@ -310,34 +334,40 @@ export function OpcionesPago(props) {
 
             <Button
               type="button"
-              className={`boton-opcion-pago p-2 ${
-                comprobante === "S" ? "btn-seleccionado" : "btn-outline-dark"
+              className={`h-11 justify-start gap-2 rounded-lg border px-3 ${
+                comprobante === "S"
+                  ? "border-primary/40 bg-primary/5 text-foreground ring-1 ring-primary/15"
+                  : "border-border/70 bg-background text-muted-foreground hover:bg-muted hover:text-foreground"
               }`}
               onClick={() => {
                 handleShowFactura(false);
                 handleShowDatosClientes(false);
                 handleSlectComprobante("S");
               }}
-             variant="default">
+              variant="outline"
+            >
               <ReceiptText size={18} /> Boleta Simple
             </Button>
 
             {sunatActivo ? (
               <Button
                 type="button"
-                className={`boton-opcion-pago p-2 ${
-                  comprobante === "F" ? "btn-seleccionado" : "btn-outline-dark"
+                className={`h-11 justify-start gap-2 rounded-lg border px-3 ${
+                  comprobante === "F"
+                    ? "border-primary/40 bg-primary/5 text-foreground ring-1 ring-primary/15"
+                    : "border-border/70 bg-background text-muted-foreground hover:bg-muted hover:text-foreground"
                 }`}
                 onClick={() => {
                   handleShowFactura(true);
                   handleShowDatosClientes(true);
                   handleSlectComprobante("F");
                 }}
-               variant="default">
+                variant="outline"
+              >
                 <ReceiptText size={18} /> Factura
               </Button>
             ) : (
-              <div className="d-flex align-items-center justify-content-center p-2 border rounded bg-light text-muted w-100">
+              <div className="flex items-center justify-center p-2 rounded bg-muted text-muted-foreground w-full">
                 <small
                   className="text-center"
                   style={{ fontSize: "0.7rem", lineHeight: "1.2" }}
@@ -347,25 +377,28 @@ export function OpcionesPago(props) {
               </div>
             )}
           </div>
-        </div>
+        </section>
 
         {/* ================================================================ */}
         {/* INFORMACIÓN DEL CLIENTE: BOLETA */}
         {/* ================================================================ */}
-        <div className={`mt-2 ${clienteBoleta ? "d-block" : "d-none"}`}>
-          <h6 className="fw-bold mb-3 text-dark">Datos del Cliente (Boleta)</h6>
+        <section
+          className={`space-y-3 rounded-lg border border-border/70 bg-muted/20 p-3 ${clienteBoleta ? "block" : "hidden"}`}
+        >
+          <h3 className="mb-0 text-sm font-semibold text-foreground">
+            Datos del Cliente (Boleta)
+          </h3>
 
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-2 mb-2">
-            <div className="md:col-span-4">
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
+            <div className="space-y-1">
               <label
-                className="small text-muted mb-1"
-                style={{ fontSize: "0.75rem" }}
+                className="text-xs font-medium text-muted-foreground"
               >
                 Tipo Doc.
               </label>
               <select
                 id="tipo_documento"
-                className="form-select form-select-sm"
+                className="h-10 w-full appearance-auto rounded-md border border-input bg-background px-3 text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                 {...register("tipo_documento")}
                 onChange={handleSelectChange(
                   setTipoDocumento,
@@ -379,26 +412,18 @@ export function OpcionesPago(props) {
               </select>
             </div>
 
-            <div className="md:col-span-8">
+            <div className="space-y-1">
               <label
-                className="small text-muted mb-1"
-                style={{ fontSize: "0.75rem" }}
+                className="text-xs font-medium text-muted-foreground"
               >
                 Número de Documento
               </label>
-              <div className="position-relative">
+              <div className="relative">
                 <input
                   type="text"
-                  className={`form-control form-control-sm ${errors.numeroDocumento ? "is-invalid" : ""}`}
+                  className={`h-10 w-full rounded-md border border-input bg-background px-3 pr-9 text-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring ${errors.numeroDocumento ? "border-destructive focus-visible:ring-destructive" : ""} ${dniExitoso ? "border-emerald-500" : ""}`}
                   placeholder="Ingrese número..."
                   value={numeroDocumento}
-                  style={{
-                    paddingRight: "30px",
-                    // 🔥 Aquí forzamos la línea verde y anulamos el resplandor azul de focus
-                    borderColor: dniExitoso ? "#198754" : undefined,
-                    boxShadow: dniExitoso ? "none" : undefined,
-                    outline: "none",
-                  }}
                   {...register("numero_documento")}
                   onChange={(e) => {
                     setDniExitoso(false);
@@ -412,37 +437,40 @@ export function OpcionesPago(props) {
                   }}
                 />
                 <div
-                  className="position-absolute top-50 end-0 translate-middle-y pe-2"
-                  style={{ pointerEvents: "none" }}
+                  className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2"
                 >
                   {isSearchingDni ? (
                     <Loader2
                       size={16}
-                      className="text-dark"
-                      style={{ animation: "spin 1s linear infinite" }}
+                      className="text-foreground"
                     />
                   ) : dniExitoso ? (
-                    <CheckCircle size={16} className="text-success" />
+                    <CheckCircle
+                      size={16}
+                      className="text-emerald-600 dark:text-emerald-400"
+                    />
                   ) : (
-                    <Search size={16} className="text-muted opacity-50" />
+                    <Search
+                      size={16}
+                      className="text-muted-foreground opacity-50"
+                    />
                   )}
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-2">
-            <div className="md:col-span-6">
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+            <div className="space-y-1">
               <label
-                className="small text-muted mb-1"
-                style={{ fontSize: "0.75rem" }}
+                className="text-xs font-medium text-muted-foreground"
               >
                 Nombres
               </label>
               <input
                 type="text"
                 id="nombres"
-                className="form-control form-control-sm"
+                className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                 placeholder="Nombres..."
                 onChange={(e) => {
                   setNombres(e.target.value);
@@ -450,17 +478,16 @@ export function OpcionesPago(props) {
                 }}
               />
             </div>
-            <div className="md:col-span-6">
+            <div className="space-y-1">
               <label
-                className="small text-muted mb-1"
-                style={{ fontSize: "0.75rem" }}
+                className="text-xs font-medium text-muted-foreground"
               >
                 Apellidos
               </label>
               <input
                 type="text"
                 id="apellidos"
-                className="form-control form-control-sm"
+                className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                 placeholder="Apellidos..."
                 onChange={(e) => {
                   setApellidos(e.target.value);
@@ -469,35 +496,32 @@ export function OpcionesPago(props) {
               />
             </div>
           </div>
-        </div>
+        </section>
 
         {/* ================================================================ */}
         {/* INFORMACIÓN DEL CLIENTE: FACTURA */}
         {/* ================================================================ */}
-        <div className={`mt-2 ${clienteFactura ? "d-block" : "d-none"}`}>
-          <h6 className="fw-bold mb-3 text-dark">Datos de Facturación</h6>
+        <section
+          className={`space-y-3 rounded-lg border border-border/70 bg-muted/20 p-3 ${clienteFactura ? "block" : "hidden"}`}
+        >
+          <h3 className="mb-0 text-sm font-semibold text-foreground">
+            Datos de Facturación
+          </h3>
 
           <div className="mb-2">
             <label
-              className="small text-muted mb-1"
-              style={{ fontSize: "0.75rem" }}
+              className="text-xs font-medium text-muted-foreground"
             >
-              Número de RUC <span className="text-danger">*</span>
+              Número de RUC <span className="text-destructive">*</span>
             </label>
-            <div className="position-relative">
+            <div className="relative">
               <input
                 type="text"
-                className="form-control form-control-sm"
+                className={`h-10 w-full rounded-md border border-input bg-background px-3 pr-9 text-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring ${rucExitoso ? "border-emerald-500" : ""}`}
                 id="num_documento_ruc"
                 placeholder="Ingrese 11 dígitos..."
                 maxLength={11}
                 value={rucLocal}
-                style={{
-                  paddingRight: "30px",
-                  borderColor: rucExitoso ? "#198754" : undefined,
-                  boxShadow: rucExitoso ? "none" : undefined,
-                  outline: "none",
-                }}
                 onChange={(e) => {
                   const val = e.target.value.replace(/\D/g, "");
                   setRuc(val);
@@ -506,19 +530,23 @@ export function OpcionesPago(props) {
                 }}
               />
               <div
-                className="position-absolute top-50 end-0 translate-middle-y pe-2"
-                style={{ pointerEvents: "none" }}
+                className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2"
               >
                 {isSearchingRuc ? (
                   <Loader2
                     size={16}
-                    className="text-dark"
-                    style={{ animation: "spin 1s linear infinite" }}
+                    className="text-foreground"
                   />
                 ) : rucExitoso ? (
-                  <CheckCircle size={16} className="text-success" />
+                  <CheckCircle
+                    size={16}
+                    className="text-emerald-600 dark:text-emerald-400"
+                  />
                 ) : (
-                  <Building2 size={16} className="text-muted opacity-50" />
+                  <Building2
+                    size={16}
+                    className="text-muted-foreground opacity-50"
+                  />
                 )}
               </div>
             </div>
@@ -526,14 +554,13 @@ export function OpcionesPago(props) {
 
           <div className="mb-2">
             <label
-              className="small text-muted mb-1"
-              style={{ fontSize: "0.75rem" }}
+              className="text-xs font-medium text-muted-foreground"
             >
               Razón Social
             </label>
             <input
               type="text"
-              className="form-control form-control-sm"
+              className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
               id="nombreRazonSocial"
               placeholder="Nombre de la empresa..."
               onChange={(e) => {
@@ -545,39 +572,36 @@ export function OpcionesPago(props) {
 
           <div className="mb-2">
             <label
-              className="small text-muted mb-1"
-              style={{ fontSize: "0.75rem" }}
+              className="text-xs font-medium text-muted-foreground"
             >
               Dirección Fiscal
             </label>
-            <div className="position-relative">
+            <div className="relative">
               <input
                 type="text"
-                className="form-control form-control-sm"
+                className="h-10 w-full rounded-md border border-input bg-background py-1 pl-9 pr-3 text-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                 id="direccion"
                 placeholder="Dirección..."
-                style={{ paddingLeft: "30px" }}
                 onChange={(e) => setDireccion(e.target.value)}
               />
               <MapPin
                 size={14}
-                className="text-muted position-absolute top-50 start-0 translate-middle-y ms-2"
+                className="text-muted-foreground absolute top-1/2 left-0 -translate-y-1/2 ms-2"
               />
             </div>
           </div>
-        </div>
+        </section>
 
         {/* ================================================================ */}
         {/* CUOTAS (CRÉDITO) */}
         {/* ================================================================ */}
         <div
-          className={`mt-4 bg-light p-3 rounded border ${cuotas ? "d-block" : "d-none"}`}
+          className={`space-y-2 rounded-lg border border-border/70 bg-muted/30 p-3 ${cuotas ? "block" : "hidden"}`}
         >
           {/* 🔥 Eliminamos el texto azul (text-primary -> text-dark) */}
-          <h6 className="fw-bold mb-2 text-dark">Pago a Crédito</h6>
+          <h3 className="mb-0 text-sm font-semibold text-foreground">Pago a crédito</h3>
           <label
-            className="small text-muted mb-1"
-            style={{ fontSize: "0.75rem" }}
+            className="text-xs font-medium text-muted-foreground"
           >
             Número de Cuotas
           </label>
@@ -585,7 +609,7 @@ export function OpcionesPago(props) {
             id="cuotas"
             type="number"
             min="1"
-            className="form-control form-control-sm"
+            className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
             onChange={(e) => setNumeroCuotas(e.target.value)}
             placeholder="Ej. 3"
           />

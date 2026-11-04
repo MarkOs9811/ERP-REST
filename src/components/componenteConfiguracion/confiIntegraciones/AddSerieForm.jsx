@@ -7,7 +7,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "../../ui/button";
 import { CardContent, CardFooter } from "@/components/ui/card";
 
-
 // Tipos de documentos (sin cambios)
 const tiposDocumento = [
   { value: "01", label: "Factura" },
@@ -109,24 +108,23 @@ export function AddSerieForm({ cerrarModal }) {
 
   return (
     <div className="border-0 p-4">
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="h-100 d-flex flex-column"
-      >
+      <form onSubmit={handleSubmit(onSubmit)} className="h-full flex flex-col">
         <CardContent className="">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+          <div className="grid grid-cols-12 gap-3">
             {/* Campo 1: Tipo de Documento (sin cambios) */}
-            <div className="col-12">
+            <div className="col-span-full">
               <label
                 htmlFor="tipo_documento_sunat"
-                className="form-label small fw-bold text-dark"
+                className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-foreground"
               >
-                Tipo de Documento <span className="text-danger">*</span>
+                Tipo de Documento <span className="text-destructive">*</span>
               </label>
               <select
                 id="tipo_documento_sunat"
-                className={`form-select ${
-                  errors.tipo_documento_sunat ? "is-invalid" : ""
+                className={`h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+                  errors.tipo_documento_sunat
+                    ? "border-destructive focus-visible:ring-destructive"
+                    : ""
                 }`}
                 {...register("tipo_documento_sunat", {
                   required: "El tipo de documento es obligatorio",
@@ -145,26 +143,28 @@ export function AddSerieForm({ cerrarModal }) {
                 ))}
               </select>
               {errors.tipo_documento_sunat && (
-                <div className="invalid-feedback">
+                <div className="text-sm text-destructive">
                   {errors.tipo_documento_sunat.message}
                 </div>
               )}
             </div>
 
             {/* Campo 2: Número de Serie (CON FILTRADO ALFANUMÉRICO) */}
-            <div className="col-12">
+            <div className="col-span-full">
               <label
                 htmlFor="numeroSerie"
-                className="form-label small fw-bold text-dark"
+                className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-foreground"
               >
-                Número de Serie <span className="text-danger">*</span>
+                Número de Serie <span className="text-destructive">*</span>
               </label>
               <input
                 id="numeroSerie"
                 type="text"
                 placeholder="Ejemplo: F001 o FA01" // Placeholder actualizado
-                className={`form-control ${
-                  errors.numeroSerie ? "is-invalid" : ""
+                className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+                  errors.numeroSerie
+                    ? "border-destructive focus-visible:ring-destructive"
+                    : ""
                 }`}
                 {...numeroSerieProps}
                 // 2. CORRECCIÓN EN EL FILTRO 'onChange'
@@ -196,26 +196,28 @@ export function AddSerieForm({ cerrarModal }) {
                 }}
               />
               {errors.numeroSerie && (
-                <div className="invalid-feedback">
+                <div className="text-sm text-destructive">
                   {errors.numeroSerie.message}
                 </div>
               )}
             </div>
 
             {/* Campo 3: Correlativo (CON FILTRADO EN VIVO) */}
-            <div className="col-12">
+            <div className="col-span-full">
               <label
                 htmlFor="correlativo"
-                className="form-label small fw-bold text-dark"
+                className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold text-foreground"
               >
-                Correlativo Inicial <span className="text-danger">*</span>
+                Correlativo Inicial <span className="text-destructive">*</span>
               </label>
               <input
                 id="correlativo"
                 type="text"
                 placeholder="Ejemplo: 102"
-                className={`form-control ${
-                  errors.correlativo ? "is-invalid" : ""
+                className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+                  errors.correlativo
+                    ? "border-destructive focus-visible:ring-destructive"
+                    : ""
                 }`}
                 {...correlativoProps}
                 onChange={(e) => {
@@ -226,7 +228,7 @@ export function AddSerieForm({ cerrarModal }) {
                 }}
               />
               {errors.correlativo && (
-                <div className="invalid-feedback">
+                <div className="text-sm text-destructive">
                   {errors.correlativo.message}
                 </div>
               )}
@@ -239,12 +241,17 @@ export function AddSerieForm({ cerrarModal }) {
           <Button
             type="button"
             onClick={() => reset()}
-            className="btn-cerrar-modal align-items-center w-auto"
-           variant="default">
+            className="btn-cerrar-modal items-center w-auto"
+            variant="default"
+          >
             <X className="me-2" size={16} />
             Limpiar Campos
           </Button>
-          <Button type="submit" className="btn-guardar align-items-center " variant="default">
+          <Button
+            type="submit"
+            className="btn-guardar items-center"
+            variant="default"
+          >
             <Save className="me-2" size={16} />
             Guardar Serie
           </Button>

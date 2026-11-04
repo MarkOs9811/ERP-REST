@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 
 // TUS ESTILOS
-import "../../../css/estilosPlanillas/EstilosListAsistencia.css";
+
 
 // SERVICIOS
 import { GetRegistroAsistencias } from "../../../service/accionesPlanilla/GetRegistroAsistencias";
@@ -27,7 +27,6 @@ import { BotonMotionGeneral } from "../../componentesReutilizables/BotonMotionGe
 import { GetReporteExcel } from "../../../service/accionesReutilizables/GetReporteExcel";
 import { Button } from "../../ui/button";
 import { CardContent, CardFooter } from "@/components/ui/card";
-
 
 // --- HELPERS ---
 const formatDate = (dateString) => {
@@ -211,17 +210,18 @@ export function ListaAsistencia({ onClose }) {
   ];
 
   return (
-    <div className="modern-card rounded-0">
+    <div className="modern-card rounded-none">
       {/* HEADER */}
-      <div className="d-flex justify-content-between align-items-center p-3 ">
-        <h6 className="m-0 fw-bold d-flex align-items-center gap-2">
+      <div className="flex justify-between items-center p-3">
+        <h6 className="m-0 font-bold flex items-center gap-2">
           <CalendarCheck size={20} /> Gestión de Asistencias
         </h6>
         <Button
           className="btn-principal"
           onClick={() => refetch()}
           title="Recargar datos"
-         variant="default">
+          variant="default"
+        >
           <RefreshCw size={16} className={isRefetching ? "spin-anim" : ""} />
           <span>{isRefetching ? "Cargando..." : "Actualizar"}</span>
         </Button>
@@ -229,17 +229,17 @@ export function ListaAsistencia({ onClose }) {
 
       <CardContent className="p-4 border-0">
         {/* BARRA DE FILTROS */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-2 mb-4">
+        <div className="grid grid-cols-12 gap-2 mb-4">
           {/* Buscador Nombre */}
-          <div className="col-12 col-md-3">
-            <div className="input-group">
-              <span className="input-group-text input-group-text-custom">
+          <div className="col-span-full md:col-span-3">
+            <div className="flex w-full items-stretch">
+              <span className="inline-flex items-center rounded-md border-input bg-muted px-3 text-sm text-muted-foreground input-group-text-custom">
                 {" "}
                 <Search size={16} />{" "}
               </span>
               <input
                 type="text"
-                className="form-control modern-input border-start-0 ps-0"
+                className="h-9 w-full rounded-md bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 modern-input border-s-0 ps-0"
                 placeholder="Buscar empleado..."
                 value={filtroNombre}
                 onChange={(e) => setFiltroNombre(e.target.value)}
@@ -248,28 +248,28 @@ export function ListaAsistencia({ onClose }) {
           </div>
 
           {/* Rango de Fechas (Inicio - Fin) */}
-          <div className="col-12 col-md-5">
+          <div className="col-span-full md:col-span-5">
             <div
-              className="d-flex align-items-center gap-1 bg-white border rounded px-2 py-1"
+              className="flex items-center gap-1 bg-background rounded px-2 py-1"
               style={{ borderColor: "var(--border-color)" }}
             >
               <div>
-                <CalendarDays size={16} className="text-muted" />
+                <CalendarDays size={16} className="text-muted-foreground" />
               </div>
               <input
                 type="date"
-                className="form-control border-0 p-1 shadow-none"
+                className="h-9 w-full rounded-md border-input bg-background text-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 border-0 p-1 shadow-none"
                 style={{ fontSize: "0.875rem", color: "var(--text-main)" }}
                 value={fechaInicio}
                 onChange={(e) => setFechaInicio(e.target.value)}
                 title="Fecha Inicio"
               />
               <div className="">
-                <ArrowRight size={16} className="text-muted" />
+                <ArrowRight size={16} className="text-muted-foreground" />
               </div>
               <input
                 type="date"
-                className="form-control border-0 p-1 shadow-none"
+                className="h-9 w-full rounded-md border-input bg-background text-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 border-0 p-1 shadow-none"
                 style={{ fontSize: "0.875rem", color: "var(--text-main)" }}
                 value={fechaFin}
                 onChange={(e) => setFechaFin(e.target.value)}
@@ -279,9 +279,9 @@ export function ListaAsistencia({ onClose }) {
           </div>
 
           {/* Filtro Estado */}
-          <div className="col-6 col-md-2">
+          <div className="col-span-6 md:col-span-2">
             <select
-              className="form-select modern-input"
+              className="h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 modern-input"
               value={filtroEstado}
               onChange={(e) => setFiltroEstado(e.target.value)}
             >
@@ -293,11 +293,12 @@ export function ListaAsistencia({ onClose }) {
           </div>
 
           {/* Botón Limpiar */}
-          <div className="col-6 col-md-2">
+          <div className="col-span-6 md:col-span-2">
             <Button
-              className="btn-modern btn-outline w-100"
+              className="btn-modern btn-outline w-full"
               onClick={handleLimpiar}
-             variant="default">
+              variant="default"
+            >
               <FilterX size={16} /> Limpiar
             </Button>
           </div>
@@ -305,7 +306,7 @@ export function ListaAsistencia({ onClose }) {
 
         {/* DASHBOARD DE ESTADÍSTICAS */}
         {dataFiltrada.length > 0 && (
-          <div className="d-flex flex-wrap gap-3 mb-4">
+          <div className="flex flex-wrap gap-3 mb-4">
             <div className="stat-item">
               <span className="stat-label">Total:</span>
               <span className="stat-value">{stats.total}</span>
@@ -317,8 +318,11 @@ export function ListaAsistencia({ onClose }) {
                 borderColor: "transparent",
               }}
             >
-              <CheckCircle2 size={16} className="text-success" />
-              <span className="text-success fw-bold">
+              <CheckCircle2
+                size={16}
+                className="text-emerald-600 dark:text-emerald-400"
+              />
+              <span className="text-emerald-600 dark:text-emerald-400 font-bold">
                 {stats.puntuales} Puntuales
               </span>
             </div>
@@ -338,7 +342,7 @@ export function ListaAsistencia({ onClose }) {
         )}
 
         {/* TABLA */}
-        <div className="border rounded-3 overflow-hidden shadow-sm bg-white">
+        <div className="border rounded-md overflow-hidden shadow-sm bg-background">
           <CondicionCarga isLoading={isLoading} isError={isError}>
             <TablasGenerales
               columnas={columnas}
@@ -368,7 +372,7 @@ export function ListaAsistencia({ onClose }) {
                 },
               }}
               noDataComponent={
-                <div className="p-5 text-center text-muted d-flex flex-column align-items-center">
+                <div className="p-5 text-center text-muted-foreground flex flex-col items-center">
                   <Search size={40} className="mb-2 opacity-25" />
                   <p className="m-0">No se encontraron registros</p>
                 </div>
@@ -386,10 +390,14 @@ export function ListaAsistencia({ onClose }) {
           onClick={handleExportarExcel} // <--- Llama al handler que usa GetReporteExcel
           loading={isExporting} // <--- Muestra loading mientras descarga
           icon={<Download size={18} />}
-          classDefault="btn-modern btn-excel text-center align-items-center gap-1 p-2 w-auto me-auto"
+          classDefault="btn-modern btn-excel text-center items-center gap-1 p-2 w-auto me-auto"
         />
 
-        <Button className="btn-cerrar-modal w-auto" onClick={onClose} variant="default">
+        <Button
+          className="btn-cerrar-modal w-auto"
+          onClick={onClose}
+          variant="default"
+        >
           <X size={18} /> Cerrar Vista
         </Button>
       </CardFooter>

@@ -120,7 +120,7 @@ export function ListaMisEntregas() {
       cell: (row) => (
         <div>
           <Button
-            className="btn-ver my-2 d-flex align-items-center gap-1"
+            className="btn-ver my-2 flex items-center gap-1"
             onClick={() => {
               setDataPedido(row);
               setModalDetallesVenta(true);

@@ -35,7 +35,7 @@ export function Configuracion() {
         <Settings
           height="24px"
           width="24px"
-          className="text-auto mb-1 mb-sm-0 me-sm-2"
+          className="text-auto mb-1 sm:mb-0 sm:me-2"
         />
       ),
       label: "Generales",
@@ -47,7 +47,7 @@ export function Configuracion() {
         <Users
           height="24px"
           width="24px"
-          className="text-auto mb-1 mb-sm-0 me-sm-2"
+          className="text-auto mb-1 sm:mb-0 sm:me-2"
         />
       ),
       label: "Mis Datos",
@@ -59,7 +59,7 @@ export function Configuracion() {
         <Building2
           height="24px"
           width="24px"
-          className="text-auto mb-1 mb-sm-0 me-sm-2"
+          className="text-auto mb-1 sm:mb-0 sm:me-2"
         />
       ),
       label: "Empresa",
@@ -71,7 +71,7 @@ export function Configuracion() {
         <Link2
           height="24px"
           width="24px"
-          className="text-auto mb-1 mb-sm-0 me-sm-2"
+          className="text-auto mb-1 sm:mb-0 sm:me-2"
         />
       ),
       label: "Integraciones",
@@ -83,7 +83,7 @@ export function Configuracion() {
         <BookCheck
           height="24px"
           width="24px"
-          className="text-auto mb-1 mb-sm-0 me-sm-2"
+          className="text-auto mb-1 sm:mb-0 sm:me-2"
         />
       ),
       label: "Servicio Sunat",
@@ -96,7 +96,7 @@ export function Configuracion() {
         <MessageCircleQuestionMark
           height="24px"
           width="24px"
-          className="text-auto mb-1 mb-sm-0 me-sm-2"
+          className="text-auto mb-1 sm:mb-0 sm:me-2"
         />
       ),
       label: "Soporte y Contacto",
@@ -112,7 +112,7 @@ export function Configuracion() {
         <Users
           height="24px"
           width="24px"
-          className="text-auto mb-1 mb-sm-0 me-sm-2"
+          className="text-auto mb-1 sm:mb-0 sm:me-2"
         />
       ),
       label: "Mis Datos",
@@ -126,28 +126,28 @@ export function Configuracion() {
 
   return (
     <div>
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
-        <div className="md:col-span-12">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-2">
-            <div className="md:col-span-12">
+      <div className="grid grid-cols-12 gap-3">
+        <div className="col-span-full md:col-span-12">
+          <div className="grid grid-cols-12 gap-2">
+            <div className="col-span-full md:col-span-12">
               <Card className="border-0 h-full">
-                <ul className="list-group bg-muted list-group-horizontal text-center border-0 w-100 overflow-auto">
+                <ul className="divide-y bg-muted flex flex-row text-center border-0 w-full overflow-auto">
                   {opciones.map((op) => (
                     <Link
                       key={op.to}
                       to={op.to}
-                      className={`w-auto list-group-item list-group-item-action d-flex flex-column flex-sm-row align-items-center justify-content-center p-2 border-0 flex-fill ${
+                      className={`w-auto relative bg-background text-foreground transition-colors hover:bg-accent hover:text-accent-foreground flex flex-col sm:flex-row items-center justify-center p-2 border-0 flex-1 ${
                         isActive(op.path) ? "btn-principal" : ""
                       }`}
                     >
                       {op.icon}
-                      <p className="small m-0">{op.label}</p>
+                      <p className="text-sm m-0">{op.label}</p>
                     </Link>
                   ))}
                 </ul>
               </Card>
             </div>
-            <div className="md:col-span-12">
+            <div className="col-span-full md:col-span-12">
               <Outlet />
             </div>
           </div>

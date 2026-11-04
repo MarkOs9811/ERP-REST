@@ -23,10 +23,9 @@ import {
 } from "lucide-react";
 import { Button } from "../../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
+import { Input } from "@/components/ui/input";
 
 export function AdelantoSueldo() {
-  const BASE_URL = process.env.REACT_APP_BASE_URL;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpenQuestion, setIsModalOpenQuestion] = useState(false);
   const [adelantoSueldoId, setAdelantoSueldoId] = useState(null);
@@ -172,7 +171,7 @@ export function AdelantoSueldo() {
     {
       name: "Empleado",
       cell: (row) => (
-        <div className="d-flex flex-column align-items-start text-center">
+        <div className="flex flex-col items-start text-center">
           <div>
             {capitalizeFirstLetter(
               row.usuario?.empleado?.persona?.nombre.toLowerCase(),
@@ -183,7 +182,7 @@ export function AdelantoSueldo() {
               ) || ""}
           </div>
           <span
-            className="fw-bold text-primary mt-1 text-left text-start"
+            className="font-bold text-primary mt-1 text-left"
             style={{ fontSize: "0.8rem" }}
           >
             {row.usuario?.empleado?.persona?.documento_identidad || ""}
@@ -198,10 +197,10 @@ export function AdelantoSueldo() {
       name: "Documento",
       selector: (row) => (
         <a
-          href={`${BASE_URL}/storage/${row.justificacion}`}
+          href={""}
           target="_blank"
           rel="noopener noreferrer"
-          className=" btn mx-2 mb-0"
+          className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 mx-2 mb-0"
         >
           <FileText color={"#1591c6"} width="30px" height="30px" />
         </a>
@@ -214,12 +213,14 @@ export function AdelantoSueldo() {
       cell: (row) => {
         return (
           <div
-            className="d-flex align-items-center justify-content-center h-100"
+            className="flex items-center justify-center h-full"
             style={{ textAlign: "center" }}
           >
             <p
-              className={`badge ${
-                row.estado == 1 ? "bg-success" : "bg-warning text-dark"
+              className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors ${
+                row.estado == 1
+                  ? "bg-emerald-600"
+                  : "bg-amber-500 text-foreground"
               }`}
               style={{ margin: 0 }}
             >
@@ -232,47 +233,50 @@ export function AdelantoSueldo() {
     {
       name: "Acciones",
       cell: (row) => (
-        <div className="d-flex justify-content-center gap-2">
+        <div className="flex justify-center gap-2">
           {row.estado == 1 ? (
             <>
               <Button
-                className="btn btn-outline-dark"
+                className="shadow inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border-input bg-background text-foreground hover:bg-accent"
                 title="Ver detalles"
                 onClick={() => verDetalles(row.id)}
-               variant="default">
+                variant="default"
+              >
                 <Eye color={"auto"} />
               </Button>
               <Button
-                className="btn btn-outline-danger"
+                className="shadow inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border-destructive bg-background text-destructive hover:bg-destructive/10"
                 title="Eliminar registro"
                 onClick={() => eliminarAdelantoSueldo(row.id)}
-               variant="destructive">
+                variant="destructive"
+              >
                 <Trash2 color={"auto"} />
               </Button>
             </>
           ) : (
             <>
               <Button
-                className="btn btn-outline-dark"
+                className="shadow inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border-input bg-background text-foreground hover:bg-accent"
                 title="Editar Adelanto de Sueldo"
                 onClick={() => getEditAdelantoSueldo(row.id)}
-                data-bs-target="#adelantodeSueldoEditar"
-                data-bs-toggle="modal"
-               variant="default">
+                variant="default"
+              >
                 <Pencil color={"auto"} />
               </Button>
               <Button
-                className="btn btn-outline-danger"
+                className="shadow inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border-destructive bg-background text-destructive hover:bg-destructive/10"
                 title="Eliminar registro"
                 onClick={() => eliminarAdelantoSueldo(row.id)}
-               variant="destructive">
+                variant="destructive"
+              >
                 <Trash2 color={"auto"} />
               </Button>
               <Button
-                className="btn btn-pagar btn-outline-success"
+                className="shadow btn-pagar inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border-emerald-600 bg-background text-emerald-700 hover:bg-emerald-50 dark:text-emerald-400 dark:hover:bg-emerald-950"
                 title="Realizar el pago"
                 onClick={() => confirmarPagoQuestion(row.id)}
-               variant="default">
+                variant="default"
+              >
                 <BanknoteArrowUp color={"auto"} />
               </Button>
             </>
@@ -291,34 +295,45 @@ export function AdelantoSueldo() {
 
   return (
     <div>
-      <Card className="pb-2">
-        <CardHeader className="border-bottom-0 flex flex-col flex-md-row justify-between items-center gap-2 p-3">
-          <div className="d-flex align-items-center">
-            <CardTitle asChild><h4 className="mb-0 titulo-card-especial">
-              Panel de Adelantos
-            </h4></CardTitle>
-            <span className="badge-header ms-2">Registros</span>
+      <Card className="rounded-2xl border border-border/70 bg-card shadow-sm ring-0 pb-2">
+        <CardHeader className="flex flex-col items-stretch gap-4 border-b border-border/70 px-5 py-5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+          <div className="flex items-center">
+            <CardTitle asChild>
+              <h4 className="mb-0 text-base font-semibold tracking-tight text-foreground">
+                Panel de Adelantos
+              </h4>
+            </CardTitle>
+            <span className="ml-2 inline-flex items-center rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
+              Registros
+            </span>
           </div>
-          <div className="d-flex align-items-center  gap-2 mt-3 mt-md-0">
-            <div className="header-search-container">
-              <Search className="search-icon" />
-              <input
+          <div className="flex w-full flex-col items-stretch gap-2 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center">
+            <div className="relative w-full min-w-0 sm:w-64">
+              <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
                 type="text"
                 placeholder="Buscar adelanto..."
-                className="form-control"
+                className="h-9 pl-9"
               />
             </div>
-            <Button className="btn btn-outline-dark px-3" title="Reporte" variant="default">
+            <Button
+              size="lg"
+              className="w-full gap-2 px-3 sm:w-auto"
+              title="Reporte"
+              variant="ghostOutline"
+            >
               <FileText size={18} />
               Reporte
             </Button>
             <Button
-              className="btn btn-dark px-3"
+              size="lg"
+              className="gap-2 px-3 w-full sm:w-auto"
               title="Agregar"
               onClick={() => {
                 setIsModalOpen(true);
               }}
-             variant="default">
+              variant="default"
+            >
               <Plus size={18} />
               Agregar
             </Button>
@@ -348,7 +363,7 @@ export function AdelantoSueldo() {
         hideFooter={true}
       >
         {({ handleClose }) => (
-          <div className="modal-body p-3">
+          <div className="p-3">
             <FormularioAdelantoSueldo
               onSubmit={handleSubmit(onSubmit)}
               handleUsuarioSelect={handleUsuarioSelect}
@@ -358,7 +373,6 @@ export function AdelantoSueldo() {
               errors={errors}
               usuarios={usuarios}
               isLoadingUsuarios={isLoadingUsuarios}
-              BASE_URL={BASE_URL}
               onClose={handleClose}
             />
           </div>

@@ -17,7 +17,6 @@ import {
 import { Button } from "../../ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
-
 export function AjustesBonificaciones() {
   const queryClient = useQueryClient();
   const [filtroBonificacion, setFiltroBoificaciones] = useState("");
@@ -138,9 +137,13 @@ export function AjustesBonificaciones() {
       cell: (row) => (
         <div>
           {row.estado == 1 ? (
-            <div className="badge bg-success text-white">Activo</div>
+            <div className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-emerald-600 text-white">
+              Activo
+            </div>
           ) : (
-            <div className="badge bg-danger text-white">Inactivo</div>
+            <div className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-destructive text-white">
+              Inactivo
+            </div>
           )}
         </div>
       ),
@@ -150,7 +153,7 @@ export function AjustesBonificaciones() {
       name: "Acciones",
       grow: 0,
       cell: (row) => (
-        <div className="d-flex justify-content-center">
+        <div className="flex justify-center">
           {/* Botón Eliminar o Activar */}
           {row.estado == 1 ? (
             <>
@@ -174,14 +177,15 @@ export function AjustesBonificaciones() {
             </>
           ) : (
             <Button
-              className="btn-activar btn-sm ms-2"
+              className="btn-activar inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 px-3 text-xs ms-2"
               title="Activar"
               onClick={() => {
                 setModalQuestionActivar(true);
                 setDataBonificacion(row);
               }}
               disabled={loadingActivar}
-             variant="default">
+              variant="default"
+            >
               <CheckCheck className="text-auto" size={"auto"} />
             </Button>
           )}
@@ -194,14 +198,14 @@ export function AjustesBonificaciones() {
   return (
     <Card className="h-full py-2">
       <CardHeader className="flex justify-between items-center p-2 border-b">
-        <h4 className=" mb-0">
+        <h4 className="mb-0">
           <Coins className="text-auto" /> Bonificaciones
         </h4>
-        <div className="d-flex ms-auto mx-2">
+        <div className="flex mx-2">
           <input
             type="text"
             placeholder="Buscar..."
-            className="form-control"
+            className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
             onChange={(e) => setFiltroBoificaciones(e.target.value)}
           />
         </div>
@@ -214,8 +218,9 @@ export function AjustesBonificaciones() {
             setModalEditBoni(false);
             setDataBonificacion([]);
           }}
-         variant="default">
-          <Plus className=" text-auto" />
+          variant="default"
+        >
+          <Plus className="text-auto" />
         </Button>
       </CardHeader>
       <CardContent className="p-0">

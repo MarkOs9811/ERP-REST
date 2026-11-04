@@ -9,7 +9,6 @@ import { clearProductoSelececcionado } from "../../../redux/productoTransferirSl
 import { Button } from "../../ui/button";
 import { CardContent } from "@/components/ui/card";
 
-
 export function DestinoTransferir() {
   const [archivo, setArchivo] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -142,19 +141,22 @@ export function DestinoTransferir() {
 
   return (
     <CardContent className="">
-      <div className="d-flex justify-content-between align-items-center gap-2 p-2 mb-3 border rounded bg-light small fw-semibold text-secondary">
+      <div className="flex justify-between items-center gap-2 p-2 mb-3 rounded bg-muted text-sm font-semibold text-muted-foreground">
         <span>{productoSeleccionado.length} productos</span>
         <span>{totalUnidades} unidades</span>
       </div>
 
-      <div className="mb-3 position-relative">
+      <div className="mb-3 relative">
         <div className="">
-          <label htmlFor="destino" className="form-label fw-bold">
+          <label
+            htmlFor="destino"
+            className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-bold"
+          >
             Destino
           </label>
           <select
             id="destino"
-            className="form-select"
+            className="h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
             value={idDestino}
             onChange={(e) => setIdDestino(e.target.value)}
           >
@@ -170,31 +172,35 @@ export function DestinoTransferir() {
         </div>
       </div>
 
-      <div className="mb-3 position-relative">
-        <label htmlFor="archivo" className="form-label fw-bold">
+      <div className="mb-3 relative">
+        <label
+          htmlFor="archivo"
+          className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-bold"
+        >
           Adjuntar archivo (PDF o Word)
         </label>
         <input
           ref={fileInputRef}
           type="file"
           id="archivo"
-          className="form-control"
+          className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
           accept=".pdf,.doc,.docx"
           onChange={handleArchivoChange}
         />
         {archivo && (
-          <div className="form-text text-success mt-1">
+          <div className="text-sm text-emerald-600 dark:text-emerald-400 mt-1">
             Archivo seleccionado: {archivo.name}
           </div>
         )}
       </div>
       <Button
-        className="btn-guardar w-100 p-3"
+        className="btn-guardar w-full p-3"
         onClick={handleConfirmar}
         disabled={
           loading || !idDestino || !archivo || productoSeleccionado.length === 0
         }
-       variant="default">
+        variant="default"
+      >
         {loading ? "Transfiriendo..." : "Transferir"}
       </Button>
     </CardContent>

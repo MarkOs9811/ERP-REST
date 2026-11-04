@@ -95,7 +95,7 @@ export function ListaDocumentosFirmados() {
             setHandleEliminar(true);
             setDataDocument(row);
           }}
-          className="btn-eliminar d-flex"
+          className="btn-eliminar flex"
           title="Eliminar este documento"
          variant="destructive">
           <Trash2 className="text-auto" size={"auto"} />

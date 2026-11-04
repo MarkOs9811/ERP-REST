@@ -2,7 +2,6 @@ import React from "react";
 import { Briefcase, Calendar, Clock } from "lucide-react";
 import { Card } from "@/components/ui/card";
 
-
 export function Paso2Laborales({
   register,
   errors,
@@ -27,11 +26,11 @@ export function Paso2Laborales({
       </h5>
 
       <div className="mb-3">
-        <label className="form-label small fw-semi-bold text-muted">
+        <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm fw-semi-bold text-muted-foreground">
           <Briefcase size={16} className="me-1" /> Tipo Contrato
         </label>
         <select
-          className={`form-select ${errors.contrato ? "is-invalid" : ""}`}
+          className={`h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.contrato ? "border-destructive focus-visible:ring-destructive" : ""}`}
           {...register("contrato", { required: "Requerido" })}
         >
           <option value="">Seleccione...</option>
@@ -42,27 +41,29 @@ export function Paso2Laborales({
           ))}
         </select>
         {errors.contrato && (
-          <div className="invalid-feedback">{errors.contrato.message}</div>
+          <div className="text-sm text-destructive">
+            {errors.contrato.message}
+          </div>
         )}
       </div>
 
-      <div className="row">
-        <div className="col-6 mb-3">
-          <label className="form-label small fw-semi-bold text-muted">
+      <div className="grid grid-cols-12 gap-3">
+        <div className="col-span-6 mb-3">
+          <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm fw-semi-bold text-muted-foreground">
             <Calendar size={16} className="me-1" /> Inicio Contrato
           </label>
           <input
-            className={`form-control ${errors.fecha_contrato ? "is-invalid" : ""}`}
+            className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.fecha_contrato ? "border-destructive focus-visible:ring-destructive" : ""}`}
             type="date"
             {...register("fecha_contrato", { required: "Requerido" })}
           />
         </div>
-        <div className="col-6 mb-3">
-          <label className="form-label small fw-semi-bold text-muted">
+        <div className="col-span-6 mb-3">
+          <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm fw-semi-bold text-muted-foreground">
             <Calendar size={16} className="me-1" /> Fin Contrato
           </label>
           <input
-            className={`form-control ${errors.fecha_fin_contrato ? "is-invalid" : ""}`}
+            className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.fecha_fin_contrato ? "border-destructive focus-visible:ring-destructive" : ""}`}
             type="date"
             {...register("fecha_fin_contrato", { required: "Requerido" })}
           />
@@ -70,11 +71,11 @@ export function Paso2Laborales({
       </div>
 
       <div className="mb-3">
-        <label className="form-label small fw-semi-bold text-muted">
+        <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm fw-semi-bold text-muted-foreground">
           <Briefcase size={16} className="me-1" /> Área
         </label>
         <select
-          className={`form-select ${errors.area ? "is-invalid" : ""}`}
+          className={`h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.area ? "border-destructive focus-visible:ring-destructive" : ""}`}
           {...register("area", { required: "Requerido" })}
         >
           <option value="">Seleccione...</option>
@@ -86,13 +87,13 @@ export function Paso2Laborales({
         </select>
       </div>
 
-      <div className="row">
-        <div className="col-6 mb-3">
-          <label className="form-label small fw-semi-bold text-muted">
+      <div className="grid grid-cols-12 gap-3">
+        <div className="col-span-6 mb-3">
+          <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm fw-semi-bold text-muted-foreground">
             <Briefcase size={16} className="me-1" /> Cargo
           </label>
           <select
-            className={`form-select ${errors.cargo ? "is-invalid" : ""}`}
+            className={`h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.cargo ? "border-destructive focus-visible:ring-destructive" : ""}`}
             {...register("cargo", { required: "Requerido" })}
             onChange={handleCargoChange}
           >
@@ -104,12 +105,12 @@ export function Paso2Laborales({
             ))}
           </select>
         </div>
-        <div className="col-6 mb-3">
-          <label className="form-label small fw-semi-bold text-muted">
+        <div className="col-span-6 mb-3">
+          <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm fw-semi-bold text-muted-foreground">
             <Clock size={16} className="me-1" /> Horario
           </label>
           <select
-            className={`form-select ${errors.horario ? "is-invalid" : ""}`}
+            className={`h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.horario ? "border-destructive focus-visible:ring-destructive" : ""}`}
             {...register("horario", { required: "Requerido" })}
           >
             <option value="">Seleccione...</option>
@@ -122,24 +123,24 @@ export function Paso2Laborales({
         </div>
       </div>
 
-      <div className="row">
-        <div className="col-6">
-          <label className="form-label small fw-semi-bold text-muted">
+      <div className="grid grid-cols-12 gap-3">
+        <div className="col-span-6">
+          <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm fw-semi-bold text-muted-foreground">
             S/. Salario base
           </label>
           <input
-            className="form-control bg-light"
+            className="h-9 w-full rounded-md border-input px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 bg-muted"
             placeholder="Salario base"
             {...register("salario")}
             readOnly
           />
         </div>
-        <div className="col-6">
-          <label className="form-label small fw-semi-bold text-muted">
+        <div className="col-span-6">
+          <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm fw-semi-bold text-muted-foreground">
             S/. Pago por Hora
           </label>
           <input
-            className="form-control bg-light"
+            className="h-9 w-full rounded-md border-input px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 bg-muted"
             placeholder="Pago por Hora"
             {...register("pagoPorHora")}
             readOnly

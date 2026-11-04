@@ -18,12 +18,12 @@ export function ModalDetallesSolicitud({ data }) {
   const estadoResuelto = data?.estado === 1;
 
   return (
-    <div className="solicitud-detalle-wrap container-fluid p-3 p-md-4">
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
-        <div className="md:col-span-6">
+    <div className="solicitud-detalle-wrap w-full p-3 p-md-4">
+      <div className="grid grid-cols-12 gap-3">
+        <div className="col-span-full md:col-span-6">
           <Card className="border h-full solicitud-detalle-card">
             <CardHeader className="solicitud-detalle-card-header">
-              <p className="h6 mt-1 mb-0 d-flex align-items-center gap-2">
+              <p className="h6 mt-1 mb-0 flex items-center gap-2">
                 <FileAxis3D className="text-auto me-2" />
                 Información General
               </p>
@@ -39,7 +39,7 @@ export function ModalDetallesSolicitud({ data }) {
               <span id="detalleSolicitante" className="mt-2">
                 {capitalizeFirstLetter(data?.nombre_solicitante)}
               </span>
-              <small id="detalleCorreo" className="text-muted mt-1">
+              <small id="detalleCorreo" className="text-muted-foreground mt-1">
                 {data?.usuario?.empleado?.persona?.correo}
               </small>
               <BadgeComponent
@@ -48,17 +48,17 @@ export function ModalDetallesSolicitud({ data }) {
                 label={capitalizeFirstLetter(data?.area?.nombre || "Sin área")}
                 variant="primary"
               />
-              <small id="detalleCelular" className="text-muted mt-2">
+              <small id="detalleCelular" className="text-muted-foreground mt-2">
                 {data?.celular}
               </small>
             </CardContent>
           </Card>
         </div>
 
-        <div className="md:col-span-6">
+        <div className="col-span-full md:col-span-6">
           <Card className="border h-full solicitud-detalle-card">
             <CardHeader className="solicitud-detalle-card-header">
-              <p className="h6 mt-1 mb-0 d-flex align-items-center gap-2">
+              <p className="h6 mt-1 mb-0 flex items-center gap-2">
                 <Box className="text-auto me-2" /> Detalles del Producto
               </p>
             </CardHeader>
@@ -83,10 +83,10 @@ export function ModalDetallesSolicitud({ data }) {
           </Card>
         </div>
 
-        <div className="md:col-span-12">
+        <div className="col-span-full md:col-span-12">
           <Card className="border h-full solicitud-detalle-card">
             <CardHeader className="solicitud-detalle-card-header">
-              <p className="h6 mt-1 mb-0 d-flex align-items-center gap-2">
+              <p className="h6 mt-1 mb-0 flex items-center gap-2">
                 <Info className="text-auto me-2" /> Información Adicional
               </p>
             </CardHeader>
@@ -123,7 +123,7 @@ export function ModalDetallesSolicitud({ data }) {
                 <strong>Fecha:</strong>{" "}
                 <span
                   id="fechaSolicitud"
-                  className="d-inline-flex align-items-center gap-2"
+                  className="inline-flex items-center gap-2"
                 >
                   <CalendarDays size={14} />
                   {data?.fecha_solicitud || data?.created_at || "-"}

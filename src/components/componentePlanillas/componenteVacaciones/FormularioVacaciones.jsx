@@ -11,20 +11,24 @@ export function FormularioVacaciones({
   errors,
   usuarios,
   isLoadingUsuarios,
-  BASE_URL,
   calcularDiasTotales, // Función para calcular los días totales
   onClose,
 }) {
   console.log("ERRORES DEL FORMULARIO:", errors);
   return (
     <form id="agregarVacacionesForm" onSubmit={onSubmitVaca}>
-      <small className="text-info">Selecciona un empleado</small>
-      <div className=" mb-3">
-        <label htmlFor="empleado" className="form-label">
+      <small className="text-sky-600 dark:text-sky-400">
+        Selecciona un empleado
+      </small>
+      <div className="mb-3">
+        <label
+          htmlFor="empleado"
+          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+        >
           Empleado
         </label>
         <select
-          className={`form-select ${errors.empleados ? "is-invalid" : ""}`}
+          className={`h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.empleados ? "border-destructive focus-visible:ring-destructive" : ""}`}
           id="empleado"
           defaultValue=""
           onChange={handleUsuarioSelect}
@@ -49,33 +53,24 @@ export function FormularioVacaciones({
         </select>
 
         {errors.empleados && (
-          <div className="invalid-feedback">
+          <div className="text-sm text-destructive">
             Debe seleccionar al menos un empleado.
           </div>
         )}
       </div>
 
       {empleadosSeleccionados?.length > 0 && (
-        <div className="mb-3 d-flex flex-wrap gap-2">
+        <div className="mb-3 flex flex-wrap gap-2">
           {empleadosSeleccionados.map((usuario) => (
             <span
               key={usuario.id}
-              className="badge d-flex align-items-center p-2"
+              className="rounded-full text-xs font-semibold transition-colors flex items-center p-2"
               style={{
                 borderRadius: "20px",
                 backgroundColor: "#e1f5ff",
                 color: "#017c8e",
               }}
             >
-              <img
-                src={
-                  `${BASE_URL}/storage/${usuario.fotoPerfil}` ||
-                  "/default-avatar.png"
-                }
-                alt="Foto del empleado"
-                className="rounded-circle me-2"
-                style={{ width: "30px", height: "30px" }}
-              />
               <span className="me-2">
                 {capitalizeFirstLetter(
                   usuario.empleado.persona.nombre.toLowerCase(),
@@ -86,11 +81,12 @@ export function FormularioVacaciones({
               </span>
               <Button
                 type="button"
-                className="btn-close btn-close-dark ms-2"
+                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 size-8 p-0 opacity-70 hover:opacity-100 btn-close-dark ms-2"
                 aria-label="Eliminar"
                 onClick={() => removeUsuario(usuario.id)}
                 style={{ fontSize: "10px" }}
-               variant="default"></Button>
+                variant="default"
+              ></Button>
             </span>
           ))}
         </div>
@@ -98,8 +94,11 @@ export function FormularioVacaciones({
 
       <div className="mb-3">
         {/* Fecha Inicio */}
-        <div className=" mb-3">
-          <label htmlFor="fechaInicio" className="form-label">
+        <div className="mb-3">
+          <label
+            htmlFor="fechaInicio"
+            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
             Fecha Inicio
           </label>
           <Controller
@@ -109,8 +108,10 @@ export function FormularioVacaciones({
             render={({ field }) => (
               <input
                 type="date"
-                className={`form-control ${
-                  errors.fechaInicio ? "is-invalid" : ""
+                className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+                  errors.fechaInicio
+                    ? "border-destructive focus-visible:ring-destructive"
+                    : ""
                 }`}
                 id="fechaInicio"
                 {...field}
@@ -119,13 +120,18 @@ export function FormularioVacaciones({
           />
 
           {errors.fechaInicio && (
-            <div className="invalid-feedback">{errors.fechaInicio.message}</div>
+            <div className="text-sm text-destructive">
+              {errors.fechaInicio.message}
+            </div>
           )}
         </div>
 
         {/* Fecha Fin */}
-        <div className=" mb-3">
-          <label htmlFor="fechaFin" className="form-label">
+        <div className="mb-3">
+          <label
+            htmlFor="fechaFin"
+            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
             Fecha Fin
           </label>
           <Controller
@@ -135,8 +141,10 @@ export function FormularioVacaciones({
             render={({ field }) => (
               <input
                 type="date"
-                className={`form-control ${
-                  errors.fechaFin ? "is-invalid" : ""
+                className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+                  errors.fechaFin
+                    ? "border-destructive focus-visible:ring-destructive"
+                    : ""
                 }`}
                 id="fechaFin"
                 {...field}
@@ -149,13 +157,18 @@ export function FormularioVacaciones({
           />
 
           {errors.fechaFin && (
-            <div className="invalid-feedback">{errors.fechaFin.message}</div>
+            <div className="text-sm text-destructive">
+              {errors.fechaFin.message}
+            </div>
           )}
         </div>
 
         {/* Días Totales */}
-        <div className=" mb-3">
-          <label htmlFor="diasTotales" className="form-label">
+        <div className="mb-3">
+          <label
+            htmlFor="diasTotales"
+            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
             Días Totales
           </label>
           <Controller
@@ -164,7 +177,7 @@ export function FormularioVacaciones({
             render={({ field }) => (
               <input
                 type="number"
-                className="form-control"
+                className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                 id="diasTotales"
                 {...field}
                 readOnly
@@ -174,8 +187,11 @@ export function FormularioVacaciones({
         </div>
 
         {/* Observaciones */}
-        <div className=" mb-3">
-          <label htmlFor="observaciones" className="form-label">
+        <div className="mb-3">
+          <label
+            htmlFor="observaciones"
+            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
             Observaciones
           </label>
           <Controller
@@ -183,8 +199,10 @@ export function FormularioVacaciones({
             control={control}
             render={({ field }) => (
               <textarea
-                className={`form-control ${
-                  errors.observaciones ? "is-invalid" : ""
+                className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+                  errors.observaciones
+                    ? "border-destructive focus-visible:ring-destructive"
+                    : ""
                 }`}
                 id="observaciones"
                 {...field}
@@ -195,14 +213,19 @@ export function FormularioVacaciones({
           />
 
           {errors.observaciones && (
-            <div className="invalid-feedback">
+            <div className="text-sm text-destructive">
               {errors.observaciones.message}
             </div>
           )}
         </div>
       </div>
-      <div className="d-flex gap-2 p-3">
-        <Button type="button" className="btn-cerrar" onClick={onClose} variant="default">
+      <div className="flex gap-2 p-3">
+        <Button
+          type="button"
+          className="btn-cerrar"
+          onClick={onClose}
+          variant="default"
+        >
           Cancelar
         </Button>
         <Button type="submit" className="btn-guardar" variant="default">

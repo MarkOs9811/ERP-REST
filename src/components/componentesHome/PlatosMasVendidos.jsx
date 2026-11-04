@@ -3,7 +3,7 @@ import { getVentas } from "../../service/ObtenerVentasDetalle";
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
 import { Award } from "lucide-react";
 import { Card } from "@/components/ui/card";
- // Cambié el icono al de tu diseño
+// Cambié el icono al de tu diseño
 
 export function PlatoMasVendido() {
   const {
@@ -79,7 +79,7 @@ export function PlatoMasVendido() {
 
   return (
     <CondicionCarga isLoading={isLoadingVentas} isError={isErrorVentas}>
-      <Card className="h-full rounded-xl border border-border bg-card p-4 text-card-foreground">
+      <Card className="h-full rounded-2xl border-border/70 bg-card p-4 text-card-foreground shadow-none">
         {/* CABECERA */}
         <div className="mb-2 flex items-center justify-between">
           <div>
@@ -104,10 +104,10 @@ export function PlatoMasVendido() {
               {top3Platos.map(
                 ([plato, { cantidad, foto, precio, categoria }], index) => (
                   <div className="min-w-0" key={index}>
-                    <Card className="relative flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card">
+                    <Card className="relative flex h-full flex-col overflow-hidden rounded-xl border-border bg-card">
                       {/* Badge de Ranking Flotante */}
                       <span
-                        className={`absolute right-0 top-0 z-[1] flex size-8 translate-x-1/4 -translate-y-1/4 items-center justify-center rounded-full p-2 text-sm font-bold text-white shadow-sm ${
+                        className={`absolute right-0 top-0 z-[1] flex size-8 translate-x-1/4 -translate-y-1/4 items-center justify-center rounded-full p-2 text-sm font-bold text-white ${
                           index === 0
                             ? "bg-rose-600"
                             : index === 1
@@ -168,7 +168,7 @@ export function PlatoMasVendido() {
                   {menuSecundario.map(
                     ([plato, { cantidad, foto, precio }], index) => (
                       <Card
-                        className="w-64 shrink-0 rounded-xl border border-border bg-card"
+                        className="w-64 shrink-0 rounded-xl border-border bg-card"
                         key={index}
                       >
                         <div className="flex items-center justify-between gap-2 p-2">

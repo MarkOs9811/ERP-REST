@@ -70,10 +70,10 @@ export function GraficoCuentasPorCobrar() {
   };
 
   return (
-    <div className="w-100 h-100 ms-auto m-auto d-flex flex-column">
-      <div className="mb-4 d-flex gap-3 align-items-center">
+    <div className="w-full h-full m-auto flex flex-col">
+      <div className="mb-4 flex gap-3 items-center">
         <span
-          className="rounded-circle p-2 d-flex justify-content-center align-items-center"
+          className="rounded-full p-2 flex justify-center items-center"
           style={{
             backgroundColor: "var(--bg-emerald-soft)",
             color: "var(--fw-emerald)",
@@ -83,9 +83,9 @@ export function GraficoCuentasPorCobrar() {
         >
           <CreditCard size={25} />
         </span>
-        <div className="d-flex flex-column flex-grow-1">
+        <div className="flex flex-col grow">
           <span
-            className="fw-bold"
+            className="font-bold"
             style={{ color: "var(--text-main)", fontSize: "1.1rem" }}
           >
             Ventas al crédito

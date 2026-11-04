@@ -8,7 +8,6 @@ import ToastAlert from "../../componenteToast/ToastAlert";
 import { Button } from "../../ui/button";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 
-
 const Categorias = ({ categorias, onToggle }) => {
   const [modalAddMetodoPago, setModalAddCategoria] = useState(false);
   const queryClient = useQueryClient();
@@ -38,32 +37,35 @@ const Categorias = ({ categorias, onToggle }) => {
     }
   };
   return (
-    <div className="md:col-span-12">
-      <Card className="shadow-sm border h-full">
+    <div className="col-span-full md:col-span-12">
+      <Card className="shadow-sm h-full">
         <CardContent className="">
-          <div className="d-flex justify-content-between align-items-center">
-            <CardTitle asChild><p className="mb-0 h5">Categorías</p></CardTitle>
+          <div className="flex justify-between items-center">
+            <CardTitle asChild>
+              <p className="mb-0 h5">Categorías</p>
+            </CardTitle>
             <Button
-              className="btn btn-light"
+              className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-muted text-foreground shadow-sm hover:bg-muted/80"
               title="Agregar Categoría"
               onClick={() => setModalAddCategoria(true)}
-             variant="default">
+              variant="default"
+            >
               <PlusIcon className="text-auto" />
             </Button>
           </div>
-          <ul className="list-group border-0 mt-3">
+          <ul className="flex flex-col divide-y border-0 mt-3">
             {categorias.map((cat) => (
               <li
                 key={cat.id}
-                className="list-group-item border-0 d-flex justify-content-between align-items-center"
+                className="relative bg-background px-4 py-3 text-foreground border-0 flex justify-between items-center"
               >
                 <div>
                   <h6 className="mb-1">{cat.nombre}</h6>
-                  <small className="text-muted">
+                  <small className="text-muted-foreground">
                     <div
-                      className={`badge ${
+                      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors ${
                         cat.estado == 1
-                          ? "bg-success text-white"
+                          ? "bg-emerald-600 text-white"
                           : "bg-secondary text-white"
                       }`}
                     >
@@ -71,12 +73,12 @@ const Categorias = ({ categorias, onToggle }) => {
                     </div>
                   </small>
                 </div>
-                <div className="form-switch">
+                <div className="flex items-center gap-2">
                   <input
                     type="checkbox"
                     checked={cat.estado == 1}
                     onChange={() => onToggle(cat.id)}
-                    className="form-check-input"
+                    className="size-4 shrink-0 rounded border-input accent-primary"
                     id={`categoriaCheck${cat.id}`}
                     style={{
                       width: 40,
@@ -97,36 +99,42 @@ const Categorias = ({ categorias, onToggle }) => {
         hideFooter={true}
       >
         <Card className="flex h-full bg-transparent">
-          <CardContent asChild><form
-            className="row g-3"
-            onSubmit={handleSubmit(handleSubmitMetodo)}
-          >
-            <div className="col-12">
-              <label className="form-label">Nombre del la categoria</label>
-              <input
-                type="text"
-                className={`form-control ${errors.nombre ? "is-invalid" : ""}`}
-                {...register("nombre", {
-                  required: "El nombre es obligatorio",
-                  maxLength: {
-                    value: 20,
-                    message: "El nombre no debe exceder los 20 caracteres",
-                  },
-                })}
-                placeholder="Ej: Dulces, electrodomesticos."
-                autoFocus
-              />
-              {errors.nombre && (
-                <div className="invalid-feedback">{errors.nombre.message}</div>
-              )}
-            </div>
+          <CardContent asChild>
+            <form
+              className="grid grid-cols-12 gap-3"
+              onSubmit={handleSubmit(handleSubmitMetodo)}
+            >
+              <div className="col-span-full">
+                <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                  Nombre del la categoria
+                </label>
+                <input
+                  type="text"
+                  className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.nombre ? "border-destructive focus-visible:ring-destructive" : ""}`}
+                  {...register("nombre", {
+                    required: "El nombre es obligatorio",
+                    maxLength: {
+                      value: 20,
+                      message: "El nombre no debe exceder los 20 caracteres",
+                    },
+                  })}
+                  placeholder="Ej: Dulces, electrodomesticos."
+                  autoFocus
+                />
+                {errors.nombre && (
+                  <div className="text-sm text-destructive">
+                    {errors.nombre.message}
+                  </div>
+                )}
+              </div>
 
-            <div className="col-12 text-end">
-              <Button type="submit" className="btn-guardar" variant="default">
-                Guardar
-              </Button>
-            </div>
-          </form></CardContent>
+              <div className="col-span-full text-right">
+                <Button type="submit" className="btn-guardar" variant="default">
+                  Guardar
+                </Button>
+              </div>
+            </form>
+          </CardContent>
         </Card>
       </ModalRight>
     </div>

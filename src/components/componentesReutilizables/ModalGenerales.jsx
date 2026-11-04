@@ -1,8 +1,15 @@
-import React, { useState } from "react";
-import "../../css/ModalAlertQuestion.css";
-import ReactDOM from "react-dom";
-import { X } from "lucide-react";
-import { Button } from "../ui/button";
+import { useState } from "react";
+import { LoaderCircle, X } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "../ui/alert-dialog";
 
 function ModalGenerales({
   show,
@@ -17,65 +24,75 @@ function ModalGenerales({
   showButtons = true,
   textConfirm = "Confirmar",
   textCancel = "Cancelar",
-  btnConfirmColor = "btn-danger",
+  btnConfirmColor = "",
 }) {
-  // --- NUEVO: Estado para controlar la carga ---
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleConfirm = async () => {
+  const handleConfirm = async (event) => {
+    event.preventDefault();
+    if (isLoading) return;
+
+    if (!handleAccion) {
+      handleCloseModal();
+      return;
+    }
+
+    setIsLoading(true);
     try {
-      if (handleAccion) {
-        setIsLoading(true); // Encendemos el loader
+      const exito = idProceso
+        ? await handleAccion(idProceso)
+        : await handleAccion();
 
-        const exito = idProceso
-          ? await handleAccion(idProceso)
-          : await handleAccion();
-
-        if (exito === true) {
-          handleCloseModal();
-        }
-      } else {
-        // Si el modal no tiene handleAccion (es solo un aviso), lo cerramos directo
-        handleCloseModal();
-      }
+      if (exito === true) handleCloseModal();
     } catch (error) {
       console.error("Error en modal:", error);
     } finally {
-      setIsLoading(false); // Apagamos el loader pase lo que pase (éxito o error)
+      setIsLoading(false);
     }
   };
 
-  if (!show) return null;
+  const closeButton = (
+    <AlertDialogCancel
+      variant="ghost"
+      size="icon"
+      className="absolute right-3 top-3 size-8 rounded-full text-muted-foreground"
+      aria-label="Cerrar"
+      disabled={isLoading}
+    >
+      <X className="size-4" />
+      <span className="sr-only">Cerrar</span>
+    </AlertDialogCancel>
+  );
 
-  return ReactDOM.createPortal(
-    <div className={`fw-modal-overlay ${show ? "show" : ""}`}>
-      <div
-        className="fw-modal-shell d-flex flex-column overflow-hidden position-relative"
+  return (
+    <AlertDialog
+      open={Boolean(show)}
+      onOpenChange={(open) => {
+        if (!open && !isLoading) handleCloseModal();
+      }}
+    >
+      <AlertDialogContent
+        className="max-h-[90dvh] gap-0 overflow-y-auto p-0 sm:max-w-none"
         style={{
-          width: width,
-          height: height,
-          maxWidth: "95vw",
-          maxHeight: "95vh",
-          backgroundColor: "var(--bg-surface, #ffffff)",
-          color: "var(--text-main, #0f172a)",
+          width: `min(${width}, calc(100vw - 2rem))`,
+          maxHeight: height === "auto" ? "90dvh" : `min(${height}, 90dvh)`,
         }}
       >
-        <Button
-          onClick={handleCloseModal}
-          className="fw-modal-close-btn btn-icon"
-          aria-label="Cerrar"
-          disabled={isLoading}
-         variant="default">
-          <X size={20} />
-        </Button>
+        {closeButton}
+        <AlertDialogHeader
+          className={`border-b border-border/70 px-6 py-5 pr-14 ${
+            mensaje ? "" : "sr-only"
+          }`}
+        >
+          <AlertDialogTitle className="text-lg font-semibold tracking-tight">
+            {mensaje || "Confirmación"}
+          </AlertDialogTitle>
+          <AlertDialogDescription className="sr-only">
+            Confirma o cancela para continuar.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
 
-        {mensaje && (
-          <div className="fw-modal-header text-center">
-            <h4 className="fw-bold m-0">{mensaje}</h4>
-          </div>
-        )}
-
-        <div className="fw-modal-body modal-body">
+        <div className="min-h-0 overflow-y-auto px-6 py-5">
           {children
             ? children
             : cuerpo &&
@@ -85,37 +102,24 @@ function ModalGenerales({
         </div>
 
         {showButtons && (
-          <div className="fw-modal-actions">
-            <Button
-              onClick={handleCloseModal}
-              className="btn-cerrar-modal"
+          <AlertDialogFooter className="-mx-0 -mb-0 rounded-b-xl border-border/70 px-6 py-4">
+            <AlertDialogCancel
               disabled={!handleAccion || isLoading}
-             variant="default">
+            >
               {textCancel}
-            </Button>
-            <Button
+            </AlertDialogCancel>
+            <AlertDialogAction
               onClick={handleConfirm}
-              className={`btn fw-modal-btn fw-modal-btn-confirm ${btnConfirmColor}`}
               disabled={isLoading}
-             variant="default">
-              {isLoading ? (
-                <>
-                  <span
-                    className="spinner-border spinner-border-sm"
-                    role="status"
-                    aria-hidden="true"
-                  ></span>
-                  Procesando...
-                </>
-              ) : (
-                textConfirm
-              )}
-            </Button>
-          </div>
+              className={`gap-2 ${btnConfirmColor}`.trim()}
+            >
+              {isLoading && <LoaderCircle className="size-4 animate-spin" />}
+              {isLoading ? "Procesando..." : textConfirm}
+            </AlertDialogAction>
+          </AlertDialogFooter>
         )}
-      </div>
-    </div>,
-    document.body,
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
 

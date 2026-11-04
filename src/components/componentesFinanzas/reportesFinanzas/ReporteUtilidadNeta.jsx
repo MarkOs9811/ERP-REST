@@ -18,7 +18,6 @@ import { GraficoIngresosEgresos } from "../../../graficosChar/GraficoIngresosEgr
 import { Cargando } from "../../componentesReutilizables/Cargando";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
-
 export function ReporteUtilidadNeta() {
   const reporteRef = useRef();
   const generarReporte = useGenerarReporte("reporte_utilidad_neta.pdf");
@@ -123,14 +122,14 @@ export function ReporteUtilidadNeta() {
   });
 
   return (
-    <div className="p-4 ">
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-3 mb-4">
+    <div className="p-4">
+      <div className="grid grid-cols-12 gap-3 mb-4">
         {/* Botón de reporte */}
-        <div className="md:col-span-12 d-flex justify-content-auto ms-auto">
+        <div className="col-span-full md:col-span-12 flex justify-between ms-auto">
           <div>
             <h5>Informe</h5>
           </div>
-          <div className="d-flex ms-auto gap-3">
+          <div className="flex ms-auto gap-3">
             <BotonMotionGeneral
               text={loading ? "Generando..." : "Generar Reporte"}
               icon={
@@ -148,12 +147,12 @@ export function ReporteUtilidadNeta() {
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-3">
-        <div className="md:col-span-12" ref={reporteRef}>
+      <div className="grid grid-cols-12 gap-3 mb-3">
+        <div className="col-span-full md:col-span-12" ref={reporteRef}>
           {/* Tarjetas resumen */}
-          <div className="md:col-span-12 mb-2">
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-3">
-              <div className="md:col-span-3">
+          <div className="col-span-full md:col-span-12 mb-2">
+            <div className="grid grid-cols-12 gap-3 mb-3">
+              <div className="col-span-full md:col-span-3">
                 <Card className="rounded-xl p-3 h-full">
                   {loadingVentas ? (
                     <div>
@@ -161,19 +160,19 @@ export function ReporteUtilidadNeta() {
                     </div>
                   ) : (
                     <>
-                      <div className="d-flex align-items-center gap-2 mb-2">
-                        <span className="fw-bold text-dark">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="font-bold text-foreground">
                           Ventas Totales
                         </span>
                       </div>
-                      <h4 className="fw-bold text-dark mb-0">
+                      <h4 className="font-bold text-foreground mb-0">
                         S/ {totalVentas.toFixed(2)}
                       </h4>
                     </>
                   )}
                 </Card>
               </div>
-              <div className="md:col-span-3">
+              <div className="col-span-full md:col-span-3">
                 <Card className="rounded-xl p-3 h-full">
                   {loadingCompras ? (
                     <div>
@@ -181,84 +180,92 @@ export function ReporteUtilidadNeta() {
                     </div>
                   ) : (
                     <>
-                      <div className="d-flex align-items-center gap-2 mb-2">
-                        <TrendingDown className="text-danger" size={28} />
-                        <span className="fw-bold text-danger">
+                      <div className="flex items-center gap-2 mb-2">
+                        <TrendingDown className="text-destructive" size={28} />
+                        <span className="font-bold text-destructive">
                           Egresos Totales
                         </span>
                       </div>
-                      <h4 className="fw-bold text-danger mb-0">
+                      <h4 className="font-bold text-destructive mb-0">
                         S/ {totalCompras.toFixed(2)}
                       </h4>
                     </>
                   )}
                 </Card>
               </div>
-              <div className="md:col-span-3">
+              <div className="col-span-full md:col-span-3">
                 <Card className="rounded-xl p-3 h-full">
-                  <div className="d-flex align-items-center gap-2 mb-2">
-                    <TrendingUp className="text-dark" size={28} />
-                    <span className="fw-bold text-dark">Utilidad Neta</span>
+                  <div className="flex items-center gap-2 mb-2">
+                    <TrendingUp className="text-foreground" size={28} />
+                    <span className="font-bold text-foreground">
+                      Utilidad Neta
+                    </span>
                   </div>
-                  <h4 className="fw-bold text-dark mb-0">
+                  <h4 className="font-bold text-foreground mb-0">
                     S/ {utilidadNeta.toFixed(2)}
                   </h4>
                 </Card>
               </div>
-              <div className="md:col-span-3">
+              <div className="col-span-full md:col-span-3">
                 <Card className="rounded-xl p-3 h-full">
-                  <div className="d-flex align-items-center gap-2 mb-2">
-                    <Percent className="text-dark" size={28} />
-                    <span className="fw-bold text-dark">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Percent className="text-foreground" size={28} />
+                    <span className="font-bold text-foreground">
                       Margen de Ganancia
                     </span>
                   </div>
-                  <h4 className="fw-bold text-dark mb-0">{margen}%</h4>
+                  <h4 className="font-bold text-foreground mb-0">{margen}%</h4>
                 </Card>
               </div>
             </div>
           </div>
 
           {/* Desglose financiero */}
-          <div className="md:col-span-12 mb-2">
+          <div className="col-span-full md:col-span-12 mb-2">
             <Card className="rounded-xl p-3">
-              <div className="d-flex align-items-center gap-2 mb-4">
-                <BarChart2 className="text-dark" size={22} />
-                <span className="fw-bold text-dark">Desglose Financiero</span>
+              <div className="flex items-center gap-2 mb-4">
+                <BarChart2 className="text-foreground" size={22} />
+                <span className="font-bold text-foreground">
+                  Desglose Financiero
+                </span>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-4text-center">
-                <div className="md:col-span-4">
-                  <span className="text-muted">Ventas Totales del Periodo</span>
-                  <h5 className="fw-bold text-dark">
+              <div className="grid grid-cols-12 gap-4text-center">
+                <div className="col-span-full md:col-span-4">
+                  <span className="text-muted-foreground">
+                    Ventas Totales del Periodo
+                  </span>
+                  <h5 className="font-bold text-foreground">
                     S/ {totalVentas.toFixed(2)}
                   </h5>
                 </div>
-                <div className="md:col-span-4">
-                  <span className="text-muted">
+                <div className="col-span-full md:col-span-4">
+                  <span className="text-muted-foreground">
                     Compras Totales del Periodo
                   </span>
-                  <h5 className="fw-bold text-danger">
+                  <h5 className="font-bold text-destructive">
                     S/ {totalCompras.toFixed(2)}
                   </h5>
                 </div>
-                <div className="md:col-span-4">
-                  <span className="text-muted">Costos Operativos</span>
-                  <h5 className="fw-bold text-dark">
+                <div className="col-span-full md:col-span-4">
+                  <span className="text-muted-foreground">
+                    Costos Operativos
+                  </span>
+                  <h5 className="font-bold text-foreground">
                     S/ {costosOperativos.toFixed(2)}
                   </h5>
                 </div>
               </div>
               <hr />
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-4text-center">
-                <div className="md:col-span-6">
-                  <span className="text-muted">Utilidad Bruta</span>
-                  <h5 className="fw-bold text-dark">
+              <div className="grid grid-cols-12 gap-4text-center">
+                <div className="col-span-full md:col-span-6">
+                  <span className="text-muted-foreground">Utilidad Bruta</span>
+                  <h5 className="font-bold text-foreground">
                     S/ {utilidadBruta.toFixed(2)}
                   </h5>
                 </div>
-                <div className="md:col-span-6">
-                  <span className="text-muted">Utilidad Neta</span>
-                  <h5 className="fw-bold text-dark">
+                <div className="col-span-full md:col-span-6">
+                  <span className="text-muted-foreground">Utilidad Neta</span>
+                  <h5 className="font-bold text-foreground">
                     S/ {utilidadNeta.toFixed(2)}
                   </h5>
                 </div>
@@ -267,15 +274,17 @@ export function ReporteUtilidadNeta() {
           </div>
 
           {/* Comparativa mensual */}
-          <div className="md:col-span-12 mb-2">
+          <div className="col-span-full md:col-span-12 mb-2">
             <Card className="rounded-xl p-3">
-              <div className="d-flex align-items-center gap-2 mb-4">
-                <BarChart2 className="text-dark" size={22} />
-                <span className="fw-bold text-dark">Comparativa Mensual</span>
+              <div className="flex items-center gap-2 mb-4">
+                <BarChart2 className="text-foreground" size={22} />
+                <span className="font-bold text-foreground">
+                  Comparativa Mensual
+                </span>
               </div>
-              <div className="table-responsive">
-                <table className="table table-bordered align-middle mb-0">
-                  <thead className="table-light">
+              <div className="w-full overflow-x-auto">
+                <table className="w-full caption-bottom text-sm border-border [&_th]:border [&_td]:border [&_th]:border-border [&_td]:border-border align-middle mb-0">
+                  <thead className="bg-muted">
                     <tr>
                       <th>Mes</th>
                       <th>Ventas</th>
@@ -287,7 +296,10 @@ export function ReporteUtilidadNeta() {
                   <tbody>
                     {comparativaMensual.length === 0 ? (
                       <tr>
-                        <td colSpan={5} className="text-center text-muted">
+                        <td
+                          colSpan={5}
+                          className="text-center text-muted-foreground"
+                        >
                           No hay datos disponibles
                         </td>
                       </tr>
@@ -309,15 +321,17 @@ export function ReporteUtilidadNeta() {
           </div>
 
           {/* Gráfico */}
-          <div className="md:col-span-12 gap-3">
+          <div className="col-span-full md:col-span-12 gap-3">
             <Card className="p-3">
-              <CardHeader className="flex gap-2 align-middle justify-content-left p-3">
-                <span className="alert alert-primary text-primary p-2 mb-0">
+              <CardHeader className="flex gap-2 align-middle justify-start p-3">
+                <span className="relative w-full rounded-lg text-sm border-primary/30 bg-primary/10 text-primary p-2 mb-0">
                   <PieChart size={25} />
                 </span>
-                <h6 className="mb-1 d-flex flex-column gap-1">
-                  <span className="fw-bold">Gráfico de ingresos y egresos</span>
-                  <p className="text-muted small mb-0">Cada mes</p>
+                <h6 className="mb-1 flex flex-col gap-1">
+                  <span className="font-bold">
+                    Gráfico de ingresos y egresos
+                  </span>
+                  <p className="text-muted-foreground text-sm mb-0">Cada mes</p>
                 </h6>
               </CardHeader>
               <CardContent className="">

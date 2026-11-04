@@ -8,7 +8,6 @@ import { HoraLive } from "../utils/HoraLive";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
-
 export function TakeAsistencia() {
   const [loading, setLoading] = useState(false); // 🔥 Control de peticiones concurrentes
   const dniInputRef = useRef(null);
@@ -97,15 +96,15 @@ export function TakeAsistencia() {
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center">
+    <div className="flex justify-center items-center">
       <Card className="my-3 p-4 rounded-2xl justify-center">
         <CardHeader className="bg-background border-0 text-center mb-3 flex flex-col items-center gap-2 p-3">
-          <h4 className="fw-bold text-main mb-1">
+          <h4 className="font-bold text-main mb-1">
             <ClockPlus className="me-2" /> Registro de Asistencia
           </h4>
-          <div className="d-flex justify-content-center align-items-center text-muted">
+          <div className="flex justify-center items-center text-muted-foreground">
             <p
-              className="mb-0 h2 fw-bold"
+              className="mb-0 h2 font-bold"
               style={{ color: "var(--brand-primary)" }}
             >
               <HoraLive />
@@ -115,7 +114,7 @@ export function TakeAsistencia() {
 
         <CardContent className="">
           <div className="mb-4">
-            <label htmlFor="dni" className="small">
+            <label htmlFor="dni" className="text-sm">
               DNI del Empleado
             </label>
             <input
@@ -125,8 +124,10 @@ export function TakeAsistencia() {
               {...register("documento_identidad", {
                 required: "El DNI es obligatorio",
               })}
-              className={`form-control form-control-lg  ${
-                errors.documento_identidad ? "is-invalid" : ""
+              className={`w-full rounded-md border-input bg-background py-1 shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 h-10 px-4 text-base ${
+                errors.documento_identidad
+                  ? "border-destructive focus-visible:ring-destructive"
+                  : ""
               }`}
               placeholder="Ingrese su DNI"
               ref={(e) => {
@@ -135,30 +136,32 @@ export function TakeAsistencia() {
               }}
             />
             {errors.documento_identidad && (
-              <div className="invalid-feedback">
+              <div className="text-sm text-destructive">
                 {errors.documento_identidad.message}
               </div>
             )}
           </div>
 
-          <div className="d-flex justify-content-between gap-3">
+          <div className="flex justify-between gap-3">
             <Button
               type="button"
-              className="btn-guardar w-100"
+              className="btn-guardar w-full"
               style={{ backgroundColor: "var(--fw-emerald)" }}
               onClick={registrarEntrada}
               disabled={loading}
-             variant="default">
+              variant="default"
+            >
               <DoorOpenIcon height="20px" width="20px" className="me-2" />
               {loading ? "Procesando..." : "Entrada"}
             </Button>
             <Button
               type="button"
-              className="btn-eliminar w-100"
+              className="btn-eliminar w-full"
               style={{ backgroundColor: "var(--fw-strawberry)" }}
               onClick={registrarSalida}
               disabled={loading}
-             variant="destructive">
+              variant="destructive"
+            >
               <LogOut height="20px" width="20px" className="me-2" />
               {loading ? "Procesando..." : "Salida"}
             </Button>

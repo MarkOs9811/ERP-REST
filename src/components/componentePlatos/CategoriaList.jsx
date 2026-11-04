@@ -2,12 +2,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import axiosInstance from "../../api/AxiosInstance";
-import "../../css/estilosComponentePlatos/estilosCategoria.css";
+
 import ToastAlert from "../../components/componenteToast/ToastAlert";
 import ModalAlertQuestion from "../componenteToast/ModalAlertQuestion";
 import ModalAlertActivar from "../componenteToast/ModalAlertActivar";
 import { CategoriaEditar } from "./CategoriaEditar";
-import { useTooltips } from "../../hooks/UseToolTips";
 import { GetCategoriaPlatos } from "../../service/accionesPlatos/GetCategoriaPlatos";
 import { useQuery } from "@tanstack/react-query";
 import { Cargando } from "../componentesReutilizables/Cargando";
@@ -20,7 +19,6 @@ import {
 } from "../componentesReutilizables/BotonesAccion";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-
 
 export function CategoriaList() {
   const [categoria, setCategoria] = useState([]);
@@ -44,8 +42,6 @@ export function CategoriaList() {
     retry: 1,
     refetchOnWindowFocus: false,
   });
-
-  useTooltips(categoria);
 
   // Filtrar las categorías basadas en la búsqueda
   const filteredCategorias = categoriasList.filter((cat) =>
@@ -184,11 +180,12 @@ export function CategoriaList() {
     <Card className="p-0 h-full">
       <CardHeader className="border-0 flex justify-between items-center mb-2">
         <h4 className="mb-0">Categorías</h4>
-        <div className="d-flex">
+        <div className="flex">
           <Button
-            className="btn btn-dark btn-sm rounded-pill px-2 "
+            className="bg-foreground text-background shadow-sm hover:bg-foreground/90 inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 text-xs rounded-full px-2"
             onClick={() => setModalAddCategoria(true)}
-           variant="default">
+            variant="default"
+          >
             <FontAwesomeIcon icon={faPlus} />
             Nuevo
           </Button>
@@ -197,10 +194,10 @@ export function CategoriaList() {
 
       {/* Buscador */}
       <div className="mb-3 mx-4">
-        <div className="input-group">
+        <div className="flex w-full items-stretch">
           <input
             type="text"
-            className="form-control rounded-pill ps-4 mx-2"
+            className="h-9 w-full border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 rounded-full ps-4 mx-2"
             placeholder="Buscar categoría..."
             aria-label="Buscar categoría"
             value={searchTerm}
@@ -208,7 +205,7 @@ export function CategoriaList() {
           />
           <FontAwesomeIcon
             icon={faMagnifyingGlass}
-            className="position-absolute end-0 me-4"
+            className="absolute right-0 me-4"
             style={{ top: "50%", transform: "translateY(-50%)" }}
           />
         </div>
@@ -221,19 +218,19 @@ export function CategoriaList() {
             <Cargando />
           </div>
         ) : errorCategorias ? (
-          <div className="text-center p-4 text-danger">
+          <div className="text-center p-4 text-destructive">
             <p>Error al cargar los platos.</p>
           </div>
         ) : (
           filteredCategorias.map((categoria) => (
             <div
-              className="d-flex justify-content-between align-items-center borderInferior p-3"
+              className="flex justify-between items-center borderInferior p-3"
               key={categoria.id}
             >
-              <div className="d-flex flex-column justify-content-center">
-                <div className="d-flex align-items-center">
+              <div className="flex flex-col justify-center">
+                <div className="flex items-center">
                   <div
-                    className={`rounded-circle ${
+                    className={`rounded-full ${
                       categoria.estado === 1
                         ? "categoriaActiva"
                         : "categoriaFalse"
@@ -261,14 +258,13 @@ export function CategoriaList() {
                   />
                 ) : (
                   <Button
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
                     title="Activar Categoría"
                     className="btn-activar"
                     onClick={() =>
                       handleActivar(categoria.id, categoria.nombre)
                     }
-                   variant="default">
+                    variant="default"
+                  >
                     <Check size={18} />
                   </Button>
                 )}
@@ -286,44 +282,52 @@ export function CategoriaList() {
         title={"Nueva Categoría"}
       >
         {({ handleClose }) => (
-          <Card asChild><form
-            className="gap-3 border-0 h-100 bg-transparent p-3"
-            onSubmit={handleSubmit(handleRegisterCategoria)}
-          >
-            <div className="modal-body mb-3">
-              <label htmlFor="nombreCategoria" className="form-label">
-                Nombre de la categoría
-              </label>
-              <input
-                type="text"
-                id="nombreCategoria"
-                className={`form-control ${errors.nombre ? "is-invalid" : ""}`}
-                {...register("nombre", {
-                  required: "El nombre es obligatorio",
-                })}
-                placeholder="Ej: Bebidas, Postres, etc."
-                autoFocus
-              />
-              {errors.nombre && (
-                <div className="invalid-feedback">{errors.nombre.message}</div>
-              )}
-            </div>
-            <div className="modal-footer gap-2">
-              <Button
-                type="button"
-                className="btn-cerrar-modal"
-                onClick={() => {
-                  reset();
-                  handleClose();
-                }}
-               variant="default">
-                Cancelar
-              </Button>
-              <Button type="submit" className="btn-guardar" variant="default">
-                Guardar
-              </Button>
-            </div>
-          </form></Card>
+          <Card asChild>
+            <form
+              className="gap-3 border-0 h-full bg-transparent p-3"
+              onSubmit={handleSubmit(handleRegisterCategoria)}
+            >
+              <div className="p-4 mb-3">
+                <label
+                  htmlFor="nombreCategoria"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  Nombre de la categoría
+                </label>
+                <input
+                  type="text"
+                  id="nombreCategoria"
+                  className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.nombre ? "border-destructive focus-visible:ring-destructive" : ""}`}
+                  {...register("nombre", {
+                    required: "El nombre es obligatorio",
+                  })}
+                  placeholder="Ej: Bebidas, Postres, etc."
+                  autoFocus
+                />
+                {errors.nombre && (
+                  <div className="text-sm text-destructive">
+                    {errors.nombre.message}
+                  </div>
+                )}
+              </div>
+              <div className="flex items-center justify-end border-t p-4 gap-2">
+                <Button
+                  type="button"
+                  className="btn-cerrar-modal"
+                  onClick={() => {
+                    reset();
+                    handleClose();
+                  }}
+                  variant="default"
+                >
+                  Cancelar
+                </Button>
+                <Button type="submit" className="btn-guardar" variant="default">
+                  Guardar
+                </Button>
+              </div>
+            </form>
+          </Card>
         )}
       </ModalRight>
 

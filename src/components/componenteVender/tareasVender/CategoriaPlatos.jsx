@@ -1,4 +1,4 @@
-import "../../../css/estilosComponentesCategoriaPlatos/estilosCategoriaPlatos.css";
+
 import { capitalizeFirstLetter } from "../../../hooks/FirstLetterUp";
 import { useDispatch, useSelector } from "react-redux";
 import { setEstadoCategoria } from "../../../redux/categoriaPlatosSlice";
@@ -38,39 +38,54 @@ export function CategoriaPlatos({ claveVenta = "", clearSearch }) {
   };
 
   return (
-    /* 🔥 CAMBIO AQUÍ: d-flex, flex-nowrap (evita saltos de línea), overflow-auto (scroll) y gap-2 (separación) */
-    <div className="d-flex flex-nowrap overflow-auto gap-2 pb-2 mb-2 contenedor-categorias-scroll">
-      {isLoading && <p className="mb-0 text-muted">Cargando categorías...</p>}
-      {isError && !isLoading && <p className="error-message mb-0">{isError}</p>}
-
-      {/* Botón TODO al inicio (usualmente es mejor UX tenerlo primero) */}
+    <div className="flex min-w-0 items-center gap-1 overflow-x-auto rounded-xl border border-border/60 bg-muted/40 p-1">
+      {isLoading && (
+        <p className="mb-0 shrink-0 text-xs text-muted-foreground">
+          Cargando categorías...
+        </p>
+      )}
+      {isError && !isLoading && (
+        <p className="mb-0 shrink-0 text-xs text-destructive">
+          No se pudieron cargar las categorías
+        </p>
+      )}
       <Button
-        className={`rounded-pill border-0 py-1 px-3 text-nowrap flex-shrink-0 ${
-          estadoCategoria == "todo" ? "categoriaSelect" : "bg-light text-dark"
+        type="button"
+        size="sm"
+        variant={estadoCategoria === "todo" ? "default" : "ghost"}
+        className={`h-7 shrink-0 rounded-lg px-3 ${
+          estadoCategoria === "todo"
+            ? ""
+            : "text-muted-foreground hover:bg-background hover:text-foreground"
         }`}
+        aria-pressed={estadoCategoria === "todo"}
         onClick={() => handleFiltrarCategoria(`todo`)}
-       variant="default">
+      >
         Todo
       </Button>
 
-      {/* Mostrar las categorías */}
       {categorias.map((categoria) => (
         <Button
           key={categoria.id}
-          /* 🔥 CAMBIO AQUÍ: text-nowrap (el texto no se rompe) y flex-shrink-0 (el botón no se aplasta) */
-          className={`rounded-pill border-0 py-1 px-3 text-nowrap flex-shrink-0 ${
-            estadoCategoria == categoria.nombre
-              ? "categoriaSelect"
-              : "bg-light text-dark"
+          type="button"
+          size="sm"
+          variant={
+            estadoCategoria === categoria.nombre ? "default" : "ghost"
+          }
+          className={`h-7 shrink-0 rounded-lg px-3 ${
+            estadoCategoria === categoria.nombre
+              ? ""
+              : "text-muted-foreground hover:bg-background hover:text-foreground"
           }`}
+          aria-pressed={estadoCategoria === categoria.nombre}
           onClick={() => handleFiltrarCategoria(`${categoria.nombre}`)}
-         variant="default">
+        >
           {capitalizeFirstLetter(categoria.nombre)}
         </Button>
       ))}
 
       {!isLoading && !isError && categorias.length === 0 && (
-        <p className="mb-0 text-muted">No hay categorías.</p>
+        <p className="mb-0 text-muted-foreground">No hay categorías.</p>
       )}
     </div>
   );

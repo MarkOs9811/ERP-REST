@@ -2,7 +2,6 @@ import { Settings } from "lucide-react";
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 
-
 const OPCIONES_BACKUP = [
   {
     key: "ventas",
@@ -63,7 +62,7 @@ export function Mantenimiento() {
   };
 
   return (
-    <div className="w-100 p-3">
+    <div className="w-full p-3">
       <Card className="shadow-sm p-4" style={{ borderRadius: 18 }}>
         <h3>Backups y mantenimiento</h3>
 
@@ -71,7 +70,7 @@ export function Mantenimiento() {
           {/* {OPCIONES_BACKUP.map((op) => (
             <div className="md:col-span-6" key={op.key}>
               <div
-                className="card border shadow-sm p-4 h-100"
+                className="card shadow-sm p-4 h-100"
                 style={{ borderRadius: 18 }}
               >
                 <div className="d-flex align-items-center mb-2">
@@ -98,18 +97,20 @@ export function Mantenimiento() {
               </div>
             </div>
           ))} */}
-          <span className="text-muted text-center">
+          <span className="text-muted-foreground text-center">
             <Settings className="me-2" />
             Módulo en construcción
           </span>
         </div>
-        <div className="d-flex justify-content-end mt-4">
+        <div className="flex justify-end mt-4">
           {/* <button className="btn-guardar btn-sm" onClick={handleBackup}>
             Realizar Backup
           </button> */}
         </div>
         {mensaje && (
-          <div className="alert alert-info mt-3 py-2 px-3">{mensaje}</div>
+          <div className="relative w-full rounded-lg text-sm border-sky-500/30 bg-sky-500/10 text-sky-700 dark:text-sky-400 mt-3 py-2 px-3">
+            {mensaje}
+          </div>
         )}
       </Card>
     </div>

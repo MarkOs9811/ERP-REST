@@ -1,11 +1,10 @@
-import "../../css/EstilosFinanzas.css";
+
 import { FlujoCaja } from "../../components/componentesFinanzas/FlujoCaja";
 import { ResumenActivosPasivos } from "../../components/componentesFinanzas/ResumenActivosPasivos";
 import { Calculator, ChartColumnBig, PlusIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Button } from "../../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
 
 export function Presupuestos() {
   const [modoVista, setModoVista] = useState("total");
@@ -27,11 +26,11 @@ export function Presupuestos() {
 
   return (
     <div>
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
-        <div className="md:col-span-12">
+      <div className="grid grid-cols-12 gap-3">
+        <div className="col-span-full md:col-span-12">
           <Card className="py-2">
-            <CardHeader className="border-bottom-0 flex flex-col flex-md-row justify-between items-center gap-2 p-3">
-              <div className="d-flex align-items-center">
+            <CardHeader className="border-b-0 flex flex-col md:flex-row justify-between items-center gap-2 p-3">
+              <div className="flex items-center">
                 <Calculator
                   color={"var(--fw-strawberry)"}
                   height="45px"
@@ -39,9 +38,9 @@ export function Presupuestos() {
                   className="me-2"
                 />
                 <div>
-                  <CardTitle asChild><h4 className="mb-0 titulo-card-especial">
-                    Presupuestos
-                  </h4></CardTitle>
+                  <CardTitle asChild>
+                    <h4 className="mb-0 titulo-card-especial">Presupuestos</h4>
+                  </CardTitle>
                   <small
                     className="fw-flow-description"
                     style={{ fontWeight: "normal" }}
@@ -52,27 +51,29 @@ export function Presupuestos() {
                 </div>
               </div>
 
-              <div className="d-flex flex-wrap gap-2 mt-3 mt-md-0 align-items-center ms-auto">
+              <div className="flex flex-wrap gap-2 mt-3 md:mt-0 items-center ms-auto">
                 <Button
-                  className="btn px-3"
+                  className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 px-3"
                   style={{
                     border: "1px solid var(--fw-border)",
                     backgroundColor: "var(--bg-card)",
                     color: "var(--text-main)",
                   }}
-                 variant="default">
+                  variant="default"
+                >
                   <PlusIcon size={18} />
                   Registrar Saldo
                 </Button>
 
                 <Button
-                  className="btn px-3"
+                  className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 px-3"
                   style={{
                     border: "1px solid var(--fw-border)",
                     backgroundColor: "var(--bg-emerald-soft)",
                     color: "var(--fw-emerald)",
                   }}
-                 variant="default">
+                  variant="default"
+                >
                   <PlusIcon size={18} />
                   Crear Presupuesto
                 </Button>
@@ -80,10 +81,10 @@ export function Presupuestos() {
             </CardHeader>
           </Card>
         </div>
-        <div className="md:col-span-12 d-flex  w-100 gap-3">
+        <div className="col-span-full md:col-span-12 flex w-full gap-3">
           <Card className="p-3 w-full">
             <CardHeader className="border-0 flex items-center justify-between p-3">
-              <div className="d-flex align-items-center">
+              <div className="flex items-center">
                 <ChartColumnBig
                   color="var(--fw-emerald)"
                   height="32px"
@@ -91,21 +92,21 @@ export function Presupuestos() {
                   className="me-3"
                 />
                 <div>
-                  <h6 className=" mb-0">Flujo de Caja</h6>
-                  <small className="text-muted">
+                  <h6 className="mb-0">Flujo de Caja</h6>
+                  <small className="text-muted-foreground">
                     Monitorea y gestiona el flujo de caja para asegurar la
                     liquidez.
                   </small>
                 </div>
               </div>
               <div
-                className="btn-group"
+                className="flex items-center"
                 role="group"
                 aria-label="Botones de Flujo de Caja"
               >
                 <Button
                   type="button"
-                  className="btn"
+                  className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90"
                   style={{
                     border: "1px solid var(--fw-border)",
                     backgroundColor:
@@ -118,12 +119,13 @@ export function Presupuestos() {
                         : "var(--text-main)",
                   }}
                   onClick={() => setModoVista("total")}
-                 variant="default">
+                  variant="default"
+                >
                   <i className="fas fa-calculator"></i> Total
                 </Button>
                 <Button
                   type="button"
-                  className="btn"
+                  className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90"
                   title="Ultimo Mes"
                   style={{
                     border: "1px solid var(--fw-border)",
@@ -137,23 +139,22 @@ export function Presupuestos() {
                         : "var(--text-main)",
                   }}
                   onClick={() => setModoVista("mes")}
-                 variant="default">
+                  variant="default"
+                >
                   <i className="fas fa-calendar-alt"></i> Por Mes
                 </Button>
               </div>
             </CardHeader>
 
-            <div className="px-3 pb-2 d-flex justify-content-end align-items-center gap-2">
+            <div className="px-3 pb-2 flex justify-end items-center gap-2">
               {modoVista === "mes" && (
                 <>
-                  <small className="text-muted text-capitalize">
-                    {labelMesSeleccionado}
-                  </small>
+                  <small className="capitalize">{labelMesSeleccionado}</small>
                   <input
                     type="month"
                     value={selectedMonth}
                     onChange={(e) => setSelectedMonth(e.target.value)}
-                    className="form-control"
+                    className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                     style={{ maxWidth: "210px" }}
                   />
                 </>
@@ -164,10 +165,12 @@ export function Presupuestos() {
               <FlujoCaja modoVista={modoVista} selectedMonth={selectedMonth} />
             </CardContent>
           </Card>
-          <Card className="py-2 w-50">
+          <Card className="py-2 w-1/2">
             <CardHeader className="border-0 p-3 flex items-center">
-              <div className="d-flex align-items-center">
-                <CardTitle asChild><p className="h4 ms-2 mb-0">Activos y Pasivos</p></CardTitle>
+              <div className="flex items-center">
+                <CardTitle asChild>
+                  <p className="h4 ms-2 mb-0">Activos y Pasivos</p>
+                </CardTitle>
               </div>
             </CardHeader>
             <CardContent className="">

@@ -125,12 +125,7 @@ export function SideBar() {
 
   return (
     <aside
-      className={`
-        fixed left-0 top-0 z-40 flex h-screen shrink-0
-        md:sticky md:top-0
-        transition-transform duration-300 ease-in-out
-        ${isCompressedMobile ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
-      `}
+      className={`fixed left-0 top-0 z-40 flex h-screen shrink-0 md:sticky md:top-0 transition-transform duration-300 ease-in-out ${isCompressedMobile ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}
     >
       {/*
         NIVEL 1: BARRA PRINCIPAL (Siempre visible, solo iconos)
@@ -169,15 +164,11 @@ export function SideBar() {
               handleModuloSeleccionado("accesos rapido", e);
               dispatch(setSidebarCompressed(true));
             }}
-            className={`
-              flex size-11 shrink-0 items-center justify-center rounded-2xl transition-all duration-200
-              focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background
-              ${
+            className={`flex size-11 shrink-0 items-center justify-center rounded-2xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
                 location.pathname === `/`
-                  ? "bg-primary text-primary-foreground shadow-sm"
+                  ? "bg-primary text-primary-foreground"
                   : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-              }
-            `}
+              }`}
           >
             <Home size={22} strokeWidth={location.pathname === `/` ? 2.5 : 2} />
           </Link>
@@ -212,15 +203,11 @@ export function SideBar() {
                   handleModuloSeleccionado(roleUrl, e);
                   dispatch(setSidebarCompressed(false)); // Despliega el Nivel 2
                 }}
-                className={`
-                  flex size-11 shrink-0 items-center justify-center rounded-2xl transition-all duration-200
-                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background
-                  ${
+                className={`flex size-11 shrink-0 items-center justify-center rounded-2xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
                     isActive
-                      ? "bg-primary text-primary-foreground shadow-sm"
+                      ? "bg-primary text-primary-foreground"
                       : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-                  }
-                `}
+                  }`}
               >
                 <IconComponent size={22} strokeWidth={isActive ? 2.5 : 2} />
               </Link>
@@ -241,15 +228,11 @@ export function SideBar() {
               handleModuloSeleccionado("", e);
               dispatch(setSidebarCompressed(true));
             }}
-            className={`
-              mx-auto flex size-11 items-center justify-center rounded-2xl transition-all duration-200
-              focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background
-              ${
+            className={`mx-auto flex size-11 items-center justify-center rounded-2xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
                 location.pathname.includes("/configuracion")
-                  ? "bg-primary text-primary-foreground shadow-sm"
+                  ? "bg-primary text-primary-foreground"
                   : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-              }
-            `}
+              }`}
           >
             <Settings
               size={22}
@@ -265,12 +248,9 @@ export function SideBar() {
         NIVEL 2: PANEL DE SUBMÓDULOS (Desplazable y empuja contenido)
       */}
       <div
-        className={`
-          z-10 flex h-full shrink-0 flex-col overflow-hidden border-r border-sidebar-border bg-sidebar text-sidebar-foreground transition-[width,opacity] duration-300 ease-in-out md:hidden
-          ${!isCompressed ? "w-64 opacity-100" : "w-0 opacity-0"}
-        `}
+        className={`z-10 flex h-full shrink-0 flex-col overflow-hidden border-r border-sidebar-border bg-sidebar-accent/50 text-sidebar-foreground transition-[width,opacity] duration-300 ease-in-out md:hidden ${!isCompressed ? "w-64 opacity-100" : "w-0 opacity-0"}`}
       >
-        <div className="flex h-16 w-64 shrink-0 items-center justify-between border-b border-sidebar-border bg-muted/50 px-4">
+        <div className="flex h-16 w-64 shrink-0 items-center justify-between border-b border-sidebar-border bg-sidebar-accent/60 px-4">
           <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
             SUBMÓDULOS
           </span>
@@ -281,7 +261,8 @@ export function SideBar() {
             className="flex h-9 items-center gap-2 rounded-lg px-2 text-xs font-medium text-muted-foreground transition hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             onClick={() => dispatch(setSidebarCompressed(true))}
             title="Volver a los módulos"
-           variant="default">
+            variant="ghost"
+          >
             <ArrowLeft size={15} />
             Volver
           </Button>
@@ -291,7 +272,8 @@ export function SideBar() {
             aria-label="Cerrar menú"
             className="flex size-9 items-center justify-center rounded-lg text-muted-foreground transition hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             onClick={() => dispatch(toggleSidebarMobile())}
-           variant="default">
+            variant="ghost"
+          >
             <X size={18} />
           </Button>
         </div>

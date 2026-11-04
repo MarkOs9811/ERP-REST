@@ -63,22 +63,22 @@ export function AjustesAlmacen() {
   return (
     <div>
       <Card className="py-2">
-        <CardHeader className="border-bottom-0 flex flex-col flex-md-row justify-between items-center gap-2 p-3">
-          <div className="d-flex align-items-center">
+        <CardHeader className="border-b-0 flex flex-col md:flex-row justify-between items-center gap-2 p-3">
+          <div className="flex items-center">
             <CardTitle asChild><h4 className="mb-0 titulo-card-especial">
               Configuración de Almacén
             </h4></CardTitle>
           </div>
         </CardHeader>
         <CardContent className="p-3">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
-            <div className="col-lg-6">
+          <div className="grid grid-cols-12 gap-3">
+            <div className="col-span-full lg:col-span-6">
               <Categorias
                 categorias={categorias}
                 onToggle={handleCambiarEstadoCategoria}
               />
             </div>
-            <div className="col-lg-6">
+            <div className="col-span-full lg:col-span-6">
               <UnidadMedida
                 unidades={unidades}
                 onToggle={handleCambiarEstadoUnidades}

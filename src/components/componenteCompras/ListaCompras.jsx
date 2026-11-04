@@ -129,7 +129,7 @@ export function ListaCompras({ data, search }) {
     {
       name: "Acciones",
       cell: (row) => (
-        <div className="d-flex ">
+        <div className="flex">
           <BtnEditar
             onClick={() => {
               setModalEditarCompra(true);

@@ -38,7 +38,7 @@ export function FormularioDeduccion({ onClose, isEdit, dataEdit = null }) {
       if (isEditMood) {
         response = await axiosInstance.put(
           `/deducciones/editar/${dataEdit.id}`,
-          data
+          data,
         );
       } else {
         response = await axiosInstance.post("/deducciones", data);
@@ -61,29 +61,37 @@ export function FormularioDeduccion({ onClose, isEdit, dataEdit = null }) {
     <form onSubmit={handleSubmit(onSubmit)} className="p-4">
       {/* ...el resto de tu JSX está perfecto... */}
       <div className="mb-3">
-        <label htmlFor="nombre" className="form-label small">
+        <label
+          htmlFor="nombre"
+          className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm"
+        >
           Nombre (Concepto)
         </label>
         <input
           id="nombre"
           type="text"
-          className={`form-control ${errors.nombre ? "is-invalid" : ""}`}
+          className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.nombre ? "border-destructive focus-visible:ring-destructive" : ""}`}
           {...register("nombre", {
             required: "El nombre es obligatorio",
           })}
         />
         {errors.nombre && (
-          <div className="invalid-feedback">{errors.nombre.message}</div>
+          <div className="text-sm text-destructive">
+            {errors.nombre.message}
+          </div>
         )}
       </div>
 
       <div className="mb-3">
-        <label htmlFor="porcentaje" className="form-label small">
+        <label
+          htmlFor="porcentaje"
+          className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm"
+        >
           Porcentaje ({porcentajeValue || 0}%)
         </label>
         <input
           type="range"
-          className="form-range"
+          className="w-full accent-primary"
           min="0"
           max="100"
           step="0.01"
@@ -103,8 +111,10 @@ export function FormularioDeduccion({ onClose, isEdit, dataEdit = null }) {
         />
         <input
           type="number"
-          className={`form-control form-control-sm mt-2 ${
-            errors.porcentaje ? "is-invalid" : ""
+          className={`w-full rounded-md border-input bg-background py-1 shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 h-8 px-2.5 text-xs mt-2 ${
+            errors.porcentaje
+              ? "border-destructive focus-visible:ring-destructive"
+              : ""
           }`}
           min="0"
           max="100"
@@ -120,7 +130,7 @@ export function FormularioDeduccion({ onClose, isEdit, dataEdit = null }) {
           })}
         />
         {errors.porcentaje && (
-          <div className="invalid-feedback d-block">
+          <div className="text-sm text-destructive block">
             {errors.porcentaje.message}
           </div>
         )}
@@ -128,13 +138,14 @@ export function FormularioDeduccion({ onClose, isEdit, dataEdit = null }) {
 
       <hr className="my-4" />
 
-      <div className="d-flex justify-content-end gap-2">
+      <div className="flex justify-end gap-2">
         <Button
           type="button"
           className="btn-cerrar-modal"
           onClick={onClose}
           title="Cerrar formulario"
-         variant="default">
+          variant="default"
+        >
           Cancelar
         </Button>
         <Button
@@ -142,10 +153,11 @@ export function FormularioDeduccion({ onClose, isEdit, dataEdit = null }) {
           className="btn-guardar"
           title={isEditMood ? "Actualizar deducción" : "Guardar deducción"}
           disabled={loadingSave}
-         variant="default">
+          variant="default"
+        >
           {loadingSave ? (
             <span
-              className="spinner-border spinner-border-sm"
+              className="inline-block animate-spin rounded-full border-current border-r-transparent size-4 border"
               role="status"
               aria-hidden="true"
             ></span>

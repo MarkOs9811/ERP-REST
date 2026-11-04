@@ -11,7 +11,7 @@ import { PlatoAdd } from "../../components/componentePlatos/PlatoAdd";
 import { PlatoMasVendido } from "../../components/componentesHome/PlatosMasVendidos";
 import { Button } from "../../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
+import { Input } from "@/components/ui/input";
 
 export function Platos() {
   const [search, setSearch] = useState("");
@@ -22,16 +22,16 @@ export function Platos() {
   );
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-12 gap-3 ">
-      <div className="md:col-span-12 col-lg-12">
+    <div className="grid grid-cols-12 gap-3">
+      <div className="md:col-span-12 col-span-full">
         <CondicionCarga isLoading={upDateList} isError={null}>
-          <Card className="h-full py-2">
-            <CardHeader className="border-bottom-0 flex flex-col flex-md-row justify-between items-center mb-2">
-              <div className="d-flex align-items-center">
-                <CardTitle asChild><h4 className="mb-0 titulo-card-especial">
-                  Panel de Menú
-                </h4></CardTitle>
-                <span className="badge-header ms-2">Platos</span>
+          <Card className="rounded-2xl border border-border/70 bg-card shadow-sm ring-0 h-full py-2">
+            <CardHeader className="flex flex-col items-stretch gap-4 border-b border-border/70 px-5 py-5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+              <div className="flex items-center">
+                <CardTitle asChild>
+                  <h4 className="mb-0 text-base font-semibold tracking-tight text-foreground">Panel de Menú</h4>
+                </CardTitle>
+                <span className="ml-2 inline-flex items-center rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground">Platos</span>
               </div>
               <div className="overflow-auto">
                 {/* AQUI ENLAZAMOS EL SETSEARCH AL COMPONENTE CATEGORIA */}
@@ -40,32 +40,34 @@ export function Platos() {
                   clearSearch={setSearch}
                 />
               </div>
-              <div className="d-flex align-items-center gap-2 mt-3 mt-md-0">
-                <div className="header-search-container">
-                  <Search className="search-icon" />
-                  <input
+              <div className="flex w-full flex-col items-stretch gap-2 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center">
+                <div className="relative w-full min-w-0 sm:w-64">
+                  <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                  <Input
                     type="text"
                     placeholder="Buscar plato..."
-                    className="form-control"
+                    className="h-9 pl-9"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                   />
                 </div>
 
-                <Button
+                <Button size="lg"
                   type="button"
-                  className="btn btn-outline-dark px-3"
+                  className="w-full gap-2 px-3 sm:w-auto"
                   onClick={() => GetReporteExcel("/reportePlatosTodos")}
-                 variant="default">
+                  variant="ghostOutline"
+                >
                   <FileText size={20} />
                   Reporte
                 </Button>
 
-                <Button
+                <Button size="lg"
                   type="button"
-                  className="btn btn-dark px-3"
+                  className="gap-2 px-3 w-full sm:w-auto"
                   onClick={() => setShowModal(true)}
-                 variant="default">
+                  variant="default"
+                >
                   <Plus size={20} />
                   Crear
                 </Button>
@@ -81,7 +83,7 @@ export function Platos() {
           </Card>
         </CondicionCarga>
       </div>
-      <div className="md:col-span-12">
+      <div className="col-span-full md:col-span-12">
         <PlatoMasVendido />
       </div>
 

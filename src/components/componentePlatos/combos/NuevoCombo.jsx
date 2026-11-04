@@ -17,7 +17,6 @@ import {
 import { Button } from "../../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-
 export function NuevoCombo({ onClose, onSuccess, estadoOpenAi }) {
   const {
     register,
@@ -134,18 +133,21 @@ export function NuevoCombo({ onClose, onSuccess, estadoOpenAi }) {
     <form onSubmit={handleSubmit(onSubmit)} className="px-2">
       {/* Nombre Combo */}
       <div className="mb-3">
-        <label htmlFor="nombreCombo" className="form-label">
+        <label
+          htmlFor="nombreCombo"
+          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+        >
           Nombre del Combo
         </label>
         <input
           type="text"
-          className={`form-control ${errors.nombreCombo ? "is-invalid" : ""}`}
+          className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.nombreCombo ? "border-destructive focus-visible:ring-destructive" : ""}`}
           id="nombreCombo"
           placeholder="Ej. Combo Ejecutivo"
           {...register("nombreCombo", { required: "Este campo es requerido" })}
         />
         {errors.nombreCombo && (
-          <div className="invalid-feedback d-block">
+          <div className="text-sm text-destructive block">
             {errors.nombreCombo.message}
           </div>
         )}
@@ -153,14 +155,17 @@ export function NuevoCombo({ onClose, onSuccess, estadoOpenAi }) {
 
       {/* Precio */}
       <div className="mb-4">
-        <label htmlFor="precioCombo" className="form-label">
+        <label
+          htmlFor="precioCombo"
+          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+        >
           Precio del Combo (S/.)
         </label>
         <input
           type="number"
           min="0"
           step="0.01"
-          className={`form-control ${errors.precioCombo ? "is-invalid" : ""}`}
+          className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.precioCombo ? "border-destructive focus-visible:ring-destructive" : ""}`}
           id="precioCombo"
           placeholder="0.00"
           {...register("precioCombo", {
@@ -172,21 +177,21 @@ export function NuevoCombo({ onClose, onSuccess, estadoOpenAi }) {
           })}
         />
         {errors.precioCombo && (
-          <div className="invalid-feedback d-block">
+          <div className="text-sm text-destructive block">
             {errors.precioCombo.message}
           </div>
         )}
       </div>
 
       {/* Selects por categoría */}
-      <div className="row">
+      <div className="grid grid-cols-12 gap-3">
         {Object.entries(opciones).map(([categoria, items]) => (
-          <div className="md:col-span-6 mb-3" key={categoria}>
-            <label className="form-label d-flex align-items-center">
+          <div className="col-span-full md:col-span-6 mb-3" key={categoria}>
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center">
               {iconos[categoria]} {categoria}
             </label>
             <select
-              className="form-select"
+              className="h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
               onChange={(e) => handleSelectChange(e, categoria)}
             >
               <option value="">Seleccionar {categoria}</option>
@@ -201,28 +206,31 @@ export function NuevoCombo({ onClose, onSuccess, estadoOpenAi }) {
       </div>
 
       {/* Descripción dinámica */}
-      <div className="mb-4 border rounded p-3">
-        <label className="form-label fw-semibold">Descripción del Combo</label>
+      <div className="mb-4 rounded p-3">
+        <label className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-semibold">
+          Descripción del Combo
+        </label>
         {/* Ítems seleccionados manualmente */}
         <div className="mb-3">
           <h6 className="mb-2">Seleccionados:</h6>
-          <div className="d-flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2">
             {selectedItems.map((item, index) => (
               <span
                 key={`selected-${index}`}
-                className="badge rounded-pill bg-primary d-flex align-items-center px-3 py-2"
+                className="border text-xs font-semibold transition-colors rounded-full bg-primary flex items-center px-3 py-2"
               >
                 {item}
                 <Button
                   type="button"
                   onClick={() => removeItem(item)}
-                  className="btn btn-sm btn-close btn-close-white ms-2"
+                  className="bg-primary text-primary-foreground shadow hover:bg-primary/90 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 size-8 p-0 opacity-70 hover:opacity-100 btn-close-white ms-2"
                   aria-label="Cerrar"
-                 variant="default"></Button>
+                  variant="default"
+                ></Button>
               </span>
             ))}
             {selectedItems.length === 0 && (
-              <p className="text-muted small mt-2">
+              <p className="text-muted-foreground text-sm mt-2">
                 No has seleccionado elementos aún.
               </p>
             )}
@@ -234,19 +242,22 @@ export function NuevoCombo({ onClose, onSuccess, estadoOpenAi }) {
             <Card className="p-2 border">
               {/* Botón IA */}
               <CardHeader className="">
-                <div className="d-flex justify-content-start align-items-center mb-4 flex-column">
+                <div className="flex justify-start items-center mb-4 flex-col">
                   <Button
                     type="button"
-                    className={`btn d-flex align-items-center ${
-                      bloqueado ? "btn-secondary disabled" : "btn-outline-dark"
+                    className={`justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 flex items-center ${
+                      bloqueado
+                        ? "bg-secondary text-secondary-foreground hover:bg-secondary/80 disabled"
+                        : "border border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground"
                     }`}
                     onClick={handleGenerarCombo}
                     disabled={bloqueado}
-                   variant="default">
+                    variant="default"
+                  >
                     {bloqueado ? (
                       <>
                         <span
-                          className="spinner-border spinner-border-sm me-2"
+                          className="inline-block animate-spin rounded-full border-current border-r-transparent size-4 me-2"
                           role="status"
                           aria-hidden="true"
                         ></span>
@@ -259,7 +270,7 @@ export function NuevoCombo({ onClose, onSuccess, estadoOpenAi }) {
                       </>
                     )}
                   </Button>
-                  <small className="text-muted fst-italic mt-1">
+                  <small className="text-muted-foreground italic mt-1">
                     Intenta crear el combo con la inteligencia artificial
                   </small>
                 </div>
@@ -267,47 +278,54 @@ export function NuevoCombo({ onClose, onSuccess, estadoOpenAi }) {
 
               <CardContent className="">
                 {bloqueado ? (
-                  <div className="d-flex flex-column align-items-center py-4">
+                  <div className="flex flex-col items-center py-4">
                     <Cargando />
                   </div>
                 ) : isError ? (
-                  <div className="alert alert-danger">
+                  <div className="relative w-full rounded-lg px-4 py-3 text-sm border-destructive/30 bg-destructive/10 text-destructive">
                     Hubo un error al obtener el combo.
                     <Button
                       type="button"
-                      className="btn btn-sm btn-danger mt-2"
+                      className="h-8 px-3 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90 mt-2"
                       onClick={handleGenerarCombo}
                       disabled={bloqueado}
-                     variant="destructive">
+                      variant="destructive"
+                    >
                       Reintentar
                     </Button>
                   </div>
                 ) : dataComboAi?.nombre ? (
                   <div className="mb-4">
-                    <CardTitle asChild><h5 className="">{dataComboAi.nombre}</h5></CardTitle>
+                    <CardTitle asChild>
+                      <h5 className="">{dataComboAi.nombre}</h5>
+                    </CardTitle>
                     <p className="">{dataComboAi.descripcion}</p>
 
-                    <div className="d-flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-2">
                       {selectedItems.map((nombre, index) => (
-                        <span key={index} className="badge bg-primary">
+                        <span
+                          key={index}
+                          className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-primary"
+                        >
                           {nombre}
                           <Button
                             onClick={(e) => {
                               e.preventDefault();
                               removeItem(nombre);
                             }}
-                            className="btn-close btn-close-white ms-2"
-                           variant="default"/>
+                            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 size-8 p-0 opacity-70 hover:opacity-100 btn-close-white ms-2"
+                            variant="default"
+                          />
                         </span>
                       ))}
                     </div>
 
-                    <div className="me-auto mt-3 float-end">
+                    <div className="me-auto mt-3 float-right">
                       <p className="h3">S/.{dataComboAi.precioCombo}</p>
                     </div>
                   </div>
                 ) : (
-                  <p className="text-muted">
+                  <p className="text-muted-foreground">
                     Presiona el botón para generar un combo
                   </p>
                 )}
@@ -318,12 +336,13 @@ export function NuevoCombo({ onClose, onSuccess, estadoOpenAi }) {
       </div>
 
       {/* Botón de envío */}
-      <div className="text-end d-flex gap-3">
+      <div className="text-right flex gap-3">
         <Button
           type="button"
           className="btn-cerrar-modal"
           onClick={() => onClose()}
-         variant="default">
+          variant="default"
+        >
           Cerrar
         </Button>
         <Button type="submit" className="btn-guardar" variant="default">

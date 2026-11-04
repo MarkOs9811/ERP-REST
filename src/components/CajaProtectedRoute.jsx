@@ -1,6 +1,6 @@
 // CajaProtectedRoute.js
 import React, { useEffect } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import { useQuery } from "@tanstack/react-query";
 import { GetVerificacionCaja } from "../service/accionesVender/GetVerificacionCaja";
@@ -12,7 +12,6 @@ import { Button } from "./ui/button";
 export const CajaProtectedRoute = ({ children }) => {
   const { user } = useAuth();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const {
     data: dataCaja,
@@ -56,15 +55,15 @@ export const CajaProtectedRoute = ({ children }) => {
   if (isLoadingCaja || !user) {
     return (
       <div
-        className="d-flex justify-content-center align-items-center"
+        className="flex justify-center items-center"
         style={{ minHeight: "80vh" }}
       >
         <div
-          className="spinner-border"
+          className="inline-block size-5 animate-spin rounded-full border-2 border-current border-r-transparent"
           style={{ color: "var(--fw-saffron)" }}
           role="status"
         >
-          <span className="visually-hidden">Cargando validaciones...</span>
+          <span className="sr-only">Cargando validaciones...</span>
         </div>
       </div>
     );
@@ -74,13 +73,7 @@ export const CajaProtectedRoute = ({ children }) => {
   // 2. VALIDACIÓN DE ROLES (Sin cambios)
   // ==========================================
   const nombreCargo = user?.empleado?.cargo?.nombre?.toLowerCase() || "";
-  const palabrasBloqueadas = [
-    "mozo",
-    "moso",
-    "meser",
-    "delivery",
-    "cocin",
-  ];
+  const palabrasBloqueadas = ["mozo", "moso", "meser", "delivery", "cocin"];
   const esRolSinPermisoDeCaja = palabrasBloqueadas.some((palabra) =>
     nombreCargo.includes(palabra),
   );
@@ -95,28 +88,30 @@ export const CajaProtectedRoute = ({ children }) => {
     if (esRolSinPermisoDeCaja) {
       return (
         <div
-          className="d-flex flex-column align-items-center justify-content-center"
+          className="flex flex-col items-center justify-center"
           style={{ minHeight: "80vh" }}
         >
           <div
-            className="text-center p-4 bg-white rounded shadow-sm border"
+            className="text-center p-4 bg-background rounded shadow-sm border"
             style={{ maxWidth: "450px" }}
           >
             <span
-              className="fs-1 mb-3 d-block"
+              className="text-4xl mb-3 block"
               style={{ color: "var(--fw-strawberry)" }}
             >
               <LockKeyhole size={48} />
             </span>
-            <h4 className="fw-bold text-dark mb-3">
+            <h4 className="font-bold text-foreground mb-3">
               Sistema de Ventas Cerrado
             </h4>
-            <p className="text-muted mb-0">
+            <p className="text-muted-foreground mb-0">
               No hay ninguna caja abierta en la sucursal en este momento. Por
               favor, espera a que Administración aperture el turno.
             </p>
-            <Button className="my-4 btn-generico" onClick={() => navigate("/")} variant="default">
-              <ArrowLeft /> Volver al Inicio
+            <Button asChild className="my-4 gap-2" variant="outline">
+              <Link to="/">
+                <ArrowLeft /> Volver al inicio
+              </Link>
             </Button>
           </div>
         </div>

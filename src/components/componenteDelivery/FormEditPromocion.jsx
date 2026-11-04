@@ -117,15 +117,15 @@ export function FormEditPromocion({ onClose, platos, promocionSelected }) {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="d-flex flex-column h-100 p-4"
+      className="flex flex-col h-full p-4"
     >
       {/* Selector de Plato */}
       <div className="mb-4">
-        <label className="form-label fw-medium text-dark">
+        <label className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-medium text-foreground">
           Seleccionar Plato / Combo
         </label>
         <select
-          className={`form-select border-secondary  ${errors.idPlato ? "is-invalid" : ""}`}
+          className={`h-9 w-full appearance-auto rounded-md bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 border-secondary ${errors.idPlato ? "border-destructive focus-visible:ring-destructive" : ""}`}
           {...register("idPlato", {
             required: "Por favor selecciona un plato",
             onChange: (e) => {
@@ -157,18 +157,20 @@ export function FormEditPromocion({ onClose, platos, promocionSelected }) {
           ))}
         </select>
         {errors.idPlato && (
-          <span className="text-danger small">{errors.idPlato.message}</span>
+          <span className="text-destructive text-sm">
+            {errors.idPlato.message}
+          </span>
         )}
       </div>
 
       {/* Título de la Promo */}
       <div className="mb-4">
-        <label className="form-label fw-medium text-dark">
+        <label className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-medium text-foreground">
           Título del Banner (App)
         </label>
         <input
           type="text"
-          className={`form-control  ${errors.titulo ? "is-invalid" : ""}`}
+          className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.titulo ? "border-destructive focus-visible:ring-destructive" : ""}`}
           placeholder="Ej: Jueves de Locura 2x1"
           {...register("titulo", {
             required: "El título es obligatorio",
@@ -179,23 +181,25 @@ export function FormEditPromocion({ onClose, platos, promocionSelected }) {
           })}
         />
         {errors.titulo && (
-          <span className="text-danger small">{errors.titulo.message}</span>
+          <span className="text-destructive text-sm">
+            {errors.titulo.message}
+          </span>
         )}
       </div>
 
       {/* Fila de Precios y Descuentos */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-4">
-        <div className="col-6">
-          <label className="form-label fw-medium text-dark">
+      <div className="grid grid-cols-12 gap-3 mb-4">
+        <div className="col-span-6">
+          <label className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-medium text-foreground">
             Descuento (%)
           </label>
-          <div className="input-group ">
-            <span className="input-group-text bg-white">
-              <Percent size={16} className="text-muted" />
+          <div className="flex w-full items-stretch">
+            <span className="inline-flex items-center rounded-md border-input px-3 text-sm text-muted-foreground bg-background">
+              <Percent size={16} className="text-muted-foreground" />
             </span>
             <input
               type="number"
-              className={`form-control ${errors.porcentaje_descuento ? "is-invalid" : ""}`}
+              className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.porcentaje_descuento ? "border-destructive focus-visible:ring-destructive" : ""}`}
               placeholder="Ej: 15"
               {...register("porcentaje_descuento", {
                 required: "Ingrese un porcentaje",
@@ -207,24 +211,24 @@ export function FormEditPromocion({ onClose, platos, promocionSelected }) {
             />
           </div>
           {errors.porcentaje_descuento && (
-            <span className="text-danger small">
+            <span className="text-destructive text-sm">
               {errors.porcentaje_descuento.message}
             </span>
           )}
         </div>
 
-        <div className="col-6">
-          <label className="form-label fw-medium text-dark">
+        <div className="col-span-6">
+          <label className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-medium text-foreground">
             Precio Promo (S/)
           </label>
-          <div className="input-group ">
-            <span className="input-group-text bg-white">
-              <DollarSign size={16} className="text-danger" />
+          <div className="flex w-full items-stretch">
+            <span className="inline-flex items-center rounded-md border-input px-3 text-sm text-muted-foreground bg-background">
+              <DollarSign size={16} className="text-destructive" />
             </span>
             <input
               type="number"
               step="0.01"
-              className={`form-control text-danger fw-bold ${errors.precio_promocional ? "is-invalid" : ""}`}
+              className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 text-destructive font-bold ${errors.precio_promocional ? "border-destructive focus-visible:ring-destructive" : ""}`}
               {...register("precio_promocional", {
                 required: "El precio final es obligatorio",
                 min: { value: 0.1, message: "Debe ser mayor a 0" },
@@ -232,12 +236,12 @@ export function FormEditPromocion({ onClose, platos, promocionSelected }) {
             />
           </div>
           {errors.precio_promocional && (
-            <span className="text-danger small">
+            <span className="text-destructive text-sm">
               {errors.precio_promocional.message}
             </span>
           )}
           {precioOriginal > 0 && (
-            <small className="text-muted mt-1 d-block">
+            <small className="text-muted-foreground mt-1 block">
               Precio normal: S/ {precioOriginal}
             </small>
           )}
@@ -245,37 +249,41 @@ export function FormEditPromocion({ onClose, platos, promocionSelected }) {
       </div>
 
       {/* Fechas de Vigencia */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-4">
-        <div className="col-6">
-          <label className="form-label fw-medium text-dark">Fecha Inicio</label>
-          <div className="input-group ">
-            <span className="input-group-text bg-white">
+      <div className="grid grid-cols-12 gap-3 mb-4">
+        <div className="col-span-6">
+          <label className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-medium text-foreground">
+            Fecha Inicio
+          </label>
+          <div className="flex w-full items-stretch">
+            <span className="inline-flex items-center rounded-md border-input px-3 text-sm text-muted-foreground bg-background">
               <Calendar size={16} />
             </span>
             <input
               type="date"
-              className={`form-control ${errors.fecha_inicio ? "is-invalid" : ""}`}
+              className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.fecha_inicio ? "border-destructive focus-visible:ring-destructive" : ""}`}
               {...register("fecha_inicio", {
                 required: "Seleccione fecha de inicio",
               })}
             />
           </div>
           {errors.fecha_inicio && (
-            <span className="text-danger small">
+            <span className="text-destructive text-sm">
               {errors.fecha_inicio.message}
             </span>
           )}
         </div>
 
-        <div className="col-6">
-          <label className="form-label fw-medium text-dark">Fecha Fin</label>
-          <div className="input-group ">
-            <span className="input-group-text bg-white">
+        <div className="col-span-6">
+          <label className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-medium text-foreground">
+            Fecha Fin
+          </label>
+          <div className="flex w-full items-stretch">
+            <span className="inline-flex items-center rounded-md border-input px-3 text-sm text-muted-foreground bg-background">
               <Calendar size={16} />
             </span>
             <input
               type="date"
-              className={`form-control ${errors.fecha_fin ? "is-invalid" : ""}`}
+              className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.fecha_fin ? "border-destructive focus-visible:ring-destructive" : ""}`}
               {...register("fecha_fin", {
                 required: "Seleccione fecha de fin",
                 validate: (value) => {
@@ -290,7 +298,7 @@ export function FormEditPromocion({ onClose, platos, promocionSelected }) {
             />
           </div>
           {errors.fecha_fin && (
-            <span className="text-danger small">
+            <span className="text-destructive text-sm">
               {errors.fecha_fin.message}
             </span>
           )}
@@ -299,7 +307,7 @@ export function FormEditPromocion({ onClose, platos, promocionSelected }) {
 
       {/* Carga de Imagen */}
       <div className="mb-4">
-        <label className="form-label fw-medium text-dark">
+        <label className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-medium text-foreground">
           Imagen del Banner actual
         </label>
         {promocionSelected?.imagen_banner && (
@@ -312,40 +320,46 @@ export function FormEditPromocion({ onClose, platos, promocionSelected }) {
             />
           </div>
         )}
-        <label className="form-label fw-medium text-dark">
+        <label className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-medium text-foreground">
           Actualizar Imagen (Opcional)
         </label>
-        <div className="border border-2 border-dashed rounded-3 p-4 text-center bg-light">
-          <Image size={32} className="text-muted mb-2" />
-          <p className="mb-0 text-muted small">
+        <div className="border-2 border-dashed rounded-md p-4 text-center bg-muted">
+          <Image size={32} className="text-muted-foreground mb-2" />
+          <p className="mb-0 text-muted-foreground text-sm">
             Arrastra una nueva imagen o haz clic para subir y reemplazar la
             actual
           </p>
           <input
             type="file"
-            className={`form-control mt-3 ${errors.imagen_banner ? "is-invalid" : ""}`}
+            className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 mt-3 ${errors.imagen_banner ? "border-destructive focus-visible:ring-destructive" : ""}`}
             accept="image/*"
             {...register("imagen_banner")}
           />
         </div>
         {errors.imagen_banner && (
-          <span className="text-danger small mt-1 d-block text-start">
+          <span className="text-destructive text-sm mt-1 block text-left">
             {errors.imagen_banner.message}
           </span>
         )}
       </div>
 
       {/* Controles del Footer */}
-      <div className="mt-auto d-flex justify-content-end gap-2 border-top p-3">
+      <div className="mt-auto flex justify-end gap-2 border-t p-3">
         <Button
           type="button"
           className="btn-cerrar-modal"
           onClick={onClose}
           disabled={isSubmitting}
-         variant="default">
+          variant="default"
+        >
           Cancelar
         </Button>
-        <Button type="submit" className="btn-guardar" disabled={isSubmitting} variant="default">
+        <Button
+          type="submit"
+          className="btn-guardar"
+          disabled={isSubmitting}
+          variant="default"
+        >
           {isSubmitting ? "Actualizando..." : "Actualizar Promoción"}
         </Button>
       </div>

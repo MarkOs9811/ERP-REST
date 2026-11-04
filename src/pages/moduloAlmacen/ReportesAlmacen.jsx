@@ -137,7 +137,7 @@ export function ReportesAlmacen() {
       </Card>
 
       {loadingTipo && (
-        <div className="d-flex justify-content-center">
+        <div className="flex justify-center">
           <Cargando />
         </div>
       )}
@@ -147,9 +147,9 @@ export function ReportesAlmacen() {
         setIsOpen={setIsModalOpen}
         sheetUrl={sheetUrl}
         titulo={tipoGenerado}
-        fondo="bg-light"
+        fondo="bg-background"
         data={fechas}
-        tamaño="modal-xl"
+        tamaño="max-w-7xl"
       />
     </div>
   );

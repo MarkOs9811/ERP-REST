@@ -18,7 +18,13 @@ import { DashboardEmpresa } from "../componentesSuperAdmin/componentesEmpresaAdm
 import { ModulosEmpresa } from "../componentesSuperAdmin/componentesEmpresaAdmin/ModulosEmpresa";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../components/ui/dropdown-menu";
 
 export function EmpresasAdmin() {
   const [filtro, setFiltro] = useState("");
@@ -108,14 +114,15 @@ export function EmpresasAdmin() {
       cell: (row) =>
         !row.userAdmin ? (
           <Button
-            className="btn btn-outline-primary btn-sm d-flex align-items-center gap-1"
+            className="border border-input bg-background text-foreground shadow-sm hover:bg-accent hover:text-accent-foreground justify-center whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 px-3 text-xs flex items-center gap-1"
             onClick={() => console.log("Click en asignar", row)}
-           variant="default">
+            variant="default"
+          >
             <Plus size={16} />
             Asignar Usuario
           </Button>
         ) : (
-          <span className="text-dark">{row.userAdmin}</span>
+          <span className="text-foreground">{row.userAdmin}</span>
         ),
       sortable: true,
     },
@@ -126,9 +133,13 @@ export function EmpresasAdmin() {
       width: "110px",
       cell: (row) =>
         row.estado == 1 ? (
-          <span className="badge bg-success bg-opacity-75">Activo</span>
+          <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-emerald-600/75">
+            Activo
+          </span>
         ) : (
-          <span className="badge bg-danger bg-opacity-75">Inactivo</span>
+          <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-destructive/75">
+            Inactivo
+          </span>
         ),
     },
     {
@@ -137,92 +148,82 @@ export function EmpresasAdmin() {
       button: true,
       width: "80px",
       cell: (row) => (
-        <div className="dropdown m-2">
-          <Button
-            className="btn bg-transparent btn-sm text-dark"
-            type="button"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-            data-bs-boundary="window"
-            data-bs-popper-config='{"strategy":"fixed"}'
-           variant="default">
-            <MoreVertical size={18} />
-          </Button>
-
-          <ul className="dropdown-menu dropdown-menu-end shadow border-0">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="m-2 text-foreground"
+              aria-label={`Acciones de ${row.nombre}`}
+            >
+              <MoreVertical size={18} />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
             {/* --- Opciones si está ACTIVO --- */}
             {row.estado == 1 ? (
               <>
-                <li>
-                  <Button
-                    className="btn-editar dropdown-item align-items-center gap-2"
-                    onClick={() => {
-                      setFormularioAbierto(true);
-                      setDataEmpresa(row);
-                    }}
-                   variant="secondary">
-                    <Pen size={16} /> Editar
-                  </Button>
-                </li>
-                <li>
-                  <Button
-                    className="btn-principal dropdown-item align-items-center gap-2"
-                    onClick={() => {
-                      setDataEmpresa(row);
-                      setDashboardEmpresa(true);
-                    }}
-                   variant="default">
-                    <Eye size={16} /> Ver Detalles
-                  </Button>
-                </li>
-                <li>
-                  <Button
-                    className="btn-principal dropdown-item align-items-center gap-2"
-                    onClick={() => {
-                      setModulosEmpresa(true);
-                      setDataEmpresa(row);
-                    }}
-                   variant="default">
-                    <LayoutDashboard size={16} /> Ver Módulos
-                  </Button>
-                </li>
-                <li>
-                  <hr className="dropdown-divider" />
-                </li>
-                <li>
-                  <Button className="btn-eliminar dropdown-item align-items-center gap-2 text-danger" variant="destructive">
-                    <Trash2 size={16} /> Eliminar
-                  </Button>
-                </li>
+                <DropdownMenuItem
+                  onSelect={() => {
+                    setFormularioAbierto(true);
+                    setDataEmpresa(row);
+                  }}
+                >
+                  <Pen size={16} />
+                  Editar
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onSelect={() => {
+                    setDataEmpresa(row);
+                    setDashboardEmpresa(true);
+                  }}
+                >
+                  <Eye size={16} />
+                  Ver Detalles
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onSelect={() => {
+                    setModulosEmpresa(true);
+                    setDataEmpresa(row);
+                  }}
+                >
+                  <LayoutDashboard size={16} />
+                  Ver Módulos
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem variant="destructive">
+                  <Trash2 size={16} />
+                  Eliminar
+                </DropdownMenuItem>
               </>
             ) : (
               /* --- Opciones si está INACTIVO --- */
               <>
-                <li>
-                  <Button className="btn-activar dropdown-item align-items-center gap-2 text-success" variant="default">
-                    <Check size={16} /> Activar Empresa
-                  </Button>
-                </li>
-                <li>
-                  <Button className="btn-principal dropdown-item align-items-center gap-2" variant="default">
-                    <LayoutDashboard size={16} /> Ver Módulos
-                  </Button>
-                </li>
+                <DropdownMenuItem>
+                  <Check size={16} />
+                  Activar Empresa
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <LayoutDashboard size={16} />
+                  Ver Módulos
+                </DropdownMenuItem>
               </>
             )}
-          </ul>
-        </div>
+          </DropdownMenuContent>
+        </DropdownMenu>
       ),
     },
   ];
   return (
     <Card className="border py-2">
       <CardHeader className="flex">
-        <CardTitle asChild><h3 className="">Listado de Empresas</h3></CardTitle>
-        <div className="d-flex ms-auto gap-2">
+        <CardTitle asChild>
+          <h3 className="">Listado de Empresas</h3>
+        </CardTitle>
+        <div className="flex ms-auto gap-2">
           <input
             type="text"
-            className="form-control"
+            className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
             placeholder="Buscar empresa..."
             value={filtro}
             onChange={(e) => setFiltro(e.target.value)}
@@ -230,7 +231,7 @@ export function EmpresasAdmin() {
           <BotonMotionGeneral
             text="Crear nueva empresa"
             icon={<Plus />}
-            classDefault="btn-generico w-100 align-items-center "
+            classDefault="btn-generico w-full items-center"
             onClick={() => {
               setFormularioAbierto(true);
               setDataEmpresa(null);

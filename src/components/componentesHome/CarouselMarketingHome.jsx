@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { BannerFidelizacion } from "../componenteCliente/BannerFidelización";
 import { CuponActivoHome } from "../componenteCliente/CuponActivo";
-import "../../css/estilosHome/EstiloFidelizacion.css";
 import { Button } from "../ui/button";
 
 export function CarouselMarketingHome() {
@@ -17,36 +16,46 @@ export function CarouselMarketingHome() {
 
   return (
     <section
-      className="fw-carousel-marketing relative h-[280px] min-h-[260px]"
+      className="relative h-[280px] min-h-[260px]"
       aria-label="Promociones"
     >
-      <div className="h-full">
-        <div className="h-full" aria-live="polite">
+      <div className="relative h-full">
+        <div className="h-full" aria-live="polite" aria-atomic="true">
           {activeSlide === 0 ? (
             <BannerFidelizacion botonAction="ver" />
           ) : (
             <CuponActivoHome />
           )}
         </div>
-        <div className="absolute bottom-3 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2">
+        <div
+          className="absolute right-3 top-3 z-10 flex items-center gap-1 rounded-full border border-white/60 bg-background/75 p-1 shadow-none backdrop-blur-md dark:border-white/10"
+          role="group"
+          aria-label="Seleccionar promoción"
+        >
           <Button
             type="button"
             onClick={() => setActiveSlide(0)}
             aria-label="Mostrar fidelización"
-            aria-current={activeSlide === 0 ? "true" : undefined}
-            className={`h-2 rounded-full transition-all ${
-              activeSlide === 0 ? "w-6 bg-slate-800" : "w-2 bg-slate-400"
+            aria-pressed={activeSlide === 0}
+            variant="ghost"
+            className={`h-2 min-w-0 rounded-full p-0 transition-[width,background-color] duration-300 ${
+              activeSlide === 0
+                ? "w-5 bg-violet-600 hover:bg-violet-600"
+                : "w-2 bg-muted-foreground/30 hover:bg-muted-foreground/50"
             }`}
-           variant="default"/>
+          />
           <Button
             type="button"
             onClick={() => setActiveSlide(1)}
             aria-label="Mostrar cupón activo"
-            aria-current={activeSlide === 1 ? "true" : undefined}
-            className={`h-2 rounded-full transition-all ${
-              activeSlide === 1 ? "w-6 bg-slate-800" : "w-2 bg-slate-400"
+            aria-pressed={activeSlide === 1}
+            variant="ghost"
+            className={`h-2 min-w-0 rounded-full p-0 transition-[width,background-color] duration-300 ${
+              activeSlide === 1
+                ? "w-5 bg-emerald-600 hover:bg-emerald-600"
+                : "w-2 bg-muted-foreground/30 hover:bg-muted-foreground/50"
             }`}
-           variant="default"/>
+          />
         </div>
       </div>
     </section>

@@ -4,7 +4,7 @@ import { MesasList } from "../components/componenteVender/MesasList";
 
 export function LayOutMozo() {
   return (
-    <div className="container-fluid p-0">
+    <div className="w-full p-0">
       {/* Puedes reemplazar este div gris por tu componente <ToMesa /> */}
       <MesasList />{" "}
     </div>

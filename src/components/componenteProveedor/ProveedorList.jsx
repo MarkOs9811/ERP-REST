@@ -194,7 +194,7 @@ export function ProveedorList({ search, updateList }) {
       cell: (row) => {
         const { estado } = row;
         return (
-          <div className="d-flex justify-content-around py-2">
+          <div className="flex justify-around py-2">
             {estado == 1 ? (
               <>
                 <BtnEditar
@@ -208,9 +208,10 @@ export function ProveedorList({ search, updateList }) {
               </>
             ) : (
               <Button
-                className="btn btn-outline-success"
+                className="shadow inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border-emerald-600 bg-background text-emerald-700 hover:bg-emerald-50 dark:text-emerald-400 dark:hover:bg-emerald-950"
                 onClick={() => handleQuestionActivar(row.id, row.nombre)}
-               variant="default">
+                variant="default"
+              >
                 <FontAwesomeIcon icon={faPowerOff} />
               </Button>
             )}

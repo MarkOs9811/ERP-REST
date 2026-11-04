@@ -56,13 +56,15 @@ export default function FormConfiguracionEmpresa({ configuracion, onClose }) {
   // CASO 1: Es la configuración de Tipo de Venta (POS)
   if (configuracion?.nombre === "Tipo Venta") {
     return (
-      <form onSubmit={handleUpdate} className="d-flex flex-column h-100 p-3">
-        <p className="text-muted small mb-4">{configuracion.descripcion}</p>
+      <form onSubmit={handleUpdate} className="flex flex-col h-full p-3">
+        <p className="text-muted-foreground text-sm mb-4">
+          {configuracion.descripcion}
+        </p>
 
-        <div className="d-flex flex-column gap-3 mb-4">
+        <div className="flex flex-col gap-3 mb-4">
           {/* Opcion Restaurante */}
           <div
-            className="p-3 border d-flex align-items-center gap-3"
+            className="p-3 flex items-center gap-3"
             style={{
               borderRadius: "var(--radius-md)",
               backgroundColor:
@@ -79,7 +81,7 @@ export default function FormConfiguracionEmpresa({ configuracion, onClose }) {
             onClick={() => setValorConfig("restaurante")}
           >
             <div
-              className="d-flex justify-content-center align-items-center rounded p-2"
+              className="flex justify-center items-center rounded p-2"
               style={{
                 backgroundColor:
                   valorConfig === "restaurante"
@@ -93,14 +95,14 @@ export default function FormConfiguracionEmpresa({ configuracion, onClose }) {
             >
               <UtensilsCrossed size={28} />
             </div>
-            <div className="flex-grow-1">
+            <div className="grow">
               <h6
-                className="fw-bold mb-1"
+                className="font-bold mb-1"
                 style={{ color: "var(--text-main)" }}
               >
                 Gastronomía / Restaurante
               </h6>
-              <p className="mb-0 small text-muted">
+              <p className="mb-0 text-sm text-muted-foreground">
                 Habilita mesas, comandas y pantalla de cocina (KDS).
               </p>
             </div>
@@ -113,7 +115,7 @@ export default function FormConfiguracionEmpresa({ configuracion, onClose }) {
 
           {/* Opcion Retail */}
           <div
-            className="p-3 border d-flex align-items-center gap-3"
+            className="p-3 flex items-center gap-3"
             style={{
               borderRadius: "var(--radius-md)",
               backgroundColor:
@@ -130,7 +132,7 @@ export default function FormConfiguracionEmpresa({ configuracion, onClose }) {
             onClick={() => setValorConfig("retail")}
           >
             <div
-              className="d-flex justify-content-center align-items-center rounded p-2"
+              className="flex justify-center items-center rounded p-2"
               style={{
                 backgroundColor:
                   valorConfig === "retail" ? "var(--fw-emerald)" : "#f3f4f6",
@@ -142,14 +144,14 @@ export default function FormConfiguracionEmpresa({ configuracion, onClose }) {
             >
               <Store size={28} />
             </div>
-            <div className="flex-grow-1">
+            <div className="grow">
               <h6
-                className="fw-bold mb-1"
+                className="font-bold mb-1"
                 style={{ color: "var(--text-main)" }}
               >
                 Retail / Tienda
               </h6>
-              <p className="mb-0 small text-muted">
+              <p className="mb-0 text-sm text-muted-foreground">
                 Enfocado en ventas rápidas y lector de código de barras.
               </p>
             </div>
@@ -161,15 +163,21 @@ export default function FormConfiguracionEmpresa({ configuracion, onClose }) {
           </div>
         </div>
 
-        <div className="mt-auto d-flex justify-content-end gap-2">
+        <div className="mt-auto flex justify-end gap-2">
           <Button
             type="button"
-            className="btn btn-light px-4 fw-semibold"
+            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-muted text-foreground shadow-sm hover:bg-muted/80 px-4 font-semibold"
             onClick={onClose}
-           variant="default">
+            variant="default"
+          >
             Cancelar
           </Button>
-          <Button type="submit" className="btn-guardar px-4" disabled={loading} variant="default">
+          <Button
+            type="submit"
+            className="btn-guardar px-4"
+            disabled={loading}
+            variant="default"
+          >
             {loading ? "Guardando..." : "Aplicar Cambios"}
           </Button>
         </div>
@@ -179,31 +187,39 @@ export default function FormConfiguracionEmpresa({ configuracion, onClose }) {
 
   // CASO 2: Es cualquier otra configuración futura de tipo "empresa"
   return (
-    <form onSubmit={handleUpdate} className="d-flex flex-column h-100 p-3">
-      <p className="text-muted small mb-4">{configuracion?.descripcion}</p>
+    <form onSubmit={handleUpdate} className="flex flex-col h-full p-3">
+      <p className="text-muted-foreground text-sm mb-4">
+        {configuracion?.descripcion}
+      </p>
 
       <div className="mb-3">
-        <label className="form-label fw-semibold text-secondary small">
+        <label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-semibold text-muted-foreground text-sm">
           Valor de Configuración
         </label>
         <input
           type="text"
-          className="form-control"
+          className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
           value={valorConfig}
           onChange={(e) => setValorConfig(e.target.value)}
           required
         />
       </div>
 
-      <div className="mt-auto d-flex justify-content-end gap-2">
+      <div className="mt-auto flex justify-end gap-2">
         <Button
           type="button"
-          className="btn btn-light px-4 fw-semibold"
+          className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-muted text-foreground shadow-sm hover:bg-muted/80 px-4 font-semibold"
           onClick={onClose}
-         variant="default">
+          variant="default"
+        >
           Cancelar
         </Button>
-        <Button type="submit" className="btn-guardar px-4" disabled={loading} variant="default">
+        <Button
+          type="submit"
+          className="btn-guardar px-4"
+          disabled={loading}
+          variant="default"
+        >
           {loading ? "Guardando..." : "Guardar Cambios"}
         </Button>
       </div>

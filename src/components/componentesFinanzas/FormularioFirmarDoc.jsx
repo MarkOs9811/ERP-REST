@@ -61,9 +61,9 @@ export function FormularioFirmarDoc() {
           autoComplete="off"
         >
           <div className="mb-4">
-            <label htmlFor="pdf_file" className="form-label fw-semibold">
-              <FileSignature className="me-2 " />
-              Seleccionar PDF <span className="text-danger">*</span>
+            <label htmlFor="pdf_file" className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-semibold">
+              <FileSignature className="me-2" />
+              Seleccionar PDF <span className="text-destructive">*</span>
             </label>
             <input
               type="file"
@@ -82,12 +82,12 @@ export function FormularioFirmarDoc() {
                     "El PDF no debe superar 2MB",
                 },
               })}
-              className={`form-control border-2 rounded-3 shadow-sm ${
-                errors.pdf_file ? "border-danger" : "border-muted"
+              className={`h-9 w-full border-input bg-background px-3 py-1 text-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 border-2 rounded-md shadow-sm ${
+                errors.pdf_file ? "border-destructive" : "border-muted"
               }`}
             />
             {errors.pdf_file && (
-              <div className="text-danger small mt-1 d-flex align-items-center">
+              <div className="text-destructive text-sm mt-1 flex items-center">
                 <AlertCircle size={16} className="me-1" />
                 {errors.pdf_file.message}
               </div>
@@ -95,9 +95,9 @@ export function FormularioFirmarDoc() {
           </div>
 
           <div className="mb-4">
-            <label htmlFor="image_file" className="form-label fw-semibold">
+            <label htmlFor="image_file" className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-semibold">
               <ShieldCheck className="me-2" />
-              Cargar firma (imagen) <span className="text-danger">*</span>
+              Cargar firma (imagen) <span className="text-destructive">*</span>
             </label>
             <input
               type="file"
@@ -114,26 +114,26 @@ export function FormularioFirmarDoc() {
                     "La imagen no debe superar 1MB",
                 },
               })}
-              className={`form-control border-2 rounded-3 shadow-sm ${
-                errors.image_file ? "border-danger" : "border-muted"
+              className={`h-9 w-full border-input bg-background px-3 py-1 text-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 border-2 rounded-md shadow-sm ${
+                errors.image_file ? "border-destructive" : "border-muted"
               }`}
             />
-            <div className="form-text text-warning d-flex align-items-center mt-1">
+            <div className="text-sm text-amber-600 dark:text-amber-400 flex items-center mt-1">
               <AlertCircle size={16} className="me-1" />
               El archivo cargado no debe ser pesado
             </div>
             {errors.image_file && (
-              <div className="text-danger small mt-1 d-flex align-items-center">
+              <div className="text-destructive text-sm mt-1 flex items-center">
                 <AlertCircle size={16} className="me-1" />
                 {errors.image_file.message}
               </div>
             )}
           </div>
 
-          <div className="d-flex justify-content-end mt-4">
+          <div className="flex justify-end mt-4">
             <Button
               type="submit"
-              className="btn-guardar btn-lg align-items-centershadow"
+              className="btn-guardar inline-flex justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-10 px-8 items-center shadow"
               disabled={isSubmitting}
              variant="default">
               <FileSignature size={20} />
@@ -146,9 +146,9 @@ export function FormularioFirmarDoc() {
           </div>
         </form>
       </CardContent>
-      <CardFooter className="bg-muted rounded-bottom-4 py-3 text-center">
-        <span className="text-muted">
-          <ShieldCheck className="me-1 text-success" />
+      <CardFooter className="bg-muted rounded-b-lg py-3 text-center">
+        <span className="text-muted-foreground">
+          <ShieldCheck className="me-1 text-emerald-600 dark:text-emerald-400" />
           Solo se permite PDF y firma en imagen. Todos los campos son
           obligatorios.
         </span>

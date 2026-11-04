@@ -179,14 +179,14 @@ const GraficoBarVentas = () => {
   };
 
   if (isLoading)
-    return <p className="text-muted p-3">Cargando gráfico de ventas...</p>;
-  if (isError) return <p className="text-danger p-3">Error al cargar datos.</p>;
+    return <p className="text-muted-foreground p-3">Cargando gráfico de ventas...</p>;
+  if (isError) return <p className="text-destructive p-3">Error al cargar datos.</p>;
 
   return (
-    <div className="d-flex flex-column h-100">
-      <div className="mb-4 d-flex gap-3 align-items-center">
+    <div className="flex flex-col h-full">
+      <div className="mb-4 flex gap-3 items-center">
         <span
-          className="rounded-circle p-2 d-flex justify-content-center align-items-center"
+          className="rounded-full p-2 flex justify-center items-center"
           style={{
             backgroundColor: "var(--bg-emerald-soft)",
             color: "var(--fw-emerald)",
@@ -198,9 +198,9 @@ const GraficoBarVentas = () => {
         </span>
 
         {/* Títulos */}
-        <div className="d-flex flex-column flex-grow-1">
+        <div className="flex flex-col grow">
           <span
-            className="fw-bold"
+            className="font-bold"
             style={{ color: "var(--text-main)", fontSize: "1.1rem" }}
           >
             Ventas por mes ({currentYear})
@@ -212,7 +212,7 @@ const GraficoBarVentas = () => {
 
         {/* Resumen Total (Caja neutra) */}
         <div
-          className="ms-auto d-flex flex-column text-center px-4 py-2 rounded"
+          className="ms-auto flex flex-col text-center px-4 py-2 rounded"
           style={{
             backgroundColor: "var(--bg-main)",
             border: "1px solid var(--bg-main)",
@@ -228,7 +228,7 @@ const GraficoBarVentas = () => {
             TOTAL {currentYear}
           </small>
           <span
-            className="fw-bold"
+            className="font-bold"
             style={{ color: "var(--fw-emerald)", fontSize: "1.2rem" }}
           >
             {formatMoneda(totalVentas)}

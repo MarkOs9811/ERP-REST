@@ -10,8 +10,12 @@ import ModalRight from "../componentesReutilizables/ModalRight";
 import FormConfiguracionEmpresa from "./confiIntegraciones/FormConfiguracionEmpresa";
 import { UtensilsCrossed, Store, Settings2 } from "lucide-react";
 import { Button } from "../ui/button";
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
-
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
 
 export function MiEmpresa() {
   const [logoActual, setLogoActual] = useState(null);
@@ -152,17 +156,17 @@ export function MiEmpresa() {
   };
 
   return (
-    <div className="w-100 p-3">
+    <div className="w-full p-3">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-4">
+        <div className="grid grid-cols-12 gap-3 mb-4">
           {/* Columna Logo y carga */}
-          <div className="md:col-span-4 col-sm-12">
+          <div className="md:col-span-4 col-span-full">
             <Card
               className="p-4 flex flex-col justify-center items-center h-full"
               style={{ borderRadius: "var(--radius-lg)" }}
             >
               <h4
-                className="mb-3 fw-bold text-center"
+                className="mb-3 font-bold text-center"
                 style={{ color: "var(--text-main)" }}
               >
                 Configuración de la Empresa
@@ -194,17 +198,17 @@ export function MiEmpresa() {
                   }}
                 />
               )}
-              <div className="mb-3 w-100">
+              <div className="mb-3 w-full">
                 <label
                   htmlFor="logo"
-                  className="form-label small fw-semibold"
+                  className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-semibold"
                   style={{ color: "var(--text-muted)" }}
                 >
                   Logo de la Empresa
                 </label>
                 <div
                   {...getRootProps()}
-                  className="dropzone rounded p-4 text-center d-flex flex-column justify-content-center align-items-center"
+                  className="dropzone rounded p-4 text-center flex flex-col justify-center items-center"
                   style={{
                     cursor: "pointer",
                     minHeight: "100px",
@@ -216,11 +220,11 @@ export function MiEmpresa() {
                     {...getInputProps()}
                     id="logo"
                     name="logo"
-                    className="d-none"
+                    className="hidden"
                   />
                   {!logoPreview && (
                     <p
-                      className="small mb-2"
+                      className="text-sm mb-2"
                       style={{ color: "var(--brand-secondary)" }}
                     >
                       Haz clic o arrastra aquí para cargar el logo
@@ -228,24 +232,27 @@ export function MiEmpresa() {
                   )}
                   <Button
                     type="button"
-                    className="btn btn-sm fw-semibold"
+                    className="bg-primary text-primary-foreground shadow hover:bg-primary/90 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 px-3 text-xs font-semibold"
                     style={{
                       backgroundColor: "var(--fw-white)",
                       color: "var(--fw-saffron)",
                       border: "1px solid var(--fw-saffron)",
                       borderRadius: "var(--radius-sm)",
                     }}
-                   variant="default">
+                    variant="default"
+                  >
                     Seleccionar archivo
                   </Button>
                 </div>
-                <p className="text-danger small mt-1">{errors.logo?.message}</p>
+                <p className="text-destructive text-sm mt-1">
+                  {errors.logo?.message}
+                </p>
               </div>
             </Card>
           </div>
 
           {/* Columna datos */}
-          <div className="md:col-span-8 col-sm-12">
+          <div className="md:col-span-8 col-span-full">
             <Card
               className="p-4 h-full"
               style={{
@@ -254,16 +261,16 @@ export function MiEmpresa() {
               }}
             >
               <h5
-                className="fw-bold mb-4"
+                className="font-bold mb-4"
                 style={{ color: "var(--brand-secondary)" }}
               >
                 Datos Generales
               </h5>
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
-                <div className="md:col-span-6">
+              <div className="grid grid-cols-12 gap-3">
+                <div className="col-span-full md:col-span-6">
                   <label
                     htmlFor="ruc"
-                    className="form-label small fw-semibold"
+                    className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-semibold"
                     style={{ color: "var(--text-muted)" }}
                   >
                     RUC
@@ -271,16 +278,18 @@ export function MiEmpresa() {
                   <input
                     type="text"
                     id="ruc"
-                    className="form-control"
+                    className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                     {...register("ruc", { required: "El RUC es obligatorio" })}
                     defaultValue={datosEmpresa?.ruc || ""}
                   />
-                  <p className="text-danger small m-0">{errors.ruc?.message}</p>
+                  <p className="text-destructive text-sm m-0">
+                    {errors.ruc?.message}
+                  </p>
                 </div>
-                <div className="md:col-span-6">
+                <div className="col-span-full md:col-span-6">
                   <label
                     htmlFor="nombre"
-                    className="form-label small fw-semibold"
+                    className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-semibold"
                     style={{ color: "var(--text-muted)" }}
                   >
                     Nombre de la Empresa
@@ -288,20 +297,20 @@ export function MiEmpresa() {
                   <input
                     type="text"
                     id="nombre"
-                    className="form-control"
+                    className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                     {...register("nombre", {
                       required: "El nombre es obligatorio",
                     })}
                     defaultValue={datosEmpresa?.nombre || ""}
                   />
-                  <p className="text-danger small m-0">
+                  <p className="text-destructive text-sm m-0">
                     {errors.nombre?.message}
                   </p>
                 </div>
-                <div className="md:col-span-6">
+                <div className="col-span-full md:col-span-6">
                   <label
                     htmlFor="correo"
-                    className="form-label small fw-semibold"
+                    className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-semibold"
                     style={{ color: "var(--text-muted)" }}
                   >
                     Correo Electrónico
@@ -309,7 +318,7 @@ export function MiEmpresa() {
                   <input
                     type="email"
                     id="correo"
-                    className="form-control"
+                    className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                     {...register("correo", {
                       required: "El correo es obligatorio",
                       pattern: {
@@ -320,14 +329,14 @@ export function MiEmpresa() {
                     })}
                     defaultValue={datosEmpresa?.correo || ""}
                   />
-                  <p className="text-danger small m-0">
+                  <p className="text-destructive text-sm m-0">
                     {errors.correo?.message}
                   </p>
                 </div>
-                <div className="md:col-span-6">
+                <div className="col-span-full md:col-span-6">
                   <label
                     htmlFor="numero"
-                    className="form-label small fw-semibold"
+                    className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-semibold"
                     style={{ color: "var(--text-muted)" }}
                   >
                     Número de Teléfono
@@ -335,7 +344,7 @@ export function MiEmpresa() {
                   <input
                     type="tel"
                     id="numero"
-                    className="form-control"
+                    className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                     {...register("numero", {
                       required: "El número es obligatorio",
                       pattern: {
@@ -345,14 +354,14 @@ export function MiEmpresa() {
                     })}
                     defaultValue={datosEmpresa?.numero || ""}
                   />
-                  <p className="text-danger small m-0">
+                  <p className="text-destructive text-sm m-0">
                     {errors.numero?.message}
                   </p>
                 </div>
-                <div className="col-12">
+                <div className="col-span-full">
                   <label
                     htmlFor="direccion"
-                    className="form-label small fw-semibold"
+                    className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-semibold"
                     style={{ color: "var(--text-muted)" }}
                   >
                     Dirección
@@ -360,19 +369,23 @@ export function MiEmpresa() {
                   <input
                     type="text"
                     id="direccion"
-                    className="form-control"
+                    className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                     {...register("direccion", {
                       required: "La dirección es obligatoria",
                     })}
                     defaultValue={datosEmpresa?.direccion || ""}
                   />
-                  <p className="text-danger small m-0">
+                  <p className="text-destructive text-sm m-0">
                     {errors.direccion?.message}
                   </p>
                 </div>
               </div>
-              <div className="mt-auto pt-4 d-flex justify-content-end">
-                <Button type="submit" className="btn-guardar px-4" variant="default">
+              <div className="mt-auto pt-4 flex justify-end">
+                <Button
+                  type="submit"
+                  className="btn-guardar px-4"
+                  variant="default"
+                >
                   Guardar Cambios
                 </Button>
               </div>
@@ -382,24 +395,24 @@ export function MiEmpresa() {
       </form>
 
       {/* Sección Configuraciones Extras */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 align-items-stretch">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-stretch">
         {isLoading && (
-          <div className="col-12 text-center py-4">
+          <div className="col-span-full text-center py-4">
             <Cargando />
           </div>
         )}
 
         {isError && (
-          <div className="col-12">
-            <p className="text-danger">
+          <div className="col-span-full">
+            <p className="text-destructive">
               Hubo un error al obtener las configuraciones.
             </p>
           </div>
         )}
 
         {!isLoading && !isError && configuracionEmpresa.length === 0 && (
-          <div className="col-12">
-            <p className="text-muted">
+          <div className="col-span-full">
+            <p className="text-muted-foreground">
               No hay configuraciones de tipo "empresa" registradas.
             </p>
           </div>
@@ -413,26 +426,29 @@ export function MiEmpresa() {
               const visuals = getVisualsTipoVenta(item.clave);
 
               return (
-                <div key={item.id} className="col-12 col-sm-6 col-lg-4 d-flex">
+                <div
+                  key={item.id}
+                  className="col-span-full sm:col-span-6 lg:col-span-4 flex"
+                >
                   <Card className="">
                     <CardHeader className="border-0 px-5 pt-5">
                       <h5
-                        className="fw-bold mb-1"
+                        className="font-bold mb-1"
                         style={{ color: "var(--text-main)" }}
                       >
                         {item.nombre}
                       </h5>
                     </CardHeader>
-                    <CardContent className="mb-auto flex flex-col items-center px-5 p-0">
+                    <CardContent className="mb-auto flex flex-col items-center p-0">
                       <p
-                        className="small mb-3"
+                        className="text-sm mb-3"
                         style={{ color: "var(--text-muted)" }}
                       >
                         {item.descripcion}
                       </p>
 
                       <div
-                        className="d-flex justify-content-center align-items-center mb-3"
+                        className="flex justify-center items-center mb-3"
                         style={{
                           width: "72px",
                           height: "72px",
@@ -444,7 +460,7 @@ export function MiEmpresa() {
                       </div>
 
                       <span
-                        className="badge px-3 py-2 rounded-pill mb-4"
+                        className="inline-flex items-center text-xs font-semibold transition-colors px-3 py-2 rounded-full mb-4"
                         style={{
                           backgroundColor: visuals.bgSoft,
                           color: visuals.color,
@@ -465,7 +481,8 @@ export function MiEmpresa() {
                           setTituloModal(item.nombre);
                           setData(item);
                         }}
-                       variant="default">
+                        variant="default"
+                      >
                         <Settings2 size={18} />
                         Configurar
                       </Button>
@@ -477,17 +494,20 @@ export function MiEmpresa() {
 
             // TARJETA GENÉRICA
             return (
-              <div key={item.id} className="col-12 col-sm-6 col-lg-4 d-flex">
+              <div
+                key={item.id}
+                className="col-span-full sm:col-span-6 lg:col-span-4 flex"
+              >
                 <Card className="w-full p-4 flex flex-col">
                   <div className="mb-auto">
                     <h5
-                      className="fw-bold mb-2"
+                      className="font-bold mb-2"
                       style={{ color: "var(--text-main)" }}
                     >
                       {item.nombre}
                     </h5>
                     <p
-                      className="small m-0"
+                      className="text-sm m-0"
                       style={{ color: "var(--text-muted)" }}
                     >
                       {item.descripcion}
@@ -501,7 +521,8 @@ export function MiEmpresa() {
                       setTituloModal(item.nombre);
                       setData(item);
                     }}
-                   variant="default">
+                    variant="default"
+                  >
                     <Settings2 size={18} className="" />
                     Configuración
                   </Button>

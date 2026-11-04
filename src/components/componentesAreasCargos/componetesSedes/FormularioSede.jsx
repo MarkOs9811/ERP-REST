@@ -70,46 +70,59 @@ export function FormularioSede({ onClose, sede }) {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="d-flex flex-column h-100 p-4"
+      className="flex flex-col h-full p-4"
     >
-      <div className="flex-grow-1">
+      <div className="grow">
         <div className="mb-3">
-          <label htmlFor="nombre" className="form-label fw-bold">
+          <label
+            htmlFor="nombre"
+            className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-bold"
+          >
             Nombre de la Sede
           </label>
           <input
             id="nombre"
             type="text"
-            className={`form-control ${errors.nombre ? "is-invalid" : ""}`}
+            className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.nombre ? "border-destructive focus-visible:ring-destructive" : ""}`}
             {...register("nombre", {
               required: "El nombre es requerido",
               minLength: { value: 2, message: "Mínimo 2 caracteres" },
             })}
           />
           {errors.nombre && (
-            <div className="invalid-feedback">{errors.nombre.message}</div>
+            <div className="text-sm text-destructive">
+              {errors.nombre.message}
+            </div>
           )}
         </div>
 
         <div className="mb-3">
-          <label htmlFor="direccion" className="form-label fw-bold">
+          <label
+            htmlFor="direccion"
+            className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-bold"
+          >
             Dirección
           </label>
           <input
             id="direccion"
             type="text"
-            className={`form-control ${errors.direccion ? "is-invalid" : ""}`}
+            className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.direccion ? "border-destructive focus-visible:ring-destructive" : ""}`}
             {...register("direccion", {
               required: "La dirección es requerida",
             })}
           />
           {errors.direccion && (
-            <div className="invalid-feedback">{errors.direccion.message}</div>
+            <div className="text-sm text-destructive">
+              {errors.direccion.message}
+            </div>
           )}
         </div>
 
         <div className="mb-3">
-          <label htmlFor="telefono" className="form-label fw-bold">
+          <label
+            htmlFor="telefono"
+            className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-bold"
+          >
             Teléfono
           </label>
           <input
@@ -119,7 +132,7 @@ export function FormularioSede({ onClose, sede }) {
             pattern="\d*"
             maxLength={9}
             placeholder="Sólo dígitos, 9 caracteres"
-            className={`form-control ${errors.telefono ? "is-invalid" : ""}`}
+            className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.telefono ? "border-destructive focus-visible:ring-destructive" : ""}`}
             {...register("telefono", {
               required: false,
               validate: (value) =>
@@ -155,15 +168,17 @@ export function FormularioSede({ onClose, sede }) {
             }}
           />
           {/* Indicador en tiempo real */}
-          <div className="form-text mt-1">
+          <div className="text-sm text-muted-foreground mt-1">
             {telefonoDigits === 0 ? (
-              <span className="text-muted">Ingresa teléfono (opcional)</span>
+              <span className="text-muted-foreground">
+                Ingresa teléfono (opcional)
+              </span>
             ) : telefonoDigits === 9 ? (
-              <span className="text-success">
+              <span className="text-emerald-600 dark:text-emerald-400">
                 Teléfono válido ({telefonoDigits}/9)
               </span>
             ) : (
-              <span className="text-danger">
+              <span className="text-destructive">
                 Faltan {9 - telefonoDigits} dígito
                 {9 - telefonoDigits !== 1 ? "s" : ""} ({telefonoDigits}/9)
               </span>
@@ -171,27 +186,31 @@ export function FormularioSede({ onClose, sede }) {
           </div>
 
           {errors.telefono && (
-            <div className="invalid-feedback">{errors.telefono.message}</div>
+            <div className="text-sm text-destructive">
+              {errors.telefono.message}
+            </div>
           )}
         </div>
 
         {/* ... (Agrega más inputs aquí si es necesario) ... */}
       </div>
 
-      <div className="d-flex justify-content-end gap-2 mt-auto">
+      <div className="flex justify-end gap-2 mt-auto">
         <Button
           type="button"
           className="btn-cerrar"
           onClick={onClose}
           disabled={isSubmitting || loading}
-         variant="default">
+          variant="default"
+        >
           Cancelar
         </Button>
         <Button
           type="submit"
           className="btn-guardar"
           disabled={isSubmitting || loading}
-         variant="default">
+          variant="default"
+        >
           {isEditMode
             ? loading
               ? "Actualizando..."

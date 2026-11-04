@@ -129,9 +129,7 @@ export function Navegacion({ tipoNavegacion = null }) {
     }
   };
   // ===================================
-  const {
-    data: configEmpresa = [],
-  } = useQuery({
+  const { data: configEmpresa = [] } = useQuery({
     queryKey: ["confiEmpresa"],
     queryFn: GetConfi,
     retry: 1,
@@ -146,7 +144,7 @@ export function Navegacion({ tipoNavegacion = null }) {
   const claveVenta = configTipoVenta?.clave;
   const esComida = claveVenta === "restaurante";
   const actionButtonClass =
-    "inline-flex h-9 items-center justify-center gap-2 rounded-lg border border-border bg-background px-2.5 text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:px-3";
+    "inline-flex h-9 items-center justify-center gap-2 rounded-lg border-border bg-background px-2.5 text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:px-3";
 
   return (
     <div className={`mb-3 w-full ${navegacionAnchura ? "px-3" : "px-0"}`}>
@@ -205,10 +203,7 @@ export function Navegacion({ tipoNavegacion = null }) {
         {/* --- CONTENEDOR DERECHO (Buscador + Acciones) --- */}
         <div className="ml-auto flex flex-wrap items-center justify-end gap-1.5 sm:gap-2">
           {/* --- BUSCADOR MINIMALISTA --- */}
-          <div
-            className="relative hidden w-[220px] md:block"
-            ref={searchRef}
-          >
+          <div className="relative hidden w-[220px] md:block" ref={searchRef}>
             <Search
               size={16}
               aria-hidden="true"
@@ -217,7 +212,7 @@ export function Navegacion({ tipoNavegacion = null }) {
             <input
               type="text"
               aria-label="Buscar vista"
-              className="h-9 w-full rounded-lg border border-input bg-background pl-9 pr-3 text-sm text-foreground shadow-sm outline-none transition placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40"
+              className="h-9 w-full rounded-lg border-input bg-background pl-9 pr-3 text-sm text-foreground shadow-sm outline-none transition placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40"
               placeholder="Buscar vista..."
               value={searchTerm}
               aria-controls="navegacion-resultados-busqueda"
@@ -238,9 +233,7 @@ export function Navegacion({ tipoNavegacion = null }) {
               onKeyDown={handleSearchKeyDown}
             />
             {showSearchDropdown && searchTerm.trim() !== "" && (
-              <div
-                className="absolute left-0 top-full z-50 mt-1 max-h-[250px] w-full overflow-y-auto rounded-lg border border-border bg-popover py-1 text-popover-foreground shadow-md"
-              >
+              <div className="absolute left-0 top-full z-50 mt-1 max-h-[250px] w-full overflow-y-auto rounded-lg border-border bg-popover py-1 text-popover-foreground shadow-md">
                 <ul
                   id="navegacion-resultados-busqueda"
                   role="listbox"
@@ -261,7 +254,8 @@ export function Navegacion({ tipoNavegacion = null }) {
                           }`}
                           onMouseEnter={() => setActiveSearchIndex(idx)}
                           onClick={() => selectSearchOption(item)}
-                         variant="default">
+                          variant="default"
+                        >
                           {item.label}
                         </Button>
                       </li>
@@ -276,37 +270,28 @@ export function Navegacion({ tipoNavegacion = null }) {
             )}
           </div>
           {/* 1. Asistencia */}
-          <Button
-            type="button"
-            className={actionButtonClass}
-            onClick={() => navigate("/marcarAsistencia")}
-            title="Asistencia" // El title ayuda a que en celular, si lo mantienen presionado, diga qué es
-           variant="default">
-            <UserRoundCheck size={17} />
-            <span className="hidden sm:inline">Asistencia</span>
+          <Button asChild className={actionButtonClass} variant="outline">
+            <Link to="/marcarAsistencia" title="Asistencia">
+              <UserRoundCheck size={17} />
+              <span className="hidden sm:inline">Asistencia</span>
+            </Link>
           </Button>
           {/* 2. Eventos */}
           {rolesLocalStorage.some((r) => r.nombre === "incidencias") && (
-            <Button
-              type="button"
-              className={actionButtonClass}
-              onClick={() => navigate("/incidencias")}
-              title="Eventos"
-             variant="default">
-              <Megaphone size={17} />
-              <span className="hidden sm:inline">Eventos</span>
+            <Button asChild className={actionButtonClass} variant="outline">
+              <Link to="/incidencias" title="Eventos">
+                <Megaphone size={17} />
+                <span className="hidden sm:inline">Eventos</span>
+              </Link>
             </Button>
           )}
           {/* PARA MIS ENTREGAS DEL DELIVERY CONDUCTOR */}
           {rolesLocalStorage.some((r) => r.nombre === "mis entregas") && (
-            <Button
-              type="button"
-              className={actionButtonClass}
-              onClick={() => navigate("/mis-entregas")}
-              title="Mis Entregas"
-             variant="default">
-              <Package size={17} />
-              <span className="hidden sm:inline">Mis Entregas</span>
+            <Button asChild className={actionButtonClass} variant="outline">
+              <Link to="/mis-entregas" title="Mis entregas">
+                <Package size={17} />
+                <span className="hidden sm:inline">Mis entregas</span>
+              </Link>
             </Button>
           )}
 
@@ -314,44 +299,37 @@ export function Navegacion({ tipoNavegacion = null }) {
           {["delivery", "conductor", "administrador"].includes(
             rol?.empleado?.cargo?.nombre,
           ) && (
-            <Button
-              type="button"
-              className={actionButtonClass}
-              onClick={() => navigate("/pedidosDelivery")}
-              title="Pedidos Delivery"
-             variant="default">
-              <BikeIcon size={17} />
-              <span className="hidden sm:inline">Pedidos</span>
+            <Button asChild className={actionButtonClass} variant="outline">
+              <Link to="/pedidosDelivery" title="Pedidos delivery">
+                <BikeIcon size={17} />
+                <span className="hidden sm:inline">Pedidos</span>
+              </Link>
             </Button>
           )}
           {/* 4. POS (Oculto estrictamente para roles que no abren caja usando palabras clave) */}
           {!esRolBloqueadoParaCaja && (
             <Button
-              type="button"
-              className="inline-flex h-9 items-center justify-center gap-2 rounded-lg bg-primary px-2.5 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:px-3"
-              onClick={() => {
-                esComida
-                  ? navigate("/vender/mesas")
-                  : navigate("/vender/ventasLlevar/");
-              }}
-              title="Abrir ventas"
-             variant="default">
-              <StoreIcon size={17} />
-              <span className="hidden sm:inline">Vender</span>
+              asChild
+              className="inline-flex h-9 items-center justify-center gap-2 rounded-lg px-2.5 text-sm font-medium shadow-sm sm:px-3"
+            >
+              <Link
+                to={esComida ? "/vender/mesas" : "/vender/ventasLlevar"}
+                title="Abrir ventas"
+              >
+                <StoreIcon size={17} />
+                <span className="hidden sm:inline">Vender</span>
+              </Link>
             </Button>
           )}
           {/* 5. Cocina */}
           {["cocinero", "administrador"].includes(
             rol?.empleado?.cargo?.nombre,
           ) && (
-            <Button
-              type="button"
-              className={actionButtonClass}
-              onClick={() => navigate("/cocina")}
-              title="Cocina"
-             variant="default">
-              <CookingPotIcon size={17} />
-              <span className="hidden sm:inline">Cocina</span>
+            <Button asChild className={actionButtonClass} variant="outline">
+              <Link to="/cocina" title="Cocina">
+                <CookingPotIcon size={17} />
+                <span className="hidden sm:inline">Cocina</span>
+              </Link>
             </Button>
           )}
         </div>

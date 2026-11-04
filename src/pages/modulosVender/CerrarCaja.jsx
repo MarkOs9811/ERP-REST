@@ -30,10 +30,9 @@ import { BtnVer } from "../../components/componentesReutilizables/BotonesAccion"
 import { ModalDetallesVentas } from "../../components/componentesVentas/ModalDetallesVentas";
 import { GetMetodosPago } from "../../service/accionesVentas/GetMetodosPago";
 
-import "../../css/EstilosCerrarCaja.css";
+
 import { Button } from "../../components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-
 
 export const fetchCajaClose = async (cajaId) => {
   try {
@@ -236,9 +235,7 @@ export function CerrarCaja() {
     },
     {
       name: "Metodo Pago",
-      selector: (row) => (
-        <span className="text-capitalize">{row.metodoPago}</span>
-      ),
+      selector: (row) => <span className="capitalize">{row.metodoPago}</span>,
       sortable: true,
       wrap: true,
       center: true,
@@ -272,7 +269,7 @@ export function CerrarCaja() {
     {
       name: "Detalles",
       cell: (row) => (
-        <div className="d-flex ">
+        <div className="flex">
           <BtnVer
             onClick={() => {
               setDataVentas(row.ventaOriginal);
@@ -291,22 +288,22 @@ export function CerrarCaja() {
   if (isError) return <div>Error: {error.message}</div>;
 
   return (
-    <div className="container d-flex align-items-center justify-content-center ">
+    <div className="mx-auto w-full max-w-7xl px-4 flex items-center justify-center">
       <Card className="h-full overflow-auto border">
         <CardHeader className="p-3 border-b flex align-content-center items-center bg-background">
           <h5 className="titulo-card-especial mb-0">Arqueo y Cierre de Caja</h5>
-          <div className="badge px-3 py-2 ms-auto bg-dark border">
+          <div className="inline-flex items-center rounded-full text-xs font-semibold transition-colors px-3 py-2 ms-auto bg-foreground border">
             <span className="h5 mb-0 text-white">{caja?.nombre}</span>
           </div>
         </CardHeader>
 
         <CardContent className="p-4 h-full">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 h-100">
+          <div className="grid grid-cols-12 gap-4 h-full">
             {/* LADO IZQUIERDO: Tarjetas y Tabla */}
-            <div className="md:col-span-8 h-100">
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+            <div className="col-span-full md:col-span-8 h-full">
+              <div className="grid grid-cols-12 gap-3">
                 {/* TARJETA 1 (Fondo Inicial) */}
-                <div className="md:col-span-4">
+                <div className="col-span-full md:col-span-4">
                   <Card
                     className="h-full"
                     style={{
@@ -319,9 +316,9 @@ export function CerrarCaja() {
                     }}
                   >
                     <CardContent className="p-4 flex flex-col justify-between">
-                      <div className="d-flex justify-content-between align-items-start mb-3">
+                      <div className="flex justify-between items-start mb-3">
                         <div
-                          className="d-flex align-items-center justify-content-center rounded-circle"
+                          className="flex items-center justify-center rounded-full"
                           style={{
                             width: "45px",
                             height: "45px",
@@ -336,11 +333,11 @@ export function CerrarCaja() {
                         </div>
                       </div>
                       <div>
-                        <p className="mb-1 text-muted fw-semibold small">
+                        <p className="mb-1 text-muted-foreground font-semibold text-sm">
                           Fondo Inicial
                         </p>
                         <h3
-                          className="fw-bold mb-0"
+                          className="font-bold mb-0"
                           style={{ color: "#2d3436" }}
                         >
                           S/. {Number(cajaData?.montoInicial || 0).toFixed(2)}
@@ -351,7 +348,7 @@ export function CerrarCaja() {
                 </div>
 
                 {/* TARJETA 2 (Efectivo Físico) */}
-                <div className="md:col-span-4">
+                <div className="col-span-full md:col-span-4">
                   <Card
                     className="h-full"
                     style={{
@@ -364,9 +361,9 @@ export function CerrarCaja() {
                     }}
                   >
                     <CardContent className="p-4 flex flex-col justify-between">
-                      <div className="d-flex justify-content-between align-items-start mb-3">
+                      <div className="flex justify-between items-start mb-3">
                         <div
-                          className="d-flex align-items-center justify-content-center rounded-circle"
+                          className="flex items-center justify-center rounded-full"
                           style={{
                             width: "45px",
                             height: "45px",
@@ -381,11 +378,11 @@ export function CerrarCaja() {
                         </div>
                       </div>
                       <div>
-                        <p className="mb-1 text-muted fw-semibold small">
+                        <p className="mb-1 text-muted-foreground font-semibold text-sm">
                           Efectivo Físico
                         </p>
                         <h3
-                          className="fw-bold mb-0"
+                          className="font-bold mb-0"
                           style={{ color: "#2d3436" }}
                         >
                           S/. {fisicoEsperado}
@@ -396,7 +393,7 @@ export function CerrarCaja() {
                 </div>
 
                 {/* TARJETA 3 (Monto Vendido Total) */}
-                <div className="md:col-span-4">
+                <div className="col-span-full md:col-span-4">
                   <Card
                     className="h-full"
                     style={{
@@ -409,9 +406,9 @@ export function CerrarCaja() {
                     }}
                   >
                     <CardContent className="p-4 flex flex-col justify-between">
-                      <div className="d-flex justify-content-between align-items-start mb-3">
+                      <div className="flex justify-between items-start mb-3">
                         <div
-                          className="d-flex align-items-center justify-content-center rounded-circle"
+                          className="flex items-center justify-center rounded-full"
                           style={{
                             width: "45px",
                             height: "45px",
@@ -426,11 +423,11 @@ export function CerrarCaja() {
                         </div>
                       </div>
                       <div>
-                        <p className="mb-1 text-muted fw-semibold small">
+                        <p className="mb-1 text-muted-foreground font-semibold text-sm">
                           Total Vendido
                         </p>
                         <h3
-                          className="fw-bold mb-0"
+                          className="font-bold mb-0"
                           style={{ color: "#2d3436" }}
                         >
                           S/. {Number(cajaData?.totalVenta || 0).toFixed(2)}
@@ -441,34 +438,37 @@ export function CerrarCaja() {
                 </div>
 
                 {/* DESGLOSE POR MÉTODO DE PAGO */}
-                <div className="md:col-span-12">
+                <div className="col-span-full md:col-span-12">
                   <Card className="border bg-background p-3">
-                    <div className="d-flex align-items-center mb-3">
-                      <PieChart className="text-secondary me-2" size={18} />
-                      <h6 className="fw-bold mb-0 text-secondary">
+                    <div className="flex items-center mb-3">
+                      <PieChart
+                        className="text-muted-foreground me-2"
+                        size={18}
+                      />
+                      <h6 className="font-bold mb-0 text-muted-foreground">
                         Desglose de Ingresos
                       </h6>
                     </div>
-                    <div className="d-flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-2">
                       {Object.keys(totalesPorMetodo).length > 0 ? (
                         Object.entries(totalesPorMetodo).map(
                           ([metodo, monto]) => (
                             <div
                               key={metodo}
-                              className="border rounded px-3 py-2 bg-light d-flex justify-content-between align-items-center flex-grow-1"
+                              className="border rounded px-3 py-2 bg-muted flex justify-between items-center grow"
                               style={{ minWidth: "160px" }}
                             >
-                              <span className="text-capitalize text-muted small fw-semibold me-3">
+                              <span className="text-muted-foreground text-sm font-semibold me-3">
                                 {metodo}
                               </span>
-                              <span className="fw-bold text-dark fs-6">
+                              <span className="font-bold text-foreground text-base">
                                 S/. {Number(monto).toFixed(2)}
                               </span>
                             </div>
                           ),
                         )
                       ) : (
-                        <p className="text-muted small mb-0 w-100 text-center py-2">
+                        <p className="text-muted-foreground text-sm mb-0 w-full text-center py-2">
                           No hay ventas registradas aún.
                         </p>
                       )}
@@ -477,18 +477,18 @@ export function CerrarCaja() {
                 </div>
 
                 {/* TABLA DE VENTAS */}
-                <div className="md:col-span-12">
+                <div className="col-span-full md:col-span-12">
                   <Card className="border py-2 bg-background">
-                    <CardHeader className="bg-background border-bottom-0 pb-3">
-                      <p className="fw-bold text-secondary mb-2">
+                    <CardHeader className="bg-background border-b-0 pb-3">
+                      <p className="font-bold text-muted-foreground mb-2">
                         Historial de Transacciones
                       </p>
-                      <div className="d-flex  gap-2 align-items-center">
+                      <div className="flex gap-2 items-center">
                         {/* Input de Búsqueda */}
                         <div>
                           <input
                             type="search"
-                            className="form-control form-control-sm"
+                            className="w-full rounded-md border-input bg-background py-1 shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 h-8 px-2.5 text-xs"
                             placeholder="Buscar por pedido, vendedor..."
                             value={busqueda}
                             onChange={(e) => setBusqueda(e.target.value)}
@@ -500,7 +500,8 @@ export function CerrarCaja() {
                             type="button"
                             className={metodoFiltro === "TODOS" ? "activo" : ""}
                             onClick={() => setMetodoFiltro("TODOS")}
-                           variant="default">
+                            variant="default"
+                          >
                             Todos
                           </Button>
 
@@ -515,7 +516,8 @@ export function CerrarCaja() {
                                   : ""
                               }
                               onClick={() => setMetodoFiltro(metodo.nombre)}
-                             variant="default">
+                              variant="default"
+                            >
                               {metodo.nombre}
                             </Button>
                           ))}
@@ -535,33 +537,38 @@ export function CerrarCaja() {
             </div>
 
             {/* LADO DERECHO: Detalles y Acciones */}
-            <div className="md:col-span-4 h-100">
+            <div className="col-span-full md:col-span-4 h-full">
               <Card className="border h-full flex flex-col">
                 <CardHeader className="border-b p-3">
-                  <div className="d-flex align-items-center">
-                    <div className=" alert alert-danger rounded p-2 me-3">
-                      <CreditCard className="text-danger" size={20} />
+                  <div className="flex items-center">
+                    <div className="relative w-full text-sm border-destructive/30 bg-destructive/10 text-destructive rounded p-2 me-3">
+                      <CreditCard className="text-destructive" size={20} />
                     </div>
                     <div>
-                      <h6 className="fw-bold text-dark mb-0">
+                      <h6 className="font-bold text-foreground mb-0">
                         Detalles de Operación
                       </h6>
-                      <p className="text-muted small mb-0">Auditoría de caja</p>
+                      <p className="text-muted-foreground text-sm mb-0">
+                        Auditoría de caja
+                      </p>
                     </div>
                   </div>
                 </CardHeader>
 
                 <CardContent className="flex flex-col p-3">
                   {/* Información de Apertura */}
-                  <div className="bg-light rounded p-3 mb-4 border">
-                    <div className="d-flex flex-column mb-3 border-bottom pb-2">
-                      <div className="d-flex align-items-center mb-1">
-                        <User className="text-secondary me-2" size={16} />
-                        <span className="fw-semibold small text-secondary">
+                  <div className="bg-muted rounded p-3 mb-4 border">
+                    <div className="flex flex-col mb-3 border-b pb-2">
+                      <div className="flex items-center mb-1">
+                        <User
+                          className="text-muted-foreground me-2"
+                          size={16}
+                        />
+                        <span className="font-semibold text-sm text-muted-foreground">
                           Cajero / Usuario
                         </span>
                       </div>
-                      <span className="text-dark fw-bold ps-4">
+                      <span className="text-foreground font-bold ps-4">
                         {cajaData?.datosRegistroCaja?.usuario?.empleado?.persona
                           ?.nombre +
                           " " +
@@ -570,40 +577,46 @@ export function CerrarCaja() {
                       </span>
                     </div>
 
-                    <div className="d-flex flex-column mb-3 border-bottom pb-2">
-                      <div className="d-flex align-items-center mb-1">
-                        <Calendar className="text-secondary me-2" size={16} />
-                        <span className="fw-semibold small text-secondary">
+                    <div className="flex flex-col mb-3 border-b pb-2">
+                      <div className="flex items-center mb-1">
+                        <Calendar
+                          className="text-muted-foreground me-2"
+                          size={16}
+                        />
+                        <span className="font-semibold text-sm text-muted-foreground">
                           Fecha de Apertura
                         </span>
                       </div>
-                      <span className="text-dark fw-bold ps-4">
+                      <span className="text-foreground font-bold ps-4">
                         {cajaData?.datosRegistroCaja?.fechaApertura}
                       </span>
                     </div>
 
-                    <div className="d-flex flex-column">
-                      <div className="d-flex align-items-center mb-1">
-                        <Clock className="text-secondary me-2" size={16} />
-                        <span className="fw-semibold small text-secondary">
+                    <div className="flex flex-col">
+                      <div className="flex items-center mb-1">
+                        <Clock
+                          className="text-muted-foreground me-2"
+                          size={16}
+                        />
+                        <span className="font-semibold text-sm text-muted-foreground">
                           Hora de Apertura
                         </span>
                       </div>
-                      <span className="text-dark fw-bold ps-4">
+                      <span className="text-foreground font-bold ps-4">
                         {cajaData?.datosRegistroCaja?.horaApertura}
                       </span>
                     </div>
                   </div>
 
                   {/* Inputs de Cierre */}
-                  <div className="bg-white rounded p-3 border mb-4 flex-grow-1">
+                  <div className="bg-background rounded p-3 mb-4 grow">
                     <div className="mb-4">
-                      <label className="text-secondary small fw-semibold mb-1 d-block">
+                      <label className="text-muted-foreground text-sm font-semibold mb-1 block">
                         Total Vendido Declarado
                       </label>
                       <input
                         type="text"
-                        className="form-control border-2 bg-light fs-5 fw-bold text-success text-end"
+                        className="h-9 w-full rounded-md border-input px-3 py-1 shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 border-2 bg-muted text-lg font-bold text-emerald-600 dark:text-emerald-400 text-right"
                         style={{ height: "55px" }}
                         readOnly
                         {...register("montoVendido", {
@@ -614,13 +627,16 @@ export function CerrarCaja() {
                     </div>
 
                     <div>
-                      <label className="text-secondary small fw-semibold mb-1 d-flex align-items-center">
-                        <Wallet className="me-2 text-secondary" size={16} />
+                      <label className="text-muted-foreground text-sm font-semibold mb-1 flex items-center">
+                        <Wallet
+                          className="me-2 text-muted-foreground"
+                          size={16}
+                        />
                         Monto Físico a Dejar en Cajón
                       </label>
                       <input
                         type="text"
-                        className="form-control border-2 bg-white fs-5 fw-bold text-primary text-end"
+                        className="h-9 w-full rounded-md border-input px-3 py-1 shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 border-2 bg-background text-lg font-bold text-primary text-right"
                         style={{ height: "55px" }}
                         defaultValue="0"
                         {...register("montoDejar", {
@@ -629,22 +645,22 @@ export function CerrarCaja() {
                         })}
                         onInput={handlePrecioInput}
                       />
-                      <small className="text-muted mt-1 d-block">
+                      <small className="text-muted-foreground mt-1 block">
                         Fondo de inicio para el siguiente turno
                       </small>
                     </div>
                   </div>
 
                   {/* Botones */}
-                  <div className="d-flex flex-column gap-3 mt-auto">
+                  <div className="flex flex-col gap-3 mt-auto">
                     <BotonAnimado
                       onClick={handleImprimirCaja}
                       loading={isLoading}
                       error={error}
-                      className="btn btn-light px-4 py-3 border-2 border-dark text-dark fw-bold"
+                      className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-muted shadow-sm hover:bg-muted/80 px-4 py-3 border-2 border-dark text-foreground font-bold"
                       icon={<Printer className="me-2" size={20} />}
                     >
-                      <span className="d-flex align-items-center justify-content-center">
+                      <span className="flex items-center justify-center">
                         Imprimir Arqueo
                       </span>
                     </BotonAnimado>
@@ -652,11 +668,11 @@ export function CerrarCaja() {
                     <BotonAnimado
                       loading={isLoading}
                       error={error}
-                      className="btn btn-outline-danger border-2 px-4 py-3 fw-bold bg-danger text-white hover-outline"
+                      className="shadow inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border-destructive hover:bg-destructive/10 border-2 px-4 py-3 font-bold bg-destructive text-white hover-outline"
                       onClick={() => handleQuestionCaja(caja)}
                       icon={<Lock className="me-2" size={20} />}
                     >
-                      <span className="d-flex align-items-center justify-content-center">
+                      <span className="flex items-center justify-center">
                         Cerrar Turno y Caja
                       </span>
                     </BotonAnimado>

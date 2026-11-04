@@ -13,11 +13,10 @@ import ToastAlert from "../components/componenteToast/ToastAlert";
 import { Cargando } from "../components/componentesReutilizables/Cargando";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { GetConfi } from "../service/accionesConfiguracion/GetConfi";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Plus } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Card, CardHeader } from "@/components/ui/card";
-
 
 export function AbrirCaja() {
   const dispatch = useDispatch();
@@ -115,7 +114,7 @@ export function AbrirCaja() {
   return (
     <div>
       <div
-        className="d-flex justify-content-center align-items-center"
+        className="flex justify-center items-center"
         style={{ minHeight: "80vh" }}
       >
         <Card
@@ -127,29 +126,27 @@ export function AbrirCaja() {
               <FontAwesomeIcon icon={faBoxOpen} className="me-2" />
               Abrir Caja
             </h4>
-            <Button
-              type="button"
-              className="btn-principal mb-0"
-              onClick={() => navigate("/ventas/cajas")}
-             variant="default">
-              <Plus size={16} /> Agregar Caja
+            <Button asChild size="sm" className="gap-2">
+              <Link to="/ventas/cajas">
+                <Plus size={16} /> Agregar caja
+              </Link>
             </Button>
           </CardHeader>
 
-          <div className="alert alert-secondary mt-3">
+          <div className="relative w-full rounded-lg px-4 py-3 text-sm border-border bg-muted text-foreground mt-3">
             <FontAwesomeIcon icon={faTriangleExclamation} className="mx-2" />
             Caja cerrada. Por favor, aperture una para continuar.
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="form-abrir-caja">
             <div className="mb-3">
-              <label htmlFor="caja" className="mx-1 small">
+              <label htmlFor="caja" className="mx-1 text-sm">
                 <FontAwesomeIcon icon={faCashRegister} /> Seleccionar Caja
               </label>
 
               <select
                 id="caja"
-                className={`form-select ${errors.caja ? "is-invalid" : ""}`}
+                className={`h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.caja ? "border-destructive focus-visible:ring-destructive" : ""}`}
                 disabled={isLoadingCajas}
                 {...register("caja", { required: "Seleccione una caja" })}
               >
@@ -164,11 +161,13 @@ export function AbrirCaja() {
               </select>
 
               {errors.caja && (
-                <div className="invalid-feedback">{errors.caja.message}</div>
+                <div className="text-sm text-destructive">
+                  {errors.caja.message}
+                </div>
               )}
 
               {isErrorCajas && (
-                <div className="text-danger small mt-1">
+                <div className="text-destructive text-sm mt-1">
                   No se pudieron cargar las cajas.
                 </div>
               )}
@@ -176,7 +175,7 @@ export function AbrirCaja() {
               {!isLoadingCajas &&
                 !isErrorCajas &&
                 cajasCerradas.length === 0 && (
-                  <div className="text-muted small mt-1">
+                  <div className="text-muted-foreground text-sm mt-1">
                     No hay cajas cerradas disponibles. Cree una nueva o cierre
                     la que está abierta.
                   </div>
@@ -184,7 +183,7 @@ export function AbrirCaja() {
             </div>
 
             <div className="mb-3">
-              <label htmlFor="monto" className="mx-1 small">
+              <label htmlFor="monto" className="mx-1 text-sm">
                 Monto de Apertura S/.
               </label>
               <input
@@ -192,8 +191,10 @@ export function AbrirCaja() {
                 step="0.01"
                 min="0"
                 id="monto"
-                className={`form-control ${
-                  errors.montoApertura ? "is-invalid" : ""
+                className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+                  errors.montoApertura
+                    ? "border-destructive focus-visible:ring-destructive"
+                    : ""
                 }`}
                 placeholder="Ingrese el monto inicial"
                 {...register("montoApertura", {
@@ -206,7 +207,7 @@ export function AbrirCaja() {
               />
 
               {errors.montoApertura && (
-                <div className="invalid-feedback">
+                <div className="text-sm text-destructive">
                   {errors.montoApertura.message}
                 </div>
               )}
@@ -214,11 +215,12 @@ export function AbrirCaja() {
 
             <Button
               type="submit"
-              className="btn-guardar btn-block w-100"
+              className="btn-guardar inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 w-full"
               disabled={
                 isSubmitting || isLoadingCajas || cajasCerradas.length === 0
               }
-             variant="default">
+              variant="default"
+            >
               {isSubmitting ? (
                 <Cargando />
               ) : (

@@ -154,15 +154,17 @@ export function PedidosRider() {
   };
 
   return (
-    <div className="d-flex flex-column h-100  ">
+    <div className="flex flex-col h-full">
       {/* --- NAVEGACIÓN POR PESTAÑAS (TABS) MODERNAS --- */}
       <div
-        className="d-flex mb-4 p-1 rounded-pill shadow-sm bg-white"
+        className="flex mb-4 p-1 rounded-full shadow-sm bg-background"
         style={{ border: "1px solid #eef0f2" }}
       >
         <Button
-          className={`btn flex-grow-1 fw-bold rounded-pill border-0 transition-all ${
-            activeTab === "recoger" ? "shadow-sm" : "bg-transparent text-muted"
+          className={`inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 grow font-bold rounded-full border-0 transition-all ${
+            activeTab === "recoger"
+              ? "shadow-sm"
+              : "bg-transparent text-muted-foreground"
           }`}
           style={{
             backgroundColor:
@@ -171,27 +173,29 @@ export function PedidosRider() {
             padding: "10px 0",
           }}
           onClick={() => setActiveTab("recoger")}
-         variant="default">
+          variant="default"
+        >
           <Package className="me-2" size={18} style={{ marginBottom: "2px" }} />
           Asignados
-          <span className="badge bg-white text-dark ms-2 rounded-pill px-2">
+          <span className="inline-flex items-center py-0.5 text-xs font-semibold transition-colors bg-background text-foreground ms-2 rounded-full px-2">
             {listaRecoger.length}
           </span>
         </Button>
 
         <Button
-          className={`btn flex-grow-1 fw-bold rounded-pill border-0 transition-all ${
+          className={`inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 grow font-bold rounded-full border-0 transition-all ${
             activeTab === "camino"
-              ? "shadow-sm bg-dark text-white"
-              : "bg-transparent text-muted"
+              ? "shadow-sm bg-foreground text-white"
+              : "bg-transparent text-muted-foreground"
           }`}
           style={{ padding: "10px 0" }}
           onClick={() => setActiveTab("camino")}
-         variant="default">
+          variant="default"
+        >
           <Bike className="me-2" size={18} style={{ marginBottom: "2px" }} />
           En Moto
           <span
-            className={`badge ms-2 rounded-pill px-2 ${activeTab === "camino" ? "bg-white text-dark" : "bg-light text-muted"}`}
+            className={`inline-flex items-center py-0.5 text-xs font-semibold transition-colors ms-2 rounded-full px-2 ${activeTab === "camino" ? "bg-background text-foreground" : "bg-muted text-muted-foreground"}`}
           >
             {listaCamino.length}
           </span>
@@ -199,33 +203,39 @@ export function PedidosRider() {
       </div>
 
       {/* --- LISTA DE PEDIDOS --- */}
-      <div className="flex-grow-1 overflow-auto pb-5 px-1">
+      <div className="grow overflow-auto pb-5 px-1">
         {/* TAB 1: ESTADO 5 (Por Recoger) */}
         {activeTab === "recoger" && (
-          <div className="d-flex flex-column gap-3">
+          <div className="flex flex-col gap-3">
             {loadRecoger ? (
               <Cargando />
             ) : listaRecoger.length === 0 ? (
               <div className="text-center mt-5 pt-5 opacity-50">
-                <CheckCircle2 size={60} className="mb-3 text-secondary" />
-                <h5 className="fw-bold text-dark">Área Despejada</h5>
-                <p className="text-muted">No hay pedidos asiganos.</p>
+                <CheckCircle2
+                  size={60}
+                  className="mb-3 text-muted-foreground"
+                />
+                <h5 className="font-bold text-foreground">Área Despejada</h5>
+                <p className="text-muted-foreground">
+                  No hay pedidos asiganos.
+                </p>
               </div>
             ) : (
               listaRecoger.map((pedido) => (
                 <div
                   key={pedido.id}
-                  className="bg-white rounded-4 shadow-sm border-0 overflow-hidden"
+                  className="bg-background rounded-lg shadow-sm border-0 overflow-hidden"
                 >
                   <PedidoCard
                     pedido={pedido}
                     onOpenModal={() => handleAbrirDetalle(pedido)}
                   />
-                  <div className="p-3 bg-white border-top border-light">
+                  <div className="p-3 bg-background border-t border-light">
                     <Button
-                      className="btn-generico w-100 fw-bold rounded-pill py-2 shadow-sm d-flex justify-content-center align-items-center gap-2"
+                      className="btn-generico w-full font-bold rounded-full py-2 shadow-sm flex justify-center items-center gap-2"
                       onClick={() => solicitarCambioEstado(pedido.id, 55)}
-                     variant="default">
+                      variant="default"
+                    >
                       <Bike size={20} />
                       Iniciar Ruta
                       <ArrowRight size={18} className="ms-1" />
@@ -239,47 +249,51 @@ export function PedidosRider() {
 
         {/* TAB 2: ESTADO 55 (En Camino) */}
         {activeTab === "camino" && (
-          <div className="d-flex flex-column gap-3">
+          <div className="flex flex-col gap-3">
             {loadCamino ? (
               <Cargando />
             ) : listaCamino.length === 0 ? (
               <div className="text-center mt-5 pt-5 opacity-50">
-                <Bike size={60} className="mb-3 text-secondary" />
-                <h5 className="fw-bold text-dark">Sin Rutas Activas</h5>
-                <p className="text-muted">No tienes pedidos en la moto.</p>
+                <Bike size={60} className="mb-3 text-muted-foreground" />
+                <h5 className="font-bold text-foreground">Sin Rutas Activas</h5>
+                <p className="text-muted-foreground">
+                  No tienes pedidos en la moto.
+                </p>
               </div>
             ) : (
               listaCamino.map((pedido) => (
                 <div
                   key={pedido.id}
-                  className="bg-white rounded-4 shadow-sm border-0 overflow-hidden"
+                  className="bg-background rounded-lg shadow-sm border-0 overflow-hidden"
                   style={{ borderLeft: "5px solid #212529" }}
                 >
                   <PedidoCard
                     pedido={pedido}
                     onOpenModal={() => handleAbrirDetalle(pedido)}
                   />
-                  <div className="p-3 bg-white border-top border-light d-flex gap-3">
+                  <div className="p-3 bg-background border-t border-light flex gap-3">
                     <Button
-                      className="btn flex-grow-1 fw-bold rounded-pill py-2 d-flex justify-content-center align-items-center gap-2"
+                      className="whitespace-nowrap text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 grow font-bold rounded-full py-2 flex justify-center items-center gap-2"
                       style={{
                         backgroundColor: "#f1f3f5",
                         color: "#495057",
                         border: "none",
                       }}
                       onClick={() => handleAbrirDetalle(pedido)}
-                     variant="default">
+                      variant="default"
+                    >
                       <MapPin size={18} /> Ver Mapa
                     </Button>
                     <Button
-                      className="btn flex-grow-1 fw-bold rounded-pill py-2 d-flex justify-content-center align-items-center gap-2 shadow-sm"
+                      className="whitespace-nowrap text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 grow font-bold rounded-full py-2 flex justify-center items-center gap-2 shadow-sm"
                       style={{
                         backgroundColor: "#212529",
                         color: "white",
                         border: "none",
                       }}
                       onClick={() => solicitarCambioEstado(pedido.id, 6)}
-                     variant="default">
+                      variant="default"
+                    >
                       <CheckCircle2 size={18} /> Entregado
                     </Button>
                   </div>
@@ -302,40 +316,42 @@ export function PedidosRider() {
         width={"400px"}
       >
         {selectedPedido ? (
-          <div className="d-flex flex-column h-100 w-100">
-            <div className="flex-grow-1 overflow-y-auto">
+          <div className="flex flex-col h-full w-full">
+            <div className="grow overflow-y-auto">
               <ModalCabecera selectedPedido={selectedPedido} />
               <ModalCuerpo selectedPedido={selectedPedido} />
               <ModalFooter selectedPedido={selectedPedido} />
             </div>
 
             <div
-              className="flex-shrink-0 p-3 bg-white border-top shadow-sm"
+              className="shrink-0 p-3 bg-background border-t shadow-sm"
               style={{ zIndex: 10 }}
             >
               {activeTab === "recoger" ? (
                 <Button
-                  className="btn w-100 fw-bold py-3 rounded-pill shadow-sm d-flex justify-content-center align-items-center gap-2"
+                  className="whitespace-nowrap text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 w-full font-bold py-3 rounded-full shadow-sm flex justify-center items-center gap-2"
                   style={{
                     background: "#ff3a3a",
                     color: "white",
                     border: "none",
                   }}
                   onClick={() => solicitarCambioEstado(selectedPedido.id, 55)}
-                 variant="default">
+                  variant="default"
+                >
                   <Bike size={20} />
                   Iniciar Ruta de Entrega
                 </Button>
               ) : (
                 <Button
-                  className="btn w-100 fw-bold py-3 rounded-pill shadow-sm d-flex justify-content-center align-items-center gap-2"
+                  className="whitespace-nowrap text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 w-full font-bold py-3 rounded-full shadow-sm flex justify-center items-center gap-2"
                   style={{
                     background: "#212529",
                     color: "white",
                     border: "none",
                   }}
                   onClick={() => solicitarCambioEstado(selectedPedido.id, 6)}
-                 variant="default">
+                  variant="default"
+                >
                   <CheckCircle2 size={20} />
                   Confirmar Entrega
                 </Button>
@@ -353,27 +369,30 @@ export function PedidosRider() {
         handleAccion={ejecutarCambioEstado}
         handleCloseModal={cerrarConfirmacion}
         mensaje="Confirmar Acción"
-        btnConfirmColor="btn-danger" // Puedes cambiarlo a btn-dark si prefieres
+        btnConfirmColor="bg-destructive text-destructive-foreground"
       >
-        <div className="d-flex flex-column align-items-center">
+        <div className="flex flex-col items-center">
           {/* Ícono llamativo para la acción */}
           <div
-            className="bg-danger bg-opacity-10 text-danger rounded-circle d-flex align-items-center justify-content-center mb-3"
+            className="bg-destructive/10 text-destructive rounded-full flex items-center justify-center mb-3"
             style={{ width: "64px", height: "64px" }}
           >
             <AlertCircleIcon size={32} />
           </div>
 
-          <p className="text-muted mb-4 px-2" style={{ fontSize: "1.05rem" }}>
+          <p
+            className="text-muted-foreground mb-4 px-2"
+            style={{ fontSize: "1.05rem" }}
+          >
             ¿Estás seguro de que deseas cambiar el estado de este pedido?
           </p>
 
           {/* Caja de resumen de la acción */}
-          <div className="w-100 p-3 bg-light rounded-4 border border-light shadow-sm d-flex flex-column align-items-center">
-            <span className="badge bg-white text-secondary border px-3 py-1 rounded-pill mb-2 shadow-sm">
+          <div className="w-full p-3 bg-muted rounded-lg border-light shadow-sm flex flex-col items-center">
+            <span className="inline-flex items-center text-xs font-semibold transition-colors bg-background text-muted-foreground px-3 py-1 rounded-full mb-2 shadow-sm">
               Pedido #{confirmConfig.idPedido}
             </span>
-            <h5 className="text-danger fw-bold m-0">
+            <h5 className="text-destructive font-bold m-0">
               {confirmConfig.accionTexto}
             </h5>
           </div>

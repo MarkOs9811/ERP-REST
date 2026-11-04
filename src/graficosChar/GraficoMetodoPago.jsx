@@ -38,16 +38,16 @@ const GraficoMetodoPago = () => {
   }, [listVentas]);
 
   if (isLoading) return <Cargando />;
-  if (isError) return <p className="text-danger p-3">Error al cargar datos</p>;
+  if (isError) return <p className="text-destructive p-3">Error al cargar datos</p>;
 
   const metodoTop = metodos[0];
 
   return (
-    <div className="d-flex flex-column h-100">
+    <div className="flex flex-col h-full">
       {/* Cabecera Limpia (Estilo Fire Wok) */}
-      <div className="mb-4 d-flex gap-3 align-items-center">
+      <div className="mb-4 flex gap-3 items-center">
         <span
-          className="rounded-circle p-2 d-flex justify-content-center align-items-center"
+          className="rounded-full p-2 flex justify-center items-center"
           style={{
             backgroundColor: "var(--bg-emerald-soft)",
             color: "var(--fw-emerald)",
@@ -58,9 +58,9 @@ const GraficoMetodoPago = () => {
           <PieChart size={24} />
         </span>
 
-        <div className="d-flex flex-column flex-grow-1">
+        <div className="flex flex-col grow">
           <span
-            className="fw-bold"
+            className="font-bold"
             style={{ color: "var(--text-main)", fontSize: "1.1rem" }}
           >
             Métodos de Pago
@@ -72,11 +72,11 @@ const GraficoMetodoPago = () => {
       </div>
 
       {/* Lista de Barras */}
-      <div className="flex-grow-1">
+      <div className="grow">
         {metodos.map(({ metodo, cantidad, percent }) => (
           <div
             key={metodo}
-            className="d-flex align-items-center mb-3"
+            className="flex items-center mb-3"
             style={{ fontSize: "0.95rem" }}
           >
             {/* Nombre del método */}
@@ -143,17 +143,17 @@ const GraficoMetodoPago = () => {
       {/* Footer del componente (El Método Top) */}
       {metodoTop && (
         <div
-          className="mt-auto pt-3 border-top"
+          className="mt-auto pt-3 border-t"
           style={{ borderColor: "var(--bg-main) !important" }}
         >
           <span
-            className="d-flex align-items-center gap-2"
+            className="flex items-center gap-2"
             style={{ color: "var(--text-muted)", fontSize: "0.9rem" }}
           >
             <Crown size={20} style={{ color: "var(--fw-saffron)" }} />{" "}
             {/* Coronita Naranja Premium */}
             Método más usado:{" "}
-            <span className="fw-bold" style={{ color: "var(--fw-emerald)" }}>
+            <span className="font-bold" style={{ color: "var(--fw-emerald)" }}>
               {metodoTop.metodo}
             </span>
           </span>

@@ -25,14 +25,16 @@ export function FormularioAddMetodo({ onClose, onSubmit, isLoading }) {
   return (
     <div className="p-3 bg-transparent">
       <form
-        className="grid grid-cols-1 md:grid-cols-12 gap-3 align-content-start"
+        className="grid grid-cols-12 gap-3 align-content-start"
         onSubmit={handleSubmit(submitFormulario)}
       >
-        <div className="col-12">
-          <label className="form-label">Nombre del Método</label>
+        <div className="col-span-full">
+          <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+            Nombre del Método
+          </label>
           <input
             type="text"
-            className={`form-control ${errors.nombre ? "is-invalid" : ""}`}
+            className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.nombre ? "border-destructive focus-visible:ring-destructive" : ""}`}
             {...register("nombre", {
               required: "El nombre es obligatorio",
               maxLength: {
@@ -43,20 +45,27 @@ export function FormularioAddMetodo({ onClose, onSubmit, isLoading }) {
             placeholder="Ej: Efectivo, Tarjeta, etc."
           />
           {errors.nombre && (
-            <div className="invalid-feedback">{errors.nombre.message}</div>
+            <div className="text-sm text-destructive">
+              {errors.nombre.message}
+            </div>
           )}
         </div>
 
-        <div className="col-12 d-flex justify-content-end align-items-center gap-2 mt-2">
+        <div className="col-span-full flex justify-end items-center gap-2 mt-2">
           <Button
             type="button"
             className="btn-cerrar-modal w-auto px-3"
             onClick={onClose}
             disabled={isLoading}
-           variant="default">
+            variant="default"
+          >
             Cancelar
           </Button>
-          <Button type="submit" className="btn-guardar w-auto px-3" variant="default">
+          <Button
+            type="submit"
+            className="btn-guardar w-auto px-3"
+            variant="default"
+          >
             {isLoading ? "Guardando..." : "Guardar Método"}
           </Button>
         </div>

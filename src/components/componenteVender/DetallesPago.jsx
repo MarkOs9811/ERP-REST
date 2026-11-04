@@ -1,14 +1,13 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getPreventaMesa } from "../../service/preventaService";
 
-import "../../css/EstilosPreventa.css";
+
 import { useNavigate, useParams } from "react-router-dom";
 import {
   handleInputChange,
   handleSelectChange,
 } from "../../hooks/InputHandlers";
-import { useForm } from "react-hook-form";
 import { RealizarVenta } from "../../service/RealizarVentaService";
 import ToastAlert from "../componenteToast/ToastAlert";
 // import { useEstadoAsyn } from "../../hooks/EstadoAsync"; // YA NO LO USAREMOS AQUÍ PARA EVITAR EL AUTO-FALSE
@@ -21,8 +20,8 @@ import { clearPedidoWeb } from "../../redux/pedidoWebSlice";
 import { clearCuentaSeparada } from "../../redux/cuentaSeparadaSlice";
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useReactToPrint } from "react-to-print";
-import { FileText } from "lucide-react";
+import { StickyNote } from "lucide-react";
+import { Card } from "@/components/ui/card";
 
 export function DetallesPago() {
   const idMesa = useSelector((state) => state.mesa.idPreventaMesa);
@@ -62,14 +61,6 @@ export function DetallesPago() {
 
   // === ESTADO DE BLOQUEO MANUAL ===
   const [isProcessing, setIsProcessing] = useState(false);
-
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-    reset,
-  } = useForm();
 
   const {
     data: preventasMesa,
@@ -377,9 +368,9 @@ export function DetallesPago() {
   if (isError) return <p>Error: {errorPreventaMesa?.message}</p>;
 
   return (
-    <div className=" h-100 bg-transparent ">
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-4h-100 g-3">
-        <div className="col-lg-3 col-md-4 col-sm-6 col-12 d-flex flex-column h-100">
+    <div className="min-h-[calc(100dvh-6.5rem)] bg-transparent">
+      <div className="grid min-h-[calc(100dvh-6.5rem)] grid-cols-1 items-stretch gap-3 md:grid-cols-2 lg:grid-cols-3">
+        <div className="flex min-w-0 flex-col gap-3">
           <DetallePedido
             idMesa={idMesa}
             mesa={mesa}
@@ -390,18 +381,19 @@ export function DetallesPago() {
             igv={igv}
           />
           {estadoTipoVenta === "llevar" && pedidoLlevar.descripcion && (
-            <div className="mt-2 p-2 bg-warning bg-opacity-10 border border-warning rounded small text-dark">
-              <div className="d-flex align-items-center gap-1 fw-bold mb-1">
-                <FileText size={14} /> Notas del pedido:
+            <Card className="gap-2 rounded-xl border-amber-500/20 bg-amber-500/5 p-3 text-foreground shadow-none">
+              <div className="flex items-center gap-2 text-xs font-semibold text-amber-800 dark:text-amber-300">
+                <StickyNote className="size-4" />
+                Nota del pedido
               </div>
-              <p className="m-0 fst-italic text-break">
+              <p className="mb-0 break-words text-sm text-muted-foreground">
                 {pedidoLlevar.descripcion}
               </p>
-            </div>
+            </Card>
           )}
         </div>
 
-        <div className="col-lg-6 col-md-8 col-sm-12 col-12 d-flex flex-column">
+        <div className="flex min-w-0 flex-col">
           <OpcionesPago
             handleSelectMetodo={handleSelectMetodo}
             handleSelectCardType={handleSelectCardType}
@@ -432,7 +424,7 @@ export function DetallesPago() {
           />
         </div>
 
-        <div className="col-lg-3 col-md-12 col-sm-12 col-12 d-flex flex-column">
+        <div className="flex min-w-0 flex-col">
           <RealizarPago
             totalPreventa={totalPreventa}
             igv={igv}

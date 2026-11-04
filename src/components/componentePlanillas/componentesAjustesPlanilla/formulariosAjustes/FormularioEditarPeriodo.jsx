@@ -78,22 +78,24 @@ export function FormularioEditarPeriodo({ onClose, dataPeriodo }) {
     <div className="p-4">
       {/* 5. Usamos handleSubmit de RHF */}
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+        <div className="grid grid-cols-12 gap-3">
           {/* 1. Nombre del Periodo */}
-          <div className="col-12">
+          <div className="col-span-full">
             <div className="mb-3">
-              <label className="form-label">
+              <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                 <strong>Nombre del Periodo</strong>
               </label>
-              <div className="input-group">
-                <span className="input-group-text">
+              <div className="flex w-full items-stretch">
+                <span className="inline-flex items-center rounded-md border-input bg-muted px-3 text-sm text-muted-foreground">
                   <Type size={18} />
                 </span>
                 {/* 6. Registramos el input */}
                 <input
                   type="text"
-                  className={`form-control ${
-                    errors.nombrePeriodo ? "is-invalid" : ""
+                  className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+                    errors.nombrePeriodo
+                      ? "border-destructive focus-visible:ring-destructive"
+                      : ""
                   }`}
                   {...register("nombrePeriodo", {
                     required: "El nombre es obligatorio",
@@ -101,7 +103,7 @@ export function FormularioEditarPeriodo({ onClose, dataPeriodo }) {
                 />
               </div>
               {errors.nombrePeriodo && (
-                <small className="text-danger">
+                <small className="text-destructive">
                   {errors.nombrePeriodo.message}
                 </small>
               )}
@@ -109,19 +111,21 @@ export function FormularioEditarPeriodo({ onClose, dataPeriodo }) {
           </div>
 
           {/* 2. Fecha de Inicio */}
-          <div className="md:col-span-6">
+          <div className="col-span-full md:col-span-6">
             <div className="mb-3">
-              <label className="form-label">
+              <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                 <strong>Fecha de Inicio</strong>
               </label>
-              <div className="input-group">
-                <span className="input-group-text">
+              <div className="flex w-full items-stretch">
+                <span className="inline-flex items-center rounded-md border-input bg-muted px-3 text-sm text-muted-foreground">
                   <Calendar size={18} />
                 </span>
                 <input
                   type="date"
-                  className={`form-control ${
-                    errors.fecha_inicio ? "is-invalid" : ""
+                  className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+                    errors.fecha_inicio
+                      ? "border-destructive focus-visible:ring-destructive"
+                      : ""
                   }`}
                   {...register("fecha_inicio", {
                     required: "La fecha de inicio es obligatoria",
@@ -129,7 +133,7 @@ export function FormularioEditarPeriodo({ onClose, dataPeriodo }) {
                 />
               </div>
               {errors.fecha_inicio && (
-                <small className="text-danger">
+                <small className="text-destructive">
                   {errors.fecha_inicio.message}
                 </small>
               )}
@@ -137,19 +141,21 @@ export function FormularioEditarPeriodo({ onClose, dataPeriodo }) {
           </div>
 
           {/* 3. Fecha Fin (Corte) */}
-          <div className="md:col-span-6">
+          <div className="col-span-full md:col-span-6">
             <div className="mb-3">
-              <label className="form-label">
+              <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                 <strong>Fecha Fin (Corte)</strong>
               </label>
-              <div className="input-group">
-                <span className="input-group-text">
+              <div className="flex w-full items-stretch">
+                <span className="inline-flex items-center rounded-md border-input bg-muted px-3 text-sm text-muted-foreground">
                   <Calendar size={18} />
                 </span>
                 <input
                   type="date"
-                  className={`form-control ${
-                    errors.fecha_fin ? "is-invalid" : ""
+                  className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+                    errors.fecha_fin
+                      ? "border-destructive focus-visible:ring-destructive"
+                      : ""
                   }`}
                   {...register("fecha_fin", {
                     required: "La fecha de fin es obligatoria",
@@ -161,7 +167,7 @@ export function FormularioEditarPeriodo({ onClose, dataPeriodo }) {
                 />
               </div>
               {errors.fecha_fin && (
-                <small className="text-danger">
+                <small className="text-destructive">
                   {errors.fecha_fin.message}
                 </small>
               )}
@@ -172,7 +178,7 @@ export function FormularioEditarPeriodo({ onClose, dataPeriodo }) {
         {/* Alerta de Error del Backend */}
         {errorBackend && (
           <div
-            className="alert alert-danger d-flex align-items-center"
+            className="relative w-full rounded-lg px-4 py-3 text-sm border-destructive/30 bg-destructive/10 text-destructive flex items-center"
             role="alert"
           >
             <AlertTriangle size={18} className="me-2" />
@@ -181,13 +187,14 @@ export function FormularioEditarPeriodo({ onClose, dataPeriodo }) {
         )}
 
         {/* Botones de Acción */}
-        <div className="d-flex justify-content-end mt-4 gap-2">
+        <div className="flex justify-end mt-4 gap-2">
           <Button
             type="button"
             className="btn-cerrar-modal"
             onClick={onClose}
             disabled={isSubmitting}
-           variant="default">
+            variant="default"
+          >
             <XCircle size={18} className="" />
             Cancelar
           </Button>
@@ -195,10 +202,11 @@ export function FormularioEditarPeriodo({ onClose, dataPeriodo }) {
             type="submit"
             className="btn-guardar"
             disabled={isSubmitting} // 7. Usamos isSubmitting
-           variant="default">
+            variant="default"
+          >
             {isSubmitting ? (
               <span
-                className="spinner-border spinner-border-sm me-2"
+                className="inline-block animate-spin rounded-full border-current border-r-transparent size-4 me-2"
                 role="status"
                 aria-hidden="true"
               ></span>

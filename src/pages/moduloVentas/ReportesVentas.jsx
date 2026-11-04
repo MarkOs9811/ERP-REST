@@ -97,7 +97,7 @@ export function ReportesVentas() {
       <CardHeader className="m-0 border-0">
         <h4 className="">Reportes</h4>
       </CardHeader>
-      <CardContent className="row g-3 mb-4">
+      <CardContent className="grid grid-cols-12 gap-3 mb-4">
         <FormularioReporte
           titulo="Reporte de Ventas"
           onSubmitGoogle={handleReporteGoogle}
@@ -145,9 +145,9 @@ export function ReportesVentas() {
         setIsOpen={setIsModalOpen}
         sheetUrl={sheetUrl}
         titulo={tipoGenerado}
-        fondo="bg-light"
+        fondo="bg-background"
         data={fechas}
-        tamaño="modal-xl"
+        tamaño="max-w-7xl"
       />
     </Card>
   );

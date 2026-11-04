@@ -201,7 +201,7 @@ export function AlmacenList({ search, updateList }) {
       sortable: true,
       center: true,
       cell: (row) => (
-        <div className="d-flex align-items-center justify-content-center gap-2">
+        <div className="flex items-center justify-center gap-2">
           {/* El puntito de color */}
           <div
             style={{
@@ -261,10 +261,14 @@ export function AlmacenList({ search, updateList }) {
           <div>
             {stock <= 5 ? (
               <>
-                <span className="badge bg-danger">{stock}</span>
+                <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-destructive">
+                  {stock}
+                </span>
               </>
             ) : (
-              <span className="badge bg-success">{stock}</span>
+              <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-emerald-600">
+                {stock}
+              </span>
             )}
           </div>
         );

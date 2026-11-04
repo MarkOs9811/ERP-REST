@@ -38,7 +38,7 @@ export function StepSede({ onFinish }) {
     <Card className="text-center p-3">
       <CardHeader className="">
         {/* 1. Cabecera con Banner Vectorial */}
-        <div className="mb-4 d-flex justify-content-center align-items-center">
+        <div className="mb-4 flex justify-center items-center">
           {/* Aquí iría tu imagen real. He puesto un placeholder visual. */}
           <div style={{ maxWidth: "300px", opacity: 0.9 }}>
             {/* Ejemplo de imagen temporal (puedes borrar esto cuando pongas la tuya) */}
@@ -52,13 +52,13 @@ export function StepSede({ onFinish }) {
       </CardHeader>
       <CardContent className="">
         {/* 2. Título y Descripción */}
-        <h3 className="fw-bold text-dark mb-3 d-flex align-items-center justify-content-center gap-2">
-          <MapPin className="text-danger" size={32} strokeWidth={2.5} />
+        <h3 className="font-bold text-foreground mb-3 flex items-center justify-center gap-2">
+          <MapPin className="text-destructive" size={32} strokeWidth={2.5} />
           Establece tu Sede Principal
         </h3>
 
         <p
-          className="text-muted mx-auto mb-4"
+          className="text-muted-foreground mx-auto mb-4"
           style={{ maxWidth: "550px", fontSize: "1.1rem" }}
         >
           Todo comienza aquí. Antes de contratar personal o vender productos,
@@ -67,18 +67,18 @@ export function StepSede({ onFinish }) {
         </p>
 
         {/* 3. Pequeños iconos informativos (Beneficios) */}
-        <div className="d-flex flex-wrap justify-content-center gap-4 mb-5">
-          <div className="d-flex align-items-center text-secondary bg-light px-3 py-2 rounded shadow-sm">
+        <div className="flex flex-wrap justify-center gap-4 mb-5">
+          <div className="flex items-center text-muted-foreground bg-muted px-3 py-2 rounded shadow-sm">
             <Building2 className="me-2 text-primary" size={20} />
             <span>Control de Stock</span>
           </div>
 
-          <div className="d-flex align-items-center text-secondary bg-light px-3 py-2 rounded shadow-sm">
+          <div className="flex items-center text-muted-foreground bg-muted px-3 py-2 rounded shadow-sm">
             <Store className="me-2 text-primary" size={20} />
             <span>Punto de Facturación</span>
           </div>
 
-          <div className="d-flex align-items-center text-secondary bg-light px-3 py-2 rounded shadow-sm">
+          <div className="flex items-center text-muted-foreground bg-muted px-3 py-2 rounded shadow-sm">
             <Users className="me-2 text-primary" size={20} />
             <span>Asignación de Personal</span>
           </div>
@@ -88,7 +88,7 @@ export function StepSede({ onFinish }) {
         <Button
           type="button"
           onClick={() => cambiarEstado(1)}
-          className="btn-guardar btn-lg px-5 shadow py-2 rounded-pill d-inline-flex align-items-center gap-2 w-auto"
+          className="btn-guardar justify-center whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-10 px-5 shadow py-2 rounded-full inline-flex items-center gap-2 w-auto"
           style={{ transition: "transform 0.2s", textDecoration: "none" }}
           onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
           onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
@@ -97,7 +97,7 @@ export function StepSede({ onFinish }) {
           <ArrowRight size={20} />
         </Button>
 
-        <div className="mt-3 text-muted small">
+        <div className="mt-3 text-muted-foreground text-sm">
           <small>Paso 1 de 5 para completar la configuración</small>
         </div>
       </CardContent>

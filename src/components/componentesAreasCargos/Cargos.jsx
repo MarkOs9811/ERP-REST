@@ -15,7 +15,6 @@ import { LayoutGrid, Plus } from "lucide-react";
 import { BotonMotionGeneral } from "../componentesReutilizables/BotonMotionGeneral";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
-
 export function Cargos() {
   const [modalAddCargo, setModalAddCargo] = useState(false);
 
@@ -85,13 +84,15 @@ export function Cargos() {
   return (
     <Card className="">
       <CardHeader className="flex items-center justify-between">
-        <div className="d-flex gap-2 align-items-center">
-          <div className="p-2 alert alert-primary rounded-lg mb-0">
-            <LayoutGrid className="text-danger" size={20} />
+        <div className="flex gap-2 items-center">
+          <div className="p-2 relative w-full px-4 py-3 text-sm border-primary/30 bg-primary/10 text-primary rounded-lg mb-0">
+            <LayoutGrid className="text-destructive" size={20} />
           </div>
-          <div className="d-flex flex-column">
-            <h4 className="fw-bold m-0">Cargos</h4>
-            <small className="text-muted">Gestiona los cargos y roles</small>
+          <div className="flex flex-col">
+            <h4 className="font-bold m-0">Cargos</h4>
+            <small className="text-muted-foreground">
+              Gestiona los cargos y roles
+            </small>
           </div>
         </div>
 
@@ -109,26 +110,26 @@ export function Cargos() {
             <p>Error al cargar datos</p>
           </div>
         )}
-        <div className="list-group">
+        <div className="flex flex-col divide-y">
           {cargos.map((items) => (
             <div
               type="button"
               key={items.id}
-              className="list-group-item list-group-item-action cursor-pointer d-flex align-items-center justify-content-between"
+              className="relative border-b bg-background px-4 py-3 text-foreground transition-colors hover:bg-accent hover:text-accent-foreground cursor-pointer flex items-center justify-between"
               onClick={() => {
                 setModalViewCargo(true);
                 setCargoSeleccionado(items);
               }}
             >
-              <span className="text-left w-50 d-flex flex-column">
+              <span className="text-left w-1/2 flex flex-col">
                 <span className="">{capitalizeFirstLetter(items.nombre)}</span>
-                <small className="text-muted">
+                <small className="text-muted-foreground">
                   Empleados {items.empleados_count}
                 </small>
               </span>
-              <div className="text-end">
+              <div className="text-right">
                 <p className="h5 mb-0">S/. {items.salario}</p>
-                <p className="small mb-0">S/. {items.pagoPorHoras}</p>
+                <p className="text-sm mb-0">S/. {items.pagoPorHoras}</p>
               </div>
             </div>
           ))}

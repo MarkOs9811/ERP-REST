@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import {
   Clock,
   Printer,
@@ -9,6 +9,7 @@ import {
   User,
   XCircle,
   LoaderCircle,
+  X,
 } from "lucide-react";
 import { BadgeComponent } from "../../componentesReutilizables/BadgeComponent";
 import { obtenerTiempoRelativo } from "../../../utils/formatoFechas";
@@ -18,41 +19,17 @@ import axiosInstance from "../../../api/AxiosInstance";
 import ToastAlert from "../../componenteToast/ToastAlert";
 import { Button } from "../../ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Dialog as DialogPrimitive } from "radix-ui";
 
 
-export function OffcanvasColaLlevar({ pedidosCola = [] }) {
-  const offcanvasRef = useRef(null);
-
+export function OffcanvasColaLlevar({
+  pedidosCola = [],
+  open,
+  onOpenChange,
+}) {
   const queryCliente = useQueryClient();
   const [searchTerm, setSearchTerm] = useState("");
   const [filtroTab, setFiltroTab] = useState("todos"); // "todos" | "pendientes" | "entregados"
-
-  useEffect(() => {
-    const handleInteraction = (e) => {
-      if (!offcanvasRef.current?.classList.contains("show")) return;
-      const isEscape = e.type === "keydown" && e.key === "Escape";
-      const isClickOutside =
-        e.type === "mousedown" && !offcanvasRef.current.contains(e.target);
-      const isToggleButton = e.target.closest('[data-bs-toggle="offcanvas"]');
-
-      if (isEscape || (isClickOutside && !isToggleButton)) {
-        const bsOffcanvas = window.bootstrap?.Offcanvas?.getInstance(
-          offcanvasRef.current,
-        );
-        if (bsOffcanvas) {
-          bsOffcanvas.hide();
-        } else {
-          offcanvasRef.current.querySelector(".btn-close")?.click();
-        }
-      }
-    };
-    document.addEventListener("keydown", handleInteraction);
-    document.addEventListener("mousedown", handleInteraction);
-    return () => {
-      document.removeEventListener("keydown", handleInteraction);
-      document.removeEventListener("mousedown", handleInteraction);
-    };
-  }, []);
 
   const pedidosFiltrados = pedidosCola.filter((pedido) => {
     // 1. Filtrado por pestañas (estado)
@@ -134,40 +111,40 @@ export function OffcanvasColaLlevar({ pedidosCola = [] }) {
   };
 
   return (
-    <div
-      ref={offcanvasRef}
-      className="offcanvas offcanvas-end h-100 border-0 shadow-lg rounded-0"
-      tabIndex="-1"
-      id="offcanvasColaLlevar"
-      data-bs-scroll="true"
-      data-bs-backdrop="false"
-      style={{ width: "420px", borderLeft: "none" }}
-    >
-      <div className="offcanvas-header border-bottom flex-column align-items-start gap-3">
-        <div className="d-flex justify-content-between align-items-center w-100">
-          <h5
-            className="offcanvas-title fw-bold d-flex align-items-center gap-2 m-0"
+    <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
+      <DialogPrimitive.Portal>
+        <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-black/50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0" />
+        <DialogPrimitive.Content
+          id="offcanvasColaLlevar"
+          className="fixed inset-y-0 right-0 z-50 flex h-full w-[min(420px,100vw)] flex-col border-l bg-background shadow-xl outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:slide-in-from-right data-[state=closed]:slide-out-to-right"
+        >
+      <div className="flex flex-col items-start gap-3 border-b p-4">
+        <div className="flex justify-between items-center w-full">
+          <DialogPrimitive.Title
+            className="m-0 flex items-center gap-2 font-bold"
             style={{ color: "var(--brand-primary)" }}
           >
-            {" "}
             Pedidos en Cola
-          </h5>
+          </DialogPrimitive.Title>
           <Button
             type="button"
-            className="btn-close shadow-none"
-            data-bs-dismiss="offcanvas"
-            aria-label="Close"
-           variant="default"></Button>
+            variant="ghost"
+            size="icon"
+            aria-label="Cerrar pedidos en cola"
+            onClick={() => onOpenChange(false)}
+          >
+            <X />
+          </Button>
         </div>
 
         {/* PESTAÑAS DE FILTRO (Por entregar / Entregados / Todos) */}
-        <div className="w-100 d-flex gap-1 p-1 bg-light rounded-pill border">
+        <div className="w-full flex gap-1 p-1 bg-muted rounded-full border">
           <Button
             type="button"
-            className={`flex-fill btn btn-sm rounded-pill fw-semibold py-1 transition-all ${
+            className={`flex-1 bg-primary text-primary-foreground shadow hover:bg-primary/90 inline-flex items-center justify-center gap-2 whitespace-nowrap focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 px-3 text-xs rounded-full font-semibold py-1 transition-all ${
               filtroTab === "todos"
-                ? "bg-white text-dark shadow-sm"
-                : "text-muted border-0 bg-transparent"
+                ? "bg-background text-foreground shadow-sm"
+                : "text-muted-foreground border-0 bg-transparent"
             }`}
             onClick={() => setFiltroTab("todos")}
             style={{ fontSize: "0.85rem" }}
@@ -176,10 +153,10 @@ export function OffcanvasColaLlevar({ pedidosCola = [] }) {
           </Button>
           <Button
             type="button"
-            className={`flex-fill btn btn-sm rounded-pill fw-semibold py-1 transition-all ${
+            className={`flex-1 bg-primary text-primary-foreground shadow hover:bg-primary/90 inline-flex items-center justify-center gap-2 whitespace-nowrap focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 px-3 text-xs rounded-full font-semibold py-1 transition-all ${
               filtroTab === "pendientes"
-                ? "bg-white text-dark shadow-sm"
-                : "text-muted border-0 bg-transparent"
+                ? "bg-background text-foreground shadow-sm"
+                : "text-muted-foreground border-0 bg-transparent"
             }`}
             onClick={() => setFiltroTab("pendientes")}
             style={{ fontSize: "0.85rem" }}
@@ -188,10 +165,10 @@ export function OffcanvasColaLlevar({ pedidosCola = [] }) {
           </Button>
           <Button
             type="button"
-            className={`flex-fill btn btn-sm rounded-pill fw-semibold py-1 transition-all ${
+            className={`flex-1 bg-primary text-primary-foreground shadow hover:bg-primary/90 inline-flex items-center justify-center gap-2 whitespace-nowrap focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 px-3 text-xs rounded-full font-semibold py-1 transition-all ${
               filtroTab === "entregados"
-                ? "bg-white text-dark shadow-sm"
-                : "text-muted border-0 bg-transparent"
+                ? "bg-background text-foreground shadow-sm"
+                : "text-muted-foreground border-0 bg-transparent"
             }`}
             onClick={() => setFiltroTab("entregados")}
             style={{ fontSize: "0.85rem" }}
@@ -200,10 +177,10 @@ export function OffcanvasColaLlevar({ pedidosCola = [] }) {
           </Button>
         </div>
 
-        <div className="position-relative w-100 mt-1">
+        <div className="relative w-full mt-1">
           <input
             type="text"
-            className="form-control shadow-none border"
+            className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 shadow-none border"
             placeholder="Buscar por código (PED-123) o cliente..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -215,7 +192,7 @@ export function OffcanvasColaLlevar({ pedidosCola = [] }) {
             }}
           />
           <div
-            className="position-absolute top-50 translate-middle-y text-muted d-flex align-items-center"
+            className="absolute top-1/2 -translate-y-1/2 text-muted-foreground flex items-center"
             style={{ right: "12px", pointerEvents: "none" }}
           >
             <Search size={16} />
@@ -223,9 +200,9 @@ export function OffcanvasColaLlevar({ pedidosCola = [] }) {
         </div>
       </div>
 
-      <div className="offcanvas-body p-3 bg-white overflow-auto">
+      <div className="min-h-0 flex-1 overflow-auto bg-background p-3">
         {pedidosFiltrados.length === 0 ? (
-          <div className="text-center text-muted mt-5 opacity-50">
+          <div className="text-center text-muted-foreground mt-5 opacity-50">
             <AlertCircle size={40} className="mb-2" />
             <p>No se encontraron pedidos en cola.</p>
           </div>
@@ -249,20 +226,20 @@ export function OffcanvasColaLlevar({ pedidosCola = [] }) {
                 }}
               >
                 <CardContent className="p-3">
-                  <div className="d-flex justify-content-between align-items-start mb-2">
+                  <div className="flex justify-between items-start mb-2">
                     <div>
-                      <h6 className="fw-bold mb-1 text-dark">
+                      <h6 className="font-bold mb-1 text-foreground">
                         PED-{pedido.idPedidoLLevar || pedido.id}
                       </h6>
                       <small
-                        className="text-muted d-flex align-items-center gap-1 mb-1"
+                        className="text-muted-foreground flex items-center gap-1 mb-1"
                         style={{ fontSize: "0.8rem" }}
                       >
                         <User size={12} />{" "}
                         {pedido.detalle_cliente || "Cliente Genérico"}
                       </small>
                       <small
-                        className=" d-flex align-items-center gap-1 text-dark opacity-50"
+                        className="flex items-center gap-1 text-foreground opacity-50"
                         style={{ fontSize: "0.8rem" }}
                       >
                         <Clock size={12} />{" "}
@@ -272,20 +249,20 @@ export function OffcanvasColaLlevar({ pedidosCola = [] }) {
                     <div>{configEstado}</div>
                   </div>
 
-                  <div className="small mb-3 text-dark border-top pt-2 mt-2">
+                  <div className="text-sm mb-3 text-foreground border-t pt-2 mt-2">
                     {items.map((item, i) => (
                       <div
                         key={i}
-                        className="d-flex justify-content-between gap-2 mb-1"
+                        className="flex justify-between gap-2 mb-1"
                       >
                         <div>
-                          <span className="fw-bold text-muted me-2">
+                          <span className="font-bold text-muted-foreground me-2">
                             {item.cantidad}x
                           </span>
                           <span>{item.producto?.nombre || "Plato"}</span>
                         </div>
                         <span
-                          className="text-muted"
+                          className="text-muted-foreground"
                           style={{ fontSize: "0.75rem" }}
                         >
                           S/.{" "}
@@ -297,17 +274,17 @@ export function OffcanvasColaLlevar({ pedidosCola = [] }) {
                     ))}
                   </div>
 
-                  <div className="d-flex justify-content-between align-items-center mt-3 pt-2 border-top">
-                    <div className="d-flex gap-2">
+                  <div className="flex justify-between items-center mt-3 pt-2 border-t">
+                    <div className="flex gap-2">
                       <BotonImprimirComanda dataPedido={pedido} />
 
                       {pedido.estado === 0 || pedido.estado === 1 ? (
                         <Button
                           key={`btn-estado-${pedido.id}`}
                           type="button"
-                          className={`d-flex align-items-center gap-1 rounded-pill px-3 fw-bold ${
+                          className={`flex items-center gap-1 rounded-full px-3 font-bold ${
                             pedido.estado === 0 ? "btn-editar" : "btn-generico"
-                          } ${
+                          }${
                             pedidoProcesando === pedido.id
                               ? "disabled cursor-not-allowed"
                               : ""
@@ -331,7 +308,7 @@ export function OffcanvasColaLlevar({ pedidosCola = [] }) {
                         </Button>
                       ) : null}
                     </div>
-                    <span className="fw-bold fs-6 text-dark">
+                    <span className="font-bold text-base text-foreground">
                       S/. {totalPedido.toFixed(2)}
                     </span>
                   </div>
@@ -341,6 +318,8 @@ export function OffcanvasColaLlevar({ pedidosCola = [] }) {
           })
         )}
       </div>
-    </div>
+        </DialogPrimitive.Content>
+      </DialogPrimitive.Portal>
+    </DialogPrimitive.Root>
   );
 }

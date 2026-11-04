@@ -14,7 +14,6 @@ import { TrendingUp } from "lucide-react";
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
 import { Card } from "@/components/ui/card";
 
-
 // 2. Registramos los módulos de Chart.js
 ChartJS.register(
   CategoryScale,
@@ -146,12 +145,12 @@ export function GraficoVentasDelivery({ ventasList, load, errorLoad }) {
   return (
     <CondicionCarga isLoading={load} isError={errorLoad}>
       <Card
-        className="shadow-sm border rounded-2xl p-4 h-full w-full"
+        className="shadow-sm rounded-2xl p-4 h-full w-full"
         style={{ backgroundColor: "var(--bg-card)" }}
       >
-        <div className="d-flex align-items-center mb-4">
+        <div className="flex items-center mb-4">
           <div
-            className="p-2 rounded-circle me-3 d-flex align-items-center justify-content-center"
+            className="p-2 rounded-full me-3 flex items-center justify-center"
             style={{
               backgroundColor: "var(--bg-saffron-soft)",
               color: "var(--fw-saffron)",
@@ -160,10 +159,13 @@ export function GraficoVentasDelivery({ ventasList, load, errorLoad }) {
             <TrendingUp size={24} />
           </div>
           <div>
-            <h5 className="fw-bold mb-0" style={{ color: "var(--text-main)" }}>
+            <h5
+              className="font-bold mb-0"
+              style={{ color: "var(--text-main)" }}
+            >
               Tendencia de Pedidos
             </h5>
-            <span className="small" style={{ color: "var(--text-muted)" }}>
+            <span className="text-sm" style={{ color: "var(--text-muted)" }}>
               Últimos 7 días: Web vs Local
             </span>
           </div>

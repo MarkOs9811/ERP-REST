@@ -1,7 +1,10 @@
 export function SpinnerCargando() {
   return (
-    <div className="spinner-border spinner-border-sm text-auto" role="status">
-      <span className="visually-hidden">Cargando...</span>
+    <div
+      className="inline-block animate-spin rounded-full border-current border-r-transparent size-4 text-auto"
+      role="status"
+    >
+      <span className="sr-only">Cargando...</span>
     </div>
   );
 }

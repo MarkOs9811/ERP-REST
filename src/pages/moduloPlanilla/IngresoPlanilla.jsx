@@ -24,7 +24,6 @@ import { Paso3Aportes } from "../../components/componentePlanillas/componentesIn
 import { Button } from "../../components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
-
 export function IngresoPlanilla() {
   // Extraemos 'trigger' para validar campos manualmente
   const {
@@ -181,10 +180,10 @@ export function IngresoPlanilla() {
   };
 
   return (
-    <Card className="container">
+    <Card className="mx-auto w-full max-w-7xl px-4">
       <CardHeader className="border-0 p-3 flex justify-between items-center">
         <h4>Registro de Nuevo Empleado</h4>
-        <span className="badge bg-primary px-3 py-2">
+        <span className="inline-flex items-center rounded-full text-xs font-semibold transition-colors bg-primary px-3 py-2">
           Paso {pasoActual} de 3
         </span>
       </CardHeader>
@@ -236,22 +235,24 @@ export function IngresoPlanilla() {
           )}
 
           {/* CONTROLES DE NAVEGACIÓN */}
-          <div className="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
+          <div className="flex justify-between items-center mt-4 pt-3 border-t">
             <Button
               type="button"
-              className="btn btn-outline-secondary d-flex align-items-center"
+              className="justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border-input bg-background text-foreground shadow-sm hover:bg-accent hover:text-accent-foreground flex items-center"
               onClick={retrocederPaso}
               disabled={pasoActual === 1}
-             variant="default">
+              variant="default"
+            >
               <ArrowLeft size={18} className="me-2" /> Atrás
             </Button>
 
             {pasoActual < 3 ? (
               <Button
                 type="button"
-                className="btn-guardar d-flex align-items-center px-4"
+                className="btn-guardar flex items-center px-4"
                 onClick={avanzarPaso}
-               variant="default">
+                variant="default"
+              >
                 Siguiente <ArrowRight size={18} className="ms-2" />
               </Button>
             ) : (
@@ -260,7 +261,7 @@ export function IngresoPlanilla() {
                 text="Registrar y Generar contrato"
                 loading={loading}
                 icon={<Save size={18} />}
-                classDefault="btn btn-success d-flex align-items-center px-4"
+                classDefault="bg-emerald-600 text-white flex items-center px-4"
               />
             )}
           </div>

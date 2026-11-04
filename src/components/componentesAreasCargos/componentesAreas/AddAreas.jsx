@@ -47,10 +47,12 @@ export function AddArea({
     <form onSubmit={onSubmit} className="p-3" noValidate>
       {/* Nombre */}
       <div className="mb-3">
-        <label className="form-label small text-muted">Nombre del Area</label>
+        <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm text-muted-foreground">
+          Nombre del Area
+        </label>
         <input
           type="text"
-          className={`form-control ${errors.nombre ? "is-invalid" : ""}`}
+          className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.nombre ? "border-destructive focus-visible:ring-destructive" : ""}`}
           {...register("nombre", {
             required: "Este campo es obligatorio",
             pattern: {
@@ -60,7 +62,9 @@ export function AddArea({
           })}
         />
         {errors.nombre && (
-          <div className="invalid-feedback">{errors.nombre.message}</div>
+          <div className="text-sm text-destructive">
+            {errors.nombre.message}
+          </div>
         )}
       </div>
     </form>

@@ -16,7 +16,6 @@ import {
 import { Button } from "../../ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
-
 export function PeriodoNomina() {
   const queryClient = useQueryClient();
   const [modalGenerarPeriodo, setModalGenerarPeriodo] = useState(false);
@@ -40,17 +39,35 @@ export function PeriodoNomina() {
   const renderEstado = (estado) => {
     switch (estado) {
       case 0:
-        return <span className="badge bg-secondary">Pendiente</span>;
+        return (
+          <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-secondary">
+            Pendiente
+          </span>
+        );
       case 1:
-        return <span className="badge bg-success">Abierto</span>;
+        return (
+          <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-emerald-600">
+            Abierto
+          </span>
+        );
       case 2:
         return (
-          <span className="badge bg-warning text-dark">En Validación</span>
+          <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-amber-500 text-foreground">
+            En Validación
+          </span>
         );
       case 3:
-        return <span className="badge bg-danger">Cerrado</span>;
+        return (
+          <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-destructive">
+            Cerrado
+          </span>
+        );
       default:
-        return <span className="badge bg-light text-dark">Desconocido</span>;
+        return (
+          <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-muted text-foreground">
+            Desconocido
+          </span>
+        );
     }
   };
 
@@ -190,12 +207,13 @@ export function PeriodoNomina() {
       <Card className="py-2">
         <CardHeader className="flex justify-between items-center">
           <h5>Configuración de Periodos de Planilla</h5>
-          <div className="d-flex ms-auto gap-2">
+          <div className="flex ms-auto gap-2">
             {/* <button className="btn btn-sm btn-success"> + Nuevo Periodo</button> */}
             <Button
               className="btn-principal"
               onClick={() => setModalGenerarPeriodo(true)}
-             variant="default">
+              variant="default"
+            >
               Generar periodos del año
             </Button>
           </div>

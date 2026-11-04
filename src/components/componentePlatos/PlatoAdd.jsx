@@ -111,16 +111,14 @@ export function PlatoAdd({ handleCloseModal }) {
       <form onSubmit={handleSubmit(onSubmit)}>
         {/* --- Sección de Imagen Minimalista --- */}
         <div className="mb-4">
-          <label className="form-label text-muted small fw-bold mb-2">
+          <label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-muted-foreground text-sm font-bold mb-2">
             <ImageIcon size={14} className="me-1" /> Imagen del Plato
           </label>
 
           <div
             {...getRootProps()}
-            className={`border rounded-3 d-flex align-items-center justify-content-center p-3 position-relative ${
-              isDragActive
-                ? "border-primary bg-light"
-                : "border-secondary border-opacity-25"
+            className={`border rounded-md flex items-center justify-center p-3 relative ${
+              isDragActive ? "border-primary bg-muted" : "border-border/50"
             }`}
             style={{
               borderStyle: "dashed",
@@ -132,40 +130,42 @@ export function PlatoAdd({ handleCloseModal }) {
             <input {...getInputProps()} />
 
             {fotoPreview ? (
-              <div className="text-center w-100">
+              <div className="text-center w-full">
                 <img
                   src={fotoPreview}
                   alt="Preview"
                   className="rounded shadow-sm"
                   style={{ maxHeight: "120px", objectFit: "cover" }}
                 />
-                <div className="mt-2 text-primary small">
+                <div className="mt-2 text-primary text-sm">
                   Click para cambiar
                 </div>
               </div>
             ) : (
-              <div className="text-center text-muted">
+              <div className="text-center text-muted-foreground">
                 <UploadCloud
                   size={32}
-                  className="mb-2 text-secondary opacity-50"
+                  className="mb-2 text-muted-foreground opacity-50"
                 />
-                <p className="small mb-0">Arrastra o haz click para subir</p>
+                <p className="text-sm mb-0">Arrastra o haz click para subir</p>
               </div>
             )}
           </div>
         </div>
 
         {/* --- Grid de Campos --- */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+        <div className="grid grid-cols-12 gap-3">
           {/* Categoría */}
-          <div className="md:col-span-6">
-            <label className="form-label text-muted small fw-bold">
+          <div className="col-span-full md:col-span-6">
+            <label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-muted-foreground text-sm font-bold">
               Categoría
             </label>
-            <div className="input-group input-group-sm">
+            <div className="flex w-full items-stretch">
               <select
-                className={`form-select border-start-0 shadow-none ${
-                  errors.categoria ? "is-invalid" : ""
+                className={`h-9 w-full appearance-auto rounded-md bg-background px-3 py-1 text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 border-s-0 shadow-none ${
+                  errors.categoria
+                    ? "border-destructive focus-visible:ring-destructive"
+                    : ""
                 }`}
                 {...register("categoria", {
                   required: "Seleccione una categoría",
@@ -180,44 +180,48 @@ export function PlatoAdd({ handleCloseModal }) {
               </select>
             </div>
             {errors.categoria && (
-              <div className="text-danger small mt-1">
+              <div className="text-destructive text-sm mt-1">
                 {errors.categoria.message}
               </div>
             )}
           </div>
 
           {/* Nombre */}
-          <div className="md:col-span-6">
-            <label className="form-label text-muted small fw-bold">
+          <div className="col-span-full md:col-span-6">
+            <label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-muted-foreground text-sm font-bold">
               Nombre del Plato
             </label>
-            <div className="input-group input-group-sm">
+            <div className="flex w-full items-stretch">
               <input
                 type="text"
-                className={`form-control border-start-0 shadow-none ${
-                  errors.nombre ? "is-invalid" : ""
+                className={`h-9 w-full rounded-md bg-background px-3 py-1 text-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 border-s-0 shadow-none ${
+                  errors.nombre
+                    ? "border-destructive focus-visible:ring-destructive"
+                    : ""
                 }`}
                 placeholder="Ej. Lomo Saltado"
                 {...register("nombre", { required: "Campo obligatorio" })}
               />
             </div>
             {errors.nombre && (
-              <div className="text-danger small mt-1">
+              <div className="text-destructive text-sm mt-1">
                 {errors.nombre.message}
               </div>
             )}
           </div>
 
           {/* Precio */}
-          <div className="md:col-span-12">
-            <label className="form-label text-muted small fw-bold">
+          <div className="col-span-full md:col-span-12">
+            <label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-muted-foreground text-sm font-bold">
               Precio Unitario
             </label>
-            <div className="input-group input-group-sm">
+            <div className="flex w-full items-stretch">
               <input
                 type="text"
-                className={`form-control border-start-0 shadow-none ${
-                  errors.precio ? "is-invalid" : ""
+                className={`h-9 w-full rounded-md bg-background px-3 py-1 text-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 border-s-0 shadow-none ${
+                  errors.precio
+                    ? "border-destructive focus-visible:ring-destructive"
+                    : ""
                 }`}
                 // 🔥 USO DEL HELPER AQUÍ PARA EL PLACEHOLDER
                 placeholder={`${getMoneda()} 0.00`}
@@ -229,29 +233,31 @@ export function PlatoAdd({ handleCloseModal }) {
               />
             </div>
             {errors.precio && (
-              <div className="text-danger small mt-1">
+              <div className="text-destructive text-sm mt-1">
                 {errors.precio.message}
               </div>
             )}
           </div>
 
           {/* Descripción */}
-          <div className="col-12">
-            <label className="form-label text-muted small fw-bold">
+          <div className="col-span-full">
+            <label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-muted-foreground text-sm font-bold">
               Descripción
             </label>
-            <div className="input-group input-group-sm">
+            <div className="flex w-full items-stretch">
               <input
                 type="text"
-                className={`form-control border-start-0 shadow-none ${
-                  errors.descripcion ? "is-invalid" : ""
+                className={`h-9 w-full rounded-md bg-background px-3 py-1 text-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 border-s-0 shadow-none ${
+                  errors.descripcion
+                    ? "border-destructive focus-visible:ring-destructive"
+                    : ""
                 }`}
                 placeholder="Breve descripción del plato..."
                 {...register("descripcion", { required: "Requerido" })}
               />
             </div>
             {errors.descripcion && (
-              <div className="text-danger small mt-1">
+              <div className="text-destructive text-sm mt-1">
                 {errors.descripcion.message}
               </div>
             )}
@@ -259,18 +265,20 @@ export function PlatoAdd({ handleCloseModal }) {
         </div>
 
         {/* --- Footer de Botones --- */}
-        <div className="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+        <div className="flex justify-end gap-2 mt-4 pt-3 border-t">
           <Button
             type="button"
-            className="btn-cerrar px-4 rounded-pill"
+            className="btn-cerrar px-4 rounded-full"
             onClick={handleCloseModal}
-           variant="default">
+            variant="default"
+          >
             Cancelar
           </Button>
           <Button
             type="submit"
-            className="btn-guardar btn-dark px-4 rounded-pill"
-           variant="default">
+            className="btn-guardar inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-foreground text-background shadow-sm hover:bg-foreground/90 px-4 rounded-full"
+            variant="default"
+          >
             Guardar Plato
           </Button>
         </div>

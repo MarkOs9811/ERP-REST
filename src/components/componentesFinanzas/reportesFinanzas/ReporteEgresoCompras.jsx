@@ -77,13 +77,13 @@ export function ReporteEgresoCompras() {
     );
   if (isError) return <p>Error al obtener las compras</p>;
   return (
-    <div className="p-4 bg-light">
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
-        <div className="md:col-span-12 d-flex justify-content-auto ms-auto">
+    <div className="p-4 bg-muted">
+      <div className="grid grid-cols-12 gap-3">
+        <div className="col-span-full md:col-span-12 flex justify-between ms-auto">
           <div className="">
             <h5>Informe</h5>
           </div>
-          <div className="d-flex ms-auto gap-3">
+          <div className="flex ms-auto gap-3">
             <BotonMotionGeneral
               text={loading ? "Generando..." : "Generar Reporte"}
               icon={
@@ -103,60 +103,60 @@ export function ReporteEgresoCompras() {
         <div
           ref={reporteRef}
           id="reporte-ingresos-ventas"
-          className="grid grid-cols-1 md:grid-cols-12 gap-3"
+          className="grid grid-cols-12 gap-3"
         >
-          <div className="md:col-span-3 col-sm-12">
+          <div className="md:col-span-3 col-span-full">
             <Card className="p-3 flex flex-row items-center h-full">
               <ShoppingCart
                 color="var(--fw-saffron)"
                 width="63px"
                 height="63px"
               />
-              <div className="ms-auto text-end">
-                <h5 className="fw-light ">Compras</h5>
-                <h3 className="fw-bold mb-0">{totalCompras}</h3>
+              <div className="ms-auto text-right">
+                <h5 className="font-light">Compras</h5>
+                <h3 className="font-bold mb-0">{totalCompras}</h3>
               </div>
             </Card>
           </div>
 
-          <div className="md:col-span-3 col-sm-12">
+          <div className="md:col-span-3 col-span-full">
             <Card className="p-3 flex flex-row items-center h-full">
               <CalendarDays
                 color="var(--fw-emerald)"
                 width="63px"
                 height="63px"
               />
-              <div className="ms-auto text-end">
-                <h5 className="fw-light ">Compras del Mes</h5>
-                <h3 className="fw-bold mb-0">{comprasDelMes}</h3>
+              <div className="ms-auto text-right">
+                <h5 className="font-light">Compras del Mes</h5>
+                <h3 className="font-bold mb-0">{comprasDelMes}</h3>
               </div>
             </Card>
           </div>
 
-          <div className="md:col-span-3 col-sm-12">
+          <div className="md:col-span-3 col-span-full">
             <Card className="p-3 flex flex-row items-center h-full">
               <BanknoteArrowUp
                 color="var(--fw-strawberry)"
                 width="63px"
                 height="63px"
               />
-              <div className="ms-auto text-end">
-                <h5 className="fw-light ">Egresos del Mes</h5>
-                <h3 className="fw-bold mb-0">S/. {totalMontoComprasDelMes}</h3>
+              <div className="ms-auto text-right">
+                <h5 className="font-light">Egresos del Mes</h5>
+                <h3 className="font-bold mb-0">S/. {totalMontoComprasDelMes}</h3>
               </div>
             </Card>
           </div>
 
-          <div className="md:col-span-3 col-sm-12">
+          <div className="md:col-span-3 col-span-full">
             <Card className="p-3 flex flex-row items-center h-full">
               <Trophy color="var(--fw-saffron)" width="63px" height="63px" />
-              <div className="ms-auto text-end">
-                <h5 className="fw-light ">Proveedor TOP</h5>
-                <h3 className="fw-bold mb-0">{proveedorTop}</h3>
+              <div className="ms-auto text-right">
+                <h5 className="font-light">Proveedor TOP</h5>
+                <h3 className="font-bold mb-0">{proveedorTop}</h3>
               </div>
             </Card>
           </div>
-          <div className="md:col-span-12">
+          <div className="col-span-full md:col-span-12">
             <Card className="p-3">
               <GraficoEgresoTodo />
             </Card>

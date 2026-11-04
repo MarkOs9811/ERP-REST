@@ -77,18 +77,18 @@ export function FormPassChange({ onClose }) {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="d-flex flex-column h-100 m-0"
+      className="flex flex-col h-full m-0"
     >
-      <div className="flex-grow-1 p-4 d-flex flex-column gap-3">
+      <div className="grow p-4 flex flex-col gap-3">
         {/* Contraseña Actual */}
         <div className="form-group">
-          <label className="text-secondary small fw-medium mb-1">
+          <label className="text-muted-foreground text-sm font-medium mb-1">
             Contraseña Actual
           </label>
-          <div className="position-relative">
+          <div className="relative">
             <input
               type={showCurrent ? "text" : "password"}
-              className={`form-control pe-5 ${errors.current_password ? "is-invalid" : ""}`}
+              className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 pe-5 ${errors.current_password ? "border-destructive focus-visible:ring-destructive" : ""}`}
               style={{ backgroundImage: "none" }}
               placeholder="Ingresa tu contraseña actual"
               disabled={mutation.isPending}
@@ -97,38 +97,39 @@ export function FormPassChange({ onClose }) {
               })}
             />
             <Button
-              className="btn border-0 bg-transparent text-muted position-absolute top-50 end-0 translate-middle-y shadow-none"
+              className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:bg-primary/90 border-0 bg-transparent text-muted-foreground absolute top-1/2 right-0 -translate-y-1/2 shadow-none"
               type="button"
               onClick={() => setShowCurrent(!showCurrent)}
               style={{ zIndex: 10, paddingRight: "12px" }}
               tabIndex="-1"
-             variant="default">
+              variant="default"
+            >
               {showCurrent ? <EyeOff size={18} /> : <Eye size={18} />}
             </Button>
           </div>
           {/* Mensaje de validación debajo */}
           {errors.current_password && (
-            <small className="text-danger d-flex align-items-center mt-1 gap-1">
+            <small className="text-destructive flex items-center mt-1 gap-1">
               <AlertCircle size={14} /> {errors.current_password.message}
             </small>
           )}
         </div>
 
-        <hr className="text-muted opacity-25 my-1" />
+        <hr className="text-muted-foreground opacity-25 my-1" />
 
         {/* Nueva Contraseña */}
         <div className="form-group">
-          <label className="text-secondary small fw-medium mb-1">
+          <label className="text-muted-foreground text-sm font-medium mb-1">
             Nueva Contraseña
           </label>
-          <div className="position-relative">
+          <div className="relative">
             <input
               type={showNew ? "text" : "password"}
-              className={`form-control pe-5 ${
+              className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 pe-5 ${
                 errors.new_password
-                  ? "is-invalid"
+                  ? "border-destructive focus-visible:ring-destructive"
                   : isValidNewPass
-                    ? "is-valid"
+                    ? "border-emerald-500 focus-visible:ring-emerald-500"
                     : ""
               }`}
               style={{ backgroundImage: "none" }}
@@ -143,22 +144,23 @@ export function FormPassChange({ onClose }) {
               })}
             />
             <Button
-              className="btn border-0 bg-transparent text-muted position-absolute top-50 end-0 translate-middle-y shadow-none"
+              className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:bg-primary/90 border-0 bg-transparent text-muted-foreground absolute top-1/2 right-0 -translate-y-1/2 shadow-none"
               type="button"
               onClick={() => setShowNew(!showNew)}
               style={{ zIndex: 10, paddingRight: "12px" }}
               tabIndex="-1"
-             variant="default">
+              variant="default"
+            >
               {showNew ? <EyeOff size={18} /> : <Eye size={18} />}
             </Button>
           </div>
           {/* Mensajes de validación debajo */}
           {errors.new_password ? (
-            <small className="text-danger d-flex align-items-center mt-1 gap-1">
+            <small className="text-destructive flex items-center mt-1 gap-1">
               <AlertCircle size={14} /> {errors.new_password.message}
             </small>
           ) : isValidNewPass ? (
-            <small className="text-success d-flex align-items-center mt-1 gap-1">
+            <small className="text-emerald-600 dark:text-emerald-400 flex items-center mt-1 gap-1">
               <CheckCircle size={14} /> Contraseña válida
             </small>
           ) : null}
@@ -166,17 +168,17 @@ export function FormPassChange({ onClose }) {
 
         {/* Confirmar Contraseña */}
         <div className="form-group">
-          <label className="text-secondary small fw-medium mb-1">
+          <label className="text-muted-foreground text-sm font-medium mb-1">
             Confirmar Nueva Contraseña
           </label>
-          <div className="position-relative">
+          <div className="relative">
             <input
               type={showNew ? "text" : "password"}
-              className={`form-control pe-5 ${
+              className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 pe-5 ${
                 errors.new_password_confirmation
-                  ? "is-invalid"
+                  ? "border-destructive focus-visible:ring-destructive"
                   : isValidConfirmPass
-                    ? "is-valid"
+                    ? "border-emerald-500 focus-visible:ring-emerald-500"
                     : ""
               }`}
               style={{ backgroundImage: "none" }}
@@ -191,12 +193,12 @@ export function FormPassChange({ onClose }) {
           </div>
           {/* Mensajes de validación debajo */}
           {errors.new_password_confirmation ? (
-            <small className="text-danger d-flex align-items-center mt-1 gap-1">
+            <small className="text-destructive flex items-center mt-1 gap-1">
               <AlertCircle size={14} />{" "}
               {errors.new_password_confirmation.message}
             </small>
           ) : isValidConfirmPass ? (
-            <small className="text-success d-flex align-items-center mt-1 gap-1">
+            <small className="text-emerald-600 dark:text-emerald-400 flex items-center mt-1 gap-1">
               <CheckCircle size={14} /> Las contraseñas coinciden
             </small>
           ) : null}
@@ -204,24 +206,26 @@ export function FormPassChange({ onClose }) {
       </div>
 
       {/* Footer */}
-      <div className="p-3 border-top d-flex justify-content-end bg-light flex-shrink-0">
+      <div className="p-3 border-t flex justify-end bg-muted shrink-0">
         <Button
           type="button"
           className="btn-cerrar me-2"
           onClick={onClose}
           disabled={mutation.isPending}
-         variant="default">
+          variant="default"
+        >
           <X size={18} className="me-1" /> Cancelar
         </Button>
         <Button
           type="submit"
-          className="btn-guardar d-flex align-items-center"
+          className="btn-guardar flex items-center"
           disabled={mutation.isPending}
-         variant="default">
+          variant="default"
+        >
           {mutation.isPending ? (
             <>
               <span
-                className="spinner-border spinner-border-sm me-2"
+                className="inline-block animate-spin rounded-full border-current border-r-transparent size-4 me-2"
                 role="status"
               ></span>
               Procesando...

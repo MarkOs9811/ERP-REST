@@ -33,23 +33,23 @@ export function LayOutDelivery() {
     refetchOnWindowFocus: false,
   });
   return (
-    <div className="container">
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 overflow-hidden">
-        <div className="md:col-span-12">
+    <div className="mx-auto w-full max-w-7xl px-4">
+      <div className="grid grid-cols-12 gap-3 overflow-hidden">
+        <div className="col-span-full md:col-span-12">
           <InformacionRapidaHome />
         </div>
-        <div className="md:col-span-10">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
-            <div className="md:col-span-12">
+        <div className="col-span-full md:col-span-10">
+          <div className="grid grid-cols-12 gap-4">
+            <div className="col-span-full md:col-span-12">
               <Card className="p-2 shadow-sm h-full">
                 <PlatoMasVendido />
               </Card>
             </div>
           </div>
         </div>
-        <div className="md:col-span-2">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
-            <div className="md:col-span-12">
+        <div className="col-span-full md:col-span-2">
+          <div className="grid grid-cols-12 gap-3">
+            <div className="col-span-full md:col-span-12">
               <VentasTipo
                 ventasList={ventasList}
                 load={loadingVentas}

@@ -2,7 +2,7 @@ import { Printer } from "lucide-react";
 import { TicketImpresion } from "../componenteVender/TiketsType/TicketImpresion";
 import { useReactToPrint } from "react-to-print";
 import { useRef } from "react";
-import "../../css/estilosVentas/EstilosDetallesVentas.css"; // <-- Importamos los estilos Fire Wok
+
 import { formatearFecha } from "../../utils/formatearFechas";
 import { Button } from "../ui/button";
 
@@ -71,9 +71,9 @@ export function ModalDetallesVentas({ dataVentas }) {
   if (!dataVentas) return <div className="fw-loading">Cargando...</div>;
 
   return (
-    <div className="container fw-modal-wrapper">
+    <div className="mx-auto w-full max-w-7xl px-4 fw-modal-wrapper">
       {/* Encabezado */}
-      <div className="d-flex justify-content-between align-items-start fw-header-section">
+      <div className="flex justify-between items-start fw-header-section">
         <div>
           <h4 className="fw-title">Venta #{id}</h4>
           <span className="fw-badge-doc">{documento}</span>
@@ -81,12 +81,12 @@ export function ModalDetallesVentas({ dataVentas }) {
       </div>
 
       {/* Grid de Información General */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-4fw-info-grid">
-        <div className="col-12 col-md-6 d-flex flex-column fw-info-col">
+      <div className="grid grid-cols-12 gap-4fw-info-grid">
+        <div className="col-span-full md:col-span-6 flex flex-col fw-info-col">
           <span className="fw-label">Fecha</span>
           <span className="fw-value">{formatearFecha(created_at)}</span>
         </div>
-        <div className="col-12 col-md-6 d-flex flex-column fw-info-col">
+        <div className="col-span-full md:col-span-6 flex flex-col fw-info-col">
           <span className="fw-label">Vendedor</span>
           <span className="fw-value">
             {usuario?.empleado.persona.nombre +
@@ -94,11 +94,11 @@ export function ModalDetallesVentas({ dataVentas }) {
               usuario?.empleado.persona.apellidos || "N/A"}
           </span>
         </div>
-        <div className="col-12 col-md-6 d-flex flex-column fw-info-col">
+        <div className="col-span-full md:col-span-6 flex flex-col fw-info-col">
           <span className="fw-label">Método de pago</span>
           <span className="fw-value">{idMetodo || "N/A"}</span>
         </div>
-        <div className="col-12 col-md-6 d-flex flex-column fw-info-col">
+        <div className="col-span-full md:col-span-6 flex flex-col fw-info-col">
           <span className="fw-label">Tipo de venta</span>
           <span className="fw-value">{pedido?.tipoVenta || "N/A"}</span>
         </div>
@@ -148,25 +148,25 @@ export function ModalDetallesVentas({ dataVentas }) {
       </div>
 
       {/* Totales */}
-      <div className="d-flex justify-content-end fw-totals-section">
+      <div className="flex justify-end fw-totals-section">
         <div className="fw-totals-box">
-          <div className="d-flex justify-content-between fw-total-row">
+          <div className="flex justify-between fw-total-row">
             <span className="fw-label">Subtotal:</span>
             <span className="fw-value">
               S/ {parseFloat(subTotal).toFixed(2)}
             </span>
           </div>
-          <div className="d-flex justify-content-between fw-total-row">
+          <div className="flex justify-between fw-total-row">
             <span className="fw-label">IGV:</span>
             <span className="fw-value">S/ {parseFloat(igv).toFixed(2)}</span>
           </div>
-          <div className="d-flex justify-content-between fw-total-row">
+          <div className="flex justify-between fw-total-row">
             <span className="fw-label">Descuento:</span>
             <span className="fw-value">
               S/ {parseFloat(descuento).toFixed(2)}
             </span>
           </div>
-          <div className="d-flex justify-content-between fw-total-final">
+          <div className="flex justify-between fw-total-final">
             <span>Total:</span>
             <span>S/ {parseFloat(total).toFixed(2)}</span>
           </div>
@@ -174,7 +174,7 @@ export function ModalDetallesVentas({ dataVentas }) {
       </div>
 
       {/* Acciones */}
-      <div className="d-flex justify-content-end fw-actions-section">
+      <div className="flex justify-end fw-actions-section">
         <Button onClick={() => handlePrint()} className="fw-btn-print" variant="default">
           <Printer size={18} />
           <span>Imprimir Ticket</span>

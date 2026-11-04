@@ -1,97 +1,65 @@
-import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faPowerOff } from "@fortawesome/free-solid-svg-icons";
 import { Redo2, Trash2, MoreVertical, Edit } from "lucide-react";
 import { Button } from "../ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
 const AccionesAlmacenList = ({ row, acciones }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const toggleMenu = (e) => {
-    e.stopPropagation(); // Evita que el clic se pase a la fila
-    setIsOpen(!isOpen);
-  };
-
   return (
-    <div
-      className="dropdown"
-      onMouseLeave={() => setIsOpen(false)} // Se cierra solo si quitas el mouse
-      style={{ position: "relative" }}
-    >
-      <Button
-        className="btn btn-sm p-2 border-0 z-index-1000"
-        onClick={toggleMenu}
-        title="Opciones"
-       variant="default">
-        <MoreVertical size={18} />
-      </Button>
-
-      {/* Forzamos a que se muestre si isOpen es true */}
-      {isOpen && (
-        <ul
-          className="dropdown-menu shadow border rounded-3 show z-index-1000"
-          style={{
-            position: "absolute",
-            right: "0", // Lo alinea a la derecha para que no se salga de la pantalla
-            top: "100%",
-          }}
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="ghost"
+          size="icon"
+          title="Opciones"
+          aria-label="Opciones de almacén"
+          onClick={(event) => event.stopPropagation()}
         >
+          <MoreVertical size={18} />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
           {row.estado == 1 ? (
             <>
-              <li>
-                <Button
-                  className="dropdown-item d-flex align-items-center gap-2"
-                  onClick={() => acciones.ingresarStock(row)}
-                 variant="default">
-                  <FontAwesomeIcon icon={faPlus} />
-                  Ingresar Stock
-                </Button>
-              </li>
-              <li>
-                <Button
-                  className="dropdown-item d-flex align-items-center gap-2"
-                  onClick={() => acciones.editar(row)}
-                 variant="default">
-                  <Edit size={16} />
-                  Editar
-                </Button>
-              </li>
-              <li>
-                <Button
-                  className="dropdown-item d-flex align-items-center gap-2"
-                  onClick={() => acciones.eliminar(row.id, row.nombre)}
-                 variant="default">
-                  <Trash2 size={16} />
-                  Eliminar
-                </Button>
-              </li>
-              <li>
-                <hr className="dropdown-divider" />
-              </li>
-              <li>
-                <Button
-                  className="dropdown-item d-flex align-items-center gap-2"
-                  onClick={() => acciones.transferir()}
-                 variant="default">
-                  <Redo2 size={16} />
-                  Transferir
-                </Button>
-              </li>
+              <DropdownMenuItem onSelect={() => acciones.ingresarStock(row)}>
+                <FontAwesomeIcon icon={faPlus} />
+                Ingresar Stock
+              </DropdownMenuItem>
+              <DropdownMenuItem onSelect={() => acciones.editar(row)}>
+                <Edit size={16} />
+                Editar
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onSelect={() => acciones.eliminar(row.id, row.nombre)}
+              >
+                <Trash2 size={16} />
+                Eliminar
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onSelect={() => acciones.transferir()}>
+                <Redo2 size={16} />
+                Transferir
+              </DropdownMenuItem>
             </>
           ) : (
-            <li>
-              <Button
-                className="dropdown-item d-flex align-items-center gap-2"
-                onClick={() => acciones.activar(row.id, row.nombre)}
-               variant="default">
-                <FontAwesomeIcon icon={faPowerOff} className="text-success" />
-                Activar Producto
-              </Button>
-            </li>
+            <DropdownMenuItem
+              onSelect={() => acciones.activar(row.id, row.nombre)}
+            >
+              <FontAwesomeIcon
+                icon={faPowerOff}
+                className="text-emerald-600 dark:text-emerald-400"
+              />
+              Activar Producto
+            </DropdownMenuItem>
           )}
-        </ul>
-      )}
-    </div>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 

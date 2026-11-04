@@ -1,7 +1,6 @@
 import NotificacionBtn from "../componentesReutilizables/componentesPedidosWeb/NotificacionBtn";
 import { useProcesarPagoWeb } from "../../hooks/VenderDeliveryHook/UseProcesarPagoWeb";
 import {
-  AlarmClock,
   BikeIcon,
   CheckCheck,
   CheckCheckIcon,
@@ -63,34 +62,36 @@ const CardPedidoDelivery = ({ pedido, onOpenModal }) => {
 
   const estadoClases = {
     3: {
-      bgColor: "#fff3cd",
-      icono: <AlarmClock color="#ffc100" size={16} />,
+      color: "amber",
       botones: (
-        <div className="d-flex flex-column align-items-center justify-content-center gap-2 w-100 h-100">
+        <div className="flex flex-col items-center justify-center gap-1">
           <Button
-            className="btn-generico w-0 px-2 rounded-2"
+            className="size-8 rounded-lg"
+            size="icon"
             title="Notificar al cliente"
-           variant="default">
-            <Megaphone size={18} />
+            variant="ghost"
+          >
+            <Megaphone className="size-4" />
           </Button>
         </div>
       ),
     },
     4: {
-      bgColor: "#ffe2e2",
-      icono: <AlarmClock color="#0e4988" size={16} />,
+      color: "sky",
       botones: (
-        <div className="d-flex flex-column align-items-center justify-content-center gap-2 w-100 h-100">
+        <div className="flex flex-col items-center justify-center gap-1">
           <Button
-            className="btn-generico w-0 px-2 rounded-2"
+            className="size-8 rounded-lg"
+            size="icon"
             onClick={(e) => {
               e.stopPropagation(); // Buena práctica
               ImprimirPedidoWeb();
             }}
             type="button"
             title="Imprimir Ticket"
-           variant="default">
-            <Printer size={18} />
+            variant="ghost"
+          >
+            <Printer size={16} />
           </Button>
           <div style={{ display: "none" }}>
             <TicketPedidosWeb ref={componentRef} dataActual={datosVenta} />
@@ -100,31 +101,34 @@ const CardPedidoDelivery = ({ pedido, onOpenModal }) => {
       ),
     },
     5: {
-      bgColor: "#def8e4",
-      icono: <CheckCheck color="#28a745" size={16} />,
+      color: "emerald",
       botones: (
-        <div className="d-flex flex-column align-items-center justify-content-center gap-2 w-100 h-100">
+        <div className="flex flex-col items-center justify-center gap-1">
           {/* LÓGICA APLICADA AQUÍ: Solo mostrar si NO está pagado */}
           {pedido.estado_pago !== "pagado" && (
             <>
               <Button
                 type="button"
-                className="btn-generico w-0 px-2 rounded-2"
+                className="size-8 rounded-lg"
+                size="icon"
                 onClick={handleRealizarPago}
                 title="Procesar Pago"
-               variant="default">
-                <CheckCheckIcon size={18} />
+                variant="ghost"
+              >
+                <CheckCheckIcon className="size-4" />
               </Button>
 
               <Button
-                className="btn-generico w-0 px-2 rounded-2"
+                className="size-8 rounded-lg"
+                size="icon"
                 onClick={(e) => {
                   e.stopPropagation();
                   ImprimirPedidoWeb();
                 }}
                 title="Imprimir Ticket"
-               variant="default">
-                <PrinterIcon size={18} />
+                variant="ghost"
+              >
+                <PrinterIcon className="size-4" />
               </Button>
               <div style={{ display: "none" }}>
                 <TicketPedidosWeb ref={componentRef} dataActual={datosVenta} />
@@ -140,49 +144,84 @@ const CardPedidoDelivery = ({ pedido, onOpenModal }) => {
   };
 
   const estadoActual = estadoClases[pedido.estado_pedido] || estadoClases[3];
+  const estiloEstado = {
+    amber: {
+      card: "border-amber-500/25 bg-amber-500/[0.04]",
+      accent: "bg-amber-500",
+      badge: "border-amber-500/25 bg-amber-500/10 text-amber-800 dark:text-amber-300",
+    },
+    sky: {
+      card: "border-sky-500/25 bg-sky-500/[0.04]",
+      accent: "bg-sky-500",
+      badge: "border-sky-500/25 bg-sky-500/10 text-sky-800 dark:text-sky-300",
+    },
+    emerald: {
+      card: "border-emerald-500/25 bg-emerald-500/[0.04]",
+      accent: "bg-emerald-500",
+      badge: "border-emerald-500/25 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300",
+    },
+  }[estadoActual.color];
 
   const [verModalRider, setVerModalRider] = useState(false);
   const [dataIdPedido, setDataIdPedido] = useState(null);
 
   return (
     <div
-      className={`mb-2 rounded position-relative overflow-hidden shadow-sm`}
-      style={{
-        background: estadoActual.bgColor,
-        borderLeft: `4px solid ${
-          pedido.estado_pedido === 3
-            ? "#ffc013"
-            : pedido.estado_pedido === 4
-              ? "#ce4e2e"
-              : "#0fb30f"
-        }`,
-      }}
+      className={`relative mb-0 overflow-hidden rounded-xl border ${estiloEstado.card}`}
     >
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-0 w-100 m-0">
-        {/* Columna Izquierda (Texto) */}
+      <div
+        aria-hidden="true"
+        className={`absolute inset-y-0 left-0 w-1 ${estiloEstado.accent}`}
+      />
+      <div className="grid grid-cols-[minmax(0,1fr)_auto_auto]">
         <div
-          className="col-7 col-md-7 p-3 d-flex flex-column justify-content-center"
+          className="flex min-w-0 cursor-pointer flex-col justify-center gap-2 p-3 pl-4 transition-colors hover:bg-background/50"
           onClick={onOpenModal}
-          style={{ cursor: "pointer" }}
+          role="button"
+          tabIndex={0}
+          aria-label={`Ver detalles del pedido ${pedido.codigo_pedido}`}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              onOpenModal?.();
+            }
+          }}
         >
-          <div className="fw-bold mb-1">{pedido.codigo_pedido}</div>
-          <div className="text-muted small">
-            <div className="d-flex align-items-center mb-1">
-              <UserRound className="me-2" size={14} />
-              <span className="text-truncate">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="truncate text-sm font-semibold tracking-tight text-foreground">
+              {pedido.codigo_pedido}
+            </span>
+            <span
+              className={`inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[11px] font-medium ${estiloEstado.badge}`}
+            >
+              <span
+                className={`size-1.5 rounded-full bg-current ${
+                  pedido.estado_pedido === 3 ? "animate-pulse" : ""
+                }`}
+              />
+              {pedido.estado_pedido === 3
+                ? "Pendiente"
+                : pedido.estado_pedido === 4
+                  ? "En proceso"
+                  : "Listo"}
+            </span>
+          </div>
+          <div className="flex min-w-0 flex-col gap-1 text-xs text-muted-foreground">
+            <div className="flex min-w-0 items-center gap-1.5">
+              <UserRound className="size-3.5 shrink-0" />
+              <span className="truncate">
                 {pedido.nombre_cliente || "Cliente"}
               </span>
             </div>
-            <div className="d-flex align-items-center">
-              <Phone className="me-2" size={14} />
-              <span>{pedido.numero_cliente}</span>
+            <div className="flex items-center gap-1.5">
+              <Phone className="size-3.5 shrink-0" />
+              <span className="truncate">{pedido.numero_cliente}</span>
             </div>
           </div>
         </div>
 
-        {/* Columna Derecha (Precios) */}
-        <div className="col-3 col-md-4 p-3 d-flex flex-column justify-content-center align-items-end">
-          <span className="fw-bold fs-5 mb-1">
+        <div className="flex min-w-24 flex-col items-end justify-center gap-1.5 p-3">
+          <span className="text-base font-semibold tabular-nums text-foreground">
             S/.{" "}
             {pedido?.detalles_pedido
               ?.reduce(
@@ -193,39 +232,36 @@ const CardPedidoDelivery = ({ pedido, onOpenModal }) => {
           </span>
 
           <span
-            className={`badge ${
+            className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium ${
               pedido.estado_pago === "pagado"
-                ? "bg-success text-white"
-                : "bg-warning text-dark"
+                ? "border-emerald-500/25 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300"
+                : "border-amber-500/25 bg-amber-500/10 text-amber-800 dark:text-amber-300"
             }`}
-            style={{ padding: "0.4rem 0.8rem", fontSize: "0.75rem" }}
           >
+            <span className="size-1.5 rounded-full bg-current" />
             {pedido.estado_pago === "pagado" ? "Pagado" : "Por Pagar"}
           </span>
-          {/* PONER BOTON DE ASIGNAR RIDER CUANDO ELE STADO SEA IGUAL A 5 */}
           {pedido.estado_pedido === 5 && (
-            <span
-              className="btn-principal small mt-2"
-              style={{ fontSize: "0.75rem" }}
-              onClick={() => {
+            <Button
+              type="button"
+              size="sm"
+              variant={pedido.idDeliveryRider == null ? "default" : "outline"}
+              className="mt-1 h-7 gap-1.5 rounded-lg px-2 text-[11px]"
+              onClick={(event) => {
+                event.stopPropagation();
                 setVerModalRider(true);
                 setDataIdPedido(pedido.id);
               }}
             >
-              <BikeIcon />
+              <BikeIcon className="size-3.5" />
               {pedido.idDeliveryRider == null
                 ? "Asignar Rider"
                 : "Asigando a Rider"}
-            </span>
+            </Button>
           )}
-          {}
         </div>
 
-        {/* Columna Lateral (Botones) */}
-        <div
-          className="col-2 col-md-1 py-2 d-flex align-items-center justify-content-center border-start"
-          style={{ background: "#ffffff" }}
-        >
+        <div className="col-start-3 row-start-1 row-span-2 flex items-center justify-center border-l border-border/70 bg-background/70 px-1.5">
           {estadoActual.botones}
         </div>
       </div>

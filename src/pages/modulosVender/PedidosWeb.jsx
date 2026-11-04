@@ -149,56 +149,92 @@ export function PedidosWeb() {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <div className="kanban-container h-100 px-md-0">
+      <div className="h-full min-h-0 overflow-x-auto">
+        <div className="grid h-full min-h-0 min-w-[900px] grid-cols-3 gap-3 lg:min-w-0">
         {[
           {
             key: "pendientes",
             title: "Pendientes - Pago",
-            color: "#e0e0e0",
-            border: "#ffffff",
+            description: "Esperando confirmación",
+            color: "bg-amber-500/10 text-amber-700 dark:text-amber-300",
             icon: (
-              <Hourglass className="text-auto" height="35px" width="35px" />
+              <Hourglass className="size-[18px]" />
             ),
-            // Asignamos los estados específicos para esta columna
             colLoading: isLoading,
             colError: isError,
+            items: pedidos.pendientes,
           },
           {
             key: "proceso",
             title: "En Proceso",
-            color: "#eef4f9",
-            border: "#ffffff",
+            description: "Preparando pedidos",
+            color: "bg-sky-500/10 text-sky-700 dark:text-sky-300",
             icon: (
-              <CookingPot className="text-auto" height="35px" width="35px" />
+              <CookingPot className="size-[18px]" />
             ),
-            // Asignamos los estados específicos para esta columna
             colLoading: isLoadingProceso,
             colError: isErrorProceso,
+            items: pedidos.proceso,
           },
           {
             key: "listos",
             title: "Listo - Para recoger",
-            color: "#f6fef9",
-            border: "#ffffff",
+            description: "Pedidos listos para despacho",
+            color: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
             icon: (
-              <CheckCheck className="text-auto" height="35px" width="35px" />
+              <CheckCheck className="size-[18px]" />
             ),
-            // Asignamos los estados específicos para esta columna
             colLoading: isLoadingListos,
             colError: isErrorListos,
+            items: pedidos.listos,
           },
-        ].map(({ key, title, border, icon, colLoading, colError }) => (
-          <Card key={key} className="kanban-col py-2">
-            <div
-              className=" kanban-column flex-grow-1 h-100 d-flex flex-column bg-white"
-              style={{
-                borderTop: `10px solid ${border}`,
-                borderRadius: "0.5rem",
-              }}
+        ].map(
+          ({
+            key,
+            title,
+            description,
+            color,
+            icon,
+            colLoading,
+            colError,
+            items,
+          }) => (
+            <Card
+              key={key}
+              className="flex min-h-0 min-w-0 flex-col gap-0 overflow-hidden rounded-xl border-border/70 bg-muted/30 p-0 shadow-none"
             >
-              <div className="d-flex bg-transparent border-bottom px-5 py-3 align-items-center">
-                <h3 className="text-dark mb-0 fs-5 fw-bold">{title}</h3>
-                <div className="text-end ms-auto">{icon}</div>
+              <div className="flex items-center justify-between gap-3 border-b border-border/70 bg-card px-3 py-3">
+                <div className="flex min-w-0 items-center gap-2.5">
+                  <span
+                    className={`flex size-9 shrink-0 items-center justify-center rounded-lg ${color}`}
+                  >
+                    {icon}
+                  </span>
+                  <div className="min-w-0">
+                    <h3 className="mb-0 truncate text-sm font-semibold tracking-tight text-foreground">
+                      {title}
+                    </h3>
+                    <p className="mb-0 truncate text-xs text-muted-foreground">
+                      {description}
+                    </p>
+                  </div>
+                </div>
+                <span
+                  className={`inline-flex min-w-7 items-center justify-center rounded-full px-2 py-1 text-xs font-semibold tabular-nums ${color}`}
+                >
+                  {items?.length > 0 && (
+                    <span
+                      className={`mr-1.5 size-1.5 rounded-full ${
+                        key === "pendientes"
+                          ? "animate-pulse bg-amber-500"
+                          : key === "proceso"
+                            ? "bg-sky-500"
+                            : "bg-emerald-500"
+                      }`}
+                    />
+                  )}
+                  {items?.length || 0}
+                </span>
               </div>
 
               <Droppable droppableId={key}>
@@ -206,29 +242,34 @@ export function PedidosWeb() {
                   <div
                     ref={provided.innerRef}
                     {...provided.droppableProps}
-                    className="flex-grow-1 overflow-auto p-2 p-md-3"
+                    className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto bg-muted/20 p-2"
                   >
-                    {/* ESTADOS ESPECÍFICOS DE CARGA PARA CADA COLUMNA */}
                     {colLoading && (
-                      <div className="d-flex justify-content-center align-items-center py-4">
-                        {/* Opción 1: Tu componente con estilo inline para forzar que gire 
-                          (Necesitas tener @keyframes spin definido en tu CSS global, o usar clases como fa-spin) 
-                        */}
-                        <div style={{ animation: "spin 1s linear infinite" }}>
+                      <div className="flex min-h-32 flex-1 items-center justify-center">
+                        <div className="animate-spin">
                           <Cargando />
                         </div>
                       </div>
                     )}
 
                     {colError && (
-                      <div className="error text-danger text-center fw-bold py-3">
-                        Error al cargar Pedidos
+                      <div className="flex min-h-32 flex-1 items-center justify-center rounded-lg border border-destructive/20 bg-destructive/5 px-3 text-center text-sm text-destructive">
+                        No se pudieron cargar los pedidos.
                       </div>
                     )}
 
-                    {/* Solo mapeamos los pedidos si NO está cargando */}
+                    {!colLoading && !colError && items?.length === 0 && (
+                      <div className="flex min-h-32 flex-1 flex-col items-center justify-center rounded-lg border border-dashed border-border/70 bg-background/60 px-3 py-6 text-center">
+                        <CheckCheck className="mb-2 size-5 text-muted-foreground/60" />
+                        <p className="mb-0 text-xs text-muted-foreground">
+                          No hay pedidos en esta etapa
+                        </p>
+                      </div>
+                    )}
+
                     {!colLoading &&
-                      pedidos[key]?.map((pedido, index) => (
+                      !colError &&
+                      items?.map((pedido, index) => (
                         <Draggable
                           key={pedido.id}
                           draggableId={pedido.id.toString()}
@@ -239,7 +280,7 @@ export function PedidosWeb() {
                               ref={provided.innerRef}
                               {...provided.draggableProps}
                               {...provided.dragHandleProps}
-                              className="mb-3"
+                              className="min-w-0"
                             >
                               <CardPedidoDelivery
                                 pedido={pedido}
@@ -256,9 +297,10 @@ export function PedidosWeb() {
                   </div>
                 )}
               </Droppable>
-            </div>
-          </Card>
-        ))}
+            </Card>
+          ),
+        )}
+        </div>
       </div>
 
       {/* MODAL (Se queda exactamente igual) */}
@@ -276,7 +318,7 @@ export function PedidosWeb() {
         }}
       >
         {selectedPedido ? (
-          <div className="p-0 rounded-0 border-none d-flex flex-column h-100">
+          <div className="p-0 rounded-none border-none flex flex-col h-full">
             <ModalCabecera selectedPedido={selectedPedido} />
             <ModalCuerpo selectedPedido={selectedPedido} />
             <ModalFooter selectedPedido={selectedPedido} />

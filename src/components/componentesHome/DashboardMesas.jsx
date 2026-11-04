@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { GetMesasVender } from "../../service/accionesVender/GetMesasVender";
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
-import "../../css/EstilosHome.css";
+
 import { Clock, Cookie, Plus } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { Card } from "@/components/ui/card";
@@ -52,13 +52,12 @@ export function DashboardMesas() {
     refetchOnWindowFocus: true,
   });
 
-  const navigate = useNavigate();
   // FIX: Si tu API devuelve { data: [...] } lo extraemos.
   // Si ya es un array, lo tomamos directo. Si llega vacío o undefined, pasamos un [].
   const listaMesas = Array.isArray(mesas) ? mesas : mesas?.data || [];
 
   return (
-    <Card className="salon-container m-0 flex h-full min-h-[300px] flex-col rounded-xl border border-border bg-card p-4 text-card-foreground">
+    <Card className="salon-container m-0 flex h-full min-h-[300px] flex-col rounded-2xl border-border/70 bg-card p-4 text-card-foreground shadow-none">
       <div className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex flex-wrap items-center gap-3">
           <span
@@ -76,13 +75,11 @@ export function DashboardMesas() {
               {listaMesas.length} mesas
             </p>
           </div>
-          <Button
-            type="button"
-            onClick={() => navigate("/ventas/mesas")}
-            className="btn-principal inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm"
-           variant="default">
-            <Plus size={16} />{" "}
-            {listaMesas.length === 0 ? "Crear Mesas" : "Gestionar Mesas"}
+          <Button asChild size="default">
+            <Link to="/ventas/mesas">
+              <Plus size={16} />{" "}
+              {listaMesas.length === 0 ? "Crear mesas" : "Gestionar mesas"}
+            </Link>
           </Button>
         </div>
 
@@ -105,7 +102,7 @@ export function DashboardMesas() {
       <CondicionCarga isLoading={loading} isError={error} mode="cards">
         <div className="home-salon-grid min-h-0 flex-1">
           {listaMesas.length === 0 && !loading && (
-            <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 p-4 text-center text-sm text-amber-800 dark:text-amber-300">
+            <div className="rounded-lg border-amber-500/30 bg-amber-500/10 p-4 text-center text-sm text-amber-800 dark:text-amber-300">
               No se encontraron mesas.
             </div>
           )}
@@ -118,7 +115,7 @@ export function DashboardMesas() {
               return (
                 <div className="min-w-0" key={mesa.id}>
                   <Card
-                    className={`mesa-card-flat flex h-full min-h-32 w-full flex-col rounded-lg border p-3 text-left text-foreground${
+                    className={`mesa-card-flat flex h-full min-h-32 w-full flex-col rounded-lg p-3 text-left text-foreground ${
                       isLibre
                         ? "border-emerald-500/40 bg-emerald-500/5"
                         : "border-rose-500/40 bg-rose-500/5"
@@ -128,7 +125,7 @@ export function DashboardMesas() {
                       <span className="mesa-capacidad-flat text-xs text-muted-foreground">
                         CAPACIDAD: {mesa.capacidad}p
                       </span>
-                      <span className={`dot dot-${statusClass}`}></span>
+                      <span className={`dot dot- ${statusClass}`}></span>
                     </div>
 
                     <h4 className="mesa-numero-flat">Mesa {mesa.numero}</h4>

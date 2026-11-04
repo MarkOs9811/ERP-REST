@@ -64,13 +64,13 @@ export const MapaRiderCliente = ({
 
   if (loadError)
     return (
-      <div className="text-center p-3 text-danger">
+      <div className="text-center p-3 text-destructive">
         Error de autenticación con Google Maps. Revisa tu API Key y Facturación.
       </div>
     );
   if (!isLoaded)
     return (
-      <div className="text-center p-3 text-muted">
+      <div className="text-center p-3 text-muted-foreground">
         Cargando mapa interactivo...
       </div>
     );

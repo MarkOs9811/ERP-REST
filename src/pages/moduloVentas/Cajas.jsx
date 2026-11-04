@@ -15,7 +15,7 @@ import { GetCajas } from "../../service/accionesVentas/GetCajas";
 import { CondicionCarga } from "../../components/componentesReutilizables/CondicionCarga";
 import { Button } from "../../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
+import { Input } from "@/components/ui/input";
 
 export function Cajas() {
   const [search, setSearch] = useState("");
@@ -92,25 +92,28 @@ export function Cajas() {
   });
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
-      <div className="col-lg-12 col-sm-12">
+    <div className="grid grid-cols-12 gap-3">
+      <div className="col-span-full">
         <CondicionCarga
           isLoading={isLoading}
           isError={isError}
           mode="single-card"
         >
           <Card className="">
-            <CardHeader className="border-bottom-0 flex flex-col flex-md-row justify-between items-center gap-2">
-              <div className="d-flex align-items-center">
-                <CardTitle asChild><h4 className="mb-0">Panel de Cajas</h4></CardTitle>
+            <CardHeader className="border-b-0 flex flex-col md:flex-row justify-between items-center gap-2">
+              <div className="flex items-center">
+                <CardTitle asChild>
+                  <h4 className="mb-0">Panel de Cajas</h4>
+                </CardTitle>
                 <span className="badge-header ms-2">Registro</span>
               </div>
-              <div className="d-flex align-items-center flex-wrap gap-2 mt-3 mt-md-0">
+              <div className="flex items-center flex-wrap gap-2 mt-3 md:mt-0">
                 <Button
                   type="button"
                   className="btn-principal px-3"
                   onClick={() => setModalAddCaja(true)}
-                 variant="default">
+                  variant="default"
+                >
                   <Plus size={18} />
                   Abrir Caja
                 </Button>
@@ -123,34 +126,34 @@ export function Cajas() {
           </Card>
         </CondicionCarga>
       </div>
-      <div className="col-lg-12 col-sm-12">
+      <div className="col-span-full">
         <CondicionCarga
           isLoading={isLoading}
           isError={isError}
           mode="single-card"
         >
-          <Card className="overflow-hidden">
-            <CardHeader className="border-bottom-0 flex flex-col flex-md-row justify-between items-center gap-2">
-              <div className="d-flex align-items-center">
-                <CardTitle asChild><h4 className="mb-0 titulo-card-especial">
-                  Registros Caja
-                </h4></CardTitle>
-                <span className="badge-header ms-2">Historial</span>
+          <Card className="rounded-2xl border border-border/70 bg-card shadow-sm ring-0 overflow-hidden">
+            <CardHeader className="flex flex-col items-stretch gap-4 border-b border-border/70 px-5 py-5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+              <div className="flex items-center">
+                <CardTitle asChild>
+                  <h4 className="mb-0 text-base font-semibold tracking-tight text-foreground">Registros Caja</h4>
+                </CardTitle>
+                <span className="ml-2 inline-flex items-center rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground">Historial</span>
               </div>
 
-              <div className="d-flex flex-column flex-md-row align-items-center justify-content-md-end gap-2 mt-3 mt-md-0">
-                <div className="header-search-container">
-                  <Search className="search-icon" />
-                  <input
+              <div className="flex flex-col md:flex-row items-center md:justify-end gap-2 mt-3 md:mt-0">
+                <div className="relative w-full min-w-0 sm:w-64">
+                  <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                  <Input
                     type="search"
-                    className="form-control"
+                    className="h-9 pl-9"
                     placeholder="Buscar registro..."
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                   />
                 </div>
                 <select
-                  className="form-select"
+                  className="h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   style={{ minWidth: "150px" }}
@@ -164,7 +167,7 @@ export function Cajas() {
                 </select>
                 <input
                   type="date"
-                  className="form-control"
+                  className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   style={{ maxWidth: "180px" }}

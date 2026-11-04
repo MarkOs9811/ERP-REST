@@ -59,19 +59,19 @@ export function StepUsuario({ onFinish }) {
   };
 
   return (
-    <Card className="p-0 text-center border-0 rounded-0 shadow-sm animate-fade-in overflow-hidden">
+    <Card className="p-0 text-center border-0 rounded-none shadow-sm animate-fade-in overflow-hidden">
       {/* 1. CARD HEADER: Tema Púrpura (Equipo/Admin) */}
       <CardHeader className="py-4 relative border-0 m-0">
         {/* Fondo degradado suave Violeta/Lila */}
         <div
-          className="position-absolute top-0 start-0 w-100 h-100 p-0"
+          className="absolute top-0 left-0 w-full h-full p-0"
           style={{
             background: "linear-gradient(to bottom, #f3e8ff, #ffffff)", // Lila muy suave
             opacity: 1,
           }}
         />
 
-        <div className="position-relative z-1">
+        <div className="relative z-1">
           {/* Imagen Principal (3D Team Icon) */}
           <img
             src="https://cdn-icons-png.flaticon.com/512/3215/3215935.png" // Icono 3D de Colaboración/Team
@@ -84,8 +84,8 @@ export function StepUsuario({ onFinish }) {
           />
 
           {/* Icono Flotante (Badge) */}
-          <div className="position-absolute top-100 start-50 translate-middle mt-2">
-            <div className="bg-white p-2 rounded-circle shadow-sm d-flex align-items-center justify-content-center">
+          <div className="absolute top-full left-1/2 -translate-x-1/2 -translate-y-1/2 mt-2">
+            <div className="bg-background p-2 rounded-full shadow-sm flex items-center justify-center">
               <UserPlus
                 className="text-primary" // O un color morado personalizado
                 style={{ color: "#6f42c1" }} // Púrpura Bootstrap
@@ -100,53 +100,53 @@ export function StepUsuario({ onFinish }) {
       {/* 2. CARD BODY */}
       <CardContent className="pt-5 pb-4 px-4">
         {/* Título */}
-        <h3 className="fw-bold text-dark mb-3 mt-2">Tu Equipo de Trabajo</h3>
+        <h3 className="font-bold text-foreground mb-3 mt-2">Tu Equipo de Trabajo</h3>
 
         {/* Descripción (Enfatizando que es opcional) */}
         <p
-          className="text-muted mx-auto mb-4"
+          className="text-muted-foreground mx-auto mb-4"
           style={{ maxWidth: "580px", fontSize: "1.1rem" }}
         >
           Si tienes colaboradores, regístralos ahora para asignarles roles
           (Cajero, Mozo). Cada usuario tendrá su propio acceso y permisos.{" "}
           <br />
-          <span className="fw-semibold text-dark fst-italic">
+          <span className="font-semibold text-foreground italic">
             ¿Trabajas solo? Puedes saltar este paso.
           </span>
         </p>
 
         {/* 3. Beneficios (Pills) */}
-        <div className="d-flex flex-wrap justify-content-center gap-3 mb-5">
-          <div className="d-flex align-items-center text-secondary bg-light px-3 py-2 rounded-pill border">
+        <div className="flex flex-wrap justify-center gap-3 mb-5">
+          <div className="flex items-center text-muted-foreground bg-muted px-3 py-2 rounded-full border">
             <ShieldCheck
               className="me-2"
               style={{ color: "#6f42c1" }}
               size={18}
             />
-            <span className="small fw-bold">Accesos</span>
+            <span className="text-sm font-bold">Accesos</span>
           </div>
 
-          <div className="d-flex align-items-center text-secondary bg-light px-3 py-2 rounded-pill border">
+          <div className="flex items-center text-muted-foreground bg-muted px-3 py-2 rounded-full border">
             <Clock className="me-2" style={{ color: "#6f42c1" }} size={18} />
-            <span className="small fw-bold">Turnos</span>
+            <span className="text-sm font-bold">Turnos</span>
           </div>
 
-          <div className="d-flex align-items-center text-secondary bg-light px-3 py-2 rounded-pill border">
+          <div className="flex items-center text-muted-foreground bg-muted px-3 py-2 rounded-full border">
             <CheckCircle2
               className="me-2"
               style={{ color: "#6f42c1" }}
               size={18}
             />
-            <span className="small fw-bold">Rendimiento</span>
+            <span className="text-sm font-bold">Rendimiento</span>
           </div>
         </div>
 
         {/* 4. Botones de Acción (Principal y Secundario) */}
-        <div className="d-flex flex-column flex-sm-row gap-3 justify-content-center align-items-center mb-2">
+        <div className="flex flex-col sm:flex-row gap-3 justify-center items-center mb-2">
           {/* Opción A: Crear Usuario (Principal) */}
           <Button
             type="button"
-            className="btn-guardar w-auto text-white btn-lg px-5 py-3 rounded-pill shadow d-inline-flex align-items-center gap-2"
+            className="btn-guardar w-auto text-white justify-center whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-10 px-5 py-3 rounded-full shadow inline-flex items-center gap-2"
             style={{
               background: "linear-gradient(90deg, #6f42c1, #a66efa)", // Gradiente Púrpura
               border: "none",
@@ -167,7 +167,7 @@ export function StepUsuario({ onFinish }) {
         <div className="mt-3">
           <Button
             onClick={handleSkip}
-            className="btn text-primary text-decoration-none small"
+            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary shadow hover:bg-primary/90 text-primary no-underline text-sm"
             disabled={loading}
            variant="default">
             {loading
@@ -176,7 +176,7 @@ export function StepUsuario({ onFinish }) {
           </Button>
         </div>
 
-        <div className="mt-3 text-muted small">Paso 5 de 5 - Último paso</div>
+        <div className="mt-3 text-muted-foreground text-sm">Paso 5 de 5 - Último paso</div>
       </CardContent>
     </Card>
   );

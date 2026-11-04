@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Globe, Store } from "lucide-react";
 import { getVentas } from "../../service/ObtenerVentasDetalle";
 import { GraficoVentasDelivery } from "../../components/componenteDelivery/GraficoVentaDelivery";
-import "../../css/estilosDelivery/EstilosDeliveryHome.css";
+
 export function DashboardDelivery() {
   const {
     data: ventasList = [],
@@ -36,13 +36,13 @@ export function DashboardDelivery() {
   }, [ventasList]);
 
   return (
-    <div className="d-flex flex-column gap-4 w-100">
+    <div className="flex flex-col gap-4 w-full">
       {/* =========================================
           SECCIÓN DE KPIs (TARJETAS AURA)
           ========================================= */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+      <div className="grid grid-cols-12 gap-4">
         {/* KPI Delivery (Web) */}
-        <div className="col-12 col-md-6">
+        <div className="col-span-full md:col-span-6">
           <div className="fw-kpi-card kpi-web-aura border">
             <div className="kpi-icon-wrapper bg-saffron-soft">
               <Globe size={28} className="text-saffron" />
@@ -55,7 +55,7 @@ export function DashboardDelivery() {
         </div>
 
         {/* KPI Local (Mesa/Llevar) */}
-        <div className="col-12 col-md-6">
+        <div className="col-span-full md:col-span-6">
           <div className="fw-kpi-card kpi-local-aura border">
             <div className="kpi-icon-wrapper bg-emerald-soft">
               <Store size={28} className="text-emerald" />
@@ -71,7 +71,7 @@ export function DashboardDelivery() {
       {/* =========================================
           SECCIÓN DEL GRÁFICO
           ========================================= */}
-      <div className="w-100">
+      <div className="w-full">
         <GraficoVentasDelivery
           ventasList={ventasList}
           load={loadingVentas}

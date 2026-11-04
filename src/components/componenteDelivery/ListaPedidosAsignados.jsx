@@ -139,12 +139,13 @@ export function ListaPedidosAsignados() {
           {row.estado_pedido === 54 && (
             <>
               <Button
-                className="btn btn-outline-dark my-2 me-2" // Añadí 'me-2' para separar los botones si están en la misma línea
+                className="shadow inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border-input bg-background text-foreground hover:bg-accent my-2 me-2" // Añadí 'me-2' para separar los botones si están en la misma línea
                 onClick={() => {
                   setDataPedido(row);
                   setModalAsignarRider(true);
                 }}
-               variant="default">
+                variant="default"
+              >
                 Cambiar
               </Button>
               <Button
@@ -153,7 +154,8 @@ export function ListaPedidosAsignados() {
                   setModalQuestion(true);
                   setDataPedido(row);
                 }}
-               variant="destructive">
+                variant="destructive"
+              >
                 Quitar
               </Button>
             </>
@@ -161,18 +163,19 @@ export function ListaPedidosAsignados() {
 
           {/* Condición 2: Estado 55 (En ruta) -> Bloqueado */}
           {row.estado_pedido === 55 && (
-            <span className="text-muted">No disponible</span>
+            <span className="text-muted-foreground">No disponible</span>
           )}
 
           {/* Condición 3: Estado 6 (Entregado) -> Ver detalles */}
           {row.estado_pedido === 6 && (
             <Button
-              className="btn-ver my-2 d-flex align-items-center gap-1"
+              className="btn-ver my-2 flex items-center gap-1"
               onClick={() => {
                 setDataPedido(row);
                 setModalDetallesVenta(true);
               }}
-             variant="outline">
+              variant="outline"
+            >
               <Eye size={16} /> Detalles
             </Button>
           )}

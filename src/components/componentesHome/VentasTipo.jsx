@@ -2,7 +2,6 @@ import { Globe, ShoppingBag, Utensils } from "lucide-react";
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
 import { Card } from "@/components/ui/card";
 
-
 export function VentasTipo({ load, error, errorLoad, ventasList }) {
   const isError = error ?? errorLoad;
   // Lógica optimizada: Procesamos todo en una sola iteración (O(N)) usando reduce.
@@ -75,55 +74,42 @@ export function VentasTipo({ load, error, errorLoad, ventasList }) {
 
   return (
     <CondicionCarga isLoading={load} isError={isError}>
-      <Card className="h-full rounded-xl border border-border bg-card p-4 text-card-foreground">
-        <h2 className="mb-4 text-base font-semibold">
-          Ventas por tipo
-        </h2>
+      <Card className="h-full rounded-2xl border-border/70 bg-card p-4 text-card-foreground shadow-none">
+        <h2 className="mb-4 text-base font-semibold">Ventas por tipo</h2>
         <div className="flex flex-col gap-3">
-        {tarjetasStats.map((stat) => (
-          <div
-            key={stat.id}
-            className="flex items-center gap-3 rounded-lg border border-border p-3"
-            style={{
-              backgroundColor: "var(--bg-muted, hsl(var(--muted)))",
-            }}
-          >
-            {/* Ícono */}
+          {tarjetasStats.map((stat) => (
             <div
-              className="flex size-12 shrink-0 items-center justify-center rounded-full"
-              style={{
-                width: "48px",
-                height: "48px",
-                backgroundColor: stat.bgIcono,
-              }}
+              key={stat.id}
+              className="flex items-center gap-3 rounded-xl border border-border/60 bg-muted/40 p-3"
             >
-              {stat.icono}
-            </div>
-
-            {/* Textos (flex-grow-1 empuja el número hacia la derecha automáticamente) */}
-            <div className="flex min-w-0 flex-1 flex-col">
-              <span
-                className="font-semibold"
-                style={{ color: "var(--text-main)" }}
+              {/* Ícono */}
+              <div
+                className="flex size-12 shrink-0 items-center justify-center rounded-full"
+                style={{
+                  width: "48px",
+                  height: "48px",
+                  backgroundColor: stat.bgIcono,
+                }}
               >
-                {stat.titulo}
-              </span>
-              <small
-                style={{ color: "var(--text-muted)", fontSize: "0.85rem" }}
-              >
-                {stat.subtitulo}
-              </small>
-            </div>
+                {stat.icono}
+              </div>
 
-            {/* Valor (Número final) */}
-            <div
-              className="text-2xl font-bold"
-              style={{ color: "var(--text-main)" }}
-            >
-              {stat.valor}
+              {/* Textos (flex-grow-1 empuja el número hacia la derecha automáticamente) */}
+              <div className="flex min-w-0 flex-1 flex-col">
+                <span className="font-semibold text-foreground">
+                  {stat.titulo}
+                </span>
+                <small className="text-sm text-muted-foreground">
+                  {stat.subtitulo}
+                </small>
+              </div>
+
+              {/* Valor (Número final) */}
+              <div className="text-2xl font-bold text-foreground">
+                {stat.valor}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
         </div>
       </Card>
     </CondicionCarga>

@@ -17,7 +17,6 @@ import { EditFormSerie } from "./confiIntegraciones/EditFormSerie";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
-
 export function ServicioSunat() {
   const [modalRightSunat, setModalRightSunat] = useState(false);
   const [modalAddSerieCorr, setModalAddSerieCorr] = useState(false);
@@ -248,7 +247,7 @@ export function ServicioSunat() {
               setModalQuestionActivar(row?.id);
               setDataSerie(row);
             }}
-            className="badge btn btn-dark border shadow-sm"
+            className="px-2.5 py-0.5 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-foreground text-background hover:bg-foreground/90 shadow-sm"
             style={{
               color: "white",
               borderRadius: "12px",
@@ -256,7 +255,8 @@ export function ServicioSunat() {
               cursor: "pointer",
               fontSize: "12px",
             }}
-           variant="default">
+            variant="default"
+          >
             Establecer
           </Button>
         ),
@@ -278,7 +278,7 @@ export function ServicioSunat() {
       name: "Acciones",
       center: true,
       cell: (row) => (
-        <div className="d-flex gap-2 m-2">
+        <div className="flex gap-2 m-2">
           <Button
             type="button"
             className="btn-editar"
@@ -292,7 +292,8 @@ export function ServicioSunat() {
               setModalEditarSerie(true);
               setDataEditSerie(row);
             }}
-           variant="secondary">
+            variant="secondary"
+          >
             <Pen size={15} />
           </Button>
 
@@ -310,7 +311,8 @@ export function ServicioSunat() {
                   : "Desactivar Serie"
               }
               className="btn-eliminar"
-             variant="destructive">
+              variant="destructive"
+            >
               <Trash size={15} />
             </Button>
           ) : (
@@ -320,8 +322,9 @@ export function ServicioSunat() {
                 setDataActivar(row);
               }}
               title="Activar Serie"
-              className="btn-activar btn-sm w-auto"
-             variant="default">
+              className="btn-activar inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 px-3 text-xs w-auto"
+              variant="default"
+            >
               <PowerIcon size={"auto"} />
             </Button>
           )}
@@ -332,16 +335,16 @@ export function ServicioSunat() {
 
   if (isLoading) {
     return (
-      <div className="w-100 p-3 text-center">
-        <span className="text-secondary">Cargando configuración...</span>
+      <div className="w-full p-3 text-center">
+        <span className="text-muted-foreground">Cargando configuración...</span>
       </div>
     );
   }
 
   if (isError) {
     return (
-      <div className="w-100 p-3 text-center">
-        <span className="text-danger">
+      <div className="w-full p-3 text-center">
+        <span className="text-destructive">
           Error: No se pudo cargar la configuración de SUNAT.
         </span>
       </div>
@@ -349,13 +352,10 @@ export function ServicioSunat() {
   }
 
   return (
-    <div className="container w-100 p-3 d-flex gap-4 align-items-stretch flex-wrap flex-column">
+    <div className="mx-auto max-w-7xl w-full p-3 flex gap-4 items-stretch flex-wrap flex-col">
       {/* Card de información SUNAT */}
-      <Card
-        className="p-4 shadow-sm flex-grow-1"
-        style={{ borderRadius: 18 }}
-      >
-        <div className="d-flex align-items-center mb-3">
+      <Card className="p-4 shadow-sm grow" style={{ borderRadius: 18 }}>
+        <div className="flex items-center mb-3">
           <FileText
             color={"#ee5252"}
             height="30px"
@@ -363,14 +363,14 @@ export function ServicioSunat() {
             className="me-2"
           />
           <span
-            className="fw-semibold"
+            className="font-semibold"
             style={{ color: "#1d2530", fontSize: 18 }}
           >
             Configuración de Servicio SUNAT
           </span>
-          <div className="form-switch ms-auto">
+          <div className="flex items-center gap-2 ms-auto">
             <input
-              className="form-check-input"
+              className="size-4 shrink-0 rounded border-input accent-primary"
               type="checkbox"
               id={`flexSwitchCheckDefault${sunatConfig?.id}`}
               checked={!!switches[sunatConfig?.id]}
@@ -384,44 +384,55 @@ export function ServicioSunat() {
             />
           </div>
         </div>
-        <p className="text-secondary small mb-3">
+        <p className="text-muted-foreground text-sm mb-3">
           {sunatConfig?.descripcion ||
             "Configuración del servicio de SUNAT para la emisión de comprobantes electrónicos."}
         </p>
         <div className="mb-2">
-          <span className="badge bg-light text-dark me-2">RUC</span>
-          <span className="small">{sunatConfig?.clave || "-"}</span>
+          <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-muted text-foreground me-2">
+            RUC
+          </span>
+          <span className="text-sm">{sunatConfig?.clave || "-"}</span>
         </div>
         <div className="mb-2">
-          <span className="badge bg-light text-dark me-2">Archivo .pem</span>
-          <span className="small">{sunatConfig?.valor1 || "-"}</span>
+          <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-muted text-foreground me-2">
+            Archivo .pem
+          </span>
+          <span className="text-sm">{sunatConfig?.valor1 || "-"}</span>
         </div>
         <div className="mb-2">
-          <span className="badge bg-light text-dark me-2">Endpoint</span>
-          <span className="small">{sunatConfig?.valor2 || "-"}</span>
+          <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-muted text-foreground me-2">
+            Endpoint
+          </span>
+          <span className="text-sm">{sunatConfig?.valor2 || "-"}</span>
         </div>
         <div className="mb-2">
-          <span className="badge bg-light text-dark me-2">Usuario Sol</span>
-          <span className="small">{sunatConfig?.valor3 || "-"}</span>
+          <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-muted text-foreground me-2">
+            Usuario Sol
+          </span>
+          <span className="text-sm">{sunatConfig?.valor3 || "-"}</span>
         </div>
         <div className="mb-2">
-          <span className="badge bg-light text-dark me-2">Clave Sol</span>
-          <span className="small">{sunatConfig?.valor4 || "-"}</span>
+          <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-muted text-foreground me-2">
+            Clave Sol
+          </span>
+          <span className="text-sm">{sunatConfig?.valor4 || "-"}</span>
         </div>
 
-        <div className="d-flex">
+        <div className="flex">
           <Button
-            className="btn btn-sm btn-outline-dark ms-auto"
+            className="shadow h-8 px-3 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border-input bg-background text-foreground hover:bg-accent ms-auto"
             onClick={() => setModalRightSunat(true)}
-           variant="default">
+            variant="default"
+          >
             Configurar
           </Button>
         </div>
       </Card>
       <Card className="shadow-sm py-2">
-        <CardHeader className="items-center flex justify-content-left">
-          <File size={30} className="text-danger me-2" />
-          <span className="fw-semibold h5">
+        <CardHeader className="items-center flex justify-start">
+          <File size={30} className="text-destructive me-2" />
+          <span className="font-semibold h5">
             Información de Serie y correlativo
           </span>
           <div className="ms-auto">
@@ -429,7 +440,8 @@ export function ServicioSunat() {
               type="button"
               className="btn-principal btn-icon"
               onClick={() => setModalAddSerieCorr(true)}
-             variant="default">
+              variant="default"
+            >
               <PlusIcon />
             </Button>
           </div>
@@ -489,10 +501,10 @@ export function ServicioSunat() {
         handleAccion={handleSetDefault}
       >
         <div className="rounded my-3 p-3">
-          <h3 className="fw-bold mb-2">
+          <h3 className="font-bold mb-2">
             ¿Desea establecer esta serie como predeterminada?
           </h3>
-          <small className="text-muted">
+          <small className="text-muted-foreground">
             Esta serie se utilizará por defecto para emitir documentos del mismo
             tipo. Las demás series de este tipo se desactivarán automáticamente.
           </small>
@@ -508,8 +520,8 @@ export function ServicioSunat() {
         handleAccion={handleActivarSerie}
       >
         <div className="rounded my-3 p-3">
-          <h3 className="fw-bold mb-2">¿Desea activar esta serie?</h3>
-          <small className="text-muted">
+          <h3 className="font-bold mb-2">¿Desea activar esta serie?</h3>
+          <small className="text-muted-foreground">
             Al activarla, la serie podrá ser utilizada en la emisión de
             documentos, pero no será la predeterminada a menos que usted la
             configure como tal.
@@ -526,8 +538,8 @@ export function ServicioSunat() {
         handleAccion={handleDesactivarSerie}
       >
         <div className="rounded my-3 p-3">
-          <h3 className="fw-bold mb-2">¿Desea desactivar esta serie?</h3>
-          <small className="text-muted">
+          <h3 className="font-bold mb-2">¿Desea desactivar esta serie?</h3>
+          <small className="text-muted-foreground">
             Al desactivar, la serie no podrá ser puesta por defecto.
           </small>
         </div>

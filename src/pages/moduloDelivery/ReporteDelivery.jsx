@@ -70,7 +70,7 @@ export function ReporteDelivery() {
   };
 
   return (
-    <div className="container-fluid ">
+    <div className="w-full">
       <Card className="">
         <CardHeader className="border-0">
           <h4>Reporte de Delivery</h4>

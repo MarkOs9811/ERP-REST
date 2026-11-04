@@ -108,21 +108,23 @@ export function FormEditarSolicitud({ dataSolicitud, onClose }) {
   };
 
   return (
-    <div className="p-4 h-100 d-flex flex-column" style={{ margin: "0 auto" }}>
+    <div className="p-4 h-full flex flex-col" style={{ margin: "0 auto" }}>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="d-flex flex-column flex-grow-1 h-100"
+        className="flex flex-col grow h-full"
         style={{ minHeight: 0 }}
       >
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
-          <div className="md:col-span-6">
-            <label className="form-label ">
+        <div className="grid grid-cols-12 gap-3">
+          <div className="col-span-full md:col-span-6">
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
               <Tag size={18} /> Producto
             </label>
             <input
               type="text"
-              className={`form-control ${
-                errors.nombre_producto ? "is-invalid" : ""
+              className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+                errors.nombre_producto
+                  ? "border-destructive focus-visible:ring-destructive"
+                  : ""
               }`}
               {...register("nombre_producto", {
                 required: "El producto es obligatorio",
@@ -130,18 +132,18 @@ export function FormEditarSolicitud({ dataSolicitud, onClose }) {
               placeholder="Nombre del producto"
             />
             {errors.nombre_producto && (
-              <div className="invalid-feedback">
+              <div className="text-sm text-destructive">
                 {errors.nombre_producto.message}
               </div>
             )}
           </div>
-          <div className="md:col-span-3">
-            <label className="form-label ">
+          <div className="col-span-full md:col-span-3">
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
               <Hash size={18} /> Cantidad
             </label>
             <input
               type="number"
-              className={`form-control ${errors.cantidad ? "is-invalid" : ""}`}
+              className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.cantidad ? "border-destructive focus-visible:ring-destructive" : ""}`}
               {...register("cantidad", {
                 required: "La cantidad es obligatoria",
                 min: 1,
@@ -149,15 +151,17 @@ export function FormEditarSolicitud({ dataSolicitud, onClose }) {
               placeholder="Cantidad"
             />
             {errors.cantidad && (
-              <div className="invalid-feedback">{errors.cantidad.message}</div>
+              <div className="text-sm text-destructive">
+                {errors.cantidad.message}
+              </div>
             )}
           </div>
-          <div className="md:col-span-3">
-            <label className="form-label ">
+          <div className="col-span-full md:col-span-3">
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
               <ListChecks size={18} /> Unidad
             </label>
             <select
-              className={`form-select ${errors.idUnidad ? "is-invalid" : ""}`}
+              className={`h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.idUnidad ? "border-destructive focus-visible:ring-destructive" : ""}`}
               {...register("idUnidad", {
                 required: "La unidad es obligatoria",
               })}
@@ -172,16 +176,20 @@ export function FormEditarSolicitud({ dataSolicitud, onClose }) {
                 ))}
             </select>
             {errors.idUnidad && (
-              <div className="invalid-feedback">{errors.idUnidad.message}</div>
+              <div className="text-sm text-destructive">
+                {errors.idUnidad.message}
+              </div>
             )}
           </div>
-          <div className="md:col-span-6">
-            <label className="form-label ">
+          <div className="col-span-full md:col-span-6">
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
               <Tag size={18} /> Categoría
             </label>
             <select
-              className={`form-select ${
-                errors.idCategoria ? "is-invalid" : ""
+              className={`h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+                errors.idCategoria
+                  ? "border-destructive focus-visible:ring-destructive"
+                  : ""
               }`}
               {...register("idCategoria", {
                 required: "La categoría es obligatoria",
@@ -197,64 +205,70 @@ export function FormEditarSolicitud({ dataSolicitud, onClose }) {
                 ))}
             </select>
             {errors.idCategoria && (
-              <div className="invalid-feedback">
+              <div className="text-sm text-destructive">
                 {errors.idCategoria.message}
               </div>
             )}
           </div>
-          <div className="md:col-span-6">
-            <label className="form-label ">
+          <div className="col-span-full md:col-span-6">
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
               <Tag size={18} /> Marca
             </label>
             <input
               type="text"
-              className={`form-control ${errors.marcaProd ? "is-invalid" : ""}`}
+              className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.marcaProd ? "border-destructive focus-visible:ring-destructive" : ""}`}
               {...register("marcaProd")}
               placeholder="Marca"
             />
           </div>
-          <div className="md:col-span-6">
-            <label className="form-label ">
+          <div className="col-span-full md:col-span-6">
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
               <FileEdit size={18} /> Motivo
             </label>
             <input
               type="text"
-              className={`form-control ${errors.motivo ? "is-invalid" : ""}`}
+              className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.motivo ? "border-destructive focus-visible:ring-destructive" : ""}`}
               {...register("motivo")}
               placeholder="Motivo"
             />
           </div>
-          <div className="md:col-span-6">
-            <label className="form-label ">
+          <div className="col-span-full md:col-span-6">
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
               <FileEdit size={18} /> Descripción
             </label>
             <input
               type="text"
-              className={`form-control ${
-                errors.descripcion ? "is-invalid" : ""
+              className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+                errors.descripcion
+                  ? "border-destructive focus-visible:ring-destructive"
+                  : ""
               }`}
               {...register("descripcion")}
               placeholder="Descripción"
             />
           </div>
-          <div className="md:col-span-4">
-            <label className="form-label ">Precio estimado</label>
+          <div className="col-span-full md:col-span-4">
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+              Precio estimado
+            </label>
             <input
               type="number"
               step="0.01"
-              className={`form-control ${
-                errors.precio_estimado ? "is-invalid" : ""
+              className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+                errors.precio_estimado
+                  ? "border-destructive focus-visible:ring-destructive"
+                  : ""
               }`}
               {...register("precio_estimado")}
               placeholder="Precio estimado"
             />
           </div>
-          <div className="md:col-span-4">
-            <label className="form-label ">
+          <div className="col-span-full md:col-span-4">
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
               <FileEdit size={18} /> Prioridad
             </label>
             <select
-              className={`form-select ${errors.prioridad ? "is-invalid" : ""}`}
+              className={`h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.prioridad ? "border-destructive focus-visible:ring-destructive" : ""}`}
               {...register("prioridad", {
                 required: "La prioridad es obligatoria",
               })}
@@ -265,30 +279,36 @@ export function FormEditarSolicitud({ dataSolicitud, onClose }) {
               <option value="Baja">Baja</option>
             </select>
             {errors.prioridad && (
-              <div className="invalid-feedback">{errors.prioridad.message}</div>
+              <div className="text-sm text-destructive">
+                {errors.prioridad.message}
+              </div>
             )}
           </div>
-          <div className="md:col-span-4">
-            <label className="form-label ">
+          <div className="col-span-full md:col-span-4">
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
               <FileEdit size={18} /> Uso previsto
             </label>
             <input
               type="text"
-              className={`form-control ${
-                errors.uso_previsto ? "is-invalid" : ""
+              className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+                errors.uso_previsto
+                  ? "border-destructive focus-visible:ring-destructive"
+                  : ""
               }`}
               {...register("uso_previsto")}
               placeholder="Uso previsto"
             />
           </div>
-          <div className="md:col-span-6">
-            <label className="form-label ">
+          <div className="col-span-full md:col-span-6">
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
               <User size={18} /> Solicitante
             </label>
             <input
               type="text"
-              className={`form-control ${
-                errors.nombre_solicitante ? "is-invalid" : ""
+              className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+                errors.nombre_solicitante
+                  ? "border-destructive focus-visible:ring-destructive"
+                  : ""
               }`}
               {...register("nombre_solicitante", {
                 required: "El solicitante es obligatorio",
@@ -296,19 +316,21 @@ export function FormEditarSolicitud({ dataSolicitud, onClose }) {
               placeholder="Nombre del solicitante"
             />
             {errors.nombre_solicitante && (
-              <div className="invalid-feedback">
+              <div className="text-sm text-destructive">
                 {errors.nombre_solicitante.message}
               </div>
             )}
           </div>
-          <div className="md:col-span-6">
-            <label className="form-label ">
+          <div className="col-span-full md:col-span-6">
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
               <Mail size={18} /> Email
             </label>
             <input
               type="email"
-              className={`form-control ${
-                errors.correo_electronico ? "is-invalid" : ""
+              className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+                errors.correo_electronico
+                  ? "border-destructive focus-visible:ring-destructive"
+                  : ""
               }`}
               {...register("correo_electronico", {
                 required: "El email es obligatorio",
@@ -320,28 +342,28 @@ export function FormEditarSolicitud({ dataSolicitud, onClose }) {
               placeholder="Correo electrónico"
             />
             {errors.correo_electronico && (
-              <div className="invalid-feedback">
+              <div className="text-sm text-destructive">
                 {errors.correo_electronico.message}
               </div>
             )}
           </div>
-          <div className="md:col-span-6">
-            <label className="form-label ">
+          <div className="col-span-full md:col-span-6">
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
               <Phone size={18} /> Teléfono
             </label>
             <input
               type="text"
-              className={`form-control ${errors.telefono ? "is-invalid" : ""}`}
+              className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.telefono ? "border-destructive focus-visible:ring-destructive" : ""}`}
               {...register("telefono")}
               placeholder="Teléfono"
             />
           </div>
-          <div className="md:col-span-6">
-            <label className="form-label ">
+          <div className="col-span-full md:col-span-6">
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
               <Tag size={18} /> Área
             </label>
             <select
-              className={`form-select ${errors.idArea ? "is-invalid" : ""}`}
+              className={`h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.idArea ? "border-destructive focus-visible:ring-destructive" : ""}`}
               {...register("idArea", { required: "El área es obligatoria" })}
               disabled={loadingAreas}
             >
@@ -354,12 +376,14 @@ export function FormEditarSolicitud({ dataSolicitud, onClose }) {
                 ))}
             </select>
             {errors.idArea && (
-              <div className="invalid-feedback">{errors.idArea.message}</div>
+              <div className="text-sm text-destructive">
+                {errors.idArea.message}
+              </div>
             )}
           </div>
         </div>
         <div className="mt-auto pt-3">
-          <div className="d-flex justify-content-end gap-2">
+          <div className="flex justify-end gap-2">
             <Button
               type="button"
               className="btn-cerrar-modal"
@@ -368,14 +392,16 @@ export function FormEditarSolicitud({ dataSolicitud, onClose }) {
                 onClose && onClose();
               }}
               disabled={isSubmitting}
-             variant="default">
+              variant="default"
+            >
               Cancelar
             </Button>
             <Button
               type="submit"
-              className="btn-guardar align-items-center gap-2"
+              className="btn-guardar items-center gap-2"
               disabled={isSubmitting}
-             variant="default">
+              variant="default"
+            >
               <FileEdit size={18} /> Guardar Cambios
             </Button>
           </div>

@@ -12,7 +12,6 @@ import {
 import { Button } from "../../ui/button";
 import { Card } from "@/components/ui/card";
 
-
 export function Paso1Personales({
   register,
   errors,
@@ -49,13 +48,13 @@ export function Paso1Personales({
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
-      <div className="md:col-span-12">
+    <div className="grid grid-cols-12 gap-3">
+      <div className="col-span-full md:col-span-12">
         <Card className="border p-4">
           <h5 className="mb-4">Paso 1: Datos Personales</h5>
 
           {/* FOTO DE PERFIL */}
-          <div className="d-flex flex-column align-items-center text-center mb-4">
+          <div className="flex flex-col items-center text-center mb-4">
             <input
               type="file"
               accept="image/*"
@@ -79,15 +78,16 @@ export function Paso1Personales({
             ) : (
               <UserCircle
                 size={150}
-                className="mb-3 text-muted"
+                className="mb-3 text-muted-foreground"
                 strokeWidth={1}
               />
             )}
             <Button
               type="button"
-              className="btn-generico btn-sm"
+              className="btn-generico inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 px-3 text-xs"
               onClick={() => fileInputRef.current.click()}
-             variant="default">
+              variant="default"
+            >
               <Upload size={16} className="me-2" /> Seleccionar Imagen
             </Button>
             <input
@@ -97,20 +97,20 @@ export function Paso1Personales({
               })}
             />
             {errors.fotoPerfil && (
-              <div className="text-danger mt-2 small">
+              <div className="text-destructive mt-2 text-sm">
                 {errors.fotoPerfil.message}
               </div>
             )}
           </div>
 
           {/* DATOS PERSONALES */}
-          <div className="row">
-            <div className="md:col-span-5 mb-3">
-              <label className="form-label small fw-semi-bold text-muted">
+          <div className="grid grid-cols-12 gap-3">
+            <div className="col-span-full md:col-span-5 mb-3">
+              <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm fw-semi-bold text-muted-foreground">
                 <FileText size={16} className="me-1" /> Tipo Documento
               </label>
               <select
-                className={`form-select ${errors.tipo_documento ? "is-invalid" : ""}`}
+                className={`h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.tipo_documento ? "border-destructive focus-visible:ring-destructive" : ""}`}
                 {...register("tipo_documento", {
                   required: "Debe seleccionar un tipo de documento",
                   // Si cambian el tipo de documento, limpiamos el campo del número para evitar errores
@@ -125,18 +125,18 @@ export function Paso1Personales({
                 </option>
               </select>
               {errors.tipo_documento && (
-                <div className="invalid-feedback">
+                <div className="text-sm text-destructive">
                   {errors.tipo_documento.message}
                 </div>
               )}
             </div>
 
-            <div className="md:col-span-7 mb-3">
-              <label className="form-label small fw-semi-bold text-muted">
+            <div className="col-span-full md:col-span-7 mb-3">
+              <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm fw-semi-bold text-muted-foreground">
                 Número de Documento
               </label>
               <input
-                className={`form-control ${errors.num_documento ? "is-invalid" : ""}`}
+                className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.num_documento ? "border-destructive focus-visible:ring-destructive" : ""}`}
                 type="text"
                 maxLength={getMaxLen()} // Límite dinámico
                 placeholder="Número de Documento"
@@ -172,7 +172,7 @@ export function Paso1Personales({
                 })}
               />
               {errors.num_documento && (
-                <div className="invalid-feedback">
+                <div className="text-sm text-destructive">
                   {errors.num_documento.message}
                 </div>
               )}
@@ -180,57 +180,61 @@ export function Paso1Personales({
           </div>
 
           <div className="mb-3">
-            <label className="form-label small fw-semi-bold text-muted">
+            <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm fw-semi-bold text-muted-foreground">
               <User size={16} className="me-1" /> Nombre
             </label>
             <input
-              className={`form-control ${errors.nombre ? "is-invalid" : ""}`}
+              className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.nombre ? "border-destructive focus-visible:ring-destructive" : ""}`}
               {...register("nombre", { required: "El nombre es requerido" })}
               placeholder="Nombre del empleado"
             />
             {errors.nombre && (
-              <div className="invalid-feedback">{errors.nombre.message}</div>
+              <div className="text-sm text-destructive">
+                {errors.nombre.message}
+              </div>
             )}
           </div>
 
           <div className="mb-3">
-            <label className="form-label small fw-semi-bold text-muted">
+            <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm fw-semi-bold text-muted-foreground">
               <User size={16} className="me-1" /> Apellidos
             </label>
             <input
-              className={`form-control ${errors.apellidos ? "is-invalid" : ""}`}
+              className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.apellidos ? "border-destructive focus-visible:ring-destructive" : ""}`}
               {...register("apellidos", {
                 required: "Los apellidos son requeridos",
               })}
               placeholder="Apellidos del empleado"
             />
             {errors.apellidos && (
-              <div className="invalid-feedback">{errors.apellidos.message}</div>
+              <div className="text-sm text-destructive">
+                {errors.apellidos.message}
+              </div>
             )}
           </div>
 
-          <div className="row">
-            <div className="col-6 mb-3">
-              <label className="form-label small fw-semi-bold text-muted">
+          <div className="grid grid-cols-12 gap-3">
+            <div className="col-span-6 mb-3">
+              <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm fw-semi-bold text-muted-foreground">
                 <Calendar size={16} className="me-1" /> F. Nacimiento
               </label>
               <input
-                className={`form-control ${errors.fecha_nacimiento ? "is-invalid" : ""}`}
+                className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.fecha_nacimiento ? "border-destructive focus-visible:ring-destructive" : ""}`}
                 type="date"
                 {...register("fecha_nacimiento", { required: "Requerido" })}
               />
               {errors.fecha_nacimiento && (
-                <div className="invalid-feedback">
+                <div className="text-sm text-destructive">
                   {errors.fecha_nacimiento.message}
                 </div>
               )}
             </div>
-            <div className="col-6 mb-3">
-              <label className="form-label small fw-semi-bold text-muted">
+            <div className="col-span-6 mb-3">
+              <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm fw-semi-bold text-muted-foreground">
                 <Phone size={16} className="me-1" /> Nº de contacto
               </label>
               <input
-                className={`form-control ${errors.telefono ? "is-invalid" : ""}`}
+                className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.telefono ? "border-destructive focus-visible:ring-destructive" : ""}`}
                 type="tel" // Cambiado de "number" a "tel"
                 maxLength={9} // Limita visualmente a 9 caracteres
                 placeholder="Ej: 987654321"
@@ -243,7 +247,7 @@ export function Paso1Personales({
                 })}
               />
               {errors.telefono && (
-                <div className="invalid-feedback">
+                <div className="text-sm text-destructive">
                   {errors.telefono.message}
                 </div>
               )}
@@ -251,13 +255,13 @@ export function Paso1Personales({
           </div>
 
           {/* UBICACIÓN */}
-          <div className="row">
-            <div className="col-4 mb-3">
-              <label className="form-label small fw-semi-bold text-muted">
+          <div className="grid grid-cols-12 gap-3">
+            <div className="col-span-4 mb-3">
+              <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm fw-semi-bold text-muted-foreground">
                 <MapPin size={16} className="me-1" /> Depto.
               </label>
               <select
-                className={`form-select ${errors.departamento ? "is-invalid" : ""}`}
+                className={`h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.departamento ? "border-destructive focus-visible:ring-destructive" : ""}`}
                 {...register("departamento", {
                   required: "Requerido",
                   onChange: (e) => {
@@ -276,12 +280,12 @@ export function Paso1Personales({
                 ))}
               </select>
             </div>
-            <div className="col-4 mb-3">
-              <label className="form-label small fw-semi-bold text-muted">
+            <div className="col-span-4 mb-3">
+              <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm fw-semi-bold text-muted-foreground">
                 <MapPin size={16} className="me-1" /> Provincia
               </label>
               <select
-                className={`form-select ${errors.provincia ? "is-invalid" : ""}`}
+                className={`h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.provincia ? "border-destructive focus-visible:ring-destructive" : ""}`}
                 {...register("provincia", {
                   required: "Requerido",
                   onChange: (e) => {
@@ -299,12 +303,12 @@ export function Paso1Personales({
                 ))}
               </select>
             </div>
-            <div className="col-4 mb-3">
-              <label className="form-label small fw-semi-bold text-muted">
+            <div className="col-span-4 mb-3">
+              <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm fw-semi-bold text-muted-foreground">
                 <MapPin size={16} className="me-1" /> Distrito
               </label>
               <select
-                className={`form-select ${errors.distrito ? "is-invalid" : ""}`}
+                className={`h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.distrito ? "border-destructive focus-visible:ring-destructive" : ""}`}
                 {...register("distrito", { required: "Requerido" })}
                 disabled={!selectedProvincia}
               >
@@ -319,23 +323,23 @@ export function Paso1Personales({
           </div>
 
           <div className="mb-3">
-            <label className="form-label small fw-semi-bold text-muted">
+            <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm fw-semi-bold text-muted-foreground">
               <MapPin size={16} className="me-1" /> Dirección
             </label>
             <input
-              className={`form-control ${errors.direccion ? "is-invalid" : ""}`}
+              className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.direccion ? "border-destructive focus-visible:ring-destructive" : ""}`}
               {...register("direccion", { required: "Requerido" })}
               placeholder="Dirección"
             />
           </div>
 
           <div className="mb-3">
-            <label className="form-label small fw-semi-bold text-muted">
+            <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm fw-semi-bold text-muted-foreground">
               <Mail size={16} className="me-1" /> Correo Electrónico
             </label>
             <input
               type="email"
-              className={`form-control ${errors.correo ? "is-invalid" : ""}`}
+              className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.correo ? "border-destructive focus-visible:ring-destructive" : ""}`}
               {...register("correo", { required: "Requerido" })}
               placeholder="Correo Electrónico"
             />

@@ -1,9 +1,4 @@
 import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { getVentas } from "../../service/ObtenerVentasDetalle";
-
-import { Cargando } from "../componentesReutilizables/Cargando";
-
 import { capitalizeFirstLetter } from "../../hooks/FirstLetterUp";
 import { TablasGenerales } from "../componentesReutilizables/TablasGenerales";
 import {
@@ -21,23 +16,13 @@ import { ModalDetallesVentas } from "./ModalDetallesVentas";
 import { BtnVer } from "../componentesReutilizables/BotonesAccion";
 import { BadgeComponent } from "../componentesReutilizables/BadgeComponent";
 import { Card } from "@/components/ui/card";
-
+import { Button } from "../ui/button";
 
 export function ListVentas({ search, ventas }) {
   const [modalDetallesVenta, setModalDetallesVenta] = useState(false);
   const [dataVentas, setDataVentas] = useState([]);
 
-  // React Query: obtener ventas con `useQuery`
-  const {
-    data: ventasConsultadas = [],
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ["ventas"],
-    queryFn: getVentas,
-    enabled: ventas === undefined,
-  });
-  const listVentas = ventas ?? ventasConsultadas;
+  const listVentas = Array.isArray(ventas) ? ventas : [];
   // Estado para la lista filtrada
   const [filteredVentas, setFilteredVentas] = useState([]);
 
@@ -101,7 +86,7 @@ export function ListVentas({ search, ventas }) {
     {
       name: "Detalles",
       cell: (row) => (
-        <div className="d-flex ">
+        <div className="flex">
           <BtnVer
             onClick={() => {
               setDataVentas(row);
@@ -118,12 +103,12 @@ export function ListVentas({ search, ventas }) {
       name: "Comprobante",
       selector: (row) => (
         <span
-          className={`badge ${
+          className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors ${
             row.documento === "B"
-              ? "bg-success"
+              ? "bg-emerald-600 text-white dark:bg-emerald-500 dark:text-emerald-950"
               : row.documento === "F"
-                ? "bg-primary"
-                : "bg-secondary"
+                ? "bg-primary text-primary-foreground"
+                : "bg-secondary text-secondary-foreground"
           }`}
         >
           {row.documento === "B"
@@ -158,7 +143,7 @@ export function ListVentas({ search, ventas }) {
         // Caso 1: Venta por web
         if (!usuario?.email) {
           return (
-            <span className="text-muted fw-medium small">
+            <span className="text-muted-foreground font-medium text-sm">
               Se vendió por web
             </span>
           );
@@ -175,7 +160,7 @@ export function ListVentas({ search, ventas }) {
           : "";
 
         return (
-          <div className="d-flex align-items-center gap-3">
+          <div className="flex items-center gap-3">
             <img
               // AHORA USAMOS foto_url DIRECTAMENTE
               src={
@@ -184,13 +169,7 @@ export function ListVentas({ search, ventas }) {
                   : "/images/default-avatar.png"
               }
               alt="Perfil"
-              className="rounded-circle shadow-sm"
-              style={{
-                width: "32px",
-                height: "32px",
-                objectFit: "cover",
-                border: "1px solid #e2e8f0",
-              }}
+              className="size-8 shrink-0 rounded-full border border-border object-cover shadow-sm"
               onError={(e) => {
                 if (!e.target.src.includes("default-avatar.png")) {
                   e.target.src = "/images/default-avatar.png";
@@ -198,17 +177,14 @@ export function ListVentas({ search, ventas }) {
               }}
             />
 
-            <div
-              className="d-flex flex-column text-start"
-              style={{ minWidth: 0 }}
-            >
+            <div className="flex min-w-0 flex-col text-left">
               <span
-                className="fw-medium text-dark text-truncate"
+                className="font-medium text-foreground truncate"
                 title={usuario.email}
               >
                 {usuario.email}
               </span>
-              <small className="text-muted text-truncate">
+              <small className="text-muted-foreground truncate">
                 {`${nombre} ${apellidos}`.trim() || "Usuario sin nombre"}
               </small>
             </div>
@@ -221,8 +197,8 @@ export function ListVentas({ search, ventas }) {
     {
       name: "Fecha",
       selector: (row) => (
-        <span className="d-flex align-items-center gap-1">
-          <CalendarCheck2 className="text-auto" height="16px" width="16px" />
+        <span className="flex items-center gap-1">
+          <CalendarCheck2 className="size-4 shrink-0 text-muted-foreground" />
           {new Intl.DateTimeFormat("es-ES", {
             dateStyle: "short",
             timeStyle: "short",
@@ -321,34 +297,41 @@ export function ListVentas({ search, ventas }) {
               : null;
 
         return (
-          <div className="d-flex align-items-center gap-2 p-2">
+          <div className="flex items-center gap-2 p-2">
             {xmlUrl ? (
-              <a
-                href={xmlUrl} // <-- Usamos el enlace limpio de Cloudflare
-                className="btn-ver d-flex align-items-center gap-1 btn-sm"
-                target="_blank" // Agregado para que abra en nueva pestaña
-                rel="noopener noreferrer"
+              <Button
+                asChild
+                size="sm"
+                variant="ghostOutline"
+                className="gap-1 px-2"
               >
-                <Eye className="text-auto" size={15} />{" "}
-                <span className="small">XML</span>{" "}
-                {/* Corregí el typo 'spam' a 'span' 😉 */}
-              </a>
+                <a href={xmlUrl} target="_blank" rel="noopener noreferrer">
+                  <Eye className="size-3.5" />
+                  <span>XML</span>
+                </a>
+              </Button>
             ) : (
-              <span className="text-muted small">XML no disponible</span>
+              <span className="text-muted-foreground text-sm">
+                XML no disponible
+              </span>
             )}
 
             {cdrUrl ? (
-              <a
-                href={cdrUrl} // <-- Usamos el enlace limpio de Cloudflare
-                className="btn-ver d-flex align-items-center gap-1 btn-sm"
-                target="_blank" // Agregado para que abra en nueva pestaña
-                rel="noopener noreferrer"
+              <Button
+                asChild
+                size="sm"
+                variant="ghostOutline"
+                className="gap-1 px-2"
               >
-                <CloudDownload className="text-auto" size={15} />{" "}
-                <span className="small"> CDR</span>
-              </a>
+                <a href={cdrUrl} target="_blank" rel="noopener noreferrer">
+                  <CloudDownload className="size-3.5" />
+                  <span>CDR</span>
+                </a>
+              </Button>
             ) : (
-              <span className="text-muted small">CDR no disponible</span>
+              <span className="text-muted-foreground text-sm">
+                CDR no disponible
+              </span>
             )}
           </div>
         );
@@ -359,9 +342,7 @@ export function ListVentas({ search, ventas }) {
   ];
 
   return (
-    <Card className="shadow-none border-0">
-      {isLoading && <Cargando />}
-      {isError && <div className="error">Error al cargar ventas</div>}
+    <Card className="min-w-0 border-0 bg-transparent p-0 shadow-none">
       <TablasGenerales columnas={columns} datos={filteredVentas} />
 
       <ModalRight

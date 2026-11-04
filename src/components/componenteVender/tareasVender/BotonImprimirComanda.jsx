@@ -86,16 +86,19 @@ export function BotonImprimirComanda({ dataPedido }) {
         type="button"
         onClick={handleImprimir}
         disabled={imprimirMutation.isPending}
-        className="btn-icon border d-flex align-items-center justify-content-center text-muted rounded-pill px-3"
+        className="btn-icon flex items-center justify-center text-muted-foreground rounded-full px-3"
         title="Reimprimir"
         style={{
           cursor: imprimirMutation.isPending ? "not-allowed" : "pointer",
         }}
-       variant="default">
+        variant="default"
+      >
         <PrinterCheck
           size={16}
           className={
-            imprimirMutation.isPending ? "spinner-border spinner-border-sm" : ""
+            imprimirMutation.isPending
+              ? "inline-block animate-spin rounded-full border-current border-r-transparent size-4 border"
+              : ""
           }
         />
       </Button>

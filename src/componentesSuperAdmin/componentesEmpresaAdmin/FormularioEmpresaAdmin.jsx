@@ -6,7 +6,6 @@ import ToastAlert from "../../components/componenteToast/ToastAlert";
 import { Button } from "../../components/ui/button";
 import { Card } from "@/components/ui/card";
 
-
 export function FormularioEmpresaAdmin({ dataEmpresa = null, onClose }) {
   const isEditMode = Boolean(dataEmpresa);
   const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -145,11 +144,11 @@ export function FormularioEmpresaAdmin({ dataEmpresa = null, onClose }) {
   return (
     <div className="p-3">
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
-        <div className="mb-3 d-flex flex-column gap-3 align-items-start">
+        <div className="mb-3 flex flex-col gap-3 items-start">
           {/* Preview de la imagen */}
-          <Card className="m-auto bg-background p-2 border rounded-full overflow-hidden">
+          <Card className="m-auto bg-background p-2 rounded-full overflow-hidden">
             <div
-              className="rounded-pill position-relative"
+              className="rounded-full relative"
               style={{
                 width: 92,
                 height: 92,
@@ -164,20 +163,22 @@ export function FormularioEmpresaAdmin({ dataEmpresa = null, onClose }) {
                   src={previewUrl}
                   alt="Preview"
                   style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                  className="rounded-pill"
+                  className="rounded-full"
                 />
               ) : (
-                <span className="small text-muted">Sin img</span>
+                <span className="text-sm text-muted-foreground">Sin img</span>
               )}
             </div>
           </Card>
 
-          <div className="flex-grow-1 w-100">
-            <label className="form-label small d-block">Logo / Foto</label>
+          <div className="grow w-full">
+            <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm block">
+              Logo / Foto
+            </label>
             <input
               type="file"
               accept="image/*"
-              className={`form-control ${errors.logo ? "is-invalid" : ""}`}
+              className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.logo ? "border-destructive focus-visible:ring-destructive" : ""}`}
               // --- CORRECCIÓN IMPORTANTE AQUÍ ---
               // Usamos el onChange dentro de la configuración de register para no perderlo
               {...register("logo", {
@@ -200,9 +201,11 @@ export function FormularioEmpresaAdmin({ dataEmpresa = null, onClose }) {
               })}
             />
             {errors.logo && (
-              <div className="invalid-feedback">{errors.logo.message}</div>
+              <div className="text-sm text-destructive">
+                {errors.logo.message}
+              </div>
             )}
-            <small className="text-muted">
+            <small className="text-muted-foreground">
               Formatos: jpg, png, webp. Máx 4MB.
             </small>
           </div>
@@ -210,10 +213,12 @@ export function FormularioEmpresaAdmin({ dataEmpresa = null, onClose }) {
 
         {/* Resto de campos (Sin cambios mayores) */}
         <div className="mb-3">
-          <label className="form-label small">Nombre de la Empresa*</label>
+          <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm">
+            Nombre de la Empresa*
+          </label>
           <input
             type="text"
-            className={`form-control ${errors.nombre ? "is-invalid" : ""}`}
+            className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.nombre ? "border-destructive focus-visible:ring-destructive" : ""}`}
             {...register("nombre", {
               required: "El nombre es obligatorio",
               minLength: { value: 3, message: "Mínimo 3 caracteres" },
@@ -221,32 +226,40 @@ export function FormularioEmpresaAdmin({ dataEmpresa = null, onClose }) {
             })}
           />
           {errors.nombre && (
-            <div className="invalid-feedback">{errors.nombre.message}</div>
+            <div className="text-sm text-destructive">
+              {errors.nombre.message}
+            </div>
           )}
         </div>
 
         <div className="mb-3">
-          <label className="form-label small">Dirección*</label>
+          <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm">
+            Dirección*
+          </label>
           <input
             type="text"
-            className={`form-control ${errors.direccion ? "is-invalid" : ""}`}
+            className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.direccion ? "border-destructive focus-visible:ring-destructive" : ""}`}
             {...register("direccion", {
               required: "La dirección es obligatoria",
               minLength: { value: 5, message: "Mínimo 5 caracteres" },
             })}
           />
           {errors.direccion && (
-            <div className="invalid-feedback">{errors.direccion.message}</div>
+            <div className="text-sm text-destructive">
+              {errors.direccion.message}
+            </div>
           )}
         </div>
 
-        <div className="row">
-          <div className="md:col-span-6 mb-3">
-            <label className="form-label small">RUC*</label>
+        <div className="grid grid-cols-12 gap-3">
+          <div className="col-span-full md:col-span-6 mb-3">
+            <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm">
+              RUC*
+            </label>
             <input
               type="text"
               inputMode="numeric"
-              className={`form-control ${errors.ruc ? "is-invalid" : ""}`}
+              className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.ruc ? "border-destructive focus-visible:ring-destructive" : ""}`}
               {...register("ruc", {
                 required: "El RUC es obligatorio",
                 pattern: {
@@ -256,15 +269,19 @@ export function FormularioEmpresaAdmin({ dataEmpresa = null, onClose }) {
               })}
             />
             {errors.ruc && (
-              <div className="invalid-feedback">{errors.ruc.message}</div>
+              <div className="text-sm text-destructive">
+                {errors.ruc.message}
+              </div>
             )}
           </div>
 
-          <div className="md:col-span-6 mb-3">
-            <label className="form-label small">Teléfono*</label>
+          <div className="col-span-full md:col-span-6 mb-3">
+            <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm">
+              Teléfono*
+            </label>
             <input
               type="tel"
-              className={`form-control ${errors.telefono ? "is-invalid" : ""}`}
+              className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.telefono ? "border-destructive focus-visible:ring-destructive" : ""}`}
               {...register("telefono", {
                 required: "El teléfono es obligatorio",
                 pattern: {
@@ -274,16 +291,20 @@ export function FormularioEmpresaAdmin({ dataEmpresa = null, onClose }) {
               })}
             />
             {errors.telefono && (
-              <div className="invalid-feedback">{errors.telefono.message}</div>
+              <div className="text-sm text-destructive">
+                {errors.telefono.message}
+              </div>
             )}
           </div>
         </div>
 
         <div className="mb-3">
-          <label className="form-label small">Email*</label>
+          <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm">
+            Email*
+          </label>
           <input
             type="email"
-            className={`form-control ${errors.email ? "is-invalid" : ""}`}
+            className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.email ? "border-destructive focus-visible:ring-destructive" : ""}`}
             {...register("email", {
               required: "El email es obligatorio",
               pattern: {
@@ -293,20 +314,28 @@ export function FormularioEmpresaAdmin({ dataEmpresa = null, onClose }) {
             })}
           />
           {errors.email && (
-            <div className="invalid-feedback">{errors.email.message}</div>
+            <div className="text-sm text-destructive">
+              {errors.email.message}
+            </div>
           )}
         </div>
 
-        <div className="d-flex justify-content-end gap-2">
+        <div className="flex justify-end gap-2">
           <Button
             type="button"
             className="btn-cerrar-modal"
             onClick={onClose}
             disabled={isSubmitting}
-           variant="default">
+            variant="default"
+          >
             Cancelar
           </Button>
-          <Button type="submit" className="btn-guardar" disabled={isSubmitting} variant="default">
+          <Button
+            type="submit"
+            className="btn-guardar"
+            disabled={isSubmitting}
+            variant="default"
+          >
             {isEditMode ? "Actualizar Empresa" : "Crear Empresa"}
           </Button>
         </div>

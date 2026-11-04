@@ -1,5 +1,84 @@
 import DataTable from "react-data-table-component";
-import getCustomDataTableStyles from "../../css/estilosComponentesTable/DataTableStyles";
+
+const estilosTabla = {
+  table: {
+    style: {
+      backgroundColor: "var(--card)",
+      color: "var(--card-foreground)",
+    },
+  },
+  tableWrapper: {
+    style: {
+      backgroundColor: "var(--card)",
+    },
+  },
+  responsiveWrapper: {
+    style: {
+      maxWidth: "100%",
+      overflowX: "auto",
+    },
+  },
+  headRow: {
+    style: {
+      backgroundColor: "var(--muted)",
+      borderBottomColor: "var(--border)",
+      color: "var(--foreground)",
+      minHeight: "3rem",
+    },
+  },
+  headCells: {
+    style: {
+      color: "var(--muted-foreground)",
+      fontSize: "0.75rem",
+      fontWeight: 600,
+    },
+  },
+  rows: {
+    style: {
+      backgroundColor: "var(--card)",
+      borderBottomColor: "var(--border)",
+      color: "var(--card-foreground)",
+      minHeight: "3.25rem",
+    },
+    stripedStyle: {
+      backgroundColor: "var(--muted)",
+    },
+    highlightOnHoverStyle: {
+      backgroundColor: "var(--accent)",
+      color: "var(--accent-foreground)",
+    },
+  },
+  cells: {
+    style: {
+      color: "var(--card-foreground)",
+    },
+  },
+  pagination: {
+    style: {
+      backgroundColor: "var(--card)",
+      borderTopColor: "var(--border)",
+      color: "var(--muted-foreground)",
+    },
+    pageButtonsStyle: {
+      backgroundColor: "transparent",
+      color: "var(--foreground)",
+      fill: "var(--foreground)",
+    },
+  },
+  noData: {
+    style: {
+      backgroundColor: "var(--card)",
+      color: "var(--muted-foreground)",
+      padding: "2rem",
+    },
+  },
+  progress: {
+    style: {
+      backgroundColor: "var(--card)",
+      color: "var(--muted-foreground)",
+    },
+  },
+};
 
 export function TablasGenerales({
   columnas,
@@ -10,10 +89,8 @@ export function TablasGenerales({
   totalRegistros = 0,
   alCambiarPagina = () => {},
 }) {
-  const isDark = document.body.classList.contains("dark-theme");
-
   return (
-    <div className="fw-tabla-wrapper">
+    <div className="w-full min-w-0 max-w-full overflow-hidden bg-card text-card-foreground">
       <DataTable
         className="tablaGeneral"
         columns={columnas}
@@ -21,9 +98,9 @@ export function TablasGenerales({
         responsive
         dense
         fixedHeader
-        striped={true} // <-- ESTO ACTIVA EL INTERCALADO
-        highlightOnHover={true}
-        customStyles={getCustomDataTableStyles(isDark)}
+        striped
+        highlightOnHover
+        customStyles={estilosTabla}
         // --- ESTADO DE CARGA ---
         progressPending={cargando}
         // --- CONFIGURACIÓN DE PAGINACIÓN ---
@@ -39,7 +116,9 @@ export function TablasGenerales({
           selectAllRowsItemText: "Todos",
         }}
         noDataComponent={
-          <div className="no-data-table">No hay datos para mostrar</div>
+          <div className="px-4 py-8 text-sm text-muted-foreground">
+            No hay datos para mostrar
+          </div>
         }
       />
     </div>

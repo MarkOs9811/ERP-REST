@@ -110,7 +110,7 @@ export function PerfilPanel({ user, fotoPerfil }) {
   return (
     <div>
       {/* 🔸 Perfil */}
-      <div className="d-flex flex-column align-items-center">
+      <div className="flex flex-col items-center">
         <img
           src={fotoPerfil}
           alt="Perfil"
@@ -124,8 +124,8 @@ export function PerfilPanel({ user, fotoPerfil }) {
           }}
         />
         <h5 className="mt-3 mb-0">{user?.name || "Usuario"}</h5>
-        <small className="text-muted">{user?.email}</small>
-        <span className="badge bg-dark mt-2">
+        <small className="text-muted-foreground">{user?.email}</small>
+        <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-foreground mt-2">
           {user?.empleado?.cargo?.nombre || "Sin cargo"}
         </span>
       </div>
@@ -133,12 +133,13 @@ export function PerfilPanel({ user, fotoPerfil }) {
       <hr />
 
       {/* 🔸 Menú */}
-      <ul className="list-unstyled px-4 mt-3">
+      <ul className="m-0 list-none p-0 px-4 mt-3">
         <li className="mb-3">
           <Button
-            className="btn w-100 justify-content-start d-flex align-items-center gap-3 fw-medium pb-2 border-bottom border-light"
+            className="whitespace-nowrap rounded-md text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 w-full justify-start flex items-center gap-3 font-medium pb-2 border-b border-light"
             onClick={() => navigate("/")}
-           variant="default">
+            variant="default"
+          >
             <House
               style={{ color: "var(--brand-primary)" }}
               height="20px"
@@ -150,9 +151,10 @@ export function PerfilPanel({ user, fotoPerfil }) {
 
         <li className="mb-3">
           <Button
-            className="btn w-100 justify-content-start d-flex align-items-center gap-3 fw-medium pb-2 border-bottom border-light"
+            className="whitespace-nowrap rounded-md text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 w-full justify-start flex items-center gap-3 font-medium pb-2 border-b border-light"
             onClick={() => navigate("/configuracion/MiPerfil")}
-           variant="default">
+            variant="default"
+          >
             <User
               style={{ color: "var(--brand-primary)" }}
               height="20px"
@@ -164,9 +166,10 @@ export function PerfilPanel({ user, fotoPerfil }) {
 
         <li className="mb-3">
           <Button
-            className="btn w-100 justify-content-start d-flex align-items-center gap-3 fw-medium pb-2 border-bottom border-light"
+            className="whitespace-nowrap rounded-md text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 w-full justify-start flex items-center gap-3 font-medium pb-2 border-b border-light"
             onClick={() => navigate("/rr.hh/asistencia")}
-           variant="default">
+            variant="default"
+          >
             <ShieldCheck
               style={{ color: "var(--brand-primary)" }}
               height="20px"
@@ -178,9 +181,10 @@ export function PerfilPanel({ user, fotoPerfil }) {
 
         <li className="mb-3">
           <Button
-            className="btn w-100 justify-content-start d-flex align-items-center gap-3 fw-medium pb-2 border-bottom border-light"
+            className="whitespace-nowrap rounded-md text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 w-full justify-start flex items-center gap-3 font-medium pb-2 border-b border-light"
             onClick={() => navigate("/configuracion")}
-           variant="default">
+            variant="default"
+          >
             <UserRoundCog
               style={{ color: "var(--brand-primary)" }}
               height="20px"
@@ -193,34 +197,36 @@ export function PerfilPanel({ user, fotoPerfil }) {
       {/* 🔸 Selector de sede */}
       {rolUsuario == "administrador" ? (
         <div className="px-4 pb-2">
-          <div className="rounded-3 p-3 mb-3 shadow-sm border bg-light">
-            <div className="d-flex align-items-center mb-2">
+          <div className="rounded-md p-3 mb-3 shadow-sm bg-muted">
+            <div className="flex items-center mb-2">
               <i
                 className="fa-solid fa-building fa-lg me-2"
                 style={{ color: "var(--brand-primary)" }}
               ></i>
-              <h6 className="mb-0 fw-semibold text-dark">Cambiar de Sede</h6>
+              <h6 className="mb-0 font-semibold text-foreground">
+                Cambiar de Sede
+              </h6>
             </div>
 
             {isLoading ? (
               <div className="text-center py-3">
                 <div
-                  className="spinner-border"
+                  className="inline-block size-5 animate-spin rounded-full border-2 border-current border-r-transparent"
                   style={{ color: "var(--brand-primary)" }}
                   role="status"
                 >
-                  <span className="visually-hidden">Cargando...</span>
+                  <span className="sr-only">Cargando...</span>
                 </div>
               </div>
             ) : isError ? (
-              <div className="alert alert-danger py-2 mb-0">
+              <div className="relative w-full rounded-lg px-4 text-sm border-destructive/30 bg-destructive/10 text-destructive py-2 mb-0">
                 Error al cargar las sedes
               </div>
             ) : (
-              <div className=" mt-2">
+              <div className="mt-2">
                 <select
                   id="selectSede"
-                  className="form-select border-light shadow-sm bg-body text-body"
+                  className="h-9 w-full appearance-auto rounded-md px-3 py-1 text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 border-light shadow-sm bg-body text-foreground"
                   style={{ borderRadius: "10px" }}
                   value={selectedSede}
                   onChange={(e) => handleChangeSede(e.target.value)}
@@ -237,10 +243,10 @@ export function PerfilPanel({ user, fotoPerfil }) {
               </div>
             )}
 
-            <div className="text-end mt-2">
-              <small className="text-muted opacity-75">
+            <div className="text-right mt-2">
+              <small className="text-muted-foreground opacity-75">
                 Sede actual:{" "}
-                <strong className="text-dark">
+                <strong className="text-foreground">
                   {nombreSedeActual || "No seleccionada"}
                 </strong>
               </small>
@@ -249,13 +255,14 @@ export function PerfilPanel({ user, fotoPerfil }) {
         </div>
       ) : null}
 
-      <div className="px-4 pb-4 d-flex mt-auto">
+      <div className="px-4 pb-4 flex mt-auto">
         {/* 🔸 Botón de cerrar sesión */}
         <Button
-          className="btn btn-danger w-100 d-flex align-items-center justify-content-center mb-0 shadow-sm"
+          className="gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-destructive text-destructive-foreground hover:bg-destructive/90 w-full flex items-center justify-center mb-0 shadow-sm"
           onClick={cerrarSession}
           style={{ borderRadius: "10px" }}
-         variant="destructive">
+          variant="destructive"
+        >
           <LogOut className="me-2" height="20px" width="20px" color="#fff" />
           Cerrar sesión
         </Button>

@@ -131,16 +131,18 @@ export function FormAddSolicitudExterna({ onClose }) {
     <div className="p-4">
       <form onSubmit={handleSubmit(onSubmit)}>
         {/* ===================== 🧍 DATOS DEL SOLICITANTE ===================== */}
-        <h6 className="fw-bold text-dark mb-3">Datos del solicitante</h6>
+        <h6 className="font-bold text-foreground mb-3">
+          Datos del solicitante
+        </h6>
 
-        <div className="row">
-          <div className="md:col-span-6 mb-3 position-relative">
-            <label className="form-label d-flex align-items-center gap-2">
+        <div className="grid grid-cols-12 gap-3">
+          <div className="col-span-full md:col-span-6 mb-3 relative">
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-2">
               <StoreIcon size={18} />
-              Area <span className="text-danger">*</span>
+              Area <span className="text-destructive">*</span>
             </label>
             <select
-              className={`form-select ${errors.proveedor ? "is-invalid" : ""}`}
+              className={`h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.proveedor ? "border-destructive focus-visible:ring-destructive" : ""}`}
               {...register("area_origen", { required: "Campo obligatorio" })}
             >
               <option value="">Seleccione un area_origen</option>
@@ -154,21 +156,23 @@ export function FormAddSolicitudExterna({ onClose }) {
                   ))}
             </select>
             {errors.area_origen && (
-              <div className="invalid-feedback d-block">
+              <div className="text-sm text-destructive block">
                 {errors.area_origen.message}
               </div>
             )}
           </div>
 
           {/* Nombre del solicitante */}
-          <div className="md:col-span-6 mb-3">
-            <label className="form-label">
-              Nombre del solicitante <span className="text-danger">*</span>
+          <div className="col-span-full md:col-span-6 mb-3">
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+              Nombre del solicitante <span className="text-destructive">*</span>
             </label>
             <input
               type="text"
-              className={`form-control ${
-                errors.nombre_solicitante ? "is-invalid" : ""
+              className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+                errors.nombre_solicitante
+                  ? "border-destructive focus-visible:ring-destructive"
+                  : ""
               }`}
               {...register("nombre_solicitante", {
                 required: "Campo obligatorio",
@@ -179,21 +183,23 @@ export function FormAddSolicitudExterna({ onClose }) {
               })}
             />
             {errors.nombre_solicitante && (
-              <div className="invalid-feedback">
+              <div className="text-sm text-destructive">
                 {errors.nombre_solicitante.message}
               </div>
             )}
           </div>
 
           {/* Correo electrónico */}
-          <div className="md:col-span-6 mb-3">
-            <label className="form-label">
-              Correo electrónico <span className="text-danger">*</span>
+          <div className="col-span-full md:col-span-6 mb-3">
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+              Correo electrónico <span className="text-destructive">*</span>
             </label>
             <input
               type="email"
-              className={`form-control ${
-                errors.correo_electronico ? "is-invalid" : ""
+              className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+                errors.correo_electronico
+                  ? "border-destructive focus-visible:ring-destructive"
+                  : ""
               }`}
               {...register("correo_electronico", {
                 required: "Campo obligatorio",
@@ -204,20 +210,20 @@ export function FormAddSolicitudExterna({ onClose }) {
               })}
             />
             {errors.correo_electronico && (
-              <div className="invalid-feedback">
+              <div className="text-sm text-destructive">
                 {errors.correo_electronico.message}
               </div>
             )}
           </div>
 
           {/* Teléfono */}
-          <div className="md:col-span-6 mb-3">
-            <label className="form-label">
-              Teléfono <span className="text-danger">*</span>
+          <div className="col-span-full md:col-span-6 mb-3">
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+              Teléfono <span className="text-destructive">*</span>
             </label>
             <input
               type="text"
-              className={`form-control ${errors.telefono ? "is-invalid" : ""}`}
+              className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.telefono ? "border-destructive focus-visible:ring-destructive" : ""}`}
               {...register("telefono", {
                 required: "Campo obligatorio",
                 pattern: {
@@ -227,23 +233,27 @@ export function FormAddSolicitudExterna({ onClose }) {
               })}
             />
             {errors.telefono && (
-              <div className="invalid-feedback">{errors.telefono.message}</div>
+              <div className="text-sm text-destructive">
+                {errors.telefono.message}
+              </div>
             )}
           </div>
         </div>
 
         {/* ===================== 📦 DATOS DEL PRODUCTO ===================== */}
-        <h6 className="fw-bold text-dark mt-4 mb-3">Datos del producto</h6>
+        <h6 className="font-bold text-foreground mt-4 mb-3">
+          Datos del producto
+        </h6>
 
-        <div className="row">
+        <div className="grid grid-cols-12 gap-3">
           {/* Proveedor */}
-          <div className="md:col-span-6 mb-3 position-relative">
-            <label className="form-label d-flex align-items-center gap-2">
+          <div className="col-span-full md:col-span-6 mb-3 relative">
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-2">
               <TruckIcon size={18} />
-              Proveedor <span className="text-danger">*</span>
+              Proveedor <span className="text-destructive">*</span>
             </label>
             <select
-              className={`form-select ${errors.proveedor ? "is-invalid" : ""}`}
+              className={`h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.proveedor ? "border-destructive focus-visible:ring-destructive" : ""}`}
               {...register("proveedor", { required: "Campo obligatorio" })}
             >
               <option value="">Seleccione un proveedor</option>
@@ -256,21 +266,23 @@ export function FormAddSolicitudExterna({ onClose }) {
                 ))}
             </select>
             {errors.proveedor && (
-              <div className="invalid-feedback d-block">
+              <div className="text-sm text-destructive block">
                 {errors.proveedor.message}
               </div>
             )}
           </div>
 
           {/* Unidad de medida */}
-          <div className="md:col-span-6 mb-3 position-relative">
-            <label className="form-label d-flex align-items-center gap-2">
+          <div className="col-span-full md:col-span-6 mb-3 relative">
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-2">
               <Tag size={18} />
-              Unidad de medida <span className="text-danger">*</span>
+              Unidad de medida <span className="text-destructive">*</span>
             </label>
             <select
-              className={`form-select ${
-                errors.unidad_medida ? "is-invalid" : ""
+              className={`h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+                errors.unidad_medida
+                  ? "border-destructive focus-visible:ring-destructive"
+                  : ""
               }`}
               {...register("unidad_medida", {
                 required: "Campo obligatorio",
@@ -286,62 +298,68 @@ export function FormAddSolicitudExterna({ onClose }) {
                 ))}
             </select>
             {errors.unidad_medida && (
-              <div className="invalid-feedback d-block">
+              <div className="text-sm text-destructive block">
                 {errors.unidad_medida.message}
               </div>
             )}
           </div>
 
           {/* Marca */}
-          <div className="md:col-span-6 mb-3">
-            <label className="form-label">
-              Marca del producto <span className="text-danger">*</span>
+          <div className="col-span-full md:col-span-6 mb-3">
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+              Marca del producto <span className="text-destructive">*</span>
             </label>
             <input
               type="text"
-              className={`form-control ${
-                errors.marcaProducto ? "is-invalid" : ""
+              className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+                errors.marcaProducto
+                  ? "border-destructive focus-visible:ring-destructive"
+                  : ""
               }`}
               {...register("marcaProducto", { required: "Campo obligatorio" })}
             />
             {errors.marcaProducto && (
-              <div className="invalid-feedback">
+              <div className="text-sm text-destructive">
                 {errors.marcaProducto.message}
               </div>
             )}
           </div>
 
           {/* Cantidad */}
-          <div className="md:col-span-3 mb-3">
-            <label className="form-label">
-              Cantidad <span className="text-danger">*</span>
+          <div className="col-span-full md:col-span-3 mb-3">
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+              Cantidad <span className="text-destructive">*</span>
             </label>
             <input
               type="number"
               min="1"
               step="1"
-              className={`form-control ${errors.cantidad ? "is-invalid" : ""}`}
+              className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.cantidad ? "border-destructive focus-visible:ring-destructive" : ""}`}
               {...register("cantidad", {
                 required: "Campo obligatorio",
                 min: { value: 1, message: "Debe ser mayor a 0" },
               })}
             />
             {errors.cantidad && (
-              <div className="invalid-feedback">{errors.cantidad.message}</div>
+              <div className="text-sm text-destructive">
+                {errors.cantidad.message}
+              </div>
             )}
           </div>
 
           {/* Precio estimado */}
-          <div className="md:col-span-3 mb-3">
-            <label className="form-label">
-              Precio estimado (S/.) <span className="text-danger">*</span>
+          <div className="col-span-full md:col-span-3 mb-3">
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+              Precio estimado (S/.) <span className="text-destructive">*</span>
             </label>
             <input
               type="number"
               min="0.01"
               step="0.01"
-              className={`form-control ${
-                errors.precio_estimado ? "is-invalid" : ""
+              className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+                errors.precio_estimado
+                  ? "border-destructive focus-visible:ring-destructive"
+                  : ""
               }`}
               {...register("precio_estimado", {
                 required: "Campo obligatorio",
@@ -349,21 +367,23 @@ export function FormAddSolicitudExterna({ onClose }) {
               })}
             />
             {errors.precio_estimado && (
-              <div className="invalid-feedback">
+              <div className="text-sm text-destructive">
                 {errors.precio_estimado.message}
               </div>
             )}
           </div>
 
           {/* Descripción */}
-          <div className="col-12 mb-3">
-            <label className="form-label">
-              Descripción <span className="text-danger">*</span>
+          <div className="col-span-full mb-3">
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+              Descripción <span className="text-destructive">*</span>
             </label>
             <textarea
               rows="2"
-              className={`form-control ${
-                errors.descripcion ? "is-invalid" : ""
+              className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+                errors.descripcion
+                  ? "border-destructive focus-visible:ring-destructive"
+                  : ""
               }`}
               {...register("descripcion", {
                 required: "Campo obligatorio",
@@ -374,7 +394,7 @@ export function FormAddSolicitudExterna({ onClose }) {
               })}
             ></textarea>
             {errors.descripcion && (
-              <div className="invalid-feedback">
+              <div className="text-sm text-destructive">
                 {errors.descripcion.message}
               </div>
             )}
@@ -382,19 +402,19 @@ export function FormAddSolicitudExterna({ onClose }) {
         </div>
 
         {/* ===================== 📋 DETALLES DE LA SOLICITUD ===================== */}
-        <h6 className="fw-bold text-dark mt-4 mb-3">
+        <h6 className="font-bold text-foreground mt-4 mb-3">
           Detalles de la solicitud
         </h6>
 
-        <div className="row">
+        <div className="grid grid-cols-12 gap-3">
           {/* Motivo */}
-          <div className="col-12 mb-3">
-            <label className="form-label">
-              Motivo <span className="text-danger">*</span>
+          <div className="col-span-full mb-3">
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+              Motivo <span className="text-destructive">*</span>
             </label>
             <textarea
               rows="2"
-              className={`form-control ${errors.motivo ? "is-invalid" : ""}`}
+              className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.motivo ? "border-destructive focus-visible:ring-destructive" : ""}`}
               {...register("motivo", {
                 required: "Campo obligatorio",
                 minLength: {
@@ -404,19 +424,23 @@ export function FormAddSolicitudExterna({ onClose }) {
               })}
             ></textarea>
             {errors.motivo && (
-              <div className="invalid-feedback">{errors.motivo.message}</div>
+              <div className="text-sm text-destructive">
+                {errors.motivo.message}
+              </div>
             )}
           </div>
 
           {/* Uso previsto */}
-          <div className="col-12 mb-3">
-            <label className="form-label">
-              Uso previsto <span className="text-danger">*</span>
+          <div className="col-span-full mb-3">
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+              Uso previsto <span className="text-destructive">*</span>
             </label>
             <textarea
               rows="2"
-              className={`form-control ${
-                errors.uso_previsto ? "is-invalid" : ""
+              className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+                errors.uso_previsto
+                  ? "border-destructive focus-visible:ring-destructive"
+                  : ""
               }`}
               {...register("uso_previsto", {
                 required: "Campo obligatorio",
@@ -427,7 +451,7 @@ export function FormAddSolicitudExterna({ onClose }) {
               })}
             ></textarea>
             {errors.uso_previsto && (
-              <div className="invalid-feedback">
+              <div className="text-sm text-destructive">
                 {errors.uso_previsto.message}
               </div>
             )}
@@ -435,11 +459,11 @@ export function FormAddSolicitudExterna({ onClose }) {
         </div>
 
         {/* ===================== 🚦 PRIORIDAD ===================== */}
-        <h6 className="fw-bold text-dark mt-4 mb-3">Prioridad</h6>
+        <h6 className="font-bold text-foreground mt-4 mb-3">Prioridad</h6>
 
-        <div className="md:col-span-4 mb-4">
+        <div className="col-span-full md:col-span-4 mb-4">
           <select
-            className={`form-select ${errors.prioridad ? "is-invalid" : ""}`}
+            className={`h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.prioridad ? "border-destructive focus-visible:ring-destructive" : ""}`}
             {...register("prioridad", { required: "Campo obligatorio" })}
           >
             <option value="">Seleccione prioridad</option>
@@ -448,55 +472,62 @@ export function FormAddSolicitudExterna({ onClose }) {
             <option value="baja">Baja</option>
           </select>
           {errors.prioridad && (
-            <div className="invalid-feedback">{errors.prioridad.message}</div>
+            <div className="text-sm text-destructive">
+              {errors.prioridad.message}
+            </div>
           )}
         </div>
 
         {/* ===================== ✍️ FIRMAS ===================== */}
-        <h6 className="fw-bold text-dark mt-4 mb-3">Firmas</h6>
+        <h6 className="font-bold text-foreground mt-4 mb-3">Firmas</h6>
 
-        <div className="row">
+        <div className="grid grid-cols-12 gap-3">
           {/* Firma del solicitante */}
-          <div className="md:col-span-6 mb-3">
-            <label className="form-label d-flex align-items-center gap-2">
+          <div className="col-span-full md:col-span-6 mb-3">
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-2">
               <PenLine size={18} />
-              Firma del solicitante <span className="text-danger">*</span>
+              Firma del solicitante <span className="text-destructive">*</span>
             </label>
             <input
               type="file"
               accept="image/*"
-              className={`form-control ${
-                errors.firmaSolicitante ? "is-invalid" : ""
+              className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+                errors.firmaSolicitante
+                  ? "border-destructive focus-visible:ring-destructive"
+                  : ""
               }`}
               {...register("firmaSolicitante", {
                 required: "Campo obligatorio",
               })}
             />
             {errors.firmaSolicitante && (
-              <div className="invalid-feedback d-block">
+              <div className="text-sm text-destructive block">
                 {errors.firmaSolicitante.message}
               </div>
             )}
           </div>
 
           {/* Firma del administrador */}
-          <div className="md:col-span-6 mb-3">
-            <label className="form-label d-flex align-items-center gap-2">
+          <div className="col-span-full md:col-span-6 mb-3">
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-2">
               <PenLine size={18} />
-              Firma del administrador <span className="text-danger">*</span>
+              Firma del administrador{" "}
+              <span className="text-destructive">*</span>
             </label>
             <input
               type="file"
               accept="image/*"
-              className={`form-control ${
-                errors.firma_admin ? "is-invalid" : ""
+              className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+                errors.firma_admin
+                  ? "border-destructive focus-visible:ring-destructive"
+                  : ""
               }`}
               {...register("firma_admin", {
                 required: "Campo obligatorio",
               })}
             />
             {errors.firma_admin && (
-              <div className="invalid-feedback d-block">
+              <div className="text-sm text-destructive block">
                 {errors.firma_admin.message}
               </div>
             )}
@@ -504,20 +535,22 @@ export function FormAddSolicitudExterna({ onClose }) {
         </div>
 
         {/* ===================== 🔘 BOTONES ===================== */}
-        <div className="mt-4 d-flex justify-content-end gap-2">
+        <div className="mt-4 flex justify-end gap-2">
           <Button
             type="button"
             className="btn-cerrar"
             disabled={isLoadingSave}
             onClick={onClose}
-           variant="default">
+            variant="default"
+          >
             Cancelar
           </Button>
           <Button
             type="submit"
             className="btn-guardar"
             disabled={isLoadingSave}
-           variant="default">
+            variant="default"
+          >
             {isLoadingSave ? "Guardando..." : "Guardar Solicitud"}
           </Button>
         </div>

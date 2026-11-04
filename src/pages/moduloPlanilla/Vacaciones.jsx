@@ -23,10 +23,9 @@ import { FormularioVenderDias } from "../../components/componentePlanillas/compo
 import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteExcel";
 import { Button } from "../../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
+import { Input } from "@/components/ui/input";
 
 export function Vacaciones() {
-  const BASE_URL = process.env.REACT_APP_BASE_URL;
   const queryClient = useQueryClient();
   const [filtro, setFiltro] = useState("");
 
@@ -227,7 +226,7 @@ export function Vacaciones() {
     {
       name: "Empleado",
       cell: (row) => (
-        <div className="d-flex flex-column align-items-start text-left py-2">
+        <div className="flex flex-col items-start text-left py-2">
           <div>
             {capitalizeFirstLetter(
               row.usuario?.empleado?.persona?.nombre.toLowerCase(),
@@ -238,7 +237,7 @@ export function Vacaciones() {
               ) || ""}
           </div>
           <span
-            className="fw-bold text-primary mt-1 text-left text-start"
+            className="font-bold text-primary mt-1 text-left"
             style={{ fontSize: "0.8rem" }}
           >
             {row.usuario?.empleado?.persona?.documento_identidad || ""}
@@ -268,7 +267,7 @@ export function Vacaciones() {
     {
       name: "Dias total",
       cell: (row) => (
-        <span className="text-primary fw-bold">{row.dias_totales}</span>
+        <span className="text-primary font-bold">{row.dias_totales}</span>
       ),
       width: "120px", // Ancho suficiente para el TÍTULO
       grow: 0,
@@ -277,7 +276,7 @@ export function Vacaciones() {
     {
       name: "Dias consumidos",
       cell: (row) => (
-        <span className="text-primary fw-bold">{row.dias_utilizados}</span>
+        <span className="text-primary font-bold">{row.dias_utilizados}</span>
       ),
       width: "150px", // Ancho suficiente para el TÍTULO
       grow: 0,
@@ -286,7 +285,7 @@ export function Vacaciones() {
     {
       name: "Dias vendidos",
       cell: (row) => (
-        <span className="text-primary fw-bold">{row.dias_vendidos}</span>
+        <span className="text-primary font-bold">{row.dias_vendidos}</span>
       ),
       width: "130px", // Ancho suficiente para el TÍTULO
       grow: 0,
@@ -296,7 +295,7 @@ export function Vacaciones() {
       name: "Estado",
       cell: (row) => (
         <span
-          className={`badge rounded-pill text-bg-${
+          className={`inline-flex items-center px-2.5 py-0.5 text-xs font-semibold transition-colors rounded-full text-bg- ${
             row.estado === 1 ? "success" : "danger"
           }`}
         >
@@ -320,7 +319,7 @@ export function Vacaciones() {
             : 100;
 
         return (
-          <div className="w-100">
+          <div className="w-full">
             <div className="progress">
               <div
                 className="progress-bar bg-primary progress-bar-striped"
@@ -341,36 +340,39 @@ export function Vacaciones() {
       grow: 0,
       center: true,
       cell: (row) => (
-        <div className="d-flex gap-2">
+        <div className="flex gap-2">
           {/* Botón Editar */}
           <Button
-            className="btn-editar btn-sm"
+            className="btn-editar inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 px-3 text-xs"
             title="Editar vacaciones"
             disabled={row.estado == 1}
-           variant="secondary">
+            variant="secondary"
+          >
             <Pencil className="text-auto" size={"auto"} />
           </Button>
 
           {/* Botón Eliminar */}
           <Button
-            className="btn-eliminar btn-sm"
+            className="btn-eliminar inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 px-3 text-xs"
             title="Eliminar"
             disabled={row.estado === 1}
             onClick={() => eliminarVacaciones(row.id)}
-           variant="destructive">
+            variant="destructive"
+          >
             <Trash2 className="text-auto" size={"auto"} />
           </Button>
 
           {/* Botón Vender Días */}
           <Button
-            className="btn-principal btn-sm"
+            className="btn-principal inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 px-3 text-xs"
             title="Vender Días"
             disabled={row.estado == 1}
             onClick={() => {
               setModalVender(true);
               setVacacionesId(row);
             }}
-           variant="default">
+            variant="default"
+          >
             <ShoppingBag cclassName="text-auto" size={"auto"} />
           </Button>
         </div>
@@ -379,39 +381,47 @@ export function Vacaciones() {
   ];
   return (
     <div>
-      <Card className="shadow-sm pb-2">
-        <CardHeader className="border-bottom-0 flex flex-col flex-md-row justify-between items-center gap-2 p-3">
-          <div className="d-flex align-items-center">
-            <CardTitle asChild><h4 className="mb-0 titulo-card-especial">
-              Panel de Vacaciones
-            </h4></CardTitle>
-            <span className="badge-header ms-2">Registros</span>
+      <Card className="rounded-2xl border border-border/70 bg-card shadow-sm ring-0 pb-2">
+        <CardHeader className="flex flex-col items-stretch gap-4 border-b border-border/70 px-5 py-5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+          <div className="flex items-center">
+            <CardTitle asChild>
+              <h4 className="mb-0 text-base font-semibold tracking-tight text-foreground">
+                Panel de Vacaciones
+              </h4>
+            </CardTitle>
+            <span className="ml-2 inline-flex items-center rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
+              Registros
+            </span>
           </div>
-          <div className="d-flex align-items-center  gap-2 mt-3 mt-md-0">
-            <div className="header-search-container">
-              <Search className="search-icon" />
-              <input
+          <div className="flex w-full flex-col items-stretch gap-2 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center">
+            <div className="relative w-full min-w-0 sm:w-64">
+              <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
                 type="text"
                 placeholder="Buscar vacaciones..."
-                className="form-control"
+                className="h-9 pl-9"
                 onChange={(e) => setFiltro(e.target.value)}
               />
             </div>
             <Button
-              className="btn btn-outline-dark px-3"
+              size="lg"
+              className="w-full gap-2 px-3 sm:w-auto"
               title="Reporte"
               onClick={() => GetReporteExcel("/reporteVacaciones")}
-             variant="default">
+              variant="ghostOutline"
+            >
               <FileText size={18} />
               Reporte
             </Button>
             <Button
-              className="btn btn-dark px-3"
+              size="lg"
+              className="gap-2 px-3 w-full sm:w-auto"
               title="Agregar"
               onClick={() => {
                 setIsModalOpen(true);
               }}
-             variant="default">
+              variant="default"
+            >
               <Plus size={18} />
               Agregar
             </Button>
@@ -435,7 +445,7 @@ export function Vacaciones() {
         hideFooter={true}
       >
         {({ handleClose }) => (
-          <div className="modal-body p-3">
+          <div className="p-3">
             <FormularioVacaciones
               onSubmitVaca={handleSubmitAgregar(onSubmitStoreVacaciones)}
               handleUsuarioSelect={handleUsuarioSelect}
@@ -446,7 +456,6 @@ export function Vacaciones() {
               errors={errorsAgregar}
               usuarios={usuarios}
               isLoadingUsuarios={isLoadingUsuarios}
-              BASE_URL={BASE_URL}
               onClose={handleClose}
             />
           </div>
@@ -461,7 +470,7 @@ export function Vacaciones() {
         submitText="Vender"
         hideFooter={true}
       >
-        <div className="modal-body p-3">
+        <div className="p-3">
           <FormularioVenderDias
             handleSubmit={handleSubmitVender}
             vacacionesId={vacacionesId}

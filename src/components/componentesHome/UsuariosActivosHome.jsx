@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { GetAsistencia } from "../../service/GetAsistencia";
-import { useNavigate } from "react-router-dom"; // Importa useNavigate
+import { Link } from "react-router-dom";
 
 import { capitalizeFirstLetter } from "../../hooks/FirstLetterUp";
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
@@ -8,10 +8,7 @@ import { UserRound } from "lucide-react";
 import { Button } from "../ui/button";
 import { Card } from "@/components/ui/card";
 
-
 export function UsuariosActivosHome() {
-  const navigate = useNavigate(); // Inicializa useNavigate
-
   const {
     data: usuariosActivos = [],
     isLoading: isLoadingUsuarios,
@@ -27,7 +24,7 @@ export function UsuariosActivosHome() {
 
   return (
     <CondicionCarga isLoading={isLoadingUsuarios} isError={isErrorUsuarios}>
-      <Card className="h-full overflow-auto rounded-xl border border-border bg-card p-0 text-card-foreground">
+      <Card className="h-full overflow-auto rounded-2xl border-border/70 bg-card p-0 text-card-foreground shadow-none">
         <div className="flex items-center gap-3 border-b border-border p-4">
           <span
             className="inline-flex rounded-full p-2 text-white"
@@ -36,9 +33,7 @@ export function UsuariosActivosHome() {
             <UserRound size={18} />
           </span>
           <div>
-            <h2 className="mb-0 text-sm font-semibold">
-              Usuarios activos
-            </h2>
+            <h2 className="mb-0 text-sm font-semibold">Usuarios activos</h2>
             <p className="mb-0 text-xs text-muted-foreground">
               {listaAsistenciaHoy.length} en asistencia hoy
             </p>
@@ -76,11 +71,8 @@ export function UsuariosActivosHome() {
                   <p className="mb-0 text-sm text-muted-foreground">
                     +{listaAsistenciaHoy.length - 4} más...
                   </p>
-                  <Button
-                    className="p-0 text-sm font-semibold text-primary hover:underline"
-                    onClick={() => navigate("/rr.hh/asistencia")}
-                   variant="default">
-                    Ver todos
+                  <Button asChild variant="link" className="h-auto p-0 text-sm">
+                    <Link to="/rr.hh/asistencia">Ver todos</Link>
                   </Button>
                 </div>
               )}

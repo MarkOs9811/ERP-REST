@@ -152,7 +152,7 @@ export const MainLayout = () => {
   };
 
   return (
-    <div className="flex h-dvh w-full overflow-hidden bg-muted/40">
+    <div className="flex h-dvh w-full overflow-hidden bg-background">
       <BotonAgenteAi />
       {showFullLayout && (
         <div className="sidebar-main-wrapper shrink-0">
@@ -162,8 +162,7 @@ export const MainLayout = () => {
 
       {showFullLayout && (
         <div
-          className={`submenu-secundario-wrapper relative z-30 hidden h-full shrink-0 flex-col overflow-hidden border-r border-sidebar-border bg-sidebar text-sidebar-foreground transition-[width,opacity] duration-300 ease-in-out md:flex
-            ${isCompressed ? "subMenuComprimido w-0 min-w-0 opacity-0" : "w-64 min-w-64 opacity-100"}`}
+          className={`submenu-secundario-wrapper relative z-30 hidden h-full shrink-0 flex-col overflow-hidden border-r border-sidebar-border bg-sidebar-accent/50 text-sidebar-foreground transition-[width,opacity] duration-300 ease-in-out md:flex ${isCompressed ? "subMenuComprimido w-0 min-w-0 opacity-0" : "w-64 min-w-64 opacity-100"}`}
         >
           <SubMenuTabs />
         </div>
@@ -190,7 +189,7 @@ export const MainLayout = () => {
 
         {!showHeader && <Navegacion tipoNavegacion={esRolEspecial} />}
 
-        <div className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto bg-muted/40 px-3 py-4 sm:px-4 lg:px-5">
+        <div className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto bg-background px-3 py-4 sm:px-4 lg:px-5">
           <ContenedorPrincipal>
             <ToastContainer />
             <Routes>

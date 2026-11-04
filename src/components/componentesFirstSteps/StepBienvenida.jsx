@@ -30,7 +30,7 @@ export function StepBienvenida({ onStart }) {
         ></div>
         {/* 2. ICONO FLOTANTE */}
         <div
-          className="absolute bottom-0 left-1/2 flex size-20 -translate-x-1/2 translate-y-1/2 items-center justify-center rounded-full bg-white p-4 shadow-lg"
+          className="absolute bottom-0 left-1/2 flex size-20 -translate-x-1/2 translate-y-1/2 items-center justify-center rounded-full bg-background p-4 shadow-lg"
           style={{
             zIndex: 10,
           }}
@@ -77,7 +77,7 @@ export function StepBienvenida({ onStart }) {
           {["Configuración Guiada", "Gestión Eficiente", "Soporte 24/7"].map(
             (item, index) => (
               <div key={index}>
-                <div className="flex items-center rounded-full border border-border bg-muted px-3 py-2">
+                <div className="flex items-center rounded-full border-border bg-muted px-3 py-2">
                   <CheckCircle2 size={16} className="mr-2 text-emerald-600" />
                   <span className="text-xs font-semibold text-muted-foreground">
                     {item}
@@ -96,7 +96,8 @@ export function StepBienvenida({ onStart }) {
             style={{
               border: "none",
             }}
-           variant="default">
+            variant="default"
+          >
             ¡Comencemos!
             <ArrowRight size={24} />
           </Button>

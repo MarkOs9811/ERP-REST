@@ -10,17 +10,14 @@ import {
 import { useEffect, useMemo } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { GetConfi } from "../../service/accionesConfiguracion/GetConfi";
 import { PutData } from "../../service/CRUD/PutData";
 import { PostData } from "../../service/CRUD/PostData";
 import { Button } from "../ui/button";
 import { Card } from "@/components/ui/card";
 
-
 export function Generales() {
-  const navigate = useNavigate();
-
   // 1. Obtener configuración
   const { data: configuracion = [] } = useQuery({
     queryKey: ["configuraciones"],
@@ -115,25 +112,25 @@ export function Generales() {
   });
 
   return (
-    <div className="container py-4">
+    <div className="mx-auto w-full max-w-7xl px-4 py-4">
       <h3
-        className="fw-bold mb-4 d-flex align-items-center gap-2"
+        className="font-bold mb-4 flex items-center gap-2"
         style={{ color: "var(--text-main)" }}
       >
         <Settings size={22} /> Configuración General
       </h3>
 
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+      <div className="grid grid-cols-12 gap-4">
         {/* Card IGV */}
-        <div className="md:col-span-6">
+        <div className="col-span-full md:col-span-6">
           <form
             onSubmit={handleSubmitIgv((data) => mutationIgv.mutate(data))}
-            className="h-100"
+            className="h-full"
           >
             <Card className="border p-3">
-              <div className="mb-3 d-flex gap-2 align-items-center">
+              <div className="mb-3 flex gap-2 items-center">
                 <span
-                  className="alert border-0 fw-bold p-2 mb-0"
+                  className="relative w-full rounded-lg text-sm border-0 font-bold p-2 mb-0"
                   style={{
                     backgroundColor: "var(--bg-saffron-soft)",
                     color: "var(--fw-saffron)",
@@ -141,44 +138,45 @@ export function Generales() {
                 >
                   <Percent size={22} />
                 </span>
-                <div className="d-flex flex-column gap-1">
+                <div className="flex flex-col gap-1">
                   <span
-                    className="fw-bold"
+                    className="font-bold"
                     style={{ color: "var(--text-main)" }}
                   >
                     Impuesto General (IGV/IVA)
                   </span>
                   <p
-                    className="small mb-0"
+                    className="text-sm mb-0"
                     style={{ color: "var(--text-muted)" }}
                   >
                     Establece el porcentaje aplicable a las ventas.
                   </p>
                 </div>
               </div>
-              <div className="d-flex gap-3 mt-3 align-items-center mb-4">
+              <div className="flex gap-3 mt-3 items-center mb-4">
                 <input
                   type="number"
                   min="0"
                   max="100"
                   step="1"
                   inputMode="numeric"
-                  className="form-control border "
+                  className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 border"
                   {...registerIgv("igv", { required: true })}
                 />
                 <div
-                  className="form-control bg-light border w-25 text-center"
+                  className="h-9 rounded-md border-input px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 bg-muted w-1/4 text-center"
                   style={{ color: "var(--text-muted)" }}
                 >
                   {igvSeleccionado || 0}%
                 </div>
               </div>
-              <div className="d-flex justify-content-end mt-auto">
+              <div className="flex justify-end mt-auto">
                 <Button
                   type="submit"
                   disabled={mutationIgv.isPending}
                   className="btn-guardar px-3"
-                 variant="default">
+                  variant="default"
+                >
                   {mutationIgv.isPending ? (
                     "Guardando..."
                   ) : (
@@ -193,15 +191,15 @@ export function Generales() {
         </div>
 
         {/* Card Moneda */}
-        <div className="md:col-span-6">
+        <div className="col-span-full md:col-span-6">
           <form
             onSubmit={handleSubmitMoneda((data) => mutationMoneda.mutate(data))}
-            className="h-100"
+            className="h-full"
           >
             <Card className="border p-3">
-              <div className="mb-3 d-flex gap-2 align-items-center">
+              <div className="mb-3 flex gap-2 items-center">
                 <span
-                  className="alert border-0 fw-bold p-2 mb-0"
+                  className="relative w-full rounded-lg text-sm border-0 font-bold p-2 mb-0"
                   style={{
                     backgroundColor: "var(--bg-emerald-soft)",
                     color: "var(--fw-emerald)",
@@ -209,15 +207,15 @@ export function Generales() {
                 >
                   <Coins size={22} />
                 </span>
-                <div className="d-flex flex-column gap-1">
+                <div className="flex flex-col gap-1">
                   <span
-                    className="fw-bold"
+                    className="font-bold"
                     style={{ color: "var(--text-main)" }}
                   >
                     Moneda del Sistema
                   </span>
                   <p
-                    className="small mb-0"
+                    className="text-sm mb-0"
                     style={{ color: "var(--text-muted)" }}
                   >
                     Símbolo monetario para reportes y tickets.
@@ -226,7 +224,7 @@ export function Generales() {
               </div>
               <div className="mt-3 mb-4">
                 <select
-                  className="form-select border "
+                  className="h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 border"
                   {...registerMoneda("simbolo", { required: true })}
                 >
                   <option value="S/.">S/. (Sol Peruano)</option>
@@ -236,15 +234,16 @@ export function Generales() {
                   <option value="Q">Q (Quetzal)</option>
                 </select>
               </div>
-              <div className="small text-muted ms-4">
+              <div className="text-sm text-muted-foreground ms-4">
                 <span>Moneda actual: </span>"<b>{itemMoneda.clave}</b>"
               </div>
-              <div className="d-flex justify-content-end mt-auto">
+              <div className="flex justify-end mt-auto">
                 <Button
                   type="submit"
                   disabled={mutationMoneda.isPending}
                   className="btn-guardar px-3"
-                 variant="default">
+                  variant="default"
+                >
                   {mutationMoneda.isPending ? (
                     "Guardando..."
                   ) : (
@@ -259,15 +258,15 @@ export function Generales() {
         </div>
 
         {/* Card Zona Horaria */}
-        <div className="md:col-span-6">
+        <div className="col-span-full md:col-span-6">
           <form
             onSubmit={handleSubmitZona((data) => mutationZona.mutate(data))}
-            className="h-100"
+            className="h-full"
           >
             <Card className="border p-3">
-              <div className="mb-3 d-flex gap-2 align-items-center">
+              <div className="mb-3 flex gap-2 items-center">
                 <span
-                  className="alert border-0 fw-bold p-2 mb-0"
+                  className="relative w-full rounded-lg text-sm border-0 font-bold p-2 mb-0"
                   style={{
                     backgroundColor: "var(--bg-strawberry-soft)",
                     color: "var(--fw-strawberry)",
@@ -275,15 +274,15 @@ export function Generales() {
                 >
                   <Globe size={22} />
                 </span>
-                <div className="d-flex flex-column gap-1">
+                <div className="flex flex-col gap-1">
                   <span
-                    className="fw-bold"
+                    className="font-bold"
                     style={{ color: "var(--text-main)" }}
                   >
                     Zona Horaria (Timezone)
                   </span>
                   <p
-                    className="small mb-0"
+                    className="text-sm mb-0"
                     style={{ color: "var(--text-muted)" }}
                   >
                     Sincroniza la hora de las ventas con tu región.
@@ -293,7 +292,7 @@ export function Generales() {
 
               <div className="mt-3 mb-4">
                 <select
-                  className="form-select border "
+                  className="h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 border"
                   {...registerZona("zona", { required: true })}
                 >
                   <option value="America/Lima">América / Lima (Perú)</option>
@@ -311,16 +310,17 @@ export function Generales() {
                   </option>
                 </select>
               </div>
-              <div className="small text-muted ms-4">
+              <div className="text-sm text-muted-foreground ms-4">
                 <span>Zona Horaria actual: </span>
                 <b>{itemZona.clave}</b>
               </div>
-              <div className="d-flex justify-content-end mt-auto">
+              <div className="flex justify-end mt-auto">
                 <Button
                   type="submit"
                   disabled={mutationZona.isPending}
                   className="btn-guardar px-3"
-                 variant="default">
+                  variant="default"
+                >
                   {mutationZona.isPending ? (
                     "Guardando..."
                   ) : (
@@ -335,11 +335,11 @@ export function Generales() {
         </div>
 
         {/* Card Accesos Rápidos: Métodos de Pago */}
-        <div className="md:col-span-6">
+        <div className="col-span-full md:col-span-6">
           <Card className="border p-3">
-            <div className="mb-3 d-flex gap-2 align-items-center">
+            <div className="mb-3 flex gap-2 items-center">
               <span
-                className="alert border-0 fw-bold p-2 mb-0"
+                className="relative w-full rounded-lg text-sm border-0 font-bold p-2 mb-0"
                 style={{
                   backgroundColor: "rgba(25, 143, 80, 0.1)",
                   color: "var(--fw-emerald)",
@@ -347,12 +347,15 @@ export function Generales() {
               >
                 <CreditCard size={22} />
               </span>
-              <div className="d-flex flex-column gap-1">
-                <span className="fw-bold" style={{ color: "var(--text-main)" }}>
+              <div className="flex flex-col gap-1">
+                <span
+                  className="font-bold"
+                  style={{ color: "var(--text-main)" }}
+                >
                   Métodos de Pago
                 </span>
                 <p
-                  className="small mb-0"
+                  className="text-sm mb-0"
                   style={{ color: "var(--text-muted)" }}
                 >
                   Configura Yape, Plin, tarjetas y efectivo.
@@ -360,19 +363,17 @@ export function Generales() {
               </div>
             </div>
             <div className="mt-2 mb-4">
-              <p className="small" style={{ color: "var(--text-muted)" }}>
+              <p className="text-sm" style={{ color: "var(--text-muted)" }}>
                 Los métodos de pago, integraciones bancarias y billeteras
                 digitales se gestionan centralizados dentro del módulo de
                 ventas.
               </p>
             </div>
-            <div className="d-flex justify-content-end mt-auto">
-              <Button
-                type="button"
-                className="btn-generico d-flex align-items-center gap-2"
-                onClick={() => navigate("/ventas/ajustesVentas")}
-               variant="default">
-                Configurar Pagos <ExternalLink size={16} />
+            <div className="flex justify-end mt-auto">
+              <Button asChild variant="outline" className="flex items-center gap-2">
+                <Link to="/ventas/ajustesVentas">
+                  Configurar pagos <ExternalLink size={16} />
+                </Link>
               </Button>
             </div>
           </Card>

@@ -10,12 +10,11 @@ import {
 } from "lucide-react"; // Se removió DollarSign
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
 import { TablasGenerales } from "../componentesReutilizables/TablasGenerales";
-import "../../css/estilosClientes/DashboardCliente.css";
+
 import { useNavigate } from "react-router-dom";
 import { ListaFeedBacks } from "./ListaFeedBacks";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-
 
 // 1. Utilidades
 const formatSoles = (monto) => {
@@ -35,7 +34,7 @@ const UserAvatar = ({ foto, nombre }) => {
       <img
         src={foto}
         alt={`Avatar`}
-        className="rounded-circle flex-shrink-0"
+        className="rounded-full shrink-0"
         style={{ width: "36px", height: "36px", objectFit: "cover" }}
         referrerPolicy="no-referrer"
         onError={() => setImgError(true)}
@@ -44,7 +43,7 @@ const UserAvatar = ({ foto, nombre }) => {
   }
   return (
     <div
-      className="bg-fw-saffron-soft text-fw-saffron rounded-circle d-flex align-items-center justify-content-center fw-bold flex-shrink-0"
+      className="bg-fw-saffron-soft text-fw-saffron rounded-full flex items-center justify-center font-bold shrink-0"
       style={{ width: "36px", height: "36px", fontSize: "14px" }}
     >
       {inicial}
@@ -56,16 +55,16 @@ const UserAvatar = ({ foto, nombre }) => {
 const KpiCard = ({ icon, trendType, trendValue, title, value, colorClass }) => {
   const isUp = trendType === "up";
   return (
-    <Card className="p-4 h-full border rounded-2xl">
-      <div className="d-flex justify-content-between align-items-start mb-4">
+    <Card className="p-4 h-full rounded-2xl">
+      <div className="flex justify-between items-start mb-4">
         <div
-          className={`bg-fw-${colorClass}-soft text-fw-${colorClass} rounded-fw-md d-flex align-items-center justify-content-center`}
+          className={`bg-fw- ${colorClass} -soft text-fw- ${colorClass} rounded-fw-md flex items-center justify-center`}
           style={{ width: "48px", height: "48px" }}
         >
           {icon}
         </div>
         <div
-          className={` text-auto rounded-pill px-2 py-1 fw-bold ${
+          className={`text-auto rounded-full px-2 py-1 font-bold ${
             isUp
               ? "bg-fw-emerald-soft text-fw-emerald"
               : "bg-fw-strawberry-soft text-fw-strawberry"
@@ -76,8 +75,8 @@ const KpiCard = ({ icon, trendType, trendValue, title, value, colorClass }) => {
         </div>
       </div>
       <div>
-        <p className="text-fw-muted small mb-1 fw-semibold">{title}</p>
-        <h3 className="mb-0 fw-bold text-fw-main">{value}</h3>
+        <p className="text-fw-muted text-sm mb-1 font-semibold">{title}</p>
+        <h3 className="mb-0 font-bold text-fw-main">{value}</h3>
       </div>
     </Card>
   );
@@ -111,10 +110,10 @@ export function DashboardGrafic() {
         selector: (row) => row.nombre, // Para el sort alfabético
         sortable: true,
         cell: (row) => (
-          <div className="d-flex align-items-center gap-3 py-2">
+          <div className="flex items-center gap-3 py-2">
             <UserAvatar foto={row.foto} nombre={row.nombre} />
             <div>
-              <span className="d-block fw-bold text-fw-main">
+              <span className="block font-bold text-fw-main">
                 {row.nombre} {row.apellidos}
               </span>
               <small className="text-fw-muted" style={{ fontSize: "12px" }}>
@@ -132,7 +131,7 @@ export function DashboardGrafic() {
         width: "150px",
         cell: (row) => (
           <span
-            className="badge border px-2 py-1 text-fw-main"
+            className="inline-flex items-center rounded-full text-xs font-semibold transition-colors px-2 py-1 text-fw-main"
             style={{ backgroundColor: "var(--fw-muetd)" }}
           >
             {row.cantidad_pedidos}
@@ -146,7 +145,7 @@ export function DashboardGrafic() {
         right: true,
         width: "200px",
         cell: (row) => (
-          <span className="fw-bold text-fw-emerald">
+          <span className="font-bold text-fw-emerald">
             {formatSoles(row.total_comprado)}
           </span>
         ),
@@ -158,11 +157,11 @@ export function DashboardGrafic() {
   return (
     <div className="p-0">
       {/* SECCIÓN 1: KPIs Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-4">
+      <div className="grid grid-cols-12 gap-3 mb-4">
         <CondicionCarga isLoading={isLoading} isError={isError} mode="cards">
-          <div className="md:col-span-3">
+          <div className="col-span-full md:col-span-3">
             <KpiCard
-              icon={<span className="fw-bold h5 mb-0 text-center">S/</span>} // <- MODIFICACIÓN AQUÍ
+              icon={<span className="font-bold h5 mb-0 text-center">S/</span>} // <- MODIFICACIÓN AQUÍ
               colorClass="emerald"
               trendType="up"
               trendValue="12.5"
@@ -171,7 +170,7 @@ export function DashboardGrafic() {
             />
           </div>
 
-          <div className="md:col-span-3">
+          <div className="col-span-full md:col-span-3">
             <KpiCard
               icon={<Users size={24} />}
               colorClass="saffron"
@@ -182,7 +181,7 @@ export function DashboardGrafic() {
             />
           </div>
 
-          <div className="md:col-span-3">
+          <div className="col-span-full md:col-span-3">
             <KpiCard
               icon={<ShoppingCart size={24} />}
               colorClass="strawberry"
@@ -193,7 +192,7 @@ export function DashboardGrafic() {
             />
           </div>
 
-          <div className="md:col-span-3">
+          <div className="col-span-full md:col-span-3">
             <KpiCard
               icon={<TrendingUp size={24} />}
               colorClass="emerald"
@@ -211,10 +210,10 @@ export function DashboardGrafic() {
           isError={isError}
           mode="single-card"
         >
-          <div className="md:col-span-8">
+          <div className="col-span-full md:col-span-8">
             <Card className="">
               <CardHeader className="items-baseline flex justify-center">
-                <h6 className="fw-bold text-fw-main">
+                <h6 className="font-bold text-fw-main">
                   {" "}
                   <UsersRoundIcon className="me-2" />
                   Clientes frecuentes
@@ -222,9 +221,10 @@ export function DashboardGrafic() {
 
                 <div className="ms-auto">
                   <Button
-                    className="btn btn-outline-dark"
+                    className="shadow inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border-input bg-background text-foreground hover:bg-accent"
                     onClick={() => navegacion("/clientes/lista")}
-                   variant="default">
+                    variant="default"
+                  >
                     Ver todos
                   </Button>
                 </div>
@@ -234,10 +234,10 @@ export function DashboardGrafic() {
               </CardContent>
             </Card>
           </div>
-          <div className="md:col-span-4">
+          <div className="col-span-full md:col-span-4">
             <Card className="rounded-xl">
-              <CardHeader className="justify-content-left flex items-baseline">
-                <h6 className="fw-bold  text-fw-main">
+              <CardHeader className="justify-start flex items-baseline">
+                <h6 className="font-bold text-fw-main">
                   <MessageSquareHeartIcon /> Comentarios Recientes
                 </h6>
               </CardHeader>

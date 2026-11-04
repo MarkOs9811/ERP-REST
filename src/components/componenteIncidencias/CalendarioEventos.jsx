@@ -8,7 +8,6 @@ import { Plus, PlusIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
-
 export function CalendarioEventos() {
   const [showModalEvento, setShowModalEvento] = useState(false);
 
@@ -42,9 +41,10 @@ export function CalendarioEventos() {
         <h4>Calendario de eventos</h4>
         <div className="ms-auto">
           <Button
-            className="btn btn-outline-dark"
+            className="shadow inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border-input bg-background text-foreground hover:bg-accent"
             onClick={() => setShowModalEvento(true)}
-           variant="default">
+            variant="default"
+          >
             <PlusIcon className="text-auto" /> Crear Evento
           </Button>
         </div>

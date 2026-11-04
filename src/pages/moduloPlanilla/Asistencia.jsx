@@ -6,12 +6,11 @@ import {
   faUsers,
   faUserSlash,
 } from "@fortawesome/free-solid-svg-icons";
-import "../../css/EstilosAsistencia.css";
 
 import { useQuery } from "@tanstack/react-query";
 import { GetAsistencia } from "../../service/GetAsistencia";
-import DataTable from "react-data-table-component";
-import customDataTableStyles from "../../css/estilosComponentesTable/DataTableStyles";
+// import DataTable from "react-data-table-component";
+// import customDataTableStyles from "../../css/estilosComponentesTable/DataTableStyles";
 import { capitalizeFirstLetter } from "../../hooks/FirstLetterUp";
 import { GraficoEstadoAsistencia } from "../../components/componentePlanillas/componentesAsistencia/GraficoEstadoAsistencia";
 import { GraficoAsistenciasMensual } from "../../components/componentePlanillas/componentesAsistencia/GraficoAsistenciasMensual";
@@ -32,7 +31,7 @@ import { CondicionCarga } from "../../components/componentesReutilizables/Condic
 import { TablasGenerales } from "../../components/componentesReutilizables/TablasGenerales";
 import { Button } from "../../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
+import { Input } from "@/components/ui/input";
 
 export function Asistencia() {
   const [listAsistencias, setModalListAsistencias] = useState(false);
@@ -136,7 +135,7 @@ export function Asistencia() {
                 opacity: 0.8,
               }}
             />
-            <span className="fw-bold" style={{ color: "#444f53" }}>
+            <span className="font-bold" style={{ color: "#444f53" }}>
               {documento}
             </span>
           </div>
@@ -150,20 +149,22 @@ export function Asistencia() {
       cell: (row) => {
         if (row?.estadoAsistencia === "a tiempo") {
           return (
-            <div className="badge bg-success-gradient fw-bold">
+            <div className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs transition-colors bg-success-gradient font-bold">
               <CircleCheckBig /> A tiempo
             </div>
           );
         } else if (row?.estadoAsistencia === "tardanza") {
           return (
-            <div className="badge bg-danger-gradient fw-bold">
+            <div className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs transition-colors bg-danger-gradient font-bold">
               {" "}
               <BellRing /> Tardanza
             </div>
           );
         } else {
           return (
-            <div className="badge bg-secondary-gradient">Sin registro</div>
+            <div className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-secondary-gradient">
+              Sin registro
+            </div>
           );
         }
       },
@@ -176,109 +177,132 @@ export function Asistencia() {
       errorMessage={errorMessage}
     >
       <section className="asistencia-dashboard">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+        <div className="grid grid-cols-12 gap-3">
           {/* Card 1: Total de empleados */}
-          <div className="md:col-span-3 col-sm-6">
-            <Card className="card-total h-full">
-              <CardContent className="flex justify-between items-center">
-                <div className="text-white" style={{ fontSize: "2rem" }}>
+          <div className="col-span-full md:col-span-3 sm:col-span-6">
+            <Card className="h-full border-indigo-500/20 bg-gradient-to-br from-indigo-500/15 via-sky-500/10 to-card text-indigo-900 shadow-lg shadow-indigo-500/10 ring-1 ring-inset ring-indigo-500/10 dark:from-indigo-500/20 dark:via-sky-500/10 dark:text-indigo-100">
+              <CardContent className="flex items-center justify-between gap-4">
+                <div className="text-2xl text-indigo-700 dark:text-indigo-300">
                   <FontAwesomeIcon icon={faUsers} />
                 </div>
-                <div className="text-end">
-                  <CardTitle asChild><h6 className="text-white mb-1">
-                    Total de empleados
-                  </h6></CardTitle>
-                  <p className="mb-0 h2 text-white">{totalEmpleados}</p>
+                <div className="text-right">
+                  <CardTitle asChild>
+                    <h6 className="mb-1 text-sm font-medium text-indigo-800 dark:text-indigo-200">
+                      Total de empleados
+                    </h6>
+                  </CardTitle>
+                  <p className="mb-0 text-2xl font-semibold text-indigo-950 dark:text-indigo-100">
+                    {totalEmpleados}
+                  </p>
                 </div>
               </CardContent>
             </Card>
           </div>
 
           {/* Card 2: Empleados Ausentes */}
-          <div className="md:col-span-3 col-sm-6">
-            <Card className="card-ausentes h-full">
-              <CardContent className="flex justify-between items-center">
-                <div className="text-white" style={{ fontSize: "2rem" }}>
+          <div className="col-span-full md:col-span-3 sm:col-span-6">
+            <Card className="h-full border-rose-500/20 bg-gradient-to-br from-rose-500/15 via-orange-400/10 to-card text-rose-900 shadow-lg shadow-rose-500/10 ring-1 ring-inset ring-rose-500/10 dark:from-rose-500/20 dark:via-orange-400/10 dark:text-rose-100">
+              <CardContent className="flex items-center justify-between gap-4">
+                <div className="text-2xl text-rose-700 dark:text-rose-300">
                   <FontAwesomeIcon icon={faUserSlash} />
                 </div>
-                <div className="text-end">
-                  <CardTitle asChild><h6 className="text-white mb-1">
-                    Empleados Ausentes
-                  </h6></CardTitle>
-                  <p className="mb-0 h2 text-white">{empleadosAusentes}</p>
+                <div className="text-right">
+                  <CardTitle asChild>
+                    <h6 className="mb-1 text-sm font-medium text-rose-800 dark:text-rose-200">
+                      Empleados Ausentes
+                    </h6>
+                  </CardTitle>
+                  <p className="mb-0 text-2xl font-semibold text-rose-950 dark:text-rose-100">
+                    {empleadosAusentes}
+                  </p>
                 </div>
               </CardContent>
             </Card>
           </div>
 
           {/* Card 3: Empleados A tiempo */}
-          <div className="md:col-span-3 col-sm-6">
-            <Card className="card-tiempo h-full">
-              <CardContent className="flex justify-between items-center">
-                <div className="text-white" style={{ fontSize: "2rem" }}>
+          <div className="col-span-full md:col-span-3 sm:col-span-6">
+            <Card className="h-full border-teal-500/20 bg-gradient-to-br from-teal-500/15 via-emerald-400/10 to-card text-teal-900 shadow-lg shadow-teal-500/10 ring-1 ring-inset ring-teal-500/10 dark:from-teal-500/20 dark:via-emerald-400/10 dark:text-teal-100">
+              <CardContent className="flex items-center justify-between gap-4">
+                <div className="text-2xl text-teal-700 dark:text-teal-300">
                   <FontAwesomeIcon icon={faUserCheck} />
                 </div>
-                <div className="text-end">
-                  <CardTitle asChild><h6 className="text-white mb-1">
-                    Empleados A tiempo
-                  </h6></CardTitle>
-                  <p className="mb-0 h2 text-white">{empleadosATiempo}</p>
+                <div className="text-right">
+                  <CardTitle asChild>
+                    <h6 className="mb-1 text-sm font-medium text-teal-800 dark:text-teal-200">
+                      Empleados A tiempo
+                    </h6>
+                  </CardTitle>
+                  <p className="mb-0 text-2xl font-semibold text-teal-950 dark:text-teal-100">
+                    {empleadosATiempo}
+                  </p>
                 </div>
               </CardContent>
             </Card>
           </div>
 
           {/* Card 4: Empleados en tardanza */}
-          <div className="md:col-span-3 col-sm-6">
-            <Card className="card-tardanza h-full">
-              <CardContent className="flex justify-between items-center">
-                <div className="text-white" style={{ fontSize: "2rem" }}>
+          <div className="col-span-full md:col-span-3 sm:col-span-6">
+            <Card className="h-full border-violet-500/20 bg-gradient-to-br from-violet-500/15 via-fuchsia-400/10 to-card text-violet-900 shadow-lg shadow-violet-500/10 ring-1 ring-inset ring-violet-500/10 dark:from-violet-500/20 dark:via-fuchsia-400/10 dark:text-violet-100">
+              <CardContent className="flex items-center justify-between gap-4">
+                <div className="text-2xl text-violet-700 dark:text-violet-300">
                   <FontAwesomeIcon icon={faClock} />
                 </div>
-                <div className="text-end">
-                  <CardTitle asChild><h6 className="text-white mb-1">
-                    Empleados en tardanza
-                  </h6></CardTitle>
-                  <p className="mb-0 h2 text-white">{empleadosTardanza}</p>
+                <div className="text-right">
+                  <CardTitle asChild>
+                    <h6 className="mb-1 text-sm font-medium text-violet-800 dark:text-violet-200">
+                      Empleados en tardanza
+                    </h6>
+                  </CardTitle>
+                  <p className="mb-0 text-2xl font-semibold text-violet-950 dark:text-violet-100">
+                    {empleadosTardanza}
+                  </p>
                 </div>
               </CardContent>
             </Card>
           </div>
 
-          <div className="md:col-span-8 col-sm-12">
-            <Card className="h-full">
-              <CardHeader className="border-bottom-0 flex flex-col flex-md-row justify-between items-center gap-2 p-3">
-                <div className="d-flex align-items-center">
-                  <CardTitle asChild><h4 className="mb-0 titulo-card-especial">
-                    Panel de Asistencia
-                  </h4></CardTitle>
-                  <span className="badge-header ms-2">Hoy</span>
+          <div className="md:col-span-8 col-span-full">
+            <Card className="rounded-2xl border border-border/70 bg-card shadow-sm ring-0 h-full">
+              <CardHeader className="flex flex-col items-stretch gap-4 border-b border-border/70 px-5 py-5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+                <div className="flex items-center">
+                  <CardTitle asChild>
+                    <h4 className="mb-0 text-base font-semibold tracking-tight text-foreground">
+                      Panel de Asistencia
+                    </h4>
+                  </CardTitle>
+                  <span className="ml-2 inline-flex items-center rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground">Hoy</span>
                 </div>
-                <div className="d-flex align-items-center  gap-2 mt-3 mt-md-0">
-                  <div className="header-search-container">
-                    <Search className="search-icon" />
-                    <input
+                <div className="flex w-full flex-col items-stretch gap-2 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center">
+                  <div className="relative w-full min-w-0 sm:w-64">
+                    <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                    <Input
                       type="text"
                       placeholder="Buscar asistencia..."
-                      className="form-control"
+                      className="h-9 pl-9"
                     />
                   </div>
                   <Button
-                    className="btn-generico px-3"
+                    size="lg"
+                    variant="ghostOutline"
+                    className="w-full gap-2 px-3 sm:w-auto"
                     onClick={() => GetReporteExcel("/reporteAsistenciaHoy")}
-                   variant="default">
+                  >
                     <FileText size={18} />
                     Reporte
                   </Button>
                 </div>
               </CardHeader>
               <CardContent className="p-0">
-                <TablasGenerales columns={columnas} data={listaAsistenciaHoy} />
+                <TablasGenerales
+                  columnas={columnas}
+                  datos={listaAsistenciaHoy}
+                />
               </CardContent>
             </Card>
           </div>
 
-          <div className="md:col-span-4 col-sm-12">
+          <div className="md:col-span-4 col-span-full">
             <Card className="h-full">
               <CardHeader className="flex justify-between items-center p-3">
                 <p className="h4 mb-0">
@@ -294,10 +318,10 @@ export function Asistencia() {
             </Card>
           </div>
 
-          <div className="md:col-span-12 col-sm-12">
+          <div className="md:col-span-12 col-span-full">
             <Card className="h-full" style={{ minHeight: "600px" }}>
               <CardHeader className="p-3">
-                <div className="d-flex justify-content-between align-items-center">
+                <div className="flex justify-between items-center">
                   <p className="h4 mb-0">
                     <CalendarCheck className="me-2 color-auto" />
                     Asistencias Mensual
@@ -305,9 +329,10 @@ export function Asistencia() {
                 </div>
                 <div className="ms-auto">
                   <Button
-                    className="btn-generico  ms-auto"
+                    className="btn-generico ms-auto"
                     onClick={() => setModalListAsistencias(true)}
-                   variant="default">
+                    variant="default"
+                  >
                     <Eye className="me-1 text-auto" />
                     Ver Asistencias
                   </Button>

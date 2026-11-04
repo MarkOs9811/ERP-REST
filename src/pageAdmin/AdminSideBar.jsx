@@ -6,7 +6,7 @@ import { NavLink } from "react-router-dom";
 // Asumiendo que tu archivo está en "src/components/admin/"
 // y tu CSS está en "src/cssAdmin/"
 // ===============================================
-import "../cssAdmin/estilosSideBarAdmin.css";
+
 
 // Importamos los íconos de Lucide
 import {
@@ -32,10 +32,10 @@ export const AdminSidebar = () => {
   );
 
   return (
-    <div className="admin-sidebar bg-light h-100">
-      <div className="sidebar-header-admin border-bottom d-flex align-items-center justify-content-center p-3">
-        <div className="d-flex justify-content-center align-items-center w-100 gap-2">
-          <span className="alert bg-primary text-white p-2 mb-0 d-flex align-items-center">
+    <div className="admin-sidebar bg-muted h-full">
+      <div className="sidebar-header-admin border-b flex items-center justify-center p-3">
+        <div className="flex justify-center items-center w-full gap-2">
+          <span className="relative w-full rounded-lg text-sm bg-primary text-white p-2 mb-0 flex items-center">
             <HardHat size={25} />
           </span>
           <span className="admin-sidebar-header-logo">AdminPanel</span>
@@ -44,7 +44,7 @@ export const AdminSidebar = () => {
 
       {/* El CSS se encargará de estilizar esto */}
       <nav className="admin-sidebar-nav">
-        <ul className="list-unstyled ">
+        <ul className="m-0 list-none p-0">
           <li>
             <NavLink to="/masterAdmin/home" end className={getLinkClass}>
               {renderIcon(Home)}
@@ -78,9 +78,9 @@ export const AdminSidebar = () => {
         </ul>
       </nav>
 
-      <div className="position-absolute bottom-0 start-0 w-100 p-3 border-top d-flex align-items-center">
+      <div className="absolute bottom-0 left-0 w-full p-3 border-t flex items-center">
         <div
-          className="admin-sidebar-user-avatar d-flex align-items-center justify-content-center bg-primary text-white rounded-circle flex-shrink-0"
+          className="admin-sidebar-user-avatar flex items-center justify-center bg-primary text-white rounded-full shrink-0"
           style={{ width: 44, height: 44, overflow: "hidden" }}
         >
           {user?.avatar ? (
@@ -88,24 +88,24 @@ export const AdminSidebar = () => {
               src={user.avatar}
               alt="Avatar"
               style={{ width: "100%", height: "100%", objectFit: "cover" }}
-              className="rounded-circle"
+              className="rounded-full"
             />
           ) : (
-            <span className="fw-bold">
+            <span className="font-bold">
               {user?.name ? user.name.charAt(0).toUpperCase() : "JD"}
             </span>
           )}
         </div>
 
-        <div className="admin-sidebar-user-info ms-3 text-truncate">
+        <div className="admin-sidebar-user-info ms-3 truncate">
           <div
-            className="name fw-semibold text-truncate"
+            className="name font-semibold truncate"
             style={{ maxWidth: 150 }}
           >
             {user?.name || "Juan Pérez"}
           </div>
           <div
-            className="role text-muted small text-truncate"
+            className="role text-muted-foreground text-sm truncate"
             style={{ maxWidth: 150 }}
           >
             {user?.role || "Super Admin"}

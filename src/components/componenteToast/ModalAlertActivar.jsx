@@ -1,8 +1,17 @@
-import "react-toastify/dist/ReactToastify.css";
-import "../../css/ModalAlertActivar.css"; // Importar CSS correctamente
+import { useState } from "react";
+import { LoaderCircle, ShieldCheck } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
-import ReactDOM from "react-dom";
-import { Button } from "../ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogMedia,
+  AlertDialogTitle,
+} from "../ui/alert-dialog";
 
 function ModalAlertActivar({
   show,
@@ -14,62 +23,62 @@ function ModalAlertActivar({
   loading = false,
 }) {
   const queryClient = useQueryClient();
-  const isLoading = Boolean(loading);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const isLoading = Boolean(loading) || isProcessing;
 
-  const handleConfirm = async () => {
+  const handleConfirm = async (event) => {
+    event.preventDefault();
+    if (isLoading) return;
+
+    setIsProcessing(true);
     try {
-      // Ejecutar la función de activación pasando el ID
       const success = await handleActivar(idActivar);
-      if (success) {
-        queryClient.invalidateQueries({ queryKey: ["usuarios"] });
-        handleCloseModal();
-      } else {
-        handleCloseModal();
-      }
-    } catch (error) {
+      if (success) queryClient.invalidateQueries({ queryKey: ["usuarios"] });
       handleCloseModal();
+    } catch (error) {
+      console.error("Error al activar:", error);
+      handleCloseModal();
+    } finally {
+      setIsProcessing(false);
     }
   };
 
-  if (!show) return null;
-
-  return ReactDOM.createPortal(
-    <div className={`modal-overlay my-0 ${show ? "show" : ""}`}>
-      <div className="contenido-model bg-white">
-        <p className="h5">¿Estás seguro de Activar este {tipo}?</p>
-        <h4 className="modal-name-activar">
-          {nombre || "Nombre no disponible"}
-        </h4>
-        <div>
-          <Button
+  return (
+    <AlertDialog
+      open={Boolean(show)}
+      onOpenChange={(open) => {
+        if (!open && !isLoading) handleCloseModal();
+      }}
+    >
+      <AlertDialogContent className="gap-5 p-6 sm:max-w-md">
+        <AlertDialogHeader className="place-items-center text-center sm:place-items-center sm:text-center">
+          <AlertDialogMedia className="size-12 rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+            <ShieldCheck className="size-6" />
+          </AlertDialogMedia>
+          <AlertDialogTitle className="text-lg font-semibold">
+            ¿Activar este {tipo}?
+          </AlertDialogTitle>
+          <AlertDialogDescription>
+            Se habilitará nuevamente el acceso para{" "}
+            <span className="font-medium text-foreground">
+              {nombre || "este registro"}
+            </span>
+            .
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter className="-mx-6 -mb-6 rounded-b-xl border-t-0 bg-transparent px-6 pb-6">
+          <AlertDialogCancel disabled={isLoading}>Cancelar</AlertDialogCancel>
+          <AlertDialogAction
             onClick={handleConfirm}
-            className="btn-activarToast mx-2"
             disabled={isLoading}
-           variant="default">
-            {isLoading ? (
-              <>
-                <span
-                  className="spinner-border spinner-border-sm me-2"
-                  role="status"
-                  aria-hidden="true"
-                ></span>
-                Activando...
-              </>
-            ) : (
-              "Confirmar"
-            )}
-          </Button>
-          <Button
-            onClick={handleCloseModal}
-            className="btn-cancelar"
-            disabled={isLoading}
-           variant="default">
-            {isLoading ? "Espere..." : "Cancelar"}
-          </Button>
-        </div>
-      </div>
-    </div>,
-    document.body,
+            className="gap-2 bg-emerald-600 text-white hover:bg-emerald-700"
+          >
+            {isLoading && <LoaderCircle className="size-4 animate-spin" />}
+            {isLoading ? "Activando..." : "Confirmar"}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
 

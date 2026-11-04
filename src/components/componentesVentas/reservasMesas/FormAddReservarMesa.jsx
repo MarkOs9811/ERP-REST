@@ -119,60 +119,60 @@ export default function FormAddReservarMesa({
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="d-flex flex-column h-100 bg-white"
+      className="flex flex-col h-full bg-background"
     >
-      <div className="p-4 flex-grow-1 overflow-auto">
+      <div className="p-4 grow overflow-auto">
         <div className="mb-4">
-          <label className="small fw-bold  mb-1  d-block">
+          <label className="text-sm font-bold mb-1 block">
             Nombre del Cliente *
           </label>
           <input
             type="text"
-            className={`form-control border-secondary bg-light ${errors.nombre_cliente ? "is-invalid" : ""}`}
+            className={`h-9 w-full rounded-md px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 border-secondary bg-muted ${errors.nombre_cliente ? "border-destructive focus-visible:ring-destructive" : ""}`}
             placeholder="Ej: Familia Pérez"
             {...register("nombre_cliente", { required: "Requerido" })}
           />
         </div>
 
         <div
-          className="d-flex align-items-start gap-2 p-3 mb-4 rounded"
+          className="flex items-start gap-2 p-3 mb-4 rounded"
           style={{
             backgroundColor: "#f1f5f9",
             border: "1px solid #e2e8f0",
             color: "#475569",
           }}
         >
-          <Info size={18} className="flex-shrink-0 mt-1" />
+          <Info size={18} className="shrink-0 mt-1" />
           <span style={{ fontSize: "0.85rem", lineHeight: "1.4" }}>
             El sistema bloquea la mesa por un rango de <strong>2 horas</strong>.
             Las mesas cruzadas no se podrán seleccionar.
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-4mb-4">
-          <div className="col-6">
-            <label className="small fw-bold  mb-1  d-block">Fecha *</label>
+        <div className="grid grid-cols-12 gap-4 mb-4">
+          <div className="col-span-6">
+            <label className="text-sm font-bold mb-1 block">Fecha *</label>
             <input
               type="date"
-              className={`form-control border-secondary bg-light ${errors.fecha_reserva ? "is-invalid" : ""}`}
+              className={`h-9 w-full rounded-md px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 border-secondary bg-muted ${errors.fecha_reserva ? "border-destructive focus-visible:ring-destructive" : ""}`}
               {...register("fecha_reserva", { required: "Requerida" })}
             />
           </div>
-          <div className="col-6">
-            <label className="small fw-bold  mb-1  d-block">Hora *</label>
+          <div className="col-span-6">
+            <label className="text-sm font-bold mb-1 block">Hora *</label>
             <input
               type="time"
-              className={`form-control border-secondary bg-light ${errors.hora_reserva ? "is-invalid" : ""}`}
+              className={`h-9 w-full rounded-md px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 border-secondary bg-muted ${errors.hora_reserva ? "border-destructive focus-visible:ring-destructive" : ""}`}
               {...register("hora_reserva", { required: "Requerida" })}
             />
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-4mb-4">
-          <div className="col-8">
-            <label className="small fw-bold  mb-1  d-block">Mesa *</label>
+        <div className="grid grid-cols-12 gap-4 mb-4">
+          <div className="col-span-8">
+            <label className="text-sm font-bold mb-1 block">Mesa *</label>
             <select
-              className={`form-select border-secondary bg-light ${errors.idMesa ? "is-invalid" : ""}`}
+              className={`h-9 w-full appearance-auto rounded-md px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 border-secondary bg-muted ${errors.idMesa ? "border-destructive focus-visible:ring-destructive" : ""}`}
               {...register("idMesa", { required: "Requerida" })}
               disabled={!fechaSeleccionada || !horaSeleccionada}
             >
@@ -188,42 +188,42 @@ export default function FormAddReservarMesa({
             </select>
             {(!fechaSeleccionada || !horaSeleccionada) && (
               <small
-                className="text-danger mt-1 d-block"
+                className="text-destructive mt-1 block"
                 style={{ fontSize: "0.7rem", fontWeight: "600" }}
               >
                 * Selecciona fecha y hora primero
               </small>
             )}
           </div>
-          <div className="col-4">
-            <label className="small fw-bold  mb-1  d-block">Personas</label>
+          <div className="col-span-4">
+            <label className="text-sm font-bold mb-1 block">Personas</label>
             <input
               type="number"
               min="1"
-              className="form-control border-secondary bg-light"
+              className="h-9 w-full rounded-md px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 border-secondary bg-muted"
               {...register("cantidad_personas")}
             />
           </div>
         </div>
 
         <div className="mb-4">
-          <label className="small fw-bold  mb-1  d-block">
+          <label className="text-sm font-bold mb-1 block">
             Celular (Opcional)
           </label>
           <input
             type="text"
-            className="form-control border-secondary bg-light"
+            className="h-9 w-full rounded-md px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 border-secondary bg-muted"
             placeholder="Ej: 987654321"
             {...register("telefono_cliente")}
           />
         </div>
 
         <div className="mb-4">
-          <label className="small fw-bold  mb-1  d-block">
+          <label className="text-sm font-bold mb-1 block">
             Notas (Opcional)
           </label>
           <textarea
-            className="form-control border-secondary bg-light"
+            className="h-9 w-full rounded-md px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 border-secondary bg-muted"
             rows="3"
             placeholder="Ej: Cumpleaños..."
             {...register("nota")}
@@ -231,21 +231,23 @@ export default function FormAddReservarMesa({
         </div>
       </div>
 
-      <div className="p-3 border-top d-flex justify-content-between flex-shrink-0">
+      <div className="p-3 border-t flex justify-between shrink-0">
         <Button
           type="button"
-          className="btn-cerrar  d-flex align-items-center gap-2 px-3 fw-bold text-dark shadow-sm"
+          className="btn-cerrar flex items-center gap-2 px-3 font-bold text-foreground shadow-sm"
           onClick={volverALista}
           disabled={loading}
-         variant="default">
+          variant="default"
+        >
           <ArrowLeft size={16} /> Volver
         </Button>
         {/* Cambié el color del botón para que combine con el botón "Comenzar a vender" de tu dashboard */}
         <Button
           type="submit"
-          className="btn-guardar d-flex align-items-center gap-2 px-4 fw-bold shadow-sm"
+          className="btn-guardar flex items-center gap-2 px-4 font-bold shadow-sm"
           disabled={loading}
-         variant="default">
+          variant="default"
+        >
           {loading ? (
             "Procesando..."
           ) : (

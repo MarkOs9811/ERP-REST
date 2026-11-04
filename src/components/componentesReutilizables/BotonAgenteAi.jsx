@@ -1,5 +1,4 @@
 import { Brain } from "lucide-react";
-import "../../css/EstilosBotonAgenteAi.css";
 import ModalRight from "./ModalRight";
 import { FormAgenteChat } from "../componenteAgentes/FormAgenteChat";
 import { useState } from "react";
@@ -11,11 +10,12 @@ export function BotonAgenteAi() {
   return (
     <div>
       <Button
-        className="agent-ai-button d-flex align-items-center justify-content-center overflow-hidden"
+        className="absolute bottom-4 right-8 z-50 flex h-10 w-10 items-center justify-center rounded-full p-0  hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 sm:h-12 sm:w-12"
         title="Abrir agente IA"
         aria-label="Abrir agente IA"
         onClick={() => setModalAgenteAi(true)}
-       variant="default">
+        variant="default"
+      >
         <Brain aria-hidden="true" />
       </Button>
 

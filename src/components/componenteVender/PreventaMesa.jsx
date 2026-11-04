@@ -13,7 +13,7 @@ import {
   clearCuentaSeparada,
 } from "../../redux/cuentaSeparadaSlice";
 
-import "../../css/EstilosPreventa.css";
+
 import { CardPlatos } from "./CardPlatos";
 import ToastAlert from "../componenteToast/ToastAlert";
 import { capitalizeFirstLetter } from "../../hooks/FirstLetterUp";
@@ -27,6 +27,7 @@ import {
   BanIcon,
   CheckCheck,
   ChevronLeft,
+  ClipboardList,
   Minus,
   Plus,
   Repeat,
@@ -44,14 +45,16 @@ import { BuscadorPlatos } from "./tareasVender/BuscadorPlatos";
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
 import BotonAnimado from "../componentesReutilizables/BotonAnimado";
 import { TicketPreVenta } from "./TiketsType/TicketPreVenta";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClipboardList } from "@fortawesome/free-solid-svg-icons";
 import { FilaPlatoUnificado } from "./tareasVender/FilaPlatoUnificado";
 import { BadgeComponent } from "../componentesReutilizables/BadgeComponent";
 import { ImprimirTicket } from "./tareasVender/ImprimiTIcket";
 import { Button } from "../ui/button";
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
-
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
 
 export function PreventaMesa() {
   const idMesa = useSelector((state) => state.mesa.idPreventaMesa);
@@ -449,28 +452,28 @@ export function PreventaMesa() {
   const isAnulando = anularMesaMutation.isPending;
 
   return (
-    <div className="h-100 bg-transparent">
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 h-100">
-        <div className="col-lg-4 h-100">
+    <div className="min-h-full bg-transparent lg:h-full lg:min-h-0">
+      <div className="grid min-h-full grid-cols-1 gap-3 lg:h-full lg:min-h-0 lg:grid-cols-12">
+        <div className="order-2 min-h-[28rem] lg:order-2 lg:col-span-4 lg:min-h-0">
           <Card
-            className={`h-full flex flex-col overflow-hidden${isSplitMode ? "border-dark border-2" : ""}`}
+            className={`flex h-full min-h-0 flex-col overflow-hidden rounded-xl border-border/70 py-0 shadow-none ${isSplitMode ? "ring-2 ring-primary/15" : ""}`}
           >
             <CardHeader
-              className={`p-3 flex flex-col gap-2${isSplitMode ? "bg-warning" : ""}`}
+              className={`flex flex-col gap-2 border-b px-3 py-3 ${isSplitMode ? "bg-muted/70" : "bg-background"}`}
             >
               {/* 1. CONTENEDOR SUPERIOR (Título y Botón) */}
-              <div className="d-flex justify-content-between align-items-center w-100">
+              <div className="flex justify-between items-center w-full">
                 <div>
-                  <h5 className="mb-0 fw-bold d-flex align-items-center gap-2">
-                    {isSplitMode && <Scissors size={20} />}{" "}
+                  <h2 className="mb-0 flex items-center gap-2 text-sm font-semibold tracking-tight">
+                    {isSplitMode && <Scissors className="size-4" />}{" "}
                     {isSplitMode ? "Separar Cuenta" : `Mesa ${mesaNumero}`}
                     <BadgeComponent
                       label={`PED-${preventas?.[0]?.idPedido}`}
                       className="text-xs px-2"
                       variant="secondary"
                     />
-                  </h5>
-                  <small className="text-muted">
+                  </h2>
+                  <small className="text-xs text-muted-foreground">
                     {isSplitMode
                       ? "Selecciona items a pagar"
                       : "Resumen de cuenta"}
@@ -478,31 +481,31 @@ export function PreventaMesa() {
                 </div>
 
                 <Button
-                  className={`btn btn-sm rounded-pill px-3 ${
-                    isSplitMode ? "btn-white text-dark" : "btn-outline-dark"
-                  }`}
+                  size="sm"
+                  className="h-8 gap-1.5 rounded-lg border-border/70"
                   onClick={isSplitMode ? toggleSplitMode : handleVolverMesas}
-                 variant="default">
+                  variant="outline"
+                >
                   {isSplitMode ? (
                     <>
-                      <XCircle size={16} className="me-1" /> Cancelar
+                      <XCircle className="size-4" /> Cancelar
                     </>
                   ) : (
                     <>
-                      <ChevronLeft size={16} className="me-1" /> Volver
+                      <ChevronLeft className="size-4" /> Volver
                     </>
                   )}
                 </Button>
               </div>
             </CardHeader>
 
-            <CardContent className="overflow-auto p-2 flex flex-col gap-1">
+            <CardContent className="min-h-0 flex-1 overflow-auto p-2">
               {/* POR CONFIRMAR */}
               {itemsCarrito.length > 0 && (
                 <div
                   className={`mb-3 animate__animated animate__fadeIn ${isSplitMode ? "opacity-50" : ""}`}
                 >
-                  <h6 className="text-warning fw-bold small ms-1 mb-2 d-flex align-items-center gap-1">
+                  <h6 className="text-amber-600 dark:text-amber-400 font-bold text-sm ms-1 mb-2 flex items-center gap-1">
                     <Plus size={14} /> Por confirmar
                   </h6>
                   {itemsCarrito.map((i) => (
@@ -523,7 +526,7 @@ export function PreventaMesa() {
               {/* EN ESPERA */}
               {platosEnEspera.length > 0 && (
                 <div className="mb-2">
-                  <h6 className="text-warning fw-bold small ms-1 mb-2 d-flex align-items-center gap-1">
+                  <h6 className="text-amber-600 dark:text-amber-400 font-bold text-sm ms-1 mb-2 flex items-center gap-1">
                     <Clock size={14} /> En espera
                   </h6>
                   {platosEnEspera.map((i) => (
@@ -552,7 +555,7 @@ export function PreventaMesa() {
               {/* EN PREPARACIÓN */}
               {platosCocinando.length > 0 && (
                 <div className="mb-2">
-                  <h6 className="text-secondary fw-bold small ms-1 mb-2 d-flex align-items-center gap-1">
+                  <h6 className="text-muted-foreground font-bold text-sm ms-1 mb-2 flex items-center gap-1">
                     <ChefHat size={14} /> En preparación
                   </h6>
                   {platosCocinando.map((i) => (
@@ -572,7 +575,7 @@ export function PreventaMesa() {
               {/* ENTREGADOS */}
               {platosEntregados.length > 0 && (
                 <div className="mb-2">
-                  <h6 className="text-success fw-bold small ms-1 mb-2 d-flex align-items-center gap-1">
+                  <h6 className="text-emerald-600 dark:text-emerald-400 font-bold text-sm ms-1 mb-2 flex items-center gap-1">
                     <CheckCheck size={14} /> Entregados
                   </h6>
                   {platosEntregados.map((i) => (
@@ -590,16 +593,16 @@ export function PreventaMesa() {
               )}
             </CardContent>
 
-            <CardFooter className="bg-background border-t shadow-lg pt-3 pb-2 px-3">
+            <CardFooter className="flex-col items-stretch gap-3 border-t bg-background px-3 py-3">
               <ImprimirTicket
                 itemsCarrito={itemsCarrito}
                 imprimirTicket={imprimirTicket}
                 setImprimirTicket={setImprimirTicket}
               />
-              <div className="d-flex justify-content-between align-items-end mb-3">
-                <div className="text-muted small lh-sm">
+              <div className="flex items-end justify-between gap-3">
+              <div className="text-xs leading-tight text-muted-foreground">
                   {isSplitMode ? (
-                    <div className="text-dark fw-bold">
+                    <div className="font-medium text-foreground">
                       Seleccionados: {itemsSeleccionados.length}
                     </div>
                   ) : (
@@ -615,13 +618,11 @@ export function PreventaMesa() {
                     <div>IGV (18%): S/. {(granTotal * 0.18).toFixed(2)}</div>
                   )}
                 </div>
-                <div className="text-end">
-                  <small className="text-muted d-block">
+                <div className="text-right">
+                  <small className="text-muted-foreground block">
                     {isSplitMode ? "Total Seleccionado" : "Total a Pagar"}
                   </small>
-                  <h3
-                    className={`fw-bold m-0 ${isSplitMode ? "text-success" : "text-dark"}`}
-                  >
+                  <h3 className="m-0 text-xl font-semibold tracking-tight text-foreground">
                     S/.{" "}
                     {(isSplitMode ? totalSeleccionado : granTotal).toFixed(2)}
                   </h3>
@@ -630,120 +631,102 @@ export function PreventaMesa() {
 
               {isSplitMode ? (
                 <BotonAnimado
-                  className="btn-guardar  w-100 p-3 mb-2 fw-bold fs-5 border"
+                  className="mb-2 inline-flex h-11 w-full items-center justify-center rounded-lg bg-primary px-4 text-sm font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
                   onClick={handleCobrarSeleccion}
                   disabled={totalSeleccionado === 0}
                 >
-                  COBRAR SELECCIÓN
+                  Cobrar selección
                 </BotonAnimado>
               ) : (
                 <>
                   {itemsCarrito.length > 0 ? (
                     <>
-                      <div className="d-flex flex-column gap-2">
+                      <div className="flex flex-col gap-2">
                         <BotonAnimado
-                          className="btn-guardar  w-100 p-3  fw-bold fs-5 border mb-2"
+                          className="mb-2 inline-flex h-11 w-full items-center justify-center rounded-lg bg-primary px-4 text-sm font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
                           onClick={handleAddPlatoPreventaMesas}
                           loading={isSendingToKitchen}
                         >
-                          ENVIAR A COCINA
+                          Enviar a cocina
                         </BotonAnimado>
                       </div>
                     </>
                   ) : (
                     <BotonAnimado
-                      className="btn-guardar border w-100  mb-2 fw-bold fs-5 py-3"
+                      className="mb-2 inline-flex h-11 w-full items-center justify-center rounded-lg bg-primary px-4 text-sm font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
                       onClick={handleRealizarPago}
                       disabled={granTotal === 0}
                     >
-                      COBRAR MESA
+                      Cobrar mesa
                     </BotonAnimado>
                   )}
                 </>
               )}
 
               {!isSplitMode && itemsCarrito.length === 0 && (
-                <div className="col-12 mb-2">
+                <div className="col-span-full mb-2">
                   <Button
-                    className="btn-principal w-100 fw-bold shadow-sm rounded-pill p-3"
+                    className="h-10 w-full rounded-lg font-medium"
                     onClick={toggleSplitMode}
                     disabled={granTotal === 0}
-                   variant="default">
-                    <Scissors size={18} className="me-2" /> SEPARAR CUENTA
+                    variant="outline"
+                  >
+                    <Scissors className="size-4" /> Separar cuenta
                   </Button>
                 </div>
               )}
 
               {!isSplitMode && (
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-2">
-                  <div className="col-4">
+                <div className="grid grid-cols-3 gap-2">
+                  <div>
                     <Button
-                      className="btn btn-outline-dark w-100 btn-sm rounded-pill"
+                      size="sm"
+                      className="h-8 w-full border-border/70 px-1 text-xs"
                       onClick={handleTranferirToMesa}
-                     variant="default">
-                      <Repeat size={16} /> Mover
+                      variant="outline"
+                    >
+                      <Repeat className="size-3.5" /> Mover
                     </Button>
                   </div>
-                  <div className="col-4">
+                  <div>
                     <Button
-                      className="btn btn-outline-dark w-100 btn-sm rounded-pill"
+                      size="sm"
+                      className="h-8 w-full border-border/70 px-1 text-xs"
                       onClick={handleImprimirTicket}
                       disabled={isPrinting}
-                     variant="default">
-                      <Printer size={16} />{" "}
+                      variant="outline"
+                    >
+                      <Printer className="size-3.5" />{" "}
                       {isPrinting ? "Imprimiendo..." : "Ticket"}
                     </Button>
                   </div>
-                  <div className="col-4">
+                  <div>
                     <Button
-                      className="btn btn-outline-danger w-100 btn-sm rounded-pill"
+                      size="sm"
+                      className="h-8 w-full px-1 text-xs"
                       onClick={handleCancelarPedidosQuestion}
                       disabled={platosEntregados.length > 0 || isAnulando}
-                     variant="destructive">
-                      <BanIcon size={16} /> Anular
+                      variant="destructive"
+                    >
+                      <BanIcon className="size-3.5" /> Anular
                     </Button>
                   </div>
-                  <div className="col-12 mt-2">
+                  <div className="col-span-3 mt-1">
                     <div
-                      className="d-flex align-items-start bg-warning bg-opacity-10 p-3"
-                      style={{
-                        border: "2px dashed #ffc107",
-                        borderRadius: "8px",
-                        minHeight: "60px",
-                      }}
+                      className="flex min-h-14 items-start gap-2 rounded-lg border border-dashed border-border bg-muted/40 p-3"
                     >
-                      <div
-                        className="bg-warning rounded-circle d-flex align-items-center justify-content-center me-2 mt-1"
-                        style={{ width: "24px", height: "24px", flexShrink: 0 }}
-                      >
-                        <FontAwesomeIcon
-                          icon={faClipboardList}
-                          className="text-white"
-                          style={{ fontSize: "0.75rem" }}
-                        />
+                      <div className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-md bg-background text-muted-foreground ring-1 ring-border">
+                        <ClipboardList className="size-4" strokeWidth={1.8} />
                       </div>
-                      <div className="flex-grow-1">
-                        <small
-                          className="text-muted fw-bold d-block mb-1"
-                          style={{
-                            fontSize: "0.65rem",
-                            textTransform: "uppercase",
-                          }}
-                        >
+                      <div className="min-w-0 flex-1">
+                        <small className="mb-1 block text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
                           Observaciones:
                         </small>
                         <p
-                          className="m-0 text-dark fw-medium"
-                          style={{
-                            fontSize: "0.85rem",
-                            lineHeight: "1.3",
-                            fontStyle: notaPedido ? "normal" : "italic",
-                          }}
+                          className={`m-0 text-sm leading-snug text-foreground ${notaPedido ? "font-medium" : "italic text-muted-foreground"}`}
                         >
                           {notaPedido || (
-                            <span className="text-muted">
-                              Sin notas adicionales...
-                            </span>
+                            <>Sin notas adicionales...</>
                           )}
                         </p>
                       </div>
@@ -755,23 +738,32 @@ export function PreventaMesa() {
           </Card>
         </div>
         <div
-          className={`col-lg-8 h-100 ${isSplitMode ? "opacity-50 pe-none" : ""}`}
+          className={`order-1 min-h-[34rem] lg:order-1 lg:col-span-8 lg:min-h-0 ${isSplitMode ? "pointer-events-none opacity-50" : ""}`}
         >
-          <Card className="flex flex-grow-1 flex-col h-full p-0 m-0 overflow-auto">
-            <CardHeader className="bg-background border-b py-3 px-3 m-0 flex items-center gap-3 flex-wrap">
-              <div>
-                <h6 className="d-flex align-items-center gap-2 flex-shrink-0">
-                  <Hamburger size={28} /> Menú de Platos
-                </h6>
+          <Card className="flex h-full min-h-0 flex-col overflow-hidden rounded-xl border-border/70 py-0 shadow-none">
+            <CardHeader className="m-0 flex flex-col items-stretch gap-3 border-b border-border/70 bg-background/90 px-3 py-3 sm:px-4">
+              <div className="flex min-w-0 flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex min-w-0 items-center gap-2.5">
+                  <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                    <Hamburger className="size-4" />
+                  </span>
+                  <div className="min-w-0">
+                    <h2 className="m-0 truncate text-sm font-semibold tracking-tight">
+                      Menú de platos
+                    </h2>
+                    <p className="mb-0 text-xs text-muted-foreground">
+                      Selecciona productos para la mesa
+                    </p>
+                  </div>
+                </div>
+                <div className="min-w-0 w-full sm:max-w-xs">
+                  <BuscadorPlatos
+                    searchTerm={searchTerm}
+                    setSearchTerm={setSearchTerm}
+                  />
+                </div>
               </div>
-
-              <div className="flex-grow-1">
-                <BuscadorPlatos
-                  searchTerm={searchTerm}
-                  setSearchTerm={setSearchTerm}
-                />
-              </div>
-              <div className="overflow-auto d-flex justify-content-lg-en">
+              <div className="min-w-0">
                 <CategoriaPlatos
                   claveVenta={"restaurante"}
                   clearSearch={setSearchTerm}
@@ -783,28 +775,34 @@ export function PreventaMesa() {
               isError={errorPlatos}
               mode="cards"
             >
-              <CardContent className="p-2 contenedor-platos overflow-x-hidden m-auto">
+              <CardContent className="grid min-h-0 flex-1 grid-cols-2 content-start gap-2.5 overflow-y-auto bg-muted/20 p-3 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 min-[1800px]:grid-cols-6 sm:gap-3">
                 {productos
                   .filter((p) => {
                     const matchCategoria =
                       categoriaFiltroPlatos === "todo" ||
-                      p.categoria.nombre === categoriaFiltroPlatos;
+                      p.categoria?.nombre === categoriaFiltroPlatos;
                     const matchSearch = p.nombre
                       .toLowerCase()
                       .includes(searchTerm.toLowerCase());
                     return matchCategoria && matchSearch;
                   })
-                  .map((p) => (
+                  .map((p) => {
+                    const itemEnCarrito = itemsCarrito.find(
+                      (item) => item.id === p.id,
+                    );
+                    return (
                     <CardPlatos
                       key={p.id}
                       item={p}
-                      isSelected={itemsCarrito.some((i) => i.id === p.id)}
+                      isSelected={!!itemEnCarrito}
+                      cantidadEnCarrito={itemEnCarrito?.cantidad || 0}
                       handleAdd={handleAddPlatoPreventa}
                       handleRemove={handleDecrementNewItem}
                       capitalizeFirstLetter={capitalizeFirstLetter}
-                      esComida={"restaurante"}
+                      esComida
                     />
-                  ))}
+                    );
+                  })}
               </CardContent>
             </CondicionCarga>
           </Card>

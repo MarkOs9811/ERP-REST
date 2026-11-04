@@ -1,5 +1,5 @@
 import React from "react";
-import "../../css/EstilosIconoCargando.css";
+
 import { AlertTriangle } from "lucide-react";
 
 export function CondicionCarga({
@@ -13,7 +13,7 @@ export function CondicionCarga({
     // === NUEVO MODO: SINGLE CARD (Para widgets individuales) ===
     if (mode === "single-card") {
       return (
-        <div className="skeleton-card p-3 h-100 w-100 ">
+        <div className="skeleton-card p-3 h-full w-full">
           {/* Estructura interna igual, pero SIN el loop map() y SIN col-md-3 */}
           <div className="skeleton-bar skeleton-title"></div>
           <div className="skeleton-bar skeleton-text"></div>
@@ -57,10 +57,12 @@ export function CondicionCarga({
 
   if (isError) {
     return (
-      <div className="m-0 flex items-start gap-2 rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-destructive shadow-sm">
+      <div className="m-0 flex items-start gap-2 rounded-lg border-destructive/30 bg-destructive/10 p-3 text-destructive shadow-sm">
         <AlertTriangle className="mt-1 shrink-0" size={18} />
         <div>
-          <div className="text-sm font-semibold">No se pudo cargar la información</div>
+          <div className="text-sm font-semibold">
+            No se pudo cargar la información
+          </div>
           <div className="mt-1 text-sm">{errorMessage}</div>
         </div>
       </div>

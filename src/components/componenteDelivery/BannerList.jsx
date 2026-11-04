@@ -2,13 +2,12 @@ import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axiosInstance from "../../api/AxiosInstance";
 import * as LucideIcons from "lucide-react";
-import "../../css/estilosDelivery/EstiloBannerList.css";
+
 import { GetData } from "../../service/CRUD/GetData";
 import ToastAlert from "../componenteToast/ToastAlert";
 import ModalAlertQuestion from "../componenteToast/ModalAlertQuestion";
 import { Button } from "../ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-
 
 const BannerList = ({ onEdit }) => {
   const queryClient = useQueryClient();
@@ -78,9 +77,9 @@ const BannerList = ({ onEdit }) => {
 
   if (isLoading)
     return (
-      <div className="text-center py-5 text-muted">
+      <div className="text-center py-5 text-muted-foreground">
         <span
-          className="spinner-border spinner-border-sm me-2"
+          className="inline-block animate-spin rounded-full border-current border-r-transparent size-4 me-2"
           role="status"
         ></span>
         Cargando banners...
@@ -90,23 +89,23 @@ const BannerList = ({ onEdit }) => {
   return (
     <>
       <Card className="p-3">
-        <div className="d-flex justify-content-between align-items-center mb-3">
-          <h4 className="fw-bold mb-2 d-flex align-items-center gap-2">
+        <div className="flex justify-between items-center mb-3">
+          <h4 className="font-bold mb-2 flex items-center gap-2">
             <LucideIcons.LayoutGrid size={20} />
             Banners Activos
           </h4>
         </div>
 
-        <CardContent className="list-group list-group-flush">
+        <CardContent className="flex flex-col divide-y-0">
           {Array.isArray(banners) && banners.length > 0 ? (
             banners.map((banner) => (
               <div
                 key={banner.id}
-                className="border banner-item rounded-4 my-2 p-3 d-flex justify-content-between align-items-center flex-wrap gap-"
+                className="border banner-item rounded-lg my-2 p-3 flex justify-between items-center flex-wrap gap-"
               >
-                <div className="banner-info d-flex align-items-center gap-3">
+                <div className="banner-info flex items-center gap-3">
                   <div
-                    className="banner-mini-preview rounded-3"
+                    className="banner-mini-preview rounded-md"
                     style={{
                       width: "50px",
                       height: "30px",
@@ -117,18 +116,18 @@ const BannerList = ({ onEdit }) => {
                     }}
                   />
                   <div>
-                    <p className="banner-name fw-bold mb-0">{banner.title}</p>
-                    <small className="text-muted">
+                    <p className="banner-name font-bold mb-0">{banner.title}</p>
+                    <small className="text-muted-foreground">
                       {banner.tag} • {banner.offer}
                     </small>
                   </div>
                 </div>
 
-                <div className="banner-actions d-flex align-items-center gap-2">
+                <div className="banner-actions flex items-center gap-2">
                   {/* Switch de Estado */}
-                  <div className="form-check form-switch m-0">
+                  <div className="flex items-center gap-2 m-0">
                     <input
-                      className="form-check-input"
+                      className="size-4 shrink-0 rounded border-input accent-primary"
                       type="checkbox"
                       style={{ cursor: "pointer" }}
                       checked={!!banner.is_active} // Casteo seguro a booleano
@@ -146,21 +145,22 @@ const BannerList = ({ onEdit }) => {
                   </div>
                   {/* Botón Editar */}
                   <Button
-                    className="btn-editar  "
+                    className="btn-editar"
                     onClick={() => onEdit(banner)}
-                   variant="secondary">
+                    variant="secondary"
+                  >
                     <LucideIcons.Edit2 size={16} />
                   </Button>
 
                   {/* Botón Eliminar (Llama al modal) */}
-                  <Button className="btn-eliminar " variant="destructive">
+                  <Button className="btn-eliminar" variant="destructive">
                     <LucideIcons.Trash2 size={16} />
                   </Button>
                 </div>
               </div>
             ))
           ) : (
-            <div className="text-center py-4 text-muted">
+            <div className="text-center py-4 text-muted-foreground">
               No hay banners configurados.
             </div>
           )}

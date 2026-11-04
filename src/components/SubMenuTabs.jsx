@@ -270,15 +270,11 @@ export function SubMenuTabs() {
               <Link
                 to={tab.path}
                 aria-current={isActive ? "page" : undefined}
-                className={`
-                  group relative flex min-h-11 w-full items-center gap-3 rounded-xl px-3 py-2 transition-all duration-200
-                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background
-                  ${
+                className={`group relative flex min-h-11 w-full items-center gap-3 rounded-xl px-3 py-2 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
                     isActive
                       ? "bg-accent font-medium text-accent-foreground"
                       : "text-muted-foreground hover:bg-accent/70 hover:text-accent-foreground"
-                  }
-                `}
+                  }`}
               >
                 {isActive && (
                   <span className="absolute inset-y-2 left-0 w-0.5 rounded-full bg-primary" />

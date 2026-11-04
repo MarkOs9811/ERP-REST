@@ -7,24 +7,24 @@ import { PeriodoNomina } from "../../components/componentePlanillas/componentesA
 export function AjustesPlanilla() {
   return (
     <div>
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
-        <div className="md:col-span-12 gap-3 d-flex flex-column col-sm-12">
+      <div className="grid grid-cols-12 gap-3">
+        <div className="md:col-span-12 gap-3 flex flex-col col-span-full">
           {/* <div className="md:col-span-12">
             <AjustesGenerales />
           </div> */}
-          <div className="md:col-span-12">
+          <div className="col-span-full md:col-span-12">
             <PeriodoNomina />
           </div>
         </div>
-        <div className="md:col-span-12 col-sm-12">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
-            <div className="md:col-span-4 col-sm-4">
+        <div className="md:col-span-12 col-span-full">
+          <div className="grid grid-cols-12 gap-3">
+            <div className="col-span-full md:col-span-4 sm:col-span-4">
               <AjustesBonificaciones />
             </div>
-            <div className="md:col-span-4 col-sm-4">
+            <div className="col-span-full md:col-span-4 sm:col-span-4">
               <AjustesDeducciones />
             </div>
-            <div className="md:col-span-4 col-sm-4">
+            <div className="col-span-full md:col-span-4 sm:col-span-4">
               <AjustesHorario />
             </div>
           </div>

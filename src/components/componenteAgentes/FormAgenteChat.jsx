@@ -12,7 +12,7 @@ import {
   Sparkles,
   MessageSquareDashed,
 } from "lucide-react";
-import "../../css/estilosAgente/EstilosChatAgente.css";
+
 import axiosInstance from "../../api/AxiosInstance";
 import { Button } from "../ui/button";
 import { Card } from "@/components/ui/card";
@@ -107,12 +107,12 @@ export function FormAgenteChat() {
   };
 
   return (
-    <div className="chat-ai-container d-flex flex-column w-100 h-100 border-0 rounded-0">
+    <div className="chat-ai-container flex flex-col w-full h-full border-0 rounded-none">
       <input type="hidden" {...register("agenteType")} />
 
       {/* HEADER */}
-      <Card className="flex p-3 rounded-none border-0 rounded-0 justify-between items-center">
-        <div className="chat-agent-selector  d-flex align-items-center">
+      <Card className="flex p-3 border-0 rounded-none justify-between items-center">
+        <div className="chat-agent-selector flex items-center">
           {AGENTES_CONFIG.map((ag) => {
             const Icono = ag.icono;
             const isSelected = agenteSeleccionado === ag.id;
@@ -127,7 +127,7 @@ export function FormAgenteChat() {
                 }}
                 title={!ag.disponible ? "Próximamente" : ag.nombre}
                 // AQUI ESTÁ EL CAMBIO: pill-activa en vez de selected
-                className={`agent-pill d-flex  align-items-center px-3 justify-content-center ${isSelected ? "pill-activa" : ""}`}
+                className={`agent-pill flex items-center px-3 justify-center ${isSelected ? "pill-activa" : ""}`}
                variant="default">
                 <Icono size={22} className={isSelected ? "me-1" : ""} />
                 {isSelected && <span>{ag.nombre}</span>}
@@ -138,43 +138,43 @@ export function FormAgenteChat() {
       </Card>
 
       {/* BODY */}
-      <div className="chat-ai-body d-flex flex-column flex-grow-1 custom-scrollbar">
+      <div className="chat-ai-body flex flex-col grow custom-scrollbar">
         {messages.length === 0 ? (
-          <div className="chat-empty-state d-flex flex-column align-items-center text-center">
+          <div className="chat-empty-state flex flex-col items-center text-center">
             <div className="empty-icon-wrapper">
               <agenteInfo.icono size={48} strokeWidth={1.5} />
             </div>
             <h3>¿En qué te ayudo hoy?</h3>
             <p>Selecciona una sugerencia para el {agenteInfo.nombre}.</p>
 
-            <div className="chat-suggestions-container d-flex flex-wrap justify-content-center gap-2 mt-3">
+            <div className="chat-suggestions-container flex flex-wrap justify-center gap-2 mt-3">
               {sugerenciasActuales.map((sugerencia, index) => (
                 <Button
                   key={index}
                   type="button"
                   onClick={() => handleBadgeClick(sugerencia)}
-                  className="suggestion-badge d-flex align-items-center"
+                  className="suggestion-badge flex items-center"
                   disabled={chatMutation.isPending}
                  variant="default">
-                  <MessageSquareDashed size={14} className="me-2 text-muted" />
+                  <MessageSquareDashed size={14} className="me-2 text-muted-foreground" />
                   {sugerencia}
                 </Button>
               ))}
             </div>
           </div>
         ) : (
-          <div className="chat-messages-list d-flex flex-column">
+          <div className="chat-messages-list flex flex-col">
             {messages.map((msg, index) => (
               <div
                 key={index}
-                className={`chat-row d-flex align-items-end ${
+                className={`chat-row flex items-end ${
                   msg.role === "user"
-                    ? "row-user justify-content-end"
+                    ? "row-user justify-end"
                     : "row-agent"
                 } animate-slide-up`}
               >
                 {msg.role === "agent" && (
-                  <div className="avatar-agent d-flex align-items-center justify-content-center">
+                  <div className="avatar-agent flex items-center justify-center">
                     <agenteInfo.icono size={18} />
                   </div>
                 )}
@@ -184,7 +184,7 @@ export function FormAgenteChat() {
                   {msg.content}
                 </div>
                 {msg.role === "user" && (
-                  <div className="avatar-user d-flex align-items-center justify-content-center">
+                  <div className="avatar-user flex items-center justify-center">
                     <User size={18} />
                   </div>
                 )}
@@ -194,8 +194,8 @@ export function FormAgenteChat() {
         )}
 
         {chatMutation.isPending && (
-          <div className="chat-row d-flex align-items-end row-agent animate-slide-up mt-3 bg-light">
-            <div className="avatar-agent d-flex align-items-center justify-content-center pulse-anim">
+          <div className="chat-row flex items-end row-agent animate-slide-up mt-3 bg-muted">
+            <div className="avatar-agent flex items-center justify-center pulse-anim">
               <Bot size={18} />
             </div>
             <div className="chat-bubble bubble-agent typing-indicator">
@@ -211,21 +211,21 @@ export function FormAgenteChat() {
       {/* FOOTER */}
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="chat-ai-footer flex-shrink-0 w-100 "
+        className="chat-ai-footer shrink-0 w-full"
       >
-        <div className="input-wrapper d-flex align-items-center w-100">
+        <div className="input-wrapper flex items-center w-full">
           <input
             {...register("prompt")}
             type="text"
             autoComplete="off"
             disabled={chatMutation.isPending || !agenteInfo.disponible}
             placeholder={`Habla con el ${agenteInfo.nombre}...`}
-            className="chat-input-clean flex-grow-1 bg-transparent"
+            className="chat-input-clean grow bg-transparent"
           />
           <Button
             type="submit"
             disabled={chatMutation.isPending || !agenteInfo.disponible}
-            className="chat-btn-send d-flex align-items-center justify-content-center"
+            className="chat-btn-send flex items-center justify-center"
            variant="default">
             {chatMutation.isPending ? (
               <Loader2 size={18} className="animacion-rotar" />

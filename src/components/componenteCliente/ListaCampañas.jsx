@@ -12,7 +12,7 @@ import {
   CircleDollarSign,
   CalendarDays,
 } from "lucide-react";
-import "../../css/estilosClientes/EstiloCampanas.css";
+
 import { formatearFecha } from "../../utils/formatearFechas";
 import { BadgeComponent } from "../componentesReutilizables/BadgeComponent";
 import { useState } from "react";
@@ -25,7 +25,13 @@ import { FormEditarCampañas } from "./FormEditarCampañas";
 import { EstadisticasCampana } from "./EstadisticasCampana";
 import { Button } from "../ui/button";
 import { Card } from "@/components/ui/card";
-
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
 export function ListaCampañas() {
   const [campanaSeleccionada, setCampanaSeleccionada] = useState(null);
@@ -90,7 +96,9 @@ export function ListaCampañas() {
   if (isLoading)
     return <div className="p-3 text-center">Cargando campañas...</div>;
   if (error)
-    return <div className="p-3 text-danger">Error al cargar las campañas</div>;
+    return (
+      <div className="p-3 text-destructive">Error al cargar las campañas</div>
+    );
 
   const gradientClasses = [
     "bg-gradient-orange",
@@ -100,11 +108,11 @@ export function ListaCampañas() {
 
   return (
     <Card className="border-0 p-3 bg-transparent">
-      <h3 className="mb-4 fw-bold text-dark">Campañas Activas</h3>
+      <h3 className="mb-4 font-bold text-foreground">Campañas Activas</h3>
 
       <div className="campanas-grid">
         {listaCampañas.length === 0 ? (
-          <p className="text-muted">No hay campañas creadas aún.</p>
+          <p className="text-muted-foreground">No hay campañas creadas aún.</p>
         ) : (
           listaCampañas.map((campana, index) => {
             const gradientClass =
@@ -114,66 +122,59 @@ export function ListaCampañas() {
             return (
               <Card
                 key={campana.id || index}
-                className="overflow-hidden rounded-5 bg-background"
+                className="overflow-hidden rounded-xl bg-background"
               >
                 {/* Cabecera con degradado */}
                 <div className={`campana-header ${gradientClass}`}>
-                  <div className="d-flex justify-content-between align-items-center mb-3">
+                  <div className="flex justify-between items-center mb-3">
                     <BadgeComponent
                       label={isDraft ? "Borrador" : "Activo"}
                       className="mb-0"
                     />
 
                     {/* DROPDOWN DE ACCIONES */}
-                    <div className="dropdown">
-                      <Button
-                        className="btn btn-link text-white p-0 border-0"
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                       variant="default">
-                        <MoreHorizontal size={20} />
-                      </Button>
-                      <ul className="dropdown-menu dropdown-menu-end shadow-sm border-0">
-                        <li>
-                          <Button
-                            className="dropdown-item d-flex align-items-center gap-2"
-                            onClick={() => handleEdit(campana)}
-                           variant="default">
-                            <Edit size={16} className="text-secondary" />
-                            Editar
-                          </Button>
-                        </li>
-                        <li>
-                          <hr className="dropdown-divider" />
-                        </li>
-                        <li>
-                          <Button
-                            className="dropdown-item d-flex align-items-center gap-2 text-danger"
-                            onClick={() => {
-                              setShowDeleteModal(true);
-                              setCampanaSeleccionada(campana);
-                            }}
-                           variant="default">
-                            <Trash2 size={16} />
-                            Eliminar
-                          </Button>
-                        </li>
-                      </ul>
-                    </div>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          aria-label="Acciones de campaña"
+                        >
+                          <MoreHorizontal size={20} />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onSelect={() => handleEdit(campana)}>
+                          <Edit size={16} />
+                          Editar
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem
+                          variant="destructive"
+                          onSelect={() => {
+                            setShowDeleteModal(true);
+                            setCampanaSeleccionada(campana);
+                          }}
+                        >
+                          <Trash2 size={16} />
+                          Eliminar
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </div>
 
                   {/* Avatares superpuestos */}
                   <div className="avatars-group">
-                    <div className="avatar bg-light"></div>
+                    <div className="avatar bg-muted"></div>
                     <div className="avatar bg-secondary"></div>
-                    <div className="avatar bg-dark"></div>
+                    <div className="avatar bg-foreground"></div>
                     <div className="avatar avatar-more">+12</div>
                   </div>
                 </div>
 
                 {/* Cuerpo de la tarjeta */}
                 <div className="campana-body">
-                  <h5 className="campana-title fw-bold text-dark mb-3">
+                  <h5 className="campana-title font-bold text-foreground mb-3">
                     {campana.nombre}
                   </h5>
 
@@ -181,12 +182,12 @@ export function ListaCampañas() {
                   {campana.tipo === "cupon" ? (
                     <div className="detalles-cupon mb-4">
                       {/* Código y Valor Resaltados */}
-                      <div className="d-flex align-items-center gap-2 mb-2">
+                      <div className="flex items-center gap-2 mb-2">
                         <span className="badge-codigo-cupon">
                           <Ticket size={14} className="me-1" />
                           {campana.codigo_cupon}
                         </span>
-                        <span className="badge-valor-cupon fw-bold">
+                        <span className="badge-valor-cupon font-bold">
                           {campana.tipo_descuento === "porcentaje"
                             ? `-${campana.valor_descuento}%`
                             : `- S/ ${campana.valor_descuento}`}
@@ -194,12 +195,12 @@ export function ListaCampañas() {
                       </div>
 
                       {/* Lista de Condiciones Minimalista */}
-                      <ul className="condiciones-lista list-unstyled mb-0 mt-3 text-muted">
+                      <ul className="condiciones-lista m-0 list-none p-0 mb-0 mt-3 text-muted-foreground">
                         {campana.monto_minimo_compra > 0 && (
-                          <li className="d-flex align-items-start gap-2 mb-1">
+                          <li className="flex items-start gap-2 mb-1">
                             <CircleDollarSign
                               size={14}
-                              className="mt-1 flex-shrink-0 text-secondary"
+                              className="mt-1 shrink-0 text-muted-foreground"
                             />
                             <span>
                               Aplica en compras mayores a{" "}
@@ -207,10 +208,10 @@ export function ListaCampañas() {
                             </span>
                           </li>
                         )}
-                        <li className="d-flex align-items-start gap-2">
+                        <li className="flex items-start gap-2">
                           <CalendarDays
                             size={14}
-                            className="mt-1 flex-shrink-0 text-secondary"
+                            className="mt-1 shrink-0 text-muted-foreground"
                           />
                           <span>
                             Válido del {formatearFecha(campana.fecha_inicio)} al{" "}
@@ -221,7 +222,7 @@ export function ListaCampañas() {
                     </div>
                   ) : (
                     // Vista para otros tipos de campañas (puntos, etc)
-                    <p className="campana-desc text-muted mb-4 text-truncate-2">
+                    <p className="campana-desc mb-4 text-truncate-2">
                       Programa de beneficios y puntos para clientes leales.
                     </p>
                   )}
@@ -234,10 +235,10 @@ export function ListaCampañas() {
                     const isAgotado = limite && disponibles <= 0;
 
                     return (
-                      <div className="campana-stats d-flex justify-content-between gap-2 border-bottom pb-3 mb-3">
-                        <div className="stat-item flex-fill text-center border rounded py-2 bg-light border-0">
+                      <div className="campana-stats flex justify-between gap-2 border-b pb-3 mb-3">
+                        <div className="stat-item flex-1 text-center rounded py-2 bg-muted border-0">
                           <span
-                            className="stat-label text-muted d-block text-uppercase mb-1"
+                            className="stat-label block uppercase mb-1"
                             style={{
                               fontSize: "0.65rem",
                               letterSpacing: "0.5px",
@@ -245,16 +246,16 @@ export function ListaCampañas() {
                           >
                             Usados
                           </span>
-                          <span className="stat-value fw-bold text-dark d-flex align-items-center justify-content-center gap-1">
+                          <span className="stat-value font-bold text-foreground flex items-center justify-center gap-1">
                             <Users size={14} /> {usados}
                           </span>
                         </div>
 
                         <div
-                          className={`stat-item flex-fill text-center border rounded py-2 ${isAgotado ? "border-danger bg-danger-subtle" : "border-0 bg-light"}`}
+                          className={`stat-item flex-1 text-center rounded py-2 ${isAgotado ? "border-destructive bg-danger-subtle" : "border-0 bg-muted"}`}
                         >
                           <span
-                            className={`stat-label text-uppercase d-block mb-1 ${isAgotado ? "text-danger" : "text-muted"}`}
+                            className={`stat-label uppercase block mb-1 ${isAgotado ? "text-destructive" : "text-muted-foreground"}`}
                             style={{
                               fontSize: "0.65rem",
                               letterSpacing: "0.5px",
@@ -263,7 +264,7 @@ export function ListaCampañas() {
                             Disponibles
                           </span>
                           <span
-                            className={`stat-value fw-bold d-flex align-items-center justify-content-center gap-1 ${isAgotado ? "text-danger" : "text-success"}`}
+                            className={`stat-value font-bold flex items-center justify-center gap-1 ${isAgotado ? "text-destructive" : "text-emerald-700 dark:text-emerald-400"}`}
                           >
                             <TrendingUp size={14} /> {disponibles}
                           </span>
@@ -274,9 +275,10 @@ export function ListaCampañas() {
 
                   {/* Botón Acción */}
                   <Button
-                    className="btn btn-outline-dark w-100 fw-bold d-flex align-items-center justify-content-center gap-2 campana-btn-action"
+                    className="shadow whitespace-nowrap rounded-md text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border-input bg-background text-foreground hover:bg-accent w-full font-bold flex items-center justify-center gap-2 campana-btn-action"
                     onClick={() => handleVerEstadisticas(campana)}
-                   variant="default">
+                    variant="default"
+                  >
                     Ver Estadísticas <ChevronRight size={16} />
                   </Button>
                 </div>

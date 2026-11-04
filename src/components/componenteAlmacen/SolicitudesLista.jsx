@@ -14,7 +14,7 @@ import { BadgeComponent } from "../componentesReutilizables/BadgeComponent";
 import ModalRight from "../componentesReutilizables/ModalRight";
 import ModalGeneral from "../componenteToast/ModalGeneral";
 import ToastAlert from "../componenteToast/ToastAlert";
-import "../../css/estilosAlmacen/EstilosSolicitudesModal.css";
+
 import { Button } from "../ui/button";
 
 export function SolicitudesLista({ search, updateList }) {
@@ -140,7 +140,8 @@ export function SolicitudesLista({ search, updateList }) {
           className="btn-informativo"
           title="Ver Solicitud"
           onClick={() => handleVerSolicitud(row)}
-         variant="default">
+          variant="default"
+        >
           <FontAwesomeIcon icon={faEye} />
         </Button>
       ),
@@ -191,11 +192,11 @@ export function SolicitudesLista({ search, updateList }) {
       name: "Usuario Origen",
       selector: (row) => (
         <>
-          <span className="badge bg-light text-muted text-left">
+          <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-muted text-muted-foreground text-left">
             {capitalizeFirstLetter(row.nombre_solicitante)}
             <br />
           </span>
-          <span className="small">
+          <span className="text-sm">
             {capitalizeFirstLetter(row.usuario?.email)}
           </span>
         </>
@@ -228,7 +229,8 @@ export function SolicitudesLista({ search, updateList }) {
   ];
 
   if (isLoading) return <Cargando />;
-  if (isError) return <div className="text-danger">Error: {error.message}</div>;
+  if (isError)
+    return <div className="text-destructive">Error: {error.message}</div>;
 
   return (
     <div>

@@ -10,7 +10,7 @@ export function Transferencias() {
         <CardHeader className="flex flex-col items-start border-b bg-transparent">
           <div>
             <h4 className="m-0">Transferencias de activos y productos</h4>
-            <span className="text-muted small">
+            <span className="text-muted-foreground text-sm">
               Enfocado para mover productos al inventario de ventas
             </span>
           </div>

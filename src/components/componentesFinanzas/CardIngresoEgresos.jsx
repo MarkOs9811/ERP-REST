@@ -60,10 +60,10 @@ export function CardIngresoEgresos({ sumaIngresos, sumaEgresos }) {
   };
 
   return (
-    <div className="col-12">
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+    <div className="col-span-full">
+      <div className="grid grid-cols-12 gap-3">
         {/* CARD INGRESOS */}
-        <div className="col-12 col-lg-6">
+        <div className="col-span-full lg:col-span-6">
           <Card
             className="p-3 h-full flex flex-col justify-between relative overflow-hidden"
             style={{
@@ -73,15 +73,15 @@ export function CardIngresoEgresos({ sumaIngresos, sumaEgresos }) {
             }}
           >
             <div
-              className="position-absolute top-0 start-0 w-100 h-100"
+              className="absolute top-0 left-0 w-full h-full"
               style={{ opacity: 0.34, pointerEvents: "none" }}
             >
               <Line data={ingresosChartData} options={options} />
             </div>
 
-            <div className="d-flex align-items-center gap-2 mb-3">
+            <div className="flex items-center gap-2 mb-3">
               <span
-                className="rounded-circle p-3 position-relative"
+                className="rounded-full p-3 relative"
                 style={{
                   backgroundColor: "var(--bg-emerald-soft)",
                   color: colors.emerald,
@@ -90,16 +90,16 @@ export function CardIngresoEgresos({ sumaIngresos, sumaEgresos }) {
                 <TrendingUp size={24} />
               </span>
               <span
-                className="ms-auto fw-bold"
+                className="ms-auto font-bold"
                 style={{ fontSize: "0.9rem", color: colors.emerald }}
               >
                 Ingresos
               </span>
             </div>
 
-            <div className="position-relative">
+            <div className="relative">
               <span
-                className="text-muted fw-bold"
+                className="text-muted-foreground font-bold"
                 style={{
                   fontSize: "0.85rem",
                   display: "block",
@@ -109,7 +109,7 @@ export function CardIngresoEgresos({ sumaIngresos, sumaEgresos }) {
                 Total Ingresos
               </span>
               <h3
-                className="fw-bold mb-0"
+                className="font-bold mb-0"
                 style={{ fontSize: "1.3rem", color: colors.emerald }}
               >
                 {/*  USO DEL HELPER AQUÍ */}
@@ -120,7 +120,7 @@ export function CardIngresoEgresos({ sumaIngresos, sumaEgresos }) {
         </div>
 
         {/* CARD EGRESOS */}
-        <div className="col-12 col-lg-6">
+        <div className="col-span-full lg:col-span-6">
           <Card
             className="p-3 h-full flex flex-col justify-between relative overflow-hidden"
             style={{
@@ -130,15 +130,15 @@ export function CardIngresoEgresos({ sumaIngresos, sumaEgresos }) {
             }}
           >
             <div
-              className="position-absolute top-0 start-0 w-100 h-100"
+              className="absolute top-0 left-0 w-full h-full"
               style={{ opacity: 0.34, pointerEvents: "none" }}
             >
               <Line data={egresosChartData} options={options} />
             </div>
 
-            <div className="d-flex align-items-center gap-2 mb-3">
+            <div className="flex items-center gap-2 mb-3">
               <span
-                className="rounded-circle p-3 position-relative"
+                className="rounded-full p-3 relative"
                 style={{
                   backgroundColor: "var(--bg-strawberry-soft)",
                   color: colors.strawberry,
@@ -147,16 +147,16 @@ export function CardIngresoEgresos({ sumaIngresos, sumaEgresos }) {
                 <TrendingDown size={24} />
               </span>
               <span
-                className="ms-auto fw-bold"
+                className="ms-auto font-bold"
                 style={{ fontSize: "0.9rem", color: colors.strawberry }}
               >
                 Egresos
               </span>
             </div>
 
-            <div className="position-relative">
+            <div className="relative">
               <span
-                className="text-muted fw-bold"
+                className="text-muted-foreground font-bold"
                 style={{
                   fontSize: "0.85rem",
                   display: "block",
@@ -166,7 +166,7 @@ export function CardIngresoEgresos({ sumaIngresos, sumaEgresos }) {
                 Total Egresos
               </span>
               <h3
-                className="fw-bold mb-0"
+                className="font-bold mb-0"
                 style={{ fontSize: "1.3rem", color: colors.strawberry }}
               >
                 {/*  USO DEL HELPER AQUÍ */}

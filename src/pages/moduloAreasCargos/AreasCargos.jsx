@@ -11,35 +11,43 @@ export function AreasCargo() {
 
   return (
     <Card className="p-4">
-      <ul className="nav nav-pills mb-4" id="pills-tab" role="tablist">
-        <li className="nav-item" role="presentation">
+      <div
+        className="mb-4 flex flex-wrap gap-2 border-b"
+        id="pills-tab"
+        role="tablist"
+        aria-label="Administración de áreas, cargos y sedes"
+      >
           <Button
-            className={`nav-link ${activeTab === "areas" ? "active fw-bold" : "text-muted"}`}
+            variant="ghost"
+            className={`rounded-b-none border-b-2 border-transparent ${activeTab === "areas" ? "border-primary text-primary font-semibold" : "text-muted-foreground"}`}
             onClick={() => setActiveTab("areas")}
             type="button"
-           variant="default">
+            role="tab"
+            aria-selected={activeTab === "areas"}
+          >
             Áreas
           </Button>
-        </li>
-        <li className="nav-item" role="presentation">
           <Button
-            className={`nav-link ${activeTab === "cargos" ? "active fw-bold" : "text-muted"}`}
+            variant="ghost"
+            className={`rounded-b-none border-b-2 border-transparent ${activeTab === "cargos" ? "border-primary text-primary font-semibold" : "text-muted-foreground"}`}
             onClick={() => setActiveTab("cargos")}
             type="button"
-           variant="default">
+            role="tab"
+            aria-selected={activeTab === "cargos"}
+          >
             Cargos
           </Button>
-        </li>
-        <li className="nav-item" role="presentation">
           <Button
-            className={`nav-link ${activeTab === "sedes" ? "active fw-bold" : "text-muted"}`}
+            variant="ghost"
+            className={`rounded-b-none border-b-2 border-transparent ${activeTab === "sedes" ? "border-primary text-primary font-semibold" : "text-muted-foreground"}`}
             onClick={() => setActiveTab("sedes")}
             type="button"
-           variant="default">
+            role="tab"
+            aria-selected={activeTab === "sedes"}
+          >
             Sedes
           </Button>
-        </li>
-      </ul>
+      </div>
 
       <div className="tab-content">
         {activeTab === "areas" && (

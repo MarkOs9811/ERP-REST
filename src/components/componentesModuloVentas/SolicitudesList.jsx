@@ -99,7 +99,7 @@ export function SolicitudesList({ search }) {
       cell: (row) => {
         const { estado } = row;
         return (
-          <div className="d-flex justify-content-around py-2">
+          <div className="flex justify-around py-2">
             {estado == 0 ? (
               <>
                 <BtnEditar
@@ -118,7 +118,7 @@ export function SolicitudesList({ search }) {
                 />
               </>
             ) : (
-              <Button className="btn btn-guardar w-100" variant="default">
+              <Button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 btn-guardar w-full" variant="default">
                 <CheckCheck className="text-auto" />
                 Revisada
               </Button>

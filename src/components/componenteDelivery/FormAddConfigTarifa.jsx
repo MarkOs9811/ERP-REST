@@ -70,25 +70,25 @@ export function FormAddConfigTarifa({ onClose, sedeId }) {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="d-flex flex-column h-100 p-4"
+      className="flex flex-col h-full p-4"
       style={{ overflowY: "auto" }}
     >
       {/* HORARIOS Y DÍAS DE ATENCIÓN (NUEVO) */}
-      <h6 className="fw-bold mb-3 text-dark border-bottom pb-2">
+      <h6 className="font-bold mb-3 text-foreground border-b pb-2">
         Horario de Atención de la Sede
       </h6>
 
       {/* Días de la semana */}
       <div className="mb-3">
-        <label className="form-label fw-medium text-dark small d-flex align-items-center gap-1">
-          <CalendarDays size={16} className="text-muted" />
+        <label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-medium text-foreground text-sm flex items-center gap-1">
+          <CalendarDays size={16} className="text-muted-foreground" />
           Días de Operación
         </label>
-        <div className="d-flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2">
           {DIAS_SEMANA.map((dia) => (
-            <div className="form-check form-check-inline m-0" key={dia}>
+            <div className="inline-flex items-center gap-2 m-0" key={dia}>
               <input
-                className="form-check-input"
+                className="size-4 shrink-0 rounded border-input accent-primary"
                 type="checkbox"
                 id={`dia-${dia}`}
                 value={dia}
@@ -96,50 +96,50 @@ export function FormAddConfigTarifa({ onClose, sedeId }) {
                   required: "Selecciona al menos un día",
                 })}
               />
-              <label className="form-check-label small" htmlFor={`dia-${dia}`}>
+              <label className="font-medium text-sm" htmlFor={`dia-${dia}`}>
                 {dia.substring(0, 3)} {/* Muestra Lun, Mar, Mie, etc. */}
               </label>
             </div>
           ))}
         </div>
         {errors.dias_atencion && (
-          <span className="text-danger small d-block mt-1">
+          <span className="text-destructive text-sm block mt-1">
             {errors.dias_atencion.message}
           </span>
         )}
       </div>
 
       {/* Horas */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-4">
-        <div className="col-6">
-          <label className="form-label fw-medium text-dark small d-flex align-items-center gap-1">
-            <Clock size={16} className="text-muted" />
+      <div className="grid grid-cols-12 gap-3 mb-4">
+        <div className="col-span-6">
+          <label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-medium text-foreground text-sm flex items-center gap-1">
+            <Clock size={16} className="text-muted-foreground" />
             Hora Apertura
           </label>
           <input
             type="time"
-            className={`form-control ${errors.hora_apertura ? "is-invalid" : ""}`}
+            className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.hora_apertura ? "border-destructive focus-visible:ring-destructive" : ""}`}
             {...register("hora_apertura", { required: "Obligatorio" })}
           />
           {errors.hora_apertura && (
-            <span className="text-danger small">
+            <span className="text-destructive text-sm">
               {errors.hora_apertura.message}
             </span>
           )}
         </div>
 
-        <div className="col-6">
-          <label className="form-label fw-medium text-dark small d-flex align-items-center gap-1">
-            <Clock size={16} className="text-muted" />
+        <div className="col-span-6">
+          <label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-medium text-foreground text-sm flex items-center gap-1">
+            <Clock size={16} className="text-muted-foreground" />
             Hora Cierre
           </label>
           <input
             type="time"
-            className={`form-control ${errors.hora_cierre ? "is-invalid" : ""}`}
+            className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.hora_cierre ? "border-destructive focus-visible:ring-destructive" : ""}`}
             {...register("hora_cierre", { required: "Obligatorio" })}
           />
           {errors.hora_cierre && (
-            <span className="text-danger small">
+            <span className="text-destructive text-sm">
               {errors.hora_cierre.message}
             </span>
           )}
@@ -147,13 +147,16 @@ export function FormAddConfigTarifa({ onClose, sedeId }) {
       </div>
 
       {/* TARIFAS */}
-      <h6 className="fw-bold mb-3 mt-2 text-dark border-bottom pb-2">
+      <h6 className="font-bold mb-3 mt-2 text-foreground border-b pb-2">
         Tarifas de Delivery
       </h6>
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-4">
-        <div className="col-6">
-          <label className="form-label fw-medium text-dark small d-flex align-items-center gap-1">
-            <span className="text-muted fw-bold" style={{ fontSize: "0.9rem" }}>
+      <div className="grid grid-cols-12 gap-3 mb-4">
+        <div className="col-span-6">
+          <label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-medium text-foreground text-sm flex items-center gap-1">
+            <span
+              className="text-muted-foreground font-bold"
+              style={{ fontSize: "0.9rem" }}
+            >
               S/
             </span>
             Costo Base (S/)
@@ -161,7 +164,7 @@ export function FormAddConfigTarifa({ onClose, sedeId }) {
           <input
             type="number"
             step="0.01"
-            className={`form-control ${errors.costo_base_delivery ? "is-invalid" : ""}`}
+            className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.costo_base_delivery ? "border-destructive focus-visible:ring-destructive" : ""}`}
             placeholder="Ej: 5.00"
             {...register("costo_base_delivery", {
               required: "Campo obligatorio",
@@ -169,15 +172,18 @@ export function FormAddConfigTarifa({ onClose, sedeId }) {
             })}
           />
           {errors.costo_base_delivery && (
-            <span className="text-danger small">
+            <span className="text-destructive text-sm">
               {errors.costo_base_delivery.message}
             </span>
           )}
         </div>
 
-        <div className="col-6">
-          <label className="form-label fw-medium text-dark small d-flex align-items-center gap-1">
-            <span className="text-muted fw-bold" style={{ fontSize: "0.9rem" }}>
+        <div className="col-span-6">
+          <label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-medium text-foreground text-sm flex items-center gap-1">
+            <span
+              className="text-muted-foreground font-bold"
+              style={{ fontSize: "0.9rem" }}
+            >
               S/
             </span>
             Costo Prioridad (S/)
@@ -185,7 +191,7 @@ export function FormAddConfigTarifa({ onClose, sedeId }) {
           <input
             type="number"
             step="0.01"
-            className={`form-control ${errors.costo_prioridad ? "is-invalid" : ""}`}
+            className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.costo_prioridad ? "border-destructive focus-visible:ring-destructive" : ""}`}
             placeholder="Ej: 8.00"
             {...register("costo_prioridad", {
               min: { value: 0, message: "Mínimo 0" },
@@ -195,18 +201,18 @@ export function FormAddConfigTarifa({ onClose, sedeId }) {
       </div>
 
       {/* TIEMPOS ESTIMADOS (ETA) */}
-      <h6 className="fw-bold mb-3 text-dark border-bottom pb-2">
+      <h6 className="font-bold mb-3 text-foreground border-b pb-2">
         Tiempo de Entrega Estimado
       </h6>
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-4">
-        <div className="col-6">
-          <label className="form-label fw-medium text-dark small d-flex align-items-center gap-1">
-            <Clock size={16} className="text-muted" />
+      <div className="grid grid-cols-12 gap-3 mb-4">
+        <div className="col-span-6">
+          <label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-medium text-foreground text-sm flex items-center gap-1">
+            <Clock size={16} className="text-muted-foreground" />
             Minutos Min
           </label>
           <input
             type="number"
-            className={`form-control ${errors.tiempo_min ? "is-invalid" : ""}`}
+            className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.tiempo_min ? "border-destructive focus-visible:ring-destructive" : ""}`}
             placeholder="Ej: 30"
             {...register("tiempo_min", {
               required: "Obligatorio",
@@ -215,14 +221,14 @@ export function FormAddConfigTarifa({ onClose, sedeId }) {
           />
         </div>
 
-        <div className="col-6">
-          <label className="form-label fw-medium text-dark small d-flex align-items-center gap-1">
-            <Clock size={16} className="text-muted" />
+        <div className="col-span-6">
+          <label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-medium text-foreground text-sm flex items-center gap-1">
+            <Clock size={16} className="text-muted-foreground" />
             Minutos Max
           </label>
           <input
             type="number"
-            className={`form-control ${errors.tiempo_max ? "is-invalid" : ""}`}
+            className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.tiempo_max ? "border-destructive focus-visible:ring-destructive" : ""}`}
             placeholder="Ej: 45"
             {...register("tiempo_max", {
               required: "Obligatorio",
@@ -232,7 +238,7 @@ export function FormAddConfigTarifa({ onClose, sedeId }) {
             })}
           />
           {errors.tiempo_max && (
-            <span className="text-danger small">
+            <span className="text-destructive text-sm">
               {errors.tiempo_max.message}
             </span>
           )}
@@ -240,41 +246,46 @@ export function FormAddConfigTarifa({ onClose, sedeId }) {
       </div>
 
       {/* PROPINAS SUGERIDAS */}
-      <h6 className="fw-bold mb-3 text-dark border-bottom pb-2">
+      <h6 className="font-bold mb-3 text-foreground border-b pb-2">
         Propinas Sugeridas (Opcional)
       </h6>
       <div className="mb-4">
-        <label className="form-label fw-medium text-dark small d-flex align-items-center gap-1">
-          <HeartHandshake size={16} className="text-muted" />
+        <label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-medium text-foreground text-sm flex items-center gap-1">
+          <HeartHandshake size={16} className="text-muted-foreground" />
           Lista de montos (S/)
         </label>
         <input
           type="text"
-          className="form-control mb-1"
+          className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 mb-1"
           placeholder="Ej: 2, 3, 5"
           {...register("propinasInput")}
         />
-        <small className="text-muted d-block" style={{ fontSize: "0.80rem" }}>
+        <small
+          className="text-muted-foreground block"
+          style={{ fontSize: "0.80rem" }}
+        >
           Ingresa los montos separados por comas. Déjalo en blanco para ocultar
           módulos de propinas.
         </small>
       </div>
 
       {/* Controles del Footer */}
-      <div className="mt-auto d-flex justify-content-end gap-2 border-top pt-3 pb-1">
+      <div className="mt-auto flex justify-end gap-2 border-t pt-3 pb-1">
         <Button
           type="button"
-          className="btn-cerrar rounded-pill px-4"
+          className="btn-cerrar rounded-full px-4"
           onClick={onClose}
           disabled={isSubmitting}
-         variant="default">
+          variant="default"
+        >
           Cancelar
         </Button>
         <Button
           type="submit"
           className="btn-guardar px-4"
           disabled={isSubmitting}
-         variant="default">
+          variant="default"
+        >
           {isSubmitting ? "Guardando..." : "Guardar Configuración"}
         </Button>
       </div>

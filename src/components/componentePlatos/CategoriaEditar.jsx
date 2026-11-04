@@ -48,23 +48,27 @@ export function CategoriaEditar({
   return (
     <form onSubmit={handleUpdateCategoria} className="p-3">
       <div className="">
-        <label htmlFor="inputNombreCat" className="form-label">
+        <label
+          htmlFor="inputNombreCat"
+          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+        >
           Nombre de categoría
         </label>
         <input
           id="inputNombreCat"
-          className="form-control"
+          className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
           value={dataForm.nombre}
           onChange={(e) => setDataForm({ ...dataForm, nombre: e.target.value })}
         />
       </div>
       {/* Botones */}
-      <div className="d-flex justify-content-end my-3">
+      <div className="flex justify-end my-3">
         <Button
           type="button"
           className="btn-cerrar-modal btn-cerrar me-2"
           onClick={handleCloseModal}
-         variant="default">
+          variant="default"
+        >
           <X /> Cerrar
         </Button>
         <Button type="submit" className="btn-guardar" variant="default">

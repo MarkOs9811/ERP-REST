@@ -40,7 +40,7 @@ export function TwilioFromIntegracion({ dataIntegracion }) {
           SID: data.SID.trim(), // Account SID
           apiKey: data.authToken.trim(), // Auth Token de Twilio
           numeroTwilio: data.numeroTwilio.trim(), // WhatsApp de Twilio
-        }
+        },
       );
       if (response.data.success) {
         ToastAlert("success", "Configuración guardada con éxito");
@@ -65,30 +65,32 @@ export function TwilioFromIntegracion({ dataIntegracion }) {
     twilioConfig?.valor3?.trim() !== "";
 
   return (
-    <div className="container mt-3">
+    <div className="mx-auto w-full max-w-7xl px-4 mt-3">
       <form onSubmit={handleSubmit(onSubmit)} className="p-3">
         {/* Card de validación */}
         <div
-          className={`alert p-3 mb-3 border-0 shadow-sm ${
-            isConfigured ? "alert-success" : "alert-danger"
+          className={`relative w-full rounded-lg text-sm p-3 mb-3 border-0 shadow-sm ${
+            isConfigured
+              ? "rounded-md border-emerald-600/30 bg-emerald-600/10 p-4 text-emerald-800 dark:text-emerald-300"
+              : "rounded-md border-destructive/50 bg-destructive/10 p-4 text-destructive"
           }`}
           role="alert"
         >
           {isConfigured ? (
-            <span className="small">
+            <span className="text-sm">
               <CheckCircle size={24} className="me-2" />
               Todo correcto, la integración con <strong>TWILIO</strong> está
               configurada.
             </span>
           ) : (
-            <span className="small">
+            <span className="text-sm">
               <XCircle size={24} className="me-2" />
               Faltan credenciales. Genera tu API Key en{" "}
               <a
                 href="https://platform.openai.com/account/api-keys"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="fw-bold text-decoration-underline"
+                className="font-bold underline"
               >
                 OpenAI Dashboard
               </a>
@@ -98,10 +100,12 @@ export function TwilioFromIntegracion({ dataIntegracion }) {
         </div>
 
         <div className="mb-3">
-          <label className="form-label">SID Twilio</label>
+          <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+            SID Twilio
+          </label>
           <input
             type="text"
-            className={`form-control ${errors.SID ? "is-invalid" : ""}`}
+            className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.SID ? "border-destructive focus-visible:ring-destructive" : ""}`}
             {...register("SID", {
               required: "Este campo es obligatorio.",
               validate: (v) =>
@@ -111,15 +115,17 @@ export function TwilioFromIntegracion({ dataIntegracion }) {
             disabled={!isEditing}
           />
           {errors.SID && (
-            <div className="invalid-feedback">{errors.SID.message}</div>
+            <div className="text-sm text-destructive">{errors.SID.message}</div>
           )}
         </div>
 
         <div className="mb-3">
-          <label className="form-label">API Key</label>
+          <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+            API Key
+          </label>
           <input
             type="text"
-            className={`form-control ${errors.apiKey ? "is-invalid" : ""}`}
+            className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.apiKey ? "border-destructive focus-visible:ring-destructive" : ""}`}
             {...register("apiKey", {
               required: "Este campo es obligatorio.",
               validate: (v) =>
@@ -129,15 +135,21 @@ export function TwilioFromIntegracion({ dataIntegracion }) {
             disabled={!isEditing}
           />
           {errors.apiKey && (
-            <div className="invalid-feedback">{errors.apiKey.message}</div>
+            <div className="text-sm text-destructive">
+              {errors.apiKey.message}
+            </div>
           )}
         </div>
         <div className="mb-3">
-          <label className="form-label">Número de Twilio</label>
+          <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+            Número de Twilio
+          </label>
           <input
             type="text"
-            className={`form-control ${
-              errors.numeroTwilio ? "is-invalid" : ""
+            className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+              errors.numeroTwilio
+                ? "border-destructive focus-visible:ring-destructive"
+                : ""
             }`}
             {...register("numeroTwilio", {
               required: "Este campo es obligatorio.",
@@ -147,22 +159,25 @@ export function TwilioFromIntegracion({ dataIntegracion }) {
             })}
             disabled={!isEditing}
           />
-          <small className="text-muted">Ejemplo: whatsapp:+195#######</small>
+          <small className="text-muted-foreground">
+            Ejemplo: whatsapp:+195#######
+          </small>
           {errors.numeroTwilio && (
-            <div className="invalid-feedback">
+            <div className="text-sm text-destructive">
               {errors.numeroTwilio.message}
             </div>
           )}
         </div>
 
         {/* Botones */}
-        <div className="d-flex justify-content-end gap-2">
+        <div className="flex justify-end gap-2">
           {!isEditing ? (
             <Button
               type="button" // 👈 evita submit
               className="btn-editar"
               onClick={() => setIsEditing(true)}
-             variant="secondary">
+              variant="secondary"
+            >
               Editar
             </Button>
           ) : (
@@ -172,14 +187,20 @@ export function TwilioFromIntegracion({ dataIntegracion }) {
                 className="btn-cancelar"
                 onClick={() => setIsEditing(false)}
                 disabled={loading}
-               variant="default">
+                variant="default"
+              >
                 Cancelar
               </Button>
-              <Button type="submit" className="btn-guardar" disabled={loading} variant="default">
+              <Button
+                type="submit"
+                className="btn-guardar"
+                disabled={loading}
+                variant="default"
+              >
                 {loading ? (
                   <>
                     <span
-                      className="spinner-border spinner-border-sm me-2"
+                      className="inline-block animate-spin rounded-full border-current border-r-transparent size-4 me-2"
                       role="status"
                       aria-hidden="true"
                     ></span>

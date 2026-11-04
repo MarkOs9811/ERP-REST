@@ -45,14 +45,14 @@ export function StepPlatosProductos({ onFinish }) {
       <CardHeader className="py-4 relative border-0 m-0">
         {/* Fondo degradado suave Naranja/Melocotón */}
         <div
-          className="position-absolute top-0 start-0 w-100 h-100 p-0"
+          className="absolute top-0 left-0 w-full h-full p-0"
           style={{
             background: "linear-gradient(to bottom, #ffcdcdff, #ffffff)", // Un naranja pastel muy suave
             opacity: 1,
           }}
         />
 
-        <div className="position-relative z-1">
+        <div className="relative z-1">
           {/* Imagen Principal (3D Food Icon) */}
           <img
             src="https://cdn-icons-png.flaticon.com/512/2921/2921822.png" // Icono de Hamburguesa/Comida 3D
@@ -65,10 +65,10 @@ export function StepPlatosProductos({ onFinish }) {
           />
 
           {/* Icono Flotante (Badge) */}
-          <div className="position-absolute top-100 start-50 translate-middle mt-2">
-            <div className="bg-white p-2 rounded-circle shadow-sm d-flex align-items-center justify-content-center">
+          <div className="absolute top-full left-1/2 -translate-x-1/2 -translate-y-1/2 mt-2">
+            <div className="bg-background p-2 rounded-full shadow-sm flex items-center justify-center">
               <UtensilsCrossed
-                className="text-danger" // Color rojo/naranja
+                className="text-destructive" // Color rojo/naranja
                 size={30}
                 strokeWidth={2.5}
               />
@@ -80,11 +80,11 @@ export function StepPlatosProductos({ onFinish }) {
       {/* 2. CARD BODY */}
       <CardContent className="pt-5 pb-4 px-4">
         {/* Título */}
-        <h3 className="fw-bold text-dark mb-3 mt-2">Arma tu Menú o Catálogo</h3>
+        <h3 className="font-bold text-foreground mb-3 mt-2">Arma tu Menú o Catálogo</h3>
 
         {/* Descripción */}
         <p
-          className="text-muted mx-auto mb-4"
+          className="text-muted-foreground mx-auto mb-4"
           style={{ maxWidth: "580px", fontSize: "1.1rem" }}
         >
           Dale vida a tu negocio. Crea tus <b>Categorías</b> (ej.{" "}
@@ -94,30 +94,30 @@ export function StepPlatosProductos({ onFinish }) {
         </p>
 
         {/* 3. Beneficios (Pills) */}
-        <div className="d-flex flex-wrap justify-content-center gap-3 mb-5">
-          <div className="d-flex align-items-center text-secondary bg-light px-3 py-2 rounded-pill border">
-            <Tags className="me-2 text-danger" size={18} />
-            <span className="small fw-bold">Categorías</span>
+        <div className="flex flex-wrap justify-center gap-3 mb-5">
+          <div className="flex items-center text-muted-foreground bg-muted px-3 py-2 rounded-full border">
+            <Tags className="me-2 text-destructive" size={18} />
+            <span className="text-sm font-bold">Categorías</span>
           </div>
 
-          <div className="d-flex align-items-center text-secondary bg-light px-3 py-2 rounded-pill border">
-            <Soup className="me-2 text-danger" size={18} />
-            <span className="small fw-bold">Carta Digital</span>
+          <div className="flex items-center text-muted-foreground bg-muted px-3 py-2 rounded-full border">
+            <Soup className="me-2 text-destructive" size={18} />
+            <span className="text-sm font-bold">Carta Digital</span>
           </div>
 
-          <div className="d-flex align-items-center text-secondary bg-light px-3 py-2 rounded-pill border">
-            <PackageSearch className="me-2 text-danger" size={18} />
-            <span className="small fw-bold">Control de Stock</span>
+          <div className="flex items-center text-muted-foreground bg-muted px-3 py-2 rounded-full border">
+            <PackageSearch className="me-2 text-destructive" size={18} />
+            <span className="text-sm font-bold">Control de Stock</span>
           </div>
         </div>
 
         {/* 4. Botones de Acción */}
-        <div className="d-flex gap-3 justify-content-center align-items-center mb-2">
+        <div className="flex gap-3 justify-center items-center mb-2">
           {/* Botón Principal (Estilo Naranja Vibrante) */}
           <Button
             type="button"
             onClick={() => cambiarEstado(4)}
-            className="btn-guardar w-auto text-white btn-lg px-5 py-3 rounded-pill shadow d-inline-flex align-items-center gap-2"
+            className="btn-guardar w-auto text-white justify-center whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-10 px-5 py-3 rounded-full shadow inline-flex items-center gap-2"
             style={{
               background: "linear-gradient(90deg, #fd7e14, #dc3545)", // Gradiente Naranja a Rojo
               border: "none",
@@ -133,7 +133,7 @@ export function StepPlatosProductos({ onFinish }) {
           </Button>
         </div>
 
-        <div className="mt-4 text-muted small">
+        <div className="mt-4 text-muted-foreground text-sm">
           Paso 4 de 5 para completar la configuración
         </div>
       </CardContent>

@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import "../../css/EstilosPreventa.css";
+
 import { capitalizeFirstLetter } from "../../hooks/FirstLetterUp";
 import { CardPlatos } from "./CardPlatos";
 import { useDispatch, useSelector } from "react-redux";
@@ -35,11 +35,16 @@ import { GetInventario } from "../../service/GetInventario";
 import { OffcanvasColaLlevar } from "./tareasVender/OffCanvaColaLlevar";
 import { GetPedidosCocina } from "../../service/accionesVender/GetPedidosCocina";
 import { Button } from "../ui/button";
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
-
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
 
 export function ToLlevar() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [colaAbierta, setColaAbierta] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -148,31 +153,30 @@ export function ToLlevar() {
   };
 
   return (
-    <div className="h-100 bg-transparent">
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-4h-100 g-3">
-        {/* COLUMNA IZQUIERDA: CUENTA Y DETALLES */}
-        <div className="md:col-span-4 col-lg-3 h-100">
-          <Card className="flex-grow-1 h-full flex flex-col overflow-hidden">
+    <div className="min-h-full bg-transparent lg:h-full lg:min-h-0">
+      <div className="grid min-h-full grid-cols-1 gap-3 lg:h-full lg:min-h-0 lg:grid-cols-12">
+        <div className="order-2 min-h-[28rem] lg:order-2 lg:col-span-4 lg:min-h-0 xl:col-span-3">
+          <Card className="h-full min-h-0 flex flex-col overflow-hidden rounded-xl border-border/70 py-0 shadow-none">
             {/* Header: Título y Botón Eliminar (Reubicado) */}
-            <CardHeader className="m-0 bg-background border-b flex py-3">
-              <div className="d-flex justify-content-between align-items-center w-100">
-                <h5 className="mb-0 fw-bold text-dark">Para Llevar</h5>
-                <div className="d-flex align-items-center gap-2">
+            <CardHeader className="m-0 flex items-center justify-between border-b bg-background px-3 py-3">
+              <h2 className="mb-0 text-sm font-semibold tracking-tight text-foreground">
+                Para llevar
+              </h2>
+                <div className="flex items-center gap-2">
                   <Button
-                    className="btn-editar d-flex align-items-center gap-2 position-relative rounded-pill px-3"
-                    data-bs-toggle="offcanvas"
-                    data-bs-target="#offcanvasColaLlevar"
+                    size="sm"
+                    variant="outline"
+                    className="relative h-8 gap-2 rounded-lg border-border/70 px-3"
                     aria-controls="offcanvasColaLlevar"
-                   variant="secondary">
-                    <ListOrderedIcon size={16} />
+                    aria-haspopup="dialog"
+                    aria-expanded={colaAbierta}
+                    onClick={() => setColaAbierta(true)}
+                  >
+                    <ListOrderedIcon className="size-4" strokeWidth={1.8} />
                     Cola
                     {pedidosLlevarPendientes?.length > 0 && (
                       <span
-                        className="position-absolute top-0 start-0 translate-middle badge rounded-pill"
-                        style={{
-                          backgroundColor: "var(--fw-strawberry)",
-                          color: "var(--fw-white)",
-                        }}
+                        className="absolute -right-1.5 -top-1.5 inline-flex min-w-5 items-center justify-center rounded-full border border-background bg-primary px-1.5 py-0.5 text-[10px] font-semibold leading-none text-primary-foreground"
                       >
                         {pedidosLlevarPendientes.length}
                       </span>
@@ -180,35 +184,39 @@ export function ToLlevar() {
                   </Button>
                   {items.length > 0 && (
                     <Button
-                      className="btn-eliminar d-flex align-items-center gap-1"
+                      size="sm"
+                      className="h-8 gap-1.5 rounded-lg"
                       onClick={handleEliminarTodo}
                       title="Limpiar cuenta"
-                     variant="destructive">
-                      <Trash2 size={16} />
-                      <span className="small">Limpiar</span>
+                      variant="destructive"
+                    >
+                      <Trash2 className="size-3.5" />
+                      <span>Limpiar</span>
                     </Button>
                   )}
                 </div>
-              </div>
             </CardHeader>
 
-            <CardContent className="overflow-auto p-0 flex flex-col">
+            <CardContent className="min-h-0 flex-1 overflow-auto p-0">
               {/* Lista de Platos */}
 
               {items.length > 0 ? (
-                <div className="overflow-auto rounded-none  ">
-                  <table className="table table-borderless align-middle mb-0">
-                    <thead className="text-muted small border-bottom ">
+                <div className="overflow-auto rounded-none">
+                  <table className="w-full text-sm [&_th]:border-0 [&_td]:border-0">
+                    <thead className="sticky top-0 border-b bg-background text-xs text-muted-foreground">
                       <tr>
-                        <th scope="col" className="ps-3 fw-normal py-2">
+                        <th scope="col" className="py-2.5 pl-3 text-left font-medium">
                           Desc.
                         </th>
-                        <th scope="col" className="text-center fw-normal py-2">
+                        <th
+                          scope="col"
+                          className="py-2.5 text-center font-medium"
+                        >
                           Cant.
                         </th>
                         <th
                           scope="col"
-                          className="text-end fw-normal py-2 pe-3"
+                          className="py-2.5 pr-3 text-right font-medium"
                         >
                           Total
                         </th>
@@ -216,69 +224,60 @@ export function ToLlevar() {
                     </thead>
                     <tbody>
                       {items.map((item) => (
-                        <tr key={item.id} className="border-bottom">
-                          <td className="ps-3 py-2">
-                            <div className="d-flex flex-column">
-                              <span
-                                className="fw-bold text-dark small"
-                                style={{ fontSize: "0.9rem" }}
-                              >
+                        <tr key={item.id} className="border-b border-border/50 last:border-0">
+                          <td className="py-2.5 pl-3">
+                            <div className="flex flex-col">
+                              <span className="line-clamp-2 text-sm font-medium text-foreground">
                                 {item.nombre}
                               </span>
-                              <span
-                                className="text-muted"
-                                style={{ fontSize: "0.75rem" }}
-                              >
+                              <span className="text-xs text-muted-foreground">
                                 S/. {Number(item.precio).toFixed(2)}
                               </span>
                             </div>
                           </td>
-                          <td className="py-2 text-center bg-transparent">
-                            <div
-                              className="d-flex align-items-center justify-content-center border rounded-pill mx-auto px-1"
-                              style={{
-                                width: "fit-content",
-                                margin: "0 auto",
-                              }}
-                            >
+                          <td className="py-2 text-center">
+                            <div className="mx-auto flex w-fit items-center justify-center rounded-lg border border-border/70 bg-background px-0.5">
                               <Button
-                                className="btn-informativo btn-icon btn-link border-0 text-dark p-0"
-                                style={{ width: "22px" }}
+                                size="icon-sm"
+                                className="size-7 text-muted-foreground"
                                 onClick={() =>
                                   handleRemovePlatoPreventa(item.id)
                                 }
-                               variant="default">
-                                <Minus size={14} />
-                              </Button>
-                              <span
-                                className="fw-bold mx-1"
-                                style={{ fontSize: "0.85rem" }}
+                                variant="ghost"
+                                aria-label={`Quitar una unidad de ${item.nombre}`}
                               >
+                                <Minus className="size-3.5" />
+                              </Button>
+                              <span className="mx-1 min-w-5 text-sm font-medium tabular-nums">
                                 {item.cantidad}
                               </span>
                               <Button
-                                className="btn-informativo btn-icon btn-link border-0 text-dark p-0"
-                                style={{ width: "22px" }}
+                                size="icon-sm"
+                                className="size-7 text-muted-foreground"
                                 onClick={() => handleAddPlatoPreventa(item)}
-                               variant="default">
-                                <Plus size={14} />
+                                variant="ghost"
+                                aria-label={`Agregar una unidad de ${item.nombre}`}
+                              >
+                                <Plus className="size-3.5" />
                               </Button>
                             </div>
                           </td>
                           <td
-                            className="text-end py-2 pe-3 fw-bold text-dark"
-                            style={{ fontSize: "0.9rem" }}
+                            className="py-2.5 pr-3 text-right font-medium text-foreground"
                           >
                             S/. {(item.cantidad * item.precio).toFixed(2)}
                           </td>
-                          <td className="text-center py-2">
+                          <td className="py-2 text-center pr-2">
                             <Button
-                              className="btn-eliminar btn-icon   mx-2 p-0 "
+                              size="icon-sm"
+                              className="size-7"
                               onClick={() =>
                                 handleRemovePlatoPreventa(item.id, true)
                               }
-                             variant="destructive">
-                              <Trash2 size={14} />
+                              variant="destructive"
+                              aria-label={`Eliminar ${item.nombre} de la cuenta`}
+                            >
+                              <Trash2 className="size-3.5" />
                             </Button>
                           </td>
                         </tr>
@@ -287,49 +286,42 @@ export function ToLlevar() {
                   </table>
                 </div>
               ) : (
-                <div className="h-100 d-flex align-items-center justify-content-center opacity-50">
-                  <FileText size={40} className="mb-2" />
-                  <p className="small mb-0">La cuenta está vacía</p>
+                <div className="flex h-full min-h-40 flex-col items-center justify-center gap-2 text-muted-foreground">
+                  <FileText className="size-8 opacity-50" />
+                  <p className="mb-0 text-sm">La cuenta está vacía</p>
                 </div>
               )}
             </CardContent>
 
             {/* Footer: Totales y Botón Pagar */}
             <CardFooter
-              className="bg-background border-t p-3 shadow-lg"
-              style={{ zIndex: 10 }}
+              className="z-10 flex-col items-stretch gap-3 border-t bg-background p-3"
             >
               {/* SECCIÓN NUEVA: Input de Descripción General */}
-              <div className="p-3 bg-white mb-2 ">
-                <label className="form-label text-success small fw-bold d-flex align-items-center gap-1">
-                  <Notebook /> Cliente / Notas del Pedido:
+              <div className="space-y-1.5">
+                <label className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+                  <Notebook className="size-3.5" /> Cliente / notas
                 </label>
-                <div className="input-group">
-                  <textarea
-                    className="form-control  bg-light"
-                    rows="2"
-                    placeholder="Ej: Juan Perez - Sin cremas, cubiertos extra..."
-                    style={{ resize: "none", fontSize: "0.9rem" }}
-                    value={descripcion}
-                    onChange={handleDescripcionChange}
-                  ></textarea>
-                </div>
+                <textarea
+                  className="min-h-14 w-full resize-none rounded-lg border border-input bg-background px-3 py-2 text-sm shadow-xs outline-none transition-colors placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring/40"
+                  rows="2"
+                  placeholder="Ej.: Juan Pérez, sin cremas..."
+                  value={descripcion}
+                  onChange={handleDescripcionChange}
+                />
               </div>
-              <div className="d-flex justify-content-between align-items-end mb-3">
-                <div className="text-muted small">
-                  <div>Items: {items.length}</div>
+              <div className="flex items-end justify-between gap-3">
+                <div className="space-y-0.5 text-xs text-muted-foreground">
+                  <div>Productos: {items.length}</div>
                   <div>
                     Cant: {items.reduce((acc, i) => acc + i.cantidad, 0)}
                   </div>
                 </div>
-                <div className="text-end">
-                  <small
-                    className="text-muted d-block"
-                    style={{ fontSize: "0.75rem" }}
-                  >
-                    Total a Pagar
+                <div className="text-right">
+                  <small className="block text-xs text-muted-foreground">
+                    Total a pagar
                   </small>
-                  <span className="h4 fw-bold text-dark mb-0">
+                  <span className="text-xl font-semibold tracking-tight text-foreground">
                     S/.{" "}
                     {items
                       .reduce(
@@ -342,44 +334,48 @@ export function ToLlevar() {
               </div>
 
               <Button
-                className="btn-guardar w-100 py-3 fw-bold d-flex align-items-center justify-content-center gap-2 shadow-sm"
+                className="h-11 w-full gap-2 rounded-lg font-semibold shadow-sm"
                 onClick={hanldleRealizarPago}
                 disabled={items.length === 0}
-               variant="default">
-                <CheckCheckIcon size={20} />
-                COBRAR / ENVIAR
+                variant="default"
+              >
+                <CheckCheckIcon className="size-4" />
+                Cobrar / enviar
               </Button>
             </CardFooter>
           </Card>
         </div>
-        {/* COLUMNA DERECHA: CATÁLOGO (Sin cambios mayores, solo ancho) */}
-        <div className="md:col-span-8 col-lg-9 h-100 ">
-          <Card className="flex flex-grow-1 flex-col h-full p-0 m-0 overflow-auto">
-            <CardHeader className="bg-background border-b py-3 px-3 flex items-center gap-3 flex-wrap">
-              <div className="d-flex align-items-center gap-2 flex-shrink-0">
-                {claveVenta === "restaurante" ? (
-                  <Hamburger size={28} />
-                ) : (
-                  <StoreIcon size={28} />
-                )}
-
-                <h6 className="m-0 fw-bold">
-                  {claveVenta === "restaurante"
-                    ? "Menú de Platos"
-                    : "Inventario / Productos"}
-                </h6>
+        <div className="order-1 min-h-[34rem] lg:order-1 lg:col-span-8 lg:min-h-0 xl:col-span-9">
+          <Card className="flex h-full min-h-0 flex-col overflow-hidden rounded-xl border-border/70 py-0 shadow-none">
+            <CardHeader className="m-0 flex flex-col items-stretch gap-3 border-b border-border/70 bg-background/90 px-3 py-3 sm:px-4">
+              <div className="flex min-w-0 flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex min-w-0 items-center gap-2.5">
+                  <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                    {claveVenta === "restaurante" ? (
+                      <Hamburger className="size-4" />
+                    ) : (
+                      <StoreIcon className="size-4" />
+                    )}
+                  </span>
+                  <div className="min-w-0">
+                    <h2 className="m-0 truncate text-sm font-semibold tracking-tight">
+                      {claveVenta === "restaurante"
+                        ? "Menú de platos"
+                        : "Inventario / productos"}
+                    </h2>
+                    <p className="mb-0 text-xs text-muted-foreground">
+                      Selecciona productos para la venta
+                    </p>
+                  </div>
+                </div>
+                <div className="min-w-0 w-full sm:max-w-xs">
+                  <BuscadorPlatos
+                    searchTerm={searchTerm}
+                    setSearchTerm={setSearchTerm}
+                  />
+                </div>
               </div>
-
-              {/* Buscador */}
-              <div className="flex-grow-1">
-                <BuscadorPlatos
-                  searchTerm={searchTerm}
-                  setSearchTerm={setSearchTerm}
-                />
-              </div>
-
-              {/* Categorías */}
-              <div className="overflow-auto ">
+              <div className="min-w-0">
                 <CategoriaPlatos
                   claveVenta={claveVenta}
                   clearSearch={setSearchTerm}
@@ -392,12 +388,12 @@ export function ToLlevar() {
               isError={isErrorProductos}
               mode="cards"
             >
-              <CardContent className="p-2 contenedor-platos overflow-x-hidden m-auto">
+              <CardContent className="grid min-h-0 flex-1 grid-cols-2 content-start gap-2.5 overflow-y-auto bg-muted/20 p-3 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 min-[1800px]:grid-cols-6 sm:gap-3">
                 {productos
                   .filter((producto) => {
                     const matchCategoria =
                       categoriaFiltroPlatos === "todo" ||
-                      producto.categoria.nombre === categoriaFiltroPlatos;
+                      producto.categoria?.nombre === categoriaFiltroPlatos;
                     const matchSearch = producto.nombre
                       .toLowerCase()
                       .includes(searchTerm.toLowerCase());
@@ -423,7 +419,7 @@ export function ToLlevar() {
                         key={producto.id}
                         item={producto}
                         isSelected={isSelected}
-                        cantidadEnCarrito={cantidadEnCarrito} // 👉 LE PASAMOS LA CANTIDAD AL CARD
+                        cantidadEnCarrito={cantidadEnCarrito}
                         handleAdd={handleAddPlatoPreventa}
                         handleRemove={handleRemovePlatoPreventa}
                         capitalizeFirstLetter={capitalizeFirstLetter}
@@ -436,7 +432,11 @@ export function ToLlevar() {
           </Card>
         </div>
       </div>
-      <OffcanvasColaLlevar pedidosCola={pedidosLlevar} />
+      <OffcanvasColaLlevar
+        pedidosCola={pedidosLlevar}
+        open={colaAbierta}
+        onOpenChange={setColaAbierta}
+      />
     </div>
   );
 }

@@ -9,7 +9,7 @@ import {
   Box,
 } from "lucide-react";
 import { motion } from "framer-motion";
-import "../../css/EstilosFinanzas.css";
+
 import ModalRight from "../../components/componentesReutilizables/ModalRight";
 import { useState } from "react";
 import { ReporteIngresoVentas } from "../../components/componentesFinanzas/reportesFinanzas/ReporteIngresoVentas";
@@ -74,8 +74,8 @@ export function ReportesFinanzas() {
 
   return (
     <div>
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-4gap-3">
-        <div className="md:col-span-12">
+      <div className="grid grid-cols-12 gap-4gap-3">
+        <div className="col-span-full md:col-span-12">
           <Card className="">
             <CardContent className="">
               <h4 className="text-left">
@@ -93,13 +93,13 @@ export function ReportesFinanzas() {
             </CardContent>
           </Card>
         </div>
-        <div className="md:col-span-12 ">
+        <div className="col-span-full md:col-span-12">
           <div className="reportes-grid">
             {reportes.map((reporte, index) => (
               <Card asChild>
                 <motion.div key={index} className="reporte-card">
                   <div className="reporte-icon">{reporte.icono}</div>
-                  <h5 className="text-dark text-auto fw-bold">
+                  <h5 className="text-auto font-bold">
                     {reporte.titulo}
                   </h5>
                   <p>{reporte.descripcion}</p>

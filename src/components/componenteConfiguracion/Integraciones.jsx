@@ -21,11 +21,10 @@ import { OpenAiFormIntegracion } from "./confiIntegraciones/OpenAiFormIntegracio
 import { TwilioFromIntegracion } from "./confiIntegraciones/TwilioFromIntegracion";
 import { TesseractFormIntegracion } from "./confiIntegraciones/TesseractFormIntegracion";
 
-import "../../css/estilosConfiguracion/EstiloIntegraciones.css";
+
 import { GeminiFormIntegracion } from "./confiIntegraciones/GeminiFormIntegracion";
 import { Button } from "../ui/button";
 import { Card } from "@/components/ui/card";
-
 
 // Función para retornar el icono según el nombre
 function getIcon(nombre) {
@@ -110,8 +109,8 @@ export function Integraciones() {
 
   if (isLoading) {
     return (
-      <div className="w-100 p-3 text-center">
-        <span className="text-secondary">
+      <div className="w-full p-3 text-center">
+        <span className="text-muted-foreground">
           <Cargando />
         </span>
       </div>
@@ -120,8 +119,8 @@ export function Integraciones() {
 
   if (isError) {
     return (
-      <div className="w-100 p-3 text-center">
-        <span className="text-danger">
+      <div className="w-full p-3 text-center">
+        <span className="text-destructive">
           Error: {error?.message || "No se pudieron cargar las integraciones."}
         </span>
       </div>
@@ -129,24 +128,27 @@ export function Integraciones() {
   }
 
   return (
-    <div className="container w-100 p-3">
+    <div className="mx-auto max-w-7xl w-full p-3">
       <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
         {integraciones.map((item) => (
-          <div className="md:col-span-4 col-xl-6 col-sm-12" key={item.id}>
+          <div
+            className="md:col-span-4 xl:col-span-6 col-span-full"
+            key={item.id}
+          >
             <Card className="p-4 h-full" style={{ borderRadius: 18 }}>
-              <div className="d-flex align-items-center mb-2">
+              <div className="flex items-center mb-2">
                 <div className="me-3">{getIcon(item.nombre)}</div>
-                <div className="flex-grow-1">
+                <div className="grow">
                   <span
-                    className="fw-semibold"
+                    className="font-semibold"
                     style={{ color: "#1d2530", fontSize: 18 }}
                   >
                     {item.nombre}
                   </span>
                 </div>
-                <div className="form-switch m-0">
+                <div className="flex items-center gap-2 m-0">
                   <input
-                    className="form-check-input"
+                    className="size-4 shrink-0 rounded border-input accent-primary"
                     type="checkbox"
                     id={`flexSwitchCheckDefault${item.id}`}
                     checked={!!switches[item.id]}
@@ -160,18 +162,21 @@ export function Integraciones() {
                   />
                 </div>
               </div>
-              <div className="text-muted small mb-2">{item.descripcion}</div>
-              <div className="d-flex justify-content-end">
+              <div className="text-muted-foreground text-sm mb-2">
+                {item.descripcion}
+              </div>
+              <div className="flex justify-end">
                 <Button
                   type="button"
-                  className="btn btn-outline-dark btn-sm"
+                  className="shadow border-input bg-background text-foreground hover:bg-accent inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 px-3 text-xs"
                   disabled={!switches[item.id]}
                   onClick={() => {
                     setOpenModal(true);
                     setTituloModal(item.nombre);
                     setData(item);
                   }}
-                 variant="default">
+                  variant="default"
+                >
                   Configurar
                 </Button>
               </div>

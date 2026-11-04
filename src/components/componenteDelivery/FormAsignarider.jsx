@@ -94,18 +94,20 @@ export const FormAsignarRider = forwardRef(
     const detallesPlatos = dataPedido?.detalles_pedido || [];
 
     return (
-      <div className="container-fluid w-100">
+      <div className="w-full">
         {/* Cabecera ARREGLADA: Solo cambiamos esto */}
-        <div className="d-flex align-items-center gap-3 mb-4 p-3">
+        <div className="flex items-center gap-3 mb-4 p-3">
           <div
-            className=" rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"
+            className="rounded-md flex items-center justify-center shrink-0"
             style={{ width: "48px", height: "48px" }}
           >
             <UserPlus size={24} />
           </div>
-          <div className="d-flex flex-column justify-content-center">
-            <h4 className="text-xl font-bold mb-0 lh-1">Asignar Repartidor</h4>
-            <p className="text-secondary small mb-0 mt-1">
+          <div className="flex flex-col justify-center">
+            <h4 className="text-xl font-bold mb-0 leading-none">
+              Asignar Repartidor
+            </h4>
+            <p className="text-muted-foreground text-sm mb-0 mt-1">
               Pedido{" "}
               <span className="font-bold text-gray-800 bg-gray-100 px-1.5 py-0.5 rounded">
                 {dataPedido?.codigo_pedido || idPedido}
@@ -118,52 +120,52 @@ export const FormAsignarRider = forwardRef(
         {dataPedido && (
           /* CONTENEDOR PADRE */
           <div
-            className="d-flex flex-row w-100 gap-3 mb-4"
+            className="flex flex-row w-full gap-3 mb-4"
             style={{ display: "flex", flexDirection: "row", width: "100%" }}
           >
             {/* IZQUIERDA: Datos de Entrega */}
             <div
-              className="w-50 border rounded-4 p-3 d-flex flex-column"
+              className="w-1/2 rounded-lg p-3 flex flex-col"
               style={{ width: "50%" }}
             >
-              <h5 className="fw-bold text-danger small text-uppercase d-flex align-items-center gap-2 mb-3">
+              <h5 className="font-bold text-sm uppercase flex items-center gap-2 mb-3">
                 {/* Cambiado de text-primary a text-danger para quitar el azul */}
                 <Navigation size={18} className="" />
                 Entrega a
               </h5>
 
-              <div className="d-flex align-items-start mb-3">
+              <div className="flex items-start mb-3">
                 <div
-                  className="d-flex align-items-center justify-content-center mb-0 alert border-danger bg-white text-danger p-2"
+                  className="flex items-center justify-center mb-0 relative w-full rounded-lg text-sm border-destructive bg-background text-destructive p-2"
                   style={{ width: "36px", height: "36px" }}
                 >
                   <User size={18} />
                 </div>
-                <div className="d-flex flex-column mx-2">
-                  <span className="small fw-bolder text-dark">
+                <div className="flex flex-col mx-2">
+                  <span className="text-sm font-extrabold text-foreground">
                     {dataPedido.nombre_cliente || "Cliente"}
                   </span>
-                  <span className="text-muted small">
+                  <span className="text-muted-foreground text-sm">
                     {dataPedido.numero_cliente || "Sin teléfono"}
                   </span>
                 </div>
               </div>
 
               {/* Agregado align-items-start para arreglar el ícono alargado */}
-              <div className="d-flex align-items-start">
+              <div className="flex items-start">
                 <div
-                  className="d-flex align-items-center justify-content-center mb-0 alert border-danger bg-white text-danger p-2"
+                  className="flex items-center justify-center mb-0 relative w-full rounded-lg text-sm border-destructive bg-background text-destructive p-2"
                   style={{ width: "36px", height: "36px" }}
                 >
-                  <MapPin size={18} className="flex-shrink-0" />
+                  <MapPin size={18} className="shrink-0" />
                 </div>
-                <div className="d-flex flex-column mx-2">
-                  <span className="small lh-sm text-dark mb-1 fw-light">
+                <div className="flex flex-col mx-2">
+                  <span className="text-sm leading-tight text-foreground mb-1 font-light">
                     {dataPedido.direccion?.calle || "Dirección no especificada"}
                   </span>
                   {dataPedido.tipo_entrega && (
                     <span
-                      className="fw-bold text-uppercase text-danger bg-danger bg-opacity-10 px-2 py-1 rounded border border-danger-subtle"
+                      className="font-bold text-destructive bg-destructive/10 px-2 py-1 rounded border-danger-subtle"
                       style={{ width: "max-content", fontSize: "10px" }}
                     >
                       {dataPedido.tipo_entrega}
@@ -174,8 +176,8 @@ export const FormAsignarRider = forwardRef(
             </div>
 
             {/* DERECHA: Resumen de Platos (Este lado estaba perfecto, lo mantengo igual) */}
-            <div className="w-50 border rounded-4 p-3 d-flex flex-column  wh-100">
-              <h5 className="fw-bold text-warning small text-uppercase d-flex align-items-center gap-2 mb-3">
+            <div className="w-1/2 rounded-lg p-3 flex flex-col w-full h-full">
+              <h5 className="font-bold dark:text-amber-400 text-sm uppercase flex items-center gap-2 mb-3">
                 <ShoppingBag size={18} />
                 Detalle
               </h5>
@@ -188,44 +190,46 @@ export const FormAsignarRider = forwardRef(
                   detallesPlatos.map((item, idx) => (
                     <div
                       key={idx}
-                      className="d-flex align-items-start gap-2 text-start mb-1"
+                      className="flex items-start gap-2 text-left mb-1"
                     >
                       <span
-                        className="small fw-bold flex-shrink-0"
+                        className="text-sm font-bold shrink-0"
                         style={{ color: "#ea580c" }}
                       >
                         {item.cantidad}x
                       </span>
-                      <span className="small text-secondary lh-sm">
+                      <span className="text-sm text-muted-foreground leading-tight">
                         {item?.plato?.nombre || item.producto || "Plato"}
                       </span>
                     </div>
                   ))
                 ) : (
-                  <span className="small text-muted">Sin detalles.</span>
+                  <span className="text-sm text-muted-foreground">
+                    Sin detalles.
+                  </span>
                 )}
               </div>
 
-              <div className="d-flex flex-row justify-content-between align-items-end border-top pt-2 mt-auto">
-                <div className="d-flex flex-column text-start">
+              <div className="flex flex-row justify-between items-end border-t pt-2 mt-auto">
+                <div className="flex flex-col text-left">
                   <span
-                    className="fw-bold text-muted text-uppercase"
+                    className="font-bold uppercase"
                     style={{ fontSize: "10px" }}
                   >
                     Envío
                   </span>
-                  <span className="small fw-medium text-secondary">
+                  <span className="text-sm font-medium text-muted-foreground">
                     S/ {Number(dataPedido.costo_envio || 0).toFixed(2)}
                   </span>
                 </div>
-                <div className="d-flex flex-column text-end">
+                <div className="flex flex-col text-right">
                   <span
-                    className="fw-bold text-muted text-uppercase"
+                    className="font-bold uppercase"
                     style={{ fontSize: "10px" }}
                   >
                     Total
                   </span>
-                  <span className="small fw-bold text-dark">
+                  <span className="text-sm font-bold text-foreground">
                     S/ {Number(dataPedido.total || 0).toFixed(2)}
                   </span>
                 </div>
@@ -241,12 +245,12 @@ export const FormAsignarRider = forwardRef(
           </label>
 
           {isLoading ? (
-            <div className="w-full flex flex-row items-center gap-2 p-2.5 border border-slate-200 rounded-lg bg-slate-50 text-slate-500 text-sm">
+            <div className="w-full flex flex-row items-center gap-2 p-2.5 border-slate-200 rounded-lg bg-slate-50 text-slate-500 text-sm">
               <Loader2 className="animate-spin" size={16} /> Cargando
               repartidores...
             </div>
           ) : isError ? (
-            <div className="w-full flex flex-row items-center gap-2 p-2.5 border border-red-200 bg-red-50 text-red-600 rounded-lg text-sm">
+            <div className="w-full flex flex-row items-center gap-2 p-2.5 border-red-200 bg-red-50 text-red-600 rounded-lg text-sm">
               <AlertCircle size={16} /> Error de conexión.
             </div>
           ) : (
@@ -255,9 +259,9 @@ export const FormAsignarRider = forwardRef(
                 {...register("id_repartidor", {
                   required: "Selecciona un repartidor",
                 })}
-                className={`w-full  pl-3 form-select pr-8 py-2.5 border ${
+                className={`h-9 w-full appearance-auto rounded-md border-input bg-background px-3 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 pr-8 py-2.5 ${
                   errors.id_repartidor ? "border-red-400" : "border-slate-300"
-                } rounded-lg bg-white text-sm text-slate-800 appearance-none focus:outline-none focus:border-slate-500 cursor-pointer`}
+                } rounded-lg bg-background text-sm text-slate-800 appearance-auto focus:outline-none focus:border-slate-500 cursor-pointer`}
                 disabled={asignarRiderMutation.isPending}
               >
                 <option value="">-- Selecciona el rider en turno --</option>

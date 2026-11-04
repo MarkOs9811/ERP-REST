@@ -52,14 +52,17 @@ export function FormularioMesa({ onClose, isEdit, dataEdit = null }) {
     <form onSubmit={handleSubmit(onSubmit)} className="p-4">
       {/* Campo Número */}
       <div className="mb-3">
-        <label htmlFor="numero" className="form-label small">
+        <label
+          htmlFor="numero"
+          className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm"
+        >
           Número de Mesa
         </label>
         <input
           id="numero"
           type="number"
           placeholder="Ej: 5, 12, 101"
-          className={`form-control ${errors.numero ? "is-invalid" : ""}`}
+          className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.numero ? "border-destructive focus-visible:ring-destructive" : ""}`}
           {...register("numero", {
             required: "El número es obligatorio",
             valueAsNumber: true,
@@ -70,19 +73,24 @@ export function FormularioMesa({ onClose, isEdit, dataEdit = null }) {
           })}
         />
         {errors.numero && (
-          <div className="invalid-feedback">{errors.numero.message}</div>
+          <div className="text-sm text-destructive">
+            {errors.numero.message}
+          </div>
         )}
       </div>
 
       {/* Campo Capacidad */}
       <div className="mb-3">
-        <label htmlFor="capacidad" className="form-label small">
+        <label
+          htmlFor="capacidad"
+          className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm"
+        >
           Capacidad (N° de personas)
         </label>
         <input
           id="capacidad"
           type="number"
-          className={`form-control ${errors.capacidad ? "is-invalid" : ""}`}
+          className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.capacidad ? "border-destructive focus-visible:ring-destructive" : ""}`}
           {...register("capacidad", {
             required: "La capacidad es obligatoria",
             valueAsNumber: true,
@@ -93,20 +101,25 @@ export function FormularioMesa({ onClose, isEdit, dataEdit = null }) {
           })}
         />
         {errors.capacidad && (
-          <div className="invalid-feedback">{errors.capacidad.message}</div>
+          <div className="text-sm text-destructive">
+            {errors.capacidad.message}
+          </div>
         )}
       </div>
 
       {/* Campo Piso */}
       <div className="mb-3">
-        <label htmlFor="piso" className="form-label small">
+        <label
+          htmlFor="piso"
+          className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm"
+        >
           Piso
         </label>
         <input
           id="piso"
           type="number"
           placeholder="Ej: 1, 2"
-          className={`form-control ${errors.piso ? "is-invalid" : ""}`}
+          className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.piso ? "border-destructive focus-visible:ring-destructive" : ""}`}
           {...register("piso", {
             required: "El piso es obligatorio",
             valueAsNumber: true,
@@ -117,20 +130,21 @@ export function FormularioMesa({ onClose, isEdit, dataEdit = null }) {
           })}
         />
         {errors.piso && (
-          <div className="invalid-feedback">{errors.piso.message}</div>
+          <div className="text-sm text-destructive">{errors.piso.message}</div>
         )}
       </div>
 
       <hr className="my-4" />
 
       {/* Botones de acción */}
-      <div className="d-flex justify-content-end gap-2">
+      <div className="flex justify-end gap-2">
         <Button
           type="button"
           className="btn-cerrar-modal"
           onClick={onClose}
           title="Cerrar formulario"
-         variant="default">
+          variant="default"
+        >
           Cancelar
         </Button>
         <Button
@@ -138,7 +152,8 @@ export function FormularioMesa({ onClose, isEdit, dataEdit = null }) {
           className="btn-guardar"
           title={isEditMood ? "Actualizar mesa" : "Guardar mesa"}
           disabled={loadingSave}
-         variant="default">
+          variant="default"
+        >
           {loadingSave ? (
             <span className="load"></span>
           ) : (

@@ -17,7 +17,6 @@ import { BotonMotionGeneral } from "../../components/componentesReutilizables/Bo
 import { Button } from "../../components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
-
 export function ModulosEmpresa({ onClose, dataEmpresa }) {
   // Solo necesitamos el ID para trabajar de forma independiente
   const empresaId = dataEmpresa?.id;
@@ -111,9 +110,11 @@ export function ModulosEmpresa({ onClose, dataEmpresa }) {
   // Render de carga
   if (loadingRoles || loadingEmpresa) {
     return (
-      <div className="d-flex flex-column align-items-center justify-content-center py-5 h-100">
-        <Loader2 className="animate-spin text-dark" size={32} />
-        <span className="mt-2 text-muted small">Sincronizando...</span>
+      <div className="flex flex-col items-center justify-center py-5 h-full">
+        <Loader2 className="animate-spin text-foreground" size={32} />
+        <span className="mt-2 text-muted-foreground text-sm">
+          Sincronizando...
+        </span>
       </div>
     );
   }
@@ -121,14 +122,16 @@ export function ModulosEmpresa({ onClose, dataEmpresa }) {
   return (
     <div className="p-4">
       {/* Header */}
-      <div className="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
+      <div className="flex justify-between items-center mb-4 pb-3 border-b">
         <div>
-          <h5 className="fw-bold  mb-1 d-flex align-items-center gap-2">
+          <h5 className="font-bold mb-1 flex items-center gap-2">
             <Shield size={20} /> Gestión de Módulos
           </h5>
-          <div className="text-muted small">
+          <div className="text-muted-foreground text-sm">
             Empresa:{" "}
-            <span className="fw-bold text-dark">{empresaFresca?.nombre}</span>
+            <span className="font-bold text-foreground">
+              {empresaFresca?.nombre}
+            </span>
           </div>
         </div>
         <Button className="btn-principal" onClick={onClose} variant="default">
@@ -136,36 +139,39 @@ export function ModulosEmpresa({ onClose, dataEmpresa }) {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+      <div className="grid grid-cols-12 gap-4">
         {/* COLUMNA IZQUIERDA: CONTRATADOS */}
-        <div className="md:col-span-7 pe-md-4 border-end">
-          <div className="d-flex align-items-center justify-content-between mb-3">
-            <h6 className="fw-bold text-success mb-0 d-flex align-items-center gap-2">
+        <div className="col-span-full md:col-span-7 md:pe-4 border-r">
+          <div className="flex items-center justify-between mb-3">
+            <h6 className="font-bold text-emerald-600 dark:text-emerald-400 mb-0 flex items-center gap-2">
               <CheckCircle size={16} /> Contratados ({activos.length})
             </h6>
           </div>
 
           {activos.length === 0 ? (
             <Card className="border-0 shadow-sm py-5 text-center">
-              <div className="text-muted opacity-50 mb-2">
+              <div className="text-muted-foreground opacity-50 mb-2">
                 <PackageOpen size={40} className="mx-auto" />
               </div>
-              <small className="text-muted">Sin módulos asignados.</small>
+              <small className="text-muted-foreground">
+                Sin módulos asignados.
+              </small>
             </Card>
           ) : (
-            <div className="d-flex flex-column gap-3">
+            <div className="flex flex-col gap-3">
               {activos.map((rol) => (
                 <Card key={rol.id} className="border">
                   <CardContent className="py-2 px-3">
-                    <div className="d-flex justify-content-between align-items-center mb-2">
-                      <span className="fw-bold text-dark small">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="font-bold text-foreground text-sm">
                         {rol.nombre}
                       </span>
                       <Button
                         className="btn-eliminar p-0"
                         onClick={() => handleDetach(rol.id)}
                         disabled={loadingId === rol.id}
-                       variant="destructive">
+                        variant="destructive"
+                      >
                         {loadingId === rol.id ? (
                           <Loader2 size={14} className="animate-spin" />
                         ) : (
@@ -175,10 +181,10 @@ export function ModulosEmpresa({ onClose, dataEmpresa }) {
                     </div>
 
                     {/* Configuración Pivot */}
-                    <div className="bg-light rounded p-2 d-flex align-items-center gap-3">
-                      <div className="form-check form-switch mb-0 min-h-auto">
+                    <div className="bg-muted rounded p-2 flex items-center gap-3">
+                      <div className="flex items-center gap-2 mb-0 min-h-auto">
                         <input
-                          className="form-check-input"
+                          className="size-4 shrink-0 rounded border-input accent-primary"
                           type="checkbox"
                           role="switch"
                           style={{ width: "2em", height: "1em" }}
@@ -192,7 +198,7 @@ export function ModulosEmpresa({ onClose, dataEmpresa }) {
                           }
                         />
                         <label
-                          className="form-check-label small ms-1"
+                          className="font-medium text-sm ms-1"
                           style={{ fontSize: "0.75rem" }}
                         >
                           {Number(rol.pivot?.estado ?? 1) === 1
@@ -201,11 +207,11 @@ export function ModulosEmpresa({ onClose, dataEmpresa }) {
                         </label>
                       </div>
                       <div className="vr opacity-25"></div>
-                      <div className="d-flex align-items-center gap-1 flex-grow-1">
-                        <Calendar size={12} className="text-muted" />
+                      <div className="flex items-center gap-1 grow">
+                        <Calendar size={12} className="text-muted-foreground" />
                         <input
                           type="date"
-                          className="form-control form-control-sm border-0 bg-transparent p-0"
+                          className="w-full rounded-md border-input shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 h-8 text-xs border-0 bg-transparent p-0"
                           style={{ fontSize: "0.75rem", boxShadow: "none" }}
                           value={rol.pivot?.fecha_expiracion || ""}
                           onChange={(e) =>
@@ -226,13 +232,13 @@ export function ModulosEmpresa({ onClose, dataEmpresa }) {
         </div>
 
         {/* COLUMNA DERECHA: DISPONIBLES */}
-        <div className="md:col-span-5 ps-md-4">
-          <h6 className="fw-bold text-primary mb-3 d-flex align-items-center gap-2">
+        <div className="col-span-full md:col-span-5 md:ps-4">
+          <h6 className="font-bold text-primary mb-3 flex items-center gap-2">
             <PlusCircle size={16} /> Catálogo ({disponibles.length})
           </h6>
 
           <div
-            className="d-flex flex-column gap-2"
+            className="flex flex-col gap-2"
             style={{
               maxHeight: "60vh",
               overflowY: "auto",
@@ -246,18 +252,19 @@ export function ModulosEmpresa({ onClose, dataEmpresa }) {
               >
                 <CardContent className="py-2 px-3 flex justify-between items-center">
                   <span
-                    className="text-dark fw-medium small text-uppercase"
+                    className="font-medium text-sm uppercase"
                     style={{ fontSize: "0.8rem" }}
                   >
                     {rol.nombre}
                   </span>
 
                   <Button
-                    className="btn-principal btn-sm rounded-pill py-0 px-3"
+                    className="btn-principal inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 text-xs rounded-full py-0 px-3"
                     style={{ fontSize: "0.7rem", height: "24px" }}
                     onClick={() => handleAttach(rol.id)}
                     disabled={loadingId === rol.id}
-                   variant="default">
+                    variant="default"
+                  >
                     {loadingId === rol.id ? (
                       <Loader2 size={12} className="animate-spin" />
                     ) : (
@@ -271,7 +278,7 @@ export function ModulosEmpresa({ onClose, dataEmpresa }) {
               </Card>
             ))}
             {disponibles.length === 0 && (
-              <div className="alert alert-success small py-2">
+              <div className="relative w-full rounded-lg px-4 border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 text-sm py-2">
                 ¡Todos asignados!
               </div>
             )}

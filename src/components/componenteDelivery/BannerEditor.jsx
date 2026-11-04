@@ -1,10 +1,9 @@
 import React, { useEffect } from "react";
 import * as LucideIcons from "lucide-react";
 import { useForm } from "react-hook-form";
-import "../../css/estilosDelivery/EstilosBannerEditro.css";
+
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-
 
 const BannerEditor = ({
   initialData,
@@ -106,212 +105,243 @@ const BannerEditor = ({
   };
 
   return (
-    <Card asChild><form className="p-3" onSubmit={handleSubmit(onSubmit)}>
-      <CardHeader className="editor-header">
-        <h3 className="editor-title">
-          {isEditing ? "Editando Banner" : "Editor de Diseño"}
-        </h3>
-        <div className="d-flex gap-2">
-          {presets.map((p) => (
-            <div
-              key={p.name}
-              className="preset-dot"
-              style={{
-                backgroundColor: p.color,
-                cursor: "pointer",
-                border: "2px solid white",
-                boxShadow: "0 0 5px rgba(0,0,0,0.2)",
-              }}
-              onClick={() => applyPreset(p.config)}
-              title={p.name}
+    <Card asChild>
+      <form className="p-3" onSubmit={handleSubmit(onSubmit)}>
+        <CardHeader className="editor-header">
+          <h3 className="editor-title">
+            {isEditing ? "Editando Banner" : "Editor de Diseño"}
+          </h3>
+          <div className="flex gap-2">
+            {presets.map((p) => (
+              <div
+                key={p.name}
+                className="preset-dot"
+                style={{
+                  backgroundColor: p.color,
+                  cursor: "pointer",
+                  border: "2px solid white",
+                  boxShadow: "0 0 5px rgba(0,0,0,0.2)",
+                }}
+                onClick={() => applyPreset(p.config)}
+                title={p.name}
+              />
+            ))}
+          </div>
+        </CardHeader>
+
+        <CardContent className="grid grid-cols-12 gap-3">
+          {/* Información de Contenido */}
+          <div className="col-span-full md:col-span-6">
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+              Etiqueta (Tag)
+            </label>
+            <input
+              type="text"
+              className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+              {...register("tag")}
             />
-          ))}
-        </div>
-      </CardHeader>
+          </div>
 
-      <CardContent className="row g-3">
-        {/* Información de Contenido */}
-        <div className="md:col-span-6">
-          <label className="form-label">Etiqueta (Tag)</label>
-          <input type="text" className="form-control" {...register("tag")} />
-        </div>
+          <div className="col-span-full md:col-span-6">
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+              Título <span className="text-destructive">*</span>
+            </label>
+            <input
+              type="text"
+              className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.title ? "border-destructive focus-visible:ring-destructive" : ""}`}
+              {...register("title", { required: "El título es obligatorio" })}
+            />
+          </div>
 
-        <div className="md:col-span-6">
-          <label className="form-label">
-            Título <span className="text-danger">*</span>
-          </label>
-          <input
-            type="text"
-            className={`form-control ${errors.title ? "is-invalid" : ""}`}
-            {...register("title", { required: "El título es obligatorio" })}
-          />
-        </div>
+          <div className="col-span-full md:col-span-6">
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+              Subtítulo
+            </label>
+            <input
+              type="text"
+              className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+              {...register("subtitle")}
+            />
+          </div>
 
-        <div className="md:col-span-6">
-          <label className="form-label">Subtítulo</label>
-          <input
-            type="text"
-            className="form-control"
-            {...register("subtitle")}
-          />
-        </div>
+          <div className="col-span-full md:col-span-6">
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+              Oferta (Ej: 50% OFF)
+            </label>
+            <input
+              type="text"
+              className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 font-bold"
+              {...register("offer")}
+            />
+          </div>
 
-        <div className="md:col-span-6">
-          <label className="form-label">Oferta (Ej: 50% OFF)</label>
-          <input
-            type="text"
-            className="form-control fw-bold"
-            {...register("offer")}
-          />
-        </div>
+          {/* Estilización */}
+          <div className="col-span-full md:col-span-6">
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+              Tema Base
+            </label>
+            <select
+              className="h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+              {...register("theme")}
+            >
+              <option value="red">Fire Red</option>
+              <option value="black">Night Black</option>
+              <option value="glass">Glass Morphism</option>
+              <option value="custom">Personalizado</option>
+            </select>
+          </div>
 
-        {/* Estilización */}
-        <div className="md:col-span-6">
-          <label className="form-label">Tema Base</label>
-          <select className="form-select" {...register("theme")}>
-            <option value="red">Fire Red</option>
-            <option value="black">Night Black</option>
-            <option value="glass">Glass Morphism</option>
-            <option value="custom">Personalizado</option>
-          </select>
-        </div>
+          <div className="col-span-full md:col-span-6">
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+              Redondez ({formData.border_radius}rem)
+            </label>
+            <input
+              type="range"
+              className="w-full accent-primary"
+              min="0"
+              max="3"
+              step="0.25"
+              {...register("border_radius")}
+            />
+          </div>
 
-        <div className="md:col-span-6">
-          <label className="form-label">
-            Redondez ({formData.border_radius}rem)
-          </label>
-          <input
-            type="range"
-            className="form-range"
-            min="0"
-            max="3"
-            step="0.25"
-            {...register("border_radius")}
-          />
-        </div>
+          <div className="col-span-full md:col-span-6">
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+              Icono
+            </label>
+            <div className="flex gap-2">
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  className="size-4 shrink-0 rounded border-input accent-primary"
+                  {...register("has_icon")}
+                />
+              </div>
+              {formData.has_icon && (
+                <select
+                  className="w-full appearance-auto rounded-md border-input bg-background py-1 shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 h-8 px-2.5 text-xs"
+                  {...register("icon_name")}
+                >
+                  <option value="Flame">Fuego</option>
+                  <option value="Sparkles">Destellos</option>
+                  <option value="Gift">Regalo</option>
+                  <option value="Zap">Rayo</option>
+                </select>
+              )}
+            </div>
+          </div>
 
-        <div className="md:col-span-6">
-          <label className="form-label">Icono</label>
-          <div className="d-flex gap-2">
-            <div className="form-check form-switch">
+          <div className="col-span-full md:col-span-6">
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+              Estado
+            </label>
+            <div className="flex items-center gap-2">
               <input
                 type="checkbox"
-                className="form-check-input"
-                {...register("has_icon")}
+                className="size-4 shrink-0 rounded border-input accent-primary"
+                {...register("is_active")}
               />
+              <span className="text-sm text-muted-foreground">
+                {formData.is_active ? "Activo" : "Inactivo"}
+              </span>
             </div>
-            {formData.has_icon && (
-              <select
-                className="form-select form-select-sm"
-                {...register("icon_name")}
+          </div>
+
+          {/* Colores */}
+          <div className="col-span-full pt-3 border-t">
+            <div className="grid grid-cols-12 gap-3">
+              <div className="col-span-full md:col-span-3">
+                <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm">
+                  Fondo
+                </label>
+                <input
+                  type="color"
+                  className="h-9 rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 form-control-color w-full"
+                  {...register("bg_color")}
+                />
+              </div>
+              <div className="col-span-full md:col-span-3">
+                <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm">
+                  Texto
+                </label>
+                <input
+                  type="color"
+                  className="h-9 rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 form-control-color w-full"
+                  {...register("text_color")}
+                />
+              </div>
+              <div className="col-span-full md:col-span-3">
+                <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm">
+                  Gradiente
+                </label>
+                <div className="flex items-center gap-2 mb-1">
+                  <input
+                    type="checkbox"
+                    className="size-4 shrink-0 rounded border-input accent-primary"
+                    {...register("gradient")}
+                  />
+                </div>
+                {formData.gradient && (
+                  <input
+                    type="color"
+                    className="h-9 rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 form-control-color w-full"
+                    {...register("gradient_color")}
+                  />
+                )}
+              </div>
+              <div className="col-span-full md:col-span-3">
+                <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm">
+                  Aura
+                </label>
+                <div className="flex items-center gap-2 mb-1">
+                  <input
+                    type="checkbox"
+                    className="size-4 shrink-0 rounded border-input accent-primary"
+                    {...register("has_aura")}
+                  />
+                </div>
+                {formData.has_aura && (
+                  <input
+                    type="color"
+                    className="h-9 rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 form-control-color w-full"
+                    {...register("aura_color")}
+                  />
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Acciones */}
+          <div className="col-span-full pt-4 flex gap-2">
+            {isEditing && (
+              <Button
+                type="button"
+                className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-muted text-foreground shadow-sm hover:bg-muted/80 w-1/2 py-3 rounded-lg"
+                onClick={onCancel}
+                variant="default"
               >
-                <option value="Flame">Fuego</option>
-                <option value="Sparkles">Destellos</option>
-                <option value="Gift">Regalo</option>
-                <option value="Zap">Rayo</option>
-              </select>
+                Cancelar
+              </Button>
             )}
-          </div>
-        </div>
-
-        <div className="md:col-span-6">
-          <label className="form-label">Estado</label>
-          <div className="form-check form-switch">
-            <input
-              type="checkbox"
-              className="form-check-input"
-              {...register("is_active")}
-            />
-            <span className="small text-muted">
-              {formData.is_active ? "Activo" : "Inactivo"}
-            </span>
-          </div>
-        </div>
-
-        {/* Colores */}
-        <div className="col-12 pt-3 border-top">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
-            <div className="md:col-span-3">
-              <label className="form-label small">Fondo</label>
-              <input
-                type="color"
-                className="form-control form-control-color w-100"
-                {...register("bg_color")}
-              />
-            </div>
-            <div className="md:col-span-3">
-              <label className="form-label small">Texto</label>
-              <input
-                type="color"
-                className="form-control form-control-color w-100"
-                {...register("text_color")}
-              />
-            </div>
-            <div className="md:col-span-3">
-              <label className="form-label small">Gradiente</label>
-              <div className="form-check form-switch mb-1">
-                <input
-                  type="checkbox"
-                  className="form-check-input"
-                  {...register("gradient")}
-                />
-              </div>
-              {formData.gradient && (
-                <input
-                  type="color"
-                  className="form-control form-control-color w-100"
-                  {...register("gradient_color")}
-                />
-              )}
-            </div>
-            <div className="md:col-span-3">
-              <label className="form-label small">Aura</label>
-              <div className="form-check form-switch mb-1">
-                <input
-                  type="checkbox"
-                  className="form-check-input"
-                  {...register("has_aura")}
-                />
-              </div>
-              {formData.has_aura && (
-                <input
-                  type="color"
-                  className="form-control form-control-color w-100"
-                  {...register("aura_color")}
-                />
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Acciones */}
-        <div className="col-12 pt-4 d-flex gap-2">
-          {isEditing && (
             <Button
-              type="button"
-              className="btn btn-light w-50 py-3 rounded-4"
-              onClick={onCancel}
-             variant="default">
-              Cancelar
+              type="submit"
+              className={`${isEditing ? "btn-activar " : "btn-guardar "} font-bold`}
+              variant="default"
+            >
+              {isEditing ? (
+                <>
+                  <LucideIcons.Save size={18} className="me-2" /> Actualizar
+                </>
+              ) : (
+                <>
+                  <LucideIcons.Plus size={18} className="me-2" /> Guardar Banner
+                </>
+              )}
             </Button>
-          )}
-          <Button
-            type="submit"
-            className={` ${isEditing ? "btn-activar " : "btn-guardar "}   fw-bold`}
-           variant="default">
-            {isEditing ? (
-              <>
-                <LucideIcons.Save size={18} className="me-2" /> Actualizar
-              </>
-            ) : (
-              <>
-                <LucideIcons.Plus size={18} className="me-2" /> Guardar Banner
-              </>
-            )}
-          </Button>
-        </div>
-      </CardContent>
-    </form></Card>
+          </div>
+        </CardContent>
+      </form>
+    </Card>
   );
 };
 

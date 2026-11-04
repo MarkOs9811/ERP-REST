@@ -110,19 +110,27 @@ export function ValidarNomina({ onClose }) {
     return (
       <>
         <div
-          className="modal-body p-0"
+          className="p-0"
           style={{ minHeight: "400px", maxHeight: "80vh", overflowY: "auto" }}
         >
           <div className="text-center p-5">
             {/* HTML para Spinner */}
-            <div className="spinner-border" role="status">
-              <span className="visually-hidden">Cargando...</span>
+            <div
+              className="inline-block size-5 animate-spin rounded-full border-2 border-current border-r-transparent"
+              role="status"
+            >
+              <span className="sr-only">Cargando...</span>
             </div>
             <p className="mt-2">Cargando datos del periodo...</p>
           </div>
         </div>
-        <div className="modal-footer">
-          <Button className="btn-cerrar-modal" onClick={onClose} disabled variant="default">
+        <div className="flex items-center justify-end gap-2 border-t p-4">
+          <Button
+            className="btn-cerrar-modal"
+            onClick={onClose}
+            disabled
+            variant="default"
+          >
             Cancelar
           </Button>
         </div>
@@ -140,21 +148,28 @@ export function ValidarNomina({ onClose }) {
     return (
       <>
         <div
-          className="modal-body p-0"
+          className="p-0"
           style={{ minHeight: "400px", maxHeight: "80vh", overflowY: "auto" }}
         >
           {/* HTML para Alert */}
-          <div className="alert alert-danger m-3" role="alert">
+          <div
+            className="relative w-full rounded-lg px-4 py-3 text-sm border-destructive/30 bg-destructive/10 text-destructive m-3"
+            role="alert"
+          >
             <strong>Error:</strong> {errorMessage}
-            <p className="mb-0 small">
+            <p className="mb-0 text-sm">
               {error.response?.status == 404
                 ? "Asegúrese de que exista un periodo en estado 'Abierto' para validar."
                 : "Verifique su conexión o contacte a soporte."}
             </p>
           </div>
         </div>
-        <div className="modal-footer">
-          <Button className="btn-cerrar-modal" onClick={onClose} variant="default">
+        <div className="flex items-center justify-end gap-2 border-t p-4">
+          <Button
+            className="btn-cerrar-modal"
+            onClick={onClose}
+            variant="default"
+          >
             Cancelar
           </Button>
         </div>
@@ -167,16 +182,23 @@ export function ValidarNomina({ onClose }) {
     return (
       <>
         <div
-          className="modal-body p-0"
+          className="p-0"
           style={{ minHeight: "400px", maxHeight: "80vh", overflowY: "auto" }}
         >
           {/* HTML para Alert */}
-          <div className="alert alert-warning m-3" role="alert">
+          <div
+            className="relative w-full rounded-lg px-4 py-3 text-sm border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-400 m-3"
+            role="alert"
+          >
             No se encontró ningún periodo de nómina activo para validar.
           </div>
         </div>
-        <div className="modal-footer">
-          <Button className="btn-cerrar-modal" onClick={onClose} variant="default">
+        <div className="flex items-center justify-end gap-2 border-t p-4">
+          <Button
+            className="btn-cerrar-modal"
+            onClick={onClose}
+            variant="default"
+          >
             Cancelar
           </Button>
         </div>
@@ -253,10 +275,11 @@ export function ValidarNomina({ onClose }) {
         // HTML <button>
         <Button
           type="button"
-          className="btn btn-outline-danger btn-sm"
+          className="shadow border-destructive bg-background text-destructive hover:bg-destructive/10 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 px-3 text-xs"
           disabled={estaSoloEnVistaPrevia}
           title="Excluir Adelanto"
-         variant="destructive">
+          variant="destructive"
+        >
           <MinusCircle size={16} />
         </Button>
       ),
@@ -296,10 +319,14 @@ export function ValidarNomina({ onClose }) {
       sortable: true,
       cell: (row) =>
         row.estado == 1 ? (
-          <div className="badge bg-success">Realizado</div>
+          <div className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-emerald-600">
+            Realizado
+          </div>
         ) : (
           <>
-            <div className="badge bg-warning">Pendiente</div>
+            <div className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-amber-500">
+              Pendiente
+            </div>
           </>
         ),
     },
@@ -329,31 +356,32 @@ export function ValidarNomina({ onClose }) {
   return (
     <>
       <div
-        className="modal-body p-0 bg-transparent"
+        className="p-0 bg-transparent"
         style={{ minHeight: "400px", maxHeight: "80vh", overflowY: "auto" }}
       >
         {/* 1. SECCIÓN SUPERIOR DE BOTONES */}
         <div
-          className="p-3 border-bottom d-flex justify-content-between align-items-center flex-wrap gap-2"
+          className="p-3 border-b flex justify-between items-center flex-wrap gap-2"
           style={{ backgroundColor: "#f8f9fa" }}
         >
           <div>
             <h5 className="mb-0">
               Periodo a Resolver: <strong>{periodo.nombrePeriodo}</strong>
             </h5>
-            <span className="text-muted small">
+            <span className="text-muted-foreground text-sm">
               {periodo.fecha_inicio} al {periodo.fecha_fin}
             </span>
           </div>
-          <div className="d-flex gap-2">
+          <div className="flex gap-2">
             {estaAbierto && (
               // HTML <button>
               <Button
                 type="button"
-                className="btn btn-dark"
+                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-foreground text-background shadow-sm hover:bg-foreground/90"
                 onClick={handleIniciarValidacion}
                 disabled={iniciando}
-               variant="default">
+                variant="default"
+              >
                 <PlayCircle size={18} className="me-1" />
                 {iniciando ? "Iniciando..." : "Comenzar Validación"}
               </Button>
@@ -362,7 +390,7 @@ export function ValidarNomina({ onClose }) {
               // HTML <button>
               <Button
                 type="button"
-                className="btn btn-success"
+                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-emerald-600 text-white shadow-sm hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600"
                 onClick={handleGenerarPagos}
                 disabled={!confirmadoResuelto || pagando}
                 title={
@@ -370,7 +398,8 @@ export function ValidarNomina({ onClose }) {
                     ? "Debe confirmar que todas las incidencias están resueltas"
                     : "Generar pago final y cerrar periodo"
                 }
-               variant="default">
+                variant="default"
+              >
                 <CheckCircle size={18} className="me-1" />
                 {pagando ? "Procesando..." : "Generar Pagos"}
               </Button>
@@ -381,77 +410,81 @@ export function ValidarNomina({ onClose }) {
         {/* 2. VISTA DE DATOS (Pestañas con HTML + useState) */}
         <div className="p-3">
           {/* Navegación de Pestañas */}
-          <ul
-            className="nav nav-tabs mb-3"
+          <div
+            className="mb-3 flex flex-wrap gap-2 overflow-x-auto border-b"
             id="resolver-nomina-tabs"
             role="tablist"
+            aria-label="Secciones de validación de nómina"
           >
-            <li className="nav-item" role="presentation">
-              <Button
-                className={`nav-link text-dark ${
-                  activeTab === "asistencias" ? "active" : ""
-                }`}
-                onClick={() => setActiveTab("asistencias")}
-                type="button"
-                role="tab"
-               variant="default">
-                <Clock size={16} className="me-1" /> Asistencias (
-                {asistencias.length})
-              </Button>
-            </li>
-            <li className="nav-item" role="presentation">
-              <Button
-                className={`nav-link text-dark ${
-                  activeTab === "adelantos" ? "active" : ""
-                }`}
-                onClick={() => setActiveTab("adelantos")}
-                type="button"
-                role="tab"
-               variant="default">
-                S/. Adelantos ({adelantos.length})
-              </Button>
-            </li>
-            <li className="nav-item" role="presentation">
-              <Button
-                className={`nav-link text-dark ${
-                  activeTab === "horasExtra" ? "active" : ""
-                }`}
-                onClick={() => setActiveTab("horasExtra")}
-                type="button"
-                role="tab"
-               variant="default">
-                <Briefcase size={16} className="me-1" /> Horas Extra (
-                {horasExtra.length})
-              </Button>
-            </li>
-            <li className="nav-item" role="presentation">
-              <Button
-                className={`nav-link text-dark ${
-                  activeTab === "vacaciones" ? "active" : ""
-                }`}
-                onClick={() => setActiveTab("vacaciones")}
-                type="button"
-                role="tab"
-               variant="default">
-                <CalendarCheck size={16} className="me-1" /> Vacaciones (
-                {vacaciones.length})
-              </Button>
-            </li>
-          </ul>
+            <Button
+              variant="ghost"
+              className={`rounded-b-none border-b-2 border-transparent text-foreground ${
+                activeTab === "asistencias" ? "border-primary text-primary" : ""
+              }`}
+              onClick={() => setActiveTab("asistencias")}
+              type="button"
+              role="tab"
+              aria-selected={activeTab === "asistencias"}
+            >
+              <Clock size={16} className="me-1" /> Asistencias (
+              {asistencias.length})
+            </Button>
+            <Button
+              variant="ghost"
+              className={`rounded-b-none border-b-2 border-transparent text-foreground ${
+                activeTab === "adelantos" ? "border-primary text-primary" : ""
+              }`}
+              onClick={() => setActiveTab("adelantos")}
+              type="button"
+              role="tab"
+              aria-selected={activeTab === "adelantos"}
+            >
+              S/. Adelantos ({adelantos.length})
+            </Button>
+            <Button
+              variant="ghost"
+              className={`rounded-b-none border-b-2 border-transparent text-foreground ${
+                activeTab === "horasExtra" ? "border-primary text-primary" : ""
+              }`}
+              onClick={() => setActiveTab("horasExtra")}
+              type="button"
+              role="tab"
+              aria-selected={activeTab === "horasExtra"}
+            >
+              <Briefcase size={16} className="me-1" /> Horas Extra (
+              {horasExtra.length})
+            </Button>
+            <Button
+              variant="ghost"
+              className={`rounded-b-none border-b-2 border-transparent text-foreground ${
+                activeTab === "vacaciones" ? "border-primary text-primary" : ""
+              }`}
+              onClick={() => setActiveTab("vacaciones")}
+              type="button"
+              role="tab"
+              aria-selected={activeTab === "vacaciones"}
+            >
+              <CalendarCheck size={16} className="me-1" /> Vacaciones (
+              {vacaciones.length})
+            </Button>
+          </div>
 
           {/* Contenido de las Pestañas (Renderizado Condicional) */}
           <div className="tab-content" id="resolver-nomina-tabs-content">
             {/* PESTAÑA 1: ASISTENCIAS */}
             {activeTab === "asistencias" && (
-              <div className="py-2 ">
-                <p className="text-muted small">
+              <div className="py-2">
+                <p className="text-muted-foreground text-sm">
                   {estaSoloEnVistaPrevia
                     ? "Revise las incidencias de asistencia. Para editarlas, debe 'Comenzar Validación'."
                     : "Use los controles para marcar faltas, aprobar manualmente, etc."}
                 </p>
 
                 {/* HTML para Alert */}
-                <div className="alert alert-light small" role="alert">
+                <div
+                  className="relative w-full rounded-md border-border bg-muted p-4 text-foreground text-sm"
+                  role="alert"
+                >
                   <strong>Nota:</strong> Esta tabla muestra los{" "}
                   {asistencias.length} registros de asistencia (fichajes)
                   encontrados. El próximo paso será implementar una vista de
@@ -468,9 +501,9 @@ export function ValidarNomina({ onClose }) {
                       style={{ backgroundColor: "#e8f3ff" }}
                     >
                       {/* 2. El form-switch "limpio" (sin 'border', 'p-3', etc.) */}
-                      <div className="form-check form-switch fw-bold">
+                      <div className="flex items-center gap-2 font-bold">
                         <input
-                          className="form-check-input" // Sin márgenes
+                          className="size-4 shrink-0 rounded border-input accent-primary" // Sin márgenes
                           type="checkbox"
                           role="switch"
                           id="confirmar-resolucion-asistencias"
@@ -480,7 +513,7 @@ export function ValidarNomina({ onClose }) {
                           }}
                         />
                         <label
-                          className="form-check-label"
+                          className="text-sm font-medium"
                           htmlFor="confirmar-resolucion-asistencias"
                         >
                           Confirmo que se realizaron las validaciones de todas
@@ -504,7 +537,10 @@ export function ValidarNomina({ onClose }) {
                   </div>
                 ) : (
                   // HTML para Alert
-                  <div className="alert alert-secondary small" role="alert">
+                  <div
+                    className="relative w-full rounded-lg px-4 py-3 border-border bg-muted text-foreground text-sm"
+                    role="alert"
+                  >
                     No se encontraron registros de asistencia para este periodo.
                   </div>
                 )}
@@ -526,7 +562,10 @@ export function ValidarNomina({ onClose }) {
                   </div>
                 ) : (
                   // HTML para Alert
-                  <div className="alert alert-secondary small" role="alert">
+                  <div
+                    className="relative w-full rounded-lg px-4 py-3 border-border bg-muted text-foreground text-sm"
+                    role="alert"
+                  >
                     No hay adelantos registrados para este periodo.
                   </div>
                 )}
@@ -538,7 +577,7 @@ export function ValidarNomina({ onClose }) {
               <div className="py-2">
                 {horasExtra.length > 0 ? (
                   <div
-                    className="border rounded  py-2"
+                    className="border rounded py-2"
                     style={{ backgroundColor: "#f8f9fa" }}
                   >
                     <TablasGenerales
@@ -548,7 +587,10 @@ export function ValidarNomina({ onClose }) {
                   </div>
                 ) : (
                   // HTML para Alert
-                  <div className="alert alert-secondary small" role="alert">
+                  <div
+                    className="relative w-full rounded-lg px-4 py-3 border-border bg-muted text-foreground text-sm"
+                    role="alert"
+                  >
                     No hay horas extra registradas para este periodo.
                   </div>
                 )}
@@ -570,7 +612,10 @@ export function ValidarNomina({ onClose }) {
                   </div>
                 ) : (
                   // HTML para Alert
-                  <div className="alert alert-secondary small" role="alert">
+                  <div
+                    className="relative w-full rounded-lg px-4 py-3 border-border bg-muted text-foreground text-sm"
+                    role="alert"
+                  >
                     No hay vacaciones registradas para este periodo.
                   </div>
                 )}
@@ -581,12 +626,13 @@ export function ValidarNomina({ onClose }) {
       </div>
 
       {/* Footer del Modal (Sin cambios) */}
-      <div className="modal-footer p-3">
+      <div className="flex items-center justify-end gap-2 border-t p-3">
         <Button
           className="btn-cerrar-modal"
           onClick={onClose}
           disabled={iniciando || pagando}
-         variant="default">
+          variant="default"
+        >
           Cancelar
         </Button>
       </div>

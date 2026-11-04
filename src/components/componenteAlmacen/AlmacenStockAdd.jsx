@@ -74,7 +74,7 @@ export function AlmacenStockAdd({
   return (
     <div className="p-3">
       <div
-        className="alert alert-danger d-flex align-items-center"
+        className="relative w-full rounded-lg px-4 py-3 text-sm border-destructive/30 bg-destructive/10 text-destructive flex items-center"
         role="alert"
       >
         <span className="me-2">
@@ -82,7 +82,7 @@ export function AlmacenStockAdd({
         </span>
         La información del documento debe reflejarse aquí. Para agregar un nuevo
         producto, ingrese{" "}
-        <a href="#" className="text-decoration-none">
+        <a href="#" className="no-underline">
           aquí
         </a>
         .
@@ -92,51 +92,63 @@ export function AlmacenStockAdd({
         <div className="mb-3">
           <label
             htmlFor="productoNombre"
-            className="form-label small text-secondary"
+            className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm text-muted-foreground"
           >
             Nombres Producto/activo
           </label>
           <input
             type="text"
             id="productoNombre"
-            className="form-control"
+            className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
             value={producto.nombre}
             readOnly
           />
         </div>
 
         {/* Categoría, Unidad de medida, Proveedor */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-2">
-          <div className="md:col-span-4">
+        <div className="grid grid-cols-12 gap-2">
+          <div className="col-span-full md:col-span-4">
             <label
               htmlFor="productoCategoria"
-              className="form-label small text-secondary"
+              className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm text-muted-foreground"
             >
               Categoría
             </label>
-            <select className="form-select" id="productoCategoria" disabled>
+            <select
+              className="h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+              id="productoCategoria"
+              disabled
+            >
               <option>{producto.categoria.nombre || "Sin categoría"}</option>
             </select>
           </div>
-          <div className="md:col-span-4">
+          <div className="col-span-full md:col-span-4">
             <label
               htmlFor="productoUnidad"
-              className="form-label small text-secondary"
+              className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm text-muted-foreground"
             >
               Unidad de medida
             </label>
-            <select className="form-select" id="productoUnidad" disabled>
+            <select
+              className="h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+              id="productoUnidad"
+              disabled
+            >
               <option>{producto.unidad.nombre || "Sin unidad"}</option>
             </select>
           </div>
-          <div className="md:col-span-4">
+          <div className="col-span-full md:col-span-4">
             <label
               htmlFor="productoProveedor"
-              className="form-label small text-secondary"
+              className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm text-muted-foreground"
             >
               Proveedor
             </label>
-            <select className="form-select" id="productoProveedor" disabled>
+            <select
+              className="h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+              id="productoProveedor"
+              disabled
+            >
               <option>{producto.proveedor.nombre || "Sin proveedor"}</option>
             </select>
           </div>
@@ -146,14 +158,14 @@ export function AlmacenStockAdd({
         <div className="my-3">
           <label
             htmlFor="stockActual"
-            className="form-label small text-secondary"
+            className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm text-muted-foreground"
           >
             Stock actual
           </label>
           <input
             type="number"
             id="stockActual"
-            className="form-control"
+            className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
             value={producto.cantidad}
             readOnly
           />
@@ -163,16 +175,18 @@ export function AlmacenStockAdd({
         <div className="mb-3">
           <label
             htmlFor="nuevaCantidad"
-            className="form-label small text-secondary"
+            className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm text-muted-foreground"
           >
             Cantidad a ingresar
           </label>
-          <div className="input-group">
+          <div className="flex w-full items-stretch">
             <input
               type="number"
               id="nuevaCantidad"
-              className={`form-control ${
-                cantidadError ? "is-invalid" : "input-add-stock"
+              className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+                cantidadError
+                  ? "border-destructive focus-visible:ring-destructive"
+                  : "input-add-stock"
               }`}
               placeholder="Ingrese cantidad ingresada"
               value={cantidad}
@@ -181,7 +195,7 @@ export function AlmacenStockAdd({
               required
             />
             {cantidadError && (
-              <div className="invalid-feedback">
+              <div className="text-sm text-destructive">
                 <i className="fas fa-exclamation-circle"></i> La cantidad
                 ingresada es inválida.
               </div>
@@ -193,12 +207,12 @@ export function AlmacenStockAdd({
         <div className="mb-3">
           <label
             htmlFor="archivoPDF"
-            className="form-label small text-secondary"
+            className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm text-muted-foreground"
           >
             Seleccionar PDF
           </label>
           <input
-            className="form-control"
+            className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
             type="file"
             id="archivoPDF"
             accept="application/pdf"
@@ -209,9 +223,11 @@ export function AlmacenStockAdd({
             })}
             onChange={(e) => setPdfFile(e.target.files[0])}
           />
-          {errors.pdf && <p className="text-danger">{errors.pdf.message}</p>}
+          {errors.pdf && (
+            <p className="text-destructive">{errors.pdf.message}</p>
+          )}
 
-          <small className="text-success">
+          <small className="text-emerald-600 dark:text-emerald-400">
             <i className="fas fa-info-circle"></i> Cargar archivo firmado por
             Administrador/finanzas
           </small>
@@ -220,12 +236,12 @@ export function AlmacenStockAdd({
         <div className="mb-3">
           <label
             htmlFor="archivoFirma"
-            className="form-label small text-secondary"
+            className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm text-muted-foreground"
           >
             Cargar firma
           </label>
           <input
-            className="form-control"
+            className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
             type="file"
             id="archivoFirma"
             accept="image/*"
@@ -237,25 +253,30 @@ export function AlmacenStockAdd({
             onChange={(e) => setImageFile(e.target.files[0])}
           />
           {errors.firma && (
-            <p className="text-danger">{errors.firma.message}</p>
+            <p className="text-destructive">{errors.firma.message}</p>
           )}
 
-          <small className="text-warning">
+          <small className="text-amber-600 dark:text-amber-400">
             <i className="fas fa-exclamation-circle"></i> El archivo cargado no
             debe ser pesado
           </small>
         </div>
 
         {/* Botones */}
-        <div className="d-flex justify-content-end">
+        <div className="flex justify-end">
           <Button
             type="button"
-            className="btn-cerrar-modal me-2 rounded-pill"
+            className="btn-cerrar-modal me-2 rounded-full"
             onClick={handleCloseModal}
-           variant="default">
+            variant="default"
+          >
             <i className="fas fa-times"></i> Cerrar
           </Button>
-          <Button type="submit" className="btn-guardar rounded-pill" variant="default">
+          <Button
+            type="submit"
+            className="btn-guardar rounded-full"
+            variant="default"
+          >
             <i className="fas fa-save"></i> Firmar y actualizar
           </Button>
         </div>

@@ -2,7 +2,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { GetLibroMayor } from "../../service/serviceFinanzas/GetLibroMayor";
 import { CardCuentaContable } from "../../components/componentesFinanzas/CardCuentasContables";
 import { CardResultadoEjercicio } from "../../components/componentesFinanzas/CardResultadoEjercicio";
-import "../../css/EstilosFinanzas.css";
+
 import {
   BookText,
   ClipboardType,
@@ -15,7 +15,6 @@ import { useState } from "react";
 import ModalAlertQuestion from "../../components/componenteToast/ModalAlertQuestion";
 import { Button } from "../../components/ui/button";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
-
 
 export function LibroMayor() {
   const queryClient = useQueryClient();
@@ -71,8 +70,8 @@ export function LibroMayor() {
 
   return (
     <div>
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
-        <div className="md:col-span-12">
+      <div className="grid grid-cols-12 gap-3">
+        <div className="col-span-full md:col-span-12">
           <Card className="">
             <CardHeader className="p-3 border-0 flex items-center">
               <BookText
@@ -80,16 +79,14 @@ export function LibroMayor() {
                 height="45px"
                 width="45px"
               />
-              <CardTitle asChild><p className="h4 ms-2 mb-0">Libro Mayor</p></CardTitle>
-              <div className="d-flex ms-auto">
+              <CardTitle asChild>
+                <p className="h4 ms-2 mb-0">Libro Mayor</p>
+              </CardTitle>
+              <div className="flex ms-auto">
                 <Button
-                  className="btn ms-auto mx-2 d-flex align-items-center p-2"
-                  style={{
-                    border: "1px solid var(--fw-border)",
-                    backgroundColor: "var(--bg-card)",
-                    color: "var(--text-main)",
-                  }}
-                 variant="default">
+                  className="mx-2 flex items-center justify-center gap-2 p-2"
+                  variant="ghostOutline"
+                >
                   <ClipboardType className={"mx-2"} />
                   Generar Reporte
                 </Button>
@@ -98,22 +95,22 @@ export function LibroMayor() {
           </Card>
         </div>
 
-        <div className="md:col-span-12">
+        <div className="col-span-full md:col-span-12">
           <Card className="p-2">
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-3 p-2">
-              <div className="md:col-span-4">
+            <div className="grid grid-cols-12 gap-3 p-2">
+              <div className="col-span-full md:col-span-4">
                 <div className="fw-libro-resumen-card">
                   <small>Total Debitos</small>
                   <h4>S/. {totalDebitos.toFixed(2)}</h4>
                 </div>
               </div>
-              <div className="md:col-span-4">
+              <div className="col-span-full md:col-span-4">
                 <div className="fw-libro-resumen-card">
                   <small>Total Creditos</small>
                   <h4>S/. {totalCreditos.toFixed(2)}</h4>
                 </div>
               </div>
-              <div className="md:col-span-4">
+              <div className="col-span-full md:col-span-4">
                 <div className="fw-libro-resumen-card fw-libro-balance-card">
                   <small>Balance</small>
                   <h4>S/. {balance.toFixed(2)}</h4>
@@ -123,42 +120,45 @@ export function LibroMayor() {
           </Card>
         </div>
 
-        <div className="md:col-span-12">
+        <div className="col-span-full md:col-span-12">
           <CardResultadoEjercicio
             registroEjercicio={registroEjercicio}
             resultado={resultado}
           />
         </div>
 
-        <div className="md:col-span-12">
-          <Card className="py-2 border-0 p-2">
-            <div className="d-flex justify-content-between align-items-center p-3">
+        <div className="col-span-full md:col-span-12">
+          <Card className="border-0 p-2">
+            <div className="flex justify-between items-center p-3">
               <h5 className="mb-0">Cuentas Contables</h5>
-              <div className="d-flex" role="group">
+              <div className="flex" role="group">
                 <Button
-                  className="btn p-2 d-flex align-items-center mx-1"
+                  className="justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 p-2 flex items-center mx-1"
                   style={{ fontSize: "1rem" }}
                   onClick={() => setModalQuestion(true)}
                   disabled={loadingCierre}
-                 variant="default">
+                  variant="default"
+                >
                   {loadingCierre ? (
-                    <span className="spinner-border spinner-border-sm me-2"></span>
+                    <span className="inline-block animate-spin rounded-full border-current border-r-transparent size-4 me-2"></span>
                   ) : (
                     <ClipboardTypeIcon className={"mx-2"} />
                   )}
                   {loadingCierre ? "Calculando..." : "Balance y Cierre"}
                 </Button>
                 <Button
-                  className="btn p-2 d-flex align-items-center mx-1"
+                  className="justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 p-2 flex items-center mx-1"
                   style={{ fontSize: "1rem" }}
-                 variant="default">
+                  variant="default"
+                >
                   <ExternalLink className={"mx-2"} />
                   Aperturar Cuentas
                 </Button>
                 <Button
-                  className="btn p-2 d-flex align-items-center mx-1"
+                  className="justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 p-2 flex items-center mx-1"
                   style={{ fontSize: "1.2rem" }}
-                 variant="default">
+                  variant="default"
+                >
                   <ExternalLinkIcon />
                 </Button>
               </div>
@@ -183,7 +183,7 @@ export function LibroMayor() {
             )}
 
             {!isLoading && !isError && !sinMovimientos && (
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-4gap-3 p-3 ">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-4gap-3 p-3">
                 {Object.entries(movimientos).map(([nombreCuenta, items]) => (
                   <CardCuentaContable
                     key={nombreCuenta}

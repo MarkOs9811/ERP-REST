@@ -62,7 +62,7 @@ export function FlujoCaja({ modoVista = "total", selectedMonth = "" }) {
 
   if (isLoading) {
     return (
-      <div className="p-3 text-center text-muted">
+      <div className="p-3 text-center text-muted-foreground">
         Cargando flujo de caja...
       </div>
     );
@@ -70,7 +70,7 @@ export function FlujoCaja({ modoVista = "total", selectedMonth = "" }) {
 
   return (
     <CardContent className="p-3">
-      <table className="w-100 table-borderless table-hover table-sm">
+      <table className="w-full [&_th]:border-0 [&_td]:border-0 [&_tbody_tr:hover]:bg-muted/50 text-xs">
         <thead>
           <tr>
             <th className="p-2">Tipo</th>
@@ -83,7 +83,7 @@ export function FlujoCaja({ modoVista = "total", selectedMonth = "" }) {
           {isError && (
             <tr>
               <td colSpan={4} className="p-3">
-                <div className="fw-flow-error-box text-danger">
+                <div className="fw-flow-error-box text-destructive">
                   Error al cargar los datos:
                   <pre className="mb-0">{JSON.stringify(error, null, 2)}</pre>
                 </div>
@@ -94,7 +94,7 @@ export function FlujoCaja({ modoVista = "total", selectedMonth = "" }) {
           {sinDatosMensuales && !isError && (
             <tr>
               <td colSpan={4} className="p-2">
-                <div className="fw-flow-empty-month text-muted fst-italic">
+                <div className="fw-flow-empty-month text-muted-foreground italic">
                   No hay datos registrados para el mes seleccionado.
                 </div>
               </td>
@@ -103,7 +103,7 @@ export function FlujoCaja({ modoVista = "total", selectedMonth = "" }) {
 
           {/* Operativo */}
           <tr className="fw-flow-subtitle-row">
-            <td className="fw-bold p-2 fw-flow-subtitle-text" colSpan={4}>
+            <td className="font-bold p-2 fw-flow-subtitle-text" colSpan={4}>
               Flujo de Caja Operativo
             </td>
           </tr>
@@ -111,7 +111,7 @@ export function FlujoCaja({ modoVista = "total", selectedMonth = "" }) {
             <td className="p-2">Ventas Contado</td>
             <td>{flujoCaja.ventasContado.toFixed(2)}</td>
             <td>0.00</td>
-            <td className="fw-flow-positive text-success text-center">
+            <td className="fw-flow-positive text-emerald-600 dark:text-emerald-400 text-center">
               {flujoCaja.ventasContado.toFixed(2)}
             </td>
           </tr>
@@ -119,7 +119,7 @@ export function FlujoCaja({ modoVista = "total", selectedMonth = "" }) {
             <td className="p-2">Ventas Crédito Cobradas</td>
             <td>{flujoCaja.ventasCreditoCobradas.toFixed(2)}</td>
             <td>0.00</td>
-            <td className="fw-flow-positive text-success text-center">
+            <td className="fw-flow-positive text-emerald-600 dark:text-emerald-400 text-center">
               {flujoCaja.ventasCreditoCobradas.toFixed(2)}
             </td>
           </tr>
@@ -127,7 +127,7 @@ export function FlujoCaja({ modoVista = "total", selectedMonth = "" }) {
             <td className="p-2">Compras Contado</td>
             <td>0.00</td>
             <td>{flujoCaja.comprasContado.toFixed(2)}</td>
-            <td className="fw-flow-negative text-danger text-center">
+            <td className="fw-flow-negative text-destructive text-center">
               -{flujoCaja.comprasContado.toFixed(2)}
             </td>
           </tr>
@@ -135,7 +135,7 @@ export function FlujoCaja({ modoVista = "total", selectedMonth = "" }) {
             <td className="p-2">Compras Crédito Pagadas</td>
             <td>0.00</td>
             <td>{flujoCaja.comprasCreditoPagadas.toFixed(2)}</td>
-            <td className="fw-flow-negative text-danger text-center">
+            <td className="fw-flow-negative text-destructive text-center">
               -{flujoCaja.comprasCreditoPagadas.toFixed(2)}
             </td>
           </tr>
@@ -143,14 +143,14 @@ export function FlujoCaja({ modoVista = "total", selectedMonth = "" }) {
             <td className="p-2">Pagos al Personal</td>
             <td>0.00</td>
             <td>{flujoCaja.pagosPersonal.toFixed(2)}</td>
-            <td className="fw-flow-negative text-danger text-center">
+            <td className="fw-flow-negative text-destructive text-center">
               -{flujoCaja.pagosPersonal.toFixed(2)}
             </td>
           </tr>
 
           {/* Inversión y Financiamiento */}
           <tr className="fw-flow-subtitle-row p-2">
-            <td className="fw-bold p-2 fw-flow-subtitle-text" colSpan={4}>
+            <td className="font-bold p-2 fw-flow-subtitle-text" colSpan={4}>
               Flujo de Caja de Inversión y Financiamiento
             </td>
           </tr>
@@ -158,7 +158,7 @@ export function FlujoCaja({ modoVista = "total", selectedMonth = "" }) {
             <td className="p-2">Inversiones en Activos</td>
             <td>{flujoCaja.inversionesActivos.toFixed(2)}</td>
             <td>0.00</td>
-            <td className="fw-flow-positive text-success text-center">
+            <td className="fw-flow-positive text-emerald-600 dark:text-emerald-400 text-center">
               {flujoCaja.inversionesActivos.toFixed(2)}
             </td>
           </tr>
@@ -166,7 +166,7 @@ export function FlujoCaja({ modoVista = "total", selectedMonth = "" }) {
             <td className="p-2">Préstamos Recibidos</td>
             <td>{flujoCaja.prestamosRecibidos.toFixed(2)}</td>
             <td>0.00</td>
-            <td className="fw-flow-positive text-success text-center">
+            <td className="fw-flow-positive text-emerald-600 dark:text-emerald-400 text-center">
               {flujoCaja.prestamosRecibidos.toFixed(2)}
             </td>
           </tr>
@@ -174,17 +174,17 @@ export function FlujoCaja({ modoVista = "total", selectedMonth = "" }) {
             <td className="p-2">Pago de Deudas</td>
             <td>0.00</td>
             <td>{flujoCaja.pagoDeudas.toFixed(2)}</td>
-            <td className="fw-flow-negative text-danger text-center">
+            <td className="fw-flow-negative text-destructive text-center">
               -{flujoCaja.pagoDeudas.toFixed(2)}
             </td>
           </tr>
         </tbody>
         <tfoot>
-          <tr className="fw-flow-total-row border-top">
+          <tr className="fw-flow-total-row border-t">
             <th className="p-2 fw-flow-subtitle-text">{labelPeriodo}</th>
             <td></td>
             <td></td>
-            <td className="fw-bold fw-flow-total-value text-center fs-5">
+            <td className="font-bold fw-flow-total-value text-center text-lg">
               S/. {totalGeneral.toFixed(2)}
             </td>
           </tr>

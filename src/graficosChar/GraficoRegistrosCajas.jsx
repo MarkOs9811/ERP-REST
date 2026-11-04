@@ -81,7 +81,7 @@ export function GraficoRegistrosCajas() {
         </>
       )}
       {errorRegistrosCajas && (
-        <div className="text-danger">
+        <div className="text-destructive">
           Error al cargar los registros de cajas: {errorRegistrosCajas.message}
         </div>
       )}

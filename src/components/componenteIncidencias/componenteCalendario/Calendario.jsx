@@ -7,8 +7,8 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import esLocale from "@fullcalendar/core/locales/es";
 import tippy from "tippy.js";
-import "tippy.js/dist/tippy.css";
-import "../../../css/EstilosCalendario.css";
+
+
 import {
   BellRing,
   CalendarDays,

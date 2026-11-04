@@ -58,13 +58,13 @@ export function ReporteIngresoVentas() {
   };
   return (
     <div className="p-0 m-0">
-      <div className="container-fluid bg-light p-4">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
-          <div className="md:col-span-12 d-flex justify-content-auto ms-auto">
+      <div className="w-full bg-muted p-4">
+        <div className="grid grid-cols-12 gap-3">
+          <div className="col-span-full md:col-span-12 flex justify-between ms-auto">
             <div className="">
               <h5>Reporte</h5>
             </div>
-            <div className="d-flex ms-auto gap-3">
+            <div className="flex ms-auto gap-3">
               <BotonMotionGeneral
                 text={loading ? "Generando..." : "Generar Reporte"}
                 icon={
@@ -92,18 +92,18 @@ export function ReporteIngresoVentas() {
         <div
           ref={reporteRef}
           id="reporte-ingresos-ventas"
-          className="grid grid-cols-1 md:grid-cols-12 gap-3"
+          className="grid grid-cols-12 gap-3"
         >
-          <div className="md:col-span-12 d-flex gap-3">
-            <div className="md:col-span-3">
+          <div className="col-span-full md:col-span-12 flex gap-3">
+            <div className="col-span-full md:col-span-3">
               <Card className="h-full">
-                <CardHeader className="my-2 flex gap-2 align-middle justify-content-left">
-                  <span className="alert border-0 alert-success text-success p-2 mb-0">
+                <CardHeader className="my-2 flex gap-2 align-middle justify-start">
+                  <span className="relative w-full rounded-lg text-sm border-0 border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 p-2 mb-0">
                     <TrendingUp size={25} />
                   </span>
-                  <h6 className="mb-1 d-flex flex-column gap-1">
-                    <span className="fw-bold">Total de ingresos</span>
-                    <p className="text-muted small mb-0"></p>
+                  <h6 className="mb-1 flex flex-col gap-1">
+                    <span className="font-bold">Total de ingresos</span>
+                    <p className="text-muted-foreground text-sm mb-0"></p>
                   </h6>
                 </CardHeader>
                 <CardContent className="p-2">
@@ -113,15 +113,15 @@ export function ReporteIngresoVentas() {
                 </CardContent>
               </Card>
             </div>
-            <div className="md:col-span-3">
+            <div className="col-span-full md:col-span-3">
               <Card className="">
-                <CardHeader className="my-2 flex gap-2 align-middle justify-content-left">
-                  <span className="alert border-0 alert-danger text-danger p-2 mb-0">
+                <CardHeader className="my-2 flex gap-2 align-middle justify-start">
+                  <span className="relative w-full rounded-lg text-sm border-0 border-destructive/30 bg-destructive/10 text-destructive p-2 mb-0">
                     <TrendingDown size={25} />
                   </span>
-                  <h6 className="mb-1 d-flex flex-column gap-1">
-                    <span className="fw-bold">Total de egresos</span>
-                    <p className="text-muted small mb-0"></p>
+                  <h6 className="mb-1 flex flex-col gap-1">
+                    <span className="font-bold">Total de egresos</span>
+                    <p className="text-muted-foreground text-sm mb-0"></p>
                   </h6>
                 </CardHeader>
                 <CardContent className="p-2">
@@ -130,37 +130,37 @@ export function ReporteIngresoVentas() {
               </Card>
             </div>
           </div>
-          <div className="md:col-span-12">
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
-              <div className="md:col-span-4">
+          <div className="col-span-full md:col-span-12">
+            <div className="grid grid-cols-12 gap-3">
+              <div className="col-span-full md:col-span-4">
                 <Card className="h-full rounded">
                   <GraficoCuentasPorCobrar />
 
                   <div
-                    className="grid grid-cols-1 md:grid-cols-12 gap-4w-100 g-3 mx-auto justify-content-center align-items-center m-0"
+                    className="grid grid-cols-12 w-full gap-3 justify-center items-center m-0"
                     style={{ minHeight: "120px" }}
                   >
-                    <div className="md:col-span-6 d-flex justify-content-center align-items-center">
+                    <div className="col-span-full md:col-span-6 flex justify-center items-center">
                       <Card className="border w-full">
                         <CardContent
                           className="flex flex-col justify-center items-center"
                           style={{ minHeight: "80px" }}
                         >
                           <small>Deudas Cobrados</small>
-                          <p className="text-center mb-0 text-primary  h4">
+                          <p className="text-center mb-0 text-primary h4">
                             S/. {montoPagado.toFixed(2)}
                           </p>
                         </CardContent>
                       </Card>
                     </div>
-                    <div className="md:col-span-6 d-flex justify-content-center align-items-center">
+                    <div className="col-span-full md:col-span-6 flex justify-center items-center">
                       <Card className="border w-full">
                         <CardContent
                           className="flex flex-col justify-center items-center"
                           style={{ minHeight: "80px" }}
                         >
                           <small>Total Prestamos</small>
-                          <p className="text-center mb-0 text-dark h4">
+                          <p className="text-center mb-0 text-foreground h4">
                             S/. {montoRestante.toFixed(2)}
                           </p>
                         </CardContent>
@@ -169,12 +169,12 @@ export function ReporteIngresoVentas() {
                   </div>
                 </Card>
               </div>
-              <div className="md:col-span-4">
+              <div className="col-span-full md:col-span-4">
                 <Card className="h-full rounded">
                   <GraficoMetodoPago />
                 </Card>
               </div>
-              <div className="md:col-span-4">
+              <div className="col-span-full md:col-span-4">
                 <Card className="h-full rounded p-3">
                   <PlatoMasVendido />
                 </Card>

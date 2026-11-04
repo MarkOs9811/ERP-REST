@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
@@ -27,11 +27,11 @@ export const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // Estados para alternar vistas
-  const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [badgeMessage, setBadgeMessage] = useState({ type: "", text: "" });
 
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const isForgotPassword = searchParams.get("recuperar") === "1";
   const dispatch = useDispatch();
 
   const {
@@ -47,8 +47,7 @@ export const Login = () => {
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
-  const toggleView = (showForgot) => {
-    setIsForgotPassword(showForgot);
+  const resetFormForViewChange = () => {
     setBadgeMessage({ type: "", text: "" });
     reset();
     clearErrors();
@@ -58,7 +57,8 @@ export const Login = () => {
   const onSubmitLogin = async (data) => {
     setLoading(true);
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/login", {
+      const response = await axios.post("http://erp-api.test/api/login", {
+        // const response = await axios.post("http://127.0.0.1:8000/api/login", {
         email: data.email,
         password: data.password,
       });
@@ -150,7 +150,7 @@ export const Login = () => {
       <div className="w-full max-w-4xl">
         <Card className="flex w-full flex-col overflow-hidden rounded-xl border-zinc-200 shadow-sm md:flex-row md:h-137.5 p-0">
           {/* COLUMNA IZQUIERDA: FORMULARIOS */}
-          <div className="flex w-full flex-col justify-center bg-white p-8 md:w-1/2 md:p-12">
+          <div className="flex w-full flex-col justify-center bg-background p-8 md:w-1/2 md:p-12">
             {!isForgotPassword ? (
               /* --- FORMULARIO DE LOGIN --- */
               <form
@@ -158,7 +158,7 @@ export const Login = () => {
                 className="mx-auto flex w-full max-w-90 flex-col justify-center space-y-6"
               >
                 <div className="flex flex-col space-y-2 text-center mb-2">
-                  <h3 className="text-3xl  font-semibold tracking-tight">
+                  <h3 className="text-3xl font-semibold tracking-tight">
                     ¡Te damos la bienvenida!
                   </h3>
                   <p className="text-sm text-zinc-500">
@@ -196,13 +196,13 @@ export const Login = () => {
                       >
                         Contraseña
                       </Label>
-                      <Button
-                        type="button"
-                        onClick={() => toggleView(true)}
-                        className="text-xs font-medium text-zinc-900 underline-offset-4 hover:underline"
-                       variant="default">
+                      <Link
+                        to="/login?recuperar=1"
+                        onClick={resetFormForViewChange}
+                        className="rounded-sm text-xs font-medium text-zinc-700 underline-offset-4 transition-colors hover:text-zinc-950 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      >
                         ¿Olvidaste tu contraseña?
-                      </Button>
+                      </Link>
                     </div>
                     <div className="relative">
                       <Input
@@ -217,7 +217,8 @@ export const Login = () => {
                         type="button"
                         onClick={togglePasswordVisibility}
                         className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 focus:outline-none"
-                       variant="default">
+                       variant="default"
+                       >
                         <FontAwesomeIcon
                           icon={showPassword ? faEyeSlash : faEye}
                           className="text-xs"
@@ -253,7 +254,8 @@ export const Login = () => {
                   type="submit"
                   disabled={loading}
                   className="w-full bg-black rounded text-white hover:bg-zinc-800 h-9"
-                 variant="default">
+                 variant="default"
+                 >
                   {loading ? <Cargando textColor="white" /> : "Iniciar sesión"}
                 </Button>
               </form>
@@ -321,18 +323,19 @@ export const Login = () => {
                   type="submit"
                   disabled={loading}
                   className="w-full bg-black text-white hover:bg-zinc-800 h-9"
-                 variant="default">
+                 variant="default"
+                 >
                   {loading ? <Cargando textColor="white" /> : "Enviar enlace"}
                 </Button>
 
                 <div className="text-center text-sm">
-                  <Button
-                    type="button"
-                    onClick={() => toggleView(false)}
-                    className="text-zinc-500 underline underline-offset-4 hover:text-zinc-900"
-                   variant="default">
+                  <Link
+                    to="/login"
+                    onClick={resetFormForViewChange}
+                    className="rounded-sm text-sm font-medium text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  >
                     Volver a iniciar sesión
-                  </Button>
+                  </Link>
                 </div>
               </form>
             )}

@@ -50,10 +50,12 @@ export function AddCargo({
     <form onSubmit={onSubmit} className="p-3" noValidate>
       {/* Nombre */}
       <div className="mb-3">
-        <label className="form-label">Nombre del Cargo</label>
+        <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+          Nombre del Cargo
+        </label>
         <input
           type="text"
-          className={`form-control ${errors.nombre ? "is-invalid" : ""}`}
+          className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.nombre ? "border-destructive focus-visible:ring-destructive" : ""}`}
           {...register("nombre", {
             required: "Este campo es obligatorio",
             pattern: {
@@ -63,16 +65,20 @@ export function AddCargo({
           })}
         />
         {errors.nombre && (
-          <div className="invalid-feedback">{errors.nombre.message}</div>
+          <div className="text-sm text-destructive">
+            {errors.nombre.message}
+          </div>
         )}
       </div>
 
       {/* Salario */}
       <div className="mb-3">
-        <label className="form-label">Salario</label>
+        <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+          Salario
+        </label>
         <input
           type="text"
-          className={`form-control ${errors.salario ? "is-invalid" : ""}`}
+          className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.salario ? "border-destructive focus-visible:ring-destructive" : ""}`}
           {...register("salario", {
             required: "El salario es obligatorio",
             validate: validatePrecio,
@@ -80,16 +86,20 @@ export function AddCargo({
           onInput={handlePrecioInput}
         />
         {errors.salario && (
-          <div className="invalid-feedback">{errors.salario.message}</div>
+          <div className="text-sm text-destructive">
+            {errors.salario.message}
+          </div>
         )}
       </div>
 
       {/* Pago por Hora */}
       <div className="mb-3">
-        <label className="form-label">Pago por Hora</label>
+        <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+          Pago por Hora
+        </label>
         <input
           type="text"
-          className={`form-control ${errors.pagoPorHoras ? "is-invalid" : ""}`}
+          className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.pagoPorHoras ? "border-destructive focus-visible:ring-destructive" : ""}`}
           {...register("pagoPorHoras", {
             required: "El pago por hora es obligatorio",
             validate: validatePrecio,
@@ -98,24 +108,28 @@ export function AddCargo({
           readOnly
         />
         {errors.pagoPorHoras && (
-          <div className="invalid-feedback">{errors.pagoPorHoras.message}</div>
+          <div className="text-sm text-destructive">
+            {errors.pagoPorHoras.message}
+          </div>
         )}
       </div>
       {/* Roles */}
-      <div className="mb-3 p-3 border rounded">
-        <label className="form-label">Selecciona los Roles</label>
-        <div className="alert alert-dark d-flex flex-column">
+      <div className="mb-3 p-3 rounded">
+        <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+          Selecciona los Roles
+        </label>
+        <div className="relative w-full text-sm rounded-md border-border bg-secondary p-4 text-secondary-foreground flex flex-col">
           <small>Recuerde que no todos los modulos estan disponibles.</small>
           <small>Están sujetos al plan de su empresa.</small>
         </div>
 
         {roles.map((role) => (
-          <div className="form-check" key={role.id}>
+          <div className="flex items-center gap-2" key={role.id}>
             <input
               type="checkbox"
               id={`role-${role.id}`}
               value={role.id}
-              className="form-check-input "
+              className="size-4 shrink-0 rounded border-input accent-primary"
               {...register("rolerCar", {
                 validate: (value) =>
                   (value && value.length > 0) ||
@@ -123,7 +137,7 @@ export function AddCargo({
               })}
             />
             <label
-              className="form-check-label mx-2"
+              className="text-sm font-medium mx-2"
               htmlFor={`role-${role.id}`}
             >
               {role.nombre}
@@ -131,7 +145,7 @@ export function AddCargo({
           </div>
         ))}
         {errors.rolerCar && (
-          <div className="invalid-feedback d-block">
+          <div className="text-sm text-destructive block">
             {errors.rolerCar.message}
           </div>
         )}

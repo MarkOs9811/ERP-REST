@@ -91,7 +91,7 @@ export function KardexList({ search }) {
         const isEntrada = row.tipo_movimiento.toLowerCase() === "entrada";
 
         return (
-          <div className="d-flex align-items-center justify-content-center">
+          <div className="flex items-center justify-center">
             {isEntrada ? (
               <span className="kardex-chip-tipo kardex-chip-tipo-entrada">
                 <ArrowUpRight size={16} /> Entrada
@@ -124,7 +124,7 @@ export function KardexList({ search }) {
       grow: 1,
       cell: (row) => {
         return (
-          <p className="mb-0 fw-bold kardex-numeric-chip">{row.cantidad}</p>
+          <p className="mb-0 font-bold kardex-numeric-chip">{row.cantidad}</p>
         );
       },
       sortable: true,
@@ -136,7 +136,7 @@ export function KardexList({ search }) {
       grow: 1,
       cell: (row) => {
         return (
-          <p className="mb-0 fw-bold kardex-numeric-chip">
+          <p className="mb-0 font-bold kardex-numeric-chip">
             {row.stock_anterior}
           </p>
         );
@@ -149,7 +149,7 @@ export function KardexList({ search }) {
       grow: 1,
       cell: (row) => {
         return (
-          <p className="mb-0 fw-bold kardex-numeric-chip">{row.stock_actual}</p>
+          <p className="mb-0 font-bold kardex-numeric-chip">{row.stock_actual}</p>
         );
       },
       center: true,
@@ -160,7 +160,7 @@ export function KardexList({ search }) {
       grow: 1,
       cell: (row) => {
         return (
-          <div className="w-100 d-flex align-items-center justify-content-center kardex-fecha-cell">
+          <div className="w-full flex items-center justify-center kardex-fecha-cell">
             <CalendarDays size={16} />
             <p className="mx-1 mb-0">{row.fecha_movimiento}</p>
           </div>
@@ -173,12 +173,12 @@ export function KardexList({ search }) {
       grow: 1,
       cell: (row) => {
         return (
-          <div className="w-100 d-flex align-items-center justify-content-center">
+          <div className="w-full flex items-center justify-center">
             <a
               href={row.kardex_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn btn-ver kardex-detalle-btn"
+              className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 btn-ver kardex-detalle-btn"
               title="Ver detalle del documento"
             >
               <FileText size={16} />

@@ -14,7 +14,6 @@ import { useGenerarReporte } from "../../../hooks/GenerarPdfReporte";
 import { GraficoRegistrosCajas } from "../../../graficosChar/GraficoRegistrosCajas";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
-
 export function ReporteCaja() {
   const { data: registrosCajasData = [] } = useQuery({
     queryKey: ["registrosCajas"],
@@ -73,17 +72,17 @@ export function ReporteCaja() {
 
   return (
     <div className="p-4">
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-3">
+      <div className="grid grid-cols-12 gap-3 mb-3">
         {/* Botón de reporte */}
-        <div className="md:col-span-12 d-flex justify-content-auto ms-auto">
+        <div className="col-span-full md:col-span-12 flex justify-between ms-auto">
           <div>
             <h5>Reporte de Caja</h5>
-            <span className="text-muted small">
+            <span className="text-muted-foreground text-sm">
               Revisa los movimientos de caja, ingresos y salidas por turno o
               usuario responsable.
             </span>
           </div>
-          <div className="d-flex ms-auto gap-3">
+          <div className="flex ms-auto gap-3">
             <BotonMotionGeneral
               text={loading ? "Generando..." : "Generar Reporte"}
               icon={
@@ -103,47 +102,47 @@ export function ReporteCaja() {
       </div>
       <div ref={reporteRef}>
         {/* Resumen general */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-3">
-          <div className="md:col-span-4">
+        <div className="grid grid-cols-12 gap-3 mb-3">
+          <div className="col-span-full md:col-span-4">
             <Card className="rounded-xl p-3 h-full">
-              <div className="d-flex align-items-center gap-2 mb-2">
+              <div className="flex items-center gap-2 mb-2">
                 <ArrowUpCircle className="" size={28} />
-                <span className="fw-bold ">Ingresos Totales</span>
+                <span className="font-bold">Ingresos Totales</span>
               </div>
-              <h4 className="fw-bold  mb-0">S/ {totalIngresos.toFixed(2)}</h4>
+              <h4 className="font-bold mb-0">S/ {totalIngresos.toFixed(2)}</h4>
             </Card>
           </div>
-          <div className="md:col-span-4">
+          <div className="col-span-full md:col-span-4">
             <Card className="rounded-xl p-3 h-full">
-              <div className="d-flex align-items-center gap-2 mb-2">
+              <div className="flex items-center gap-2 mb-2">
                 <ArrowDownCircle className="" size={28} />
-                <span className="fw-bold ">Salidas Totales</span>
+                <span className="font-bold">Salidas Totales</span>
               </div>
-              <h4 className="fw-bold  mb-0">S/ {totalSalidas.toFixed(2)}</h4>
+              <h4 className="font-bold mb-0">S/ {totalSalidas.toFixed(2)}</h4>
             </Card>
           </div>
-          <div className="md:col-span-4">
+          <div className="col-span-full md:col-span-4">
             <Card className="rounded-xl p-3 h-full">
-              <div className="d-flex align-items-center gap-2 mb-2">
-                <span className="fw-bold">S/.</span>
-                <span className="fw-bold ">Neto Vendido</span>
+              <div className="flex items-center gap-2 mb-2">
+                <span className="font-bold">S/.</span>
+                <span className="font-bold">Neto Vendido</span>
               </div>
-              <h4 className="fw-bold  mb-0">S/ {totalNeto.toFixed(2)}</h4>
+              <h4 className="font-bold mb-0">S/ {totalNeto.toFixed(2)}</h4>
             </Card>
           </div>
         </div>
 
         {/* Gráfico de ventas por caja */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
-          <div className="md:col-span-12">
+        <div className="grid grid-cols-12 gap-3">
+          <div className="col-span-full md:col-span-12">
             <Card className="p-3 shadow-sm">
-              <CardHeader className="flex gap-2 align-middle justify-content-left p-3">
-                <span className="alert border-0 alert-primary text-danger p-2 mb-0">
+              <CardHeader className="flex gap-2 align-middle justify-start p-3">
+                <span className="relative w-full rounded-lg text-sm border-0 border-primary/30 bg-primary/10 text-destructive p-2 mb-0">
                   <ChartColumnBig size={25} />
                 </span>
-                <h6 className="mb-1 d-flex flex-column gap-1">
-                  <span className="fw-bold">Gráfico de ventas por cajas</span>
-                  <p className="text-muted small mb-0">Total</p>
+                <h6 className="mb-1 flex flex-col gap-1">
+                  <span className="font-bold">Gráfico de ventas por cajas</span>
+                  <p className="text-muted-foreground text-sm mb-0">Total</p>
                 </h6>
               </CardHeader>
               <CardContent className="">
@@ -154,18 +153,18 @@ export function ReporteCaja() {
         </div>
 
         {/* Desglose por usuario responsable */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mt-3">
-          <div className="md:col-span-12">
+        <div className="grid grid-cols-12 gap-3 mt-3">
+          <div className="col-span-full md:col-span-12">
             <Card className="p-3 shadow-sm">
-              <CardHeader className="flex gap-2 align-middle justify-content-left p-3">
-                <User size={22} className="text-dark" />
-                <span className="fw-bold text-dark">
+              <CardHeader className="flex gap-2 align-middle justify-start p-3">
+                <User size={22} className="text-foreground" />
+                <span className="font-bold text-foreground">
                   Desglose por Usuario Responsable
                 </span>
               </CardHeader>
-              <div className="table-responsive">
-                <table className="table table-bordered align-middle mb-0">
-                  <thead className="table-light">
+              <div className="w-full overflow-x-auto">
+                <table className="w-full caption-bottom text-sm border-border [&_th]:border [&_td]:border [&_th]:border-border [&_td]:border-border align-middle mb-0">
+                  <thead className="bg-muted">
                     <tr>
                       <th>Usuario</th>
                       <th>Turnos</th>
@@ -177,7 +176,10 @@ export function ReporteCaja() {
                   <tbody>
                     {Object.keys(usuarios).length === 0 ? (
                       <tr>
-                        <td colSpan={5} className="text-center text-muted">
+                        <td
+                          colSpan={5}
+                          className="text-center text-muted-foreground"
+                        >
                           No hay datos disponibles
                         </td>
                       </tr>

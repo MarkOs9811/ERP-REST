@@ -38,7 +38,7 @@ export function FormularioEditHorasExtras({ onClose, dataHoraExtras }) {
     try {
       const response = await axiosInstance.put(
         `/horasExtras/${dataHoraExtras.id}`,
-        formData
+        formData,
       );
       if (response.data.success) {
         ToastAlert("success", "Horas extras actualizadas correctamente");
@@ -49,7 +49,7 @@ export function FormularioEditHorasExtras({ onClose, dataHoraExtras }) {
       setError(true);
       ToastAlert(
         "error",
-        err.response?.data?.message || err.message || "Error al actualizar"
+        err.response?.data?.message || err.message || "Error al actualizar",
       );
     } finally {
       setLoading(false);
@@ -58,45 +58,47 @@ export function FormularioEditHorasExtras({ onClose, dataHoraExtras }) {
 
   return (
     <form className="form p-4" onSubmit={handleSubmit(onSubmitEditar)}>
-      <Card className="p-3 mb-3 border bg-muted">
-        <label className="small fw-bold mb-1 d-flex align-items-center gap-1">
+      <Card className="p-3 mb-3 bg-muted">
+        <label className="text-sm font-bold mb-1 flex items-center gap-1">
           <User size={16} /> Empleado
         </label>
-        <span className="fs-6">
+        <span className="text-base">
           {dataHoraExtras?.usuario?.empleado.persona.nombre}{" "}
           {dataHoraExtras?.usuario?.empleado.persona.apellidos}
         </span>
-        <label className="small fw-bold mb-1 mt-2 d-flex align-items-center gap-1">
+        <label className="text-sm font-bold mb-1 mt-2 flex items-center gap-1">
           <FileText size={16} /> Documento
         </label>
-        <span className="fs-6">
+        <span className="text-base">
           {dataHoraExtras?.usuario?.empleado.persona.documento_identidad}
         </span>
       </Card>
 
       <div className="mb-3">
-        <label className="form-label small fw-bold">
+        <label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold">
           <Calendar size={16} className="me-1" /> Fecha
         </label>
         <input
           type="date"
-          className={`form-control ${errors.fecha ? "is-invalid" : ""}`}
+          className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.fecha ? "border-destructive focus-visible:ring-destructive" : ""}`}
           {...register("fecha", { required: "La fecha es obligatoria" })}
         />
         {errors.fecha && (
-          <div className="invalid-feedback">{errors.fecha.message}</div>
+          <div className="text-sm text-destructive">{errors.fecha.message}</div>
         )}
       </div>
 
       <div className="mb-3">
-        <label className="form-label small fw-bold">
+        <label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold">
           <Clock size={16} className="me-1" /> Horas por Trabajar
         </label>
         <input
           type="number"
           step="0.1"
-          className={`form-control ${
-            errors.horas_trabajadas ? "is-invalid" : ""
+          className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+            errors.horas_trabajadas
+              ? "border-destructive focus-visible:ring-destructive"
+              : ""
           }`}
           placeholder="Horas a trabajar"
           {...register("horas_trabajadas", {
@@ -106,19 +108,21 @@ export function FormularioEditHorasExtras({ onClose, dataHoraExtras }) {
           })}
         />
         {errors.horas_trabajadas && (
-          <div className="invalid-feedback">
+          <div className="text-sm text-destructive">
             {errors.horas_trabajadas.message}
           </div>
         )}
       </div>
 
       <div className="mb-3">
-        <label className="form-label small fw-bold">S/. Pago Total</label>
+        <label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-bold">
+          S/. Pago Total
+        </label>
         <input
           type="number"
           step="0.01"
           readOnly="true"
-          className={`form-control ${errors.pagoTotal ? "is-invalid" : ""}`}
+          className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.pagoTotal ? "border-destructive focus-visible:ring-destructive" : ""}`}
           placeholder="Pago total"
           {...register("pagoTotal", {
             required: "El pago es obligatorio",
@@ -127,17 +131,20 @@ export function FormularioEditHorasExtras({ onClose, dataHoraExtras }) {
           })}
         />
         {errors.pagoTotal && (
-          <div className="invalid-feedback">{errors.pagoTotal.message}</div>
+          <div className="text-sm text-destructive">
+            {errors.pagoTotal.message}
+          </div>
         )}
       </div>
 
-      <div className="d-flex gap-2 pt-3 border-top">
+      <div className="flex gap-2 pt-3 border-t">
         <Button
           type="button"
           className="btn-cerrar-modal"
           onClick={onClose}
           disabled={loading} // Deshabilitar también al cargar
-         variant="default">
+          variant="default"
+        >
           Cancelar
         </Button>
 
@@ -146,11 +153,12 @@ export function FormularioEditHorasExtras({ onClose, dataHoraExtras }) {
           type="submit" // Corregido: debe ser 'submit'
           className="btn-guardar" // Tu clase CSS personalizada
           disabled={loading}
-         variant="default">
+          variant="default"
+        >
           {loading ? (
             <>
               <span
-                className="spinner-border spinner-border-sm"
+                className="inline-block animate-spin rounded-full border-current border-r-transparent size-4 border"
                 role="status"
                 aria-hidden="true"
               ></span>

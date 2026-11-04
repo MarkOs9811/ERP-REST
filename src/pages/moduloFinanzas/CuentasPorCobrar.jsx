@@ -16,7 +16,6 @@ import { DetallesCuotasCliente } from "../../components/componentesFinanzas/cuot
 import { Button } from "../../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-
 export function CuentasPorCobrar() {
   const [modalDetalleCuotas, setModalDetalleCuotas] = useState(false);
   const [dataCuotasCobrar, setDataCuotasCobrar] = useState([]);
@@ -65,7 +64,7 @@ export function CuentasPorCobrar() {
               </span>
               <br />
               <small
-                className="badge"
+                className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors"
                 style={{
                   color: "var(--text-muted)",
                   background: "var(--fw-muetd)",
@@ -88,7 +87,7 @@ export function CuentasPorCobrar() {
               </span>
               <br />
               <small
-                className="badge"
+                className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors"
                 style={{
                   color: "var(--text-muted)",
                   background: "var(--fw-muetd)",
@@ -99,7 +98,11 @@ export function CuentasPorCobrar() {
             </div>
           );
         } else {
-          return <span className="badge">Sin cliente</span>;
+          return (
+            <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors">
+              Sin cliente
+            </span>
+          );
         }
       },
       sortable: true,
@@ -130,9 +133,11 @@ export function CuentasPorCobrar() {
     {
       name: "Fecha",
       selector: (row) => (
-        <small className="d-flex flex-column">
-          <span className="text-primary fw-bold">{row.fecha_inicio}</span>
-          <span className="text-success fw-bold">{row.fecha_fin}</span>
+        <small className="flex flex-col">
+          <span className="text-primary font-bold">{row.fecha_inicio}</span>
+          <span className="text-emerald-600 dark:text-emerald-400 font-bold">
+            {row.fecha_fin}
+          </span>
         </small>
       ),
       sortable: true,
@@ -142,7 +147,7 @@ export function CuentasPorCobrar() {
       selector: (row) =>
         row.estado === "pendiente" ? (
           <span
-            className="badge p-2"
+            className="inline-flex items-center rounded-full text-xs font-semibold transition-colors p-2"
             style={{
               color: "var(--fw-saffron)",
               background: "var(--bg-saffron-soft)",
@@ -154,7 +159,7 @@ export function CuentasPorCobrar() {
           </span>
         ) : (
           <span
-            className="badge p-2"
+            className="inline-flex items-center rounded-full text-xs font-semibold transition-colors p-2"
             style={{
               color: "var(--fw-emerald)",
               background: "var(--bg-emerald-soft)",
@@ -189,12 +194,13 @@ export function CuentasPorCobrar() {
       name: "Ver cuotas",
       selector: (row) => (
         <Button
-          className="btn btn-outline-dark"
+          className="shadow inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border-input bg-background text-foreground hover:bg-accent"
           onClick={() => {
             setModalDetalleCuotas(true);
             setDataCuotasCobrar(row);
           }}
-         variant="default">
+          variant="default"
+        >
           <ListCheck
             className="text-auto"
             height="20px"
@@ -209,21 +215,23 @@ export function CuentasPorCobrar() {
   ];
   return (
     <div>
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+      <div className="grid grid-cols-12 gap-3">
         {/* Header */}
-        <div className="md:col-span-12">
+        <div className="col-span-full md:col-span-12">
           <Card className="py-2">
-            <CardHeader className="border-bottom-0 flex flex-col flex-md-row justify-between items-center gap-2 p-3">
-              <div className="d-flex align-items-center">
+            <CardHeader className="border-b-0 flex flex-col md:flex-row justify-between items-center gap-2 p-3">
+              <div className="flex items-center">
                 <Coins
                   color={"var(--fw-strawberry)"}
                   height="45px"
                   width="45px"
                   className="me-2"
                 />
-                <CardTitle asChild><h4 className="mb-0 titulo-card-especial">
-                  Cuentas por Cobrar
-                </h4></CardTitle>
+                <CardTitle asChild>
+                  <h4 className="mb-0 titulo-card-especial">
+                    Cuentas por Cobrar
+                  </h4>
+                </CardTitle>
               </div>
             </CardHeader>
             <CardContent className="p-0">
@@ -234,7 +242,9 @@ export function CuentasPorCobrar() {
               )}
               {isError && (
                 <div className="text-center">
-                  <h5 className="text-danger">Error al cargar los datos</h5>
+                  <h5 className="text-destructive">
+                    Error al cargar los datos
+                  </h5>
                 </div>
               )}
               <TablasGenerales columnas={columnas} datos={datos} />

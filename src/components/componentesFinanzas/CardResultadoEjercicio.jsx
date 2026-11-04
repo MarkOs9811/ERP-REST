@@ -20,7 +20,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 export function CardResultadoEjercicio({ registroEjercicio, resultado }) {
   if (!registroEjercicio) {
     return (
-      <div className="fw-libro-info-box text-center d-flex justify-content-center align-items-center gap-2">
+      <div className="fw-libro-info-box text-center flex justify-center items-center gap-2">
         <AlertTriangle size={20} />
         No se encontró ningún registro de resultados del ejercicio.
       </div>
@@ -36,25 +36,25 @@ export function CardResultadoEjercicio({ registroEjercicio, resultado }) {
 
   return (
     <Card className="p-2 border">
-      <CardHeader className="bg-transparent border-bottom-0 pb-0">
-        <div className="d-flex justify-content-between align-items-center flex-wrap gap-2">
+      <CardHeader className="bg-transparent border-b-0 pb-0">
+        <div className="flex justify-between items-center flex-wrap gap-2">
           <div>
-            <h5 className="mb-1 d-flex align-items-center gap-2">
+            <h5 className="mb-1 flex items-center gap-2">
               <ArrowRightLeft
                 style={{ color: "var(--brand-secondary)" }}
                 size={20}
               />
               Resultado del Ejercicio - {registroEjercicio.temporada}
             </h5>
-            <small className="fw-flow-description d-flex align-items-center gap-1">
+            <small className="fw-flow-description flex items-center gap-1">
               <Calendar size={14} />
               Desde: {registroEjercicio.fechaInicio} Hasta:{" "}
               {registroEjercicio.fechaFin}
             </small>
           </div>
-          <div className="d-flex gap-2">
+          <div className="flex gap-2">
             <Button
-              className="btn p-2 d-flex align-items-center gap-2"
+              className="justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 p-2 flex items-center gap-2"
               style={{
                 border: "1px solid var(--fw-border)",
                 backgroundColor: "var(--bg-card)",
@@ -65,7 +65,7 @@ export function CardResultadoEjercicio({ registroEjercicio, resultado }) {
               <History size={16} /> Balances anteriores
             </Button>
             <Button
-              className="btn p-2 d-flex align-items-center gap-2"
+              className="justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 p-2 flex items-center gap-2"
               style={{
                 fontSize: "1rem",
                 border: "1px solid var(--fw-border)",
@@ -81,27 +81,27 @@ export function CardResultadoEjercicio({ registroEjercicio, resultado }) {
       </CardHeader>
 
       <CardContent className="">
-        <p className="fw-flow-description d-flex align-items-center gap-2">
+        <p className="fw-flow-description flex items-center gap-2">
           <Info size={16} />
           Resultados del ejercicio para la temporada{" "}
           {registroEjercicio.temporada}.
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mt-2">
+        <div className="grid grid-cols-12 gap-3 mt-2">
           {/* Ingresos */}
-          <div className="md:col-span-6">
+          <div className="col-span-full md:col-span-6">
             <Card className="p-3 relative overflow-hidden h-full fw-libro-ingresos-card">
-              <p className="fw-libro-positive d-flex align-items-center gap-2 mb-1">
+              <p className="fw-libro-positive flex items-center gap-2 mb-1">
                 <ArrowUp size={20} />
                 <strong>Ingresos:</strong>
               </p>
-              <h3 className="fw-libro-positive fw-bold">
+              <h3 className="fw-libro-positive font-bold">
                 S/. {Number(registroEjercicio.ingresos).toFixed(2)}
               </h3>
 
               {/* ÍCONO LUCIDE DE FONDO (PiggyBank) */}
               <PiggyBank
-                className="position-absolute"
+                className="absolute"
                 size={80}
                 strokeWidth={1}
                 style={{
@@ -115,19 +115,19 @@ export function CardResultadoEjercicio({ registroEjercicio, resultado }) {
           </div>
 
           {/* Gastos */}
-          <div className="md:col-span-6">
+          <div className="col-span-full md:col-span-6">
             <Card className="p-3 relative overflow-hidden h-full fw-libro-gastos-card">
-              <p className="fw-libro-negative d-flex align-items-center gap-2 mb-1">
+              <p className="fw-libro-negative flex items-center gap-2 mb-1">
                 <ArrowDown size={20} />
                 <strong>Gastos:</strong>
               </p>
-              <h3 className="fw-libro-negative fw-bold">
+              <h3 className="fw-libro-negative font-bold">
                 S/. {Number(registroEjercicio.gastos).toFixed(2)}
               </h3>
 
               {/* ÍCONO LUCIDE DE FONDO (Wallet) */}
               <Wallet
-                className="position-absolute"
+                className="absolute"
                 size={80}
                 strokeWidth={1}
                 style={{
@@ -143,7 +143,7 @@ export function CardResultadoEjercicio({ registroEjercicio, resultado }) {
 
         {/* Resultado Final */}
         <div
-          className={`fw-libro-resultado-box text-center mt-3 d-flex align-items-center justify-content-center ${
+          className={`fw-libro-resultado-box text-center mt-3 flex items-center justify-center ${
             resultado > 0
               ? "fw-libro-resultado-positive"
               : resultado < 0
@@ -153,9 +153,9 @@ export function CardResultadoEjercicio({ registroEjercicio, resultado }) {
           role="alert"
         >
           {getResultIcon(resultado)}
-          <span className="fs-5">
+          <span className="text-lg">
             <strong>Resultado:</strong> S/. {Number(resultado).toFixed(2)}{" "}
-            <span className="fw-normal fst-italic ms-1">
+            <span className="font-normal italic ms-1">
               {resultado > 0
                 ? "(Beneficio)"
                 : resultado < 0

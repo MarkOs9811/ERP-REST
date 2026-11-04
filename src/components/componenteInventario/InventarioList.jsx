@@ -152,7 +152,7 @@ export function InventarioList({ search }) {
       cell: (row) => {
         const { estado } = row;
         return (
-          <div className="d-flex justify-content-around flex-wrap p-2">
+          <div className="flex justify-around flex-wrap p-2">
             {estado == 1 ? (
               <>
                 <BtnEditar
@@ -172,7 +172,7 @@ export function InventarioList({ search }) {
                 />
 
                 <Button
-                  className=" btn-desactivar"
+                  className="btn-desactivar"
                   onClick={() => {
                     setQuestionEliminar(true);
                     setdataProducto(row);
@@ -184,7 +184,7 @@ export function InventarioList({ search }) {
               </>
             ) : (
               <Button
-                className="btn btn-activar"
+                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 btn-activar"
                 title="Activar el producto"
                 onClick={() => {
                   setQuestionActivar(true);
@@ -246,9 +246,9 @@ export function InventarioList({ search }) {
           <div>
             {isNearExpiry ? (
               <>
-                <span className="d-flex flex-column align-items-start text-secondary">
+                <span className="flex flex-col items-start text-muted-foreground">
                   <span>{row.fecha_vencimiento}</span>
-                  <div className="d-flex align-items-center">
+                  <div className="flex items-center">
                     <small>
                       <AlertCircle className="text-auto me-2" size={20} />
                     </small>
@@ -258,9 +258,9 @@ export function InventarioList({ search }) {
               </>
             ) : isExpired ? (
               <>
-                <span className="d-flex flex-column align-items-start text-danger">
+                <span className="flex flex-col items-start text-destructive">
                   <span>{row.fecha_vencimiento}</span>
-                  <div className="d-flex align-items-center">
+                  <div className="flex items-center">
                     <small>
                       <AlertCircle className="me-2 text-auto" size={20} />
                     </small>
@@ -269,7 +269,7 @@ export function InventarioList({ search }) {
                 </span>
               </>
             ) : (
-              <span className="text-success">{row.fecha_vencimiento}</span>
+              <span className="text-emerald-600 dark:text-emerald-400">{row.fecha_vencimiento}</span>
             )}
           </div>
         );

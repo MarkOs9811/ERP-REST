@@ -7,8 +7,8 @@ export function ImprimirTicket({
     <div>
       {itemsCarrito?.length > 0 && (
         <div
-          className={`form-check form-switch d-flex align-items-center justify-content-center gap-2 mb-3 p-2 rounded transition-smooth ${
-            !itemsCarrito ? "bg-light text-muted" : "border border-warning"
+          className={`flex items-center justify-center gap-2 mb-3 p-2 rounded transition-smooth ${
+            !itemsCarrito ? "bg-muted text-muted-foreground" : "border border-amber-500"
           }`}
           style={{
             backgroundColor: itemsCarrito
@@ -18,7 +18,7 @@ export function ImprimirTicket({
         >
           <input
             id="switchImprimirTicket"
-            className="form-check-input m-0"
+            className="size-4 shrink-0 rounded border-input accent-primary m-0"
             type="checkbox"
             role="switch"
             checked={imprimirTicket}
@@ -26,7 +26,7 @@ export function ImprimirTicket({
             style={{ cursor: "pointer" }}
           />
           <label
-            className={`form-check-label small m-0 ${itemsCarrito ? "text-dark fw-bold" : ""}`}
+            className={`font-medium text-sm m-0 ${itemsCarrito ? "text-foreground font-bold" : ""}`}
             htmlFor="switchImprimirTicket"
             style={{ cursor: "pointer" }}
           >

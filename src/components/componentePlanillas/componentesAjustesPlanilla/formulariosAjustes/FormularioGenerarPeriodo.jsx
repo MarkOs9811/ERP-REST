@@ -6,7 +6,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "../../../ui/button";
 import { CardContent } from "@/components/ui/card";
 
-
 const formatearFecha = (fecha) => {
   const anio = fecha.getFullYear();
   const mes = String(fecha.getMonth() + 1).padStart(2, "0");
@@ -194,15 +193,15 @@ export function FormularioGenerarPeriodo({ onClose, ultimoCorteReal = null }) {
     <div className="p-3">
       <CardContent className="">
         <form onSubmit={handleGenerarPreview}>
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+          <div className="grid grid-cols-12 gap-3">
             {/* 1. Año a Generar */}
-            <div className="md:col-span-12">
+            <div className="col-span-full md:col-span-12">
               <div className="mb-3">
-                <label className="form-label">
+                <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                   <strong>Año a Generar</strong>
                 </label>
                 <select
-                  className="form-select"
+                  className="h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                   value={anio}
                   onChange={(e) => setAnio(Number(e.target.value))}
                 >
@@ -216,19 +215,19 @@ export function FormularioGenerarPeriodo({ onClose, ultimoCorteReal = null }) {
             </div>
 
             {/* 2. NUEVO CAMPO: Fecha de Inicio */}
-            <div className="md:col-span-12">
+            <div className="col-span-full md:col-span-12">
               <div className="mb-3">
-                <label className="form-label">
+                <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                   <strong>Fecha de Inicio del Primer Periodo</strong>
                 </label>
                 <input
                   type="date"
-                  className="form-control"
+                  className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                   value={fechaInicio}
                   onChange={(e) => setFechaInicio(e.target.value)}
                   required // Obligatorio
                 />
-                <small className="form-text text-muted">
+                <small className="text-sm text-muted-foreground">
                   {ultimoCorteReal
                     ? `Autocompletado (día después del último corte: ${ultimoCorteReal})`
                     : "Requerido (no se encontraron periodos anteriores)"}
@@ -237,13 +236,13 @@ export function FormularioGenerarPeriodo({ onClose, ultimoCorteReal = null }) {
             </div>
 
             {/* 3. Frecuencia */}
-            <div className="md:col-span-6">
+            <div className="col-span-full md:col-span-6">
               <div className="mb-3">
-                <label className="form-label">
+                <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                   <strong>Frecuencia</strong>
                 </label>
                 <select
-                  className="form-select"
+                  className="h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                   value={frecuencia}
                   onChange={(e) => setFrecuencia(e.target.value)}
                 >
@@ -256,14 +255,14 @@ export function FormularioGenerarPeriodo({ onClose, ultimoCorteReal = null }) {
             </div>
 
             {/* 4. Día de Corte */}
-            <div className="md:col-span-6">
+            <div className="col-span-full md:col-span-6">
               <div className="mb-3">
-                <label className="form-label">
+                <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                   <strong>Día de Corte (1-31)</strong>
                 </label>
                 <input
                   type="number"
-                  className="form-control"
+                  className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                   value={diaCorte}
                   onChange={(e) => setDiaCorte(Number(e.target.value))}
                   min="1"
@@ -276,7 +275,7 @@ export function FormularioGenerarPeriodo({ onClose, ultimoCorteReal = null }) {
 
           {error && (
             <div
-              className="alert alert-danger d-flex align-items-center"
+              className="relative w-full rounded-lg px-4 py-3 text-sm border-destructive/30 bg-destructive/10 text-destructive flex items-center"
               role="alert"
             >
               <AlertTriangle size={18} className="me-2" />
@@ -284,7 +283,7 @@ export function FormularioGenerarPeriodo({ onClose, ultimoCorteReal = null }) {
             </div>
           )}
 
-          <div className="d-grid d-md-block">
+          <div className="grid md:block">
             <Button type="submit" className="btn-principal" variant="default">
               <Eye size={18} className="me-2" />
               Previsualizar Periodos
@@ -297,38 +296,44 @@ export function FormularioGenerarPeriodo({ onClose, ultimoCorteReal = null }) {
           <div className="mt-4">
             <hr />
             <h5>
-              <CalendarCheck size={20} className="me-2 text-success" />
+              <CalendarCheck
+                size={20}
+                className="me-2 text-emerald-600 dark:text-emerald-400"
+              />
               Previsualización de Periodos
             </h5>
             <p>
               Se generarán los siguientes {periodosPreview.length} periodos:
             </p>
 
-            <ul className="list-group list-group-flush bg-light rounded border">
+            <ul className="flex flex-col divide-y-0 bg-muted rounded border">
               {periodosPreview.map((p, index) => (
                 <li
                   key={index}
-                  className="list-group-item d-flex justify-content-between align-items-center bg-transparent"
+                  className="relative border-b px-4 py-3 text-foreground flex justify-between items-center bg-transparent"
                 >
                   <div>
                     <strong>{p.nombrePeriodo}</strong>
                     <br />
-                    <small className="text-muted">
+                    <small className="text-muted-foreground">
                       Del {p.fecha_inicio} al {p.fecha_fin}
                     </small>
                   </div>
-                  <span className="badge bg-secondary">Pendiente</span>
+                  <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-secondary">
+                    Pendiente
+                  </span>
                 </li>
               ))}
             </ul>
 
-            <div className="d-grid gap-2 d-md-flex justify-content-end mt-4">
+            <div className="grid gap-2 md:flex justify-end mt-4">
               <Button
                 type="button"
                 className="btn-guardar"
                 onClick={handleGuardarPeriodos}
                 disabled={loading}
-               variant="default">
+                variant="default"
+              >
                 {loading ? (
                   <div>
                     <span className="load">Cargando...</span>
@@ -342,9 +347,10 @@ export function FormularioGenerarPeriodo({ onClose, ultimoCorteReal = null }) {
               </Button>
               <Button
                 type="button"
-                className=" btn-cerrar-modal ms-md-2"
+                className="btn-cerrar-modal md:ms-2"
                 onClick={onClose}
-               variant="default">
+                variant="default"
+              >
                 Cancelar
               </Button>
             </div>

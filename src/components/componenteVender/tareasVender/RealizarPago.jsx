@@ -14,7 +14,6 @@ import { ConsultarDocumento } from "../../../service/accionesVender/ConsultaDocu
 import { Button } from "../../ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
-
 export function RealizarPago({
   totalPreventa,
   igv,
@@ -118,33 +117,34 @@ export function RealizarPago({
   };
 
   return (
-    <Card className="flex-grow-1 flex flex-col h-full border overflow-auto">
-      <CardHeader className="bg-background py-3">
-        <h5 className="mb-0 fw-bold">Resumen</h5>
+    <Card className="flex h-full min-h-[440px] flex-col gap-0 overflow-hidden rounded-xl border-border/70 bg-card p-0 shadow-none">
+      <CardHeader className="border-b border-border/70 bg-background px-4 py-4">
+        <h2 className="mb-0 text-base font-semibold tracking-tight text-foreground">
+          Cobro y resumen
+        </h2>
+        <p className="mb-0 text-xs text-muted-foreground">
+          Confirma los datos del cliente y el monto recibido.
+        </p>
       </CardHeader>
 
       <form
         onSubmit={handleSubmit(onSubmit)}
         onKeyDown={handleKeyDown} // 🔥 Escuchamos el Enter en todo el formulario
-        className="d-flex flex-column h-100 overflow-hidden"
+        className="flex min-h-0 flex-1 flex-col overflow-hidden"
       >
-        <CardContent
-          className="overflow-auto p-3"
-          style={{ maxHeight: "calc(100vh - 250px)" }}
-        >
+        <CardContent className="min-h-0 flex-1 space-y-4 overflow-y-auto p-4">
           {/* ========================================== */}
           {/* 1. SECCIÓN DE BÚSQUEDA AUTOMÁTICA COMPACTA */}
           {/* ========================================== */}
-          <div className="mb-2 p-2 bg-light rounded border">
+          <section className="space-y-2 rounded-lg border border-border/70 bg-muted/30 p-3">
             <label
-              className="small text-muted fw-bold mb-1"
-              style={{ fontSize: "0.75rem" }}
+              className="text-sm text-muted-foreground font-bold mb-1"
             >
               Buscar en SUNAT/RENIEC (Opcional)
             </label>
-            <div className="input-group input-group-sm">
+            <div className="grid grid-cols-[auto_minmax(0,1fr)] gap-2">
               <select
-                className="form-select"
+                className="h-10 rounded-md border border-input bg-background px-3 text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                 value={tipoDocBusqueda}
                 onChange={(e) => {
                   setTipoDocBusqueda(e.target.value);
@@ -158,16 +158,17 @@ export function RealizarPago({
               </select>
 
               {/* Input con icono flotante */}
-              <div className="position-relative flex-grow-1">
+              <div className="relative min-w-0">
                 <input
                   type="text"
-                  className={`form-control form-control-sm  h-100 ${
-                    errorBusqueda ? "is-invalid" : ""
+                  className={`h-10 w-full rounded-md border border-input bg-background px-3 pr-9 text-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring ${
+                    errorBusqueda
+                      ? "border-destructive focus-visible:ring-destructive"
+                      : ""
                   }`}
                   placeholder={`Nº de ${tipoDocBusqueda}...`}
                   value={numDocBusqueda}
                   maxLength={tipoDocBusqueda === "DNI" ? 8 : 11}
-                  style={{ paddingRight: "30px" }}
                   onChange={(e) => {
                     const soloNumeros = e.target.value.replace(/\D/g, "");
                     setNumDocBusqueda(soloNumeros);
@@ -176,54 +177,47 @@ export function RealizarPago({
                   }}
                 />
                 <div
-                  className="position-absolute top-50 end-0 translate-middle-y pe-2 d-flex align-items-center"
-                  style={{ zIndex: 4, pointerEvents: "none" }}
+                  className="pointer-events-none absolute right-3 top-1/2 flex -translate-y-1/2 items-center"
                 >
                   {isSearching ? (
                     <Loader2
                       size={16}
                       className="text-primary"
-                      style={{ animation: "spin 1s linear infinite" }}
                     />
                   ) : (
-                    <Search size={16} className="text-muted" />
+                    <Search size={16} className="text-muted-foreground" />
                   )}
                 </div>
               </div>
             </div>
             {errorBusqueda && (
-              <small
-                className="text-danger mt-1 d-block"
-                style={{ fontSize: "0.7rem", lineHeight: "1" }}
-              >
+              <small className="block text-xs text-destructive">
                 {errorBusqueda}
               </small>
             )}
-          </div>
+          </section>
 
           {/* ========================================== */}
           {/* 2. CAMPO DE SALIDA FINAL */}
           {/* ========================================== */}
-          <div className="mb-2">
+          <div className="space-y-1.5">
             <label
               htmlFor="nombreReferencia"
-              className="small text-muted mb-1"
-              style={{ fontSize: "0.75rem" }}
+              className="text-sm font-medium text-foreground"
             >
-              Nombre / Razón Social <span className="text-danger">*</span>
+              Nombre / Razón Social <span className="text-destructive">*</span>
             </label>
-            <div className="position-relative">
+            <div className="relative">
               <input
                 id="nombreReferencia"
                 type="text"
-                className={`form-control form-control-sm fw-medium ${
+                className={`h-10 w-full rounded-md border border-input bg-background px-3 pr-9 text-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring ${
                   errors.nombreReferencia
-                    ? "is-invalid"
+                    ? "border-destructive focus-visible:ring-destructive"
                     : busquedaExitosa
-                      ? "border-success text-success" // 🔥 Solo cambiamos borde y texto sin usar is-valid
+                      ? "border-emerald-600 text-emerald-700 dark:text-emerald-400" // 🔥 Solo cambiamos borde y texto sin usar is-valid
                       : ""
                 }`}
-                style={{ paddingRight: busquedaExitosa ? "30px" : "10px" }}
                 placeholder="Nombre completo..."
                 {...register("nombreReferencia", {
                   required: "Requerido",
@@ -233,16 +227,17 @@ export function RealizarPago({
               {/* 🔥 Icono flotante CheckCircle nativo de Lucide */}
               {busquedaExitosa && !errors.nombreReferencia && (
                 <div
-                  className="position-absolute top-50 end-0 translate-middle-y pe-2 d-flex align-items-center"
-                  style={{ pointerEvents: "none", zIndex: 4 }}
+                  className="pointer-events-none absolute right-3 top-1/2 flex -translate-y-1/2 items-center"
                 >
-                  <CheckCircle size={16} className="text-success" />
+                  <CheckCircle
+                    size={16}
+                    className="text-emerald-600 dark:text-emerald-400"
+                  />
                 </div>
               )}
               {errors.nombreReferencia && (
                 <div
-                  className="invalid-feedback"
-                  style={{ fontSize: "0.7rem", display: "block" }}
+                  className="block text-xs text-destructive"
                 >
                   {errors.nombreReferencia.message}
                 </div>
@@ -253,11 +248,10 @@ export function RealizarPago({
           {/* ========================================== */}
           {/* 3. PAGOS Y VUELTO */}
           {/* ========================================== */}
-          <div className="mb-2">
+          <div className="space-y-2">
             <label
               htmlFor="pagoCon"
-              className="small text-muted mb-1"
-              style={{ fontSize: "0.75rem" }}
+              className="text-sm font-medium text-foreground"
             >
               Pagar con: S/.
             </label>
@@ -265,121 +259,109 @@ export function RealizarPago({
               id="pagoCon"
               type="number"
               step="0.1"
-              className="form-control form-control-sm"
+              className="h-11 w-full rounded-md border border-input bg-background px-3 text-lg font-semibold tabular-nums transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
               placeholder="0.00"
               {...register("pagoCon")}
-              style={{ fontSize: "1.1rem", fontWeight: "600" }}
             />
 
-            <div className="d-flex gap-1 mt-1 flex-wrap">
+            <div className="flex flex-wrap gap-2">
               {billetes.map((monto, index) => (
                 <Button
                   key={index}
                   type="button"
-                  className="badge rounded-pill bg-light text-dark border p-1 px-2 fw-medium"
-                  style={{
-                    cursor: "pointer",
-                    fontSize: "0.75rem",
-                    transition: "all 0.2s",
-                  }}
-                  onMouseEnter={(e) =>
-                    (e.target.style.backgroundColor = "#e5e7eb")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.target.style.backgroundColor = "#f8fafc")
-                  }
+                  className="h-8 rounded-full border border-border/70 bg-muted/50 px-3 text-xs font-medium text-foreground hover:bg-muted"
                   onClick={() => setValue("pagoCon", monto)}
-                 variant="default">
+                  variant="outline"
+                >
                   {index === 0 ? "EXACTO" : `S/ ${monto.toFixed(2)}`}
                 </Button>
               ))}
             </div>
           </div>
 
-          <div className="mb-2">
+          <div className="space-y-1.5">
             <label
               htmlFor="vuelto"
-              className="small text-muted mb-1"
-              style={{ fontSize: "0.75rem" }}
+              className="text-sm font-medium text-foreground"
             >
               Cambio S/.
             </label>
             <input
               id="vuelto"
               type="text"
-              className="form-control form-control-sm bg-light text-success border-success border-opacity-50"
+              className="h-10 w-full rounded-md border border-emerald-500/30 bg-emerald-500/5 px-3 text-base font-semibold tabular-nums text-emerald-700 focus-visible:outline-none dark:text-emerald-300"
               readOnly
               value={vuelto}
-              style={{ fontSize: "1.1rem", fontWeight: "700" }}
             />
           </div>
 
           {/* ========================================== */}
           {/* 4. IMPRESIÓN Y NOTAS */}
           {/* ========================================== */}
-          <div className="bg-light p-2 rounded mb-2 border">
-            <div className="d-flex align-items-center justify-content-between mb-2">
-              <div className="d-flex align-items-center gap-2">
-                <Printer size={16} className="text-muted" />
-                <span
-                  className="fw-medium text-dark"
-                  style={{ fontSize: "0.8rem" }}
-                >
-                  Imprimir
+          <section className="space-y-3 rounded-lg border border-border/70 bg-muted/30 p-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Printer size={16} className="text-muted-foreground" />
+                <span className="text-sm font-medium text-foreground">
+                  Imprimir comprobante
                 </span>
               </div>
-              <div className="form-switch m-0 p-0">
+              <label className="flex cursor-pointer items-center gap-2 text-xs text-muted-foreground" htmlFor="imprimirTicket">
+                Activar
                 <input
-                  className="form-check-input m-0"
+                  className="size-4 cursor-pointer rounded border-input accent-primary"
                   type="checkbox"
                   role="switch"
                   id="imprimirTicket"
                   {...register("imprimirTicket")}
                 />
-              </div>
+              </label>
             </div>
 
-            <div className="d-flex gap-2">
-              <StickyNote size={16} className="text-muted mt-1 flex-shrink-0" />
+            <div className="flex gap-2">
+              <StickyNote
+                size={16}
+                className="mt-2 size-4 shrink-0 text-muted-foreground"
+              />
               <textarea
-                className="form-control form-control-sm border-0 bg-white"
-                rows="1"
+                className="min-h-16 w-full resize-y rounded-md border border-input bg-background px-3 py-2 text-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                rows="2"
                 placeholder="Observaciones..."
-                style={{ fontSize: "0.8rem", resize: "none" }}
                 {...register("notas")}
               ></textarea>
             </div>
-          </div>
+          </section>
         </CardContent>
 
         {/* ========================================== */}
         {/* TOTALES Y BOTÓN (Fijos al fondo) */}
         {/* ========================================== */}
-        <div className="mt-auto bg-white border-top p-3">
-          <div className="p-2">
-            <div className="d-flex justify-content-between mb-1">
-              <span className="text-muted small">Sub Total</span>
-              <span className="fw-medium text-dark small">S/. {subTotal}</span>
+        <div className="mt-auto border-t border-border/70 bg-background p-4">
+          <div className="space-y-2">
+            <div className="flex justify-between text-sm">
+              <span className="text-muted-foreground text-sm">Sub Total</span>
+              <span className="font-medium text-foreground text-sm">
+                S/. {subTotal}
+              </span>
             </div>
-            <div className="d-flex justify-content-between mb-1">
-              <span className="text-muted small">IGV</span>
-              <span className="text-secondary small">S/. {igv}</span>
+            <div className="flex justify-between text-sm">
+              <span className="text-muted-foreground text-sm">IGV</span>
+              <span className="text-muted-foreground text-sm">S/. {igv}</span>
             </div>
-            <div className="d-flex justify-content-between align-items-center mt-1">
-              <span className="h5 mb-0 fw-bold">Total</span>
-              <span className="h4 fw-bold text-success mb-0">
+            <div className="flex items-center justify-between border-t border-border/60 pt-2">
+              <span className="font-semibold text-foreground">Total</span>
+              <span className="text-lg font-semibold tabular-nums text-emerald-700 dark:text-emerald-300">
                 S/. {totalPreventa}
               </span>
             </div>
           </div>
 
-          <div className="p-2 pt-0">
+          <div className="mt-3">
             <BotonAnimado
               type="submit"
               loading={loading}
               error={error}
-              className="btn-guardar w-100 py-3 fs-6"
-              style={{ borderRadius: "10px" }}
+              className="h-11 w-full rounded-lg text-sm font-semibold"
             >
               Realizar Pago
             </BotonAnimado>

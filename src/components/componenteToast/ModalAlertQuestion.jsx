@@ -1,9 +1,16 @@
 import { useState } from "react";
-import "react-toastify/dist/ReactToastify.css";
-import "../../css/ModalAlertQuestion.css";
-import { useQueryClient } from "@tanstack/react-query";
-import ReactDOM from "react-dom";
-import { Button } from "../ui/button";
+import { AlertTriangle, LoaderCircle } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogMedia,
+  AlertDialogTitle,
+} from "../ui/alert-dialog";
 
 function ModalAlertQuestion({
   show,
@@ -15,86 +22,64 @@ function ModalAlertQuestion({
   pregunta = "¿Estás seguro de eliminar este",
   loading = false,
 }) {
-  const queryClient = useQueryClient();
-  // 1. Estado local para manejar la carga asíncrona internamente
   const [isProcessing, setIsProcessing] = useState(false);
-
-  // 2. Combinamos el loading externo (si existe) con el interno
   const isLoading = Boolean(loading) || isProcessing;
 
-  const handleConfirm = async () => {
-    // Bloqueo JS: Si ya está cargando, ignoramos clics extra
+  const handleConfirm = async (event) => {
+    event.preventDefault();
     if (isLoading) return;
 
-    setIsProcessing(true); // Encendemos el loader
+    setIsProcessing(true);
     try {
-      // Esperamos a que termine la función del padre
-      const success = await handleEliminar(idEliminar);
-      if (success) {
-        handleCloseModal();
-      } else {
-        handleCloseModal();
-      }
+      await handleEliminar(idEliminar);
+      handleCloseModal();
     } catch (error) {
+      console.error("Error al eliminar:", error);
       handleCloseModal();
     } finally {
-      setIsProcessing(false); // Apagamos el loader pase lo que pase
+      setIsProcessing(false);
     }
   };
 
-  if (!show) return null;
-
-  return ReactDOM.createPortal(
-    <div className={`modal-overlay my-0 ${show ? "show" : ""}`}>
-      <div className="contenido-model ">
-        <p className="h5">
-          {pregunta} {tipo}?
-        </p>
-        <h4 className="modal-name-delete">
-          {nombre || "Nombre no disponible"}
-        </h4>
-
-        <div className="d-flex justify-content-center mt-4">
-          {/* Botón Confirmar */}
-          <Button
-            onClick={handleConfirm}
-            className="btn-eliminar mx-2"
-            disabled={isLoading}
-            style={{
-              opacity: isLoading ? 0.7 : 1,
-              cursor: isLoading ? "not-allowed" : "pointer",
-            }}
-           variant="destructive">
-            {isLoading ? (
-              <div className="d-flex align-items-center gap-2">
-                <span
-                  className="spinner-border spinner-border-sm"
-                  role="status"
-                  aria-hidden="true"
-                ></span>
-                <span>Procesando...</span>
-              </div>
-            ) : (
-              "Confirmar"
-            )}
-          </Button>
-
-          {/* Botón Cancelar */}
-          <Button
-            onClick={handleCloseModal}
-            className="btn-cancelar mx-2"
-            disabled={isLoading}
-            style={{
-              opacity: isLoading ? 0.7 : 1,
-              cursor: isLoading ? "not-allowed" : "pointer",
-            }}
-           variant="default">
+  return (
+    <AlertDialog
+      open={Boolean(show)}
+      onOpenChange={(open) => {
+        if (!open && !isLoading) handleCloseModal();
+      }}
+    >
+      <AlertDialogContent className="gap-5 p-6 sm:max-w-md">
+        <AlertDialogHeader className="place-items-center text-center sm:place-items-center sm:text-center">
+          <AlertDialogMedia className="size-12 rounded-2xl bg-destructive/10 text-destructive">
+            <AlertTriangle className="size-6" />
+          </AlertDialogMedia>
+          <AlertDialogTitle className="text-lg font-semibold">
+            {pregunta} {tipo}?
+          </AlertDialogTitle>
+          <AlertDialogDescription>
+            Esta acción puede afectar los datos relacionados con{" "}
+            <span className="font-medium text-foreground">
+              {nombre || "este registro"}
+            </span>
+            .
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter className="-mx-6 -mb-6 rounded-b-xl border-t-0 bg-transparent px-6 pb-6">
+          <AlertDialogCancel disabled={isLoading}>
             {isLoading ? "Espere..." : "Cancelar"}
-          </Button>
-        </div>
-      </div>
-    </div>,
-    document.body,
+          </AlertDialogCancel>
+          <AlertDialogAction
+            variant="destructive"
+            onClick={handleConfirm}
+            disabled={isLoading}
+            className="gap-2"
+          >
+            {isLoading && <LoaderCircle className="size-4 animate-spin" />}
+            {isLoading ? "Procesando..." : "Confirmar"}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
 

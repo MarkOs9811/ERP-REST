@@ -131,7 +131,7 @@ export function FormEditarInventario({ data, onCancel }) {
       onSubmit={handleSubmit(onSubmit, (errors) => console.log(errors))}
       className="p-4"
     >
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+      <div className="grid grid-cols-12 gap-3">
         <div className="image flex">
           <div className="image-preview m-auto">
             {watch("fotoActual") ? (
@@ -146,87 +146,119 @@ export function FormEditarInventario({ data, onCancel }) {
           </div>
         </div>
         {/* Nombre */}
-        <div className="col-12">
-          <label className="form-label small text-muted">Nombre</label>
+        <div className="col-span-full">
+          <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm text-muted-foreground">
+            Nombre
+          </label>
           <input
-            className={`form-control form-control-sm rounded-lg shadow-sm ${
-              errors.nombre ? "is-invalid" : ""
+            className={`w-full border-input bg-background py-1 transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 h-8 px-2.5 text-xs rounded-lg shadow-sm ${
+              errors.nombre
+                ? "border-destructive focus-visible:ring-destructive"
+                : ""
             }`}
             {...register("nombre", { required: "El nombre es obligatorio" })}
             placeholder="Nombre del producto"
           />
           {errors.nombre && (
-            <div className="invalid-feedback">{errors.nombre.message}</div>
+            <div className="text-sm text-destructive">
+              {errors.nombre.message}
+            </div>
           )}
         </div>
-        <div className="col-12">
-          <label className="form-label text-muted">Marca</label>
+        <div className="col-span-full">
+          <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-muted-foreground">
+            Marca
+          </label>
           <input
-            className={`form-control form-control-sm rounded-lg shadow-sm ${
-              errors.marca ? "is-invalid" : ""
+            className={`w-full border-input bg-background py-1 transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 h-8 px-2.5 text-xs rounded-lg shadow-sm ${
+              errors.marca
+                ? "border-destructive focus-visible:ring-destructive"
+                : ""
             }`}
             {...register("marca", {})}
           />
 
           {errors.marca && (
-            <div className="invalid-feedback">{errors.marca.message}</div> // ✅ Esto muestra el mensaje real
+            <div className="text-sm text-destructive">
+              {errors.marca.message}
+            </div> // ✅ Esto muestra el mensaje real
           )}
         </div>
 
         {/* Descripción */}
-        <div className="col-12">
-          <label className="form-label small text-muted">Descripción</label>
+        <div className="col-span-full">
+          <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm text-muted-foreground">
+            Descripción
+          </label>
           <textarea
-            className={`form-control form-control-sm rounded-lg shadow-sm ${
-              errors.descripcion ? "is-invalid" : ""
+            className={`w-full border-input bg-background py-1 transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 h-8 px-2.5 text-xs rounded-lg shadow-sm ${
+              errors.descripcion
+                ? "border-destructive focus-visible:ring-destructive"
+                : ""
             }`}
             {...register("descripcion")}
             rows={3}
             placeholder="Descripción corta"
           />
           {errors.descripcion && (
-            <div className="invalid-feedback">{errors.descripcion.message}</div>
+            <div className="text-sm text-destructive">
+              {errors.descripcion.message}
+            </div>
           )}
         </div>
 
         {/* Precio */}
-        <div className="md:col-span-6">
-          <label className="form-label small text-muted">Precio</label>
+        <div className="col-span-full md:col-span-6">
+          <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm text-muted-foreground">
+            Precio
+          </label>
           <input
             type="number"
             step="0.01"
-            className={`form-control form-control-sm rounded-lg shadow-sm ${
-              errors.precio ? "is-invalid" : ""
+            className={`w-full border-input bg-background py-1 transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 h-8 px-2.5 text-xs rounded-lg shadow-sm ${
+              errors.precio
+                ? "border-destructive focus-visible:ring-destructive"
+                : ""
             }`}
             {...register("precio", { required: "El precio es obligatorio" })}
             placeholder="0.00"
           />
           {errors.precio && (
-            <div className="invalid-feedback">{errors.precio.message}</div>
+            <div className="text-sm text-destructive">
+              {errors.precio.message}
+            </div>
           )}
         </div>
 
         {/* Stock */}
-        <div className="md:col-span-6">
-          <label className="form-label small text-muted">Stock</label>
+        <div className="col-span-full md:col-span-6">
+          <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm text-muted-foreground">
+            Stock
+          </label>
           <input
             type="number"
-            className={`form-control form-control-sm rounded-lg shadow-sm ${
-              errors.stock ? "is-invalid" : ""
+            className={`w-full border-input bg-background py-1 transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 h-8 px-2.5 text-xs rounded-lg shadow-sm ${
+              errors.stock
+                ? "border-destructive focus-visible:ring-destructive"
+                : ""
             }`}
             {...register("stock", { required: "El stock es obligatorio" })}
             placeholder="0"
           />
           {errors.stock && (
-            <div className="invalid-feedback">{errors.stock.message}</div>
+            <div className="text-sm text-destructive">
+              {errors.stock.message}
+            </div>
           )}
         </div>
 
         {/* Categoría */}
-        <div className="md:col-span-6">
-          <label className="form-label small text-muted">Categoría</label>
+        <div className="col-span-full md:col-span-6">
+          <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm text-muted-foreground">
+            Categoría
+          </label>
           <select
-            className="form-select form-select-sm rounded-lg shadow-sm"
+            className="w-full appearance-auto border-input bg-background py-1 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 h-8 px-2.5 text-xs rounded-lg shadow-sm"
             {...register("idCategoria", {
               required: "La categoría es obligatoria",
             })}
@@ -239,15 +271,19 @@ export function FormEditarInventario({ data, onCancel }) {
             ))}
           </select>
           {errors.idCategoria && (
-            <div className="invalid-feedback">{errors.idCategoria.message}</div>
+            <div className="text-sm text-destructive">
+              {errors.idCategoria.message}
+            </div>
           )}
         </div>
 
         {/* Unidad */}
-        <div className="md:col-span-6">
-          <label className="form-label small text-muted">Unidad</label>
+        <div className="col-span-full md:col-span-6">
+          <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm text-muted-foreground">
+            Unidad
+          </label>
           <select
-            className="form-select form-select-sm rounded-lg shadow-sm"
+            className="w-full appearance-auto border-input bg-background py-1 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 h-8 px-2.5 text-xs rounded-lg shadow-sm"
             {...register("idUnidad", { required: "La unidad es obligatoria" })}
           >
             <option value="">Seleccione unidad</option>
@@ -258,15 +294,19 @@ export function FormEditarInventario({ data, onCancel }) {
             ))}
           </select>
           {errors.idUnidad && (
-            <div className="invalid-feedback">{errors.idUnidad.message}</div>
+            <div className="text-sm text-destructive">
+              {errors.idUnidad.message}
+            </div>
           )}
         </div>
 
         {/* Estado */}
-        <div className="md:col-span-6">
-          <label className="form-label small text-muted">Estado</label>
+        <div className="col-span-full md:col-span-6">
+          <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm text-muted-foreground">
+            Estado
+          </label>
           <select
-            className="form-select form-select-sm rounded-lg shadow-sm"
+            className="w-full appearance-auto border-input bg-background py-1 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 h-8 px-2.5 text-xs rounded-lg shadow-sm"
             {...register("estado")}
           >
             <option value={1}>Activo</option>
@@ -275,9 +315,9 @@ export function FormEditarInventario({ data, onCancel }) {
         </div>
 
         {/* Foto */}
-        <div className="col-12 d-flex gap-3 align-items-center">
+        <div className="col-span-full flex gap-3 items-center">
           <div
-            className="w-24 h-24 rounded overflow-hidden border p-1"
+            className="w-24 h-24 rounded overflow-hidden p-1"
             style={{ width: 96, height: 96 }}
           >
             {preview ? (
@@ -287,23 +327,23 @@ export function FormEditarInventario({ data, onCancel }) {
                 style={{ width: "100%", height: "100%", objectFit: "cover" }}
               />
             ) : (
-              <div className="d-flex h-100 w-100 align-items-center justify-content-center text-muted small">
+              <div className="flex h-full w-full items-center justify-center text-muted-foreground text-sm">
                 Sin imagen
               </div>
             )}
           </div>
 
-          <div className="flex-grow-1">
-            <label className="form-label small text-muted">
+          <div className="grow">
+            <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm text-muted-foreground">
               Foto del producto
             </label>
             <input
               type="file"
               accept="image/*"
-              className="form-control form-control-sm"
+              className="w-full rounded-md border-input bg-background py-1 shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 h-8 px-2.5 text-xs"
               {...register("foto")}
             />
-            <small className="text-muted">JPG, PNG. Máx 2MB.</small>
+            <small className="text-muted-foreground">JPG, PNG. Máx 2MB.</small>
           </div>
         </div>
       </div>
@@ -315,7 +355,8 @@ export function FormEditarInventario({ data, onCancel }) {
             e.preventDefault(); // evita submit por si acaso
             onCancel();
           }}
-         variant="default">
+          variant="default"
+        >
           Cancelar
         </Button>
         <Button type="submit" className="btn-guardar" variant="default">

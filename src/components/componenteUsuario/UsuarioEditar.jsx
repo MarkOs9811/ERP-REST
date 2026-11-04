@@ -167,9 +167,9 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
     }
   };
   // Estilos comunes para etiquetas y contenedores
-  const labelStyle = "form-label fw-bold small text-secondary mb-1";
+  const labelStyle = "text-sm font-bold text-secondary-foreground mb-1";
   const sectionTitleStyle =
-    "text-danger fw-bold small text-uppercase mb-3 mt-2 border-bottom pb-1";
+    "text-destructive font-bold text-sm uppercase mb-3 mt-2 border-b pb-1";
   // Dropzone
   const { getRootProps, getInputProps } = useDropzone({
     accept: { "image/*": [] }, // Sintaxis moderna de dropzone
@@ -197,10 +197,10 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
       ) : (
         <>
           {/* SECCIÓN 1: FOTO DE PERFIL (Diseño Horizontal Compacto) */}
-          <div className="d-flex align-items-center gap-3 mb-4 p-3  rounded-3 border border-dashed">
+          <div className="flex items-center gap-3 mb-4 p-3 rounded-md border-dashed">
             <div
               {...getRootProps()}
-              className="position-relative d-flex align-items-center justify-content-center bg-white rounded-circle shadow-sm"
+              className="relative flex items-center justify-center bg-background rounded-full shadow-sm"
               style={{
                 width: "80px",
                 height: "80px",
@@ -216,35 +216,39 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
                 <img
                   src={fotoPreview}
                   alt="Preview"
-                  className="w-100 h-100 object-fit-cover"
+                  className="w-full h-full object-fit-cover"
                 />
               ) : (
-                <ImagePlus size={28} className="text-muted opacity-50" />
+                <ImagePlus
+                  size={28}
+                  className="text-muted-foreground opacity-50"
+                />
               )}
             </div>
 
-            <div className="flex-grow-1">
+            <div className="grow">
               <h6
-                className="m-0 fw-bold text-secondary"
+                className="m-0 font-bold text-muted-foreground"
                 style={{ fontSize: "0.9rem" }}
               >
                 Foto de Perfil
               </h6>
-              <p className="m-0 text-muted small lh-sm mb-2">
+              <p className="m-0 text-muted-foreground text-sm leading-tight mb-2">
                 Haz clic en el círculo para subir una imagen.
               </p>
               {fotoPreview && (
                 <Button
                   type="button"
                   onClick={removePhoto}
-                  className="btn btn-sm btn-outline-danger py-0 px-2"
+                  className="shadow h-8 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border-destructive bg-background text-destructive hover:bg-destructive/10 py-0 px-2"
                   style={{ fontSize: "0.75rem" }}
-                 variant="destructive">
+                  variant="destructive"
+                >
                   <Trash2Icon size={12} className="me-1" /> Quitar foto
                 </Button>
               )}
               {errors.fotoPerfil && (
-                <div className="text-danger small mt-1">
+                <div className="text-destructive text-sm mt-1">
                   {errors.fotoPerfil.message}
                 </div>
               )}
@@ -253,16 +257,16 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
           {/* SECCIÓN : INFORMACIÓN PERSONAL */}
           <h6 className={sectionTitleStyle}>Información Personal</h6>
 
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-3">
+          <div className="grid grid-cols-12 gap-3 mb-3">
             {/* Tipo Doc */}
-            <div className="md:col-span-5">
+            <div className="col-span-full md:col-span-5">
               <label className={labelStyle}>Tipo Doc.</label>
-              <div className="input-group">
-                <span className="input-group-text bg-white text-muted">
+              <div className="flex w-full items-stretch">
+                <span className="inline-flex items-center rounded-md border-input px-3 text-sm bg-background text-muted-foreground">
                   <FileText size={16} />
                 </span>
                 <select
-                  className="form-select"
+                  className="h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                   value={formData.tipo_documento}
                   onChange={(e) =>
                     setFormData({
@@ -279,15 +283,15 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
             </div>
 
             {/* Num Documento */}
-            <div className="md:col-span-7">
+            <div className="col-span-full md:col-span-7">
               <label className={labelStyle}>Número Documento</label>
-              <div className="input-group">
-                <span className="input-group-text bg-white text-muted">
+              <div className="flex w-full items-stretch">
+                <span className="inline-flex items-center rounded-md border-input px-3 text-sm bg-background text-muted-foreground">
                   <CreditCard size={16} />
                 </span>
                 <input
                   type="text"
-                  className="form-control"
+                  className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                   value={formData.numero_documento}
                   onChange={validacionesInput}
                   placeholder="Ingrese número"
@@ -296,15 +300,15 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
             </div>
 
             {/* Nombres */}
-            <div className="md:col-span-6">
+            <div className="col-span-full md:col-span-6">
               <label className={labelStyle}>Nombres</label>
-              <div className="input-group">
-                <span className="input-group-text bg-white text-muted">
+              <div className="flex w-full items-stretch">
+                <span className="inline-flex items-center rounded-md border-input px-3 text-sm bg-background text-muted-foreground">
                   <User size={16} />
                 </span>
                 <input
                   type="text"
-                  className="form-control"
+                  className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                   value={formData.nombres}
                   onChange={(e) =>
                     setFormData({ ...formData, nombres: e.target.value })
@@ -315,15 +319,15 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
             </div>
 
             {/* Apellidos */}
-            <div className="md:col-span-6">
+            <div className="col-span-full md:col-span-6">
               <label className={labelStyle}>Apellidos</label>
-              <div className="input-group">
-                <span className="input-group-text bg-white text-muted">
+              <div className="flex w-full items-stretch">
+                <span className="inline-flex items-center rounded-md border-input px-3 text-sm bg-background text-muted-foreground">
                   <User size={16} />
                 </span>
                 <input
                   type="text"
-                  className="form-control"
+                  className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                   value={formData.apellidos}
                   onChange={(e) =>
                     setFormData({ ...formData, apellidos: e.target.value })
@@ -337,16 +341,16 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
           {/* SECCIÓN 2: CUENTA Y ACCESO */}
           <h6 className={sectionTitleStyle}>Cuenta y Acceso</h6>
 
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-3">
-            <div className="col-12">
+          <div className="grid grid-cols-12 gap-3 mb-3">
+            <div className="col-span-full">
               <label className={labelStyle}>Correo Electrónico</label>
-              <div className="input-group">
-                <span className="input-group-text bg-white text-muted">
+              <div className="flex w-full items-stretch">
+                <span className="inline-flex items-center rounded-md border-input px-3 text-sm bg-background text-muted-foreground">
                   <Mail size={16} />
                 </span>
                 <input
                   type="email"
-                  className="form-control"
+                  className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                   value={formData.correo_electronico}
                   onChange={(e) =>
                     setFormData({
@@ -363,16 +367,16 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
           {/* SECCIÓN 3: DATOS LABORALES */}
           <h6 className={sectionTitleStyle}>Datos Laborales</h6>
 
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+          <div className="grid grid-cols-12 gap-3">
             {/* Sede */}
-            <div className="md:col-span-6">
+            <div className="col-span-full md:col-span-6">
               <label className={labelStyle}>Sede</label>
-              <div className="input-group">
-                <span className="input-group-text bg-white text-muted">
+              <div className="flex w-full items-stretch">
+                <span className="inline-flex items-center rounded-md border-input px-3 text-sm bg-background text-muted-foreground">
                   <Building2 size={16} />
                 </span>
                 <select
-                  className="form-select"
+                  className="h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                   value={formData.sede}
                   onChange={(e) =>
                     setFormData({ ...formData, sede: parseInt(e.target.value) })
@@ -389,14 +393,14 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
             </div>
 
             {/* Área */}
-            <div className="md:col-span-6">
+            <div className="col-span-full md:col-span-6">
               <label className={labelStyle}>Área</label>
-              <div className="input-group">
-                <span className="input-group-text bg-white text-muted">
+              <div className="flex w-full items-stretch">
+                <span className="inline-flex items-center rounded-md border-input px-3 text-sm bg-background text-muted-foreground">
                   <LayoutGrid size={16} />
                 </span>
                 <select
-                  className="form-select"
+                  className="h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                   value={formData.area}
                   onChange={(e) =>
                     setFormData({ ...formData, area: e.target.value })
@@ -413,14 +417,14 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
             </div>
 
             {/* Cargo */}
-            <div className="md:col-span-6">
+            <div className="col-span-full md:col-span-6">
               <label className={labelStyle}>Cargo</label>
-              <div className="input-group">
-                <span className="input-group-text bg-white text-muted">
+              <div className="flex w-full items-stretch">
+                <span className="inline-flex items-center rounded-md border-input px-3 text-sm bg-background text-muted-foreground">
                   <Briefcase size={16} />
                 </span>
                 <select
-                  className="form-select"
+                  className="h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                   value={formData.cargo}
                   onChange={handleCargoChange}
                 >
@@ -435,14 +439,14 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
             </div>
 
             {/* Horario */}
-            <div className="md:col-span-6">
+            <div className="col-span-full md:col-span-6">
               <label className={labelStyle}>Horario</label>
-              <div className="input-group">
-                <span className="input-group-text bg-white text-muted">
+              <div className="flex w-full items-stretch">
+                <span className="inline-flex items-center rounded-md border-input px-3 text-sm bg-background text-muted-foreground">
                   <Clock size={16} />
                 </span>
                 <select
-                  className="form-select"
+                  className="h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                   value={formData.horario}
                   onChange={(e) =>
                     setFormData({ ...formData, horario: e.target.value })
@@ -459,15 +463,15 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
             </div>
 
             {/* Salario */}
-            <div className="md:col-span-6">
+            <div className="col-span-full md:col-span-6">
               <label className={labelStyle}>Salario</label>
-              <div className="input-group">
-                <span className="input-group-text bg-white text-muted">
+              <div className="flex w-full items-stretch">
+                <span className="inline-flex items-center rounded-md border-input px-3 text-sm bg-background text-muted-foreground">
                   <DollarSign size={16} />
                 </span>
                 <input
                   type="text"
-                  className="form-control"
+                  className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                   value={formData.salario}
                   readOnly
                   placeholder="0.00"
@@ -477,20 +481,22 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
           </div>
 
           {/* BOTONES DE ACCIÓN */}
-          <div className="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+          <div className="flex justify-end gap-2 mt-4 pt-3 border-t">
             <Button
               type="button"
-              className="btn-cerrar-modal d-flex align-items-center gap-2"
+              className="btn-cerrar-modal flex items-center gap-2"
               onClick={handleCloseModal}
-             variant="default">
+              variant="default"
+            >
               <X size={18} /> Cancelar
             </Button>
 
             <Button
               type="submit"
-              className="btn-guardar d-flex align-items-center gap-2"
+              className="btn-guardar flex items-center gap-2"
               disabled={loading}
-             variant="default">
+              variant="default"
+            >
               <Save size={18} />
               {loading ? "Guardando..." : "Actualizar Usuario"}
             </Button>

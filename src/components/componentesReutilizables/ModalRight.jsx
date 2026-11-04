@@ -1,10 +1,13 @@
-import { useState, useEffect } from "react";
-import { createPortal } from "react-dom";
-import "../../css/EstiloModalRight.css";
+import { LoaderCircle, X } from "lucide-react";
 import { capitalizeFirstLetter } from "../../hooks/FirstLetterUp";
-import { X } from "lucide-react";
-import { BtnCerrar } from "./BotonesAccion";
 import { Button } from "../ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "../ui/sheet";
 
 const ModalRight = ({
   isOpen,
@@ -26,113 +29,89 @@ const ModalRight = ({
   submitButtonClassName = "",
   cancelButtonClassName = "",
 }) => {
-  const [shouldRender, setShouldRender] = useState(isOpen);
-
-  // Efecto para la animación de entrada y salida
-  useEffect(() => {
-    if (isOpen) {
-      setShouldRender(true);
-    } else if (shouldRender) {
-      const timer = setTimeout(() => {
-        setShouldRender(false);
-      }, 300);
-      return () => clearTimeout(timer);
-    }
-  }, [isOpen, shouldRender]);
-
-  //  Efecto optimizado para cerrar con la tecla Escape
-  useEffect(() => {
-    const handleEsc = (event) => {
-      if (event.key === "Escape" && !isLoading) {
-        onClose();
-      }
-    };
-
-    // Solo agregamos el listener si el modal está abierto
-    if (isOpen) {
-      document.addEventListener("keydown", handleEsc);
-    }
-
-    // Cleanup: limpiamos el evento cuando se cierra el modal o se desmonta
-    return () => {
-      document.removeEventListener("keydown", handleEsc);
-    };
-  }, [isOpen, isLoading, onClose]);
-
-  const handleClose = () => {
-    // Si está cargando, bloqueamos que el usuario pueda cerrar el modal accidentalmente
-    if (isLoading) return;
-
-    // Delegamos el cierre al padre para mantener sincronizada la animación con isOpen
-    onClose();
+  const handleOpenChange = (open) => {
+    if (!open && !isLoading) onClose();
   };
 
-  if (!shouldRender) return null;
+  const handleClose = () => {
+    if (!isLoading) onClose();
+  };
 
-  return createPortal(
-    <div className="modal-right-overlay m-0 p-0">
-      <div className="modal-right-backdrop" onClick={handleClose} />
-
-      <div
-        className={`modal-right-container custom-width-mobile p-0 m-0 d-flex flex-column h-100 overflow-hidden ${
-          isOpen ? "slide-in" : "slide-out"
-        }`}
-        style={{ width }}
+  return (
+    <Sheet open={isOpen} onOpenChange={handleOpenChange}>
+      <SheetContent
+        side="right"
+        showCloseButton={false}
+        onEscapeKeyDown={(event) => {
+          if (isLoading) event.preventDefault();
+        }}
+        onPointerDownOutside={(event) => {
+          if (isLoading) event.preventDefault();
+        }}
+        className="w-full gap-0 border-border/70 bg-background p-0 shadow-2xl sm:max-w-none"
+        style={{
+          width: `min(100vw, ${width})`,
+          maxWidth: "100vw",
+        }}
       >
-        {/* Header fijo */}
-        <div className="modal-right-header-content d-flex align-items-center justify-content-between p-3 w-100 border-bottom flex-shrink-0">
-          <div className="d-flex align-items-center gap-3">
-            <BtnCerrar onClick={handleClose} disabled={isLoading} />
-
-            <div className="d-flex flex-column modal-title-wrapper">
-              <h3 className="modal-right-title mb-0">
+        <SheetHeader className="flex-row items-center justify-between gap-4 border-b border-border/70 bg-background/95 px-5 py-4 backdrop-blur supports-backdrop-filter:bg-background/80 sm:px-6">
+          <div className="flex min-w-0 items-center gap-3">
+            {icono && (
+              <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary [&>svg]:size-5">
+                {icono}
+              </span>
+            )}
+            <div className="min-w-0">
+              <SheetTitle className="truncate text-base font-semibold tracking-tight sm:text-lg">
                 {capitalizeFirstLetter(title)}
-              </h3>
+              </SheetTitle>
               {subtitulo && (
-                <p className="text-muted mb-0 small">{subtitulo}</p>
+                <SheetDescription className="mt-1 line-clamp-2">
+                  {subtitulo}
+                </SheetDescription>
               )}
             </div>
           </div>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="size-9 shrink-0 rounded-full text-muted-foreground hover:text-foreground"
+            onClick={handleClose}
+            disabled={isLoading}
+            aria-label="Cerrar panel"
+          >
+            <X className="size-4" />
+          </Button>
+        </SheetHeader>
 
-          <span className="ms-auto me-1">{icono}</span>
-        </div>
-
-        {/* CUERPO DEL MODAL */}
-        <div
-          className={`modal-right-body  m-0 p-0 overflow-y-auto flex-grow-1 ${
-            hideFooter ? "full-height" : "with-footer"
-          }`}
-        >
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 py-5 sm:px-6">
           {typeof children === "function"
             ? children({ handleClose })
             : children}
         </div>
 
-        {/* Footer fijo (opcional) */}
         {!hideFooter && (
-          <div className="modal-right-footer flex-shrink-0">
+          <div className="flex shrink-0 flex-col-reverse gap-2 border-t border-border/70 bg-muted/20 px-5 py-4 sm:flex-row sm:justify-end sm:px-6">
             <Button
               type="button"
-              className={`btn-cerrar ms-2 ${cancelButtonClassName}`.trim()}
+              variant="outline"
+              className={`w-full sm:w-auto ${cancelButtonClassName}`.trim()}
               onClick={onCancel || handleClose}
-              disabled={isLoading} //  Bloqueamos botón Cancelar
-             variant="default">
+              disabled={isLoading}
+            >
               {cancelText}
             </Button>
             {showSubmit && (
               <Button
                 type="button"
-                className={`btn-guardar ms-2 ${submitButtonClassName}`.trim()}
+                className={`w-full gap-2 sm:w-auto ${submitButtonClassName}`.trim()}
                 onClick={onSubmit}
-                disabled={isLoading || isSubmitDisabled} //  Bloqueamos botón principal
-               variant="default">
+                disabled={isLoading || isSubmitDisabled}
+              >
                 {isLoading ? (
                   <>
-                    <span
-                      className="spinner-border spinner-border-sm me-2"
-                      role="status"
-                      aria-hidden="true"
-                    ></span>
+                    <LoaderCircle className="size-4 animate-spin" />
                     Procesando...
                   </>
                 ) : (
@@ -145,9 +124,8 @@ const ModalRight = ({
             )}
           </div>
         )}
-      </div>
-    </div>,
-    document.body,
+      </SheetContent>
+    </Sheet>
   );
 };
 

@@ -52,17 +52,17 @@ const GraficoLineaDayVentas = () => {
   }, [listVentas]);
 
   if (isLoading) return <Cargando />;
-  if (isError) return <p className="text-danger p-3">Error al cargar datos</p>;
+  if (isError) return <p className="text-destructive p-3">Error al cargar datos</p>;
 
   // Solo mostrar de 12:00 a 21:00 (Rango de operaciones del restaurante)
   const horasMostrar = Array.from({ length: 10 }, (_, i) => i + 12);
 
   return (
-    <div className="d-flex flex-column h-100">
+    <div className="flex flex-col h-full">
       {/* Cabecera Limpia (Estilo Fire Wok) */}
-      <div className="mb-4 d-flex gap-3 align-items-center">
+      <div className="mb-4 flex gap-3 items-center">
         <span
-          className="rounded-circle p-2 d-flex justify-content-center align-items-center"
+          className="rounded-full p-2 flex justify-center items-center"
           style={{
             backgroundColor: "var(--bg-saffron-soft)",
             color: "var(--fw-saffron)",
@@ -73,9 +73,9 @@ const GraficoLineaDayVentas = () => {
           <Clock size={24} />
         </span>
 
-        <div className="d-flex flex-column flex-grow-1">
+        <div className="flex flex-col grow">
           <span
-            className="fw-bold"
+            className="font-bold"
             style={{ color: "var(--text-main)", fontSize: "1.1rem" }}
           >
             Ventas por Hora
@@ -87,7 +87,7 @@ const GraficoLineaDayVentas = () => {
       </div>
 
       {/* Lista de Barras de Tiempo */}
-      <div className="flex-grow-1">
+      <div className="grow">
         {horasMostrar.map((hora) => {
           const ventas = ventasPorHora[hora];
           const percent = Math.round((ventas / maxVentas) * 100);
@@ -95,7 +95,7 @@ const GraficoLineaDayVentas = () => {
           return (
             <div
               key={hora}
-              className="d-flex align-items-center mb-3"
+              className="flex items-center mb-3"
               style={{ fontSize: "0.95rem" }}
             >
               {/* Etiqueta de la Hora */}
@@ -162,16 +162,16 @@ const GraficoLineaDayVentas = () => {
 
       {/* Footer del componente (Hora Punta) */}
       <div
-        className="mt-auto pt-3 border-top"
+        className="mt-auto pt-3 border-t"
         style={{ borderColor: "var(--bg-main) !important" }}
       >
         <span
-          className="d-flex align-items-center gap-2"
+          className="flex items-center gap-2"
           style={{ color: "var(--text-muted)", fontSize: "0.9rem" }}
         >
           <ClockArrowUp size={20} style={{ color: "var(--fw-strawberry)" }} />
           Hora punta:{" "}
-          <span className="fw-bold" style={{ color: "var(--fw-saffron)" }}>
+          <span className="font-bold" style={{ color: "var(--fw-saffron)" }}>
             {horaPunta}
           </span>
         </span>

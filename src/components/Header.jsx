@@ -168,7 +168,7 @@ export function Header({ tipoHeader = null }) {
               <img
                 src={fotoEmpresa}
                 alt="Logo de la empresa"
-                className="size-9 shrink-0 rounded-full border border-border object-cover"
+                className="size-9 shrink-0 rounded-full border-border object-cover"
               />
             )}
           <div className="flex min-w-0 flex-col leading-tight">
@@ -272,7 +272,7 @@ export function Header({ tipoHeader = null }) {
             title="Mi perfil"
             variant="ghost"
             onClick={() => setShowPerfilPanel(true)}
-            className="cursor-pointer inline-flex size-9 items-center justify-center overflow-hidden rounded-full border border-border bg-muted transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            className="cursor-pointer inline-flex size-9 items-center justify-center overflow-hidden rounded-full border-border bg-muted transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             {fotoPerfil && (
               <img src={fotoPerfil} alt="" className="size-full object-cover" />

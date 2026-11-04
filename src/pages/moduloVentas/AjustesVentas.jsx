@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "../../css/EstilosVentas.css";
+
 import MetodoPago from "../../components/componentesVentas/componentesAjustesVentas/MetodoPago";
 import { ContenedorPrincipal } from "../../components/componentesReutilizables/ContenedorPrincipal";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -41,8 +41,8 @@ export default function AjustesVentas() {
   };
 
   return (
-    <div className="row">
-      <div className="col-lg-12">
+    <div className="grid grid-cols-12 gap-3">
+      <div className="col-span-full">
         <Card className="">
           <CardHeader className="border-0">
             <h4>Ajustes de venta</h4>

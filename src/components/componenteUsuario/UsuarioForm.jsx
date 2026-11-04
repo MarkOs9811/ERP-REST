@@ -31,7 +31,6 @@ import {
 import { Button } from "../ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 
-
 export function UsuarioForm({ handleCloseModal }) {
   const queryClient = useQueryClient();
 
@@ -160,10 +159,10 @@ export function UsuarioForm({ handleCloseModal }) {
       <form onSubmit={handleSubmit(onSubmit)}>
         <CardContent className="p-2">
           {/* SECCIÓN 1: FOTO DE PERFIL (Diseño Horizontal Compacto) */}
-          <div className="d-flex align-items-center gap-3 mb-4 p-3  rounded-3 border border-dashed">
+          <div className="flex items-center gap-3 mb-4 p-3 rounded-md border-dashed">
             <div
               {...getRootProps()}
-              className="position-relative d-flex align-items-center justify-content-center bg-white rounded-circle shadow-sm"
+              className="relative flex items-center justify-center bg-background rounded-full shadow-sm"
               style={{
                 width: "80px",
                 height: "80px",
@@ -179,35 +178,39 @@ export function UsuarioForm({ handleCloseModal }) {
                 <img
                   src={fotoPreview}
                   alt="Preview"
-                  className="w-100 h-100 object-fit-cover"
+                  className="w-full h-full object-fit-cover"
                 />
               ) : (
-                <ImagePlus size={28} className="text-muted opacity-50" />
+                <ImagePlus
+                  size={28}
+                  className="text-muted-foreground opacity-50"
+                />
               )}
             </div>
 
-            <div className="flex-grow-1">
+            <div className="grow">
               <h6
-                className="m-0 fw-bold text-secondary"
+                className="m-0 font-bold text-muted-foreground"
                 style={{ fontSize: "0.9rem" }}
               >
                 Foto de Perfil
               </h6>
-              <p className="m-0 text-muted small lh-sm mb-2">
+              <p className="m-0 text-muted-foreground text-sm leading-tight mb-2">
                 Haz clic en el círculo para subir una imagen.
               </p>
               {fotoPreview && (
                 <Button
                   type="button"
                   onClick={removePhoto}
-                  className="btn btn-sm btn-outline-danger py-0 px-2"
+                  className="shadow h-8 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border-destructive bg-background text-destructive hover:bg-destructive/10 py-0 px-2"
                   style={{ fontSize: "0.75rem" }}
-                 variant="destructive">
+                  variant="destructive"
+                >
                   <Trash2 size={12} className="me-1" /> Quitar foto
                 </Button>
               )}
               {errors.fotoPerfil && (
-                <div className="text-danger small mt-1">
+                <div className="text-destructive text-sm mt-1">
                   {errors.fotoPerfil.message}
                 </div>
               )}
@@ -215,19 +218,21 @@ export function UsuarioForm({ handleCloseModal }) {
           </div>
 
           {/* SECCIÓN 2: DOCUMENTOS */}
-          <h6 className="text-danger fw-bold text-uppercase small mb-3 border-bottom pb-2">
+          <h6 className="font-bold uppercase text-sm mb-3 border-b pb-2">
             Información Personal
           </h6>
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-3">
+          <div className="grid grid-cols-12 gap-3 mb-3">
             {/* Tipo Documento */}
-            <div className="md:col-span-4">
-              <label className="form-label small fw-semibold text-muted mb-1 d-flex align-items-center gap-1">
+            <div className="col-span-full md:col-span-4">
+              <label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-semibold text-muted-foreground mb-1 flex items-center gap-1">
                 <IdCard size={16} />
                 Tipo Doc.
               </label>
               <select
-                className={`form-select form-select-sm ${
-                  errors.tipo_documento ? "is-invalid" : ""
+                className={`w-full appearance-auto rounded-md border-input bg-background py-1 shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 h-8 px-2.5 text-xs ${
+                  errors.tipo_documento
+                    ? "border-destructive focus-visible:ring-destructive"
+                    : ""
                 }`}
                 {...register("tipo_documento", {
                   required: "Requerido",
@@ -246,16 +251,18 @@ export function UsuarioForm({ handleCloseModal }) {
             </div>
 
             {/* Número Documento */}
-            <div className="md:col-span-8">
-              <label className="form-label small fw-semibold text-muted mb-1 d-flex align-items-center gap-1">
+            <div className="col-span-full md:col-span-8">
+              <label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-semibold text-muted-foreground mb-1 flex items-center gap-1">
                 <CreditCard size={16} />
                 Número Documento
               </label>
               <input
                 type="text"
                 inputMode="numeric"
-                className={`form-control form-control-sm ${
-                  errors.numero_documento ? "is-invalid" : ""
+                className={`w-full rounded-md border-input bg-background py-1 shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 h-8 px-2.5 text-xs ${
+                  errors.numero_documento
+                    ? "border-destructive focus-visible:ring-destructive"
+                    : ""
                 }`}
                 placeholder="Ingrese número"
                 {...register("numero_documento", {
@@ -265,7 +272,7 @@ export function UsuarioForm({ handleCloseModal }) {
                 onInput={limitDocumentoInput(watch("tipo_documento"))}
               />
               {errors.numero_documento && (
-                <span className="text-danger small">
+                <span className="text-destructive text-sm">
                   {errors.numero_documento.message}
                 </span>
               )}
@@ -273,41 +280,45 @@ export function UsuarioForm({ handleCloseModal }) {
           </div>
 
           {/* Nombres y Apellidos */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-3">
-            <div className="md:col-span-6">
-              <label className="form-label small fw-semibold text-muted mb-1 d-flex align-items-center gap-1">
+          <div className="grid grid-cols-12 gap-3 mb-3">
+            <div className="col-span-full md:col-span-6">
+              <label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-semibold text-muted-foreground mb-1 flex items-center gap-1">
                 <User size={16} />
                 Nombres
               </label>
               <input
                 type="text"
-                className={`form-control form-control-sm ${
-                  errors.nombres ? "is-invalid" : ""
+                className={`w-full rounded-md border-input bg-background py-1 shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 h-8 px-2.5 text-xs ${
+                  errors.nombres
+                    ? "border-destructive focus-visible:ring-destructive"
+                    : ""
                 }`}
                 placeholder="Ej. Juan Carlos"
                 {...register("nombres", { required: "Nombre requerido" })}
               />
               {errors.nombres && (
-                <span className="text-danger small">
+                <span className="text-destructive text-sm">
                   {errors.nombres.message}
                 </span>
               )}
             </div>
-            <div className="md:col-span-6">
-              <label className="form-label small fw-semibold text-muted mb-1 d-flex align-items-center gap-1">
+            <div className="col-span-full md:col-span-6">
+              <label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-semibold text-muted-foreground mb-1 flex items-center gap-1">
                 <User size={16} />
                 Apellidos
               </label>
               <input
                 type="text"
-                className={`form-control form-control-sm ${
-                  errors.apellidos ? "is-invalid" : ""
+                className={`w-full rounded-md border-input bg-background py-1 shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 h-8 px-2.5 text-xs ${
+                  errors.apellidos
+                    ? "border-destructive focus-visible:ring-destructive"
+                    : ""
                 }`}
                 placeholder="Ej. Pérez López"
                 {...register("apellidos", { required: "Apellido requerido" })}
               />
               {errors.apellidos && (
-                <span className="text-danger small">
+                <span className="text-destructive text-sm">
                   {errors.apellidos.message}
                 </span>
               )}
@@ -315,20 +326,22 @@ export function UsuarioForm({ handleCloseModal }) {
           </div>
 
           {/* SECCIÓN 3: CUENTA Y ACCESO */}
-          <h6 className="text-danger fw-bold text-uppercase small mt-4 mb-3 border-bottom pb-2">
+          <h6 className="font-bold uppercase text-sm mt-4 mb-3 border-b pb-2">
             Cuenta y Acceso
           </h6>
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-3">
-            <div className="md:col-span-7">
-              <label className="form-label small fw-semibold text-muted mb-1 d-flex align-items-center gap-1">
+          <div className="grid grid-cols-12 gap-3 mb-3">
+            <div className="col-span-full md:col-span-7">
+              <label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-semibold text-muted-foreground mb-1 flex items-center gap-1">
                 <Mail size={16} />
                 Correo Electrónico
               </label>
               <input
                 type="email"
                 inputMode="email"
-                className={`form-control form-control-sm ${
-                  errors.correo ? "is-invalid" : ""
+                className={`w-full rounded-md border-input bg-background py-1 shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 h-8 px-2.5 text-xs ${
+                  errors.correo
+                    ? "border-destructive focus-visible:ring-destructive"
+                    : ""
                 }`}
                 placeholder="usuario@empresa.com"
                 {...register("correo", {
@@ -340,19 +353,21 @@ export function UsuarioForm({ handleCloseModal }) {
                 })}
               />
               {errors.correo && (
-                <span className="text-danger small">
+                <span className="text-destructive text-sm">
                   {errors.correo.message}
                 </span>
               )}
             </div>
-            <div className="md:col-span-5">
-              <label className="form-label small fw-semibold text-muted mb-1 d-flex align-items-center gap-1">
+            <div className="col-span-full md:col-span-5">
+              <label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-semibold text-muted-foreground mb-1 flex items-center gap-1">
                 <Lock size={16} />
                 Método Auth
               </label>
               <select
-                className={`form-select form-select-sm ${
-                  errors.tipoAuth ? "is-invalid" : ""
+                className={`w-full appearance-auto rounded-md border-input bg-background py-1 shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 h-8 px-2.5 text-xs ${
+                  errors.tipoAuth
+                    ? "border-destructive focus-visible:ring-destructive"
+                    : ""
                 }`}
                 {...register("tipoAuth", { required: "Requerido" })}
               >
@@ -361,7 +376,7 @@ export function UsuarioForm({ handleCloseModal }) {
                 <option value="google Oauth2">Google</option>
               </select>
               {errors.tipoAuth && (
-                <span className="text-danger small">
+                <span className="text-destructive text-sm">
                   {errors.tipoAuth.message}
                 </span>
               )}
@@ -369,19 +384,21 @@ export function UsuarioForm({ handleCloseModal }) {
           </div>
 
           {/* SECCIÓN 4: DATOS LABORALES */}
-          <h6 className="text-danger fw-bold text-uppercase small mt-4 mb-3 border-bottom pb-2">
+          <h6 className="font-bold uppercase text-sm mt-4 mb-3 border-b pb-2">
             Datos Laborales
           </h6>
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-3">
+          <div className="grid grid-cols-12 gap-3 mb-3">
             {/* Área */}
-            <div className="md:col-span-6">
-              <label className="form-label small fw-semibold text-muted mb-1 d-flex align-items-center gap-1">
+            <div className="col-span-full md:col-span-6">
+              <label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-semibold text-muted-foreground mb-1 flex items-center gap-1">
                 <Building2 size={16} />
                 Área
               </label>
               <select
-                className={`form-select form-select-sm ${
-                  errors.area ? "is-invalid" : ""
+                className={`w-full appearance-auto rounded-md border-input bg-background py-1 shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 h-8 px-2.5 text-xs ${
+                  errors.area
+                    ? "border-destructive focus-visible:ring-destructive"
+                    : ""
                 }`}
                 {...register("area", { required: "Requerido" })}
               >
@@ -393,19 +410,23 @@ export function UsuarioForm({ handleCloseModal }) {
                 ))}
               </select>
               {errors.area && (
-                <span className="text-danger small">{errors.area.message}</span>
+                <span className="text-destructive text-sm">
+                  {errors.area.message}
+                </span>
               )}
             </div>
 
             {/* Cargo */}
-            <div className="md:col-span-6">
-              <label className="form-label small fw-semibold text-muted mb-1 d-flex align-items-center gap-1">
+            <div className="col-span-full md:col-span-6">
+              <label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-semibold text-muted-foreground mb-1 flex items-center gap-1">
                 <Briefcase size={16} />
                 Cargo
               </label>
               <select
-                className={`form-select form-select-sm ${
-                  errors.cargo ? "is-invalid" : ""
+                className={`w-full appearance-auto rounded-md border-input bg-background py-1 shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 h-8 px-2.5 text-xs ${
+                  errors.cargo
+                    ? "border-destructive focus-visible:ring-destructive"
+                    : ""
                 }`}
                 {...register("cargo", { required: "Requerido" })}
                 onChange={(e) => {
@@ -421,35 +442,37 @@ export function UsuarioForm({ handleCloseModal }) {
                 ))}
               </select>
               {errors.cargo && (
-                <span className="text-danger small">
+                <span className="text-destructive text-sm">
                   {errors.cargo.message}
                 </span>
               )}
             </div>
 
             {/* Salario */}
-            <div className="md:col-span-4">
-              <label className="form-label small fw-semibold text-muted mb-1 d-flex align-items-center gap-1">
+            <div className="col-span-full md:col-span-4">
+              <label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-semibold text-muted-foreground mb-1 flex items-center gap-1">
                 <Banknote size={16} />
                 Salario
               </label>
               <input
                 type="number"
                 readOnly
-                className="form-control form-control-sm"
+                className="w-full rounded-md border-input bg-background py-1 shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 h-8 px-2.5 text-xs"
                 {...register("salario", { required: "Requerido" })}
               />
             </div>
 
             {/* Horario */}
-            <div className="md:col-span-8">
-              <label className="form-label small fw-semibold text-muted mb-1 d-flex align-items-center gap-1">
+            <div className="col-span-full md:col-span-8">
+              <label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-semibold text-muted-foreground mb-1 flex items-center gap-1">
                 <Clock size={16} />
                 Horario
               </label>
               <select
-                className={`form-select form-select-sm ${
-                  errors.horario ? "is-invalid" : ""
+                className={`w-full appearance-auto rounded-md border-input bg-background py-1 shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 h-8 px-2.5 text-xs ${
+                  errors.horario
+                    ? "border-destructive focus-visible:ring-destructive"
+                    : ""
                 }`}
                 {...register("horario", { required: "Requerido" })}
               >
@@ -461,7 +484,7 @@ export function UsuarioForm({ handleCloseModal }) {
                 ))}
               </select>
               {errors.horario && (
-                <span className="text-danger small">
+                <span className="text-destructive text-sm">
                   {errors.horario.message}
                 </span>
               )}
@@ -473,15 +496,17 @@ export function UsuarioForm({ handleCloseModal }) {
         <CardFooter className="border-0 flex justify-end bg-transparent gap-2 pt-2 pb-0">
           <Button
             type="button"
-            className="btn-cerrar  px-4 rounded-3"
+            className="btn-cerrar px-4 rounded-md"
             onClick={handleCloseModal}
-           variant="default">
+            variant="default"
+          >
             Cancelar
           </Button>
           <Button
             type="submit"
-            className="btn-guardar btn-sm px-4 rounded-3 fw-bold"
-           variant="default">
+            className="btn-guardar inline-flex items-center justify-center gap-2 whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 text-xs px-4 rounded-md font-bold"
+            variant="default"
+          >
             Registrar Usuario
           </Button>
         </CardFooter>

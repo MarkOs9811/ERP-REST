@@ -5,9 +5,10 @@ import { ArrowDown, ArrowUp, FileText, Search } from "lucide-react";
 import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteExcel";
 import { CondicionCarga } from "../../components/componentesReutilizables/CondicionCarga";
 import { useQuery } from "@tanstack/react-query";
-import "../../css/estilosAlmacen/EstilosKardexModerno.css";
+
 import { Button } from "../../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 export function Kardex() {
   const [search, setSearch] = useState("");
@@ -37,8 +38,8 @@ export function Kardex() {
 
   return (
     <div className="kardex-page">
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
-        <div className="col-sm-12 col-md-6">
+      <div className="grid grid-cols-12 gap-3">
+        <div className="col-span-full md:col-span-6">
           <CondicionCarga isLoading={isLoading} isError={isError}>
             <Card className="kardex-kpi-card kardex-kpi-card-entrada h-full">
               <div className="kardex-kpi-icon-wrap">
@@ -54,10 +55,11 @@ export function Kardex() {
               <div className="kardex-kpi-action">
                 <Button
                   type="button"
-                  className="btn btn-ver kardex-export-btn"
+                  className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 btn-ver kardex-export-btn"
                   onClick={() => handleReporteEntrada()}
                   title="Exportar entradas a Excel"
-                 variant="outline">
+                  variant="outline"
+                >
                   <FileText size={18} />
                 </Button>
               </div>
@@ -65,7 +67,7 @@ export function Kardex() {
           </CondicionCarga>
         </div>
 
-        <div className="col-sm-12 col-md-6">
+        <div className="col-span-full md:col-span-6">
           <CondicionCarga isLoading={isLoading} isError={isError}>
             <Card className="kardex-kpi-card kardex-kpi-card-salida h-full">
               <div className="kardex-kpi-icon-wrap">
@@ -81,10 +83,11 @@ export function Kardex() {
               <div className="kardex-kpi-action">
                 <Button
                   type="button"
-                  className="btn btn-ver kardex-export-btn"
+                  className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 btn-ver kardex-export-btn"
                   onClick={() => handleReporteSalida()}
                   title="Exportar salidas a Excel"
-                 variant="outline">
+                  variant="outline"
+                >
                   <FileText size={18} />
                 </Button>
               </div>
@@ -92,25 +95,27 @@ export function Kardex() {
           </CondicionCarga>
         </div>
 
-        <div className="md:col-span-12">
+        <div className="col-span-full md:col-span-12">
           <CondicionCarga isLoading={isLoading} isError={isError}>
-            <Card className="kardex-panel-card py-2">
-              <CardHeader className="border-bottom-0 flex justify-between items-center gap-2 flex-wrap kardex-panel-header">
-                <div className="d-flex align-items-center gap-2 flex-wrap">
-                  <CardTitle asChild><h4 className="mb-0 titulo-card-especial kardex-panel-title">
-                    Kardex de Movimientos
-                  </h4></CardTitle>
-                  <span className="badge-header kardex-panel-badge">
+            <Card className="rounded-2xl border border-border/70 bg-card shadow-sm ring-0 kardex-panel-card py-2">
+              <CardHeader className="flex flex-col items-stretch gap-4 border-b border-border/70 px-5 py-5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <CardTitle asChild>
+                    <h4 className="mb-0 text-base font-semibold tracking-tight text-foreground kardex-panel-title">
+                      Kardex de Movimientos
+                    </h4>
+                  </CardTitle>
+                  <span className="ml-2 inline-flex items-center rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
                     Total: {totalMovimientos}
                   </span>
                 </div>
-                <div className="d-flex align-items-center">
-                  <div className="header-search-container kardex-search-box">
-                    <Search className="search-icon" />
-                    <input
+                <div className="flex items-center">
+                  <div className="relative w-full min-w-0 sm:w-64">
+                    <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                    <Input
                       type="text"
                       placeholder="Buscar producto..."
-                      className="form-control kardex-search-input"
+                      className="h-9 pl-9"
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
                     />

@@ -68,9 +68,11 @@ export function FormAddCompras() {
       <form onSubmit={handleSubmit(onSubmit)}>
         {/* Proveedor */}
         <div className="mb-3">
-          <label className="form-label small fw-semibold">Proveedor</label>
+          <label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-semibold">
+            Proveedor
+          </label>
           <select
-            className={`form-select ${errors.idProveedor ? "is-invalid" : ""}`}
+            className={`h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.idProveedor ? "border-destructive focus-visible:ring-destructive" : ""}`}
             {...register("idProveedor", {
               required: "Seleccione un proveedor",
             })}
@@ -84,26 +86,30 @@ export function FormAddCompras() {
               ))}
           </select>
           {errors.idProveedor && (
-            <div className="invalid-feedback">{errors.idProveedor.message}</div>
+            <div className="text-sm text-destructive">
+              {errors.idProveedor.message}
+            </div>
           )}
         </div>
 
         {/* Fecha de Compra */}
         <div className="mb-3">
-          <label className="form-label small fw-semibold">
+          <label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-semibold">
             Fecha de Compra
           </label>
           <input
             type="date"
-            className={`form-control ${
-              errors.fecha_compra ? "is-invalid" : ""
+            className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+              errors.fecha_compra
+                ? "border-destructive focus-visible:ring-destructive"
+                : ""
             }`}
             {...register("fecha_compra", {
               required: "La fecha es obligatoria",
             })}
           />
           {errors.fecha_compra && (
-            <div className="invalid-feedback">
+            <div className="text-sm text-destructive">
               {errors.fecha_compra.message}
             </div>
           )}
@@ -111,13 +117,13 @@ export function FormAddCompras() {
 
         {/* Total Pagado */}
         <div className="mb-3">
-          <label className="form-label small fw-semibold">
+          <label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-semibold">
             Total Pagado (S/.)
           </label>
           <input
             type="number"
             step="0.01"
-            className={`form-control ${errors.totalPagado ? "is-invalid" : ""}`}
+            className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.totalPagado ? "border-destructive focus-visible:ring-destructive" : ""}`}
             {...register("totalPagado", {
               required: "El total es obligatorio",
               min: { value: 0.01, message: "Debe ser mayor a 0" },
@@ -125,34 +131,40 @@ export function FormAddCompras() {
             })}
           />
           {errors.totalPagado && (
-            <div className="invalid-feedback">{errors.totalPagado.message}</div>
+            <div className="text-sm text-destructive">
+              {errors.totalPagado.message}
+            </div>
           )}
         </div>
 
         {/* Documento de Compra */}
         <div className="mb-3">
-          <label className="form-label small fw-semibold">
+          <label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-semibold">
             Documento de Compra (PDF, JPG, PNG)
           </label>
           <input
             type="file"
             accept=".pdf,.jpg,.jpeg,.png"
-            className={`form-control ${errors.documento ? "is-invalid" : ""}`}
+            className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.documento ? "border-destructive focus-visible:ring-destructive" : ""}`}
             {...register("documento", {
               required: "Debe subir el documento de compra",
             })}
           />
           {errors.documento && (
-            <div className="invalid-feedback">{errors.documento.message}</div>
+            <div className="text-sm text-destructive">
+              {errors.documento.message}
+            </div>
           )}
         </div>
 
         {/* Observaciones */}
         <div className="mb-3">
-          <label className="form-label small fw-semibold">Observaciones</label>
+          <label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-semibold">
+            Observaciones
+          </label>
           <textarea
             rows="3"
-            className="form-control"
+            className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
             placeholder="Ingrese observaciones (opcional)..."
             {...register("observaciones")}
           ></textarea>
@@ -160,9 +172,11 @@ export function FormAddCompras() {
 
         {/* Tipo de Compra */}
         <div className="mb-3">
-          <label className="form-label small fw-semibold">Tipo de Compra</label>
+          <label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-semibold">
+            Tipo de Compra
+          </label>
           <select
-            className={`form-select ${errors.metodoPago ? "is-invalid" : ""}`}
+            className={`h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.metodoPago ? "border-destructive focus-visible:ring-destructive" : ""}`}
             {...register("metodoPago", {
               required: "Seleccione el tipo de compra",
             })}
@@ -172,20 +186,24 @@ export function FormAddCompras() {
             <option value="credito">Crédito</option>
           </select>
           {errors.metodoPago && (
-            <div className="invalid-feedback">{errors.metodoPago.message}</div>
+            <div className="text-sm text-destructive">
+              {errors.metodoPago.message}
+            </div>
           )}
         </div>
 
         {/* Número de Cuotas */}
         <div className="mb-3">
-          <label className="form-label small fw-semibold">
+          <label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-semibold">
             Número de Cuotas
           </label>
           <input
             type="number"
             step="1"
-            className={`form-control ${
-              errors.numeroCuotas ? "is-invalid" : ""
+            className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+              errors.numeroCuotas
+                ? "border-destructive focus-visible:ring-destructive"
+                : ""
             }`}
             {...register("numeroCuotas", {
               required:
@@ -203,14 +221,14 @@ export function FormAddCompras() {
             }}
           />
           {errors.numeroCuotas && (
-            <div className="invalid-feedback">
+            <div className="text-sm text-destructive">
               {errors.numeroCuotas.message}
             </div>
           )}
         </div>
 
         {/* Botón */}
-        <div className="d-grid">
+        <div className="grid">
           <Button type="submit" className="btn-guardar" variant="default">
             Registrar Compra
           </Button>

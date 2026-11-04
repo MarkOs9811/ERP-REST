@@ -27,10 +27,9 @@ import ModalAlertQuestion from "../../components/componenteToast/ModalAlertQuest
 import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteExcel";
 import { Button } from "../../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
+import { Input } from "@/components/ui/input";
 
 export function HorasExtras() {
-  const BASE_URL = process.env.REACT_APP_BASE_URL;
   const [loading, setLoading] = useState(false);
   const [filtro, setFiltro] = useState(""); // Valor inmediato del input
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -217,7 +216,10 @@ export function HorasExtras() {
   if (isError) {
     return (
       <ContenedorPrincipal>
-        <div className="alert alert-danger" role="alert">
+        <div
+          className="relative w-full rounded-lg px-4 py-3 text-sm border-destructive/30 bg-destructive/10 text-destructive"
+          role="alert"
+        >
           Ocurrió un error al cargar los datos: {error.message}
         </div>
       </ContenedorPrincipal>
@@ -242,7 +244,7 @@ export function HorasExtras() {
             {row.usuario?.empleado.persona.nombre}{" "}
             {row.usuario?.empleado.persona.apellidos}
           </div>
-          <small className="fw-bold" style={{ color: "rgb(1, 98, 110)" }}>
+          <small className="font-bold" style={{ color: "rgb(1, 98, 110)" }}>
             {row.usuario?.empleado.persona.documento_identidad}
           </small>
         </div>
@@ -279,8 +281,8 @@ export function HorasExtras() {
       sortable: true,
       cell: (row) => (
         <span
-          className={`badge ${
-            row.estado == 1 ? "bg-success" : "bg-warning text-dark"
+          className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors ${
+            row.estado == 1 ? "bg-emerald-600" : "bg-amber-500 text-foreground"
           }`}
         >
           {row.estado == 1 ? (
@@ -301,13 +303,17 @@ export function HorasExtras() {
         <div>
           {row.estado == 1 ? (
             <>
-              <Button className="btn-ver btn-sm" title="Ver detalles" variant="outline">
+              <Button
+                className="btn-ver inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 px-3 text-xs"
+                title="Ver detalles"
+                variant="outline"
+              >
                 <EyeIcon className="text-auto" />
               </Button>
             </>
           ) : (
             <>
-              <div className="d-flex gap-2">
+              <div className="flex gap-2">
                 <Button
                   className="btn-editar"
                   title="Editar Hora extra"
@@ -315,7 +321,8 @@ export function HorasExtras() {
                     setDataEditHorasExtras(row);
                     setModalEditHoraExtras(true);
                   }}
-                 variant="secondary">
+                  variant="secondary"
+                >
                   <Pencil className="text-auto" />
                 </Button>
                 <Button
@@ -326,9 +333,10 @@ export function HorasExtras() {
                     setDataEditHorasExtras(row);
                     setModalEliminarHoraExtra(true);
                   }}
-                 variant="destructive">
+                  variant="destructive"
+                >
                   {loading ? (
-                    <span className="loading text-dark"></span>
+                    <span className="loading text-foreground"></span>
                   ) : (
                     <Trash2 className="text-auto" />
                   )}
@@ -343,39 +351,47 @@ export function HorasExtras() {
 
   return (
     <div>
-      <Card className="shadow-sm pb-2">
-        <CardHeader className="flex flex-col flex-md-row justify-between items-center gap-2 p-3">
-          <div className="d-flex align-items-center">
-            <CardTitle asChild><h4 className="mb-0 titulo-card-especial">
-              Panel de Horas Extras
-            </h4></CardTitle>
-            <span className="badge-header ms-2">Registros</span>
+      <Card className="rounded-2xl border border-border/70 bg-card shadow-sm ring-0 pb-2">
+        <CardHeader className="flex flex-col items-stretch gap-4 border-b border-border/70 px-5 py-5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+          <div className="flex items-center">
+            <CardTitle asChild>
+              <h4 className="mb-0 text-base font-semibold tracking-tight text-foreground">
+                Panel de Horas Extras
+              </h4>
+            </CardTitle>
+            <span className="ml-2 inline-flex items-center rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
+              Registros
+            </span>
           </div>
-          <div className="d-flex  gap-2 mt-3 mt-md-0 align-items-center ms-auto">
-            <div className="header-search-container">
-              <Search className="search-icon" />
-              <input
+          <div className="flex w-full flex-col items-stretch gap-2 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center">
+            <div className="relative w-full min-w-0 sm:w-64">
+              <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
                 type="text"
                 placeholder="Buscar horas extras..."
-                className="form-control"
+                className="h-9 pl-9"
                 onChange={(e) => setFiltro(e.target.value)}
               />
             </div>
             <Button
-              className="btn btn-outline-dark px-3"
+              size="lg"
+              className="w-full gap-2 px-3 sm:w-auto"
               title="Reporte"
               onClick={() => GetReporteExcel("/reporteHorasExtras")}
-             variant="default">
+              variant="ghostOutline"
+            >
               <FileText size={18} />
               Reporte
             </Button>
             <Button
-              className="btn btn-dark px-3"
+              size="lg"
+              className="gap-2 px-3 w-full sm:w-auto"
               title="Agregar"
               onClick={() => {
                 setIsModalOpen(true);
               }}
-             variant="default">
+              variant="default"
+            >
               <Plus size={18} />
               Agregar
             </Button>
@@ -394,7 +410,7 @@ export function HorasExtras() {
         submitText="Agregar"
         hideFooter={true}
       >
-        <div className="modal-body p-3">
+        <div className="p-3">
           <FormularioAddHorasExtras
             onSubmit={handleSubmit(onSubmit)}
             handleUsuarioSelect={handleUsuarioSelect}
@@ -404,7 +420,6 @@ export function HorasExtras() {
             errors={errors}
             usuarios={usuarios}
             isLoadingUsuarios={isLoadingUsuarios}
-            BASE_URL={BASE_URL}
           />
         </div>
       </ModalRight>

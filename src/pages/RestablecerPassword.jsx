@@ -107,7 +107,7 @@ export const RestablecerPassword = () => {
               <FontAwesomeIcon icon={faUnlockKeyhole} className="input-icon" />
               <input
                 type={showPassword ? "text" : "password"}
-                className={`form-control-custom ${errors.password ? "is-invalid" : ""}`}
+                className={`form-control-custom ${errors.password ? "border-destructive focus-visible:ring-destructive" : ""}`}
                 {...register("password", {
                   required: "La nueva contraseña es obligatoria",
                   minLength: {
@@ -139,7 +139,7 @@ export const RestablecerPassword = () => {
               <FontAwesomeIcon icon={faUnlockKeyhole} className="input-icon" />
               <input
                 type={showConfirmPassword ? "text" : "password"}
-                className={`form-control-custom ${errors.password_confirmation ? "is-invalid" : ""}`}
+                className={`form-control-custom ${errors.password_confirmation ? "border-destructive focus-visible:ring-destructive" : ""}`}
                 {...register("password_confirmation", {
                   required: "Debes confirmar tu contraseña",
                   validate: (value) =>
@@ -166,7 +166,7 @@ export const RestablecerPassword = () => {
               )}
             </div>
 
-            <div className="d-grid mt-4">
+            <div className="grid mt-4">
               <Button
                 type="submit"
                 className="btn-login-submit"

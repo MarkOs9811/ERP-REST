@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { GetPedidosWsp } from "../service/GetPedidosWsp";
-import "../css/EstilosPedidosWsp.css";
+
 import { useNavigate } from "react-router-dom";
 import { useCallback } from "react";
 import { Card } from "@/components/ui/card";

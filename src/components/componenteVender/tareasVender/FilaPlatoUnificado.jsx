@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Minus, Plus, Repeat, Trash2 } from "lucide-react";
 import { Button } from "../../ui/button";
 
@@ -64,82 +64,78 @@ export const FilaPlatoUnificado = ({
 
   const opacityClass =
     isSplitMode && !isSelected ? "opacity-50" : "opacity-100";
-  const bgClass = tipo === "nuevo" ? "bg-warning bg-opacity-10" : "bg-white";
-
-  // 💡 NUEVO: Color de borde según estado
-  const borderClass =
+  const stateClasses =
     tipo === "entregado"
-      ? "border-success"
+      ? "border-emerald-500/20 bg-emerald-500/[0.04]"
       : tipo === "cocinando"
-        ? "border-secondary"
-        : "border-light";
+        ? "border-sky-500/20 bg-sky-500/[0.04]"
+        : tipo === "nuevo"
+          ? "border-amber-500/20 bg-amber-500/[0.05]"
+          : "border-border/70 bg-card";
 
   const canSelect = tipo !== "nuevo";
+  const idReferencia = tipo === "nuevo" ? item.id : item.idPlato;
+  const isUpdating = loadingUpdate === idReferencia;
 
   return (
     <div
-      className={`d-flex align-items-center justify-content-between p-2 mb-1 rounded border ${bgClass} ${borderClass} ${opacityClass} transition-all`}
+      className={`mb-2 flex min-w-0 items-center gap-2 rounded-xl border p-2.5 transition-colors ${stateClasses} ${opacityClass}`}
     >
       {isSplitMode && canSelect && (
-        <div className="me-2">
+        <div className="shrink-0">
           <input
             type="checkbox"
-            className="form-check-input"
+            className="size-4 rounded border-input accent-primary"
             checked={isSelected}
             onChange={() => onToggleSelect(item)}
+            aria-label={`Seleccionar ${nombrePlato} para separar la cuenta`}
           />
         </div>
       )}
-      <div
-        className="d-flex align-items-center gap-2"
-        style={{ width: isSplitMode ? "35%" : "40%" }}
-      >
-        <div className="d-flex flex-column lh-1">
-          <span
-            className="fw-bold text-truncate"
-            style={{ fontSize: "0.9rem", maxWidth: "140px" }}
-          >
+      <div className="flex min-w-0 flex-1 items-center gap-2">
+        <div className="flex min-w-0 flex-col gap-1">
+          <span className="truncate text-sm font-semibold text-foreground">
             {nombrePlato}
           </span>
-          <span className="text-muted small">
+          <span className="text-xs text-muted-foreground">
             S/. {Number(precioUnitario).toFixed(2)}
           </span>
         </div>
       </div>
-      <div
-        className="d-flex align-items-center justify-content-center"
-        style={{ width: "30%" }}
-      >
+      <div className="flex shrink-0 items-center justify-center">
         {!isSplitMode && (
           <>
-            {/* 💡 NUEVO: Usamos isReadOnly para ocultar los controles */}
             {!isReadOnly ? (
-              <div className="d-flex align-items-center bg-white  rounded-pill px-1 ">
+              <div className="flex h-8 items-center gap-0.5 rounded-lg border border-border/70 bg-background p-0.5">
                 <Button
-                  className="btn-informativo btn-icon p-0"
+                  type="button"
+                  size="icon-sm"
+                  className="size-7 rounded-md text-muted-foreground"
                   onClick={() => handleCambioLocal(-1)}
-                  disabled={
-                    loadingUpdate ===
-                    (tipo === "nuevo" ? item.id : item.idPlato)
-                  }
-                 variant="default">
-                  <Minus size={14} />
+                  disabled={isUpdating}
+                  variant="ghost"
+                  aria-label={`Quitar una unidad de ${nombrePlato}`}
+                >
+                  <Minus className="size-4" />
                 </Button>
-                <span className="mx-2 fw-bold small">{cantidadLocal}</span>
+                <span className="min-w-7 text-center text-sm font-semibold tabular-nums text-foreground">
+                  {cantidadLocal}
+                </span>
                 <Button
-                  className="btn-informativo btn-icon p-0"
+                  type="button"
+                  size="icon-sm"
+                  className="size-7 rounded-md text-muted-foreground"
                   onClick={() => handleCambioLocal(1)}
-                  disabled={
-                    loadingUpdate ===
-                    (tipo === "nuevo" ? item.id : item.idPlato)
-                  }
-                 variant="default">
-                  <Plus size={14} />
+                  disabled={isUpdating}
+                  variant="ghost"
+                  aria-label={`Agregar una unidad de ${nombrePlato}`}
+                >
+                  <Plus className="size-4" />
                 </Button>
               </div>
             ) : (
               <span
-                className={`fw-bold fs-6 ${tipo === "entregado" ? "text-success" : "text-secondary"}`}
+                className={`font-bold text-base ${tipo === "entregado" ? "text-emerald-700 dark:text-emerald-400" : "text-secondary-foreground"}`}
               >
                 x{cantidadLocal}
               </span>
@@ -147,54 +143,60 @@ export const FilaPlatoUnificado = ({
           </>
         )}
         {isSplitMode && canSelect && isSelected && (
-          <div className="d-flex align-items-center bg-primary bg-opacity-10 border border-primary rounded-pill px-1">
+          <div className="flex h-8 items-center gap-0.5 rounded-lg border border-primary/20 bg-primary/5 p-0.5">
             <Button
-              className="btn-informativo btn-icon text-primary border-none p-0"
+              type="button"
+              size="icon-sm"
+              className="size-7 rounded-md text-primary"
               onClick={(e) => {
                 e.stopPropagation();
                 onChangeSplitQty(item.id, -1, item.cantidad);
               }}
-             variant="default">
-              <Minus size={14} />
+              variant="ghost"
+              aria-label={`Quitar cantidad seleccionada de ${nombrePlato}`}
+            >
+              <Minus className="size-4" />
             </Button>
-            <span className="mx-2 fw-bold small text-primary border-none">
+            <span className="min-w-16 text-center text-xs font-semibold tabular-nums text-primary">
               {cantidadSeleccionada} / {item.cantidad}
             </span>
             <Button
-              className="btn-informativo btn-icon text-primary border-none p-0"
+              type="button"
+              size="icon-sm"
+              className="size-7 rounded-md text-primary"
               onClick={(e) => {
                 e.stopPropagation();
                 onChangeSplitQty(item.id, 1, item.cantidad);
               }}
-             variant="default">
-              <Plus size={14} />
+              variant="ghost"
+              aria-label={`Agregar cantidad seleccionada de ${nombrePlato}`}
+            >
+              <Plus className="size-4" />
             </Button>
           </div>
         )}
       </div>
-      <div
-        className="d-flex align-items-center justify-content-end gap-2"
-        style={{ width: "30%" }}
-      >
-        <span
-          className={`fw-bold small ${isSelected ? "text-primary" : "text-dark"}`}
-        >
+      <div className="flex shrink-0 items-center justify-end gap-1.5">
+        <span className="whitespace-nowrap text-sm font-semibold tabular-nums text-foreground">
           S/.{" "}
           {Number(
             isSplitMode && isSelected ? precioSeleccionado : precioTotal,
           ).toFixed(2)}
         </span>
-        {/* 💡 NUEVO: Ocultamos el tacho de basura si está cocinando o entregado */}
         {!isSplitMode && !isReadOnly && (
           <Button
-            className="btn-eliminar btn-icon  p-0 mx-3"
+            type="button"
+            size="icon-sm"
+            className="size-7 rounded-md text-rose-600 hover:bg-rose-500/10 hover:text-rose-700 dark:text-rose-400"
             onClick={() => onDelete(item.id)}
             disabled={loadingDelete === item.id}
-           variant="destructive">
+            variant="ghost"
+            aria-label={`Eliminar ${nombrePlato}`}
+          >
             {loadingDelete === item.id ? (
-              <Repeat size={16} className="spinner-spin" />
+              <Repeat className="size-4 animate-spin" />
             ) : (
-              <Trash2 size={16} />
+              <Trash2 className="size-4" />
             )}
           </Button>
         )}

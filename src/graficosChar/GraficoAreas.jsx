@@ -135,11 +135,11 @@ export function GraficoAreas({ labels, data }) {
       : "100%";
 
   return (
-    <div className="w-100 d-flex flex-column h-100">
+    <div className="w-full flex flex-col h-full">
       {/* Contenedor del InputSelect alineado a la derecha */}
-      <div className="d-flex justify-content-end m-3">
+      <div className="flex justify-end m-3">
         <select
-          className="form-select form-select-sm shadow-none"
+          className="w-full appearance-auto rounded-md border-input bg-background py-1 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 h-8 px-2.5 text-xs shadow-none"
           style={{ width: "auto", minWidth: "150px" }}
           value={areaSeleccionada}
           onChange={(e) => setAreaSeleccionada(e.target.value)}
@@ -162,7 +162,7 @@ export function GraficoAreas({ labels, data }) {
           overflowX: "auto",
           overflowY: "hidden",
         }}
-        className="d-flex align-items-center justify-content-center p-4"
+        className="flex items-center justify-center p-4"
       >
         <div style={{ minWidth: minWidthStyle, height: "100%" }}>
           <Bar data={chartData} options={options} plugins={dataLabelsPlugin} />

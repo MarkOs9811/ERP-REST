@@ -21,7 +21,7 @@ import GraficoLineaDayVentas from "../../graficosChar/GraficoLineDayVentas";
 import GraficoMetodoPago from "../../graficosChar/GraficoMetodoPago";
 
 // Estilos y Utilidades
-import "../../css/EstilosVentas.css";
+
 import { formatMoneda } from "../../utils/currency";
 import { Button } from "../../components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -68,7 +68,7 @@ const KpiCard = ({
       {/* Textos */}
       <div>
         <span
-          className="text-muted font-bold block mb-1"
+          className="text-muted-foreground font-bold block mb-1"
           style={{ fontSize: "0.85rem" }}
         >
           {titulo}
@@ -167,10 +167,10 @@ export function Ventas() {
 
   // --- C. RENDERIZADO DE LA INTERFAZ ---
   return (
-    <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+    <div className="grid grid-cols-12 gap-4">
       {/* ================= FILA 1: KPIs PRINCIPALES (General) ================= */}
       <div className="col-span-full">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+        <div className="grid grid-cols-12 gap-3">
           {/* Ventas Hoy */}
           <div className="col-span-12 md:col-span-6 lg:col-span-3">
             <CondicionCarga isLoading={isLoading} isError={isError}>
@@ -180,7 +180,7 @@ export function Ventas() {
                     <p className="font-bold m-0">Ventas Hoy</p>
                     <Button
                       type="button"
-                      className="btn-informativo"
+                      className="gap-2 px-3"
                       onClick={() =>
                         GetReporteExcel(
                           "/reporteVentasHOY",
@@ -190,7 +190,7 @@ export function Ventas() {
                         )
                       }
                       title="Descargar Reporte"
-                      variant="default"
+                      variant="ghostOutline"
                     >
                       <FileText />
                       Reporte

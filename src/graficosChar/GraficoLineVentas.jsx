@@ -107,9 +107,9 @@ const GraficoBarEjemplo = () => {
   }, [ventas]);
 
   if (isLoading) return <Cargando />;
-  if (isError) return <p className="text-danger p-3">Error al cargar datos.</p>;
+  if (isError) return <p className="text-destructive p-3">Error al cargar datos.</p>;
   if (!ventasProcesadas)
-    return <p className="text-muted p-3">No hay datos disponibles.</p>;
+    return <p className="text-muted-foreground p-3">No hay datos disponibles.</p>;
 
   // --- CONFIGURACIÓN DEL GRÁFICO (Fire Wok Palette) ---
   const datosGrafico = {
@@ -195,11 +195,11 @@ const GraficoBarEjemplo = () => {
   };
 
   return (
-    <div className="d-flex flex-column h-100">
+    <div className="flex flex-col h-full">
       {/* Cabecera Limpia (Estilo Fire Wok) */}
-      <div className="mb-4 d-flex gap-3 align-items-center">
+      <div className="mb-4 flex gap-3 items-center">
         <span
-          className="rounded-circle p-2 d-flex justify-content-center align-items-center"
+          className="rounded-full p-2 flex justify-center items-center"
           style={{
             backgroundColor: "var(--bg-emerald-soft)",
             color: "var(--fw-emerald)",
@@ -210,9 +210,9 @@ const GraficoBarEjemplo = () => {
           <CalendarDays size={24} />
         </span>
 
-        <div className="d-flex flex-column flex-grow-1">
+        <div className="flex flex-col grow">
           <span
-            className="fw-bold"
+            className="font-bold"
             style={{ color: "var(--text-main)", fontSize: "1.1rem" }}
           >
             Tendencia Mensual

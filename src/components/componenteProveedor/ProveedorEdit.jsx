@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import ToastAlert from "../componenteToast/ToastAlert";
-import "../../css/estilosProveedore.css";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircleInfo,
@@ -113,16 +113,18 @@ export function ProveedorEdit({
 
         <div className="proveedor-section mb-4">
           <div className="proveedor-section-title">Documento y contacto</div>
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-3 proveedor-grid-top">
-            <div className="md:col-span-4">
-              <div className="proveedor-field proveedor-card-field h-100">
+          <div className="grid grid-cols-12 gap-3 proveedor-grid-top">
+            <div className="col-span-full md:col-span-4">
+              <div className="proveedor-field proveedor-card-field h-full">
                 <label htmlFor="tipo_documento" className="proveedor-label">
                   <FontAwesomeIcon icon={faIdCard} /> Tipo de Documento
                 </label>
                 <select
                   id="tipo_documento"
-                  className={`form-select ${
-                    errors.tipo_documento ? "is-invalid" : ""
+                  className={`h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+                    errors.tipo_documento
+                      ? "border-destructive focus-visible:ring-destructive"
+                      : ""
                   }`}
                   {...register("tipo_documento", {
                     required: "Este campo es obligatorio",
@@ -140,22 +142,24 @@ export function ProveedorEdit({
                 </select>
 
                 {errors.tipo_documento && (
-                  <div className="invalid-feedback">
+                  <div className="text-sm text-destructive">
                     {errors.tipo_documento.message}
                   </div>
                 )}
               </div>
             </div>
 
-            <div className="md:col-span-4">
-              <div className="proveedor-field proveedor-card-field h-100">
+            <div className="col-span-full md:col-span-4">
+              <div className="proveedor-field proveedor-card-field h-full">
                 <label htmlFor="numero_documento" className="proveedor-label">
                   <FontAwesomeIcon icon={faIdCard} /> Número de Documento
                 </label>
                 <input
                   type="text"
-                  className={`form-control ${
-                    errors.numero_documento ? "is-invalid" : ""
+                  className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+                    errors.numero_documento
+                      ? "border-destructive focus-visible:ring-destructive"
+                      : ""
                   }`}
                   placeholder={
                     tipoDocumento === "DNI" ? "00000000" : "00000000000"
@@ -183,22 +187,24 @@ export function ProveedorEdit({
                 />
 
                 {errors.numero_documento && (
-                  <div className="invalid-feedback">
+                  <div className="text-sm text-destructive">
                     {errors.numero_documento.message}
                   </div>
                 )}
               </div>
             </div>
 
-            <div className="md:col-span-4">
-              <div className="proveedor-field proveedor-card-field h-100">
+            <div className="col-span-full md:col-span-4">
+              <div className="proveedor-field proveedor-card-field h-full">
                 <label htmlFor="telefono" className="proveedor-label">
                   <FontAwesomeIcon icon={faPhone} /> Teléfono
                 </label>
                 <input
                   type="text"
-                  className={`form-control ${
-                    errors.telefono ? "is-invalid" : ""
+                  className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+                    errors.telefono
+                      ? "border-destructive focus-visible:ring-destructive"
+                      : ""
                   }`}
                   placeholder="9XXXXXXXX"
                   id="telefono"
@@ -210,7 +216,7 @@ export function ProveedorEdit({
                 />
 
                 {errors.telefono && (
-                  <div className="invalid-feedback">
+                  <div className="text-sm text-destructive">
                     {errors.telefono.message}
                   </div>
                 )}
@@ -223,15 +229,15 @@ export function ProveedorEdit({
           <div className="proveedor-section-title">
             Información del proveedor
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
-            <div className="col-12">
+          <div className="grid grid-cols-12 gap-3">
+            <div className="col-span-full">
               <div className="proveedor-field proveedor-card-field">
                 <label htmlFor="nombre" className="proveedor-label">
                   <FontAwesomeIcon icon={faUser} /> Nombre
                 </label>
                 <input
                   type="text"
-                  className={`form-control ${errors.nombre ? "is-invalid" : ""}`}
+                  className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.nombre ? "border-destructive focus-visible:ring-destructive" : ""}`}
                   placeholder="Nombre del proveedor"
                   id="nombre"
                   {...register("nombre", {
@@ -240,21 +246,21 @@ export function ProveedorEdit({
                 />
 
                 {errors.nombre && (
-                  <div className="invalid-feedback">
+                  <div className="text-sm text-destructive">
                     {errors.nombre.message}
                   </div>
                 )}
               </div>
             </div>
 
-            <div className="col-12">
+            <div className="col-span-full">
               <div className="proveedor-field proveedor-card-field">
                 <label htmlFor="contacto" className="proveedor-label">
                   <FontAwesomeIcon icon={faUser} /> Encargado o contacto
                 </label>
                 <input
                   type="text"
-                  className={`form-control ${errors.contacto ? "is-invalid" : ""}`}
+                  className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.contacto ? "border-destructive focus-visible:ring-destructive" : ""}`}
                   placeholder="Nombre de contacto"
                   id="contacto"
                   {...register("contacto", {
@@ -263,14 +269,14 @@ export function ProveedorEdit({
                 />
 
                 {errors.contacto && (
-                  <div className="invalid-feedback">
+                  <div className="text-sm text-destructive">
                     {errors.contacto.message}
                   </div>
                 )}
               </div>
             </div>
 
-            <div className="col-12">
+            <div className="col-span-full">
               <div className="proveedor-field proveedor-card-field">
                 <label htmlFor="direccion" className="proveedor-label">
                   <FontAwesomeIcon icon={faMapMarkedAlt} /> Dirección
@@ -278,7 +284,7 @@ export function ProveedorEdit({
                 <input
                   type="text"
                   id="direccion"
-                  className={`form-control ${errors.direccion ? "is-invalid" : ""}`}
+                  className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.direccion ? "border-destructive focus-visible:ring-destructive" : ""}`}
                   placeholder="Dirección del proveedor"
                   {...register("direccion", {
                     required: "Este campo es obligatorio",
@@ -286,14 +292,14 @@ export function ProveedorEdit({
                 />
 
                 {errors.direccion && (
-                  <div className="invalid-feedback">
+                  <div className="text-sm text-destructive">
                     {errors.direccion.message}
                   </div>
                 )}
               </div>
             </div>
 
-            <div className="col-12">
+            <div className="col-span-full">
               <div className="proveedor-field proveedor-card-field">
                 <label htmlFor="correo" className="proveedor-label">
                   <FontAwesomeIcon icon={faEnvelope} /> Correo Electrónico
@@ -301,7 +307,7 @@ export function ProveedorEdit({
                 <input
                   id="correo"
                   type="email"
-                  className={`form-control ${errors.correo ? "is-invalid" : ""}`}
+                  className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.correo ? "border-destructive focus-visible:ring-destructive" : ""}`}
                   placeholder="correo@ejemplo.com"
                   {...register("correo", {
                     required: "Este campo es obligatorio",
@@ -313,7 +319,7 @@ export function ProveedorEdit({
                 />
 
                 {errors.correo && (
-                  <div className="invalid-feedback">
+                  <div className="text-sm text-destructive">
                     {errors.correo.message}
                   </div>
                 )}
@@ -322,15 +328,21 @@ export function ProveedorEdit({
           </div>
         </div>
 
-        <div className="d-flex justify-content-end gap-2 mt-4 proveedor-form-actions">
+        <div className="flex justify-end gap-2 mt-4 proveedor-form-actions">
           <Button
             type="button"
             className="btn-cerrar-modal"
             onClick={handleCloseModal}
-           variant="default">
+            variant="default"
+          >
             Cancelar
           </Button>
-          <Button type="submit" className="btn-guardar" disabled={loading} variant="default">
+          <Button
+            type="submit"
+            className="btn-guardar"
+            disabled={loading}
+            variant="default"
+          >
             {loading ? "Guardando..." : "Guardar cambios"}
           </Button>
         </div>

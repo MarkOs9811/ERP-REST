@@ -14,17 +14,17 @@ import {
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { GetUsuarios } from "../../service/GetUsuarios";
-import "../../css/estilosDelivery/EstilosRepartidores.css";
+
 
 import ModalRight from "../../components/componentesReutilizables/ModalRight";
 import ModalAlertQuestion from "../../components/componenteToast/ModalAlertQuestion";
 import { FormEditRepartidor } from "../../components/componenteDelivery/FormEditRepartidor";
 import { PutData } from "../../service/CRUD/PutData";
 import { DeleteData } from "../../service/CRUD/DeleteData";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Button } from "../../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
+import { Input } from "@/components/ui/input";
 
 export function Repartidores() {
   const {
@@ -38,7 +38,6 @@ export function Repartidores() {
 
   const queryClient = useQueryClient();
 
-  const navigate = useNavigate();
   const [isModalEditOpen, setIsModalEditOpen] = useState(false);
   const [repartidorSelected, setRepartidorSelected] = useState(null);
 
@@ -67,44 +66,47 @@ export function Repartidores() {
     : [];
 
   return (
-    <div className="container-fluid p-0">
-      <Card className="rounded-2xl">
+    <div className="w-full p-0">
+      <Card className="rounded-2xl border border-border/70 bg-card shadow-sm ring-0">
         {/* HEADER DE LA VISTA */}
-        <CardHeader className="border-0">
-          <div className="d-flex align-items-center">
-            <CardTitle asChild><h4 className="mb-0 titulo-card-especial">
-              Panel de Repartidores
-              <span className="badge-header ms-2">
-                {usuariosRepartidores.length} activos
-              </span>
-            </h4></CardTitle>
+        <CardHeader className="flex flex-col items-stretch gap-4 border-b border-border/70 px-5 py-5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+          <div className="flex items-center">
+            <CardTitle asChild>
+              <h4 className="mb-0 text-base font-semibold tracking-tight text-foreground">
+                Panel de Repartidores
+                <span className="ml-2 inline-flex items-center rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
+                  {usuariosRepartidores.length} activos
+                </span>
+              </h4>
+            </CardTitle>
           </div>
 
-          <div className="d-flex  gap-2  align-items-center ">
-            <div className="header-search-container">
-              <Search className="search-icon" />
-              <input
+          <div className="flex w-full flex-col items-stretch gap-2 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center">
+            <div className="relative w-full min-w-0 sm:w-64">
+              <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
                 type="text"
                 placeholder="Buscar repartidor..."
-                className="form-control"
+                className="h-9 pl-9"
               />
             </div>
-            <Button
-              className="btn btn-outline-dark d-flex gap-2"
+            <Button size="lg"
+              className="w-full gap-2 px-3 sm:w-auto"
               title="Generar Reporte Completo"
-             variant="default">
+              variant="ghostOutline"
+            >
               <FileText size={20} />
-              <span className="d-none d-sm-inline">Reporte</span>
+              <span className="hidden sm:inline">Reporte</span>
             </Button>
-            <Button
-              className="btn btn-outline-dark d-flex gap-2"
+            <Button asChild size="lg"
+              className="gap-2 px-3 w-full sm:w-auto"
               title="Agregar Nuevo Repartidor"
-              onClick={() => {
-                navigate("/rrhh");
-              }}
-             variant="default">
-              <Plus size={20} />
-              <span className="d-none d-sm-inline">Agregar</span>
+              variant="default"
+            >
+              <Link to="/rrhh">
+                <Plus size={20} />
+                <span className="hidden sm:inline">Agregar</span>
+              </Link>
             </Button>
           </div>
         </CardHeader>
@@ -113,35 +115,41 @@ export function Repartidores() {
         <CardContent className="p-4">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
             {isLoading ? (
-              <div className="col-12 text-center py-5">
-                <div className="spinner-border text-primary" role="status">
-                  <span className="visually-hidden">Cargando...</span>
+              <div className="col-span-full text-center py-5">
+                <div
+                  className="inline-block size-5 animate-spin rounded-full border-2 border-current border-r-transparent text-primary"
+                  role="status"
+                >
+                  <span className="sr-only">Cargando...</span>
                 </div>
-                <p className="text-muted mt-2 small">
+                <p className="text-muted-foreground mt-2 text-sm">
                   Sincronizando la flota...
                 </p>
               </div>
             ) : error ? (
-              <div className="col-12">
-                <div className="alert alert-danger shadow-sm border-0 small">
+              <div className="col-span-full">
+                <div className="relative w-full rounded-lg px-4 py-3 border-destructive/30 bg-destructive/10 text-destructive shadow-sm border-0 text-sm">
                   Error al cargar repartidores: {error.message}
                 </div>
               </div>
             ) : usuariosRepartidores.length === 0 ? (
-              <div className="col-12 text-center py-5">
-                <p className="text-muted fs-5">
+              <div className="col-span-full text-center py-5">
+                <p className="text-muted-foreground text-lg">
                   No hay repartidores registrados actualmente.
                 </p>
               </div>
             ) : (
               usuariosRepartidores.map((repartidor) => (
                 /* AQUÍ ESTÁ LA CLAVE: col-md-6 (2 por fila en tablet) col-xl-4 o col-xl-3 (3 o 4 por fila en desktop) */
-                <div className="col-12 col-md-6 col-xl-4" key={repartidor.id}>
+                <div
+                  className="col-span-full md:col-span-6 xl:col-span-4"
+                  key={repartidor.id}
+                >
                   <Card className="h-full bg-background">
                     {/* Rejilla interna simplificada con Flexbox puro */}
                     <CardContent className="p-3 flex items-center gap-3">
                       {/* 1. Avatar fijo a la izquierda */}
-                      <div className="position-relative flex-shrink-0">
+                      <div className="relative shrink-0">
                         <div className="avatar-circle-horizontal overflow-hidden">
                           <img
                             src={repartidor.foto_url || "/default-avatar.png"}
@@ -153,7 +161,7 @@ export function Repartidores() {
                           />
                         </div>
                         <div
-                          className={`status-indicator-horizontal ${repartidor.estado == 1 ? "bg-success" : "bg-danger"}`}
+                          className={`status-indicator-horizontal ${repartidor.estado == 1 ? "bg-emerald-600" : "bg-destructive"}`}
                           title={
                             repartidor.estado == 1
                               ? "Activo/Conectado"
@@ -163,10 +171,10 @@ export function Repartidores() {
                       </div>
 
                       {/* 2. Información central fluida */}
-                      <div className="flex-grow-1" style={{ minWidth: 0 }}>
-                        <div className="d-flex align-items-center gap-2 mb-1">
+                      <div className="grow" style={{ minWidth: 0 }}>
+                        <div className="flex items-center gap-2 mb-1">
                           <h6
-                            className="mb-0 fw-bold text-truncate"
+                            className="mb-0 font-bold truncate"
                             title={`${repartidor.empleado.persona.nombre} ${repartidor.empleado.persona.apellidos}`}
                           >
                             {repartidor.empleado.persona.nombre}{" "}
@@ -176,7 +184,7 @@ export function Repartidores() {
 
                         <div className="mb-2">
                           <span
-                            className="badge bg-success border border-success border-opacity-25 rounded-pill px-2 py-1"
+                            className="inline-flex items-center text-xs font-semibold transition-colors bg-emerald-600 border-emerald-500 rounded-full px-2 py-1"
                             style={{ fontSize: "0.65rem" }}
                           >
                             Motorizado
@@ -184,28 +192,25 @@ export function Repartidores() {
                         </div>
 
                         <div
-                          className="d-flex flex-column gap-1 text-muted"
+                          className="flex flex-col gap-1 text-muted-foreground"
                           style={{ fontSize: "0.8rem" }}
                         >
-                          <div className="d-flex align-items-center gap-2 text-truncate">
+                          <div className="flex items-center gap-2 truncate">
                             <Phone
                               size={12}
-                              className="text-secondary flex-shrink-0"
+                              className="text-muted-foreground shrink-0"
                             />
-                            <span className="text-truncate">
+                            <span className="truncate">
                               {repartidor?.empleado?.persona?.telefono ||
                                 "Sin registro"}
                             </span>
                           </div>
-                          <div className="d-flex align-items-center gap-2 text-truncate">
+                          <div className="flex items-center gap-2 truncate">
                             <Mail
                               size={12}
-                              className="text-secondary flex-shrink-0"
+                              className="text-muted-foreground shrink-0"
                             />
-                            <span
-                              className="text-truncate"
-                              title={repartidor.email}
-                            >
+                            <span className="truncate" title={repartidor.email}>
                               {repartidor.email || "Sin correo"}
                             </span>
                           </div>
@@ -213,7 +218,7 @@ export function Repartidores() {
                       </div>
 
                       {/* 3. Acciones alineadas a la derecha */}
-                      <div className="d-flex justify-content-center align-items-center flex-shrink-0 gap-2">
+                      <div className="flex justify-center items-center shrink-0 gap-2">
                         <Button
                           className="btn-editar p-2"
                           title="Editar Repartidor"
@@ -221,11 +226,12 @@ export function Repartidores() {
                             setRepartidorSelected(repartidor);
                             setIsModalEditOpen(true);
                           }}
-                         variant="secondary">
+                          variant="secondary"
+                        >
                           <Edit2 size={18} />
                         </Button>
                         <Button
-                          className={` btn-sm  p-2 ${repartidor.estado == 1 ? "btn-eliminar" : "btn-activar"}`}
+                          className={`inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 text-xs p-2 ${repartidor.estado == 1 ? "btn-eliminar" : "btn-activar"}`}
                           title={
                             repartidor.estado == 1
                               ? "Desactivar Repartidor"
@@ -235,7 +241,8 @@ export function Repartidores() {
                             setRepartidorAccion(repartidor);
                             setShowModalActivar(true);
                           }}
-                         variant="destructive">
+                          variant="destructive"
+                        >
                           {repartidor.estado == 0 ? (
                             <Power size={18} />
                           ) : (

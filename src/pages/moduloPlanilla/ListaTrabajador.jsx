@@ -7,7 +7,7 @@ import { TablasGenerales } from "../../components/componentesReutilizables/Tabla
 import { Eye, FileText, Plus, Search } from "lucide-react";
 import { Button } from "../../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
+import { Input } from "@/components/ui/input";
 
 export function ListaTrabajador() {
   const [search, setSearch] = useState("");
@@ -46,7 +46,7 @@ export function ListaTrabajador() {
       name: "Foto",
       selector: (row) => row.usuario?.foto_url || "No disponible",
       cell: (row) => (
-        <div className="d-flex justify-content-center">
+        <div className="flex justify-center">
           {row.usuario?.fotoPerfil ? (
             <img
               src={`${row.usuario?.foto_url}`}
@@ -75,7 +75,7 @@ export function ListaTrabajador() {
                 border: "2px solid #ddd",
               }}
             >
-              <i className="bi bi-person fs-4 text-muted"></i>
+              <i className="bi bi-person text-xl text-muted-foreground"></i>
             </div>
           )}
         </div>
@@ -91,7 +91,9 @@ export function ListaTrabajador() {
       cell: (row) => (
         <div>
           <strong>{row.nombre_completo}</strong>
-          <div className="text-muted small">{row.documento_identidad}</div>
+          <div className="text-muted-foreground text-sm">
+            {row.documento_identidad}
+          </div>
         </div>
       ),
     },
@@ -126,8 +128,8 @@ export function ListaTrabajador() {
                   row.porcentaje_dias_trabajados >= 80
                     ? "#28a745"
                     : row.porcentaje_dias_trabajados >= 50
-                    ? "#ffc107"
-                    : "#dc3545",
+                      ? "#ffc107"
+                      : "#dc3545",
               }}
               aria-valuenow={row.porcentaje_dias_trabajados}
               aria-valuemin="0"
@@ -136,7 +138,7 @@ export function ListaTrabajador() {
               {row.dias_trabajados}
             </div>
           </div>
-          <small className="text-muted">
+          <small className="text-muted-foreground">
             {row.porcentaje_dias_trabajados.toFixed(1)}%
           </small>
         </div>
@@ -149,7 +151,7 @@ export function ListaTrabajador() {
       sortable: true,
       right: true,
       cell: (row) => (
-        <span className="fw-bold">
+        <span className="font-bold">
           {row.salario_neto
             ? `S/. ${parseFloat(row.salario_neto).toFixed(2)}`
             : "No registrado"}
@@ -167,20 +169,22 @@ export function ListaTrabajador() {
     {
       name: "Acciones",
       cell: (row) => (
-        <div className="d-flex gap-2">
+        <div className="flex gap-2">
           <Button
-            className="btn btn-sm btn-light"
+            className="h-8 px-3 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-muted text-foreground shadow-sm hover:bg-muted/80"
             onClick={() => handleVerDetalles(row.id)}
             title="Ver detalles"
-           variant="default">
+            variant="default"
+          >
             <Eye color={"auto"} height="20px" width="20px" />
           </Button>
 
           <Button
-            className="btn btn-sm btn-light"
+            className="h-8 px-3 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-muted text-foreground shadow-sm hover:bg-muted/80"
             onClick={() => handleGenerarBoleta(row.id)}
             title="Generar boleta"
-           variant="default">
+            variant="default"
+          >
             <FileText color={"auto"} height="20px" width="20px" />
           </Button>
         </div>
@@ -195,34 +199,35 @@ export function ListaTrabajador() {
 
   return (
     <div>
-      <Card className="shadow-sm">
-        <CardHeader className="border-bottom-0 flex flex-col flex-md-row justify-between items-center gap-2 p-3">
-          <div className="d-flex align-items-center">
-            <CardTitle asChild><h4 className="mb-0 titulo-card-especial">
-              Panel Planilla
-            </h4></CardTitle>
-            <span className="badge-header">
+      <Card className="rounded-2xl border border-border/70 bg-card shadow-sm ring-0">
+        <CardHeader className="flex flex-col items-stretch gap-4 border-b border-border/70 px-5 py-5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+          <div className="flex items-center">
+            <CardTitle asChild>
+              <h4 className="mb-0 text-base font-semibold tracking-tight text-foreground">Panel Planilla</h4>
+            </CardTitle>
+            <span className="ml-2 inline-flex items-center rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
               {listaTrabajador?.length > 0
                 ? `${listaTrabajador[0].cargo}`
                 : `${idCargo ? `(Cargo ID: ${idCargo})` : "Trabajadores"}`}
             </span>
           </div>
-          <div className="d-flex align-items-center flex-wrap gap-2 mt-3 mt-md-0">
-            <div className="header-search-container">
-              <Search className="search-icon" />
-              <input
+          <div className="flex w-full flex-col items-stretch gap-2 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center">
+            <div className="relative w-full min-w-0 sm:w-64">
+              <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
                 type="text"
                 placeholder="Buscar trabajador..."
-                className="form-control"
+                className="h-9 pl-9"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
             </div>
-            <Button
+            <Button size="lg"
               type="button"
-              className="btn btn-dark px-3"
+              className="gap-2 px-3 w-full sm:w-auto"
               onClick={handleRegistrarEmpleado}
-             variant="default">
+              variant="default"
+            >
               <Plus size={18} />
               Agregar
             </Button>

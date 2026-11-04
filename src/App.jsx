@@ -6,8 +6,6 @@ import {
   Route,
 } from "react-router-dom";
 
-import "./App.css";
-
 // --- ¡CAMBIO! Importamos useAuth ---
 import { AuthProvider, useAuth } from "./AuthContext";
 
@@ -17,7 +15,6 @@ import { CajaProvider } from "./CajaContext";
 
 import { PrivateRoute } from "./components/PrivateRoute";
 import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 import { Login } from "./pages/Login";
 

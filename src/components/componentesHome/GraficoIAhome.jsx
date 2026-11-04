@@ -22,7 +22,6 @@ import {
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 
-
 ChartJS.register(
   LineElement,
   PointElement,
@@ -39,53 +38,6 @@ const formatCurrency = (value) =>
     currency: "PEN",
     minimumFractionDigits: 2,
   }).format(Number(value || 0));
-
-const chartStyles = {
-  panel: {
-    background: "#ffffff",
-    borderRadius: "20px",
-    border: "1px solid rgba(15, 23, 42, 0.08)",
-    overflow: "hidden",
-  },
-  header: {
-    background: "#f8fafc",
-    borderBottom: "1px solid rgba(15, 23, 42, 0.06)",
-    padding: "16px 18px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  iconWrap: {
-    width: "42px",
-    height: "42px",
-    borderRadius: "14px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    background: "linear-gradient(135deg, #ff5c7d, #ff7d62)",
-    color: "#fff",
-  },
-  title: {
-    margin: 0,
-    fontSize: "1.05rem",
-    fontWeight: 800,
-    color: "#1f2937",
-  },
-  subtitle: {
-    margin: 0,
-    fontSize: "0.78rem",
-    color: "#6b7280",
-  },
-  body: {
-    padding: "18px 16px 12px",
-  },
-  metricShell: {
-    border: "1px solid rgba(148, 163, 184, 0.18)",
-    borderRadius: "18px",
-    background: "#fff",
-    padding: "18px 20px",
-  },
-};
 
 export function GraficoIAhome() {
   const {
@@ -310,7 +262,7 @@ export function GraficoIAhome() {
   const hasError = isErrorVentas || isErrorVentasIA;
 
   return (
-    <Card className="w-full overflow-hidden rounded-xl border border-border bg-card text-card-foreground">
+    <Card className="w-full overflow-hidden rounded-2xl border-border/70 bg-card text-card-foreground shadow-none">
       <CondicionCarga isLoading={isLoadingVentasIA} isError={isErrorVentasIA}>
         <div className="px-4 pt-4">
           <div className="mb-2 flex items-center justify-between gap-3">
@@ -334,9 +286,7 @@ export function GraficoIAhome() {
               </div>
             </div>
 
-            <div
-              className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-border bg-muted text-muted-foreground"
-            >
+            <div className="flex size-10 shrink-0 items-center justify-center rounded-lg border-border bg-muted text-muted-foreground">
               <CalendarDays size={18} />
             </div>
           </div>
@@ -350,33 +300,32 @@ export function GraficoIAhome() {
                 value: formatCurrency(ventasTotales),
                 delta: `${variacion >= 0 ? "+" : ""}${variacion.toFixed(1)}%`,
                 color: "#1fae68",
-                bg: "#e8f9ee",
+                surface: "border-emerald-500/20 bg-emerald-500/5 dark:bg-emerald-400/10",
               },
               {
                 label: "Predicción (7 días)",
                 value: formatCurrency(prediccionTotal),
                 color: "#ef4c4c",
-                bg: "#ffe9e9",
+                surface: "border-rose-500/20 bg-rose-500/5 dark:bg-rose-400/10",
               },
               {
                 label: "Promedio Diario (Reales)",
                 value: formatCurrency(promedioReal),
                 sub: "Por día",
                 color: "#3b82f6",
-                bg: "#edf6ff",
+                surface: "border-sky-500/20 bg-sky-500/5 dark:bg-sky-400/10",
               },
               {
                 label: "Promedio Diario (Predicción)",
                 value: formatCurrency(promedioPred),
                 sub: "Por día",
                 color: "#a855f7",
-                bg: "#f4ebff",
+                surface: "border-violet-500/20 bg-violet-500/5 dark:bg-violet-400/10",
               },
             ].map((item) => (
               <div key={item.label} className="min-w-0">
                 <Card
-                  className="h-full rounded-xl border border-border p-3"
-                  style={{ background: item.bg }}
+                  className={`h-full rounded-xl border p-3 shadow-none ${item.surface}`}
                 >
                   <div>
                     <div className="flex items-start justify-between gap-2">
@@ -415,13 +364,15 @@ export function GraficoIAhome() {
         <div className="px-4 py-4">
           <div className="grid grid-cols-1 gap-3 xl:grid-cols-2">
             <div className="min-w-0">
-              <Card className="h-full overflow-hidden rounded-xl border border-border">
+              <Card className="h-full overflow-hidden rounded-xl border-border">
                 <div className="flex items-center gap-2 border-b border-border bg-muted/50 px-4 py-3">
                   <span
                     className="inline-block size-3 rounded-full"
                     style={{ width: 12, height: 12, background: "#22c55e" }}
                   />
-                  <span className="font-semibold text-foreground">Ventas Reales</span>
+                  <span className="font-semibold text-foreground">
+                    Ventas Reales
+                  </span>
                 </div>
                 <div style={{ height: "340px" }} className="p-4">
                   {hasError ? (
@@ -440,13 +391,15 @@ export function GraficoIAhome() {
             </div>
 
             <div className="min-w-0">
-              <Card className="h-full overflow-hidden rounded-xl border border-border">
+              <Card className="h-full overflow-hidden rounded-xl border-border">
                 <div className="flex items-center gap-2 border-b border-border bg-muted/50 px-4 py-3">
                   <span
                     className="inline-block size-3 rounded-full"
                     style={{ width: 12, height: 12, background: "#ef4444" }}
                   />
-                  <span className="font-semibold text-foreground">Predicción IA</span>
+                  <span className="font-semibold text-foreground">
+                    Predicción IA
+                  </span>
                 </div>
                 <div style={{ height: "340px" }} className="p-4">
                   {hasError ? (
@@ -473,14 +426,10 @@ export function GraficoIAhome() {
           <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
             <div className="min-w-0">
               <Card
-                className="flex items-start gap-3 rounded-xl border border-border p-4"
-                style={{ background: "#ecfeff" }}
+                className="flex items-start gap-3 rounded-xl border-border/70 bg-cyan-500/5 p-4 shadow-none dark:bg-cyan-400/10"
               >
-                <div
-                  className="flex shrink-0 items-center justify-center rounded-lg"
-                  style={{ background: "#dff8ec", width: 40, height: 40 }}
-                >
-                  <Lightbulb size={20} color="#0f766e" />
+                <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-cyan-500/10 text-cyan-700 dark:text-cyan-300">
+                  <Lightbulb size={20} />
                 </div>
                 <div>
                   <div className="mb-1 font-semibold text-foreground">
@@ -500,14 +449,10 @@ export function GraficoIAhome() {
 
             <div className="min-w-0">
               <Card
-                className="flex items-start gap-3 rounded-xl border border-border p-4"
-                style={{ background: "#f5f3ff" }}
+                className="flex items-start gap-3 rounded-xl border-border/70 bg-violet-500/5 p-4 shadow-none dark:bg-violet-400/10"
               >
-                <div
-                  className="flex shrink-0 items-center justify-center rounded-lg"
-                  style={{ background: "#ede9fe", width: 40, height: 40 }}
-                >
-                  <Info size={20} color="#7c3aed" />
+                <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-violet-500/10 text-violet-700 dark:text-violet-300">
+                  <Info size={20} />
                 </div>
                 <div>
                   <div className="mb-1 font-semibold text-foreground">

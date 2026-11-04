@@ -4,7 +4,6 @@ import { capitalizeFirstLetter } from "../../hooks/FirstLetterUp";
 import { BotonMotionGeneral } from "../../components/componentesReutilizables/BotonMotionGeneral";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
-
 export function DashboardEmpresa({ onClose, dataEmpresa }) {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
 
@@ -41,7 +40,7 @@ export function DashboardEmpresa({ onClose, dataEmpresa }) {
   return (
     <Card className="bg-transparent border-0">
       <CardHeader className="flex items-center justify-between rounded-2xl border">
-        <div className="d-flex align-items-center gap-3">
+        <div className="flex items-center gap-3">
           <div
             style={{
               width: 64,
@@ -69,9 +68,9 @@ export function DashboardEmpresa({ onClose, dataEmpresa }) {
 
           <div>
             <h5 className="mb-0">{nombre}</h5>
-            <small className="text-muted d-block">RUC: {ruc}</small>
+            <small className="text-muted-foreground block">RUC: {ruc}</small>
             <small
-              className="text-muted d-block text-truncate"
+              className="text-muted-foreground block truncate"
               style={{ maxWidth: 420 }}
             >
               {direccion}
@@ -88,57 +87,59 @@ export function DashboardEmpresa({ onClose, dataEmpresa }) {
       </CardHeader>
 
       <CardContent className="">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-3">
-          <div className="col-6 col-md-3">
-            <div className="p-3 bg-light border rounded-4">
-              <div className="d-flex align-items-center justify-content-between">
+        <div className="grid grid-cols-12 gap-3 mb-3">
+          <div className="col-span-6 md:col-span-3">
+            <div className="p-3 bg-muted rounded-lg">
+              <div className="flex items-center justify-between">
                 <div>
-                  <small className="text-muted">Usuarios</small>
+                  <small className="text-muted-foreground">Usuarios</small>
                   <div className="h5 mb-0">{counts.usuariosCount}</div>
                 </div>
-                <div className="text-muted">
+                <div className="text-muted-foreground">
                   <Users size={22} />
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="col-6 col-md-3">
-            <div className="p-3 bg-light border rounded-4">
-              <div className="d-flex align-items-center justify-content-between">
+          <div className="col-span-6 md:col-span-3">
+            <div className="p-3 bg-muted rounded-lg">
+              <div className="flex items-center justify-between">
                 <div>
-                  <small className="text-muted">Sedes</small>
+                  <small className="text-muted-foreground">Sedes</small>
                   <div className="h5 mb-0">{counts.sedesCount}</div>
                 </div>
-                <div className="text-muted">
+                <div className="text-muted-foreground">
                   <MapPin size={22} />
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="col-6 col-md-3">
-            <div className="p-3 bg-light border rounded-4">
-              <div className="d-flex align-items-center justify-content-between">
+          <div className="col-span-6 md:col-span-3">
+            <div className="p-3 bg-muted rounded-lg">
+              <div className="flex items-center justify-between">
                 <div>
-                  <small className="text-muted">Configuraciones</small>
+                  <small className="text-muted-foreground">
+                    Configuraciones
+                  </small>
                   <div className="h5 mb-0">{counts.configTotal}</div>
                 </div>
-                <div className="text-muted">
+                <div className="text-muted-foreground">
                   <Settings size={22} />
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="col-6 col-md-3">
-            <div className="p-3 bg-light border rounded-4">
-              <div className="d-flex align-items-center justify-content-between">
+          <div className="col-span-6 md:col-span-3">
+            <div className="p-3 bg-muted rounded-lg">
+              <div className="flex items-center justify-between">
                 <div>
-                  <small className="text-muted">Activas</small>
+                  <small className="text-muted-foreground">Activas</small>
                   <div className="h5 mb-0">{counts.configActivas}</div>
                 </div>
-                <div className="text-muted">
+                <div className="text-muted-foreground">
                   <CheckCircle size={22} />
                 </div>
               </div>
@@ -146,23 +147,25 @@ export function DashboardEmpresa({ onClose, dataEmpresa }) {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
-          <div className="md:col-span-5">
+        <div className="grid grid-cols-12 gap-3">
+          <div className="col-span-full md:col-span-5">
             <Card className="border">
               <CardHeader className="flex items-center justify-between">
-                <strong className="small mb-0">
+                <strong className="text-sm mb-0">
                   Usuarios ({counts.usuariosCount})
                 </strong>
-                <small className="text-muted">Últimos</small>
+                <small className="text-muted-foreground">Últimos</small>
               </CardHeader>
-              <ul className="list-group list-group-flush p-2">
+              <ul className="flex flex-col divide-y-0 p-2">
                 {usuariosPreview.length === 0 ? (
-                  <li className="list-group-item">No hay usuarios</li>
+                  <li className="relative block border-b bg-background px-4 py-3 text-foreground">
+                    No hay usuarios
+                  </li>
                 ) : (
                   usuariosPreview.map((u) => (
                     <li
                       key={u.id || u.email || Math.random()}
-                      className="list-group-item d-flex align-items-center gap-3"
+                      className="relative border-b bg-background px-4 py-3 text-foreground flex items-center gap-3"
                     >
                       <div
                         style={{
@@ -180,20 +183,20 @@ export function DashboardEmpresa({ onClose, dataEmpresa }) {
                           .charAt(0)
                           .toUpperCase()}
                       </div>
-                      <div className="flex-grow-1">
-                        <div className="fw-semibold">
+                      <div className="grow">
+                        <div className="font-semibold">
                           {capitalizeFirstLetter(u.empleado?.persona?.nombre) +
                             " " +
                             capitalizeFirstLetter(
                               u.empleado?.persona?.apellidos,
                             ) || "Sin nombre"}
                         </div>
-                        <div className="small text-muted">
+                        <div className="text-sm text-muted-foreground">
                           {u.email || u.correo || "—"}
                         </div>
                       </div>
                       <div>
-                        <small className="text-muted">
+                        <small className="text-muted-foreground">
                           {u.role || u.rol || ""}
                         </small>
                       </div>
@@ -204,17 +207,17 @@ export function DashboardEmpresa({ onClose, dataEmpresa }) {
             </Card>
           </div>
 
-          <div className="md:col-span-7">
+          <div className="col-span-full md:col-span-7">
             <Card className="border">
               <CardHeader className="flex items-center justify-between">
-                <strong className="small mb-0">
+                <strong className="text-sm mb-0">
                   Configuraciones ({counts.configTotal})
                 </strong>
-                <small className="text-muted">Estado</small>
+                <small className="text-muted-foreground">Estado</small>
               </CardHeader>
 
-              <div className="table-responsive p-2">
-                <table className="table mb-0">
+              <div className="w-full overflow-x-auto p-2">
+                <table className="w-full caption-bottom text-sm mb-0">
                   <thead>
                     <tr>
                       <th>Nombre</th>
@@ -225,7 +228,10 @@ export function DashboardEmpresa({ onClose, dataEmpresa }) {
                   <tbody>
                     {configuracionesList.length === 0 ? (
                       <tr>
-                        <td colSpan="3" className="small text-muted">
+                        <td
+                          colSpan="3"
+                          className="text-sm text-muted-foreground"
+                        >
                           Sin configuraciones
                         </td>
                       </tr>
@@ -234,16 +240,18 @@ export function DashboardEmpresa({ onClose, dataEmpresa }) {
                         <tr key={cfg.id || cfg.nombre}>
                           <td className="align-middle">{cfg.nombre}</td>
                           <td
-                            className="align-middle text-truncate"
+                            className="align-middle truncate"
                             style={{ maxWidth: 320 }}
                           >
                             {cfg.descripcion || "—"}
                           </td>
                           <td className="align-middle">
                             {Number(cfg.estado) === 1 ? (
-                              <span className="badge bg-success">Activo</span>
+                              <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-emerald-600">
+                                Activo
+                              </span>
                             ) : (
-                              <span className="badge bg-secondary">
+                              <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-secondary">
                                 Inactivo
                               </span>
                             )}
@@ -259,19 +267,19 @@ export function DashboardEmpresa({ onClose, dataEmpresa }) {
         </div>
 
         {/* NUEVA SECCIÓN: SEDES */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mt-3">
-          <div className="col-12">
+        <div className="grid grid-cols-12 gap-3 mt-3">
+          <div className="col-span-full">
             <Card className="border">
               <CardHeader className="flex items-center justify-between">
-                <strong className="small mb-0">
+                <strong className="text-sm mb-0">
                   Sedes ({Array.isArray(sedes) ? sedes.length : 0})
                 </strong>
-                <small className="text-muted">Detalles</small>
+                <small className="text-muted-foreground">Detalles</small>
               </CardHeader>
 
               <CardContent className="p-2">
                 {!Array.isArray(sedes) || sedes.length === 0 ? (
-                  <div className="small text-muted p-3">
+                  <div className="text-sm text-muted-foreground p-3">
                     No hay sedes registradas
                   </div>
                 ) : (
@@ -279,7 +287,7 @@ export function DashboardEmpresa({ onClose, dataEmpresa }) {
                     {sedes.map((sede) => (
                       <div
                         key={sede.id || sede.nombre || Math.random()}
-                        className="col-12 col-md-6"
+                        className="col-span-full md:col-span-6"
                       >
                         <div
                           className="p-2 rounded"
@@ -288,7 +296,7 @@ export function DashboardEmpresa({ onClose, dataEmpresa }) {
                             border: "1px solid #eef3f7",
                           }}
                         >
-                          <div className="d-flex align-items-start gap-3">
+                          <div className="flex items-start gap-3">
                             <div
                               style={{
                                 width: 44,
@@ -305,36 +313,38 @@ export function DashboardEmpresa({ onClose, dataEmpresa }) {
                               {(sede.nombre || "S").charAt(0).toUpperCase()}
                             </div>
 
-                            <div className="flex-grow-1">
-                              <div className="fw-semibold">
+                            <div className="grow">
+                              <div className="font-semibold">
                                 {capitalizeFirstLetter(
                                   sede.nombre || sede.razon || "Sin nombre",
                                 )}
                               </div>
                               <div
-                                className="small text-muted text-truncate"
+                                className="text-sm text-muted-foreground truncate"
                                 style={{ maxWidth: 420 }}
                               >
                                 {sede.direccion ||
                                   sede.domicilio ||
                                   "Dirección no disponible"}
                               </div>
-                              <div className="small text-muted mt-1">
+                              <div className="text-sm text-muted-foreground mt-1">
                                 {sede.telefono || sede.numero || "—"} &nbsp; •
                                 &nbsp;
                                 {sede.ciudad || sede.departamento || "—"}
                               </div>
                             </div>
 
-                            <div className="text-end">
+                            <div className="text-right">
                               {Number(sede.estado) === 1 ? (
-                                <span className="badge bg-success">Activa</span>
+                                <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-emerald-600">
+                                  Activa
+                                </span>
                               ) : (
-                                <span className="badge bg-secondary">
+                                <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-secondary">
                                   Inactiva
                                 </span>
                               )}
-                              <div className="text-muted mt-2">
+                              <div className="text-muted-foreground mt-2">
                                 <MapPin size={16} />
                               </div>
                             </div>

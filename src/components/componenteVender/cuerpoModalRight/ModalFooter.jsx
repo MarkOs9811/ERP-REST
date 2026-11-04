@@ -19,7 +19,6 @@ import { MapaRiderCliente } from "../../MapaRiderCliente";
 import { Button } from "../../ui/button";
 import { Card, CardFooter, CardHeader } from "@/components/ui/card";
 
-
 export function ModalFooter({ selectedPedido }) {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
   const [modalOpen, setModalOpen] = useState(false);
@@ -81,7 +80,7 @@ export function ModalFooter({ selectedPedido }) {
       <CardFooter className="flex justify-between items-center flex-wrap gap-2">
         {/* --- ESTADO DEL PEDIDO --- */}
         <div
-          className="badge p-2 d-flex align-items-center"
+          className="rounded-full text-xs font-semibold transition-colors p-2 flex items-center"
           style={{
             backgroundColor:
               selectedPedido.estado_pedido === 3
@@ -106,7 +105,7 @@ export function ModalFooter({ selectedPedido }) {
         </div>
 
         {/* --- BOTONES DE ACCIÓN --- */}
-        <div className="d-flex gap-2 align-items-center">
+        <div className="flex gap-2 items-center">
           {/* Modal del Comprobante (Imagen) */}
           <div className="comprobante-container">
             {modalOpen &&
@@ -115,7 +114,10 @@ export function ModalFooter({ selectedPedido }) {
                   className="modal-overlay"
                   onClick={() => setModalOpen(false)}
                 >
-                  <div className="modal-content">
+                  <div
+                    className="rounded-xl bg-background p-3 shadow-xl"
+                    onClick={(event) => event.stopPropagation()}
+                  >
                     <img
                       src={`${BASE_URL}/storage/${selectedPedido.fotoComprobante}`}
                       alt="Comprobante en grande"
@@ -130,7 +132,11 @@ export function ModalFooter({ selectedPedido }) {
 
           {/* ESTADO 3: PENDIENTE */}
           {selectedPedido.estado_pedido === 3 && (
-            <Button className="btn-principal p-1" title="Notificar al cliente" variant="default">
+            <Button
+              className="btn-principal p-1"
+              title="Notificar al cliente"
+              variant="default"
+            >
               <Megaphone />
             </Button>
           )}
@@ -145,7 +151,8 @@ export function ModalFooter({ selectedPedido }) {
                     onClick={ImprimirPedidoWeb}
                     type="button"
                     title="Imprimir Ticket"
-                   variant="default">
+                    variant="default"
+                  >
                     <Printer />
                   </Button>
                   <div style={{ display: "none" }}>
@@ -170,7 +177,8 @@ export function ModalFooter({ selectedPedido }) {
                     className="btn-principal p-1"
                     onClick={handleRealizarPago}
                     title="Procesar Pago"
-                   variant="default">
+                    variant="default"
+                  >
                     <CheckCheck /> Pagar
                   </Button>
                   <Button
@@ -178,7 +186,8 @@ export function ModalFooter({ selectedPedido }) {
                     onClick={ImprimirPedidoWeb}
                     type="button"
                     title="Imprimir Ticket"
-                   variant="default">
+                    variant="default"
+                  >
                     <Printer />
                   </Button>
                   <div style={{ display: "none" }}>
@@ -202,16 +211,16 @@ export function ModalFooter({ selectedPedido }) {
         <Card className="m-2 overflow-hidden border-0 shadow-sm">
           {/* Encabezado del mapa (Se mantiene igual) */}
           <CardHeader className="bg-muted py-2 flex justify-between items-center">
-            <span className="fw-bold text-secondary d-flex align-items-center gap-2">
+            <span className="font-bold text-muted-foreground flex items-center gap-2">
               <MapPin size={16} /> Ubicación de Entrega
             </span>
-            <small className="text-muted">
+            <small className="text-muted-foreground">
               Lat: {parseFloat(selectedPedido.latitud).toFixed(4)}, Lon:{" "}
               {parseFloat(selectedPedido.longitud).toFixed(4)}
             </small>
           </CardHeader>
 
-          <div className="position-relative">
+          <div className="relative">
             {/* 🚀 AQUÍ REEMPLAZAMOS EL IFRAME POR NUESTRO NUEVO COMPONENTE 🚀 */}
             <MapaRiderCliente
               latCliente={selectedPedido.latitud}
@@ -221,7 +230,7 @@ export function ModalFooter({ selectedPedido }) {
             />
 
             {/* Botón flotante para abrir en app externa (Se mantiene igual) */}
-            <div className="position-absolute bottom-0 end-0 p-2">
+            <div className="absolute bottom-0 right-0 p-2">
               <a
                 href={
                   ubicacionActualRider
@@ -230,7 +239,7 @@ export function ModalFooter({ selectedPedido }) {
                 }
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn btn-primary btn-sm shadow"
+                className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 px-3 text-xs shadow"
                 style={{ fontSize: "0.8rem" }}
               >
                 <ExternalLink className="me-1" size={14} /> Abrir en Maps
@@ -241,7 +250,7 @@ export function ModalFooter({ selectedPedido }) {
       ) : (
         // Si es delivery pero no mandó ubicación (o es recojo en tienda)
         selectedPedido.tipo_entrega === "delivery" && (
-          <div className="alert alert-warning m-2 d-flex align-items-center gap-2 border-0">
+          <div className="relative w-full rounded-lg px-4 py-3 text-sm border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-400 m-2 flex items-center gap-2 border-0">
             <MapPin size={16} />
             <small>
               Este pedido es delivery pero no tiene ubicación registrada.

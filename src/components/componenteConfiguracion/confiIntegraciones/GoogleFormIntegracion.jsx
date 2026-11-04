@@ -106,24 +106,26 @@ export function GoogleFormIntegracion({ dataIntegracion }) {
     <form onSubmit={handleSubmit(onSubmit)} className="p-3">
       {/* Card de validación */}
       <div
-        className={`alert p-3 mb-3 border-0 shadow-sm ${
-          isConfigured ? "alert-success " : "alert-danger "
+        className={`relative w-full rounded-lg text-sm p-3 mb-3 border-0 shadow-sm ${
+          isConfigured
+            ? "rounded-md border-emerald-600/30 bg-emerald-600/10 p-4 text-emerald-800 dark:text-emerald-300 "
+            : "rounded-md border-destructive/50 bg-destructive/10 p-4 text-destructive "
         }`}
       >
         {isConfigured ? (
-          <span className="small">
+          <span className="text-sm">
             <CheckCircle size={24} className="me-2" />
             Todo correcto, puedes continuar con la configuración.
           </span>
         ) : (
-          <span className="small">
+          <span className="text-sm">
             <XCircle size={24} className="me-2" />
             Faltan credenciales. Crea un servicio en{" "}
             <a
               href="https://console.cloud.google.com/"
               target="_blank"
               rel="noopener noreferrer"
-              className=" fw-bold text-decoration-underline"
+              className="font-bold underline"
             >
               Google Cloud Console
             </a>
@@ -134,12 +136,16 @@ export function GoogleFormIntegracion({ dataIntegracion }) {
 
       {/* Campos del formulario */}
       <div className="mb-3">
-        <label className="form-label small">Client ID</label>
+        <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm">
+          Client ID
+        </label>
         <input
           type="text"
           disabled={!isEditing}
-          className={`text-muted form-control ${
-            errors.clientId ? "is-invalid" : ""
+          className={`text-muted-foreground h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+            errors.clientId
+              ? "border-destructive focus-visible:ring-destructive"
+              : ""
           }`}
           {...register("clientId", {
             required: "Este campo es obligatorio.",
@@ -150,17 +156,23 @@ export function GoogleFormIntegracion({ dataIntegracion }) {
           placeholder="Ingresa tu Client ID"
         />
         {errors.clientId && (
-          <div className="invalid-feedback">{errors.clientId.message}</div>
+          <div className="text-sm text-destructive">
+            {errors.clientId.message}
+          </div>
         )}
       </div>
 
       <div className="mb-3">
-        <label className="form-label small">ID Secreto del cliente</label>
+        <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm">
+          ID Secreto del cliente
+        </label>
         <input
           type="text"
           disabled={!isEditing}
-          className={`text-muted form-control ${
-            errors.idSecretaCliente ? "is-invalid" : ""
+          className={`text-muted-foreground h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+            errors.idSecretaCliente
+              ? "border-destructive focus-visible:ring-destructive"
+              : ""
           }`}
           {...register("idSecretaCliente", {
             required: "Este campo es obligatorio.",
@@ -171,19 +183,23 @@ export function GoogleFormIntegracion({ dataIntegracion }) {
           placeholder="Ingresa tu API Key"
         />
         {errors.idSecretaCliente && (
-          <div className="invalid-feedback">
+          <div className="text-sm text-destructive">
             {errors.idSecretaCliente.message}
           </div>
         )}
       </div>
 
       <div className="mb-3">
-        <label className="form-label small">Redirect URI</label>
+        <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm">
+          Redirect URI
+        </label>
         <input
           type="text"
           disabled={!isEditing}
-          className={`text-muted form-control ${
-            errors.redirectUrl ? "is-invalid" : ""
+          className={`text-muted-foreground h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+            errors.redirectUrl
+              ? "border-destructive focus-visible:ring-destructive"
+              : ""
           }`}
           {...register("redirectUrl", {
             required: "Este campo es obligatorio.",
@@ -193,18 +209,22 @@ export function GoogleFormIntegracion({ dataIntegracion }) {
           })}
           placeholder="Ingresa tu Redirect URI"
         />
-        <small className="text-muted">
+        <small className="text-muted-foreground">
           Dominio del backend + ruta de redireccionamiento
         </small>
         {errors.redirectUrl && (
-          <div className="invalid-feedback">{errors.redirectUrl.message}</div>
+          <div className="text-sm text-destructive">
+            {errors.redirectUrl.message}
+          </div>
         )}
       </div>
       <div>
-        <small className="text-muted">empresa: {googleConfig.idEmpresa} </small>
+        <small className="text-muted-foreground">
+          empresa: {googleConfig.idEmpresa}{" "}
+        </small>
       </div>
 
-      <div className="d-flex justify-content-between align-items-center mt-4 pt-3 border-top gap-3">
+      <div className="flex justify-between items-center mt-4 pt-3 border-t gap-3">
         {/* --- GRUPO IZQUIERDA: Botón de Conexión --- */}
         {/* Solo se muestra si NO estamos editando */}
         {!isEditing && (
@@ -219,7 +239,7 @@ export function GoogleFormIntegracion({ dataIntegracion }) {
         )}
 
         {/* --- GRUPO DERECHA: Botones de Edición/Guardado --- */}
-        <div className="d-flex justify-content-end gap-2">
+        <div className="flex justify-end gap-2">
           {!isEditing ? (
             <>
               <BotonMotionGeneral
@@ -236,11 +256,17 @@ export function GoogleFormIntegracion({ dataIntegracion }) {
                 className="btn-cerrar-modal"
                 onClick={() => setIsEditing(false)}
                 disabled={loading}
-               variant="default">
+                variant="default"
+              >
                 Cancelar
               </Button>
 
-              <Button type="submit" className="btn-guardar" disabled={loading} variant="default">
+              <Button
+                type="submit"
+                className="btn-guardar"
+                disabled={loading}
+                variant="default"
+              >
                 {loading ? "Guardando..." : "Guardar"}
               </Button>
             </>

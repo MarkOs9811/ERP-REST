@@ -20,7 +20,7 @@ export default function FormularioReporte({
   } = useForm();
 
   return (
-    <div className="col-lg-4 col-sm-12">
+    <div className="lg:col-span-4 col-span-full">
       <Card className="border shadow-sm h-full">
         <CardHeader className="text-center p-3">
           <p className="h5">{titulo}</p>
@@ -35,14 +35,14 @@ export default function FormularioReporte({
               })}
             />
 
-            <div className="d-grid w-100 p-3 mx-auto">
+            <div className="grid w-full p-3 mx-auto">
               <>
                 {estadoIntegracionGoogle?.estado === 1 ? (
                   <RippleWrapper className="p-0">
                     <BotonAnimado
                       type="submit"
                       loading={isLoading}
-                      className="btn-realizarPedido rounded-none btn-sm px-3 h6 py-2"
+                      className="btn-realizarPedido inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 text-xs px-3 h6 py-2"
                       icon={
                         !isLoading ? (
                           <FileTextIcon className="me-1 text-auto" />
@@ -53,7 +53,7 @@ export default function FormularioReporte({
                     </BotonAnimado>
                   </RippleWrapper>
                 ) : (
-                  <small className="text-muted">
+                  <small className="text-muted-foreground">
                     No disponible, inicie sesión con su cuenta de Google
                   </small>
                 )}

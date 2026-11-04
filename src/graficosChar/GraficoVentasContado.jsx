@@ -29,7 +29,7 @@ Chart.register(
 export function GraficoVentasContado() {
   const chartRef = useRef(null);
   const colors = getThemeColors();
-  const colorVentas = colors.bgEmeraldSoft || colors.emerald;
+  const colorVentas = colors.emerald || "rgb(16, 185, 129)";
 
   const {
     data: dataInformes = {},
@@ -96,7 +96,7 @@ export function GraficoVentasContado() {
     plugins: {
       legend: {
         labels: {
-          color: "var(--text-muted)",
+          color: colors.textMuted || "#64748b",
           font: { family: "'Inter', sans-serif", weight: "500" },
         },
       },
@@ -123,22 +123,22 @@ export function GraficoVentasContado() {
   };
 
   return (
-    <div className="d-flex flex-column h-100">
-      <div className="mb-4 d-flex gap-3 align-items-center">
+    <div className="flex flex-col h-full">
+      <div className="mb-4 flex gap-3 items-center">
         <span
-          className="rounded-circle p-2 d-flex justify-content-center align-items-center"
+          className="rounded-full p-2 flex justify-center items-center"
           style={{
-            backgroundColor: "var(--bg-emerald-soft)",
-            color: "var(--fw-emerald)",
+            backgroundColor: toRgba(colorVentas, 0.12),
+            color: colorVentas,
             minWidth: "48px",
             minHeight: "48px",
           }}
         >
           <ChartLine size={24} />
         </span>
-        <div className="d-flex flex-column flex-grow-1">
+        <div className="flex flex-col grow">
           <span
-            className="fw-bold"
+            className="font-bold"
             style={{ color: "var(--text-main)", fontSize: "1.1rem" }}
           >
             Ventas al Contado

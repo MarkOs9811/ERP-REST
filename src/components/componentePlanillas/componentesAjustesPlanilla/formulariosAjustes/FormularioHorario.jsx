@@ -43,7 +43,7 @@ export function FormularioHorario({ onClose, isEdit, dataEdit = null }) {
         // ¡Asegúrate de que 'dataEdit.id_horario' sea el ID correcto!
         response = await axiosInstance.put(
           `/horarios/${dataEdit.id}`, // <-- ¡Verifica este endpoint/ID!
-          data
+          data,
         );
       } else {
         response = await axiosInstance.post("/horarios", data); // <-- ¡Verifica este endpoint!
@@ -66,31 +66,39 @@ export function FormularioHorario({ onClose, isEdit, dataEdit = null }) {
     <form onSubmit={handleSubmit(onSubmit)} className="p-4">
       {/* Campo Hora Entrada */}
       <div className="mb-3">
-        <label htmlFor="horaEntrada" className="form-label small">
+        <label
+          htmlFor="horaEntrada"
+          className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm"
+        >
           Hora de Entrada
         </label>
         <input
           id="horaEntrada"
           type="time" // <-- Input de tipo TIEMPO
-          className={`form-control ${errors.horaEntrada ? "is-invalid" : ""}`}
+          className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.horaEntrada ? "border-destructive focus-visible:ring-destructive" : ""}`}
           {...register("horaEntrada", {
             required: "La hora de entrada es obligatoria",
           })}
         />
         {errors.horaEntrada && (
-          <div className="invalid-feedback">{errors.horaEntrada.message}</div>
+          <div className="text-sm text-destructive">
+            {errors.horaEntrada.message}
+          </div>
         )}
       </div>
 
       {/* Campo Hora Salida */}
       <div className="mb-3">
-        <label htmlFor="horaSalida" className="form-label small">
+        <label
+          htmlFor="horaSalida"
+          className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm"
+        >
           Hora de Salida
         </label>
         <input
           id="horaSalida"
           type="time" // <-- Input de tipo TIEMPO
-          className={`form-control ${errors.horaSalida ? "is-invalid" : ""}`}
+          className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.horaSalida ? "border-destructive focus-visible:ring-destructive" : ""}`}
           {...register("horaSalida", {
             required: "La hora de salida es obligatoria",
             // Validación personalizada:
@@ -100,20 +108,23 @@ export function FormularioHorario({ onClose, isEdit, dataEdit = null }) {
           })}
         />
         {errors.horaSalida && (
-          <div className="invalid-feedback">{errors.horaSalida.message}</div>
+          <div className="text-sm text-destructive">
+            {errors.horaSalida.message}
+          </div>
         )}
       </div>
 
       <hr className="my-4" />
 
       {/* 6. Botones dinámicos */}
-      <div className="d-flex justify-content-end gap-2">
+      <div className="flex justify-end gap-2">
         <Button
           type="button"
           className="btn-cerrar-modal"
           onClick={onClose}
           title="Cerrar formulario"
-         variant="default">
+          variant="default"
+        >
           Cancelar
         </Button>
         <Button
@@ -121,7 +132,8 @@ export function FormularioHorario({ onClose, isEdit, dataEdit = null }) {
           className="btn-guardar"
           title={isEditMood ? "Actualizar horario" : "Guardar horario"}
           disabled={loadingSave}
-         variant="default">
+          variant="default"
+        >
           {loadingSave ? (
             <span className="load"></span>
           ) : (

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import "../../css/EstiloBotonMotion.css";
+
 
 export function BotonMotionGeneral({
   text = "Botón",
@@ -25,36 +25,29 @@ export function BotonMotionGeneral({
         onClick={onClick}
         disabled={loading}
         // Combinamos clases:
-        className={`${classDefault} d-inline-flex align-items-center justify-content-center ${
-          fullWidth ? "w-100" : ""
-        } ${loading ? "opacity-75" : ""}`}
+        className={`${classDefault} inline-flex items-center justify-center ${
+          fullWidth ? "w-full" : ""
+        }${loading ? "opacity-75" : ""}`}
       >
         {loading ? (
           <>
             <span
-              className="spinner-border spinner-border-sm flex-shrink-0"
+              className="inline-block animate-spin rounded-full border-current border-r-transparent size-4 shrink-0"
               role="status"
               aria-hidden="true"
             ></span>
             {/* Ocultamos texto de carga en espacios muy pequeños */}
-            <span className="ms-2 d-none d-sm-inline text-truncate">
+            <span className="ms-2 hidden sm:inline truncate">
               {loadingText}
             </span>
           </>
         ) : (
           <>
             {/* Icono: flex-shrink-0 evita que se aplaste */}
-            {icon && (
-              <span
-                className="d-flex align-items-center flex-shrink-0 
-              "
-              >
-                {icon}
-              </span>
-            )}
+            {icon && <span className="flex items-center shrink-0">{icon}</span>}
 
             {/* Texto: text-truncate asegura que ponga "..." si no cabe */}
-            <span className="text-truncate">{text}</span>
+            <span className="truncate">{text}</span>
           </>
         )}
       </motion.button>

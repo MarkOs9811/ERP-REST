@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { CheckCheck } from "lucide-react";
-import "../../css/EstiloBotonMotion.css";
+
 
 const BotonConfirmar = ({ onClick, loading, children = "Confirmar" }) => {
   return (
@@ -11,7 +11,7 @@ const BotonConfirmar = ({ onClick, loading, children = "Confirmar" }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.05 }}
-      className={`btn-guardar w-100 p-3 ${loading ? "disabled" : ""}`}
+      className={`btn-guardar w-full p-3 ${loading ? "disabled" : ""}`}
       type="button"
       // Bloqueo 1: Atributo HTML
       disabled={loading}

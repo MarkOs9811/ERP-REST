@@ -2,8 +2,12 @@ import { useForm } from "react-hook-form";
 import BotonAnimado from "../componentesReutilizables/BotonAnimado";
 import RippleWrapper from "../componentesReutilizables/RippleWrapper";
 import { FileTextIcon } from "lucide-react";
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
-
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
 
 const getTodayDate = () => {
   const today = new Date();
@@ -34,7 +38,7 @@ export default function FormularioReporte({
   const isAnyLoading = isLoadingGoogle || isLoadingClasico;
 
   return (
-    <div className="col-lg-4 col-sm-12">
+    <div className="lg:col-span-4 col-span-full">
       <Card className="border h-full p-0 py-2">
         <CardHeader className="py-2 px-3 border-b">
           <p className="h6 mb-0">{titulo}</p>
@@ -45,16 +49,21 @@ export default function FormularioReporte({
           <CardContent className="py-3 px-3">
             <input type="hidden" {...register("tipo")} />
 
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-2">
-              <div className="col-6">
-                <label htmlFor="fechaInicio" className="form-label small mb-1">
+            <div className="grid grid-cols-12 gap-2">
+              <div className="col-span-6">
+                <label
+                  htmlFor="fechaInicio"
+                  className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm mb-1"
+                >
                   Fecha Inicio
                 </label>
                 <input
                   type="date"
                   id="fechaInicio"
-                  className={`form-control form-control-sm ${
-                    errors.fechaInicio ? "is-invalid" : ""
+                  className={`w-full rounded-md border-input bg-background py-1 shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 h-8 px-2.5 text-xs ${
+                    errors.fechaInicio
+                      ? "border-destructive focus-visible:ring-destructive"
+                      : ""
                   }`}
                   {...register("fechaInicio", {
                     required: "La fecha de inicio es obligatoria",
@@ -63,21 +72,26 @@ export default function FormularioReporte({
                   })}
                 />
                 {errors.fechaInicio && (
-                  <div className="invalid-feedback">
+                  <div className="text-sm text-destructive">
                     {errors.fechaInicio.message}
                   </div>
                 )}
               </div>
 
-              <div className="col-6">
-                <label htmlFor="fechaFin" className="form-label small mb-1">
+              <div className="col-span-6">
+                <label
+                  htmlFor="fechaFin"
+                  className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm mb-1"
+                >
                   Fecha Fin
                 </label>
                 <input
                   type="date"
                   id="fechaFin"
-                  className={`form-control form-control-sm ${
-                    errors.fechaFin ? "is-invalid" : ""
+                  className={`w-full rounded-md border-input bg-background py-1 shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 h-8 px-2.5 text-xs ${
+                    errors.fechaFin
+                      ? "border-destructive focus-visible:ring-destructive"
+                      : ""
                   }`}
                   {...register("fechaFin", {
                     required: "La fecha de fin es obligatoria",
@@ -86,7 +100,7 @@ export default function FormularioReporte({
                   })}
                 />
                 {errors.fechaFin && (
-                  <div className="invalid-feedback">
+                  <div className="text-sm text-destructive">
                     {errors.fechaFin.message}
                   </div>
                 )}
@@ -104,7 +118,7 @@ export default function FormularioReporte({
                     type="button" // <--- IMPORTANTE: type="button" para que no recargue la página
                     loading={isLoadingClasico}
                     disabled={isAnyLoading}
-                    className="btn btn-outline-dark"
+                    className="shadow inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border-input bg-background text-foreground hover:bg-accent"
                     icon={
                       !isLoadingClasico ? (
                         <FileTextIcon className="me-1" />

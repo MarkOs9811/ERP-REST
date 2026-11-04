@@ -5,59 +5,62 @@ import { UsuarioForm } from "../../components/componenteUsuario/UsuarioForm";
 import { FileText, FileUserIcon, Plus, Search } from "lucide-react";
 import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteExcel";
 import ModalRight from "../../components/componentesReutilizables/ModalRight";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Button } from "../../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
+import { Input } from "@/components/ui/input";
 
 export function Usuarios() {
   const [showModal, setShowModal] = useState(false);
   const [updateList, setUpdateList] = useState(false);
   const [search, setSearch] = useState("");
-  const navigate = useNavigate();
   return (
     <div>
-      <Card className="">
-        <CardHeader className="flex flex-col flex-md-row justify-between items-center gap-2 p-3">
-          <div className="d-flex align-items-center">
-            <CardTitle asChild><h4 className="mb-0 titulo-card-especial">
-              Panel de Usuarios
-              <span className="badge-header ms-2">Lista</span>
-            </h4></CardTitle>
+      <Card className="rounded-2xl border border-border/70 bg-card shadow-sm ring-0">
+        <CardHeader className="flex flex-col items-stretch gap-4 border-b border-border/70 px-5 py-5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+          <div className="flex items-center">
+            <CardTitle asChild>
+              <h4 className="mb-0 text-base font-semibold tracking-tight text-foreground">
+                Panel de Usuarios
+                <span className="ml-2 inline-flex items-center rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground">Lista</span>
+              </h4>
+            </CardTitle>
           </div>
 
-          <div className="d-flex  gap-2 mt-3 mt-md-0 align-items-center ms-auto">
-            <div className="header-search-container">
-              <Search className="search-icon" />
-              <input
+          <div className="flex w-full flex-col items-stretch gap-2 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center">
+            <div className="relative w-full min-w-0 sm:w-64">
+              <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
                 type="text"
                 placeholder="Buscar usuario..."
-                className="form-control"
+                className="h-9 pl-9"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
             </div>
 
-            <Button
-              className="btn btn-outline-dark px-3"
-              onClick={() => navigate("/rrhh/ingreso-a-planilla")}
-             variant="default">
-              Planilla
+            <Button asChild size="lg"
+              className="gap-2 border-border bg-background px-3 text-foreground shadow-none hover:bg-muted w-full sm:w-auto"
+              variant="outline"
+            >
+              <Link to="/rrhh/ingreso-a-planilla">Planilla</Link>
             </Button>
 
-            <Button
+            <Button size="lg"
               type="button"
-              className="btn btn-outline-dark px-3"
+              className="w-full gap-2 px-3 sm:w-auto"
               onClick={() => GetReporteExcel("/reporteUsuarios")}
-             variant="default">
+              variant="ghostOutline"
+            >
               <FileText size={18} className="me-1" />
               Reporte
             </Button>
 
-            <Button
-              className="btn btn-dark px-3"
+            <Button size="lg"
+              className="gap-2 px-3 w-full sm:w-auto"
               onClick={() => setShowModal(true)}
-             variant="default">
+              variant="default"
+            >
               <Plus size={18} />
               Agregar
             </Button>

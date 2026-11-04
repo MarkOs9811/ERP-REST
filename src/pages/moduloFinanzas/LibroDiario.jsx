@@ -14,6 +14,12 @@ import { useState } from "react";
 import ModalAlertQuestion from "../../components/componenteToast/ModalAlertQuestion";
 import { Button } from "../../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../../components/ui/dropdown-menu";
 
 // Importa tu componente de modal personalizado
 
@@ -83,30 +89,31 @@ export function LibroDiario() {
 
   return (
     <div>
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
-        <div className="md:col-span-12">
+      <div className="grid grid-cols-12 gap-3">
+        <div className="col-span-full md:col-span-12">
           <Card className="py-2">
-            <CardHeader className="border-bottom-0 flex flex-col flex-md-row justify-between items-center gap-2 p-3">
-              <div className="d-flex align-items-center">
+            <CardHeader className="border-b-0 flex flex-col md:flex-row justify-between items-center gap-2 p-3">
+              <div className="flex items-center">
                 <BookText
                   color={"var(--fw-strawberry)"}
                   height="45px"
                   width="45px"
                   className="me-2"
                 />
-                <CardTitle asChild><h4 className="mb-0 titulo-card-especial">
-                  Libro Diario
-                </h4></CardTitle>
+                <CardTitle asChild>
+                  <h4 className="mb-0 titulo-card-especial">Libro Diario</h4>
+                </CardTitle>
               </div>
-              <div className="d-flex flex-wrap gap-2 mt-3 mt-md-0 align-items-center ms-auto">
+              <div className="flex flex-wrap gap-2 mt-3 md:mt-0 items-center ms-auto">
                 {/* BOTÓN 1: CIERRE VENTAS */}
                 <Button
-                  className="btn btn-outline-dark px-3"
+                  className="gap-2 px-3"
                   onClick={() => setModalCierreVentas(true)} // Abre el modal
                   disabled={loadingVentas}
-                 variant="default">
+                  variant="ghostOutline"
+                >
                   {loadingVentas ? (
-                    <span className="spinner-border spinner-border-sm me-2"></span>
+                    <span className="inline-block animate-spin rounded-full border-current border-r-transparent size-4 me-2"></span>
                   ) : (
                     <ArchiveX size={18} className="me-1" />
                   )}
@@ -115,13 +122,14 @@ export function LibroDiario() {
 
                 {/* BOTÓN 2: CARGA LIBRO MAYOR */}
                 <Button
-                  className="btn btn-dark px-3"
+                  className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-foreground text-background shadow-sm hover:bg-foreground/90 px-3"
                   onClick={() => setModalCargaMayor(true)} // Abre el modal
                   disabled={loadingCarga}
-                 variant="default">
+                  variant="default"
+                >
                   {loadingCarga ? (
                     <span
-                      className="spinner-border spinner-border-sm me-2"
+                      className="inline-block animate-spin rounded-full border-current border-r-transparent size-4 me-2"
                       role="status"
                       aria-hidden="true"
                     ></span>
@@ -131,7 +139,10 @@ export function LibroDiario() {
                   {loadingCarga ? " Procesando..." : " Cargar Libro Mayor"}
                 </Button>
 
-                <Button className="btn btn-outline-dark px-3" variant="default">
+                <Button
+                  className="shadow inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border-input bg-background text-foreground hover:bg-accent px-3"
+                  variant="default"
+                >
                   <ClipboardType size={18} className="me-1" />
                   Reporte
                 </Button>
@@ -141,11 +152,13 @@ export function LibroDiario() {
         </div>
 
         {/* ... Resto del renderizado de la tabla de asientos (sin cambios) ... */}
-        <div className="md:col-span-12">
+        <div className="col-span-full md:col-span-12">
           {/* ... Código de la card de asientos ... */}
           <Card className="py-2">
             <CardHeader className="p-3">
-              <CardTitle asChild><p className="h4 mb-0">Asientos contables</p></CardTitle>
+              <CardTitle asChild>
+                <p className="h4 mb-0">Asientos contables</p>
+              </CardTitle>
             </CardHeader>
             <CardContent className="">
               {isLoading && <p>Cargando asientos...</p>}
@@ -165,65 +178,64 @@ export function LibroDiario() {
                   );
 
                   return (
-                    <div className="md:col-span-6" key={asiento.id}>
-                      <Card className="mb-2 shadow-card border card-asientosContables relative">
+                    <div
+                      className="col-span-full md:col-span-6"
+                      key={asiento.id}
+                    >
+                      <Card className="mb-2 shadow-card card-asientosContables relative">
                         {/* Dropdown de acciones */}
-                        <div className="dropdown position-absolute top-0 end-0 mt-2 me-2 z-index-10">
-                          <Button
-                            className="btn"
-                            type="button"
-                            data-bs-toggle="dropdown"
-                            aria-expanded="false"
-                           variant="default">
-                            <EllipsisVertical className="text-auto" />
-                          </Button>
-                          <ul className="dropdown-menu">
-                            {asiento.estado == 0 ? (
-                              <li>
-                                <Button className="dropdown-item" variant="default">
+                        <div className="absolute top-2 right-2 z-10">
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                aria-label="Acciones del asiento"
+                              >
+                                <EllipsisVertical />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              {asiento.estado == 0 ? (
+                                <DropdownMenuItem>
                                   Eliminar asiento
-                                </Button>
-                              </li>
-                            ) : (
-                              <li>
-                                <span className="dropdown-item">
+                                </DropdownMenuItem>
+                              ) : (
+                                <DropdownMenuItem disabled>
                                   No disponible
-                                </span>
-                              </li>
-                            )}
-                          </ul>
+                                </DropdownMenuItem>
+                              )}
+                            </DropdownMenuContent>
+                          </DropdownMenu>
                         </div>
                         <CardContent className="">
-                          <div className="d-flex justify-content-between align-items-center mb-3">
+                          <div className="flex justify-between items-center mb-3">
                             <p
-                              className={`badge p-2 rounded-circle ${
+                              className={`inline-flex items-center text-xs font-semibold transition-colors p-2 rounded-full ${
                                 asiento.estado === 0
-                                  ? "bg-warning"
-                                  : "bg-success"
+                                  ? "bg-amber-500"
+                                  : "bg-emerald-600"
                               }`}
                             ></p>
-                            <h6 className="fw-bold text-center flex-grow-1">
+                            <h6 className="font-bold text-center grow">
                               Transacción Nº{asiento.id}
                             </h6>
                           </div>
                           <div className="text-center mb-2">
-                            <span className="badge p-2 fecha-registro bg-light text-dark">
+                            <span className="inline-flex items-center rounded-full text-xs font-semibold transition-colors p-2 fecha-registro bg-muted text-foreground">
                               <CalendarDays className="text-auto" />{" "}
                               {asiento.fecha}
                             </span>
                           </div>
-                          <div className="row">
+                          <div className="grid grid-cols-12 gap-3">
                             {/* DEBE */}
-                            <div className="md:col-span-6 pe-md-3">
-                              <h6 className="fw-bold text-center">DEBE</h6>
+                            <div className="col-span-full md:col-span-6 md:pe-3">
+                              <h6 className="font-bold text-center">DEBE</h6>
                               <hr />
                               {Array.from({ length: maxRows }).map((_, i) =>
                                 debeDetalles[i] ? (
-                                  <div
-                                    className="d-flex justify-content-between"
-                                    key={i}
-                                  >
-                                    <span className="text-success fw-bold">
+                                  <div className="flex justify-between" key={i}>
+                                    <span className="text-emerald-600 dark:text-emerald-400 font-bold">
                                       S/.{" "}
                                       {Number(debeDetalles[i].monto).toFixed(2)}
                                     </span>
@@ -247,15 +259,12 @@ export function LibroDiario() {
                               )}
                             </div>
                             {/* HABER */}
-                            <div className="md:col-span-6 ps-md-3 border-start border-secondary">
-                              <h6 className="fw-bold text-center">HABER</h6>
+                            <div className="col-span-full md:col-span-6 md:ps-3 border-l border-secondary">
+                              <h6 className="font-bold text-center">HABER</h6>
                               <hr />
                               {Array.from({ length: maxRows }).map((_, i) =>
                                 haberDetalles[i] ? (
-                                  <div
-                                    className="d-flex justify-content-between"
-                                    key={i}
-                                  >
+                                  <div className="flex justify-between" key={i}>
                                     <span
                                       title={haberDetalles[i].cuenta?.nombre}
                                     >
@@ -268,7 +277,7 @@ export function LibroDiario() {
                                           : haberDetalles[i].cuenta?.nombre}
                                       </small>
                                     </span>
-                                    <span className="text-success fw-bold">
+                                    <span className="text-emerald-600 dark:text-emerald-400 font-bold">
                                       S/.{" "}
                                       {Number(haberDetalles[i].monto).toFixed(
                                         2,
@@ -287,8 +296,8 @@ export function LibroDiario() {
                   );
                 })}
                 {asientos.length === 0 && !isLoading && (
-                  <div className="col-12">
-                    <div className="alert alert-info text-center">
+                  <div className="col-span-full">
+                    <div className="relative w-full rounded-lg px-4 py-3 text-sm border-sky-500/30 bg-sky-500/10 text-sky-700 dark:text-sky-400 text-center">
                       No hay asientos contables registrados.
                     </div>
                   </div>

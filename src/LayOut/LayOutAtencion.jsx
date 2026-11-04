@@ -38,62 +38,65 @@ export function LayOutAtencion() {
 
   const navigate = useNavigate();
   return (
-    <div className="container">
+    <div className="mx-auto w-full max-w-7xl px-4">
       {/* CABECERA HERO MEJORADA */}
-      <div className="home-hero mb-4 p-4 bg-white rounded-4 border d-flex align-items-center justify-content-between position-relative overflow-hidden">
+      <div className="home-hero mb-4 p-4 bg-background rounded-lg flex items-center justify-between relative overflow-hidden">
         {/* Decoración de fondo opcional para darle un toque premium */}
         <div className="hero-decoration"></div>
 
-        <div className="home-hero-content position-relative z-1">
-          <span className="badge bg-primary text-light bg-opacity-10 rounded-pill px-3 fw-semibold d-inline-flex align-items-center gap-2">
+        <div className="home-hero-content relative z-1">
+          <span className="border py-0.5 text-xs transition-colors bg-primary/10 text-light rounded-full px-3 font-semibold inline-flex items-center gap-2">
             <RocketIcon />
             Panel ejecutivo
           </span>
-          <h1 className="home-hero-title fw-bold text-dark mb-1">Dashboard</h1>
-          <p className="home-hero-subtitle text-secondary mb-0">
+          <h1 className="home-hero-title font-bold text-foreground mb-1">
+            Dashboard
+          </h1>
+          <p className="home-hero-subtitle text-muted-foreground mb-0">
             Resumen general y métricas en tiempo real de tu negocio.
           </p>
         </div>
 
-        <div className="text-end position-relative z-1 d-flex flex-column align-items-end">
-          <p className="mb-2 fw-medium text-muted d-flex align-items-center gap-2">
-            <span className="status-dot bg-success rounded-circle"></span>
+        <div className="text-right relative z-1 flex flex-col items-end">
+          <p className="mb-2 font-medium text-muted-foreground flex items-center gap-2">
+            <span className="status-dot bg-emerald-600 rounded-full"></span>
             ¿Listo para empezar el turno?
           </p>
           <Button
-            className="btn-principal btn-lg px-4 py-2 fw-bold shadow-sm d-flex align-items-center gap-2 btn-abrir-caja"
+            className="btn-principal justify-center whitespace-nowrap rounded-md text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 font-bold shadow-sm flex items-center gap-2 btn-abrir-caja"
             onClick={() => navigate("/abrirCaja")}
-           variant="default">
+            variant="default"
+          >
             <StoreIcon size={20} />
             <span>Abrir Caja</span>
           </Button>
         </div>
       </div>
       {/* FIN CABECERA HERO */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 overflow-hidden">
-        <div className="md:col-span-12">
+      <div className="grid grid-cols-12 gap-3 overflow-hidden">
+        <div className="col-span-full md:col-span-12">
           <InformacionRapidaHome />
         </div>
-        <div className="md:col-span-10">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-4gap-3">
-            <div className="md:col-span-12">
+        <div className="col-span-full md:col-span-10">
+          <div className="grid grid-cols-12 gap-4gap-3">
+            <div className="col-span-full md:col-span-12">
               <CabeceraHome
                 ventasList={ventasList}
                 load={loadingVentas}
                 errorLoad={errorVentas}
               />
             </div>
-            <div className="md:col-span-12">
+            <div className="col-span-full md:col-span-12">
               <DashboardMesas />
             </div>
-            <div className="md:col-span-12">
+            <div className="col-span-full md:col-span-12">
               <PlatoMasVendido />
             </div>
           </div>
         </div>
-        <div className="md:col-span-2">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
-            <div className="md:col-span-12">
+        <div className="col-span-full md:col-span-2">
+          <div className="grid grid-cols-12 gap-3">
+            <div className="col-span-full md:col-span-12">
               <VentasTipo
                 ventasList={ventasList}
                 load={loadingVentas}

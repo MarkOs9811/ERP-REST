@@ -46,150 +46,165 @@ export function FormAddRepartidor({ onClose }) {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="d-flex flex-column h-100 p-4"
+      className="flex flex-col h-full p-4"
     >
       {/* DATOS PERSONALES */}
-      <h6 className="fw-bold mb-3 mt-2 text-dark border-bottom pb-2">
+      <h6 className="font-bold mb-3 mt-2 text-foreground border-b pb-2">
         Datos Personales
       </h6>
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-4">
-        <div className="col-12">
-          <label className="form-label fw-medium text-dark small">
+      <div className="grid grid-cols-12 gap-3 mb-4">
+        <div className="col-span-full">
+          <label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-medium text-foreground text-sm">
             Nombres
           </label>
-          <div className="input-group shadow-sm">
-            <span className="input-group-text bg-white">
-              <User size={16} className="text-muted" />
+          <div className="flex w-full items-stretch shadow-sm">
+            <span className="inline-flex items-center rounded-md border-input px-3 text-sm text-muted-foreground bg-background">
+              <User size={16} className="text-muted-foreground" />
             </span>
             <input
               type="text"
-              className={`form-control ${errors.nombres ? "is-invalid" : ""}`}
+              className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.nombres ? "border-destructive focus-visible:ring-destructive" : ""}`}
               placeholder="Nombres completos"
               {...register("nombres", { required: "Campo obligatorio" })}
             />
           </div>
           {errors.nombres && (
-            <span className="text-danger small">{errors.nombres.message}</span>
+            <span className="text-destructive text-sm">
+              {errors.nombres.message}
+            </span>
           )}
         </div>
 
-        <div className="col-12">
-          <label className="form-label fw-medium text-dark small">
+        <div className="col-span-full">
+          <label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-medium text-foreground text-sm">
             Apellidos
           </label>
-          <div className="input-group shadow-sm">
-            <span className="input-group-text bg-white">
-              <User size={16} className="text-muted" />
+          <div className="flex w-full items-stretch shadow-sm">
+            <span className="inline-flex items-center rounded-md border-input px-3 text-sm text-muted-foreground bg-background">
+              <User size={16} className="text-muted-foreground" />
             </span>
             <input
               type="text"
-              className={`form-control ${errors.apellidos ? "is-invalid" : ""}`}
+              className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.apellidos ? "border-destructive focus-visible:ring-destructive" : ""}`}
               placeholder="Apellidos completos"
               {...register("apellidos", { required: "Campo obligatorio" })}
             />
           </div>
           {errors.apellidos && (
-            <span className="text-danger small">
+            <span className="text-destructive text-sm">
               {errors.apellidos.message}
             </span>
           )}
         </div>
 
-        <div className="col-6">
-          <label className="form-label fw-medium text-dark small">
+        <div className="col-span-6">
+          <label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-medium text-foreground text-sm">
             DNI / Documento
           </label>
-          <div className="input-group shadow-sm">
-            <span className="input-group-text bg-white">
-              <Hash size={16} className="text-muted" />
+          <div className="flex w-full items-stretch shadow-sm">
+            <span className="inline-flex items-center rounded-md border-input px-3 text-sm text-muted-foreground bg-background">
+              <Hash size={16} className="text-muted-foreground" />
             </span>
             <input
               type="text"
-              className={`form-control ${errors.dni ? "is-invalid" : ""}`}
+              className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.dni ? "border-destructive focus-visible:ring-destructive" : ""}`}
               placeholder="N° de doc."
               {...register("dni", { required: "Campo obligatorio" })}
             />
           </div>
           {errors.dni && (
-            <span className="text-danger small">{errors.dni.message}</span>
+            <span className="text-destructive text-sm">
+              {errors.dni.message}
+            </span>
           )}
         </div>
 
-        <div className="col-6">
-          <label className="form-label fw-medium text-dark small">
+        <div className="col-span-6">
+          <label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-medium text-foreground text-sm">
             Teléfono
           </label>
-          <div className="input-group shadow-sm">
-            <span className="input-group-text bg-white">
-              <Phone size={16} className="text-muted" />
+          <div className="flex w-full items-stretch shadow-sm">
+            <span className="inline-flex items-center rounded-md border-input px-3 text-sm text-muted-foreground bg-background">
+              <Phone size={16} className="text-muted-foreground" />
             </span>
             <input
               type="text"
-              className={`form-control ${errors.telefono ? "is-invalid" : ""}`}
+              className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.telefono ? "border-destructive focus-visible:ring-destructive" : ""}`}
               placeholder="ej: 987654321"
               {...register("telefono", { required: "Campo obligatorio" })}
             />
           </div>
           {errors.telefono && (
-            <span className="text-danger small">{errors.telefono.message}</span>
+            <span className="text-destructive text-sm">
+              {errors.telefono.message}
+            </span>
           )}
         </div>
       </div>
 
       {/* DATOS DE CONTACTO & VEHÍCULO */}
-      <h6 className="fw-bold mb-3 text-dark border-bottom pb-2">
+      <h6 className="font-bold mb-3 text-foreground border-b pb-2">
         Información Adicional
       </h6>
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mb-4">
-        <div className="col-12">
-          <label className="form-label fw-medium text-dark small">
+      <div className="grid grid-cols-12 gap-3 mb-4">
+        <div className="col-span-full">
+          <label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-medium text-foreground text-sm">
             Correo Electrónico (Opcional)
           </label>
-          <div className="input-group shadow-sm">
-            <span className="input-group-text bg-white">
-              <Mail size={16} className="text-muted" />
+          <div className="flex w-full items-stretch shadow-sm">
+            <span className="inline-flex items-center rounded-md border-input px-3 text-sm text-muted-foreground bg-background">
+              <Mail size={16} className="text-muted-foreground" />
             </span>
             <input
               type="email"
-              className="form-control"
+              className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
               placeholder="correo@ejemplo.com"
               {...register("email")}
             />
           </div>
         </div>
 
-        <div className="col-12">
-          <label className="form-label fw-medium text-dark small">
+        <div className="col-span-full">
+          <label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-medium text-foreground text-sm">
             Placa de Vehículo (Moto/Auto)
           </label>
-          <div className="input-group shadow-sm mb-1">
-            <span className="input-group-text bg-white">
-              <Car size={16} className="text-muted" />
+          <div className="flex w-full items-stretch shadow-sm mb-1">
+            <span className="inline-flex items-center rounded-md border-input px-3 text-sm text-muted-foreground bg-background">
+              <Car size={16} className="text-muted-foreground" />
             </span>
             <input
               type="text"
-              className="form-control text-uppercase"
+              className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 uppercase"
               placeholder="A1B-234"
               {...register("placa")}
             />
           </div>
-          <small className="text-muted d-block" style={{ fontSize: "0.80rem" }}>
+          <small
+            className="text-muted-foreground block"
+            style={{ fontSize: "0.80rem" }}
+          >
             Si el repartidor usa bicicleta, déjalo en blanco.
           </small>
         </div>
       </div>
 
       {/* Controles del Footer */}
-      <div className="mt-auto d-flex justify-content-end gap-2 border-top p-3">
+      <div className="mt-auto flex justify-end gap-2 border-t p-3">
         <Button
           type="button"
           className="btn-cerrar-modal"
           onClick={onClose}
           disabled={isSubmitting}
-         variant="default">
+          variant="default"
+        >
           Cancelar
         </Button>
-        <Button type="submit" className="btn-guardar" disabled={isSubmitting} variant="default">
+        <Button
+          type="submit"
+          className="btn-guardar"
+          disabled={isSubmitting}
+          variant="default"
+        >
           {isSubmitting ? "Guardando..." : "Guardar Repartidor"}
         </Button>
       </div>

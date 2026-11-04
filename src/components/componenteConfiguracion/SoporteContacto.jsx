@@ -2,7 +2,6 @@ import { useForm } from "react-hook-form";
 import { Button } from "../ui/button";
 import { Card } from "@/components/ui/card";
 
-
 export function SoporteContacto() {
   const {
     register,
@@ -18,15 +17,15 @@ export function SoporteContacto() {
   };
 
   return (
-    <div className="w-100 p-3">
+    <div className="w-full p-3">
       <Card
         className="border p-4"
         style={{ maxWidth: 600, margin: "0 auto", borderRadius: 18 }}
       >
-        <h3 className="fw-bold mb-3" style={{ color: "#5a7a98" }}>
+        <h3 className="font-bold mb-3" style={{ color: "#5a7a98" }}>
           Soporte y Contacto
         </h3>
-        <p className="text-muted mb-4">
+        <p className="text-muted-foreground mb-4">
           ¿Tienes dudas, problemas técnicos o necesitas ayuda? Contáctanos y te
           responderemos lo antes posible.
         </p>
@@ -34,29 +33,31 @@ export function SoporteContacto() {
           <div className="mb-3">
             <label
               htmlFor="nombre"
-              className="form-label text-secondary small fw-semibold"
+              className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-muted-foreground text-sm font-semibold"
             >
               Nombre
             </label>
             <input
               id="nombre"
-              className="form-control form-control-sm"
+              className="w-full rounded-md border-input bg-background py-1 shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 h-8 px-2.5 text-xs"
               placeholder="Tu nombre"
               {...register("nombre", { required: "El nombre es obligatorio" })}
             />
-            <div className="text-danger small">{errors.nombre?.message}</div>
+            <div className="text-destructive text-sm">
+              {errors.nombre?.message}
+            </div>
           </div>
           <div className="mb-3">
             <label
               htmlFor="email"
-              className="form-label text-secondary small fw-semibold"
+              className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-muted-foreground text-sm font-semibold"
             >
               Correo electrónico
             </label>
             <input
               id="email"
               type="email"
-              className="form-control form-control-sm"
+              className="w-full rounded-md border-input bg-background py-1 shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 h-8 px-2.5 text-xs"
               placeholder="tu@email.com"
               {...register("email", {
                 required: "El correo es obligatorio",
@@ -66,39 +67,47 @@ export function SoporteContacto() {
                 },
               })}
             />
-            <div className="text-danger small">{errors.email?.message}</div>
+            <div className="text-destructive text-sm">
+              {errors.email?.message}
+            </div>
           </div>
           <div className="mb-3">
             <label
               htmlFor="mensaje"
-              className="form-label text-secondary small fw-semibold"
+              className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-muted-foreground text-sm font-semibold"
             >
               Mensaje
             </label>
             <textarea
               id="mensaje"
-              className="form-control form-control-sm"
+              className="w-full rounded-md border-input bg-background py-1 shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 h-8 px-2.5 text-xs"
               rows={4}
               placeholder="Describe tu consulta o problema"
               {...register("mensaje", {
                 required: "El mensaje es obligatorio",
               })}
             />
-            <div className="text-danger small">{errors.mensaje?.message}</div>
+            <div className="text-destructive text-sm">
+              {errors.mensaje?.message}
+            </div>
           </div>
-          <div className="d-flex justify-content-end">
-            <Button type="submit" className="btn-sm btn-guardar fw-bold" variant="default">
+          <div className="flex justify-end">
+            <Button
+              type="submit"
+              className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 px-3 text-xs btn-guardar font-bold"
+              variant="default"
+            >
               Enviar mensaje
             </Button>
           </div>
           {isSubmitSuccessful && (
-            <div className="alert alert-success mt-3 py-2 px-3">
+            <div className="relative w-full rounded-lg text-sm border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 mt-3 py-2 px-3">
               ¡Mensaje enviado correctamente!
             </div>
           )}
         </form>
         <hr className="my-4" />
-        <div className="text-center text-muted small">
+        <div className="text-center text-muted-foreground text-sm">
           También puedes escribirnos a <b>marcosparitorres@gmail.com</b> o
           llamarnos al <b>+51 970435527</b>
         </div>

@@ -6,7 +6,7 @@ import ModalRight from "../../components/componentesReutilizables/ModalRight";
 import { FormAddSolicitudExterna } from "../../components/componenteAlmacen/componenteSolicitud/FormAddSolicitudExterna";
 import { Button } from "../../components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-
+import { Input } from "@/components/ui/input";
 
 export function Solicitudes() {
   const [showModalAdd, setShowModalAdd] = useState(false);
@@ -15,32 +15,33 @@ export function Solicitudes() {
 
   return (
     <div>
-      <Card className="shadow-sm py-2">
-        <CardHeader className="flex flex-col border-bottom-0 flex flex-col flex-md-row justify-between items-center gap-2">
-          <div className="d-flex flex-column">
+      <Card className="rounded-2xl border border-border/70 bg-card shadow-sm ring-0 py-2">
+        <CardHeader className="flex flex-col items-stretch gap-4 border-b border-border/70 px-5 py-5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+          <div className="flex flex-col">
             <h4 className="m-0">Panel de Solicitudes</h4>
             <div>
-              <span className="text-muted small">
+              <span className="text-muted-foreground text-sm">
                 Lista de solicitudes por parte del usuario en ventas
               </span>
             </div>
           </div>
-          <div className="d-flex align-items-center  gap-2 mt-3 mt-md-0">
-            <div className="header-search-container">
-              <Search className="search-icon" />
-              <input
+          <div className="flex w-full flex-col items-stretch gap-2 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center">
+            <div className="relative w-full min-w-0 sm:w-64">
+              <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
                 type="text"
                 placeholder="Buscar solicitud..."
-                className="form-control"
+                className="h-9 pl-9"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
             </div>
-            <Button
-              className="btn btn-dark px-4"
+            <Button size="lg"
+              className="gap-2 px-3 w-full sm:w-auto"
               onClick={setShowModalAdd}
               title="Realiza una solicitud"
-             variant="default">
+              variant="default"
+            >
               <Plus size={18} />
               Agregar
             </Button>

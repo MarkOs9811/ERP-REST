@@ -20,8 +20,13 @@ import { GetMesasAll } from "../../service/accionesVentas/GetMesasAll";
 import ModalAlertQuestion from "../../components/componenteToast/ModalAlertQuestion";
 import { DeleteData } from "../../service/CRUD/DeleteData";
 import { Button } from "../../components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export function Mesas() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -62,20 +67,21 @@ export function Mesas() {
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
-      <div className="md:col-span-12">
+    <div className="grid grid-cols-12 gap-3">
+      <div className="col-span-full md:col-span-12">
         <Card className="">
           <CardHeader className="flex justify-between items-center border-0">
             <h4 className="mb-0">Gestión de Mesas</h4>
             <Button
-              className="btn-principal "
+              className="btn-principal"
               title="Agregar nueva mesa"
               onClick={() => {
                 setIsEditMode(false);
                 setSelectedMesa(null);
                 setModalOpen(true);
               }}
-             variant="default">
+              variant="default"
+            >
               <Plus size={18} />
               Agregar Mesa
             </Button>
@@ -86,12 +92,12 @@ export function Mesas() {
             {isLoading && (
               <div className="text-center p-5">
                 <span className="load"></span> {/* Asumo tu spinner */}
-                <p className="text-muted mt-2">Cargando mesas...</p>
+                <p className="text-muted-foreground mt-2">Cargando mesas...</p>
               </div>
             )}
 
             {isError && (
-              <div className="text-center p-5 text-danger">
+              <div className="text-center p-5 text-destructive">
                 <AlertTriangle className="mx-auto mb-2" size={40} />
                 <h5>Error al Cargar</h5>
                 <p>No se pudieron obtener los datos de las mesas.</p>
@@ -102,52 +108,62 @@ export function Mesas() {
               <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
                 {/* Mensaje si no hay mesas */}
                 {dummyMesas.length === 0 ? (
-                  <div className="col-12 text-center p-5">
-                    <Table size={40} className="text-muted mx-auto mb-2" />
+                  <div className="col-span-full text-center p-5">
+                    <Table
+                      size={40}
+                      className="text-muted-foreground mx-auto mb-2"
+                    />
                     <h5>No hay mesas registradas</h5>
                     <p>Comienza agregando una nueva mesa.</p>
                   </div>
                 ) : (
                   // Ahora 'dummyMesas' SÍ es un array y .map() funcionará
                   dummyMesas.map((mesa) => (
-                    <div key={mesa.id} className="md:col-span-3 col-lg-2">
+                    <div
+                      key={mesa.id}
+                      className="col-span-full md:col-span-3 lg:col-span-2"
+                    >
                       <Card className="h-full border">
                         <CardContent className="text-center flex flex-col p-3">
                           {/* Icono de Estado */}
                           {mesa?.estado == 1 ? (
                             <CheckCircle
                               size={36}
-                              className="text-success mx-auto"
+                              className="text-emerald-600 dark:text-emerald-400 mx-auto"
                               title="Disponible"
                             />
                           ) : (
                             <AlertCircle
                               size={36}
-                              className="text-danger mx-auto"
+                              className="text-destructive mx-auto"
                               title="Ocupada"
                             />
                           )}
 
                           {/* Info */}
-                          <CardTitle asChild><h5 className="mt-2 mb-1">
-                            Mesa N° {mesa?.numero}
-                          </h5></CardTitle>
+                          <CardTitle asChild>
+                            <h5 className="mt-2 mb-1">
+                              Mesa N° {mesa?.numero}
+                            </h5>
+                          </CardTitle>
                           <div>
                             <span
-                              className={`badge w-auto ${
-                                mesa?.estado == 1 ? "bg-success" : "bg-danger"
+                              className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors w-auto ${
+                                mesa?.estado == 1
+                                  ? "bg-emerald-600"
+                                  : "bg-destructive"
                               }`}
                             >
                               {mesa?.estado == 1 ? "Disponible" : "Ocupada"}
                             </span>
                           </div>
                           <hr className="my-2" />
-                          <div className="text-start">
-                            <small className="text-muted d-flex align-items-center">
+                          <div className="text-left">
+                            <small className="text-muted-foreground flex items-center">
                               <Users size={14} className="me-2" />
                               Capacidad: {mesa?.capacidad}
                             </small>
-                            <small className="text-muted d-flex align-items-center mt-1">
+                            <small className="text-muted-foreground flex items-center mt-1">
                               <Building size={14} className="me-2" />
                               Piso: {mesa?.piso}
                             </small>
@@ -156,7 +172,7 @@ export function Mesas() {
                         {/* Footer de Acciones */}
                         <CardFooter className="flex justify-center gap-2">
                           <Button
-                            className="btn-editar btn-icon btn-sm"
+                            className="btn-editar btn-icon inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 px-3 text-xs"
                             title={
                               mesa?.estado == 0
                                 ? "No se puede editar (mesa ocupada)"
@@ -175,11 +191,12 @@ export function Mesas() {
                               setSelectedMesa(mesa);
                               setModalOpen(true);
                             }}
-                           variant="secondary">
+                            variant="secondary"
+                          >
                             <Edit2 size={16} />
                           </Button>
                           <Button
-                            className="btn-eliminar btn-icon btn-sm"
+                            className="btn-eliminar btn-icon inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 px-3 text-xs"
                             title={
                               mesa?.estado == 0
                                 ? "No se puede eliminar (mesa ocupada)"
@@ -197,7 +214,8 @@ export function Mesas() {
                               setQuestionModalDelete(true);
                               setDataMesa(mesa);
                             }}
-                           variant="destructive">
+                            variant="destructive"
+                          >
                             <Trash2 size={16} />
                           </Button>
                         </CardFooter>

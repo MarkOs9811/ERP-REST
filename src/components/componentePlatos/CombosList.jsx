@@ -17,8 +17,19 @@ import { EstadoIntegraciones } from "../../hooks/EstadoIntegraciones";
 import { EditCombo } from "./combos/EditCombo";
 import { BadgeComponent } from "../componentesReutilizables/BadgeComponent";
 import { Button } from "../ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
 export function CombosList() {
   const [search, setSearch] = useState("");
@@ -131,12 +142,12 @@ export function CombosList() {
     <Card className="h-full">
       <CardHeader className="border-0 flex justify-between items-center mb-2">
         <h4 className="mb-0">Combos</h4>
-        <div className="d-flex align-items-center gap-2">
-          <div className="d-flex flex-wrap">
+        <div className="flex items-center gap-2">
+          <div className="flex flex-wrap">
             <input
               type="text"
               placeholder="Buscar..."
-              className="form-control"
+              className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
               value={search}
               onChange={(e) => {
                 setSearch(e.target.value);
@@ -144,14 +155,15 @@ export function CombosList() {
               }}
             />
           </div>
-          <div className="d-flex align-items-center ">
+          <div className="flex items-center">
             <Button
-              className=" btn btn-dark btn-sm rounded-pill "
+              className="bg-foreground text-background shadow-sm hover:bg-foreground/90 inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 px-3 text-xs rounded-full"
               onClick={() => {
                 setIsModalOpen(true);
                 refetchSunat();
               }}
-             variant="default">
+              variant="default"
+            >
               <FontAwesomeIcon icon={faPlus} color={"auto"} />
               Nuevo Combo
             </Button>
@@ -167,18 +179,18 @@ export function CombosList() {
         {isLoading ? (
           <Cargando />
         ) : isError ? (
-          <p className="text-danger">Error al cargar los combos.</p>
+          <p className="text-destructive">Error al cargar los combos.</p>
         ) : filteredCombos.length === 0 ? (
           <p>No se encontraron combos.</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-12 gap-4d-flex">
             {visibleCombos.map((combo) => (
-              <div className="md:col-span-2 mb-3" key={combo.id}>
-                <Card className="h-full p-0 m-0 border relative overflow-hidden">
+              <div className="col-span-full md:col-span-2 mb-3" key={combo.id}>
+                <Card className="h-full p-0 m-0 relative overflow-hidden">
                   {/* Overlay bloqueado si combo está inactivo */}
                   {combo.estado == 0 && (
                     <div
-                      className="position-absolute w-100 h-100 d-flex flex-column justify-content-center align-items-center"
+                      className="absolute w-full h-full flex flex-col justify-center items-center"
                       style={{
                         backgroundColor: "rgba(0, 0, 0, 0.6)",
                         zIndex: 5,
@@ -186,11 +198,11 @@ export function CombosList() {
                         left: 0,
                       }}
                     >
-                      <span className="text-white mb-2 fw-bold">
+                      <span className="text-white mb-2 font-bold">
                         No disponible
                       </span>
                       <Button
-                        className="btn btn-light btn-sm"
+                        className="bg-muted text-foreground shadow-sm hover:bg-muted/80 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 px-3 text-xs"
                         title="Activar Combo"
                         type="button"
                         onClick={() => {
@@ -198,12 +210,13 @@ export function CombosList() {
                           setNombreCombo(combo.nombre);
                           setIdActivarCombo(combo.id);
                         }}
-                       variant="default">
+                        variant="default"
+                      >
                         Activar
                       </Button>
                     </div>
                   )}
-                  <CardHeader className="m-0 p-0">
+                  <CardHeader className="relative m-0 p-0">
                     <img
                       src={
                         combo.foto_url
@@ -214,53 +227,45 @@ export function CombosList() {
                       width={"100%"}
                       height={"auto"}
                     />
-                    <div className="dropdown position-absolute top-0  left-100">
-                      <Button
-                        className="btn p-0 m-0"
-                        type="button"
-                        id="dropdownMenu2"
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                       variant="default">
-                        <EllipsisVerticalIcon className="text-auto" />
-                      </Button>
-                      <ul
-                        className="dropdown-menu dropdown-menu-bottom"
-                        aria-labelledby="dropdownMenu2"
-                      >
-                        <li>
-                          <Button
-                            className="dropdown-item"
-                            type="button"
-                            onClick={() => {
-                              setModalEditCombo(true);
-                              setDataCombo(combo);
-                            }}
-                           variant="default">
-                            Editar
-                          </Button>
-                        </li>
-                        <li>
-                          <Button
-                            className="dropdown-item"
-                            type="button"
-                            onClick={() => {
-                              setModalQuestion(true);
-                              setNombreCombo(combo.nombre);
-                              setIdEliminar(combo.id);
-                            }}
-                           variant="default">
-                            Desactivar Combo
-                          </Button>
-                        </li>
-                      </ul>
-                    </div>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="absolute top-2 right-2 bg-background/80"
+                          aria-label={`Acciones de ${combo.nombre}`}
+                        >
+                          <EllipsisVerticalIcon />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem
+                          onSelect={() => {
+                            setModalEditCombo(true);
+                            setDataCombo(combo);
+                          }}
+                        >
+                          Editar
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onSelect={() => {
+                            setModalQuestion(true);
+                            setNombreCombo(combo.nombre);
+                            setIdEliminar(combo.id);
+                          }}
+                        >
+                          Desactivar Combo
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </CardHeader>
                   <CardContent className="relative flex p-3">
                     <div>
-                      <CardTitle asChild><p className="h6 fw-bold">
-                        {capitalizeFirstLetter(combo.nombre)}
-                      </p></CardTitle>
+                      <CardTitle asChild>
+                        <p className="h6 font-bold">
+                          {capitalizeFirstLetter(combo.nombre)}
+                        </p>
+                      </CardTitle>
                       <small className="">{combo.descripcion}</small>
                     </div>
                   </CardContent>
@@ -293,7 +298,7 @@ export function CombosList() {
         submitText="Agregar"
         hideFooter={true}
       >
-        <div className="modal-body p-3">
+        <div className="p-3">
           <NuevoCombo
             onClose={() => setIsModalOpen(false)}
             onSuccess={handleUpdateCombos}
@@ -310,7 +315,7 @@ export function CombosList() {
         title="Editar Comboo"
         hideFooter={true}
       >
-        <div className="modal-body p-3">
+        <div className="p-3">
           <EditCombo dataCombo={dataCombo} />
         </div>
       </ModalRight>

@@ -1,27 +1,23 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import RippleWrapper from "./components/componentesReutilizables/RippleWrapper";
+import { Link, useLocation } from "react-router-dom";
 import {
-  BikeIcon,
+  Bike,
+  ChefHat,
+  Clock3,
   HandPlatter,
   Inbox,
   LockKeyhole,
   LogOut,
-  ShoppingCartIcon,
+  ShoppingCart,
+  Store,
 } from "lucide-react";
 import { useSelector } from "react-redux";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faKitchenSet } from "@fortawesome/free-solid-svg-icons";
-import "./css/EstilosPOS.css";
-import { fetchCajaClose } from "./pages/modulosVender/CerrarCaja";
 import { useQuery } from "@tanstack/react-query";
+import { fetchCajaClose } from "./pages/modulosVender/CerrarCaja";
 import { GetConfi } from "./service/accionesConfiguracion/GetConfi";
 import { HoraLive } from "./utils/HoraLive";
 import { Button } from "./components/ui/button";
-import { CardHeader } from "@/components/ui/card";
-
 
 export default function LayoutPOS({ children }) {
-  const navigate = useNavigate();
   const location = useLocation();
   const caja = useSelector((state) => state.caja.caja);
 
@@ -36,8 +32,8 @@ export default function LayoutPOS({ children }) {
   const empresaString =
     localStorage.getItem("empresa") || sessionStorage.getItem("empresa");
   const miEmpresa = empresaString ? JSON.parse(empresaString) : {};
-  const fotoEmpresa = miEmpresa.logo_url;
-  // Consulta de configuración
+  const cargoNombre = cargo?.empleado?.cargo?.nombre;
+
   const { data: configEmpresa = [] } = useQuery({
     queryKey: ["confiEmpresa"],
     queryFn: GetConfi,
@@ -46,204 +42,149 @@ export default function LayoutPOS({ children }) {
   });
 
   const configTipoVenta = configEmpresa.find(
-    (item) => item.nombre == "Tipo Venta",
+    (item) => item.nombre === "Tipo Venta",
   );
+  const esComida = configTipoVenta?.clave === "restaurante";
 
-  const esComida = configTipoVenta?.clave == "restaurante";
-
-  // Consulta para obtener los datos de la caja
   const { data: cajaData } = useQuery({
     queryKey: ["cajaClose", cajaDatos?.id],
     queryFn: () => fetchCajaClose(cajaDatos?.id),
     enabled: !!cajaDatos?.id,
   });
 
+  const puedeAtender = ["atencion al cliente", "administrador"].includes(
+    cargoNombre,
+  );
+  const navigation = [
+    esComida &&
+      puedeAtender && {
+        to: "/vender/mesas",
+        label: "Mesas",
+        icon: HandPlatter,
+      },
+    puedeAtender && {
+      to: "/vender/ventasLlevar",
+      label: esComida ? "Para llevar" : "Ventas",
+      icon: esComida ? Inbox : ShoppingCart,
+    },
+    esComida &&
+      ["cocinero", "administrador"].includes(cargoNombre) && {
+        to: "/vender/cocina",
+        label: "Cocina",
+        icon: ChefHat,
+      },
+    esComida &&
+      puedeAtender && {
+        to: "/vender/pedidosWeb",
+        label: "Delivery",
+        icon: Bike,
+      },
+  ].filter(Boolean);
+
+  const nombreCajero = [
+    cajaData?.datosRegistroCaja?.usuario?.empleado?.persona?.nombre,
+    cajaData?.datosRegistroCaja?.usuario?.empleado?.persona?.apellidos,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
-    <div className="w-100 p-0 pb-3 overflow-hidden d-flex flex-column h-100">
-      {/* HEADER LIMPIO SIN BORDES INVENTADOS */}
-      <CardHeader className="p-0 m-0 rounded-0 flex flex-col flex-md-row items-stretch align-items-md-center bg-background shadow-sm">
-        {/* ========================================================= */}
-        {/* LADO IZQUIERDO: Exactamente con tu diseño original */}
-        {/* ========================================================= */}
-        <div className="d-flex h-100 overflow-x-auto">
-          <div className="d-flex align-items-center gap-2 ms-2 me-4">
-            {fotoEmpresa && (
+    <div className="flex h-dvh min-h-[480px] w-full flex-col overflow-hidden bg-muted/30 text-foreground">
+      <header className="relative z-20 shrink-0 border-b border-border/70 bg-background/95 shadow-sm backdrop-blur supports-backdrop-filter:bg-background/85">
+        <div className="mx-auto flex min-h-16 w-full max-w-[1920px] flex-wrap items-center gap-x-4 gap-y-2 px-3 py-2 sm:px-5 lg:flex-nowrap lg:px-6">
+          <div className="flex min-w-0 items-center gap-3 lg:w-56 lg:shrink-0">
+            {miEmpresa.logo_url ? (
               <img
-                src={fotoEmpresa}
-                alt="logo empresa"
-                className="img-fluid"
-                style={{
-                  width: "35px",
-                  height: "35px",
-                  borderRadius: "50%",
-                  objectFit: "cover",
-                }}
+                src={miEmpresa.logo_url}
+                alt=""
+                className="size-9 shrink-0 rounded-xl border border-border/70 bg-muted object-cover"
               />
+            ) : (
+              <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-muted text-foreground">
+                <Store className="size-5" />
+              </span>
             )}
-            <p className="h6 fw-bold opacity-75 p-0 m-0 text-truncate sidebar-text">
-              {miEmpresa.nombre}
-            </p>
-          </div>
-          {esComida &&
-            ["atencion al cliente", "administrador"].includes(
-              cargo?.empleado?.cargo?.nombre,
-            ) && (
-              <RippleWrapper>
-                <Link
-                  className={`boton-venta d-flex align-items-center justify-content-center  h-100 ${
-                    location.pathname === "/vender/mesas" ? "activo" : ""
-                  }`}
-                  to="/vender/mesas"
-                >
-                  <HandPlatter
-                    className="text-auto pos-icon"
-                    height="22px"
-                    width="22px"
-                  />
-                  <span className="pos-btn-text ms-1">Mesas</span>
-                </Link>
-              </RippleWrapper>
-            )}
-
-          {["atencion al cliente", "administrador"].includes(
-            cargo?.empleado?.cargo?.nombre,
-          ) && (
-            <RippleWrapper>
-              <Link
-                className={`boton-venta d-flex align-items-center justify-content-center  h-100 ${
-                  location.pathname === "/vender/ventasLlevar" ? "activo" : ""
-                }`}
-                to="/vender/ventasLlevar"
-              >
-                {esComida ? (
-                  <Inbox
-                    className="text-auto pos-icon"
-                    height="22px"
-                    width="22px"
-                  />
-                ) : (
-                  <ShoppingCartIcon
-                    className="text-auto pos-icon"
-                    height="22px"
-                    width="22px"
-                  />
-                )}
-                <span className="pos-btn-text ms-1">
-                  {esComida ? "Llevar" : "Ventas"}
-                </span>
-              </Link>
-            </RippleWrapper>
-          )}
-
-          {esComida &&
-            ["cocinero", "administrador"].includes(
-              cargo?.empleado?.cargo?.nombre,
-            ) && (
-              <RippleWrapper>
-                <Link
-                  className={`boton-venta d-flex align-items-center justify-content-center  h-100 ${
-                    location.pathname === "/vender/cocina" ? "activo" : ""
-                  }`}
-                  to="/vender/cocina"
-                >
-                  <FontAwesomeIcon icon={faKitchenSet} className="pos-icon" />
-                  <span className="pos-btn-text ms-1">Cocina</span>
-                </Link>
-              </RippleWrapper>
-            )}
-          {esComida &&
-            ["atencion al cliente", "administrador"].includes(
-              cargo?.empleado?.cargo?.nombre,
-            ) && (
-              <RippleWrapper>
-                <Link
-                  className={`boton-venta d-flex align-items-center justify-content-center h-100 ${
-                    location.pathname === "/vender/pedidosWeb" ? "activo" : ""
-                  }`}
-                  to="/vender/pedidosWeb"
-                >
-                  <BikeIcon className="pos-icon" height="22px" width="22px" />
-                  <span className="pos-btn-text ms-1">Delivery</span>
-                </Link>
-              </RippleWrapper>
-            )}
-        </div>
-
-        {/* ========================================================= */}
-        {/* LADO DERECHO: Alineado, separado por 'gap' y sin líneas */}
-        {/* ========================================================= */}
-        <div className="d-flex flex-wrap flex-md-nowrap flex-grow-1 align-items-center justify-content-center justify-content-md-end p-2 pe-md-4 gap-4">
-          <div className="d-flex align-items-center">
-            <p className="fw-bold mb-0">
-              <HoraLive />
-            </p>
-          </div>
-          {/* Info Caja */}
-          <div className="d-flex align-items-center gap-2 text-nowrap">
-            <span className="text-muted small mb-0">Caja:</span>
-            <strong
-              className="text-dark border rounded px-2 py-1 bg-light shadow-sm text-uppercase mb-0"
-              style={{ fontSize: "0.85rem", letterSpacing: "0.5px" }}
-            >
-              {cajaDatos?.nombre ||
-                caja?.nombre ||
-                `CAJA ${cajaDatos?.id || ""}`}
-            </strong>
+            <span className="truncate text-sm font-semibold tracking-tight">
+              {miEmpresa.nombre || "Punto de venta"}
+            </span>
           </div>
 
-          {/* Info Cajero */}
-          <div className="d-flex align-items-center gap-2 text-nowrap">
-            <span className="text-muted small mb-0">Cajero:</span>
-            <strong
-              className="text-dark text-truncate mb-0"
-              style={{ fontSize: "0.85rem", maxWidth: "160px" }}
-            >
-              {cajaData?.datosRegistroCaja?.usuario?.empleado?.persona?.nombre}{" "}
-              {
-                cajaData?.datosRegistroCaja?.usuario?.empleado?.persona
-                  ?.apellidos
-              }
-            </strong>
-          </div>
-
-          {/* Botones de Acción */}
-          <div className="d-flex align-items-center gap-3">
-            {["atencion al cliente", "administrador"].includes(
-              cargo?.empleado?.cargo?.nombre,
-            ) &&
-              caja?.estado === "abierto" && (
+          <nav
+            aria-label="Navegación de ventas"
+            className="-mx-1 flex min-w-0 flex-1 items-center gap-1 overflow-x-auto px-1 pb-0.5 lg:mx-0"
+          >
+            {navigation.map(({ to, label, icon: Icon }) => {
+              const isActive = location.pathname === to;
+              return (
                 <Button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    navigate("/vender/cerrarCaja");
-                  }}
-                  className="pos-action-link cerrar-caja d-flex align-items-center gap-2 text-decoration-none h-100"
-                 variant="default">
-                  <LockKeyhole
-                    className="text-auto pos-icon"
-                    height="18px"
-                    width="18px"
-                  />
-                  <span className="pos-btn-text text-nowrap">Cerrar Caja</span>
+                  key={to}
+                  asChild
+                  size="default"
+                  variant={isActive ? "secondary" : "ghost"}
+                  className={`shrink-0 gap-2 rounded-lg px-3 ${
+                    isActive
+                      ? "bg-secondary text-secondary-foreground shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  <Link
+                    to={to}
+                    aria-current={isActive ? "page" : undefined}
+                  >
+                    <Icon className="size-4" strokeWidth={1.8} />
+                    {label}
+                  </Link>
+                </Button>
+              );
+            })}
+          </nav>
+
+          <div className="flex w-full flex-wrap items-center justify-between gap-2 border-t border-border/60 pt-2 sm:justify-end lg:w-auto lg:shrink-0 lg:border-0 lg:pt-0">
+            <div className="flex min-w-0 items-center gap-2 text-xs">
+              <span className="hidden items-center gap-1.5 text-muted-foreground xl:inline-flex">
+                <Clock3 className="size-3.5" />
+                <HoraLive />
+              </span>
+              <span className="hidden h-5 w-px bg-border xl:block" />
+              <span className="text-muted-foreground">Caja</span>
+              <span className="max-w-28 truncate rounded-md border border-border/70 bg-muted/60 px-2 py-1 font-medium text-foreground">
+                {cajaDatos?.nombre ||
+                  caja?.nombre ||
+                  `CAJA ${cajaDatos?.id || ""}`}
+              </span>
+              {nombreCajero && (
+                <>
+                  <span className="hidden h-5 w-px bg-border sm:block" />
+                  <span className="hidden max-w-36 truncate text-muted-foreground sm:inline">
+                    {nombreCajero}
+                  </span>
+                </>
+              )}
+            </div>
+
+            <div className="flex shrink-0 items-center gap-1.5">
+              {puedeAtender && caja?.estado === "abierto" && (
+                <Button asChild size="sm" variant="outline" className="gap-2 border-border/70">
+                  <Link to="/vender/cerrarCaja">
+                    <LockKeyhole className="size-3.5" strokeWidth={1.8} />
+                    <span className="hidden sm:inline">Cerrar caja</span>
+                  </Link>
                 </Button>
               )}
-
-            <Button
-              onClick={(e) => {
-                e.preventDefault();
-                navigate("/");
-              }}
-              className="pos-action-link salir d-flex align-items-center gap-2 text-decoration-none h-100"
-             variant="default">
-              <LogOut className="pos-icon" height="18px" width="18px" />
-              <span className="pos-btn-text text-nowrap">Salir</span>
-            </Button>
+              <Button asChild size="sm" variant="ghost" className="gap-2 text-muted-foreground hover:text-foreground">
+                <Link to="/">
+                  <LogOut className="size-3.5" strokeWidth={1.8} />
+                  Salir
+                </Link>
+              </Button>
+            </div>
           </div>
         </div>
-      </CardHeader>
+      </header>
 
-      {/* Contenido dinámico */}
-      <div className="contenedor-scroll p-3 flex-grow-1">{children}</div>
+      <main className="min-h-0 flex-1 overflow-y-auto overscroll-contain bg-muted/30 p-3 sm:p-4">
+        <div className="mx-auto h-full min-h-0 w-full max-w-[1920px]">{children}</div>
+      </main>
     </div>
   );
 }

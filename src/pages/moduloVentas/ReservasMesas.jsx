@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import "../../css/estilosVentas/EstilosReservas.css";
+
 import axiosInstance from "../../api/AxiosInstance";
 import { CardReservas } from "../../components/componentesVentas/reservasMesas/CardReservas";
 import { useState } from "react";
@@ -10,7 +10,6 @@ import FormAddReservarMesa from "../../components/componentesVentas/reservasMesa
 import { GetMesasVender } from "../../service/accionesVender/GetMesasVender";
 import { Button } from "../../components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-
 
 // ✅ Importamos el formulario
 
@@ -80,23 +79,24 @@ export function ReservasMesas() {
         <>
           <CardHeader className="flex justify-between items-center">
             <h4 className="mb-0">Reservas de mesas</h4>
-            <div className="d-flex gap-2">
-              <div className="input-group input-group-sm">
+            <div className="flex gap-2">
+              <div className="flex w-full items-stretch">
                 <input
                   type="date"
-                  className="form-control border-start-0 ps-3 bg-light"
+                  className="h-9 w-full rounded-md px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 border-s-0 ps-3 bg-muted"
                   value={fechaFiltro}
                   onChange={(e) => setFechaFiltro(e.target.value)}
                   style={{ boxShadow: "none" }}
                 />
               </div>
               <Button
-                className="btn-principal d-flex align-items-center gap-1"
+                className="btn-principal flex items-center gap-1"
                 onClick={() => {
                   setReservaEdit(null); // Limpiamos edición = "Nueva Reserva"
                   setVistaReserva("formulario"); // Cambiamos la vista
                 }}
-               variant="default">
+                variant="default"
+              >
                 <Plus size={16} />
                 Nuevo
               </Button>
@@ -105,7 +105,7 @@ export function ReservasMesas() {
 
           <CardContent className="p-0">
             {reservasFiltradas.length === 0 ? (
-              <div className="d-flex flex-column align-items-center justify-content-center py-5 text-muted h-100">
+              <div className="flex flex-col items-center justify-center py-5 text-muted-foreground h-full">
                 <CalendarDays size={40} className="mb-2 opacity-50" />
                 <p className="mb-0">
                   No hay reservas programadas para esta fecha.
@@ -116,7 +116,7 @@ export function ReservasMesas() {
                 {reservasFiltradas.map((reserva) => (
                   <div
                     key={reserva.id}
-                    className="md:col-span-3 col-sm-6 col-lg-3"
+                    className="col-span-full md:col-span-3 sm:col-span-6 lg:col-span-3"
                   >
                     <CardReservas
                       reserva={reserva}

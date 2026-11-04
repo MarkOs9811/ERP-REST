@@ -65,19 +65,22 @@ export function TesseractFormIntegracion({ dataIntegracion }) {
     tesseractConfig?.valor2?.trim() !== "";
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="p-3">
-      <div class="card  border mb-3 rounded-4 overflow-hidden">
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-0">
-          <div class="md:col-span-12 d-flex align-items-center justify-content-center bg-light position-relative">
-            <div class="animate-icon"></div>
+      <div className="mb-3 overflow-hidden rounded-xl bg-card text-card-foreground shadow-sm">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-0">
+          <div className="col-span-full relative flex items-center justify-center bg-muted">
+            <div className="animate-icon"></div>
           </div>
 
-          <div class="md:col-span-12 p-4">
-            <h3 class="fw-bold text-primary mb-3">¿Qué es Tesseract OCR?</h3>
-            <p class="text-muted">
+          <div className="col-span-full p-4">
+            <h3 className="mb-3 font-bold text-primary">
+              ¿Qué es Tesseract OCR?
+            </h3>
+            <p className="text-muted-foreground">
               <strong>Tesseract OCR</strong> es una herramienta de
               reconocimiento óptico de caracteres (OCR). Permite convertir
               imágenes o documentos escaneados en{" "}
-              <span class="fw-semibold">texto editable</span>. Descargar desde{" "}
+              <span className="font-semibold">texto editable</span>. Descargar
+              desde{" "}
               <a
                 href="https://sourceforge.net/projects/tesseract-ocr.mirror/"
                 target="_blank"
@@ -86,11 +89,11 @@ export function TesseractFormIntegracion({ dataIntegracion }) {
                 Descargar Tesseract OCR
               </a>
             </p>
-            <ul class="list-unstyled">
+            <ul className="m-0 list-none p-0">
               <li>✔️ Extrae texto de imágenes y PDFs</li>
               <li>
                 ✔️ Compatible con más de{" "}
-                <span class="fw-semibold">100 idiomas</span>
+                <span className="font-semibold">100 idiomas</span>
               </li>
               <li>✔️ Fácil de integrar en aplicaciones</li>
               <li>✔️ Gratuito y de código abierto</li>
@@ -100,24 +103,26 @@ export function TesseractFormIntegracion({ dataIntegracion }) {
       </div>
       {/* Card de validación */}
       <div
-        className={`alert  p-3 mb-3 border-0 shadow-sm ${
-          isConfigured ? "alert-success " : "alert-danger "
+        className={`relative w-full rounded-lg text-sm p-3 mb-3 border-0 shadow-sm ${
+          isConfigured
+            ? "rounded-md border-emerald-600/30 bg-emerald-600/10 p-4 text-emerald-800 dark:text-emerald-300 "
+            : "rounded-md border-destructive/50 bg-destructive/10 p-4 text-destructive "
         }`}
       >
         {isConfigured ? (
-          <span className="small">
+          <span className="text-sm">
             <CheckCircle size={24} className="me-2" />
             Todo correcto, puedes continuar con la configuración.
           </span>
         ) : (
-          <span className="small">
+          <span className="text-sm">
             <XCircle size={24} className="me-2" />
             Faltan credenciales. Crea un servicio en{" "}
             <a
               href="https://console.cloud.google.com/"
               target="_blank"
               rel="noopener noreferrer"
-              className=" fw-bold text-decoration-underline"
+              className="font-bold underline"
             >
               Google Cloud Console
             </a>
@@ -128,12 +133,16 @@ export function TesseractFormIntegracion({ dataIntegracion }) {
 
       {/* Campos del formulario */}
       <div className="mb-3">
-        <label className="form-label small">Ruta del ejecutable</label>
+        <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm">
+          Ruta del ejecutable
+        </label>
         <input
           type="text"
           disabled={!isEditing}
-          className={`text-muted form-control ${
-            errors.rutaEjecutable ? "is-invalid" : ""
+          className={`text-muted-foreground h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+            errors.rutaEjecutable
+              ? "border-destructive focus-visible:ring-destructive"
+              : ""
           }`}
           {...register("rutaEjecutable", {
             required: "Este campo es obligatorio.",
@@ -144,19 +153,23 @@ export function TesseractFormIntegracion({ dataIntegracion }) {
           placeholder="Ingresa la ruta del ejecutable"
         />
         {errors.rutaEjecutable && (
-          <div className="invalid-feedback">
+          <div className="text-sm text-destructive">
             {errors.rutaEjecutable.message}
           </div>
         )}
       </div>
 
       <div className="mb-3">
-        <label className="form-label small">Ruta de carpeta de idiomas</label>
+        <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm">
+          Ruta de carpeta de idiomas
+        </label>
         <input
           type="text"
           disabled={!isEditing}
-          className={`text-muted form-control ${
-            errors.rutaCarpetaIdioma ? "is-invalid" : ""
+          className={`text-muted-foreground h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+            errors.rutaCarpetaIdioma
+              ? "border-destructive focus-visible:ring-destructive"
+              : ""
           }`}
           {...register("rutaCarpetaIdioma", {
             required: "Este campo es obligatorio.",
@@ -167,19 +180,23 @@ export function TesseractFormIntegracion({ dataIntegracion }) {
           placeholder="Ingresa la ruta de carpeta de idiomas"
         />
         {errors.rutaCarpetaIdioma && (
-          <div className="invalid-feedback">
+          <div className="text-sm text-destructive">
             {errors.rutaCarpetaIdioma.message}
           </div>
         )}
       </div>
 
       <div className="mb-3">
-        <label className="form-label small">Codigo de idioma</label>
+        <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm">
+          Codigo de idioma
+        </label>
         <input
           type="text"
           disabled={!isEditing}
-          className={`text-muted form-control ${
-            errors.codigoIdioma ? "is-invalid" : ""
+          className={`text-muted-foreground h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+            errors.codigoIdioma
+              ? "border-destructive focus-visible:ring-destructive"
+              : ""
           }`}
           {...register("codigoIdioma", {
             required: "Este campo es obligatorio.",
@@ -189,20 +206,23 @@ export function TesseractFormIntegracion({ dataIntegracion }) {
           })}
           placeholder="Ingresa el codigo de idioma"
         />
-        <small className="text-muted">Por ejemplo: spa</small>
+        <small className="text-muted-foreground">Por ejemplo: spa</small>
         {errors.codigoIdioma && (
-          <div className="invalid-feedback">{errors.codigoIdioma.message}</div>
+          <div className="text-sm text-destructive">
+            {errors.codigoIdioma.message}
+          </div>
         )}
       </div>
 
       {/* Botones */}
-      <div className="d-flex justify-content-end gap-2">
+      <div className="flex justify-end gap-2">
         {!isEditing ? (
           <Button
             type="button"
             className="btn-editar"
             onClick={() => setIsEditing(true)}
-           variant="secondary">
+            variant="secondary"
+          >
             Editar
           </Button>
         ) : (
@@ -212,10 +232,16 @@ export function TesseractFormIntegracion({ dataIntegracion }) {
               className="btn-cancelar"
               onClick={() => setIsEditing(false)}
               disabled={loading}
-             variant="default">
+              variant="default"
+            >
               Cancelar
             </Button>
-            <Button type="submit" className="btn-guardar" disabled={loading} variant="default">
+            <Button
+              type="submit"
+              className="btn-guardar"
+              disabled={loading}
+              variant="default"
+            >
               {loading ? "Guardando..." : "Guardar"}
             </Button>
           </>

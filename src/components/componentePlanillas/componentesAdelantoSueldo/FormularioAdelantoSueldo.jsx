@@ -12,18 +12,22 @@ export function FormularioAdelantoSueldo({
   errors,
   usuarios,
   isLoadingUsuarios,
-  BASE_URL,
   onClose,
 }) {
   return (
     <form id="agregarAdelantoSueldoForm" onSubmit={onSubmit}>
-      <small className="text-info">Selecciona uno o más empleados</small>
-      <div className=" mb-3">
-        <label htmlFor="empleado" className="form-label">
+      <small className="text-sky-600 dark:text-sky-400">
+        Selecciona uno o más empleados
+      </small>
+      <div className="mb-3">
+        <label
+          htmlFor="empleado"
+          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+        >
           Empleado
         </label>
         <select
-          className={`form-select ${errors.empleados ? "is-invalid" : ""}`}
+          className={`h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.empleados ? "border-destructive focus-visible:ring-destructive" : ""}`}
           id="empleado"
           defaultValue=""
           onChange={handleUsuarioSelect}
@@ -48,33 +52,24 @@ export function FormularioAdelantoSueldo({
         </select>
 
         {errors.empleados && (
-          <div className="invalid-feedback">
+          <div className="text-sm text-destructive">
             Debe seleccionar al menos un empleado.
           </div>
         )}
       </div>
 
       {empleadosSeleccionados?.length > 0 && (
-        <div className="mb-3 d-flex flex-wrap gap-2">
+        <div className="mb-3 flex flex-wrap gap-2">
           {empleadosSeleccionados?.map((usuario) => (
             <span
               key={usuario.id}
-              className="badge d-flex align-items-center p-2"
+              className="rounded-full text-xs font-semibold transition-colors flex items-center p-2"
               style={{
                 borderRadius: "20px",
                 backgroundColor: "#e1f5ff",
                 color: "#017c8e",
               }}
             >
-              <img
-                src={
-                  `${BASE_URL}/storage/${usuario.fotoPerfil}` ||
-                  "/default-avatar.png"
-                }
-                alt="Foto del empleado"
-                className="rounded-circle me-2"
-                style={{ width: "30px", height: "30px" }}
-              />
               <span className="me-2">
                 {capitalizeFirstLetter(
                   usuario.empleado.persona.nombre.toLowerCase(),
@@ -85,20 +80,24 @@ export function FormularioAdelantoSueldo({
               </span>
               <Button
                 type="button"
-                className="btn-close btn-close-dark ms-2"
+                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 size-8 p-0 opacity-70 hover:opacity-100 btn-close-dark ms-2"
                 aria-label="Eliminar"
                 onClick={() => removeUsuario(usuario.id)}
                 style={{ fontSize: "10px" }}
-               variant="default"></Button>
+                variant="default"
+              ></Button>
             </span>
           ))}
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-2">
-        <div className="md:col-span-6 col-sm-12">
-          <div className=" mb-3">
-            <label htmlFor="fecha" className="form-label">
+      <div className="grid grid-cols-12 gap-2">
+        <div className="md:col-span-6 col-span-full">
+          <div className="mb-3">
+            <label
+              htmlFor="fecha"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
               Fecha
             </label>
             <Controller
@@ -108,7 +107,7 @@ export function FormularioAdelantoSueldo({
               render={({ field }) => (
                 <input
                   type="date"
-                  className={`form-control ${errors.fecha ? "is-invalid" : ""}`}
+                  className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.fecha ? "border-destructive focus-visible:ring-destructive" : ""}`}
                   id="fechaTrabajar"
                   {...field}
                 />
@@ -116,13 +115,18 @@ export function FormularioAdelantoSueldo({
             />
 
             {errors.fecha && (
-              <div className="invalid-feedback">{errors.fecha.message}</div>
+              <div className="text-sm text-destructive">
+                {errors.fecha.message}
+              </div>
             )}
           </div>
         </div>
-        <div className="md:col-span-6 col-sm-12">
-          <div className=" mb-3">
-            <label htmlFor="monto" className="form-label">
+        <div className="md:col-span-6 col-span-full">
+          <div className="mb-3">
+            <label
+              htmlFor="monto"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
               Monto
             </label>
             <Controller
@@ -136,7 +140,7 @@ export function FormularioAdelantoSueldo({
                 <input
                   {...field}
                   type="text"
-                  className={`form-control ${errors.monto ? "is-invalid" : ""}`}
+                  className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.monto ? "border-destructive focus-visible:ring-destructive" : ""}`}
                   onInput={(event) => {
                     event.target.value = event.target.value
                       .replace(/[^0-9.]/g, "")
@@ -149,14 +153,19 @@ export function FormularioAdelantoSueldo({
             />
 
             {errors.monto && (
-              <div className="invalid-feedback">{errors.monto.message}</div>
+              <div className="text-sm text-destructive">
+                {errors.monto.message}
+              </div>
             )}
           </div>
         </div>
       </div>
       <div className="mb-3">
-        <div className=" mb-3">
-          <label htmlFor="descripcion" className="form-label">
+        <div className="mb-3">
+          <label
+            htmlFor="descripcion"
+            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
             Descripción
           </label>
           <Controller
@@ -166,8 +175,10 @@ export function FormularioAdelantoSueldo({
             render={({ field }) => (
               <textarea
                 {...field}
-                className={`form-control ${
-                  errors.descripcion ? "is-invalid" : ""
+                className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
+                  errors.descripcion
+                    ? "border-destructive focus-visible:ring-destructive"
+                    : ""
                 }`}
                 placeholder="Descripción"
                 style={{ height: "100px" }}
@@ -176,12 +187,17 @@ export function FormularioAdelantoSueldo({
           />
 
           {errors.descripcion && (
-            <div className="invalid-feedback">{errors.descripcion.message}</div>
+            <div className="text-sm text-destructive">
+              {errors.descripcion.message}
+            </div>
           )}
         </div>
 
-        <div className=" mb-3">
-          <label htmlFor="documento" className="form-label">
+        <div className="mb-3">
+          <label
+            htmlFor="documento"
+            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
             Documento (opcional)
           </label>
           <Controller
@@ -190,7 +206,7 @@ export function FormularioAdelantoSueldo({
             render={({ field }) => (
               <input
                 type="file"
-                className="form-control"
+                className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                 id="documento"
                 accept=".pdf,.doc,.docx,.jpg,.png"
                 onChange={(e) => {
@@ -201,8 +217,13 @@ export function FormularioAdelantoSueldo({
           />
         </div>
       </div>
-      <div className="d-flex  border-top p-3 gap-2">
-        <Button type="button" className="btn-cerrar" onClick={onClose} variant="default">
+      <div className="flex border-t p-3 gap-2">
+        <Button
+          type="button"
+          className="btn-cerrar"
+          onClick={onClose}
+          variant="default"
+        >
           Cancelar
         </Button>
         <Button type="submit" className="btn-guardar" variant="default">

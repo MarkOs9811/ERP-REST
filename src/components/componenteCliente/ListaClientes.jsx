@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { TablasGenerales } from "../componentesReutilizables/TablasGenerales";
 import { GetClientesLista } from "../../service/accionesClientes/GetClientes";
 import { useState, useMemo } from "react";
-import "../../css/estilosClientes/EstilosTablasClientes.css";
+
 import { obtenerTiempoRelativo } from "../../utils/formatoFechas";
 
 // 2. Micro-componente Avatar
@@ -15,7 +15,7 @@ const UserAvatar = ({ foto, nombre }) => {
       <img
         src={foto}
         alt={`Avatar`}
-        className="rounded-circle flex-shrink-0"
+        className="rounded-full shrink-0"
         style={{ width: "36px", height: "36px", objectFit: "cover" }}
         referrerPolicy="no-referrer"
         onError={() => setImgError(true)}
@@ -24,7 +24,7 @@ const UserAvatar = ({ foto, nombre }) => {
   }
   return (
     <div
-      className="bg-fw-saffron-soft text-fw-saffron rounded-circle d-flex align-items-center justify-content-center fw-bold flex-shrink-0"
+      className="bg-fw-saffron-soft text-fw-saffron rounded-full flex items-center justify-center font-bold shrink-0"
       style={{ width: "36px", height: "36px", fontSize: "14px" }}
     >
       {inicial}
@@ -177,7 +177,10 @@ export function ListaClientes({ busqueda = "", filtros = {} }) {
   return (
     <div>
       {busqueda || filtros.fechaDesde || filtros.fechaHasta ? (
-        <div className="alert alert-info small mb-3" role="alert">
+        <div
+          className="relative w-full rounded-lg px-4 py-3 border-sky-500/30 bg-sky-500/10 text-sky-700 dark:text-sky-400 text-sm mb-3"
+          role="alert"
+        >
           Se encontraron <strong>{clientesFiltrados.length}</strong> cliente(s)
           que coinciden con tu búsqueda
         </div>

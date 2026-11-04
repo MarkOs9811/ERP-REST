@@ -2,7 +2,6 @@ import { faPowerOff } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import axiosInstance from "../../api/AxiosInstance";
-import { useTooltips } from "../../hooks/UseToolTips";
 import { PlatoEditar } from "./PlatoEdit";
 import ModalAlertQuestion from "../componenteToast/ModalAlertQuestion";
 import { GetPlatos } from "../../service/GetPlatos";
@@ -216,9 +215,9 @@ export function PlatoList({ search, categoriaActual = null }) {
       sortable: true,
       center: true,
       cell: (row) => (
-        <div className="form-check form-switch d-flex justify-content-center mb-0">
+        <div className="items-center gap-2 flex justify-center mb-0">
           <input
-            className="form-check-input"
+            className="size-4 shrink-0 rounded border-input accent-primary"
             type="checkbox"
             role="switch"
             style={{
@@ -253,7 +252,7 @@ export function PlatoList({ search, categoriaActual = null }) {
       cell: (row) => {
         const { estado } = row;
         return (
-          <div className="d-flex gap-2 justify-content-center">
+          <div className="flex gap-2 justify-center">
             {estado === 1 ? (
               <>
                 <BtnEditar
@@ -267,20 +266,20 @@ export function PlatoList({ search, categoriaActual = null }) {
               </>
             ) : (
               <Button
-                className="btn btn-sm"
+                className="bg-primary text-primary-foreground shadow hover:bg-primary/90 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 px-3 text-xs"
                 style={{
                   color: "var(--fw-emerald)",
                   borderColor: "var(--fw-emerald)",
                   backgroundColor: "transparent",
                 }}
-                data-bs-toggle="tooltip"
                 title="Activar Plato"
                 onClick={() => {
                   setModalActivar(true);
                   setNombrePlato(row?.nombre);
                   setIdPlatoActivar(row?.id);
                 }}
-               variant="default">
+                variant="default"
+              >
                 <FontAwesomeIcon icon={faPowerOff} />
               </Button>
             )}
@@ -291,8 +290,6 @@ export function PlatoList({ search, categoriaActual = null }) {
     },
   ];
 
-  useTooltips(platosList);
-
   return (
     <div>
       {loadingPlatos ? (
@@ -300,7 +297,7 @@ export function PlatoList({ search, categoriaActual = null }) {
           <Cargando />
         </div>
       ) : errorPlatos ? (
-        <div className="text-center p-4 text-danger">
+        <div className="text-center p-4 text-destructive">
           <p>Error al cargar los platos.</p>
         </div>
       ) : (

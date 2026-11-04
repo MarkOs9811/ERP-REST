@@ -1,29 +1,35 @@
 import { cloneElement, isValidElement } from "react";
 import { Badge } from "../ui/badge";
+import { cn } from "cn";
 
 const variantes = {
   success: {
     variant: "outline",
     className:
-      "border-emerald-500/20 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400",
+      "border-emerald-500/25 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
+    dotClass: "bg-emerald-500",
   },
   warning: {
     variant: "outline",
     className:
-      "border-amber-500/20 bg-amber-500/10 text-amber-700 dark:text-amber-400",
+      "border-amber-500/30 bg-amber-500/10 text-amber-800 dark:text-amber-300",
+    dotClass: "bg-amber-500",
   },
   danger: {
     variant: "destructive",
-    className: "",
+    className: "border border-rose-500/25",
+    dotClass: "bg-rose-500",
   },
   info: {
     variant: "outline",
     className:
-      "border-blue-500/20 bg-blue-500/10 text-blue-700 dark:text-blue-400",
+      "border-sky-500/25 bg-sky-500/10 text-sky-700 dark:text-sky-300",
+    dotClass: "bg-sky-500",
   },
   primary: {
     variant: "outline",
     className: "border-primary/20 bg-primary/10 text-primary",
+    dotClass: "bg-primary",
   },
   secondary: {
     variant: "secondary",
@@ -70,6 +76,7 @@ export const BadgeComponent = ({
     estadoColorMap[estadoBusqueda] ||
     "secondary";
   const selectedVariant = variantes[variantName];
+  const isStatusBadge = variantName !== "secondary";
 
   const textoOriginal = String(label);
   const textoFormateado =
@@ -84,9 +91,12 @@ export const BadgeComponent = ({
     <Badge
       {...props}
       variant={selectedVariant.variant}
-      className={`!h-auto min-h-5 gap-1 ${selectedVariant.className} ${
-        isClickable ? "cursor-pointer" : ""
-      } ${className}`}
+      className={cn(
+        "!h-auto min-h-5 gap-1.5 rounded-full px-2.5 py-1 font-medium",
+        selectedVariant.className,
+        isClickable && "cursor-pointer",
+        className,
+      )}
       onClick={isClickable ? onClick : undefined}
       onKeyDown={
         isClickable
@@ -101,7 +111,15 @@ export const BadgeComponent = ({
       role={isClickable ? "button" : undefined}
       tabIndex={isClickable ? 0 : undefined}
     >
-      {isValidElement(icon)
+        {isStatusBadge && (
+          <span
+            aria-hidden="true"
+            className={`size-1.5 shrink-0 rounded-full ${selectedVariant.dotClass} ${
+              variantName === "warning" ? "animate-pulse" : ""
+            }`}
+          />
+        )}
+        {isValidElement(icon)
         ? cloneElement(icon, { size: 14, strokeWidth: 2.5 })
         : icon}
       <span>{textoFormateado}</span>

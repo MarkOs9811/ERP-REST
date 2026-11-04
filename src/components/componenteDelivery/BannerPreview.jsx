@@ -1,6 +1,6 @@
 import React from "react";
 import * as LucideIcons from "lucide-react";
-import "../../css/estilosDelivery/EstiloBannerPreview.css";
+
 
 const BannerPreview = ({ config = {} }) => {
   // 1. EXTRACCIÓN SEGURA
@@ -59,28 +59,28 @@ const BannerPreview = ({ config = {} }) => {
       <div className="phone-screen">
         {/* Barra de estado */}
         <div
-          className="d-flex justify-content-between px-4 pt-3 pb-2"
+          className="flex justify-between px-4 pt-3 pb-2"
           style={{ fontSize: "11px", fontWeight: "600" }}
         >
           <span>9:41</span>
-          <div className="d-flex gap-2 align-items-center">
+          <div className="flex gap-2 items-center">
             <LucideIcons.Wifi size={12} />
             <LucideIcons.Battery size={12} />
           </div>
         </div>
 
         {/* Header de App (Corregido) */}
-        <div className="d-flex justify-content-between align-items-center px-3 py-2">
-          <div className="d-flex align-items-center gap-2">
+        <div className="flex justify-between items-center px-3 py-2">
+          <div className="flex items-center gap-2">
             {/* Contenedor cuadrado perfecto para la campana */}
             <div
-              className="bg-dark rounded-3 d-flex align-items-center justify-content-center"
+              className="bg-foreground rounded-md flex items-center justify-center"
               style={{ width: "32px", height: "32px" }}
             >
               <LucideIcons.Bell size={14} className="text-white" />
             </div>
             <span
-              className="fw-900 fst-italic mb-0"
+              className="fw-900 italic mb-0"
               style={{ fontSize: "16px", lineHeight: "1" }}
             >
               FIRE WOK
@@ -88,17 +88,17 @@ const BannerPreview = ({ config = {} }) => {
           </div>
           {/* Contenedor circular perfecto para el avatar */}
           <div
-            className="bg-light rounded-circle d-flex align-items-center justify-content-center border"
+            className="bg-muted rounded-full flex items-center justify-center border"
             style={{ width: "32px", height: "32px" }}
           >
-            <LucideIcons.Users size={14} className="text-secondary" />
+            <LucideIcons.Users size={14} className="text-muted-foreground" />
           </div>
         </div>
 
         {/* Buscador */}
         <div className="px-3 mb-4 mt-2">
           <div
-            className="bg-light rounded-pill p-2 px-3 d-flex align-items-center gap-2 text-muted border-0 shadow-sm"
+            className="bg-muted rounded-full p-2 px-3 flex items-center gap-2 text-muted-foreground border-0 shadow-sm"
             style={{ fontSize: "12px" }}
           >
             <LucideIcons.Search size={14} />
@@ -121,17 +121,17 @@ const BannerPreview = ({ config = {} }) => {
               />
             )}
 
-            <div className="position-relative" style={{ zIndex: 10 }}>
-              <div className="d-flex align-items-center gap-1 banner-tag mb-1">
+            <div className="relative" style={{ zIndex: 10 }}>
+              <div className="flex items-center gap-1 banner-tag mb-1">
                 {config.has_icon && Icon && <Icon size={12} strokeWidth={3} />}
                 <span>{tag}</span>
               </div>
-              <p className="banner-title text-truncate">{title}</p>
-              <p className="banner-subtitle mb-0 text-truncate">{subtitle}</p>
+              <p className="banner-title truncate">{title}</p>
+              <p className="banner-subtitle mb-0 truncate">{subtitle}</p>
             </div>
 
             <div
-              className="d-flex align-items-end justify-content-between position-relative mt-3"
+              className="flex items-end justify-between relative mt-3"
               style={{ zIndex: 10 }}
             >
               <div className="banner-offer">{offer}</div>
@@ -141,30 +141,33 @@ const BannerPreview = ({ config = {} }) => {
 
         {/* Categorías */}
         <div className="px-3">
-          <div className="d-flex justify-content-between align-items-center mb-3">
-            <span className="fw-bold text-dark" style={{ fontSize: "14px" }}>
+          <div className="flex justify-between items-center mb-3">
+            <span
+              className="font-bold text-foreground"
+              style={{ fontSize: "14px" }}
+            >
               Categorías
             </span>
             <span
-              className="text-danger fw-bold"
+              className="text-destructive font-bold"
               style={{ fontSize: "12px", cursor: "pointer" }}
             >
               Ver todo
             </span>
           </div>
-          <div className="d-flex justify-content-between gap-2 overflow-hidden px-1">
+          <div className="flex justify-between gap-2 overflow-hidden px-1">
             {[1, 2, 3, 4].map((i) => (
               <div
                 key={i}
-                className="text-center d-flex flex-column align-items-center w-25"
+                className="text-center flex flex-col items-center w-1/4"
               >
                 {/* Cuadrado perfecto usando aspect-ratio */}
                 <div
-                  className="bg-light rounded-4 mb-2 w-100 shadow-sm border border-light"
+                  className="bg-muted rounded-lg mb-2 w-full shadow-sm border-light"
                   style={{ aspectRatio: "1/1" }}
                 ></div>
                 <span
-                  className="text-muted fw-medium"
+                  className="text-muted-foreground font-medium"
                   style={{ fontSize: "9px" }}
                 >
                   Categoría
@@ -175,20 +178,20 @@ const BannerPreview = ({ config = {} }) => {
         </div>
 
         {/* Nav inferior silueteada (Corregida para ser un círculo perfecto) */}
-        <div className="position-absolute bottom-0 w-100 bg-white border-top d-flex justify-content-around align-items-center py-3 shadow-lg">
+        <div className="absolute bottom-0 w-full bg-background border-t flex justify-around items-center py-3 shadow-lg">
           {/* CÍRCULO PERFECTO: width y height fijos + flexbox */}
           <div
-            className="bg-danger-subtle rounded-circle text-danger d-flex align-items-center justify-content-center"
+            className="bg-destructive/10 rounded-full text-destructive flex items-center justify-center"
             style={{ width: "45px", height: "45px" }}
           >
             <LucideIcons.LayoutGrid size={20} />
           </div>
           <div
-            className="bg-light rounded-pill"
+            className="bg-muted rounded-full"
             style={{ width: "40px", height: "6px" }}
           ></div>
           <div
-            className="bg-light rounded-pill"
+            className="bg-muted rounded-full"
             style={{ width: "40px", height: "6px" }}
           ></div>
         </div>

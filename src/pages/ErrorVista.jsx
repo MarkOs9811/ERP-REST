@@ -1,10 +1,12 @@
+import { Link } from "react-router-dom";
 import { LockIcon } from "lucide-react";
 import { motion } from "framer-motion";
+import { Button } from "../components/ui/button";
 
 export function ErrorVista() {
   return (
     <div
-      className="d-flex justify-content-center align-items-center"
+      className="flex justify-center items-center"
       style={{ minHeight: "100vh" }}
     >
       <div className="text-center">
@@ -29,9 +31,9 @@ export function ErrorVista() {
         </p>
 
         {/* Botón */}
-        <a href="/" className="btn btn-danger px-4 py-2 rounded-lg shadow">
-          Volver al inicio
-        </a>
+        <Button asChild variant="outline">
+          <Link to="/">Volver al inicio</Link>
+        </Button>
       </div>
     </div>
   );

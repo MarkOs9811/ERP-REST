@@ -66,39 +66,39 @@ export function ProveedorAdd({ handleCloseModal }) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="p-4">
-      <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-start gap-3 p-3 mb-4 border rounded bg-light">
+      <div className="flex flex-col md:flex-row justify-between md:items-start gap-3 p-3 mb-4 rounded bg-muted">
         <div>
-          <p className="small fw-semibold text-secondary text-uppercase mb-1">
+          <p className="text-sm font-semibold uppercase mb-1">
             Nuevo proveedor
           </p>
-          <h3 className="h5 fw-bold mb-1">Registro comercial</h3>
-          <p className="small text-secondary mb-0">
+          <h3 className="h5 font-bold mb-1">Registro comercial</h3>
+          <p className="text-sm text-muted-foreground mb-0">
             Completa los datos principales para crear el proveedor de forma
             clara y ordenada.
           </p>
         </div>
-        <div className="badge text-bg-secondary d-inline-flex align-items-center gap-2 align-self-start">
+        <div className="rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-secondary text-secondary-foreground inline-flex items-center gap-2 self-start">
           <FontAwesomeIcon icon={faCircleInfo} />
           <span>Campos obligatorios</span>
         </div>
       </div>
 
       <div className="mb-4">
-        <h6 className="fw-bold text-secondary border-bottom pb-2 mb-3">
+        <h6 className="font-bold text-muted-foreground border-b pb-2 mb-3">
           Documento y contacto
         </h6>
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
-          <div className="md:col-span-4">
-            <div className="border rounded p-3 h-100">
+        <div className="grid grid-cols-12 gap-3">
+          <div className="col-span-full md:col-span-4">
+            <div className="border rounded p-3 h-full">
               <label
                 htmlFor="tipo_documento"
-                className="form-label small fw-semibold text-secondary d-flex align-items-center gap-2"
+                className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-semibold text-muted-foreground flex items-center gap-2"
               >
                 <FontAwesomeIcon icon={faIdCard} /> Tipo de Documento
               </label>
               <select
                 id="tipo_documento"
-                className={`form-select ${errors.tipo_documento ? "is-invalid" : ""}`}
+                className={`h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.tipo_documento ? "border-destructive focus-visible:ring-destructive" : ""}`}
                 {...register("tipo_documento", {
                   required: "Este campo es obligatorio",
                 })}
@@ -114,25 +114,25 @@ export function ProveedorAdd({ handleCloseModal }) {
                 <option value="RUC">RUC</option>
               </select>
               {errors.tipo_documento && (
-                <div className="invalid-feedback">
+                <div className="text-sm text-destructive">
                   {errors.tipo_documento.message}
                 </div>
               )}
             </div>
           </div>
 
-          <div className="md:col-span-4">
-            <div className="border rounded p-3 h-100">
+          <div className="col-span-full md:col-span-4">
+            <div className="border rounded p-3 h-full">
               <label
                 htmlFor="numero_documento"
-                className="form-label small fw-semibold text-secondary d-flex align-items-center gap-2"
+                className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-semibold text-muted-foreground flex items-center gap-2"
               >
                 <FontAwesomeIcon icon={faIdCard} /> Número de Documento
               </label>
               <input
                 id="numero_documento"
                 type="text"
-                className={`form-control ${errors.numero_documento ? "is-invalid" : ""}`}
+                className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.numero_documento ? "border-destructive focus-visible:ring-destructive" : ""}`}
                 placeholder="00000000"
                 value={numeroDocumento}
                 {...register("numero_documento", {
@@ -155,25 +155,25 @@ export function ProveedorAdd({ handleCloseModal }) {
                 )}
               />
               {errors.numero_documento && (
-                <div className="invalid-feedback">
+                <div className="text-sm text-destructive">
                   {errors.numero_documento.message}
                 </div>
               )}
             </div>
           </div>
 
-          <div className="md:col-span-4">
-            <div className="border rounded p-3 h-100">
+          <div className="col-span-full md:col-span-4">
+            <div className="border rounded p-3 h-full">
               <label
                 htmlFor="telefono"
-                className="form-label small fw-semibold text-secondary d-flex align-items-center gap-2"
+                className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-semibold text-muted-foreground flex items-center gap-2"
               >
                 <FontAwesomeIcon icon={faPhone} /> Teléfono
               </label>
               <input
                 id="telefono"
                 type="text"
-                className={`form-control ${errors.telefono ? "is-invalid" : ""}`}
+                className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.telefono ? "border-destructive focus-visible:ring-destructive" : ""}`}
                 placeholder="9XXXXXXXX"
                 {...register("telefono", {
                   required: "Este campo es obligatorio",
@@ -182,7 +182,7 @@ export function ProveedorAdd({ handleCloseModal }) {
                 onInput={limitTelefonoInput}
               />
               {errors.telefono && (
-                <div className="invalid-feedback">
+                <div className="text-sm text-destructive">
                   {errors.telefono.message}
                 </div>
               )}
@@ -192,95 +192,97 @@ export function ProveedorAdd({ handleCloseModal }) {
       </div>
 
       <div className="mb-3">
-        <h6 className="fw-bold text-secondary border-bottom pb-2 mb-3">
+        <h6 className="font-bold text-muted-foreground border-b pb-2 mb-3">
           Información del proveedor
         </h6>
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
-          <div className="col-12">
+        <div className="grid grid-cols-12 gap-3">
+          <div className="col-span-full">
             <div className="border rounded p-3">
               <label
                 htmlFor="nombre"
-                className="form-label small fw-semibold text-secondary d-flex align-items-center gap-2"
+                className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-semibold text-muted-foreground flex items-center gap-2"
               >
                 <FontAwesomeIcon icon={faUser} /> Nombre
               </label>
               <input
                 id="nombre"
                 type="text"
-                className={`form-control ${errors.nombre ? "is-invalid" : ""}`}
+                className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.nombre ? "border-destructive focus-visible:ring-destructive" : ""}`}
                 placeholder="Nombre del proveedor"
                 {...register("nombre", {
                   required: "Este campo es obligatorio",
                 })}
               />
               {errors.nombre && (
-                <div className="invalid-feedback">{errors.nombre.message}</div>
+                <div className="text-sm text-destructive">
+                  {errors.nombre.message}
+                </div>
               )}
             </div>
           </div>
 
-          <div className="col-12">
+          <div className="col-span-full">
             <div className="border rounded p-3">
               <label
                 htmlFor="contacto"
-                className="form-label small fw-semibold text-secondary d-flex align-items-center gap-2"
+                className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-semibold text-muted-foreground flex items-center gap-2"
               >
                 <FontAwesomeIcon icon={faUser} /> Encargado o contacto
               </label>
               <input
                 id="contacto"
                 type="text"
-                className={`form-control ${errors.contacto ? "is-invalid" : ""}`}
+                className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.contacto ? "border-destructive focus-visible:ring-destructive" : ""}`}
                 placeholder="Nombre de contacto"
                 {...register("contacto", {
                   required: "Este campo es obligatorio",
                 })}
               />
               {errors.contacto && (
-                <div className="invalid-feedback">
+                <div className="text-sm text-destructive">
                   {errors.contacto.message}
                 </div>
               )}
             </div>
           </div>
 
-          <div className="col-12">
+          <div className="col-span-full">
             <div className="border rounded p-3">
               <label
                 htmlFor="direccion"
-                className="form-label small fw-semibold text-secondary d-flex align-items-center gap-2"
+                className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-semibold text-muted-foreground flex items-center gap-2"
               >
                 <FontAwesomeIcon icon={faMapMarkedAlt} /> Dirección
               </label>
               <input
                 id="direccion"
                 type="text"
-                className={`form-control ${errors.direccion ? "is-invalid" : ""}`}
+                className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.direccion ? "border-destructive focus-visible:ring-destructive" : ""}`}
                 placeholder="Dirección del proveedor"
                 {...register("direccion", {
                   required: "Este campo es obligatorio",
                 })}
               />
               {errors.direccion && (
-                <div className="invalid-feedback">
+                <div className="text-sm text-destructive">
                   {errors.direccion.message}
                 </div>
               )}
             </div>
           </div>
 
-          <div className="col-12">
+          <div className="col-span-full">
             <div className="border rounded p-3">
               <label
                 htmlFor="correo"
-                className="form-label small fw-semibold text-secondary d-flex align-items-center gap-2"
+                className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-semibold text-muted-foreground flex items-center gap-2"
               >
                 <FontAwesomeIcon icon={faEnvelope} /> Correo Electrónico
               </label>
               <input
                 id="correo"
                 type="email"
-                className={`form-control ${errors.correo ? "is-invalid" : ""}`}
+                className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.correo ? "border-destructive focus-visible:ring-destructive" : ""}`}
                 placeholder="correo@ejemplo.com"
                 {...register("correo", {
                   required: "Este campo es obligatorio",
@@ -291,18 +293,30 @@ export function ProveedorAdd({ handleCloseModal }) {
                 })}
               />
               {errors.correo && (
-                <div className="invalid-feedback">{errors.correo.message}</div>
+                <div className="text-sm text-destructive">
+                  {errors.correo.message}
+                </div>
               )}
             </div>
           </div>
         </div>
       </div>
 
-      <div className="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
-        <Button type="button" className="btn-cerrar" onClick={handleCloseModal} variant="default">
+      <div className="flex justify-end gap-2 mt-4 pt-3 border-t">
+        <Button
+          type="button"
+          className="btn-cerrar"
+          onClick={handleCloseModal}
+          variant="default"
+        >
           Cancelar
         </Button>
-        <Button type="submit" className="btn-guardar" disabled={loading} variant="default">
+        <Button
+          type="submit"
+          className="btn-guardar"
+          disabled={loading}
+          variant="default"
+        >
           {loading ? "Guardando..." : "Guardar"}
         </Button>
       </div>

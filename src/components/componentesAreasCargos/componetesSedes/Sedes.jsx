@@ -20,17 +20,24 @@ import ModalAlertActivar from "../../componenteToast/ModalAlertActivar";
 import { capitalizeFirstLetter } from "../../../hooks/FirstLetterUp";
 import { Button } from "../../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../../ui/dropdown-menu";
 
 const SedesLoading = () => (
   <div className="text-center mt-4">
     <Spinner className="size-8 text-primary" />
-    <p className="text-muted mt-2">Cargando sedes...</p>
+    <p className="text-muted-foreground mt-2">Cargando sedes...</p>
   </div>
 );
 
 const SedesError = () => (
-  <p className="text-danger text-center mt-4">Error al cargar las sedes.</p>
+  <p className="text-destructive text-center mt-4">
+    Error al cargar las sedes.
+  </p>
 );
 
 export function Sedes() {
@@ -105,13 +112,13 @@ export function Sedes() {
     <>
       <Card className="">
         <CardHeader className="flex justify-between items-center">
-          <div className="d-flex gap-2 align-items-center">
-            <div className="p-2 alert alert-danger rounded-lg mb-0">
-              <Building2 className="text-danger" size={20} />{" "}
+          <div className="flex gap-2 items-center">
+            <div className="p-2 relative w-full px-4 py-3 text-sm border-destructive/30 bg-destructive/10 text-destructive rounded-lg mb-0">
+              <Building2 className="text-destructive" size={20} />{" "}
             </div>
-            <div className="d-flex flex-column">
-              <h4 className="fw-bold m-0">Sedes</h4>
-              <small className="text-muted">
+            <div className="flex flex-col">
+              <h4 className="font-bold m-0">Sedes</h4>
+              <small className="text-muted-foreground">
                 Administra las ubicaciones de tu empresa
               </small>
             </div>
@@ -130,10 +137,12 @@ export function Sedes() {
         <CardContent className="">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
             {sedes.map((sede, i) => (
-              <div className="md:col-span-6 col-lg-4" key={sede?.codigo || i}>
+              <div
+                className="col-span-full md:col-span-6 lg:col-span-4"
+                key={sede?.codigo || i}
+              >
                 <SedeCard
                   sede={sede}
-                  index={i}
                   onEdit={handleEditClick}
                   setSedeActual={setSedeActual}
                   setShowModalDesactivar={setShowModalDesactivar}
@@ -192,7 +201,6 @@ export function Sedes() {
 
 function SedeCard({
   sede,
-  index,
   onEdit,
   setSedeActual,
   setShowModalDesactivar,
@@ -203,7 +211,7 @@ function SedeCard({
 
   return (
     <div
-      className="rounded h-100 position-relative"
+      className="rounded h-full relative"
       style={{
         border: isMiSede
           ? "2px solid #dc3545"
@@ -215,49 +223,67 @@ function SedeCard({
     >
       <SedeActionsMenu
         sede={sede}
-        index={index}
         onEdit={onEdit}
         setSedeActual={setSedeActual}
         setShowModalDesactivar={setShowModalDesactivar}
         setShowModalActivar={setShowModalActivar}
       />
       <CardContent className="p-3 flex flex-col">
-        <div className="flex-grow-1">
-          <CardTitle asChild><h5 className="d-flex align-items-center gap-2 mb-3">
-            <Building2 className="text-danger" height="20px" width="20px" />
-            <span className="fw-bold">
-              {capitalizeFirstLetter(sede?.nombre)}
-            </span>
-          </h5></CardTitle>
-          <div className="d-flex flex-column gap-2 mb-3">
-            <span className="d-flex align-items-start gap-2">
-              <MapPin className="text-muted mt-1" height="16px" width="16px" />
+        <div className="grow">
+          <CardTitle asChild>
+            <h5 className="flex items-center gap-2 mb-3">
+              <Building2
+                className="text-destructive"
+                height="20px"
+                width="20px"
+              />
+              <span className="font-bold">
+                {capitalizeFirstLetter(sede?.nombre)}
+              </span>
+            </h5>
+          </CardTitle>
+          <div className="flex flex-col gap-2 mb-3">
+            <span className="flex items-start gap-2">
+              <MapPin
+                className="text-muted-foreground mt-1"
+                height="16px"
+                width="16px"
+              />
               <span>{sede?.direccion}</span>
             </span>
-            <span className="d-flex align-items-center gap-2">
-              <Phone className="text-muted" height="16px" width="16px" />
+            <span className="flex items-center gap-2">
+              <Phone
+                className="text-muted-foreground"
+                height="16px"
+                width="16px"
+              />
               {sede?.telefono}
             </span>
           </div>
-          <p className="mb-3 text-muted small">
+          <p className="mb-3 text-muted-foreground text-sm">
             Código: <strong>{sede?.codigo}</strong>
           </p>
         </div>
-        <div className="d-flex justify-content-between align-items-center mt-auto pt-3 border-top">
+        <div className="flex justify-between items-center mt-auto pt-3 border-t">
           <SedeStatusBadge estado={sede?.estado} />
           {sede?.estado == 0 && (
             <Button
-              className="btn btn-outline-success btn-sm"
+              className="shadow border-emerald-600 bg-background text-emerald-700 hover:bg-emerald-50 dark:text-emerald-400 dark:hover:bg-emerald-950 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 px-3 text-xs"
               onClick={() => {
                 if (typeof setSedeActual === "function") setSedeActual(sede);
                 if (typeof setShowModalActivar === "function")
                   setShowModalActivar(true);
               }}
-             variant="default">
+              variant="default"
+            >
               Activar
             </Button>
           )}
-          {isMiSede && <span className="badge bg-danger">Sede Actual</span>}
+          {isMiSede && (
+            <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-destructive">
+              Sede Actual
+            </span>
+          )}
         </div>
       </CardContent>
     </div>
@@ -266,78 +292,51 @@ function SedeCard({
 
 function SedeActionsMenu({
   sede,
-  index,
   onEdit,
   setSedeActual,
   setShowModalDesactivar,
   setShowModalActivar,
 }) {
   return (
-    <div
-      className="position-absolute top-0 end-0 p-2 dropdown"
-      style={{ zIndex: 2 }}
-    >
-      <Button
-        className="btn btn-sm btn-light bg-transparent border-0"
-        type="button"
-        id={`dropdownMenuButton-${index}`}
-        data-bs-toggle="dropdown"
-        aria-expanded="false"
-        aria-label="Opciones de sede"
-       variant="default">
-        <EllipsisVertical className="text-muted" width="20px" height="20px" />
-      </Button>
-      <ul
-        className="dropdown-menu dropdown-menu-end"
-        aria-labelledby={`dropdownMenuButton-${index}`}
-      >
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="absolute top-2 right-2 z-10"
+          aria-label="Opciones de sede"
+        >
+          <EllipsisVertical className="text-muted-foreground" size={20} />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
         {sede?.estado == 0 && (
-          <li>
-            <Button
-              className="dropdown-item"
-              type="button"
-              onClick={(e) => {
-                e.preventDefault();
-                if (typeof setSedeActual === "function") setSedeActual(sede);
-                if (typeof setShowModalActivar === "function")
-                  setShowModalActivar(true);
-              }}
-             variant="default">
-              Activar
-            </Button>
-          </li>
-        )}
-        <li>
-          <Button
-            className="dropdown-item"
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              onEdit(sede);
+          <DropdownMenuItem
+            onSelect={() => {
+              if (typeof setSedeActual === "function") setSedeActual(sede);
+              if (typeof setShowModalActivar === "function")
+                setShowModalActivar(true);
             }}
-           variant="default">
-            Editar
-          </Button>
-        </li>
-        {sede?.estado == 1 && (
-          <li>
-            <Button
-              className="dropdown-item"
-              type="button"
-              onClick={(e) => {
-                e.preventDefault();
-                // ahora sí llamamos a los setters que vienen del componente padre
-                if (typeof setSedeActual === "function") setSedeActual(sede);
-                if (typeof setShowModalDesactivar === "function")
-                  setShowModalDesactivar(true);
-              }}
-             variant="default">
-              Desactivar
-            </Button>
-          </li>
+          >
+            Activar
+          </DropdownMenuItem>
         )}
-      </ul>
-    </div>
+        <DropdownMenuItem onSelect={() => onEdit(sede)}>
+          Editar
+        </DropdownMenuItem>
+        {sede?.estado == 1 && (
+          <DropdownMenuItem
+            onSelect={() => {
+              if (typeof setSedeActual === "function") setSedeActual(sede);
+              if (typeof setShowModalDesactivar === "function")
+                setShowModalDesactivar(true);
+            }}
+          >
+            Desactivar
+          </DropdownMenuItem>
+        )}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
 
@@ -352,7 +351,7 @@ function SedeStatusBadge({ estado }) {
 
   return (
     <span
-      className={`badge ${badgeClass} d-inline-flex align-items-center gap-1 py-2 px-2`}
+      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors ${badgeClass} inline-flex items-center gap-1 py-2 px-2`}
       style={{ fontSize: "0.8rem" }}
     >
       <Icon height="16px" width="16px" />

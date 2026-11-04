@@ -9,7 +9,6 @@ import {
 import { Button } from "../../ui/button";
 import { Card } from "@/components/ui/card";
 
-
 export function CardReservas({
   reserva,
   setModalDelete,
@@ -21,15 +20,16 @@ export function CardReservas({
       className="w-full h-full"
       style={{ borderLeft: "4px solid #ef4444!important" }} // Un rojo/coral sutil que combina con tu UI
     >
-      <div className="p-3 position-relative">
+      <div className="p-3 relative">
         {/* Botones de Acción */}
-        <div className="position-absolute top-0 end-0 m-2 d-flex gap-1">
+        <div className="absolute top-0 right-0 m-2 flex gap-1">
           <Button
             className="btn-editar btn-icon p-1 hover-dark"
             style={{ background: "transparent" }}
             title="Editar Reserva"
             onClick={() => irAFormulario(reserva)} // Mandamos el objeto para editar
-           variant="secondary">
+            variant="secondary"
+          >
             <PencilIcon size={15} />
           </Button>
           <Button
@@ -43,40 +43,41 @@ export function CardReservas({
                 nombre: reserva.nombre_cliente,
               })
             }
-           variant="destructive">
+            variant="destructive"
+          >
             <Trash2Icon size={15} />
           </Button>
         </div>
 
-        <h6 className="m-0 fw-bold d-flex align-items-center gap-2 mb-3 pe-5 text-dark">
-          <UserRound size={16} className="text-muted" />
+        <h6 className="m-0 font-bold flex items-center gap-2 mb-3 pe-5 text-foreground">
+          <UserRound size={16} className="text-muted-foreground" />
           {reserva.nombre_cliente}
         </h6>
 
-        <div className="d-flex flex-wrap gap-2 mb-2">
-          <span className="badge bg-light text-dark border d-flex align-items-center gap-1 px-2 py-1">
-            <Clock1 size={12} className="text-danger" />
+        <div className="flex flex-wrap gap-2 mb-2">
+          <span className="rounded-full text-xs font-semibold transition-colors bg-muted text-foreground flex items-center gap-1 px-2 py-1">
+            <Clock1 size={12} className="text-destructive" />
             {reserva.hora_reserva.substring(0, 5)}
           </span>
-          <span className="badge bg-light text-dark border d-flex align-items-center gap-1 px-2 py-1">
-            <UtensilsCrossed size={12} className="text-muted" />
+          <span className="rounded-full text-xs font-semibold transition-colors bg-muted text-foreground flex items-center gap-1 px-2 py-1">
+            <UtensilsCrossed size={12} className="text-muted-foreground" />
             Mesa {reserva.mesa?.numero || reserva.idMesa}
           </span>
-          <span className="badge bg-light text-dark border d-flex align-items-center gap-1 px-2 py-1">
-            <Users2 size={12} className="text-muted" />
+          <span className="rounded-full text-xs font-semibold transition-colors bg-muted text-foreground flex items-center gap-1 px-2 py-1">
+            <Users2 size={12} className="text-muted-foreground" />
             {reserva.cantidad_personas} Pax
           </span>
         </div>
 
         {reserva.nota && (
           <div
-            className="mt-3 p-2 rounded text-secondary"
+            className="mt-3 p-2 rounded text-muted-foreground"
             style={{
               fontSize: "0.8rem",
               backgroundColor: "#f1f5f9",
             }}
           >
-            <span className="fst-italic">"{reserva.nota}"</span>
+            <span className="italic">"{reserva.nota}"</span>
           </div>
         )}
       </div>

@@ -12,7 +12,7 @@ import {
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { GetPlatos } from "../../service/GetPlatos";
 
-import "../../css/estilosDelivery/EstilosPromociones.css";
+
 import { FormAddPromocion } from "../../components/componenteDelivery/FormAddPromocion";
 import ModalRight from "../../components/componentesReutilizables/ModalRight";
 import { GetData } from "../../service/CRUD/GetData";
@@ -22,8 +22,14 @@ import { CondicionCarga } from "../../components/componentesReutilizables/Condic
 import { FormEditPromocion } from "../../components/componenteDelivery/FormEditPromocion";
 import ModalAlertQuestion from "../../components/componenteToast/ModalAlertQuestion";
 import { Button } from "../../components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 export function Promociones() {
   // Estado para controlar los modales y el registro seleccionado
@@ -78,43 +84,47 @@ export function Promociones() {
   };
 
   return (
-    <div className="container-fluid p-0">
-      <Card className="rounded-2xl">
+    <div className="w-full p-0">
+      <Card className="rounded-2xl border border-border/70 bg-card shadow-sm ring-0">
         {/* HEADER DE LA VISTA */}
-        <CardHeader className="border-bottom-0 flex flex-col flex-md-row justify-between items-center gap-2 p-3">
-          <div className="d-flex align-items-center">
-            <CardTitle asChild><h4 className="mb-0 titulo-card-especial">
-              Promociones App
-              <span className="badge-header ms-2 ">
-                {promociones?.length || 0} registradas
-              </span>
-            </h4></CardTitle>
+        <CardHeader className="flex flex-col items-stretch gap-4 border-b border-border/70 px-5 py-5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+          <div className="flex items-center">
+            <CardTitle asChild>
+              <h4 className="mb-0 text-base font-semibold tracking-tight text-foreground">
+                Promociones App
+                <span className="ml-2 inline-flex items-center rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
+                  {promociones?.length || 0} registradas
+                </span>
+              </h4>
+            </CardTitle>
           </div>
 
-          <div className="d-flex  gap-2 mt-3 mt-md-0 align-items-center ms-auto">
-            <div className="header-search-container">
-              <Search className="search-icon" />
-              <input
+          <div className="flex w-full flex-col items-stretch gap-2 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center">
+            <div className="relative w-full min-w-0 sm:w-64">
+              <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
                 type="text"
                 placeholder="Buscar promoción..."
-                className="form-control"
+                className="h-9 pl-9"
               />
             </div>
 
-            <Button
-              className="btn btn-outline-dark px-3 d-flex gap-2"
+            <Button size="lg"
+              className="w-full gap-2 px-3 sm:w-auto"
               title="Reporte"
-             variant="default">
+              variant="ghostOutline"
+            >
               <FileText size={20} />
-              <span className="d-none d-sm-inline">Reporte</span>
+              <span className="hidden sm:inline">Reporte</span>
             </Button>
 
             {/* BOTÓN QUE ABRE EL MODAL */}
-            <Button
-              className="btn btn-dark px-3 d-flex gap-2"
+            <Button size="lg"
+              className="gap-2 px-3 w-full sm:w-auto"
               title="Crear Promoción"
               onClick={() => setIsModalOpen(true)}
-             variant="default">
+              variant="default"
+            >
               <Plus size={20} />
               <span className="">Crear </span>
             </Button>
@@ -127,9 +137,12 @@ export function Promociones() {
             <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
               {Array.isArray(promociones) &&
                 promociones.map((promo, index) => (
-                  <div className="col-12 col-md-6 col-xl-3" key={promo.id}>
+                  <div
+                    className="col-span-full md:col-span-6 xl:col-span-3"
+                    key={promo.id}
+                  >
                     <Card
-                      className={`h-full promo-card border-secondary overflow-hidden animacion-cascada${
+                      className={`h-full promo-card border-secondary overflow-hidden animacion-cascada ${
                         promo.estado === 1 ? "" : "inactiva"
                       }`}
                       style={{ animationDelay: `${index * 0.1}s` }}
@@ -142,7 +155,7 @@ export function Promociones() {
                           className="promo-banner"
                         />
                         <span
-                          className={`badge border rounded-pill px-3 py-2 promo-badge-status fw-medium ${getBadgeClass(
+                          className={`inline-flex items-center text-xs transition-colors rounded-full px-3 py-2 promo-badge-status font-medium ${getBadgeClass(
                             promo.estado,
                           )}`}
                         >
@@ -152,36 +165,36 @@ export function Promociones() {
 
                       {/* Info de la Promo */}
                       <CardContent className="p-4 pb-2">
-                        <div className="d-flex align-items-center gap-2 mb-1">
+                        <div className="flex items-center gap-2 mb-1">
                           <Tag
                             size={18}
-                            className="text-danger flex-shrink-0 fw-bold"
+                            className="text-destructive shrink-0 font-bold"
                           />
                           <h5
-                            className="mb-0 fw-bold text-truncate"
+                            className="mb-0 font-bold truncate"
                             title={promo.titulo}
                           >
                             {promo.titulo}
                           </h5>
                         </div>
 
-                        <p className="text-muted small mb-3 text-truncate">
+                        <p className="text-muted-foreground text-sm mb-3 truncate">
                           Plato:{" "}
                           <strong>
                             {promo.plato?.nombre || "Plato no encontrado"}
                           </strong>
                         </p>
 
-                        <div className="d-flex justify-content-between align-items-end mb-3">
+                        <div className="flex justify-between items-end mb-3">
                           <div>
-                            <span className="price-old d-block">
+                            <span className="price-old block">
                               S/ {Number(promo.plato?.precio || 0).toFixed(2)}
                             </span>
-                            <span className="price-new d-block">
+                            <span className="price-new block">
                               S/ {Number(promo.precio_promocional).toFixed(2)}
                               {promo.porcentaje_descuento && (
                                 <span
-                                  className="badge bg-danger ms-2"
+                                  className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-destructive ms-2"
                                   style={{ fontSize: "0.7rem" }}
                                 >
                                   -{promo.porcentaje_descuento}%
@@ -189,7 +202,7 @@ export function Promociones() {
                               )}
                             </span>
                           </div>
-                          <div className="text-end text-muted small">
+                          <div className="text-right text-muted-foreground text-sm">
                             <Calendar size={12} className="me-1 mb-1" />
                             Hasta:{" "}
                             {promo.fecha_fin
@@ -200,7 +213,7 @@ export function Promociones() {
                       </CardContent>
 
                       {/* Acciones */}
-                      <CardFooter className="bg-muted border-top-0 p-3 flex justify-end gap-2">
+                      <CardFooter className="bg-muted border-t-0 p-3 flex justify-end gap-2">
                         <Button
                           className="btn-editar"
                           title="Editar Promoción"
@@ -208,7 +221,8 @@ export function Promociones() {
                             setPromocionSelected(promo);
                             setIsModalEditOpen(true);
                           }}
-                         variant="secondary">
+                          variant="secondary"
+                        >
                           <Edit2 size={16} />
                         </Button>
                         <Button
@@ -222,7 +236,8 @@ export function Promociones() {
                             setPromoAccion(promo);
                             setShowModalActivar(true);
                           }}
-                         variant="default">
+                          variant="default"
+                        >
                           <PowerOff size={16} />
                         </Button>
                         <Button
@@ -232,7 +247,8 @@ export function Promociones() {
                             setPromoDelete(promo);
                             setShowModalEliminar(true);
                           }}
-                         variant="destructive">
+                          variant="destructive"
+                        >
                           <Trash2 size={16} />
                         </Button>
                       </CardFooter>

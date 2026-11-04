@@ -9,7 +9,6 @@ import { DetallesCuotasPagar } from "../../components/componentesFinanzas/cuotas
 import { Button } from "../../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-
 export function CuentasPorPagar() {
   const [modalCuotasPagar, setModalCuotasPagar] = useState(false);
   const [dataCuotasPagar, setDataCuotasPagar] = useState([]);
@@ -67,7 +66,7 @@ export function CuentasPorPagar() {
       selector: (row) =>
         row.estado === "pendiente" ? (
           <span
-            className="badge p-2"
+            className="inline-flex items-center rounded-full text-xs font-semibold transition-colors p-2"
             style={{
               color: "var(--fw-saffron)",
               background: "var(--bg-saffron-soft)",
@@ -79,7 +78,7 @@ export function CuentasPorPagar() {
           </span>
         ) : (
           <span
-            className="badge p-2"
+            className="inline-flex items-center rounded-full text-xs font-semibold transition-colors p-2"
             style={{
               color: "var(--fw-emerald)",
               background: "var(--bg-emerald-soft)",
@@ -109,12 +108,13 @@ export function CuentasPorPagar() {
       name: "Ver Cuotas",
       selector: (row) => (
         <Button
-          className="btn btn-outline-dark"
+          className="shadow inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border-input bg-background text-foreground hover:bg-accent"
           onClick={() => {
             setModalCuotasPagar(true);
             setDataCuotasPagar(row);
           }}
-         variant="default">
+          variant="default"
+        >
           <List
             className="text-auto"
             height="20px"
@@ -130,20 +130,22 @@ export function CuentasPorPagar() {
 
   return (
     <div>
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
-        <div className="md:col-span-12">
+      <div className="grid grid-cols-12 gap-3">
+        <div className="col-span-full md:col-span-12">
           <Card className="py-2">
-            <CardHeader className="border-bottom-0 flex flex-col flex-md-row justify-between items-center gap-2 p-3">
-              <div className="d-flex align-items-center">
+            <CardHeader className="border-b-0 flex flex-col md:flex-row justify-between items-center gap-2 p-3">
+              <div className="flex items-center">
                 <Coins
                   color={"var(--fw-strawberry)"}
                   height="45px"
                   width="45px"
                   className="me-2"
                 />
-                <CardTitle asChild><h4 className="mb-0 titulo-card-especial">
-                  Cuentas por Pagar
-                </h4></CardTitle>
+                <CardTitle asChild>
+                  <h4 className="mb-0 titulo-card-especial">
+                    Cuentas por Pagar
+                  </h4>
+                </CardTitle>
               </div>
             </CardHeader>
             <CardContent className="p-0">

@@ -17,21 +17,21 @@ export function Paso3Aportes({
       <h5 className="mb-4" style={{ color: "#15669c" }}>
         Paso 3: Aportes, Deducciones y Bonificaciones
       </h5>
-      <div className="row">
+      <div className="grid grid-cols-12 gap-3">
         <CondicionCarga
           isLoading={loadingDeducciones}
           isError={errorDeducciones}
         >
-          <div className="md:col-span-6 mb-4">
-            <label className="fw-bold mb-3 border-bottom pb-2 d-block">
+          <div className="col-span-full md:col-span-6 mb-4">
+            <label className="font-bold mb-3 border-b pb-2 block">
               Deducciones
             </label>
             {deduccionesList?.map((d) => {
               const isEssalud = d.nombre === "ESSALUD";
               return (
-                <div className="form-check mb-2" key={d.id}>
+                <div className="flex items-center gap-2 mb-2" key={d.id}>
                   <input
-                    className="form-check-input"
+                    className="size-4 shrink-0 rounded border-input accent-primary"
                     type="checkbox"
                     value={d.id}
                     {...register("deducciones")}
@@ -55,7 +55,7 @@ export function Paso3Aportes({
                     data-nombre={d.nombre}
                   />
                   <label
-                    className="form-check-label"
+                    className="text-sm font-medium"
                     htmlFor={`deduccion_${d.id}`}
                   >
                     {d.nombre}
@@ -70,21 +70,21 @@ export function Paso3Aportes({
           isLoading={loadingDBonificaciones}
           isError={errorBonificaciones}
         >
-          <div className="md:col-span-6 mb-4">
-            <label className="fw-bold mb-3 border-bottom pb-2 d-block">
+          <div className="col-span-full md:col-span-6 mb-4">
+            <label className="font-bold mb-3 border-b pb-2 block">
               Bonificación
             </label>
             {bonificacionesList?.map((d) => (
-              <div className="form-check mb-2" key={d.id}>
+              <div className="flex items-center gap-2 mb-2" key={d.id}>
                 <input
-                  className="form-check-input"
+                  className="size-4 shrink-0 rounded border-input accent-primary"
                   type="checkbox"
                   value={d.id}
                   {...register("bonificaciones")}
                   id={`bonificaciones${d.id}`}
                 />
                 <label
-                  className="form-check-label"
+                  className="text-sm font-medium"
                   htmlFor={`bonificaciones${d.id}`}
                 >
                   {d.nombre}

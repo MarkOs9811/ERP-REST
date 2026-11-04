@@ -11,11 +11,11 @@ import { Card, CardContent } from "@/components/ui/card";
 
 export function AccesosRapidos() {
   return (
-    <div className="container">
+    <div className="mx-auto w-full max-w-7xl px-4">
       <Card className="h-full flex">
         <CardContent className="flex">
-          <h5 className="text-dark mb-3">Accesos Rápidos</h5>
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-2 text-dark ">
+          <h5 className="text-foreground mb-3">Accesos Rápidos</h5>
+          <div className="grid grid-cols-12 gap-2 text-foreground">
             {[
               {
                 icon: (
@@ -52,12 +52,12 @@ export function AccesosRapidos() {
                 className: "access-issues",
               },
             ].map((item, index) => (
-              <div key={index} className="col-6">
+              <div key={index} className="col-span-6">
                 <div
-                  className={`dashboard-card quick-access ${item.className} text-dark text-center p-2`}
+                  className={`dashboard-card quick-access ${item.className} text-foreground text-center p-2`}
                   style={{ cursor: "pointer" }}
                 >
-                  <div className="d-flex flex-column align-items-center ">
+                  <div className="flex flex-col items-center">
                     <div className="mb-2 bg-transparent">{item.icon}</div>
                     <small>{item.title}</small>
                   </div>

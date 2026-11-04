@@ -11,10 +11,12 @@ export function FormEditCaja({ onSubmit, register, errors, data, setValue }) {
   return (
     <form onSubmit={onSubmit} className="p-3">
       <div className="mb-3">
-        <label className="form-label small text-muted">Nombre de la caja</label>
+        <label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm text-muted-foreground">
+          Nombre de la caja
+        </label>
         <input
           type="text"
-          className={`form-control ${errors.nombreCaja ? "is-invalid" : ""}`}
+          className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.nombreCaja ? "border-destructive focus-visible:ring-destructive" : ""}`}
           {...register("nombreCaja", {
             required: "Este campo es obligatorio",
             pattern: {
@@ -24,7 +26,9 @@ export function FormEditCaja({ onSubmit, register, errors, data, setValue }) {
           })}
         />
         {errors.nombreCaja && (
-          <div className="invalid-feedback">{errors.nombreCaja.message}</div>
+          <div className="text-sm text-destructive">
+            {errors.nombreCaja.message}
+          </div>
         )}
       </div>
     </form>

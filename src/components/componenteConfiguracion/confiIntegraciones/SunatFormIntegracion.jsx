@@ -6,7 +6,6 @@ import ToastAlert from "../../componenteToast/ToastAlert";
 import { Button } from "../../ui/button";
 import { Card } from "@/components/ui/card";
 
-
 export function SunatFormIntegracion({ data }) {
   const defaultValues = data
     ? {
@@ -56,7 +55,7 @@ export function SunatFormIntegracion({ data }) {
 
       const response = await axiosInstance.post(
         `/configuracionesSunat/${data.id}`,
-        payload
+        payload,
       );
 
       if (response.data.success) {
@@ -80,14 +79,11 @@ export function SunatFormIntegracion({ data }) {
     data?.valor4?.trim() !== "";
 
   return (
-    <Card
-      className="border-0 p-4 flex-grow-1"
-      style={{ borderRadius: 18 }}
-    >
+    <Card className="border-0 p-4 grow" style={{ borderRadius: 18 }}>
       <form onSubmit={handleSubmit(onSubmit)}>
         {isConfigured ? (
           <div
-            className="alert alert-success d-flex align-items-center"
+            className="relative w-full rounded-lg px-4 py-3 text-sm border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 flex items-center"
             role="alert"
           >
             <CheckCircle size={24} className="me-2" />
@@ -95,7 +91,7 @@ export function SunatFormIntegracion({ data }) {
           </div>
         ) : (
           <div
-            className="alert alert-danger d-flex align-items-center"
+            className="relative w-full rounded-lg px-4 py-3 text-sm border-destructive/30 bg-destructive/10 text-destructive flex items-center"
             role="alert"
           >
             <XCircle size={24} className="me-2" />
@@ -107,13 +103,13 @@ export function SunatFormIntegracion({ data }) {
         <div className="mb-3">
           <label
             htmlFor="ruc"
-            className="form-label text-secondary small fw-semibold"
+            className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-muted-foreground text-sm font-semibold"
           >
             RUC
           </label>
           <input
             id="ruc"
-            className="form-control form-control-sm"
+            className="w-full rounded-md border-input bg-background py-1 shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 h-8 px-2.5 text-xs"
             placeholder="Número de RUC"
             disabled={!activo}
             {...register("ruc", {
@@ -122,55 +118,59 @@ export function SunatFormIntegracion({ data }) {
               maxLength: { value: 11, message: "El RUC debe tener 11 dígitos" },
             })}
           />
-          <div className="text-danger small">{errors.ruc?.message}</div>
+          <div className="text-destructive text-sm">{errors.ruc?.message}</div>
         </div>
 
         {/* Usuario SOL */}
         <div className="mb-3">
           <label
             htmlFor="usuarioSol"
-            className="form-label text-secondary small fw-semibold"
+            className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-muted-foreground text-sm font-semibold"
           >
             Usuario SOL
           </label>
           <input
             id="usuarioSol"
-            className="form-control form-control-sm"
+            className="w-full rounded-md border-input bg-background py-1 shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 h-8 px-2.5 text-xs"
             placeholder="Usuario SOL"
             disabled={!activo}
             {...register("usuarioSol", {
               required: "El usuario SOL es obligatorio",
             })}
           />
-          <div className="text-danger small">{errors.usuarioSol?.message}</div>
+          <div className="text-destructive text-sm">
+            {errors.usuarioSol?.message}
+          </div>
         </div>
 
         {/* Clave SOL */}
         <div className="mb-3">
           <label
             htmlFor="claveSol"
-            className="form-label text-secondary small fw-semibold"
+            className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-muted-foreground text-sm font-semibold"
           >
             Clave SOL
           </label>
           <input
             id="claveSol"
             type="password"
-            className="form-control form-control-sm"
+            className="w-full rounded-md border-input bg-background py-1 shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 h-8 px-2.5 text-xs"
             placeholder="Clave SOL"
             disabled={!activo}
             {...register("claveSol", {
               required: "La clave SOL es obligatoria",
             })}
           />
-          <div className="text-danger small">{errors.claveSol?.message}</div>
+          <div className="text-destructive text-sm">
+            {errors.claveSol?.message}
+          </div>
         </div>
 
         {/* Certificado Digital */}
         <div className="mb-3">
           <label
             htmlFor="certificado"
-            className="form-label text-secondary small fw-semibold"
+            className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-muted-foreground text-sm font-semibold"
           >
             Certificado Digital (.pem)
           </label>
@@ -178,46 +178,51 @@ export function SunatFormIntegracion({ data }) {
             id="certificado"
             type="file"
             accept=".pem"
-            className="form-control form-control-sm"
+            className="w-full rounded-md border-input bg-background py-1 shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 h-8 px-2.5 text-xs"
             disabled={!activo}
             {...register("certificado", {})}
             onChange={(e) => setValue("certificado", e.target.files[0])}
           />
-          <div className="text-muted small">
+          <div className="text-muted-foreground text-sm">
             {certificadoFile && certificadoFile.name
               ? `Archivo seleccionado: ${certificadoFile.name}`
               : "Selecciona tu archivo .pem"}
           </div>
-          <div className="text-danger small">{errors.certificado?.message}</div>
+          <div className="text-destructive text-sm">
+            {errors.certificado?.message}
+          </div>
         </div>
 
         {/* Endpoint */}
         <div className="mb-3">
           <label
             htmlFor="endpoint"
-            className="form-label text-secondary small fw-semibold"
+            className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-muted-foreground text-sm font-semibold"
           >
             Endpoint SUNAT
           </label>
           <input
             id="endpoint"
-            className="form-control form-control-sm"
+            className="w-full rounded-md border-input bg-background py-1 shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 h-8 px-2.5 text-xs"
             placeholder="Endpoint SUNAT"
             disabled={!activo}
             {...register("endpoint", {
               required: "El endpoint es obligatorio",
             })}
           />
-          <div className="text-danger small">{errors.endpoint?.message}</div>
+          <div className="text-destructive text-sm">
+            {errors.endpoint?.message}
+          </div>
         </div>
 
         {/* Botón */}
-        <div className="d-flex justify-content-end">
+        <div className="flex justify-end">
           <Button
             type="submit"
             className="btn-guardar"
             disabled={!activo || loading}
-           variant="default">
+            variant="default"
+          >
             {loading ? "Guardando..." : "Guardar Cambios"}
           </Button>
         </div>

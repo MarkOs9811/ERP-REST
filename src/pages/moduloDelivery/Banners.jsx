@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axiosInstance from "../../api/AxiosInstance";
 import ToastAlert from "../../components/componenteToast/ToastAlert";
-import "../../css/estilosDelivery/EstiloVistaBanners.css";
+
 import BannerEditor from "../../components/componenteDelivery/BannerEditor";
 import BannerList from "../../components/componenteDelivery/BannerList";
 import BannerPreview from "../../components/componenteDelivery/BannerPreview";
@@ -85,9 +85,9 @@ const Banner = () => {
 
   return (
     <div className="banner-generator-container p-2">
-      <div className="container-fluid">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
-          <div className="col-12">
+      <div className="w-full">
+        <div className="grid grid-cols-12 gap-4">
+          <div className="col-span-full">
             <h4 className="generator-title">Generador de Banners</h4>
             <p className="generator-subtitle">
               Diseña banners dinámicos con previsualización móvil.
@@ -95,8 +95,8 @@ const Banner = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
-          <div className="col-lg-7">
+        <div className="grid grid-cols-12 gap-5">
+          <div className="col-span-full lg:col-span-7">
             <BannerEditor
               key={isEditing ? `edit-${config.id}` : "new"}
               initialData={config}
@@ -110,14 +110,14 @@ const Banner = () => {
             </div>
           </div>
 
-          <div className="col-lg-5">
-            <div className="sticky-top" style={{ top: "2rem" }}>
+          <div className="col-span-full lg:col-span-5">
+            <div className="sticky top-0 z-10" style={{ top: "2rem" }}>
               <div className="text-center mb-3">
-                <span className="badge rounded-pill bg-dark py-2 px-3 fw-bold">
-                  <div
-                    className="spinner-grow spinner-grow-sm text-danger me-2"
-                    style={{ width: "8px", height: "8px" }}
-                  ></div>
+                <span className="inline-flex items-center text-xs transition-colors rounded-full bg-foreground py-2 px-3 font-bold">
+                  <span
+                    className="me-2 size-2 animate-pulse rounded-full bg-destructive"
+                    aria-hidden="true"
+                  />
                   MÓVIL PREVIEW
                 </span>
               </div>

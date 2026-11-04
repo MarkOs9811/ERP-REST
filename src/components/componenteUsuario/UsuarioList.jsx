@@ -215,14 +215,16 @@ export function UsuariosList({ search, updateList }) {
       wrap: true,
       grow: 2, // Le damos más espacio a esta columna importante
       cell: (row) => (
-        <div className="d-flex flex-column justify-content-center py-2">
-          <div className="nombreUsuarioTabla fw-bold">
+        <div className="flex flex-col justify-center py-2">
+          <div className="nombreUsuarioTabla font-bold">
             {row.empleado?.persona?.nombre || "Sin Nombre"}{" "}
             {row.empleado?.persona?.apellidos || ""}
           </div>
           {/* Usamos el email aquí, así ahorramos una columna entera */}
           {row.email && (
-            <small className="badge-user mt-1 text-muted">{row.email}</small>
+            <small className="badge-user mt-1 text-muted-foreground">
+              {row.email}
+            </small>
           )}
         </div>
       ),
@@ -233,14 +235,14 @@ export function UsuariosList({ search, updateList }) {
       sortable: true,
       wrap: true,
       cell: (row) => (
-        <div className="d-flex flex-column">
-          <span className="fw-bold" style={{ fontSize: "0.9rem" }}>
+        <div className="flex flex-col">
+          <span className="font-bold" style={{ fontSize: "0.9rem" }}>
             {row.empleado?.cargo?.nombre
               ? row.empleado.cargo.nombre.charAt(0).toUpperCase() +
                 row.empleado.cargo.nombre.slice(1).toLowerCase()
               : "Sin Cargo"}
           </span>
-          <small className="text-muted">
+          <small className="text-muted-foreground">
             <i className="fas fa-map-marker-alt me-1"></i>
             Sede: {row.sede?.nombre || "Sin Sede"}
           </small>
@@ -252,11 +254,11 @@ export function UsuariosList({ search, updateList }) {
       selector: (row) => row.empleado?.persona?.documento_identidad,
       wrap: true,
       cell: (row) => (
-        <div className="d-flex flex-column">
+        <div className="flex flex-col">
           <span style={{ fontSize: "0.85rem", fontWeight: "500" }}>
             DOC: {row.empleado?.persona?.documento_identidad || "---"}
           </span>
-          <small className="text-muted">
+          <small className="text-muted-foreground">
             Tel: {row.empleado?.persona?.telefono || "---"}
           </small>
         </div>
@@ -267,12 +269,12 @@ export function UsuariosList({ search, updateList }) {
       selector: (row) => row.empleado?.docContratoUrl,
       wrap: true,
       cell: (row) => (
-        <div className="d-flex flex-column">
+        <div className="flex flex-col">
           <a
             href={row.empleado?.docContratoUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-informativo text-decoration-none p-1"
+            className="btn-informativo no-underline p-1"
           >
             Ver Contrato
           </a>
@@ -290,10 +292,10 @@ export function UsuariosList({ search, updateList }) {
         const isActive = row.estado == 1;
 
         return (
-          <div className="d-flex flex-column align-items-center justify-content-center">
+          <div className="flex flex-col items-center justify-center">
             {/* 1. Tipo de Autenticación (Texto pequeño arriba) */}
             <div
-              className="d-flex align-items-center gap-1 mb-1 text-secondary"
+              className="flex items-center gap-1 mb-1 text-muted-foreground"
               style={{ fontSize: "0.75rem", fontWeight: "bold" }}
             >
               <ShieldCheck size={12} /> {/* Un toque visual extra opcional */}
@@ -319,7 +321,7 @@ export function UsuariosList({ search, updateList }) {
       cell: (row) => {
         const { estado } = row;
         return (
-          <div className="d-flex justify-content-center w-100 ">
+          <div className="flex justify-center w-full">
             {estado == 1 ? (
               <>
                 <BtnEditar
@@ -342,12 +344,13 @@ export function UsuariosList({ search, updateList }) {
               </>
             ) : (
               <Button
-                className="btn btn-outline-success btn-sm"
+                className="shadow border-emerald-600 bg-background text-emerald-700 hover:bg-emerald-50 dark:text-emerald-400 dark:hover:bg-emerald-950 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 px-3 text-xs"
                 onClick={() =>
                   handleActivarClick(row.id, row.empleado?.persona?.nombre)
                 }
                 title="Reactivar usuario"
-               variant="default">
+                variant="default"
+              >
                 <FontAwesomeIcon icon={faPowerOff} /> Activar
               </Button>
             )}

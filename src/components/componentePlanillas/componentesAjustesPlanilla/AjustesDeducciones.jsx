@@ -18,7 +18,6 @@ import { SpinnerCargando } from "../../componentesReutilizables/SpinnerCargando"
 import { Button } from "../../ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
-
 export function AjustesDeducciones() {
   const queryClient = useQueryClient();
   const [loadingDelete, setLoadingDelete] = useState(false);
@@ -132,9 +131,13 @@ export function AjustesDeducciones() {
       cell: (row) => (
         <div>
           {row.estado === 1 ? (
-            <div className="badge bg-success text-white">Activo</div>
+            <div className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-emerald-600 text-white">
+              Activo
+            </div>
           ) : (
-            <div className="badge bg-danger text-white">Inactivo</div>
+            <div className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-destructive text-white">
+              Inactivo
+            </div>
           )}
         </div>
       ),
@@ -144,7 +147,7 @@ export function AjustesDeducciones() {
     {
       name: "Acciones",
       cell: (row) => (
-        <div className="d-flex justify-content-center">
+        <div className="flex justify-center">
           {row.estado == 1 ? (
             <>
               <BtnEditar
@@ -173,7 +176,8 @@ export function AjustesDeducciones() {
                 setModalActivarDedu(true);
                 setDataDeduccion(row);
               }}
-             variant="default">
+              variant="default"
+            >
               {loadingActivar ? (
                 <SpinnerCargando />
               ) : (
@@ -191,14 +195,14 @@ export function AjustesDeducciones() {
   return (
     <Card className="h-full py-2">
       <CardHeader className="flex justify-between items-center p-2 border-b">
-        <h4 className=" mb-0">
+        <h4 className="mb-0">
           <CircleMinus className="text-auto" /> Deducciones
         </h4>
-        <div className="d-flex ms-auto mx-2">
+        <div className="flex mx-2">
           <input
             type="text"
             placeholder="Buscar..."
-            className="form-control"
+            className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
             onChange={(e) => setFiltroDeducciones(e.target.value)}
           />
         </div>
@@ -211,7 +215,8 @@ export function AjustesDeducciones() {
             setEditarDeduccion(false);
             setDataDeduccion([]);
           }}
-         variant="default">
+          variant="default"
+        >
           <Plus className="text-auto" />
         </Button>
       </CardHeader>
