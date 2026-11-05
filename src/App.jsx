@@ -85,20 +85,48 @@ function App() {
                     <BotonAgenteAi />
                     <LayoutPOS>
                       <Routes>
-                        <Route path="mesas" element={<MesasList />} />
+                        <Route
+                          path="mesas"
+                          element={
+                            <PrivateRoute restaurantOnly>
+                              <MesasList />
+                            </PrivateRoute>
+                          }
+                        />
                         <Route path="ventasLlevar" element={<ToLlevar />} />
-                        <Route path="mesas/platos" element={<ToMesa />} />
+                        <Route
+                          path="mesas/platos"
+                          element={
+                            <PrivateRoute restaurantOnly>
+                              <ToMesa />
+                            </PrivateRoute>
+                          }
+                        />
                         <Route path="pedidosWeb" element={<PedidosWeb />} />
                         <Route
                           path="mesas/preVenta"
-                          element={<PreventaMesa />}
+                          element={
+                            <PrivateRoute restaurantOnly>
+                              <PreventaMesa />
+                            </PrivateRoute>
+                          }
                         />
                         <Route
                           path="mesas/detallesPago/:idPedidoWeb?"
                           element={<DetallesPago />}
                         />
                         <Route path="cerrarCaja" element={<CerrarCaja />} />
-                        <Route path="cocina" element={<CocinaDespacho />} />
+                        <Route
+                          path="cocina"
+                          element={
+                            <PrivateRoute
+                              requiredModule="cocina"
+                              restaurantOnly
+                            >
+                              <CocinaDespacho />
+                            </PrivateRoute>
+                          }
+                        />
                       </Routes>
                     </LayoutPOS>
                   </CajaProtectedRoute>

@@ -25,39 +25,39 @@ const AccionesAlmacenList = ({ row, acciones }) => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-          {row.estado == 1 ? (
-            <>
-              <DropdownMenuItem onSelect={() => acciones.ingresarStock(row)}>
-                <FontAwesomeIcon icon={faPlus} />
-                Ingresar Stock
-              </DropdownMenuItem>
-              <DropdownMenuItem onSelect={() => acciones.editar(row)}>
-                <Edit size={16} />
-                Editar
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onSelect={() => acciones.eliminar(row.id, row.nombre)}
-              >
-                <Trash2 size={16} />
-                Eliminar
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onSelect={() => acciones.transferir()}>
-                <Redo2 size={16} />
-                Transferir
-              </DropdownMenuItem>
-            </>
-          ) : (
-            <DropdownMenuItem
-              onSelect={() => acciones.activar(row.id, row.nombre)}
-            >
-              <FontAwesomeIcon
-                icon={faPowerOff}
-                className="text-emerald-600 dark:text-emerald-400"
-              />
-              Activar Producto
+        {row.estado == 1 ? (
+          <>
+            <DropdownMenuItem onSelect={() => acciones.ingresarStock(row)}>
+              <FontAwesomeIcon icon={faPlus} />
+              Ingresar Stock
             </DropdownMenuItem>
-          )}
+            <DropdownMenuItem onSelect={() => acciones.editar(row)}>
+              <Edit size={16} />
+              Editar
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={() => acciones.eliminar(row.id, row.nombre)}
+            >
+              <Trash2 size={16} />
+              Eliminar
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onSelect={() => acciones.transferir()}>
+              <Redo2 size={16} />
+              Transferir
+            </DropdownMenuItem>
+          </>
+        ) : (
+          <DropdownMenuItem
+            onSelect={() => acciones.activar(row.id, row.nombre)}
+          >
+            <FontAwesomeIcon
+              icon={faPowerOff}
+              className="text-emerald-600 dark:text-emerald-400"
+            />
+            Activar Producto
+          </DropdownMenuItem>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );

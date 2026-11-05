@@ -57,8 +57,8 @@ export const Login = () => {
   const onSubmitLogin = async (data) => {
     setLoading(true);
     try {
-      const response = await axios.post("http://erp-api.test/api/login", {
-        // const response = await axios.post("http://127.0.0.1:8000/api/login", {
+      // const response = await axios.post("http://erp-api.test/api/login", {
+      const response = await axios.post("http://127.0.0.1:8000/api/login", {
         email: data.email,
         password: data.password,
       });
@@ -217,8 +217,8 @@ export const Login = () => {
                         type="button"
                         onClick={togglePasswordVisibility}
                         className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 focus:outline-none"
-                       variant="default"
-                       >
+                        variant="default"
+                      >
                         <FontAwesomeIcon
                           icon={showPassword ? faEyeSlash : faEye}
                           className="text-xs"
@@ -254,8 +254,8 @@ export const Login = () => {
                   type="submit"
                   disabled={loading}
                   className="w-full bg-black rounded text-white hover:bg-zinc-800 h-9"
-                 variant="default"
-                 >
+                  variant="default"
+                >
                   {loading ? <Cargando textColor="white" /> : "Iniciar sesión"}
                 </Button>
               </form>
@@ -323,8 +323,8 @@ export const Login = () => {
                   type="submit"
                   disabled={loading}
                   className="w-full bg-black text-white hover:bg-zinc-800 h-9"
-                 variant="default"
-                 >
+                  variant="default"
+                >
                   {loading ? <Cargando textColor="white" /> : "Enviar enlace"}
                 </Button>
 

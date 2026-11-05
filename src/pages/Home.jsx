@@ -14,8 +14,22 @@ import { ArrowUpRight, StoreIcon } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Badge } from "../components/ui/badge";
 import { Card } from "@/components/ui/card";
+import { GetConfi } from "../service/accionesConfiguracion/GetConfi";
+import { isRestaurantBusiness } from "../utils/modulePermissions";
 
 export function Home() {
+  const {
+    data: configuraciones = [],
+    isLoading: loadingConfiguracion,
+    isError: errorConfiguracion,
+  } = useQuery({
+    queryKey: ["confiEmpresa"],
+    queryFn: GetConfi,
+    retry: 1,
+    refetchOnWindowFocus: false,
+  });
+  const esRestaurante = isRestaurantBusiness(configuraciones);
+
   const {
     data: ventasList = [],
     isLoading: loadingVentas,
@@ -30,15 +44,43 @@ export function Home() {
   const caja = useSelector((state) => state.caja.caja);
   const cajaAbierta = caja?.estado === "abierto" && caja?.id;
   const nombreCaja = caja?.nombre || caja?.nombreCaja || "Sin caja";
+  const rutaVenta = esRestaurante ? "/vender/mesas" : "/vender/ventasLlevar";
+
+  if (loadingConfiguracion) {
+    return (
+      <main className="mx-auto flex min-h-64 w-full max-w-[1600px] items-center justify-center px-4">
+        <p className="text-sm text-muted-foreground" role="status">
+          Cargando el panel de tu negocio...
+        </p>
+      </main>
+    );
+  }
+
+  if (errorConfiguracion) {
+    return (
+      <main className="mx-auto w-full max-w-[1600px] px-4 py-6">
+        <Card
+          role="alert"
+          className="border-destructive/30 bg-destructive/5 p-4 text-sm text-destructive"
+        >
+          No se pudo cargar el tipo de venta de la empresa. Recarga la página
+          para volver a intentar.
+        </Card>
+      </main>
+    );
+  }
 
   return (
-    <main className="mx-auto w-full max-w-[1600px] space-y-5 px-3 py-4 sm:px-5 lg:px-6">
+    <main className="mx-auto w-full max-w-[1600px] space-y-5 px-0 py-4 sm:py-5">
       <div className="grid grid-cols-1 items-stretch gap-3 lg:grid-cols-12">
         <div className="min-w-0 lg:col-span-8">
-          <CabeceraHome cajaAbierta={!!cajaAbierta} />
+          <CabeceraHome
+            cajaAbierta={!!cajaAbierta}
+            esRestaurante={esRestaurante}
+          />
         </div>
         <div className="min-w-0 lg:col-span-4">
-          <Card className="flex h-full min-h-[220px] flex-col justify-between gap-5 rounded-2xl border-border/70 bg-card p-5 text-card-foreground shadow-none sm:p-6">
+          <Card className="flex h-full min-h-55 flex-col justify-between gap-5 rounded-2xl border-border/70 bg-card p-5 text-card-foreground shadow-none sm:p-6">
             <div className="space-y-4">
               <Badge
                 variant="outline"
@@ -71,7 +113,7 @@ export function Home() {
               className="h-10 w-full gap-2 rounded-lg sm:w-auto"
               variant="default"
             >
-              <Link to={cajaAbierta ? "/vender/mesas" : "/abrirCaja"}>
+              <Link to={cajaAbierta ? rutaVenta : "/abrirCaja"}>
                 <StoreIcon className="size-4" />
                 <span>{cajaAbierta ? "Ir a caja" : "Abrir caja"}</span>
                 <ArrowUpRight className="ml-auto size-4 sm:ml-0" />
@@ -81,10 +123,7 @@ export function Home() {
         </div>
       </div>
 
-      <section
-        aria-labelledby="home-summary-title"
-        className="space-y-3 rounded-2xl border border-border/60 bg-muted/20 p-3 sm:p-4"
-      >
+      <section aria-labelledby="home-summary-title" className="space-y-3">
         <div>
           <h2
             id="home-summary-title"
@@ -93,29 +132,43 @@ export function Home() {
             Resumen del día
           </h2>
           <p className="mb-0 text-xs text-muted-foreground">
-            Ventas, mesas, pedidos y almacén
+            {esRestaurante
+              ? "Ventas, ocupación del salón y pedidos"
+              : "Ventas e inventario de productos"}
           </p>
         </div>
-        <InformacionRapidaHome />
+        <div className="w-full m-auto">
+          <InformacionRapidaHome esRestaurante={esRestaurante} />
+        </div>
       </section>
 
       <section
-        aria-label="Actividad del salón y ventas"
-        className="rounded-2xl border border-border/60 bg-muted/20 p-3 sm:p-4"
+        aria-label={
+          esRestaurante
+            ? "Actividad del restaurante"
+            : "Actividad de ventas e inventario"
+        }
       >
         <div className="grid grid-cols-1 gap-3 xl:grid-cols-12">
-          <div className="col-span-full min-w-0 xl:col-span-8">
-            <DashboardMesas />
-          </div>
-          <div className="col-span-full min-w-0 xl:col-span-4">
-            <div className="flex h-full flex-col gap-3">
+          {esRestaurante && (
+            <div className="col-span-full min-w-0 xl:col-span-8">
+              <DashboardMesas />
+            </div>
+          )}
+          <div
+            className={`col-span-full min-w-0 ${esRestaurante ? "xl:col-span-4" : "xl:col-span-12"}`}
+          >
+            <div
+              className={`grid h-full gap-3 ${esRestaurante ? "lg:grid-cols-1" : "lg:grid-cols-2"}`}
+            >
               <CarouselMarketingHome />
               <VentasTipo
                 ventasList={ventasList}
                 load={loadingVentas}
                 errorLoad={errorVentas}
+                esRestaurante={esRestaurante}
               />
-              <div className="flex-1">
+              <div className={esRestaurante ? "flex-1" : "lg:col-span-2"}>
                 <UsuariosActivosHome />
               </div>
             </div>
@@ -123,9 +176,11 @@ export function Home() {
         </div>
       </section>
 
-      <section aria-label="Productos más vendidos">
-        <PlatoMasVendido />
-      </section>
+      {esRestaurante && (
+        <section aria-label="Platos más vendidos">
+          <PlatoMasVendido />
+        </section>
+      )}
 
       <section aria-label="Análisis de ventas">
         <GraficoIAhome />

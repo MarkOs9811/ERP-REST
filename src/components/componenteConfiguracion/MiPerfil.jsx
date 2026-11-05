@@ -1,14 +1,14 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect, useRef } from "react";
-import { useForm } from "react-hook-form"; // <--- Importamos React Hook Form
+import { useForm } from "react-hook-form";
 import { GetMiPerfil } from "../../service/accionesConfiguracion/GetMiPerfil";
-import { PostData } from "../../service/CRUD/PostData";
 import axiosInstance from "../../api/AxiosInstance";
 import ToastAlert from "../componenteToast/ToastAlert";
-import { KeyIcon } from "lucide-react";
+import { Camera, KeyRound, Pencil, ShieldCheck, UserRound } from "lucide-react";
 import ModalRight from "../componentesReutilizables/ModalRight";
 import { FormPassChange } from "./formularios/FormPassChange";
 import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 import { Card } from "@/components/ui/card";
 
 export const MiPerfil = () => {
@@ -28,7 +28,7 @@ export const MiPerfil = () => {
     formState: { errors },
   } = useForm();
 
-  const { data: perfil = {}, isLoading } = useQuery({
+  const { data: perfil = {} } = useQuery({
     queryKey: ["perfil"],
     queryFn: GetMiPerfil,
     refetchOnWindowFocus: false,
@@ -57,19 +57,32 @@ export const MiPerfil = () => {
     }
   }, [persona, reset]);
 
+  useEffect(() => {
+    if (!previewImage) return undefined;
+    return () => URL.revokeObjectURL(previewImage);
+  }, [previewImage]);
+
   // Manejar clic en "Cambiar foto"
   const handleFotoClick = () => {
     if (editable) {
-      fileInputRef.current.click();
+      fileInputRef.current?.click();
     }
   };
 
   // Manejar cambio de archivo (Previsualización)
   const onFileChange = (e) => {
     const file = e.target.files[0];
+    e.target.value = "";
     if (file) {
-      setPreviewImage(URL.createObjectURL(file)); // Crea URL temporal para vista previa
-      // IMPORTANTE: Guardamos el archivo binario real en react-hook-form bajo la key "foto_file"
+      if (!["image/jpeg", "image/png"].includes(file.type)) {
+        ToastAlert("error", "La foto debe estar en formato JPG o PNG.");
+        return;
+      }
+      if (file.size > 3 * 1024 * 1024) {
+        ToastAlert("error", "La foto no debe superar los 3 MB.");
+        return;
+      }
+      setPreviewImage(URL.createObjectURL(file));
       setValue("foto_file", file);
     }
   };
@@ -119,107 +132,114 @@ export const MiPerfil = () => {
       : "/images/avatar_default.png";
 
   return (
-    <div className="w-full p-3">
-      <div className="grid grid-cols-12 gap-3">
+    <div className="mx-auto w-full max-w-7xl space-y-5 p-3 sm:p-5">
+      <header className="flex flex-col gap-3 border-b border-border/70 pb-5 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-start gap-3">
+          <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+            <UserRound className="size-5" />
+          </span>
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">
+              Cuenta personal
+            </p>
+            <h1 className="mt-1 text-2xl font-semibold tracking-tight text-foreground">
+              Mi perfil
+            </h1>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Administra tus datos personales y la seguridad de tu cuenta.
+            </p>
+          </div>
+        </div>
+        <div className="inline-flex items-center gap-2 self-start rounded-full border border-emerald-500/20 bg-emerald-500/5 px-3 py-1.5 text-xs font-medium text-emerald-700 dark:text-emerald-300 sm:self-center">
+          <ShieldCheck className="size-4" />
+          Informacion de tu cuenta
+        </div>
+      </header>
+
+      <div className="grid grid-cols-12 gap-4 lg:gap-5">
         {/* Perfil lateral */}
         <div className="col-span-full md:col-span-4">
           <Card
-            className="border p-4 h-full"
+            className="flex h-full flex-col items-center justify-center rounded-2xl border-border bg-card p-5 shadow-sm sm:p-6"
             style={{
-              borderRadius: 20,
-              background: "#fff",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-              minHeight: 450,
+              minHeight: 430,
             }}
           >
-            {" "}
-            <div className="flex justify-end mb-2 items-center">
+            <div className="mb-6 flex w-full items-center justify-between">
+              <span className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                Foto de perfil
+              </span>
               <label
                 htmlFor="switch-editar"
-                className="text-muted-foreground me-2 mb-0"
-                style={{ cursor: "pointer" }}
+                className="flex cursor-pointer items-center gap-2 text-sm font-medium text-foreground"
               >
                 Editar
-              </label>
-              <div className="items-center gap-2 flex m-0 p-0">
                 <input
-                  className="size-4 shrink-0 rounded border-input accent-primary m-0"
+                  className="size-4 accent-primary"
                   type="checkbox"
                   id="switch-editar"
                   role="switch"
                   checked={editable}
                   onChange={() => {
-                    setEditable((e) => !e);
-                    if (editable) reset(); // Si cancela edición, resetear cambios
+                    if (editable) {
+                      reset();
+                      setPreviewImage(null);
+                      setValue("foto_file", null);
+                      setEditable(false);
+                      return;
+                    }
+                    setEditable(true);
                   }}
                 />
-              </div>
+              </label>
             </div>
             <div className="mb-3">
               <div
-                style={{
-                  width: 140,
-                  height: 140,
-                  margin: "0 auto",
-                  borderRadius: "50%",
-                  border: "2px dashed #e8c7c7",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  background: "#faf0f0",
-                  overflow: "hidden", // Importante para que la img no salga del borde
-                }}
+                className="mx-auto flex size-36 items-center justify-center overflow-hidden rounded-full bg-muted ring-4 ring-background shadow-lg"
               >
                 <img
                   src={currentImageSrc}
                   alt="Avatar"
-                  style={{
-                    width: 120,
-                    height: 120,
-                    borderRadius: "50%",
-                    objectFit: "cover",
-                  }}
+                  className="size-full object-cover"
                 />
               </div>
-              <div className="mt-2 text-muted-foreground text-sm text-center">
-                Permitido <b>*.jpeg, *.jpg, *.png </b>
-                <br />
-                Tamaño máximo de 3 Mb
+              <div className="mt-4 text-center">
+                <p className="font-semibold text-foreground">
+                  {persona.nombre || perfil.name || "Tu perfil"}
+                </p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  {empleado.cargo?.nombre || "Usuario"}
+                </p>
+                <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
+                  JPG o PNG, maximo 3 MB
+                </p>
               </div>
             </div>
             {/* Input oculto para el archivo */}
             <input
               type="file"
-              accept="image/*"
+              accept="image/jpeg,image/png"
               style={{ display: "none" }}
               ref={fileInputRef}
               onChange={onFileChange}
             />
             <div className="flex flex-col gap-2 w-full">
               <Button
-                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 w-1/2 mx-auto"
+                className="mx-auto mt-3 w-full max-w-xs gap-2 rounded-xl"
                 type="button"
                 onClick={handleFotoClick}
-                disabled={!editable} // Solo habilitado si está en modo edición
-                style={{
-                  background: editable ? "#ffeaea" : "#f0f0f0",
-                  color: editable ? "#ee5252" : "#999",
-                  fontWeight: 500,
-                  cursor: editable ? "pointer" : "not-allowed",
-                }}
-                variant="default"
+                disabled={!editable}
+                variant="outline"
               >
+                <Camera className="size-4" />
                 Cambiar foto
               </Button>
               <Button
-                className="btn-principal w-1/2 mx-auto"
+                className="mx-auto w-full max-w-xs gap-2 rounded-xl"
                 onClick={() => setModalPass(true)}
-                variant="default"
+                variant="secondary"
               >
-                <KeyIcon />
+                <KeyRound className="size-4" />
                 Cambiar contraseña
               </Button>
             </div>
@@ -230,27 +250,39 @@ export const MiPerfil = () => {
         <div className="col-span-full md:col-span-8">
           <Card asChild>
             <form
-              onSubmit={handleSubmit(onSubmit)} // Conectamos handleSubmit
-              className="border p-4 h-full"
-              style={{ borderRadius: 20, background: "#fff" }}
+              onSubmit={handleSubmit(onSubmit)}
+              className="h-full rounded-2xl border-border bg-card p-5 shadow-sm sm:p-6"
             >
-              <div className="flex justify-between items-center border-b mb-3">
-                <p className="h4">Mi Información</p>
+              <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-border/70 pb-4">
+                <div>
+                  <h2 className="text-base font-semibold text-foreground">
+                    Informacion personal
+                  </h2>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Los campos marcados se guardaran en tu perfil.
+                  </p>
+                </div>
+                {editable && (
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary">
+                    <Pencil className="size-3.5" />
+                    Modo edicion
+                  </span>
+                )}
               </div>
 
               <div className="grid grid-cols-12 gap-3">
                 {/* Datos personales con Register */}
                 <div className="col-span-full md:col-span-6">
-                  <label className="text-muted-foreground text-sm">
+                  <label
+                    htmlFor="perfil-nombre"
+                    className="text-sm font-medium text-foreground"
+                  >
                     Nombre
                   </label>
-                  <input
-                    className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
-                      errors.nombre
-                        ? "border-destructive focus-visible:ring-destructive"
-                        : ""
-                    }`}
+                  <Input
+                    id="perfil-nombre"
                     disabled={!editable}
+                    aria-invalid={Boolean(errors.nombre)}
                     {...register("nombre", {
                       required: "El nombre es obligatorio",
                     })}
@@ -263,16 +295,16 @@ export const MiPerfil = () => {
                 </div>
 
                 <div className="col-span-full md:col-span-6">
-                  <label className="text-muted-foreground text-sm">
+                  <label
+                    htmlFor="perfil-apellidos"
+                    className="text-sm font-medium text-foreground"
+                  >
                     Apellidos
                   </label>
-                  <input
-                    className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${
-                      errors.apellidos
-                        ? "border-destructive focus-visible:ring-destructive"
-                        : ""
-                    }`}
+                  <Input
+                    id="perfil-apellidos"
                     disabled={!editable}
+                    aria-invalid={Boolean(errors.apellidos)}
                     {...register("apellidos", {
                       required: "El apellido es obligatorio",
                     })}
@@ -285,56 +317,71 @@ export const MiPerfil = () => {
                 </div>
 
                 <div className="col-span-full md:col-span-6">
-                  <label className="text-muted-foreground text-sm">
+                  <label
+                    htmlFor="perfil-fecha"
+                    className="text-sm font-medium text-foreground"
+                  >
                     Fecha de nacimiento
                   </label>
-                  <input
+                  <Input
+                    id="perfil-fecha"
                     type="date"
-                    className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                     disabled={!editable}
                     {...register("fecha_nacimiento")}
                   />
                 </div>
 
                 <div className="col-span-full md:col-span-6">
-                  <label className="text-muted-foreground text-sm">
+                  <label
+                    htmlFor="perfil-tipo-documento"
+                    className="text-sm font-medium text-foreground"
+                  >
                     Tipo de documento
                   </label>
-                  <input
-                    className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                  <Input
+                    id="perfil-tipo-documento"
                     disabled={!editable}
                     {...register("tipo_documento")}
                   />
                 </div>
 
                 <div className="col-span-full md:col-span-6">
-                  <label className="text-muted-foreground text-sm">
+                  <label
+                    htmlFor="perfil-documento"
+                    className="text-sm font-medium text-foreground"
+                  >
                     Documento de identidad
                   </label>
-                  <input
-                    className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                  <Input
+                    id="perfil-documento"
                     disabled={!editable}
                     {...register("documento_identidad")}
                   />
                 </div>
 
                 <div className="col-span-full md:col-span-6">
-                  <label className="text-muted-foreground text-sm">
+                  <label
+                    htmlFor="perfil-telefono"
+                    className="text-sm font-medium text-foreground"
+                  >
                     Teléfono
                   </label>
-                  <input
-                    className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                  <Input
+                    id="perfil-telefono"
                     disabled={!editable}
                     {...register("telefono")}
                   />
                 </div>
 
                 <div className="col-span-full">
-                  <label className="text-muted-foreground text-sm">
+                  <label
+                    htmlFor="perfil-direccion"
+                    className="text-sm font-medium text-foreground"
+                  >
                     Dirección
                   </label>
-                  <input
-                    className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                  <Input
+                    id="perfil-direccion"
                     disabled={!editable}
                     {...register("direccion")}
                   />
@@ -342,40 +389,48 @@ export const MiPerfil = () => {
 
                 {/* Ubicación (Solo lectura por ahora, o podrías hacer selects si quisieras editarlos) */}
                 <div className="col-span-full md:col-span-4">
-                  <label className="text-muted-foreground text-sm">
+                  <label
+                    htmlFor="perfil-departamento"
+                    className="text-sm font-medium text-foreground"
+                  >
                     Departamento
                   </label>
-                  <input
-                    className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                  <Input
+                    id="perfil-departamento"
                     value={departamento?.nombre || ""}
                     disabled
                   />
                 </div>
                 <div className="col-span-full md:col-span-4">
-                  <label className="text-muted-foreground text-sm">
+                  <label
+                    htmlFor="perfil-provincia"
+                    className="text-sm font-medium text-foreground"
+                  >
                     Provincia
                   </label>
-                  <input
-                    className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                  <Input
+                    id="perfil-provincia"
                     value={provincia?.nombre || ""}
                     disabled
                   />
                 </div>
                 <div className="col-span-full md:col-span-4">
-                  <label className="text-muted-foreground text-sm">
+                  <label
+                    htmlFor="perfil-distrito"
+                    className="text-sm font-medium text-foreground"
+                  >
                     Distrito
                   </label>
-                  <input
-                    className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                  <Input
+                    id="perfil-distrito"
                     value={distrito?.nombre || ""}
                     disabled
                   />
                 </div>
 
                 {/* Datos laborales (Visualización) */}
-                <Card className="border p-3 mb-3">
-                  {/* ... (Todo tu bloque de datos laborales igual que antes) ... */}
-                  <div className="h6 text-muted-foreground mb-3">
+                <Card className="col-span-full mb-3 rounded-xl border-border bg-muted/30 p-4">
+                  <div className="mb-3 text-sm font-semibold text-foreground">
                     Información del Empleado
                   </div>
                   <div className="grid grid-cols-12 gap-3">
@@ -409,7 +464,7 @@ export const MiPerfil = () => {
 
               <div className="flex justify-end mt-4">
                 <Button
-                  className="btn-guardar" // Asegúrate de tener una clase para esto
+                  className="rounded-xl px-5"
                   type="submit"
                   disabled={!editable}
                   variant="default"

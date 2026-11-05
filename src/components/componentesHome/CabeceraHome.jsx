@@ -4,7 +4,7 @@ import { useAuth } from "../../AuthContext";
 import { Button } from "../ui/button";
 import { Card } from "@/components/ui/card";
 
-export function CabeceraHome({ cajaAbierta = false }) {
+export function CabeceraHome({ cajaAbierta = false, esRestaurante = false }) {
   const { user } = useAuth();
   const nombre = user?.empleado?.persona?.nombre || "Usuario";
   const fecha = new Date().toLocaleDateString("es-PE", {
@@ -33,17 +33,27 @@ export function CabeceraHome({ cajaAbierta = false }) {
               Hola, {nombre}
             </h1>
             <p className="mb-0 max-w-xl text-sm leading-6 text-white/75 sm:text-base">
-              Revisa ventas, salón y alertas del día desde un solo lugar.
+              {esRestaurante
+                ? "Revisa las ventas, el salón y la operación de tu restaurante."
+                : "Revisa las ventas y el inventario de tu negocio desde un solo lugar."}
             </p>
           </div>
 
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <Button
               asChild
-              className="h-10 w-fit rounded-lg px-4"
-              variant="default"
+              className="h-10  rounded-lg px-4  border-amber-50"
+              variant="ghost"
             >
-              <Link to={cajaAbierta ? "/vender/mesas" : "/abrirCaja"}>
+              <Link
+                to={
+                  cajaAbierta
+                    ? esRestaurante
+                      ? "/vender/mesas"
+                      : "/vender/ventasLlevar"
+                    : "/abrirCaja"
+                }
+              >
                 Comenzar a vender
               </Link>
             </Button>

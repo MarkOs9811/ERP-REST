@@ -1,5 +1,14 @@
 import { Link, useLocation } from "react-router-dom";
+import { useAuth } from "../AuthContext";
+import { useQuery } from "@tanstack/react-query";
+import { GetConfi } from "../service/accionesConfiguracion/GetConfi";
 import {
+  hasModuleAccess,
+  isModuleAvailableForBusiness,
+  isPathAvailableForBusiness,
+} from "../utils/modulePermissions";
+import {
+  LayoutGrid,
   Users,
   Wallet,
   Box,
@@ -241,22 +250,61 @@ export const subMenuGroups = {
 
 export function SubMenuTabs() {
   const location = useLocation();
+  const { user } = useAuth();
   const currentPath = location.pathname;
-
+  const { data: configurations = [] } = useQuery({
+    queryKey: ["confiEmpresa"],
+    queryFn: GetConfi,
+    retry: 1,
+    refetchOnWindowFocus: false,
+  });
   const activeModule = Object.keys(subMenuGroups).find(
     (prefix) =>
       currentPath.startsWith(prefix) || `${currentPath}/` === `${prefix}/`,
   );
 
   if (!activeModule) return null;
+  const moduleKey = {
+    "/rrhh": "rrhh",
+    "/platos": "platos",
+    "/clientes": "clientes",
+    "/finanzas": "finanzas",
+    "/almacen": "almacen",
+    "/ventas": "ventas",
+    "/delivery": "delivery",
+  }[activeModule];
+  if (!isModuleAvailableForBusiness(moduleKey, configurations)) return null;
+  if (!hasModuleAccess(user, moduleKey)) return null;
 
-  const tabs = subMenuGroups[activeModule];
+  const tabs = subMenuGroups[activeModule].filter((tab) => {
+    return isPathAvailableForBusiness(tab.path, configurations);
+  });
+  const moduleName =
+    {
+      "/rrhh": "Recursos humanos",
+      "/platos": "Productos",
+      "/clientes": "Clientes",
+      "/finanzas": "Finanzas",
+      "/almacen": "Almacén",
+      "/ventas": "Ventas",
+      "/delivery": "Delivery",
+    }[activeModule] || "Módulo";
 
   return (
     <nav aria-label="Submenú del módulo" className="w-full">
-      <p className="mb-3 px-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-        Navegación
-      </p>
+      <div className="mb-5 flex items-center gap-3 px-2 pt-1">
+        <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+          <LayoutGrid size={17} strokeWidth={1.8} />
+        </span>
+        <div className="min-w-0">
+          <p className="truncate text-sm font-semibold tracking-tight text-foreground">
+            {moduleName}
+          </p>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+            Navegación
+          </p>
+        </div>
+      </div>
       <ul className="flex w-full flex-col gap-1">
         {tabs.map((tab, idx) => {
           const isActive =
@@ -271,10 +319,10 @@ export function SubMenuTabs() {
                 to={tab.path}
                 aria-current={isActive ? "page" : undefined}
                 className={`group relative flex min-h-11 w-full items-center gap-3 rounded-xl px-3 py-2 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
-                    isActive
-                      ? "bg-accent font-medium text-accent-foreground"
-                      : "text-muted-foreground hover:bg-accent/70 hover:text-accent-foreground"
-                  }`}
+                  isActive
+                    ? "bg-primary/10 font-semibold text-primary ring-1 ring-inset ring-primary/10"
+                    : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                }`}
               >
                 {isActive && (
                   <span className="absolute inset-y-2 left-0 w-0.5 rounded-full bg-primary" />
@@ -282,7 +330,7 @@ export function SubMenuTabs() {
                 <span
                   className={`flex size-8 shrink-0 items-center justify-center rounded-lg transition-colors ${
                     isActive
-                      ? "bg-background text-foreground ring-1 ring-border"
+                      ? "bg-background text-primary shadow-sm ring-1 ring-primary/15"
                       : "text-muted-foreground group-hover:text-foreground"
                   }`}
                 >

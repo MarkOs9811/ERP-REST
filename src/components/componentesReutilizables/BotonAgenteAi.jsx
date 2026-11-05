@@ -1,4 +1,4 @@
-import { Brain } from "lucide-react";
+import { Brain, Sparkles } from "lucide-react";
 import ModalRight from "./ModalRight";
 import { FormAgenteChat } from "../componenteAgentes/FormAgenteChat";
 import { useState } from "react";
@@ -22,9 +22,11 @@ export function BotonAgenteAi() {
       <ModalRight
         isOpen={modalAgenteAi}
         onClose={() => setModalAgenteAi(false)}
-        width={"450px"}
+        width={"520px"}
         hideFooter={true}
-        title={"Gestione el sistema"}
+        title={"Asistente IA"}
+        subtitulo="Asistentes inteligentes para consultar y gestionar tu operación."
+        icono={<Sparkles />}
       >
         <FormAgenteChat />
       </ModalRight>

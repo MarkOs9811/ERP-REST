@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import { abrirCaja } from "../redux/cajaSlice";
 import { ArrowLeft, LockKeyhole } from "lucide-react";
 import { Button } from "./ui/button";
+import { hasModuleAccess } from "../utils/modulePermissions";
 
 export const CajaProtectedRoute = ({ children }) => {
   const { user } = useAuth();
@@ -67,6 +68,10 @@ export const CajaProtectedRoute = ({ children }) => {
         </div>
       </div>
     );
+  }
+
+  if (!hasModuleAccess(user, "ventas")) {
+    return <Navigate to="/errorVista" replace />;
   }
 
   // ==========================================

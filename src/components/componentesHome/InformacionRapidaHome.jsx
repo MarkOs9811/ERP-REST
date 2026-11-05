@@ -3,11 +3,18 @@ import { getVentas } from "../../service/ObtenerVentasDetalle";
 import { GetMesas } from "../../service/GetMesas";
 import { GetAlmacen } from "../../service/serviceAlmacen/GetAlmacen";
 import { getPedidosPendientes } from "../../service/GetPedidosPendientes";
-import { AlertCircle, Clock3, PackageSearch, Store, Table2 } from "lucide-react";
+import {
+  AlertCircle,
+  Boxes,
+  Clock3,
+  PackageSearch,
+  Store,
+  Table2,
+} from "lucide-react";
 import { formatMoneda } from "../../utils/currency";
 import { Card } from "@/components/ui/card";
 
-export function InformacionRapidaHome() {
+export function InformacionRapidaHome({ esRestaurante = false }) {
   const {
     data: ventas = [],
     isLoading: isLoadingVentas,
@@ -26,6 +33,7 @@ export function InformacionRapidaHome() {
   } = useQuery({
     queryKey: ["mesas"],
     queryFn: GetMesas,
+    enabled: esRestaurante,
     refetchOnWindowFocus: false,
     retry: 1,
   });
@@ -48,6 +56,7 @@ export function InformacionRapidaHome() {
   } = useQuery({
     queryKey: ["pedidosWeb"],
     queryFn: getPedidosPendientes,
+    enabled: esRestaurante,
     refetchOnWindowFocus: false,
     retry: 1,
   });
@@ -74,7 +83,7 @@ export function InformacionRapidaHome() {
   const porcentajeMesas =
     totalMesas > 0 ? Math.min((mesasOcupadas / totalMesas) * 100, 100) : 0;
 
-  const metricas = [
+  const metricasRestaurante = [
     {
       title: "Ventas hoy",
       value: formatMoneda(ventasHoy),
@@ -117,6 +126,21 @@ export function InformacionRapidaHome() {
       error: isErrorAlmacen,
     },
   ];
+  const metricasRetail = [
+    metricasRestaurante[0],
+    {
+      title: "Productos en inventario",
+      value: Array.isArray(almacen) ? almacen.length : 0,
+      description: "Productos registrados",
+      icon: Boxes,
+      iconClass:
+        "bg-sky-500/10 text-sky-700 ring-1 ring-sky-600/10 dark:text-sky-300",
+      loading: isLoadingAlmacen,
+      error: isErrorAlmacen,
+    },
+    metricasRestaurante[3],
+  ];
+  const metricas = esRestaurante ? metricasRestaurante : metricasRetail;
 
   return (
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">

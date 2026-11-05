@@ -1,15 +1,18 @@
 import React, { useMemo } from "react";
 import { Users, MapPin, Settings, CheckCircle } from "lucide-react";
+import { STORAGE_BASE_URL } from "../../api/AxiosInstance";
 import { capitalizeFirstLetter } from "../../hooks/FirstLetterUp";
 import { BotonMotionGeneral } from "../../components/componentesReutilizables/BotonMotionGeneral";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 export function DashboardEmpresa({ onClose, dataEmpresa }) {
-  const BASE_URL = process.env.REACT_APP_BASE_URL;
-
   const empresa = dataEmpresa ?? {};
   const logoPath = empresa.logo || empresa.logo || empresa.log || "";
-  const logoUrl = logoPath ? `${BASE_URL}/storage/${logoPath}` : null;
+  const logoUrl = logoPath
+    ? /^https?:\/\//i.test(logoPath)
+      ? logoPath
+      : `${STORAGE_BASE_URL}/storage/${logoPath.replace(/^\/+/, "")}`
+    : null;
 
   const {
     usuarios = [],

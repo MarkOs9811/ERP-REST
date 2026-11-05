@@ -254,10 +254,9 @@ export function MiEmpresa() {
           {/* Columna datos */}
           <div className="md:col-span-8 col-span-full">
             <Card
-              className="p-4 h-full"
+              className="p-4 h-full bg-card"
               style={{
                 borderRadius: "var(--radius-lg)",
-                backgroundColor: "var(--bg-card)",
               }}
             >
               <h5

@@ -39,7 +39,9 @@ export default function FormConfiguracionEmpresa({ configuracion, onClose }) {
       if (response.data.success) {
         ToastAlert("success", "Configuración actualizada correctamente");
         // Refrescamos la data global sin recargar la página
-        queryClient.invalidateQueries(["confiEmpresa"]);
+        await queryClient.invalidateQueries({
+          queryKey: ["confiEmpresa"],
+        });
         onClose();
       } else {
         ToastAlert("error", "Error al actualizar");

@@ -34,6 +34,10 @@ import { GetConfi } from "../../service/accionesConfiguracion/GetConfi";
 import { GetInventario } from "../../service/GetInventario";
 import { OffcanvasColaLlevar } from "./tareasVender/OffCanvaColaLlevar";
 import { GetPedidosCocina } from "../../service/accionesVender/GetPedidosCocina";
+import {
+  isRestaurantBusiness,
+  normalizeModuleName,
+} from "../../utils/modulePermissions";
 import { Button } from "../ui/button";
 import {
   Card,
@@ -54,29 +58,7 @@ export function ToLlevar() {
   const categoriaFiltroPlatos = useSelector(
     (state) => state.categoriaFiltroPlatos.estado,
   );
-  // consulta de pedidos detalles pedidos PARA LLEVAR
-  const {
-    data: todosLosPedidos = [],
-    isLoading: isLoadingPedidos,
-    isError: isErrorPedidos,
-  } = useQuery({
-    queryKey: ["pedidosEstado"],
-    queryFn: GetPedidosCocina,
-    retry: 0, //  Apagamos el retry local porque Axios ya lo maneja
-    refetchOnWindowFocus: false,
-    staleTime: 2000, //  Espera 2 segundos antes de permitir otra recarga masiva por WebSockets
-  });
-  const pedidosLlevar = useMemo(() => {
-    return todosLosPedidos.filter((pedido) => pedido.tipo_pedido === "llevar");
-  }, [todosLosPedidos]);
 
-  // 2. Solo los pendientes (exclusivo para el contador del botón)
-  const pedidosLlevarPendientes = useMemo(() => {
-    return pedidosLlevar.filter((pedido) => pedido.estado === 0);
-  }, [pedidosLlevar]);
-
-  // CONDICIONAR SI LA CONFIGURACIONDE LA EMRPESA ES PARA VENTAS RESTUARANTE O VENTAS STORE TIENDA NORMAL
-  // 1. Primero obtenemos la configuración de la empresa
   const {
     data: configEmpresa = [],
     isLoading: isLoadingConfig,
@@ -88,13 +70,39 @@ export function ToLlevar() {
     refetchOnWindowFocus: false,
   });
 
-  // 2. Filtramos la configuración
-  const configTipoVenta = configEmpresa.find(
-    (item) => item.nombre === "Tipo Venta",
-  );
+  const configTipoVenta = Array.isArray(configEmpresa)
+    ? configEmpresa.find(
+        (item) => normalizeModuleName(item?.nombre) === "tipo venta",
+      )
+    : undefined;
+  const esComida = isRestaurantBusiness(configEmpresa);
+  const claveVenta = esComida
+    ? "restaurante"
+    : normalizeModuleName(configTipoVenta?.clave);
 
-  const claveVenta = configTipoVenta?.clave;
-  const esComida = claveVenta === "restaurante";
+  // consulta de pedidos detalles pedidos PARA LLEVAR
+  const {
+    data: todosLosPedidos = [],
+    isLoading: isLoadingPedidos,
+    isError: isErrorPedidos,
+  } = useQuery({
+    queryKey: ["pedidosEstado"],
+    queryFn: GetPedidosCocina,
+    enabled: esComida,
+    retry: 0, //  Apagamos el retry local porque Axios ya lo maneja
+    refetchOnWindowFocus: false,
+    staleTime: 2000, //  Espera 2 segundos antes de permitir otra recarga masiva por WebSockets
+  });
+  const pedidosLlevar = useMemo(() => {
+    return (Array.isArray(todosLosPedidos) ? todosLosPedidos : []).filter(
+      (pedido) => pedido.tipo_pedido === "llevar",
+    );
+  }, [todosLosPedidos]);
+
+  // 2. Solo los pendientes (exclusivo para el contador del botón)
+  const pedidosLlevarPendientes = useMemo(() => {
+    return pedidosLlevar.filter((pedido) => pedido.estado === 0);
+  }, [pedidosLlevar]);
 
   // 3. Hacemos UNA sola consulta dinámica dependiendo de la clave
   const {
@@ -384,8 +392,8 @@ export function ToLlevar() {
             </CardHeader>
 
             <CondicionCarga
-              isLoading={isLoadingProductos}
-              isError={isErrorProductos}
+              isLoading={isLoadingConfig || isLoadingProductos}
+              isError={isErrorConfig || isErrorProductos}
               mode="cards"
             >
               <CardContent className="grid min-h-0 flex-1 grid-cols-2 content-start gap-2.5 overflow-y-auto bg-muted/20 p-3 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 min-[1800px]:grid-cols-6 sm:gap-3">

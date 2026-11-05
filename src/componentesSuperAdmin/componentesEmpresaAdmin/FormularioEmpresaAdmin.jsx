@@ -1,15 +1,13 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useQueryClient } from "@tanstack/react-query";
-import axiosInstance from "../../api/AxiosInstance";
+import axiosInstance, { STORAGE_BASE_URL } from "../../api/AxiosInstance";
 import ToastAlert from "../../components/componenteToast/ToastAlert";
 import { Button } from "../../components/ui/button";
 import { Card } from "@/components/ui/card";
 
 export function FormularioEmpresaAdmin({ dataEmpresa = null, onClose }) {
   const isEditMode = Boolean(dataEmpresa);
-  const BASE_URL = process.env.REACT_APP_BASE_URL;
-
   const [previewUrl, setPreviewUrl] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
 
@@ -44,7 +42,13 @@ export function FormularioEmpresaAdmin({ dataEmpresa = null, onClose }) {
       });
 
       const existingLogo = dataEmpresa.logo ?? dataEmpresa.logo ?? "";
-      setPreviewUrl(existingLogo ? `${BASE_URL}/storage/${existingLogo}` : "");
+      setPreviewUrl(
+        existingLogo
+          ? /^https?:\/\//i.test(existingLogo)
+            ? existingLogo
+            : `${STORAGE_BASE_URL}/storage/${existingLogo.replace(/^\/+/, "")}`
+          : "",
+      );
     } else {
       reset({
         nombre: "",
@@ -58,7 +62,7 @@ export function FormularioEmpresaAdmin({ dataEmpresa = null, onClose }) {
       setPreviewUrl("");
       setSelectedFile(null);
     }
-  }, [dataEmpresa, reset, BASE_URL]);
+  }, [dataEmpresa, reset]);
 
   const handleFileChange = (e) => {
     const file = e.target.files?.[0];
@@ -71,7 +75,11 @@ export function FormularioEmpresaAdmin({ dataEmpresa = null, onClose }) {
       // Si el usuario cancela, volvemos a la imagen original o vacío
       setSelectedFile(null);
       setPreviewUrl(
-        dataEmpresa?.logo ? `${BASE_URL}/storage/${dataEmpresa.logo}` : "",
+        dataEmpresa?.logo
+          ? /^https?:\/\//i.test(dataEmpresa.logo)
+            ? dataEmpresa.logo
+            : `${STORAGE_BASE_URL}/storage/${dataEmpresa.logo.replace(/^\/+/, "")}`
+          : "",
       );
     }
   };

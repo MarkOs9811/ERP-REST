@@ -133,7 +133,10 @@ export function DestinoTransferir() {
         queryClient.invalidateQueries({ queryKey: ["almacen"] });
       }
     } catch (error) {
-      ToastAlert("error", "Ocurrió un error al transferir");
+      // Muestra el mensaje del backend si existe, o el genérico
+      const mensajeError =
+        error.response?.data?.message || "Ocurrió un error al transferir";
+      ToastAlert("error", mensajeError);
     } finally {
       setLoading(false);
     }

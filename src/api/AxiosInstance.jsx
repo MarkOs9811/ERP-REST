@@ -1,9 +1,12 @@
 import axios from "axios";
 import ToastAlert from "../components/componenteToast/ToastAlert";
 
+export const API_BASE_URL = "http://127.0.0.1:8000/api";
+export const STORAGE_BASE_URL = API_BASE_URL.replace(/\/api\/?$/, "");
+
 const axiosInstance = axios.create({
-  // baseURL: "http://127.0.0.1:8000/api",
-  baseURL: "http://erp-api.test/api",
+  baseURL: API_BASE_URL,
+  // baseURL: "http://erp-api.test/api",
   withCredentials: true,
 });
 

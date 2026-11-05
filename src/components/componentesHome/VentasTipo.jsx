@@ -2,7 +2,13 @@ import { Globe, ShoppingBag, Utensils } from "lucide-react";
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
 import { Card } from "@/components/ui/card";
 
-export function VentasTipo({ load, error, errorLoad, ventasList }) {
+export function VentasTipo({
+  load,
+  error,
+  errorLoad,
+  ventasList,
+  esRestaurante = false,
+}) {
   const isError = error ?? errorLoad;
   // Lógica optimizada: Procesamos todo en una sola iteración (O(N)) usando reduce.
   const currentMonth = new Date().getMonth() + 1;
@@ -62,20 +68,24 @@ export function VentasTipo({ load, error, errorLoad, ventasList }) {
       icono: <ShoppingBag size={24} color="var(--fw-saffron)" />,
       bgIcono: "var(--bg-saffron-soft)",
     },
-    {
-      id: "mesa",
-      titulo: "En Mesa",
-      subtitulo: "Este mes",
-      valor: totales.mesa,
-      icono: <Utensils size={24} color="var(--fw-strawberry)" />,
-      bgIcono: "var(--bg-strawberry-soft)",
-    },
+    ...(esRestaurante
+      ? [
+          {
+            id: "mesa",
+            titulo: "En Mesa",
+            subtitulo: "Este mes",
+            valor: totales.mesa,
+            icono: <Utensils size={24} color="var(--fw-strawberry)" />,
+            bgIcono: "var(--bg-strawberry-soft)",
+          },
+        ]
+      : []),
   ];
 
   return (
     <CondicionCarga isLoading={load} isError={isError}>
       <Card className="h-full rounded-2xl border-border/70 bg-card p-4 text-card-foreground shadow-none">
-        <h2 className="mb-4 text-base font-semibold">Ventas por tipo</h2>
+        <h2 className="mb-4 text-base font-semibold">Canales de venta</h2>
         <div className="flex flex-col gap-3">
           {tarjetasStats.map((stat) => (
             <div

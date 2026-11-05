@@ -178,7 +178,8 @@ export function InventarioList({ search }) {
                     setdataProducto(row);
                   }}
                   title="Ocultar producto"
-                 variant="default">
+                  variant="outline"
+                >
                   <FontAwesomeIcon icon={faEyeSlash} />
                 </Button>
               </>
@@ -190,7 +191,8 @@ export function InventarioList({ search }) {
                   setQuestionActivar(true);
                   setdataProducto(row);
                 }}
-               variant="default">
+                variant="default"
+              >
                 <EyeIcon />
               </Button>
             )}
@@ -269,7 +271,9 @@ export function InventarioList({ search }) {
                 </span>
               </>
             ) : (
-              <span className="text-emerald-600 dark:text-emerald-400">{row.fecha_vencimiento}</span>
+              <span className="text-emerald-600 dark:text-emerald-400">
+                {row.fecha_vencimiento}
+              </span>
             )}
           </div>
         );

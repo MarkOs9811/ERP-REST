@@ -4,7 +4,7 @@ import { Header } from "../components/Header";
 import { Navegacion } from "../components/Navegacion";
 import { PrivateRoute } from "../components/PrivateRoute";
 import { SideBar } from "../components/SideBar";
-import { Route, Routes } from "react-router-dom";
+import { Outlet, Route, Routes } from "react-router-dom";
 import { TakeAsistencia } from "../pages/TakeAsistencia";
 import { Home } from "../pages/Home";
 import { Registro } from "../pages/moduloAlmacen/Registro";
@@ -139,20 +139,32 @@ export const MainLayout = () => {
   const renderHomePorRol = () => {
     if (cargoUsuario === "atencion al cliente") return <LayOutAtencion />;
     if (cargoUsuario === "cocinero" || cargoUsuario === "cosinero")
-      return <LayOutCocina />;
+      return (
+        <PrivateRoute requiredModule="cocina" restaurantOnly>
+          <LayOutCocina />
+        </PrivateRoute>
+      );
     if (
       cargoUsuario === "moso" ||
       cargoUsuario === "mozo" ||
       cargoUsuario === "mesa"
     )
-      return <LayOutMozo />;
+      return (
+        <PrivateRoute requiredModule="ventas" restaurantOnly>
+          <LayOutMozo />
+        </PrivateRoute>
+      );
     if (cargoUsuario === "delivery" || cargoUsuario === "conductor")
-      return <LayOutDelivery />;
+      return (
+        <PrivateRoute requiredModule="delivery">
+          <LayOutDelivery />
+        </PrivateRoute>
+      );
     return <Home />;
   };
 
   return (
-    <div className="flex h-dvh w-full overflow-hidden bg-background">
+    <div className="flex h-screen w-full overflow-hidden bg-background">
       <BotonAgenteAi />
       {showFullLayout && (
         <div className="sidebar-main-wrapper shrink-0">
@@ -162,34 +174,29 @@ export const MainLayout = () => {
 
       {showFullLayout && (
         <div
-          className={`submenu-secundario-wrapper relative z-30 hidden h-full shrink-0 flex-col overflow-hidden border-r border-sidebar-border bg-sidebar-accent/50 text-sidebar-foreground transition-[width,opacity] duration-300 ease-in-out md:flex ${isCompressed ? "subMenuComprimido w-0 min-w-0 opacity-0" : "w-64 min-w-64 opacity-100"}`}
+          className={`submenu-secundario-wrapper relative z-30 hidden h-full shrink-0 flex-col overflow-hidden border-r border-border/70 bg-white dark:bg-taupe-950 text-foreground transition-[width,opacity] duration-300 ease-in-out md:flex ${isCompressed ? "subMenuComprimido w-0 min-w-0 opacity-0" : "w-64 min-w-64 opacity-100"}`}
         >
-          <SubMenuTabs />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -bottom-20 -left-20 size-56 rounded-full bg-emerald-300/25 blur-3xl dark:bg-teal-400/15"
+          />
+          <div className="relative z-10 h-full overflow-y-auto px-3 py-5">
+            <SubMenuTabs />
+          </div>
         </div>
       )}
 
-      <div className="content-wrapper flex min-w-0 flex-1 flex-col overflow-hidden">
-        {!showHeader && <Header tipoHeader={esRolEspecial} />}
-        {showFullLayout && <Header tipoHeader={esRolEspecial} />}
+      <div className="content-wrapper relative flex min-h-0 min-w-0 flex-1 flex-col overflow-x-hidden overflow-y-auto">
+        <div className="sticky top-0 z-40 shrink-0 border-b border-border/70 bg-background/70 backdrop-blur-md">
+          {!showHeader && <Header tipoHeader={esRolEspecial} />}
+          {showFullLayout && <Header tipoHeader={esRolEspecial} />}
 
-        {showFullLayout && (
-          <PrivateRoute
-            allowedRoles={getCargosPermitidos([
-              "ventas",
-              "finanzas",
-              "delivery",
-              "conductor",
-              "cocinero",
-              "administrador",
-            ])}
-          >
-            <Navegacion tipoNavegacion={esRolEspecial} />
-          </PrivateRoute>
-        )}
+          {showFullLayout && <Navegacion tipoNavegacion={esRolEspecial} />}
 
-        {!showHeader && <Navegacion tipoNavegacion={esRolEspecial} />}
+          {!showHeader && <Navegacion tipoNavegacion={esRolEspecial} />}
+        </div>
 
-        <div className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto bg-background px-3 py-4 sm:px-4 lg:px-5">
+        <main className="min-h-0 flex-1 bg-background px-3 py-4 sm:px-4 lg:px-5">
           <ContenedorPrincipal>
             <ToastContainer />
             <Routes>
@@ -203,14 +210,25 @@ export const MainLayout = () => {
                   <PrivateRoute
                     allowedRoles={getCargosPermitidos([
                       "cocinero",
+                      "cocina",
+                      "platos",
                       "administrador",
                     ])}
+                    requiredModule="cocina"
+                    restaurantOnly
                   >
                     <CocinaDespacho />
                   </PrivateRoute>
                 }
               />
-              <Route path="/marcarAsistencia" element={<TakeAsistencia />} />
+              <Route
+                path="/marcarAsistencia"
+                element={
+                  <PrivateRoute requiredModule="rrhh">
+                    <TakeAsistencia />
+                  </PrivateRoute>
+                }
+              />
 
               <Route
                 path="/usuarios"
@@ -218,8 +236,10 @@ export const MainLayout = () => {
                   <PrivateRoute
                     allowedRoles={getCargosPermitidos([
                       "usuario",
+                      "RRHH",
                       "administrador",
                     ])}
+                    requiredModule="rrhh"
                   >
                     <Usuarios />
                   </PrivateRoute>
@@ -234,6 +254,7 @@ export const MainLayout = () => {
                       "conductor",
                       "administrador",
                     ])}
+                    requiredModule="delivery"
                   >
                     <PedidosRider />
                   </PrivateRoute>
@@ -249,6 +270,7 @@ export const MainLayout = () => {
                       "conductor",
                       "administrador",
                     ])}
+                    requiredModule="delivery"
                   >
                     <MisEntregas />
                   </PrivateRoute>
@@ -260,8 +282,11 @@ export const MainLayout = () => {
                   <PrivateRoute
                     allowedRoles={getCargosPermitidos([
                       "ventas",
+                      "platos",
                       "administrador",
                     ])}
+                    requiredModule="platos"
+                    restaurantOnly
                   >
                     <Platos />
                   </PrivateRoute>
@@ -273,8 +298,11 @@ export const MainLayout = () => {
                   <PrivateRoute
                     allowedRoles={getCargosPermitidos([
                       "ventas",
+                      "platos",
                       "administrador",
                     ])}
+                    requiredModule="platos"
+                    restaurantOnly
                   >
                     <Combos />
                   </PrivateRoute>
@@ -286,15 +314,25 @@ export const MainLayout = () => {
                   <PrivateRoute
                     allowedRoles={getCargosPermitidos([
                       "ventas",
+                      "platos",
                       "administrador",
                     ])}
+                    requiredModule="platos"
+                    restaurantOnly
                   >
                     <CategoriaPlatosCombos />
                   </PrivateRoute>
                 }
               />
 
-              <Route path="/almacen">
+              <Route
+                path="/almacen"
+                element={
+                  <PrivateRoute requiredModule="almacen">
+                    <Outlet />
+                  </PrivateRoute>
+                }
+              >
                 <Route
                   index
                   element={
@@ -427,7 +465,14 @@ export const MainLayout = () => {
                 />
               </Route>
 
-              <Route path="/rrhh">
+              <Route
+                path="/rrhh"
+                element={
+                  <PrivateRoute requiredModule="rrhh">
+                    <Outlet />
+                  </PrivateRoute>
+                }
+              >
                 <Route
                   index
                   element={
@@ -586,7 +631,14 @@ export const MainLayout = () => {
                 />
               </Route>
 
-              <Route path="/clientes">
+              <Route
+                path="/clientes"
+                element={
+                  <PrivateRoute requiredModule="clientes">
+                    <Outlet />
+                  </PrivateRoute>
+                }
+              >
                 <Route
                   index
                   element={
@@ -654,7 +706,14 @@ export const MainLayout = () => {
                 />
               </Route>
 
-              <Route path="/ventas">
+              <Route
+                path="/ventas"
+                element={
+                  <PrivateRoute requiredModule="ventas">
+                    <Outlet />
+                  </PrivateRoute>
+                }
+              >
                 <Route
                   index
                   element={
@@ -741,6 +800,7 @@ export const MainLayout = () => {
                         "ventas",
                         "administrador",
                       ])}
+                      restaurantOnly
                     >
                       <Mesas />
                     </PrivateRoute>
@@ -754,6 +814,7 @@ export const MainLayout = () => {
                         "ventas",
                         "administrador",
                       ])}
+                      restaurantOnly
                     >
                       <ReservasMesas />
                     </PrivateRoute>
@@ -800,7 +861,14 @@ export const MainLayout = () => {
                 />
               </Route>
 
-              <Route path="/delivery">
+              <Route
+                path="/delivery"
+                element={
+                  <PrivateRoute requiredModule="delivery">
+                    <Outlet />
+                  </PrivateRoute>
+                }
+              >
                 <Route
                   index
                   element={
@@ -966,15 +1034,26 @@ export const MainLayout = () => {
                   <PrivateRoute
                     allowedRoles={getCargosPermitidos([
                       "cocina",
+                      "cocinero",
+                      "platos",
                       "administrador",
                     ])}
+                    requiredModule="cocina"
+                    restaurantOnly
                   >
                     <CocinaDespacho />
                   </PrivateRoute>
                 }
               />
 
-              <Route path="/incidencias">
+              <Route
+                path="/incidencias"
+                element={
+                  <PrivateRoute requiredModule="incidencias">
+                    <Outlet />
+                  </PrivateRoute>
+                }
+              >
                 <Route
                   index
                   element={
@@ -990,7 +1069,14 @@ export const MainLayout = () => {
                 />
               </Route>
 
-              <Route path="/finanzas">
+              <Route
+                path="/finanzas"
+                element={
+                  <PrivateRoute requiredModule="finanzas">
+                    <Outlet />
+                  </PrivateRoute>
+                }
+              >
                 <Route
                   index
                   element={
@@ -1150,6 +1236,7 @@ export const MainLayout = () => {
                       "administrador",
                       "atención al cliente",
                     ])}
+                    requiredModule="ventas"
                   >
                     <AbrirCaja />
                   </PrivateRoute>
@@ -1158,7 +1245,7 @@ export const MainLayout = () => {
               <Route path="/iaMoodle" element={<IAMoodle />} />
             </Routes>
           </ContenedorPrincipal>
-        </div>
+        </main>
 
         {/* MODAL GENERALES OMITIDO POR ESPACIO PERO SE QUEDA IGUAL QUE TU ARCHIVO */}
         <ModalGenerales

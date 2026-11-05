@@ -15,21 +15,18 @@ import { useQuery } from "@tanstack/react-query";
 import { GetConfi } from "../service/accionesConfiguracion/GetConfi";
 import { subMenuGroups } from "./SubMenuTabs";
 import { Button } from "./ui/button";
+import { useAuth } from "../AuthContext";
+import {
+  hasModuleAccess,
+  isRestaurantBusiness,
+  isPathAvailableForBusiness,
+} from "../utils/modulePermissions";
 
 export function Navegacion({ tipoNavegacion = null }) {
   const location = useLocation();
   const pathnames = location.pathname.split("/").filter((x) => x);
   const navigate = useNavigate();
-
-  const rolesLocalStorage =
-    JSON.parse(
-      localStorage.getItem("roles") || sessionStorage.getItem("roles"),
-    ) || [];
-  const userStr =
-    localStorage.getItem("user") || sessionStorage.getItem("user");
-  // VALIDAR VARIANTES DE LOS CARGOS PARA VALIDAR CADA OPCION DE BOTON
-
-  const rol = userStr ? JSON.parse(userStr) : null;
+  const { user: rol } = useAuth();
   // 1. Obtenemos el nombre del cargo en minúsculas de forma segura
   const nombreCargo = rol?.empleado?.cargo?.nombre?.toLowerCase() || "";
 
@@ -70,10 +67,6 @@ export function Navegacion({ tipoNavegacion = null }) {
     ajustes: "Ajustes",
   };
 
-  // === BUSCADOR GLOBAL MINIMALISTA ===
-  const searchOptions = Object.values(subMenuGroups)
-    .flat()
-    .map(({ label, path }) => ({ label, path }));
   const [searchTerm, setSearchTerm] = useState("");
   const [showSearchDropdown, setShowSearchDropdown] = useState(false);
   const [activeSearchIndex, setActiveSearchIndex] = useState(0);
@@ -88,10 +81,6 @@ export function Navegacion({ tipoNavegacion = null }) {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
-  const filteredSearch = searchOptions.filter((opt) =>
-    opt.label.toLowerCase().includes(searchTerm.toLowerCase()),
-  );
 
   const selectSearchOption = (option) => {
     if (!option) return;
@@ -128,7 +117,6 @@ export function Navegacion({ tipoNavegacion = null }) {
       selectSearchOption(filteredSearch[activeSearchIndex]);
     }
   };
-  // ===================================
   const { data: configEmpresa = [] } = useQuery({
     queryKey: ["confiEmpresa"],
     queryFn: GetConfi,
@@ -136,21 +124,38 @@ export function Navegacion({ tipoNavegacion = null }) {
     refetchOnWindowFocus: false,
   });
 
-  // 2. Filtramos la configuración
-  const configTipoVenta = configEmpresa.find(
-    (item) => item.nombre === "Tipo Venta",
+  const esComida = isRestaurantBusiness(configEmpresa);
+  const modulesByPath = {
+    rrhh: "rrhh",
+    platos: "platos",
+    clientes: "clientes",
+    finanzas: "finanzas",
+    almacen: "almacen",
+    ventas: "ventas",
+    delivery: "delivery",
+  };
+  const searchOptions = Object.values(subMenuGroups)
+    .flat()
+    .filter(({ path }) => {
+      const moduleName = modulesByPath[path.split("/")[1]];
+      return (
+        Boolean(moduleName) &&
+        isPathAvailableForBusiness(path, configEmpresa) &&
+        hasModuleAccess(rol, moduleName)
+      );
+    })
+    .map(({ label, path }) => ({ label, path }));
+  const filteredSearch = searchOptions.filter((opt) =>
+    opt.label.toLowerCase().includes(searchTerm.toLowerCase()),
   );
-
-  const claveVenta = configTipoVenta?.clave;
-  const esComida = claveVenta === "restaurante";
   const actionButtonClass =
     "inline-flex h-9 items-center justify-center gap-2 rounded-lg border-border bg-background px-2.5 text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:px-3";
 
   return (
-    <div className={`mb-3 w-full ${navegacionAnchura ? "px-3" : "px-0"}`}>
+    <div className={`w-full ${navegacionAnchura ? "px-3" : "px-0"}`}>
       <nav
         aria-label="Navegación de la página"
-        className="flex min-h-[50px] w-full flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-border/60 px-3 py-2 sm:px-4"
+        className="flex min-h-12.5 w-full flex-wrap items-center justify-between gap-x-4 gap-y-2 border-border/60 bg-transparent px-3 py-2 sm:px-4"
       >
         <div className="flex min-w-0 items-center">
           {/* Breadcrumbs */}
@@ -203,7 +208,7 @@ export function Navegacion({ tipoNavegacion = null }) {
         {/* --- CONTENEDOR DERECHO (Buscador + Acciones) --- */}
         <div className="ml-auto flex flex-wrap items-center justify-end gap-1.5 sm:gap-2">
           {/* --- BUSCADOR MINIMALISTA --- */}
-          <div className="relative hidden w-[220px] md:block" ref={searchRef}>
+          <div className="relative hidden w-55 md:block" ref={searchRef}>
             <Search
               size={16}
               aria-hidden="true"
@@ -233,7 +238,7 @@ export function Navegacion({ tipoNavegacion = null }) {
               onKeyDown={handleSearchKeyDown}
             />
             {showSearchDropdown && searchTerm.trim() !== "" && (
-              <div className="absolute left-0 top-full z-50 mt-1 max-h-[250px] w-full overflow-y-auto rounded-lg border-border bg-popover py-1 text-popover-foreground shadow-md">
+              <div className="absolute left-0 top-full z-50 mt-1 max-h-62.5 w-full overflow-y-auto rounded-lg border-border bg-popover py-1 text-popover-foreground shadow-md">
                 <ul
                   id="navegacion-resultados-busqueda"
                   role="listbox"
@@ -270,14 +275,16 @@ export function Navegacion({ tipoNavegacion = null }) {
             )}
           </div>
           {/* 1. Asistencia */}
-          <Button asChild className={actionButtonClass} variant="outline">
-            <Link to="/marcarAsistencia" title="Asistencia">
-              <UserRoundCheck size={17} />
-              <span className="hidden sm:inline">Asistencia</span>
-            </Link>
-          </Button>
+          {hasModuleAccess(rol, "rrhh") && (
+            <Button asChild className={actionButtonClass} variant="outline">
+              <Link to="/marcarAsistencia" title="Asistencia">
+                <UserRoundCheck size={17} />
+                <span className="hidden sm:inline">Asistencia</span>
+              </Link>
+            </Button>
+          )}
           {/* 2. Eventos */}
-          {rolesLocalStorage.some((r) => r.nombre === "incidencias") && (
+          {hasModuleAccess(rol, "incidencias") && (
             <Button asChild className={actionButtonClass} variant="outline">
               <Link to="/incidencias" title="Eventos">
                 <Megaphone size={17} />
@@ -286,7 +293,7 @@ export function Navegacion({ tipoNavegacion = null }) {
             </Button>
           )}
           {/* PARA MIS ENTREGAS DEL DELIVERY CONDUCTOR */}
-          {rolesLocalStorage.some((r) => r.nombre === "mis entregas") && (
+          {hasModuleAccess(rol, "mis-entregas") && (
             <Button asChild className={actionButtonClass} variant="outline">
               <Link to="/mis-entregas" title="Mis entregas">
                 <Package size={17} />
@@ -296,9 +303,7 @@ export function Navegacion({ tipoNavegacion = null }) {
           )}
 
           {/* 3. Pedidos Delivery (NUEVO - Solo visible para delivery y administradores) */}
-          {["delivery", "conductor", "administrador"].includes(
-            rol?.empleado?.cargo?.nombre,
-          ) && (
+          {hasModuleAccess(rol, "delivery") && (
             <Button asChild className={actionButtonClass} variant="outline">
               <Link to="/pedidosDelivery" title="Pedidos delivery">
                 <BikeIcon size={17} />
@@ -307,7 +312,7 @@ export function Navegacion({ tipoNavegacion = null }) {
             </Button>
           )}
           {/* 4. POS (Oculto estrictamente para roles que no abren caja usando palabras clave) */}
-          {!esRolBloqueadoParaCaja && (
+          {hasModuleAccess(rol, "ventas") && !esRolBloqueadoParaCaja && (
             <Button
               asChild
               className="inline-flex h-9 items-center justify-center gap-2 rounded-lg px-2.5 text-sm font-medium shadow-sm sm:px-3"
@@ -322,9 +327,7 @@ export function Navegacion({ tipoNavegacion = null }) {
             </Button>
           )}
           {/* 5. Cocina */}
-          {["cocinero", "administrador"].includes(
-            rol?.empleado?.cargo?.nombre,
-          ) && (
+          {esComida && hasModuleAccess(rol, "cocina") && (
             <Button asChild className={actionButtonClass} variant="outline">
               <Link to="/cocina" title="Cocina">
                 <CookingPotIcon size={17} />

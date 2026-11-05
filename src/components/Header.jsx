@@ -44,7 +44,7 @@ export function Header({ tipoHeader = null }) {
     JSON.parse(
       localStorage.getItem("user") || sessionStorage.getItem("user"),
     ) || {};
-  const fotoPerfil = `${fotoPerfilLocal?.foto_url}`;
+  const fotoPerfil = fotoPerfilLocal?.foto_url || null;
 
   // PARA MOSTRAR LOS PANELES
   const [showPerfilPanel, setShowPerfilPanel] = useState(false);
@@ -132,7 +132,7 @@ export function Header({ tipoHeader = null }) {
   };
 
   return (
-    <header className="z-30 w-full shrink-0 border-b border-border bg-background text-foreground">
+    <header className="w-full shrink-0 border-b border-border/70 bg-transparent text-foreground">
       <nav
         aria-label="Barra superior"
         className="flex min-h-16 w-full flex-wrap items-center justify-between gap-x-3 gap-y-2 px-3 py-2 sm:px-4"
@@ -293,8 +293,10 @@ export function Header({ tipoHeader = null }) {
           <ModalRight
             isOpen={showPerfilPanel}
             onClose={() => setShowPerfilPanel(false)}
-            width={"350px"}
+            width={"390px"}
             hideFooter={true}
+            title="Mi cuenta"
+            subtitulo="Tu perfil y accesos personales"
           >
             <PerfilPanel user={user} fotoPerfil={fotoPerfil} />
           </ModalRight>

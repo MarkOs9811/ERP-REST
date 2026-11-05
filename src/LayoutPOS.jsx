@@ -15,6 +15,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchCajaClose } from "./pages/modulosVender/CerrarCaja";
 import { GetConfi } from "./service/accionesConfiguracion/GetConfi";
 import { HoraLive } from "./utils/HoraLive";
+import { isRestaurantBusiness } from "./utils/modulePermissions";
 import { Button } from "./components/ui/button";
 
 export default function LayoutPOS({ children }) {
@@ -41,10 +42,7 @@ export default function LayoutPOS({ children }) {
     refetchOnWindowFocus: false,
   });
 
-  const configTipoVenta = configEmpresa.find(
-    (item) => item.nombre === "Tipo Venta",
-  );
-  const esComida = configTipoVenta?.clave === "restaurante";
+  const esComida = isRestaurantBusiness(configEmpresa);
 
   const { data: cajaData } = useQuery({
     queryKey: ["cajaClose", cajaDatos?.id],

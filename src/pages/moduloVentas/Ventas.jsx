@@ -38,10 +38,7 @@ const KpiCard = ({
   esPositivo,
 }) => {
   return (
-    <Card
-      className="p-3 flex flex-col justify-between h-full"
-      style={{ backgroundColor: "var(--bg-card)", minHeight: "140px" }}
-    >
+    <Card className="p-3 flex flex-col justify-between h-full">
       <div className="flex items-center gap-2 mb-3">
         {/* Ícono Circular */}
         <span
