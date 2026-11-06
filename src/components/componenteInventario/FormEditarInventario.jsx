@@ -37,6 +37,19 @@ export function FormEditarInventario({ data, onCancel }) {
 
   const [preview, setPreview] = useState(null);
 
+  const { data: categorias = [], isLoading: isLoadingCategorias } = useQuery({
+    queryKey: ["categorias"],
+    queryFn: GetCategoria,
+    retry: 1,
+    refetchOnWindowFocus: false,
+  });
+
+  const { data: unidades = [], isLoading: isLoadingUnidades } = useQuery({
+    queryKey: ["Unidadess"],
+    queryFn: GetUnidades,
+    retry: 1,
+    refetchOnWindowFocus: false,
+  });
   // Reset form cuando llega `data`
   useEffect(() => {
     if (data) {
@@ -63,7 +76,7 @@ export function FormEditarInventario({ data, onCancel }) {
         registro_sanitario: data.registro_sanitario || "",
         fecha_vencimiento: data.fecha_vencimiento
           ? data.fecha_vencimiento.split("T")[0]
-          : "", // <--- Carga de fecha formateada
+          : "",
         estado: data.estado != null ? Number(data.estado) : 1,
         foto: null,
       });
@@ -74,7 +87,7 @@ export function FormEditarInventario({ data, onCancel }) {
         setPreview(null);
       }
     }
-  }, [data, reset]);
+  }, [data, reset, categorias, unidades]);
 
   // Preview al seleccionar archivo
   const file = watch("foto");
@@ -86,20 +99,6 @@ export function FormEditarInventario({ data, onCancel }) {
       return () => URL.revokeObjectURL(url);
     }
   }, [file]);
-
-  const { data: categorias = [] } = useQuery({
-    queryKey: ["categorias"],
-    queryFn: GetCategoria,
-    retry: 1,
-    refetchOnWindowFocus: false,
-  });
-
-  const { data: unidades = [] } = useQuery({
-    queryKey: ["Unidadess"],
-    queryFn: GetUnidades,
-    retry: 1,
-    refetchOnWindowFocus: false,
-  });
 
   const onSubmit = async (values) => {
     try {
@@ -142,6 +141,14 @@ export function FormEditarInventario({ data, onCancel }) {
     }
   };
 
+  
+  if (isLoadingCategorias || isLoadingUnidades) {
+    return (
+      <div className="p-8 flex justify-center items-center text-muted-foreground text-sm font-medium">
+        Cargando información...
+      </div>
+    );
+  }
   return (
     <form
       onSubmit={handleSubmit(onSubmit, (errors) => console.log(errors))}

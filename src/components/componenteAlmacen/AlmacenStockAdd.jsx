@@ -3,6 +3,9 @@ import { useForm } from "react-hook-form";
 import ToastAlert from "../componenteToast/ToastAlert";
 import { useState } from "react";
 import { Button } from "../ui/button";
+import axiosInstance from "@/api/AxiosInstance";
+import { useQueryClient } from "@tanstack/react-query";
+
 export function AlmacenStockAdd({
   handleCloseModal,
   producto,
@@ -13,6 +16,7 @@ export function AlmacenStockAdd({
   const [imageFile, setImageFile] = useState(null);
   const [cantidadError, setCantidadError] = useState(false);
 
+  const queryClient = useQueryClient();
   const {
     register,
     handleSubmit,
@@ -20,7 +24,7 @@ export function AlmacenStockAdd({
   } = useForm();
 
   if (!producto) {
-    return <div>Cargando...</div>; // O cualquier otro mensaje de carga
+    return <div>Cargando...</div>;
   }
 
   const validateCantidad = () => {
@@ -33,40 +37,49 @@ export function AlmacenStockAdd({
   };
 
   const onSubmit = async (data) => {
-    // Ahora data contiene los valores del formulario procesados por react-hook-form
-
     const formData = new FormData();
     formData.append("idProductoEdit", producto.id);
     formData.append("stockActual", producto.cantidad);
     formData.append("cantidadIngresar", cantidad);
-    formData.append("pdf_file", pdfFile);
-    formData.append("image_file", imageFile);
-    const token = localStorage.getItem("token");
-    if (!token) {
-      ToastAlert("error", "No estás autenticado. Por favor, inicia sesión.");
-      return; // Detén la ejecución si no hay token.
+
+    if (pdfFile) {
+      formData.append("pdf_file", pdfFile);
+    }
+    if (imageFile) {
+      formData.append("image_file", imageFile);
     }
 
     try {
-      const response = await axios.post(
-        "http://erp-api.test/api/almacen/add-stock",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
+      const response = await axiosInstance.post("/almacen/add-stock", formData);
 
-      if (response.data.status === "success") {
-        ToastAlert("success", response.data.message); // Mostrar mensaje de éxito
-        handleCloseModal();
-        onAlmacenUpdate();
+      // Validamos correctamente el estado que viene del backend
+      if (response.data.success === "true" || response.data.success === true) {
+        ToastAlert(
+          "success",
+          response.data.message || "Stock actualizado correctamente",
+        );
+
+        // Pequeño delay para permitir que el ToastAlert se dibuje antes de destruir el modal
+        setTimeout(() => {
+          if (typeof handleCloseModal === "function") {
+            handleCloseModal();
+          }
+          if (typeof onAlmacenUpdate === "function") {
+            onAlmacenUpdate();
+          }
+        }, 100);
+
+        queryClient.invalidateQueries({ queryKey: ["almacen"] });
       } else {
-        ToastAlert("error", "Algo salió mal, intenta nuevamente.");
+        ToastAlert(
+          "error",
+          response.data.message || "No se pudo actualizar el stock.",
+        );
       }
     } catch (error) {
+      const errorMessage =
+        error.response?.data?.message || "Error al actualizar el stock.";
+      ToastAlert("error", errorMessage);
       console.error("Error al actualizar el stock:", error);
     }
   };
@@ -119,7 +132,7 @@ export function AlmacenStockAdd({
               id="productoCategoria"
               disabled
             >
-              <option>{producto.categoria.nombre || "Sin categoría"}</option>
+              <option>{producto.categoria?.nombre || "Sin categoría"}</option>
             </select>
           </div>
           <div className="col-span-full md:col-span-4">
@@ -134,7 +147,7 @@ export function AlmacenStockAdd({
               id="productoUnidad"
               disabled
             >
-              <option>{producto.unidad.nombre || "Sin unidad"}</option>
+              <option>{producto.unidad?.nombre || "Sin unidad"}</option>
             </select>
           </div>
           <div className="col-span-full md:col-span-4">
@@ -149,7 +162,7 @@ export function AlmacenStockAdd({
               id="productoProveedor"
               disabled
             >
-              <option>{producto.proveedor.nombre || "Sin proveedor"}</option>
+              <option>{producto.proveedor?.nombre || "Sin proveedor"}</option>
             </select>
           </div>
         </div>
@@ -191,7 +204,7 @@ export function AlmacenStockAdd({
               placeholder="Ingrese cantidad ingresada"
               value={cantidad}
               onChange={(e) => setCantidad(e.target.value)}
-              onBlur={validateCantidad} // Validar cuando el campo pierde el foco
+              onBlur={validateCantidad}
               required
             />
             {cantidadError && (
@@ -216,12 +229,11 @@ export function AlmacenStockAdd({
             type="file"
             id="archivoPDF"
             accept="application/pdf"
-            {...register("pdf", {
-              required: "El archivo PDF es obligatorio",
-              validate: (value) =>
-                value?.length > 0 || "Debe cargar un archivo PDF",
-            })}
-            onChange={(e) => setPdfFile(e.target.files[0])}
+            {...register("pdf")}
+            onChange={(e) => {
+              register("pdf").onChange(e);
+              setPdfFile(e.target.files[0]);
+            }}
           />
           {errors.pdf && (
             <p className="text-destructive">{errors.pdf.message}</p>
@@ -245,12 +257,11 @@ export function AlmacenStockAdd({
             type="file"
             id="archivoFirma"
             accept="image/*"
-            {...register("firma", {
-              required: "La firma es obligatoria",
-              validate: (value) =>
-                value?.length > 0 || "Debe cargar una imagen de firma",
-            })}
-            onChange={(e) => setImageFile(e.target.files[0])}
+            {...register("firma")}
+            onChange={(e) => {
+              register("firma").onChange(e);
+              setImageFile(e.target.files[0]);
+            }}
           />
           {errors.firma && (
             <p className="text-destructive">{errors.firma.message}</p>
@@ -267,7 +278,7 @@ export function AlmacenStockAdd({
           <Button
             type="button"
             className="btn-cerrar-modal me-2 rounded-full"
-            onClick={handleCloseModal}
+            onClick={handleCloseModal} // Corregido: Sin paréntesis
             variant="default"
           >
             <i className="fas fa-times"></i> Cerrar

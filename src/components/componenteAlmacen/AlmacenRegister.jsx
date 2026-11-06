@@ -1,29 +1,35 @@
 import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import axiosInstance from "../../api/AxiosInstance";
 import ToastAlert from "../componenteToast/ToastAlert";
-import { Save, SaveAll } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
+import { SaveAll, FileText, PenTool, CheckCircle2 } from "lucide-react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { GetProveedores } from "../../service/GetProveedores";
-
 import { Button } from "../ui/button";
 
 export function AlmacenRegister() {
+  const queryClient = useQueryClient();
+
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    control,
+    formState: { errors, isSubmitting },
     reset,
-  } = useForm();
+    watch,
+  } = useForm({
+    defaultValues: {
+      transferir_inventario: false, // Valor por defecto del interruptor
+    },
+  });
 
-  // Estados para almacenar las opciones de los combobox
   const [categorias, setCategorias] = useState([]);
   const [unidades, setUnidades] = useState([]);
+  const isTransfering = watch("transferir_inventario");
 
-  // Función para obtener las categorías
   const fetchCategorias = async () => {
     try {
-      const response = await axiosInstance.get("/categorias"); // Endpoint para categorías
+      const response = await axiosInstance.get("/categorias");
       if (response.data.success) {
         setCategorias(response.data.data);
       }
@@ -32,10 +38,9 @@ export function AlmacenRegister() {
     }
   };
 
-  // Función para obtener las unidades
   const fetchUnidades = async () => {
     try {
-      const response = await axiosInstance.get("/unidadMedida"); // Endpoint para unidades
+      const response = await axiosInstance.get("/unidadMedida");
       if (response.data.success) {
         setUnidades(response.data.data);
       }
@@ -49,360 +54,375 @@ export function AlmacenRegister() {
     queryFn: GetProveedores,
   });
 
-  // Ejecutar las consultas al montar el componente
   useEffect(() => {
     fetchCategorias();
     fetchUnidades();
   }, []);
 
-  // Función para manejar el envío del formulario
   const onSubmit = async (data) => {
     try {
-      // Crear un objeto FormData
       const formData = new FormData();
 
-      // Agregar campos al FormData
       for (const key in data) {
         if (key === "pdf_file" || key === "image_file") {
-          // Si es un campo de archivo, agrega el primer archivo del FileList
           if (data[key] && data[key][0]) {
             formData.append(key, data[key][0]);
           }
+        } else if (key === "transferir_inventario") {
+          // Convertimos el booleano a 1 o 0 para Laravel
+          formData.append(key, data[key] ? 1 : 0);
         } else {
-          // Agrega otros campos (texto, números, etc.)
-          formData.append(key, data[key]);
+          // Evitar adjuntar campos undefined o nulos vacíos
+          if (data[key] !== undefined && data[key] !== null) {
+            formData.append(key, data[key]);
+          }
         }
       }
 
-      // Enviar la solicitud POST con FormData
       const response = await axiosInstance.post("/almacen/save", formData);
 
-      // Manejar la respuesta del servidor
       if (response.data.success) {
-        ToastAlert("success", "Registrado correctamente");
-        reset(); // Resetea el formulario después del envío exitoso
+        ToastAlert(
+          "success",
+          response.data.message || "Registrado correctamente",
+        );
+        reset();
+        // Opcional: Invalida las queries si tienes tablas escuchando
+        queryClient.invalidateQueries(["almacenes"]);
+        if (data.transferir_inventario) {
+          queryClient.invalidateQueries(["inventario"]);
+        }
       } else {
-        ToastAlert("error", "Ocurrió un error");
+        ToastAlert("error", "Ocurrió un error al guardar");
       }
     } catch (error) {
-      // Manejo de errores específicos
-      if (error.response) {
-        // El servidor respondió con un código de estado fuera del rango 2xx
-        ToastAlert(
-          "error",
-          error.response.data.message || "Error en el servidor",
-        );
-      } else if (error.request) {
-        // La solicitud fue hecha pero no se recibió respuesta
-        ToastAlert("error", "No se recibió respuesta del servidor");
-      } else {
-        // Algo sucedió en la configuración de la solicitud
-        ToastAlert("error", "Error de conexión");
-      }
+      const errorMsg =
+        error.response?.data?.message ||
+        error.response?.data?.errors?.[0] ||
+        "Error de conexión al servidor";
+      ToastAlert("error", errorMsg);
       console.error("Error al enviar el formulario:", error);
     }
   };
 
+  // Clases base para inputs reutilizables (Estilo Shadcn)
+  const inputClass =
+    "flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50";
+  const labelClass =
+    "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-1.5 block";
+  const errorClass = "text-[0.8rem] font-medium text-destructive mt-1";
+
   return (
-    <form id="productForm" onSubmit={handleSubmit(onSubmit)}>
-      <div className="almacen-card">
-        <div className="grid grid-cols-12 gap-3">
-          <div className="col-span-full md:col-span-6">
-            <div className="almacen-field">
-              <label
-                htmlFor="nombreProducto"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Nombre Producto/Activo
-              </label>
-              <input
-                type="text"
-                className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.nombreProducto ? "border-destructive focus-visible:ring-destructive" : ""}`}
-                id="nombreProducto"
-                placeholder="Nombre del producto"
-                {...register("nombreProducto", {
-                  required: "Este campo es obligatorio",
-                })}
-              />
-              {errors.nombreProducto && (
-                <div className="text-sm text-destructive">
-                  {errors.nombreProducto.message}
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="col-span-full md:col-span-6">
-            <div className="almacen-field">
-              <label
-                htmlFor="cantidad"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Cantidad
-              </label>
-              <input
-                type="number"
-                className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.cantidad ? "border-destructive focus-visible:ring-destructive" : ""}`}
-                id="cantidad"
-                placeholder="Cantidad"
-                {...register("cantidad", {
-                  required: "Este campo es obligatorio",
-                  min: {
-                    value: 1,
-                    message: "La cantidad debe ser mayor a 0",
-                  },
-                })}
-              />
-              {errors.cantidad && (
-                <div className="text-sm text-destructive">
-                  {errors.cantidad.message}
-                </div>
-              )}
-            </div>
-          </div>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="max-w-4xl mx-auto space-y-6 pb-8"
+    >
+      {/* SECCIÓN 1: DATOS PRINCIPALES */}
+      <div className="rounded-xl border bg-card text-card-foreground shadow-sm overflow-hidden">
+        <div className="flex flex-col space-y-1.5 p-6 border-b bg-muted/20">
+          <h3 className="font-semibold leading-none tracking-tight text-lg">
+            Información del Producto
+          </h3>
+          <p className="text-sm text-muted-foreground">
+            Ingrese los detalles generales para el almacén.
+          </p>
         </div>
 
-        <div className="grid grid-cols-12 gap-3 my-2">
-          <div className="col-span-full md:col-span-4">
-            <div className="almacen-field">
-              <label
-                htmlFor="precioUnit"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Precio Unitario S/.
-              </label>
-              <input
-                type="text"
-                className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.precioUnit ? "border-destructive focus-visible:ring-destructive" : ""}`}
-                id="precioUnit"
-                placeholder="Precio unitario"
-                {...register("precioUnit", {
-                  required: "Este campo es obligatorio",
-                  pattern: {
-                    value: /^\d+(\.\d{1,2})?$/,
-                    message: "Ingrese un precio válido",
-                  },
-                })}
-              />
-              {errors.precioUnit && (
-                <div className="text-sm text-destructive">
-                  {errors.precioUnit.message}
-                </div>
-              )}
-            </div>
+        <div className="p-6 grid grid-cols-1 md:grid-cols-12 gap-5">
+          <div className="md:col-span-8">
+            <label className={labelClass}>Nombre Producto/Activo *</label>
+            <input
+              type="text"
+              className={`${inputClass} ${errors.nombreProducto ? "border-destructive focus-visible:ring-destructive" : ""}`}
+              placeholder="Ej: Paracetamol 500mg"
+              {...register("nombreProducto", {
+                required: "El nombre es obligatorio",
+              })}
+            />
+            {errors.nombreProducto && (
+              <p className={errorClass}>{errors.nombreProducto.message}</p>
+            )}
           </div>
 
-          <div className="col-span-full md:col-span-4">
-            <div className="almacen-field">
-              <label
-                htmlFor="descripcion"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Descripción
-              </label>
-              <textarea
-                className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.descripcion ? "border-destructive focus-visible:ring-destructive" : ""}`}
-                id="descripcion"
-                rows={3}
-                placeholder="Descripción del producto"
-                {...register("descripcion", {
-                  required: "Este campo es obligatorio",
-                })}
-              />
-              {errors.descripcion && (
-                <div className="text-sm text-destructive">
-                  {errors.descripcion.message}
-                </div>
-              )}
-            </div>
+          <div className="md:col-span-4">
+            <label className={labelClass}>Marca *</label>
+            <input
+              type="text"
+              className={`${inputClass} ${errors.marca ? "border-destructive focus-visible:ring-destructive" : ""}`}
+              placeholder="Marca del producto"
+              {...register("marca", { required: "La marca es obligatoria" })}
+            />
+            {errors.marca && (
+              <p className={errorClass}>{errors.marca.message}</p>
+            )}
           </div>
 
-          <div className="col-span-full md:col-span-4">
-            <div className="almacen-field">
-              <label
-                htmlFor="marca"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Marca
-              </label>
-              <input
-                type="text"
-                className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.marca ? "border-destructive focus-visible:ring-destructive" : ""}`}
-                id="marca"
-                placeholder="Marca del producto"
-                {...register("marca", {
-                  required: "Este campo es obligatorio",
-                })}
-              />
-              {errors.marca && (
-                <div className="text-sm text-destructive">
-                  {errors.marca.message}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-12 gap-3 my-2">
-          <div className="col-span-full md:col-span-4">
-            <div className="almacen-field">
-              <label
-                htmlFor="categoria"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Categoría
-              </label>
-              <select
-                className={`h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.categoria ? "border-destructive focus-visible:ring-destructive" : ""}`}
-                id="categoria"
-                {...register("categoria", {
-                  required: "Este campo es obligatorio",
-                })}
-              >
-                <option value="">Seleccione una categoría</option>
-                {categorias.map((categoria) => (
-                  <option key={categoria.id} value={categoria.id}>
-                    {categoria.nombre}
-                  </option>
-                ))}
-              </select>
-              {errors.categoria && (
-                <div className="text-sm text-destructive">
-                  {errors.categoria.message}
-                </div>
-              )}
-            </div>
+          <div className="md:col-span-4">
+            <label className={labelClass}>Laboratorio</label>
+            <input
+              type="text"
+              className={inputClass}
+              placeholder="Ej: Bayer"
+              {...register("laboratorio")}
+            />
           </div>
 
-          <div className="col-span-full md:col-span-4">
-            <div className="almacen-field">
-              <label
-                htmlFor="unidad"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Unidad de Medida
-              </label>
-              <select
-                className={`h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.unidad ? "border-destructive focus-visible:ring-destructive" : ""}`}
-                id="unidad"
-                {...register("unidad", {
-                  required: "Este campo es obligatorio",
-                })}
-              >
-                <option value="">Seleccione una unidad</option>
-                {unidades.map((unidad) => (
-                  <option key={unidad.id} value={unidad.id}>
-                    {unidad.nombre}
-                  </option>
-                ))}
-              </select>
-              {errors.unidad && (
-                <div className="text-sm text-destructive">
-                  {errors.unidad.message}
-                </div>
-              )}
-            </div>
+          <div className="md:col-span-4">
+            <label className={labelClass}>Presentación *</label>
+            <input
+              type="text"
+              className={`${inputClass} ${errors.presentacion ? "border-destructive focus-visible:ring-destructive" : ""}`}
+              placeholder="Ej: Caja x 100"
+              {...register("presentacion", {
+                required: "La presentación es obligatoria",
+              })}
+            />
+            {errors.presentacion && (
+              <p className={errorClass}>{errors.presentacion.message}</p>
+            )}
           </div>
 
-          <div className="col-span-full md:col-span-4">
-            <div className="almacen-field">
-              <label
-                htmlFor="proveedor"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Proveedor
-              </label>
-              <select
-                className={`h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.proveedor ? "border-destructive focus-visible:ring-destructive" : ""}`}
-                id="proveedor"
-                {...register("proveedor", {
-                  required: "Este campo es obligatorio",
-                })}
-              >
-                <option value="">Seleccione un proveedor</option>
-                {dataProveedores
-                  .filter((proveedor) => proveedor.estado == 1)
-                  .map((proveedor) => (
-                    <option key={proveedor.id} value={proveedor.id}>
-                      {proveedor.nombre}
-                    </option>
-                  ))}
-              </select>
-              {errors.proveedor && (
-                <div className="text-sm text-destructive">
-                  {errors.proveedor.message}
-                </div>
-              )}
-            </div>
+          <div className="md:col-span-4">
+            <label className={labelClass}>Reg. Sanitario</label>
+            <input
+              type="text"
+              className={inputClass}
+              placeholder="Opcional"
+              {...register("registro_sanitario")}
+            />
+          </div>
+
+          <div className="md:col-span-12">
+            <label className={labelClass}>Descripción *</label>
+            <textarea
+              rows={2}
+              className={`flex min-h-[60px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring ${errors.descripcion ? "border-destructive focus-visible:ring-destructive" : ""}`}
+              placeholder="Breve descripción del producto..."
+              {...register("descripcion", {
+                required: "La descripción es obligatoria",
+              })}
+            />
+            {errors.descripcion && (
+              <p className={errorClass}>{errors.descripcion.message}</p>
+            )}
           </div>
         </div>
+      </div>
 
-        <div className="almacen-file-group">
-          <div className="almacen-field mb-3">
-            <label
-              htmlFor="pdf_file"
-              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+      {/* SECCIÓN 2: INVENTARIO Y CATEGORIZACIÓN */}
+      <div className="rounded-xl border bg-card text-card-foreground shadow-sm overflow-hidden">
+        <div className="p-6 grid grid-cols-1 md:grid-cols-12 gap-5">
+          <div className="md:col-span-4">
+            <label className={labelClass}>Cantidad *</label>
+            <input
+              type="number"
+              className={`${inputClass} ${errors.cantidad ? "border-destructive focus-visible:ring-destructive" : ""}`}
+              placeholder="0"
+              {...register("cantidad", {
+                required: "La cantidad es obligatoria",
+                min: { value: 1, message: "Debe ser mayor a 0" },
+              })}
+            />
+            {errors.cantidad && (
+              <p className={errorClass}>{errors.cantidad.message}</p>
+            )}
+          </div>
+
+          <div className="md:col-span-4">
+            <label className={labelClass}>Precio Unitario (S/.) *</label>
+            <input
+              type="number"
+              step="0.01"
+              className={`${inputClass} ${errors.precioUnit ? "border-destructive focus-visible:ring-destructive" : ""}`}
+              placeholder="0.00"
+              {...register("precioUnit", {
+                required: "El precio es obligatorio",
+                min: { value: 0, message: "No puede ser negativo" },
+              })}
+            />
+            {errors.precioUnit && (
+              <p className={errorClass}>{errors.precioUnit.message}</p>
+            )}
+          </div>
+
+          <div className="md:col-span-4">
+            <label className={labelClass}>Fecha de Vencimiento</label>
+            <input
+              type="date"
+              className={inputClass}
+              {...register("fecha_vencimiento")}
+            />
+          </div>
+
+          <div className="md:col-span-3">
+            <label className={labelClass}>Lote</label>
+            <input
+              type="text"
+              className={inputClass}
+              placeholder="LT-..."
+              {...register("lote")}
+            />
+          </div>
+
+          <div className="md:col-span-3">
+            <label className={labelClass}>Categoría *</label>
+            <select
+              className={`${inputClass} appearance-auto ${errors.categoria ? "border-destructive" : ""}`}
+              {...register("categoria", { required: "Requerido" })}
             >
-              Seleccionar PDF
+              <option value="">Seleccione...</option>
+              {categorias.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.nombre}
+                </option>
+              ))}
+            </select>
+            {errors.categoria && (
+              <p className={errorClass}>{errors.categoria.message}</p>
+            )}
+          </div>
+
+          <div className="md:col-span-3">
+            <label className={labelClass}>Unidad de Medida *</label>
+            <select
+              className={`${inputClass} appearance-auto ${errors.unidad ? "border-destructive" : ""}`}
+              {...register("unidad", { required: "Requerido" })}
+            >
+              <option value="">Seleccione...</option>
+              {unidades.map((uni) => (
+                <option key={uni.id} value={uni.id}>
+                  {uni.nombre}
+                </option>
+              ))}
+            </select>
+            {errors.unidad && (
+              <p className={errorClass}>{errors.unidad.message}</p>
+            )}
+          </div>
+
+          <div className="md:col-span-3">
+            <label className={labelClass}>Proveedor *</label>
+            <select
+              className={`${inputClass} appearance-auto ${errors.proveedor ? "border-destructive" : ""}`}
+              {...register("proveedor", { required: "Requerido" })}
+            >
+              <option value="">Seleccione...</option>
+              {dataProveedores
+                .filter((prov) => prov.estado == 1)
+                .map((prov) => (
+                  <option key={prov.id} value={prov.id}>
+                    {prov.nombre}
+                  </option>
+                ))}
+            </select>
+            {errors.proveedor && (
+              <p className={errorClass}>{errors.proveedor.message}</p>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* SECCIÓN 3: DOCUMENTACIÓN Y FIRMAS */}
+      <div className="rounded-xl border bg-card text-card-foreground shadow-sm overflow-hidden">
+        <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-2">
+            <label className={labelClass}>
+              <div className="flex items-center gap-2">
+                <FileText className="w-4 h-4 text-muted-foreground" />
+                Documento Respaldo (PDF) *
+              </div>
             </label>
             <input
               type="file"
-              className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.pdf_file ? "border-destructive focus-visible:ring-destructive" : ""}`}
-              id="pdf_file"
               accept="application/pdf"
-              {...register("pdf_file", {
-                required: "Este campo es obligatorio",
-              })}
+              className={`${inputClass} pt-1 ${errors.pdf_file ? "border-destructive" : ""}`}
+              {...register("pdf_file")}
             />
             {errors.pdf_file && (
-              <div className="text-sm text-destructive">
-                {errors.pdf_file.message}
-              </div>
+              <p className={errorClass}>{errors.pdf_file.message}</p>
             )}
-            <small className="almacen-helptext success">
-              <i className="fas fa-exclamation-circle"></i> Cargar archivo
-              firmado por Administrador/Finanzas
-            </small>
+            <p className="text-[0.8rem] text-muted-foreground">
+              Cargue la guía o factura (Máx 10MB).
+            </p>
           </div>
 
-          <div className="almacen-field">
-            <label
-              htmlFor="image_file"
-              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-            >
-              Cargar Firma
+          <div className="space-y-2">
+            <label className={labelClass}>
+              <div className="flex items-center gap-2">
+                <PenTool className="w-4 h-4 text-muted-foreground" />
+                Firma de Conformidad (Imagen) *
+              </div>
             </label>
             <input
               type="file"
-              className={`h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.image_file ? "border-destructive focus-visible:ring-destructive" : ""}`}
-              id="image_file"
               accept="image/*"
-              {...register("image_file", {
-                required: "Este campo es obligatorio",
-              })}
+              className={`${inputClass} pt-1 ${errors.image_file ? "border-destructive" : ""}`}
+              {...register("image_file", {})}
             />
             {errors.image_file && (
-              <div className="text-sm text-destructive">
-                {errors.image_file.message}
-              </div>
+              <p className={errorClass}>{errors.image_file.message}</p>
             )}
-            <small className="almacen-helptext warning">
-              <i className="fas fa-exclamation-circle"></i> El archivo cargado
-              no debe ser pesado
-            </small>
+            <p className="text-[0.8rem] text-muted-foreground">
+              Imagen de la firma (JPG/PNG). No debe ser pesada.
+            </p>
           </div>
         </div>
+      </div>
 
-        <div className="almacen-footer">
-          <Button
-            type="submit"
-            className="btn-guardar inline-flex items-center gap-2"
-            variant="default"
-          >
-            <SaveAll />
-            Guardar Registro
-          </Button>
-        </div>
+      {/* SECCIÓN 4: INTERRUPTOR Y GUARDAR */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
+        {/* Switch personalizado con Tailwind */}
+        <label className="flex items-center gap-3 cursor-pointer group">
+          <div className="relative">
+            <Controller
+              name="transferir_inventario"
+              control={control}
+              render={({ field }) => (
+                <input
+                  type="checkbox"
+                  className="sr-only"
+                  checked={field.value}
+                  onChange={(e) => field.onChange(e.target.checked)}
+                />
+              )}
+            />
+            <div
+              className={`block w-11 h-6 rounded-full transition-colors ${isTransfering ? "bg-primary" : "bg-muted-foreground/30"}`}
+            ></div>
+            <div
+              className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform duration-200 ease-in-out ${isTransfering ? "translate-x-5" : "translate-x-0"}`}
+            ></div>
+          </div>
+          <div className="flex flex-col">
+            <span className="text-sm font-semibold text-foreground">
+              Transferir a Inventario
+            </span>
+            <span className="text-[0.8rem] text-muted-foreground">
+              {isTransfering
+                ? "El stock ingresará al almacén y pasará directo a ventas."
+                : "El stock se quedará en el almacén central."}
+            </span>
+          </div>
+        </label>
+
+        <Button
+          type="submit"
+          disabled={isSubmitting}
+          className="w-full sm:w-auto flex items-center gap-2 px-8"
+        >
+          {isSubmitting ? (
+            <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+          ) : isTransfering ? (
+            <CheckCircle2 className="w-4 h-4" />
+          ) : (
+            <SaveAll className="w-4 h-4" />
+          )}
+          {isSubmitting
+            ? "Guardando..."
+            : isTransfering
+              ? "Guardar y Transferir"
+              : "Guardar en Almacén"}
+        </Button>
       </div>
     </form>
   );

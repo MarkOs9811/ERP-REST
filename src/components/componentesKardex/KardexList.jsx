@@ -10,6 +10,7 @@ import {
   CalendarDays,
   FileText,
 } from "lucide-react";
+import { Badge } from "../ui/badge";
 
 export function KardexList({ search }) {
   const [kardex, setKardex] = useState([]);
@@ -93,13 +94,13 @@ export function KardexList({ search }) {
         return (
           <div className="flex items-center justify-center">
             {isEntrada ? (
-              <span className="kardex-chip-tipo kardex-chip-tipo-entrada">
+              <Badge variant="ghost" className="bg-green-200/80 text-green-700">
                 <ArrowUpRight size={16} /> Entrada
-              </span>
+              </Badge>
             ) : (
-              <span className="kardex-chip-tipo kardex-chip-tipo-salida">
+              <Badge variant="destructive">
                 <ArrowDownLeft size={16} /> Salida
-              </span>
+              </Badge>
             )}
           </div>
         );
@@ -149,7 +150,9 @@ export function KardexList({ search }) {
       grow: 1,
       cell: (row) => {
         return (
-          <p className="mb-0 font-bold kardex-numeric-chip">{row.stock_actual}</p>
+          <p className="mb-0 font-bold kardex-numeric-chip">
+            {row.stock_actual}
+          </p>
         );
       },
       center: true,

@@ -310,13 +310,11 @@ export function AlmacenList({ search, updateList }) {
         title={"Agregar Stock al Producto"}
         hideFooter={true}
       >
-        {({ hanldeClose }) => (
-          <AlmacenStockAdd
-            handleCloseModal={hanldeClose}
-            producto={idProductoEdit}
-            onAlmacenUpdate={handleAlmacenUpdated}
-          />
-        )}
+        <AlmacenStockAdd
+          handleCloseModal={handleCloseModal}
+          producto={idProductoEdit}
+          onAlmacenUpdate={handleAlmacenUpdated}
+        />
       </ModalRight>
 
       <ModalAlertQuestion
