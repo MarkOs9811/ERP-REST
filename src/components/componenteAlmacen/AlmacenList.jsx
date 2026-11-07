@@ -16,6 +16,9 @@ import { useNavigate } from "react-router-dom";
 import ModalRight from "../componentesReutilizables/ModalRight";
 import { FormularioEditarAlmacen } from "./FormularioEditarAlmacen";
 import AccionesAlmacenList from "./AccionesAlmacenList";
+import ToastAlert from "../componenteToast/ToastAlert";
+import { Badge } from "../ui/badge";
+import { AlertCircleIcon } from "lucide-react";
 
 export function AlmacenList({ search, updateList }) {
   const navigate = useNavigate();
@@ -151,15 +154,15 @@ export function AlmacenList({ search, updateList }) {
         `/almacen/eliminar/${idActivo}`,
       );
       if (response.data.success) {
-        toast.success("Activo desactivado correctamente");
+        ToastAlert("info", "Activo desactivado correctamente");
         queryClient.invalidateQueries({ queryKey: ["almacen"] });
         return true;
       } else {
-        toast.error("Ocurrió un error al desactivar");
+        ToastAlert("error", "Ocurrió un error al desactivar");
         return false;
       }
     } catch (error) {
-      toast.error("Error en la conexión");
+      ToastAlert("error", "Error en la conexión");
       return false;
     }
   };
@@ -168,15 +171,15 @@ export function AlmacenList({ search, updateList }) {
     try {
       const response = await axiosInstance.post(`/almacen/activar/${idActivo}`);
       if (response.data.success) {
-        toast.success("Producto activado correctamente");
+        ToastAlert("info", "Producto activado correctamente");
         queryClient.invalidateQueries({ queryKey: ["almacen"] });
         return true;
       } else {
-        toast.error("Ocurrió un error al activar");
+        ToastAlert("error", "Ocurrió un error al activar");
         return false;
       }
     } catch (error) {
-      toast.error("Error en la conexión");
+      ToastAlert("error", "Error en la conexión");
       return false;
     }
   };
@@ -243,14 +246,24 @@ export function AlmacenList({ search, updateList }) {
     },
     {
       name: "Producto",
-      selector: (row) => row.nombre || "No disponible",
+      selector: (row) => row?.nombre || "No disponible",
       sortable: true,
       wrap: true,
       center: false,
     },
     {
+      name: "Laboratorio",
+      selector: (row) => row?.laboratorio || "no disponible",
+      sortable: true,
+    },
+    {
       name: "Marca",
-      selector: (row) => row.marca || "no disponible",
+      selector: (row) => row?.marca || "no disponible",
+      sortable: true,
+    },
+    {
+      name: "Lote",
+      selector: (row) => row?.lote || "no disponible",
       sortable: true,
     },
     {
@@ -260,15 +273,11 @@ export function AlmacenList({ search, updateList }) {
         return (
           <div>
             {stock <= 5 ? (
-              <>
-                <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-destructive">
-                  {stock}
-                </span>
-              </>
+              <Badge variant="destructive">{stock}</Badge>
             ) : (
-              <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-emerald-600">
+              <Badge variant="success" className={"bg-green-500"}>
                 {stock}
-              </span>
+              </Badge>
             )}
           </div>
         );
@@ -282,20 +291,71 @@ export function AlmacenList({ search, updateList }) {
       wrap: true,
     },
     {
-      name: "Medida",
-      selector: (row) => row.unidad.nombre || "No disponible",
+      name: "F.Venc",
+      selector: (row) => {
+        const today = new Date();
+        const oneMonthAhead = new Date(today);
+        oneMonthAhead.setMonth(today.getMonth() + 1); // Fecha dentro de 1 mes
+        const fechaVencimiento = new Date(row?.fecha_vencimiento);
+
+        // Determina si está por vencer, vencido o no
+        const isNearExpiry =
+          fechaVencimiento > today && fechaVencimiento <= oneMonthAhead;
+        const isExpired = fechaVencimiento < today;
+
+        return (
+          <div>
+            {isNearExpiry ? (
+              <>
+                <span className="flex flex-col items-start text-muted-foreground">
+                  <span>{row?.fecha_vencimiento}</span>
+                  <div className="flex items-center">
+                    <small>
+                      <AlertCircleIcon className="text-auto me-2" size={20} />
+                    </small>
+                    <span>Por Vencer</span>
+                  </div>
+                </span>
+              </>
+            ) : isExpired ? (
+              <>
+                <span className="flex flex-col items-start text-destructive">
+                  <span>{row?.fecha_vencimiento}</span>
+                  <div className="flex items-center">
+                    <small>
+                      <AlertCircleIcon className="me-2 text-auto" size={20} />
+                    </small>
+                    <span>Vencido</span>
+                  </div>
+                </span>
+              </>
+            ) : (
+              <span className="text-emerald-600 dark:text-emerald-400">
+                {row?.fecha_vencimiento}
+              </span>
+            )}
+          </div>
+        );
+      },
+      sortable: true,
+      wrap: true,
+      center: false,
+    },
+    {
+      name: "Presentación",
+      selector: (row) => row?.presentacion || "No disponible",
       sortable: true,
       wrap: true,
     },
     {
       name: "Categoria",
-      selector: (row) => row.categoria.nombre || "Categoria no disponible",
+      selector: (row) => row?.categoria?.nombre || "Categoria no disponible",
       sortable: true,
       wrap: true,
     },
     {
       name: "Proveedor",
-      selector: (row) => row.proveedor.nombre || "Proveedor no disponible",
+      selector: (row) => row?.proveedor?.nombre || "Proveedor no disponible",
       sortable: true,
       wrap: true,
     },

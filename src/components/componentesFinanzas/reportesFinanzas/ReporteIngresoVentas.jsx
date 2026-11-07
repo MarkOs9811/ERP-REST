@@ -16,7 +16,6 @@ import { useRef, useState } from "react";
 import { useGenerarReporte } from "../../../hooks/GenerarPdfReporte";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
-
 export function ReporteIngresoVentas() {
   const navigate = useNavigate();
   const reporteRef = useRef();

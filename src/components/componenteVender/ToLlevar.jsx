@@ -170,39 +170,37 @@ export function ToLlevar() {
               <h2 className="mb-0 text-sm font-semibold tracking-tight text-foreground">
                 Para llevar
               </h2>
-                <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="relative h-8 gap-2 rounded-lg border-border/70 px-3"
+                  aria-controls="offcanvasColaLlevar"
+                  aria-haspopup="dialog"
+                  aria-expanded={colaAbierta}
+                  onClick={() => setColaAbierta(true)}
+                >
+                  <ListOrderedIcon className="size-4" strokeWidth={1.8} />
+                  Cola
+                  {pedidosLlevarPendientes?.length > 0 && (
+                    <span className="absolute -right-1.5 -top-1.5 inline-flex min-w-5 items-center justify-center rounded-full border border-background bg-primary px-1.5 py-0.5 text-[10px] font-semibold leading-none text-primary-foreground">
+                      {pedidosLlevarPendientes.length}
+                    </span>
+                  )}
+                </Button>
+                {items.length > 0 && (
                   <Button
                     size="sm"
-                    variant="outline"
-                    className="relative h-8 gap-2 rounded-lg border-border/70 px-3"
-                    aria-controls="offcanvasColaLlevar"
-                    aria-haspopup="dialog"
-                    aria-expanded={colaAbierta}
-                    onClick={() => setColaAbierta(true)}
+                    className="h-8 gap-1.5 rounded-lg"
+                    onClick={handleEliminarTodo}
+                    title="Limpiar cuenta"
+                    variant="destructive"
                   >
-                    <ListOrderedIcon className="size-4" strokeWidth={1.8} />
-                    Cola
-                    {pedidosLlevarPendientes?.length > 0 && (
-                      <span
-                        className="absolute -right-1.5 -top-1.5 inline-flex min-w-5 items-center justify-center rounded-full border border-background bg-primary px-1.5 py-0.5 text-[10px] font-semibold leading-none text-primary-foreground"
-                      >
-                        {pedidosLlevarPendientes.length}
-                      </span>
-                    )}
+                    <Trash2 className="size-3.5" />
+                    <span>Limpiar</span>
                   </Button>
-                  {items.length > 0 && (
-                    <Button
-                      size="sm"
-                      className="h-8 gap-1.5 rounded-lg"
-                      onClick={handleEliminarTodo}
-                      title="Limpiar cuenta"
-                      variant="destructive"
-                    >
-                      <Trash2 className="size-3.5" />
-                      <span>Limpiar</span>
-                    </Button>
-                  )}
-                </div>
+                )}
+              </div>
             </CardHeader>
 
             <CardContent className="min-h-0 flex-1 overflow-auto p-0">
@@ -213,7 +211,10 @@ export function ToLlevar() {
                   <table className="w-full text-sm [&_th]:border-0 [&_td]:border-0">
                     <thead className="sticky top-0 border-b bg-background text-xs text-muted-foreground">
                       <tr>
-                        <th scope="col" className="py-2.5 pl-3 text-left font-medium">
+                        <th
+                          scope="col"
+                          className="py-2.5 pl-3 text-left font-medium"
+                        >
                           Desc.
                         </th>
                         <th
@@ -232,7 +233,10 @@ export function ToLlevar() {
                     </thead>
                     <tbody>
                       {items.map((item) => (
-                        <tr key={item.id} className="border-b border-border/50 last:border-0">
+                        <tr
+                          key={item.id}
+                          className="border-b border-border/50 last:border-0"
+                        >
                           <td className="py-2.5 pl-3">
                             <div className="flex flex-col">
                               <span className="line-clamp-2 text-sm font-medium text-foreground">
@@ -270,9 +274,7 @@ export function ToLlevar() {
                               </Button>
                             </div>
                           </td>
-                          <td
-                            className="py-2.5 pr-3 text-right font-medium text-foreground"
-                          >
+                          <td className="py-2.5 pr-3 text-right font-medium text-foreground">
                             S/. {(item.cantidad * item.precio).toFixed(2)}
                           </td>
                           <td className="py-2 text-center pr-2">
@@ -302,9 +304,7 @@ export function ToLlevar() {
             </CardContent>
 
             {/* Footer: Totales y Botón Pagar */}
-            <CardFooter
-              className="z-10 flex-col items-stretch gap-3 border-t bg-background p-3"
-            >
+            <CardFooter className="z-10 flex-col items-stretch gap-3 border-t bg-background p-3">
               {/* SECCIÓN NUEVA: Input de Descripción General */}
               <div className="space-y-1.5">
                 <label className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">

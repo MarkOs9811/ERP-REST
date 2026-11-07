@@ -73,11 +73,6 @@ export function DestinoTransferir() {
       return;
     }
 
-    if (!archivo) {
-      ToastAlert("warning", "Debe adjuntar un archivo primero.");
-      return;
-    }
-
     if (productoSeleccionado.length === 0) {
       ToastAlert("warning", "Debe seleccionar al menos un producto.");
       return;
@@ -199,9 +194,7 @@ export function DestinoTransferir() {
       <Button
         className="btn-guardar w-full p-3"
         onClick={handleConfirmar}
-        disabled={
-          loading || !idDestino || !archivo || productoSeleccionado.length === 0
-        }
+        disabled={loading || !idDestino || productoSeleccionado.length === 0}
         variant="default"
       >
         {loading ? "Transfiriendo..." : "Transferir"}

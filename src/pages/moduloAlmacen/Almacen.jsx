@@ -1,18 +1,23 @@
 import { AlmacenList } from "../../components/componenteAlmacen/AlmacenList";
 import { useNavigate } from "react-router-dom";
 import { ContenedorPrincipal } from "../../components/componentesReutilizables/ContenedorPrincipal";
-import { FileText, Plus, Search } from "lucide-react";
+import { FileText, Plus, Search, Upload } from "lucide-react";
 import { useState } from "react";
 import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteExcel";
 import { Button } from "../../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { ModalCargaMasiva } from "@/components/componenteAlmacen/ModalCargaMasiva";
+import ModalRight from "@/components/componentesReutilizables/ModalRight";
+import { useQueryClient } from "@tanstack/react-query";
 
 export function Almacen() {
   const [updateList, setUpdateList] = useState(false);
+  const [modalCargaAbierto, setModalCargaAbierto] = useState(false); // Estado para el modal
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
-
+  const queryClient = useQueryClient();
+  
   const handleCloseModal = () => {
     setUpdateList((prev) => !prev);
   };
@@ -20,7 +25,9 @@ export function Almacen() {
   const handleAgregar = () => {
     navigate("/almacen/registro");
   };
-
+  const recargarTabla = () => {
+    queryClient.invalidateQueries({ queryKey: ["almacen"] });
+  };
   return (
     <div>
       <Card className="rounded-2xl border border-border/70 bg-card shadow-sm ring-0 flex flex-col py-2">
@@ -71,6 +78,15 @@ export function Almacen() {
                 <Plus size={18} />
                 Agregar
               </Button>
+              <Button
+                size="lg"
+                type="button"
+                className="flex-1 sm:flex-none gap-2 px-3 h-9 bg-emerald-600 hover:bg-emerald-700 text-white"
+                onClick={() => setModalCargaAbierto(true)}
+              >
+                <Upload size={18} />
+                Importar
+              </Button>
             </div>
           </div>
         </CardHeader>
@@ -82,6 +98,20 @@ export function Almacen() {
           <AlmacenList search={search} updateList={updateList} />
         </CardContent>
       </Card>
+
+      {/* RENDERIZAR EL MODAL AQUÍ */}
+      <ModalRight
+        isOpen={modalCargaAbierto}
+        onClose={() => setModalCargaAbierto(false)}
+        title="Importar Catálogo de DIGEMID"
+        width="30%"
+        hideFooter
+      >
+        <ModalCargaMasiva
+          handleClose={() => setModalCargaAbierto(false)}
+          onUpdate={recargarTabla}
+        />
+      </ModalRight>
     </div>
   );
 }

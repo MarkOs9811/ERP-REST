@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { NavLink, Link, useLocation } from "react-router-dom";
 import {
   Bike,
   ChefHat,
@@ -53,6 +53,7 @@ export default function LayoutPOS({ children }) {
   const puedeAtender = ["atencion al cliente", "administrador"].includes(
     cargoNombre,
   );
+
   const navigation = [
     esComida &&
       puedeAtender && {
@@ -90,6 +91,7 @@ export default function LayoutPOS({ children }) {
     <div className="flex h-dvh min-h-[480px] w-full flex-col overflow-hidden bg-muted/30 text-foreground">
       <header className="relative z-20 shrink-0 border-b border-border/70 bg-background/95 shadow-sm backdrop-blur supports-backdrop-filter:bg-background/85">
         <div className="mx-auto flex min-h-16 w-full max-w-[1920px] flex-wrap items-center gap-x-4 gap-y-2 px-3 py-2 sm:px-5 lg:flex-nowrap lg:px-6">
+          {/* Logo y Nombre Empresa */}
           <div className="flex min-w-0 items-center gap-3 lg:w-56 lg:shrink-0">
             {miEmpresa.logo_url ? (
               <img
@@ -107,36 +109,30 @@ export default function LayoutPOS({ children }) {
             </span>
           </div>
 
+          {/* Navegación Principal con NavLink de React Router */}
           <nav
             aria-label="Navegación de ventas"
-            className="-mx-1 flex min-w-0 flex-1 items-center gap-1 overflow-x-auto px-1 pb-0.5 lg:mx-0"
+            className="-mx-1 flex min-w-0 flex-1 items-center gap-2 overflow-x-auto px-1 pb-0.5 lg:mx-0"
           >
-            {navigation.map(({ to, label, icon: Icon }) => {
-              const isActive = location.pathname === to;
-              return (
-                <Button
-                  key={to}
-                  asChild
-                  size="default"
-                  variant={isActive ? "secondary" : "ghost"}
-                  className={`shrink-0 gap-2 rounded-lg px-3 ${
+            {navigation.map(({ to, label, icon: Icon }) => (
+              <NavLink
+                key={to}
+                to={to}
+                className={({ isActive }) =>
+                  `flex shrink-0 items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                     isActive
-                      ? "bg-secondary text-secondary-foreground shadow-sm"
-                      : "text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  <Link
-                    to={to}
-                    aria-current={isActive ? "page" : undefined}
-                  >
-                    <Icon className="size-4" strokeWidth={1.8} />
-                    {label}
-                  </Link>
-                </Button>
-              );
-            })}
+                      ? "bg-green-600 text-white shadow-sm"
+                      : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+                  }`
+                }
+              >
+                <Icon className="size-4" strokeWidth={1.8} />
+                {label}
+              </NavLink>
+            ))}
           </nav>
 
+          {/* Info de Caja y Botones */}
           <div className="flex w-full flex-wrap items-center justify-between gap-2 border-t border-border/60 pt-2 sm:justify-end lg:w-auto lg:shrink-0 lg:border-0 lg:pt-0">
             <div className="flex min-w-0 items-center gap-2 text-xs">
               <span className="hidden items-center gap-1.5 text-muted-foreground xl:inline-flex">
@@ -162,14 +158,24 @@ export default function LayoutPOS({ children }) {
 
             <div className="flex shrink-0 items-center gap-1.5">
               {puedeAtender && caja?.estado === "abierto" && (
-                <Button asChild size="sm" variant="outline" className="gap-2 border-border/70">
-                  <Link to="/vender/cerrarCaja">
-                    <LockKeyhole className="size-3.5" strokeWidth={1.8} />
-                    <span className="hidden sm:inline">Cerrar caja</span>
-                  </Link>
-                </Button>
+                <NavLink
+                  to="/vender/cerrarCaja"
+                  className={({ isActive }) =>
+                    `flex items-center gap-1.5 rounded-lg  px-3 py-2 text-sm font-medium transition-colors hover:bg-destructive/10
+                  
+                  ${isActive ? "bg-destructive text-white shadow-sm" : "text-destructive"}`
+                  }
+                >
+                  <LockKeyhole className="size-3.5" strokeWidth={1.8} />
+                  <span className="hidden sm:inline">Cerrar caja</span>
+                </NavLink>
               )}
-              <Button asChild size="sm" variant="ghost" className="gap-2 text-muted-foreground hover:text-foreground">
+              <Button
+                asChild
+                size="sm"
+                variant="ghost"
+                className="gap-2 text-muted-foreground hover:text-foreground"
+              >
                 <Link to="/">
                   <LogOut className="size-3.5" strokeWidth={1.8} />
                   Salir
@@ -181,7 +187,9 @@ export default function LayoutPOS({ children }) {
       </header>
 
       <main className="min-h-0 flex-1 overflow-y-auto overscroll-contain bg-muted/30 p-3 sm:p-4">
-        <div className="mx-auto h-full min-h-0 w-full max-w-[1920px]">{children}</div>
+        <div className="mx-auto h-full min-h-0 w-full max-w-[1920px]">
+          {children}
+        </div>
       </main>
     </div>
   );
