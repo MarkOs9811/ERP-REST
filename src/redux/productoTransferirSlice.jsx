@@ -26,14 +26,14 @@ const productoTransferirSlice = createSlice({
 
         existingItem.cantidad += 1;
       } else {
-        if (stockDisponible <= 0) {
-          return;
-        }
+        // if (stockDisponible <= 0) {
+        //   return;
+        // }
 
         state.items.push({
           id,
           nombre,
-          cantidad: 1,
+          cantidad: 0,
           marca,
           descripcion,
           presentacion,

@@ -170,18 +170,6 @@ export function InventarioList({ search }) {
                   }}
                   title="Eliminar Producto"
                 />
-
-                <Button
-                  className="btn-desactivar"
-                  onClick={() => {
-                    setQuestionEliminar(true);
-                    setdataProducto(row);
-                  }}
-                  title="Ocultar producto"
-                  variant="outline"
-                >
-                  <FontAwesomeIcon icon={faEyeSlash} />
-                </Button>
               </>
             ) : (
               <Button

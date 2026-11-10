@@ -28,7 +28,7 @@ import {
   ListOrderedIcon, // Icono para cliente/nota
 } from "lucide-react";
 import { BuscadorPlatos } from "./tareasVender/BuscadorPlatos";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { CondicionCarga } from "../componentesReutilizables/CondicionCarga";
 import { GetConfi } from "../../service/accionesConfiguracion/GetConfi";
 import { GetInventario } from "../../service/GetInventario";
@@ -45,6 +45,7 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
+import ToastAlert from "../componenteToast/ToastAlert";
 
 export function ToLlevar() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -160,13 +161,36 @@ export function ToLlevar() {
     navigate("/vender/mesas/detallesPago");
   };
 
+  const itemsRef = useRef(items);
+  useEffect(() => {
+    itemsRef.current = items;
+  }, [items]);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "F4") {
+        e.preventDefault();
+        if (itemsRef.current.length > 0) {
+          hanldleRealizarPago();
+        } else {
+          ToastAlert("info", "No hay productos en la cuenta para cobrar.");
+        }
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [items]);
+
   return (
     <div className="min-h-full bg-transparent lg:h-full lg:min-h-0">
       <div className="grid min-h-full grid-cols-1 gap-3 lg:h-full lg:min-h-0 lg:grid-cols-12">
         <div className="order-2 min-h-[28rem] lg:order-2 lg:col-span-4 lg:min-h-0 xl:col-span-3">
           <Card className="h-full min-h-0 flex flex-col overflow-hidden rounded-xl border-border/70 py-0 shadow-none">
             {/* Header: Título y Botón Eliminar (Reubicado) */}
-            <CardHeader className="m-0 flex items-center justify-between border-b bg-background px-3 py-3">
+            <CardHeader className="m-0 flex items-center justify-between border-b   px-3 py-3">
               <h2 className="mb-0 text-sm font-semibold tracking-tight text-foreground">
                 Para llevar
               </h2>
@@ -209,7 +233,7 @@ export function ToLlevar() {
               {items.length > 0 ? (
                 <div className="overflow-auto rounded-none">
                   <table className="w-full text-sm [&_th]:border-0 [&_td]:border-0">
-                    <thead className="sticky top-0 border-b bg-background text-xs text-muted-foreground">
+                    <thead className="sticky top-0 border-b   text-xs text-muted-foreground">
                       <tr>
                         <th
                           scope="col"
@@ -248,7 +272,7 @@ export function ToLlevar() {
                             </div>
                           </td>
                           <td className="py-2 text-center">
-                            <div className="mx-auto flex w-fit items-center justify-center rounded-lg border border-border/70 bg-background px-0.5">
+                            <div className="mx-auto flex w-fit items-center justify-center rounded-lg border border-border/70   px-0.5">
                               <Button
                                 size="icon-sm"
                                 className="size-7 text-muted-foreground"
@@ -304,14 +328,14 @@ export function ToLlevar() {
             </CardContent>
 
             {/* Footer: Totales y Botón Pagar */}
-            <CardFooter className="z-10 flex-col items-stretch gap-3 border-t bg-background p-3">
+            <CardFooter className="z-10 flex-col items-stretch gap-3 border-t   p-3">
               {/* SECCIÓN NUEVA: Input de Descripción General */}
               <div className="space-y-1.5">
                 <label className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
                   <Notebook className="size-3.5" /> Cliente / notas
                 </label>
                 <textarea
-                  className="min-h-14 w-full resize-none rounded-lg border border-input bg-background px-3 py-2 text-sm shadow-xs outline-none transition-colors placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring/40"
+                  className="min-h-14 w-full resize-none rounded-lg border border-input   px-3 py-2 text-sm shadow-xs outline-none transition-colors placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring/40"
                   rows="2"
                   placeholder="Ej.: Juan Pérez, sin cremas..."
                   value={descripcion}
@@ -348,14 +372,14 @@ export function ToLlevar() {
                 variant="default"
               >
                 <CheckCheckIcon className="size-4" />
-                Cobrar / enviar
+                Cobrar / enviar F2
               </Button>
             </CardFooter>
           </Card>
         </div>
-        <div className="order-1 min-h-[34rem] lg:order-1 lg:col-span-8 lg:min-h-0 xl:col-span-9">
+        <div className="order-1 min-h-136 lg:order-1 lg:col-span-8 lg:min-h-0 xl:col-span-9">
           <Card className="flex h-full min-h-0 flex-col overflow-hidden rounded-xl border-border/70 py-0 shadow-none">
-            <CardHeader className="m-0 flex flex-col items-stretch gap-3 border-b border-border/70 bg-background/90 px-3 py-3 sm:px-4">
+            <CardHeader className="m-0 flex flex-col items-stretch gap-3 border-b border-border/70  /90 px-3 py-3 sm:px-4">
               <div className="flex min-w-0 flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex min-w-0 items-center gap-2.5">
                   <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">

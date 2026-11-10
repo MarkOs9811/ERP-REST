@@ -1,7 +1,14 @@
 import { AlmacenList } from "../../components/componenteAlmacen/AlmacenList";
 import { useNavigate } from "react-router-dom";
 import { ContenedorPrincipal } from "../../components/componentesReutilizables/ContenedorPrincipal";
-import { FileText, Plus, Search, Upload } from "lucide-react";
+import {
+  ArrowBigLeft,
+  FileText,
+  FolderArchive,
+  Plus,
+  Search,
+  Upload,
+} from "lucide-react";
 import { useState } from "react";
 import { GetReporteExcel } from "../../service/accionesReutilizables/GetReporteExcel";
 import { Button } from "../../components/ui/button";
@@ -17,7 +24,7 @@ export function Almacen() {
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  
+
   const handleCloseModal = () => {
     setUpdateList((prev) => !prev);
   };
@@ -86,6 +93,16 @@ export function Almacen() {
               >
                 <Upload size={18} />
                 Importar
+              </Button>
+
+              <Button
+                onClick={() => {
+                  navigate("/almacen/transferencia");
+                }}
+                variant="outline"
+                size="lg"
+              >
+                <FolderArchive /> Transferir
               </Button>
             </div>
           </div>

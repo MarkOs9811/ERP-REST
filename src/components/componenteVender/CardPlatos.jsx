@@ -161,25 +161,23 @@ export const CardPlatos = ({
       </CardContent>
 
       {/* Footer (Botones de Acción) */}
-      <CardFooter className="mt-auto border-t border-border/60 bg-muted/20 p-2.5">
+      <CardFooter className="mt-auto border-t border-border/60 bg-muted/20 p-2">
         {isSelected ? (
-          <div className="flex h-9 w-full items-center justify-between rounded-lg border border-border/80 bg-background px-1 shadow-sm">
+          <div className="flex h-full w-full items-center justify-between rounded-lg border border-border/80 bg-background px-2 shadow-sm">
             <Button
               type="button"
-              variant="ghost"
-              className="size-7 p-0 rounded-md text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors"
+              className="size-7 p-5 bg-gray-200 border-gray-800  rounded-md text-gray-900 hover:bg-gray-600 hover:text-white  transition-colors"
               onClick={() => handleRemove(item.id)}
               aria-label={`Quitar unidad`}
             >
               <Minus className="size-4" />
             </Button>
-            <span className="min-w-8 text-center text-sm font-bold tabular-nums text-foreground">
+            <span className="min-w-8 p-5 text-center text-lg font-bold tabular-nums text-foreground">
               {cantidadEnCarrito}
             </span>
             <Button
               type="button"
-              variant="ghost"
-              className="size-7 p-0 rounded-md text-muted-foreground hover:bg-primary/10 hover:text-primary transition-colors"
+              className="size-7 p-5 bg-green-300 border-green-800 rounded-md text-green-900 hover:bg-green-600 hover:text-green-950 transition-colors"
               onClick={() => handleAdd(item)}
               disabled={sinStock || cantidadEnCarrito >= item.stock}
               aria-label={`Agregar unidad`}

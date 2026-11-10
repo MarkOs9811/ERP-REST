@@ -78,17 +78,28 @@ export function DestinoTransferir() {
       return;
     }
 
+    // EXCEPCIÓN: Es inválido si es menor a 0, O si es 0 PERO su stock disponible es mayor a 0.
+    // (Es decir, si el stock es 0 y la cantidad es 0, SÍ está permitido).
     const tieneCantidadInvalida = productoSeleccionado.some(
-      (item) => Number(item?.cantidad) <= 0,
+      (item) =>
+        Number(item?.cantidad) < 0 ||
+        (Number(item?.cantidad) === 0 && Number(item?.stock) > 0),
     );
+
     if (tieneCantidadInvalida) {
-      ToastAlert("warning", "Hay productos con cantidades inválidas.");
+      ToastAlert(
+        "warning",
+        "Hay productos con cantidades inválidas o ceros en productos con stock.",
+      );
       return;
     }
 
+    // Validación de stock excedido (se omite si ambos stock y cantidad son 0)
     const excedeStock = productoSeleccionado.find(
-      (item) => Number(item?.cantidad) > Number(item?.stock),
+      (item) =>
+        Number(item?.cantidad) > Number(item?.stock) && Number(item?.stock) > 0,
     );
+
     if (excedeStock) {
       ToastAlert(
         "warning",
@@ -99,7 +110,9 @@ export function DestinoTransferir() {
 
     const formData = new FormData();
     formData.append("idDestino", idDestino);
-    formData.append("archivo", archivo);
+    if (archivo) {
+      formData.append("archivo", archivo);
+    }
 
     // Adjuntar productos seleccionados en JSON
     const productosSimplificados = productoSeleccionado.map((item) => ({

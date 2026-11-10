@@ -118,7 +118,7 @@ export function RealizarPago({
 
   return (
     <Card className="flex h-full min-h-[440px] flex-col gap-0 overflow-hidden rounded-xl border-border/70 bg-card p-0 shadow-none">
-      <CardHeader className="border-b border-border/70 bg-background px-4 py-4">
+      <CardHeader className="border-b border-border/70  px-4 py-4">
         <h2 className="mb-0 text-base font-semibold tracking-tight text-foreground">
           Cobro y resumen
         </h2>
@@ -137,14 +137,12 @@ export function RealizarPago({
           {/* 1. SECCIÓN DE BÚSQUEDA AUTOMÁTICA COMPACTA */}
           {/* ========================================== */}
           <section className="space-y-2 rounded-lg border border-border/70 bg-muted/30 p-3">
-            <label
-              className="text-sm text-muted-foreground font-bold mb-1"
-            >
+            <label className="text-sm text-muted-foreground font-bold mb-1">
               Buscar en SUNAT/RENIEC (Opcional)
             </label>
             <div className="grid grid-cols-[auto_minmax(0,1fr)] gap-2">
               <select
-                className="h-10 rounded-md border border-input bg-background px-3 text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                className="h-10 rounded-md border border-input  px-3 text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                 value={tipoDocBusqueda}
                 onChange={(e) => {
                   setTipoDocBusqueda(e.target.value);
@@ -161,7 +159,7 @@ export function RealizarPago({
               <div className="relative min-w-0">
                 <input
                   type="text"
-                  className={`h-10 w-full rounded-md border border-input bg-background px-3 pr-9 text-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring ${
+                  className={`h-10 w-full rounded-md border border-input  px-3 pr-9 text-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring ${
                     errorBusqueda
                       ? "border-destructive focus-visible:ring-destructive"
                       : ""
@@ -176,14 +174,9 @@ export function RealizarPago({
                     setBusquedaExitosa(false);
                   }}
                 />
-                <div
-                  className="pointer-events-none absolute right-3 top-1/2 flex -translate-y-1/2 items-center"
-                >
+                <div className="pointer-events-none absolute right-3 top-1/2 flex -translate-y-1/2 items-center">
                   {isSearching ? (
-                    <Loader2
-                      size={16}
-                      className="text-primary"
-                    />
+                    <Loader2 size={16} className="text-primary" />
                   ) : (
                     <Search size={16} className="text-muted-foreground" />
                   )}
@@ -211,7 +204,7 @@ export function RealizarPago({
               <input
                 id="nombreReferencia"
                 type="text"
-                className={`h-10 w-full rounded-md border border-input bg-background px-3 pr-9 text-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring ${
+                className={`h-10 w-full rounded-md border border-input  px-3 pr-9 text-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring ${
                   errors.nombreReferencia
                     ? "border-destructive focus-visible:ring-destructive"
                     : busquedaExitosa
@@ -226,9 +219,7 @@ export function RealizarPago({
               />
               {/* 🔥 Icono flotante CheckCircle nativo de Lucide */}
               {busquedaExitosa && !errors.nombreReferencia && (
-                <div
-                  className="pointer-events-none absolute right-3 top-1/2 flex -translate-y-1/2 items-center"
-                >
+                <div className="pointer-events-none absolute right-3 top-1/2 flex -translate-y-1/2 items-center">
                   <CheckCircle
                     size={16}
                     className="text-emerald-600 dark:text-emerald-400"
@@ -236,9 +227,7 @@ export function RealizarPago({
                 </div>
               )}
               {errors.nombreReferencia && (
-                <div
-                  className="block text-xs text-destructive"
-                >
+                <div className="block text-xs text-destructive">
                   {errors.nombreReferencia.message}
                 </div>
               )}
@@ -259,7 +248,7 @@ export function RealizarPago({
               id="pagoCon"
               type="number"
               step="0.1"
-              className="h-11 w-full rounded-md border border-input bg-background px-3 text-lg font-semibold tabular-nums transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              className="h-11 w-full rounded-md border border-input  px-3 text-lg font-semibold tabular-nums transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
               placeholder="0.00"
               {...register("pagoCon")}
             />
@@ -306,7 +295,10 @@ export function RealizarPago({
                   Imprimir comprobante
                 </span>
               </div>
-              <label className="flex cursor-pointer items-center gap-2 text-xs text-muted-foreground" htmlFor="imprimirTicket">
+              <label
+                className="flex cursor-pointer items-center gap-2 text-xs text-muted-foreground"
+                htmlFor="imprimirTicket"
+              >
                 Activar
                 <input
                   className="size-4 cursor-pointer rounded border-input accent-primary"
@@ -324,7 +316,7 @@ export function RealizarPago({
                 className="mt-2 size-4 shrink-0 text-muted-foreground"
               />
               <textarea
-                className="min-h-16 w-full resize-y rounded-md border border-input bg-background px-3 py-2 text-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                className="min-h-16 w-full resize-y rounded-md border border-input  px-3 py-2 text-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                 rows="2"
                 placeholder="Observaciones..."
                 {...register("notas")}
@@ -336,7 +328,7 @@ export function RealizarPago({
         {/* ========================================== */}
         {/* TOTALES Y BOTÓN (Fijos al fondo) */}
         {/* ========================================== */}
-        <div className="mt-auto border-t border-border/70 bg-background p-4">
+        <div className="mt-auto border-t border-border/70  p-4">
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground text-sm">Sub Total</span>

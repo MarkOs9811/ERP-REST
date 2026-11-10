@@ -150,7 +150,7 @@ export const Login = () => {
       <div className="w-full max-w-4xl">
         <Card className="flex w-full flex-col overflow-hidden rounded-xl border-zinc-200 shadow-sm md:flex-row md:h-137.5 p-0">
           {/* COLUMNA IZQUIERDA: FORMULARIOS */}
-          <div className="flex w-full flex-col justify-center bg-background p-8 md:w-1/2 md:p-12">
+          <div className="flex w-full flex-col justify-center  p-8 md:w-1/2 md:p-12">
             {!isForgotPassword ? (
               /* --- FORMULARIO DE LOGIN --- */
               <form

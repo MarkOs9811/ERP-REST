@@ -19,6 +19,7 @@ import { formatMoneda } from "../../utils/currency";
 import { Button } from "../../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import BotonReportePdf from "@/components/componentesReutilizables/BotonReportePdf";
 
 export function Inventario() {
   const [search, setSearch] = useState("");
@@ -47,7 +48,7 @@ export function Inventario() {
           <MetricCard
             loading={isLoading}
             error={isError}
-            icon={<Store color={"#000000ff"} width={"80px"} height={"80px"} />}
+            icon={<Store />}
             title="Productos"
             value={metrics.productosConteo}
             errorMessage="Error al cargar datos"
@@ -55,9 +56,7 @@ export function Inventario() {
           <MetricCard
             loading={isLoading}
             error={isError}
-            icon={
-              <StickyNote color={"#000000ff"} height="80px" width={"80px"} />
-            }
+            icon={<StickyNote />}
             title="Stock Total"
             value={metrics.stockTotal}
             errorMessage="Error al cargar el stock"
@@ -66,9 +65,7 @@ export function Inventario() {
           <MetricCard
             loading={isLoading}
             error={isError}
-            icon={
-              <StickyNote color={"#000000ff"} width={"80px"} height={"80px"} />
-            }
+            icon={<StickyNote />}
             title="Valor Total"
             value={formatMoneda(metrics.valorTotal)}
             errorMessage="Error al cargar datos"
@@ -77,9 +74,7 @@ export function Inventario() {
           <MetricCard
             loading={isLoading}
             error={isError}
-            icon={
-              <TriangleAlert color={"#ca1e1e"} width={"80px"} height={"80px"} />
-            }
+            icon={<TriangleAlert />}
             title="Por Vencer"
             value={metrics.porVencer}
             errorMessage="Error al cargar datos"
@@ -97,7 +92,9 @@ export function Inventario() {
                   Panel de Inventario
                 </h4>
               </CardTitle>
-              <span className="ml-2 inline-flex items-center rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground">Productos</span>
+              <span className="ml-2 inline-flex items-center rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
+                Productos
+              </span>
             </div>
 
             <div className="flex w-full flex-col items-stretch gap-2 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center">
@@ -112,17 +109,21 @@ export function Inventario() {
                 />
               </div>
 
-              <Button size="lg"
+              <Button
                 type="button"
                 className="w-full gap-2 px-3 sm:w-auto"
                 onClick={() => GetReporteExcel("/reporteInventarioTodo")}
                 variant="ghostOutline"
               >
                 <FileText size={18} />
-                Reporte
+                Reporte Excel
               </Button>
 
-              <Button asChild size="lg"
+              <BotonReportePdf reporteEspecifico="inventario" />
+
+              <Button
+                asChild
+                size="lg"
                 className="gap-2 px-3 w-full sm:w-auto"
                 variant="default"
               >
@@ -155,17 +156,42 @@ function MetricCard({
   return (
     <div className="col-span-full md:col-span-3 lg:col-span-3">
       <CondicionCarga isLoading={loading} isError={error} mode="single-card">
-        <Card className="p-3">
-          <div>
-            <span className="absolute opacity-90">{icon}</span>
+        <Card className="p-4 flex-row sm:h-full items-center gap-3 rounded-2xl border border-border/70 bg-card shadow-sm ring-0">
+          {/* Ícono a la izquierda (Ocupa la columna 1) */}
+          <div className=" flex items-center justify-center">
+            <div
+              className={`relative flex h-12 w-12 items-center justify-center rounded-xl ${
+                isDanger
+                  ? "bg-destructive/10 text-destructive"
+                  : "bg-primary/10 text-primary"
+              }`}
+            >
+              <span
+                className={
+                  "absolute opacity-70 " +
+                  (isDanger ? "bg-destructive/10" : "bg-green-300") +
+                  " rounded-2xl p-4 flex items-center justify-center"
+                }
+              >
+                {icon}
+              </span>
+            </div>
           </div>
-          <div className="text-right">
+
+          {/* Detalles a la derecha (Ocupan las 3 columnas restantes y se apilan en vertical) */}
+          <div className="ms-auto flex flex-col justify-center">
             <h4
-              className={`mb-1 ${isDanger ? "text-destructive" : "text-foreground"}`}
+              className={`text-xs sm:text-sm font-medium mb-0.5 ${
+                isDanger ? "text-destructive" : "text-muted-foreground"
+              }`}
             >
               {title}
             </h4>
-            <p className="h1 mb-0">{value}</p>
+            <p
+              className={`text-2xl sm:text-3xl font-bold tracking-tight ${isDanger ? "text-destructive" : "text-foreground"}`}
+            >
+              {value}
+            </p>
           </div>
         </Card>
       </CondicionCarga>
@@ -173,6 +199,7 @@ function MetricCard({
   );
 }
 
+export default MetricCard;
 // Función auxiliar para calcular las métricas
 function calculateMetrics(inventario) {
   let sumaTotal = 0;

@@ -10,13 +10,23 @@ import {
 import axiosInstance from "@/api/AxiosInstance";
 import ToastAlert from "../componenteToast/ToastAlert";
 import { Badge } from "../ui/badge";
+import { useForm, Controller } from "react-hook-form";
 
 export function ModalCargaMasiva({ handleClose, onUpdate }) {
   const [archivo, setArchivo] = useState(null);
   const [cargando, setCargando] = useState(false);
-  const [reporteResultados, setReporteResultados] = useState(null); // Estado para guardar el JSON del backend
+  const [reporteResultados, setReporteResultados] = useState(null);
 
-  const handleSubirExcel = async () => {
+  // Inicializamos react-hook-form para controlar el switch
+  const { control, watch, handleSubmit } = useForm({
+    defaultValues: {
+      transferir_inventario: false,
+    },
+  });
+
+  const isTransfering = watch("transferir_inventario");
+
+  const handleSubirExcel = handleSubmit(async (data) => {
     if (!archivo) {
       ToastAlert(
         "error",
@@ -27,10 +37,15 @@ export function ModalCargaMasiva({ handleClose, onUpdate }) {
 
     const formData = new FormData();
     formData.append("archivo_excel", archivo);
+    // Enviamos el valor del switch como 1 (true) o 0 (false)
+    formData.append(
+      "transferir_inventario",
+      data.transferir_inventario ? 1 : 0,
+    );
 
     try {
       setCargando(true);
-      setReporteResultados(null); // Limpiar resultados anteriores
+      setReporteResultados(null);
 
       const response = await axiosInstance.post(
         "/almacen/importar-masivo",
@@ -39,11 +54,8 @@ export function ModalCargaMasiva({ handleClose, onUpdate }) {
 
       if (response.data.success === true || response.data.success === "true") {
         ToastAlert("success", response.data.message);
-
-        // Guardamos el desglose en el estado para mostrarlo abajo
         setReporteResultados(response.data.resultados);
-
-        onUpdate(); // Refresca la tabla principal de almacén
+        onUpdate();
       } else {
         ToastAlert(
           "error",
@@ -58,7 +70,7 @@ export function ModalCargaMasiva({ handleClose, onUpdate }) {
     } finally {
       setCargando(false);
     }
-  };
+  });
 
   return (
     <div className="p-4 flex flex-col gap-4 max-h-[80vh] overflow-y-auto">
@@ -66,9 +78,9 @@ export function ModalCargaMasiva({ handleClose, onUpdate }) {
         <AlertCircle className="size-5 shrink-0 mt-0.5" />
         <p className="mb-0">
           <strong>Regla de importación:</strong> Sube un archivo con columnas
-          llamadas <b>nombre</b>, <b>laboratorio</b> y <b>precio</b> en la
-          primera fila. Los productos repetidos se mostrarán en el reporte
-          inferior.
+          llamadas <b>nombre</b>, <b>laboratorio</b>, <b>marca</b> y{" "}
+          <b>precio</b> en la primera fila. Los productos repetidos se mostrarán
+          en el reporte inferior.
         </p>
       </div>
 
@@ -150,6 +162,42 @@ export function ModalCargaMasiva({ handleClose, onUpdate }) {
           )}
         </div>
       )}
+
+      {/* Switch de Transferir a Inventario */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
+        <label className="flex items-center gap-3 cursor-pointer group">
+          <div className="relative">
+            <Controller
+              name="transferir_inventario"
+              control={control}
+              render={({ field }) => (
+                <input
+                  type="checkbox"
+                  className="sr-only"
+                  checked={field.value}
+                  onChange={(e) => field.onChange(e.target.checked)}
+                />
+              )}
+            />
+            <div
+              className={`block w-11 h-6 rounded-full transition-colors ${isTransfering ? "bg-primary" : "bg-muted-foreground/30"}`}
+            ></div>
+            <div
+              className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform duration-200 ease-in-out ${isTransfering ? "translate-x-5" : "translate-x-0"}`}
+            ></div>
+          </div>
+          <div className="flex flex-col">
+            <span className="text-sm font-semibold text-foreground">
+              Transferir a Inventario
+            </span>
+            <span className="text-[0.8rem] text-muted-foreground">
+              {isTransfering
+                ? "El stock ingresará al almacén y pasará directo a ventas."
+                : "El stock y producto se quedará en el almacén central."}
+            </span>
+          </div>
+        </label>
+      </div>
 
       <div className="flex justify-end gap-2 mt-2 border-t pt-4">
         <Button variant="outline" onClick={handleClose} disabled={cargando}>

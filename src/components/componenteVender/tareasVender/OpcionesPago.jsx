@@ -101,7 +101,7 @@ export function OpcionesPago(props) {
 
     const resultado = await ConsultarDocumento(doc, "DNI");
     if (resultado.success) {
-      // 🔥 LÓGICA DE SEPARACIÓN (Asumiendo formato: PATERNO MATERNO NOMBRES)
+      // LÓGICA DE SEPARACIÓN (Asumiendo formato: PATERNO MATERNO NOMBRES)
       const partes = resultado.nombre.trim().split(" ");
       let apellidosCalculados = "";
       let nombresCalculados = resultado.nombre;
@@ -190,8 +190,8 @@ export function OpcionesPago(props) {
   };
 
   return (
-    <Card className="flex h-full min-h-[440px] flex-col gap-0 overflow-hidden rounded-xl border-border/70 bg-card p-0 shadow-none">
-      <CardHeader className="border-b border-border/70 bg-background px-4 py-4">
+    <Card className="flex h-full min-h-110 flex-col gap-0 overflow-hidden rounded-xl border-border/70 bg-card p-0 shadow-none">
+      <CardHeader className="border-b border-border/70  px-4 py-4">
         <h2 className="mb-0 text-base font-semibold tracking-tight text-foreground">
           Método de pago
         </h2>
@@ -204,16 +204,8 @@ export function OpcionesPago(props) {
         {/* MÉTODOS DE PAGO PRINCIPALES */}
         {/* ================================================================ */}
         <section className="space-y-2.5">
-          <div>
-            <h3 className="mb-0 text-sm font-medium text-foreground">
-              Forma de pago
-            </h3>
-            <p className="mb-0 text-xs text-muted-foreground">
-              Elige una opción disponible.
-            </p>
-          </div>
           <div
-            className="grid grid-cols-1 gap-2 sm:grid-cols-2"
+            className="grid grid-cols-1 gap-2 sm:grid-cols-4"
             role="group"
             aria-label="Método de Pago"
           >
@@ -223,8 +215,8 @@ export function OpcionesPago(props) {
                 type="button"
                 className={`h-11 justify-start gap-2 rounded-lg border px-3 transition-colors ${
                   metodoSeleccionado === metodo.nombre
-                    ? "border-primary/40 bg-primary/5 text-foreground ring-1 ring-primary/15"
-                    : "border-border/70 bg-background text-muted-foreground hover:bg-muted hover:text-foreground"
+                    ? "border-primary/40 bg-green-400 dark:bg-green-400 dark:text-black text-foreground ring-1 ring-primary/15"
+                    : "border-border/70   hover:bg-muted hover:text-foreground"
                 }`}
                 onClick={() => {
                   handleSelectMetodo(metodo.nombre);
@@ -269,7 +261,7 @@ export function OpcionesPago(props) {
               className={`h-11 justify-start gap-2 rounded-lg border px-3 ${
                 typeTarjeta === "debito"
                   ? "border-primary/40 bg-primary/5 text-foreground ring-1 ring-primary/15"
-                  : "border-border/70 bg-background text-muted-foreground hover:bg-muted hover:text-foreground"
+                  : "border-border/70  text-muted-foreground hover:bg-muted hover:text-foreground"
               }`}
               onClick={() => handleTypeTarjeta("debito")}
               variant="outline"
@@ -281,7 +273,7 @@ export function OpcionesPago(props) {
               className={`h-11 justify-start gap-2 rounded-lg border px-3 ${
                 typeTarjeta === "credito"
                   ? "border-primary/40 bg-primary/5 text-foreground ring-1 ring-primary/15"
-                  : "border-border/70 bg-background text-muted-foreground hover:bg-muted hover:text-foreground"
+                  : "border-border/70  text-muted-foreground hover:bg-muted hover:text-foreground"
               }`}
               onClick={() => handleTypeTarjeta("credito")}
               variant="outline"
@@ -294,7 +286,9 @@ export function OpcionesPago(props) {
         {/* ================================================================ */}
         {/* TIPO DE COMPROBANTE */}
         {/* ================================================================ */}
-        <section className={`space-y-2.5 ${tipoComporbante ? "block" : "hidden"}`}>
+        <section
+          className={`space-y-2.5 ${tipoComporbante ? "block" : "hidden"}`}
+        >
           <div>
             <h3 className="mb-0 text-sm font-medium text-foreground">
               Comprobante
@@ -303,14 +297,14 @@ export function OpcionesPago(props) {
               Selecciona el documento para esta venta.
             </p>
           </div>
-          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2" role="group">
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-3" role="group">
             {sunatActivo ? (
               <Button
                 type="button"
                 className={`h-11 justify-start gap-2 rounded-lg border px-3 ${
                   comprobante === "B"
-                    ? "border-primary/40 bg-primary/5 text-foreground ring-1 ring-primary/15"
-                    : "border-border/70 bg-background text-muted-foreground hover:bg-muted hover:text-foreground"
+                    ? "border-primary/40 bg-primary text-red ring-1 ring-primary/15"
+                    : "border-border/70  text-muted-foreground hover:bg-muted hover:text-foreground"
                 }`}
                 onClick={() => {
                   handleShowFactura(false);
@@ -336,8 +330,8 @@ export function OpcionesPago(props) {
               type="button"
               className={`h-11 justify-start gap-2 rounded-lg border px-3 ${
                 comprobante === "S"
-                  ? "border-primary/40 bg-primary/5 text-foreground ring-1 ring-primary/15"
-                  : "border-border/70 bg-background text-muted-foreground hover:bg-muted hover:text-foreground"
+                  ? "border-primary/40 bg-green-400 dark:bg-green-400 dark:text-black text-foreground ring-1 ring-primary/15"
+                  : "border-border/70  text-muted-foreground hover:bg-muted hover:text-foreground"
               }`}
               onClick={() => {
                 handleShowFactura(false);
@@ -355,7 +349,7 @@ export function OpcionesPago(props) {
                 className={`h-11 justify-start gap-2 rounded-lg border px-3 ${
                   comprobante === "F"
                     ? "border-primary/40 bg-primary/5 text-foreground ring-1 ring-primary/15"
-                    : "border-border/70 bg-background text-muted-foreground hover:bg-muted hover:text-foreground"
+                    : "border-border/70  text-muted-foreground hover:bg-muted hover:text-foreground"
                 }`}
                 onClick={() => {
                   handleShowFactura(true);
@@ -391,14 +385,12 @@ export function OpcionesPago(props) {
 
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
             <div className="space-y-1">
-              <label
-                className="text-xs font-medium text-muted-foreground"
-              >
+              <label className="text-xs font-medium text-muted-foreground">
                 Tipo Doc.
               </label>
               <select
                 id="tipo_documento"
-                className="h-10 w-full appearance-auto rounded-md border border-input bg-background px-3 text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                className="h-10 w-full appearance-auto rounded-md border border-input  px-3 text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                 {...register("tipo_documento")}
                 onChange={handleSelectChange(
                   setTipoDocumento,
@@ -413,15 +405,13 @@ export function OpcionesPago(props) {
             </div>
 
             <div className="space-y-1">
-              <label
-                className="text-xs font-medium text-muted-foreground"
-              >
+              <label className="text-xs font-medium text-muted-foreground">
                 Número de Documento
               </label>
               <div className="relative">
                 <input
                   type="text"
-                  className={`h-10 w-full rounded-md border border-input bg-background px-3 pr-9 text-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring ${errors.numeroDocumento ? "border-destructive focus-visible:ring-destructive" : ""} ${dniExitoso ? "border-emerald-500" : ""}`}
+                  className={`h-10 w-full rounded-md border border-input  px-3 pr-9 text-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring ${errors.numeroDocumento ? "border-destructive focus-visible:ring-destructive" : ""} ${dniExitoso ? "border-emerald-500" : ""}`}
                   placeholder="Ingrese número..."
                   value={numeroDocumento}
                   {...register("numero_documento")}
@@ -436,14 +426,9 @@ export function OpcionesPago(props) {
                     )(e);
                   }}
                 />
-                <div
-                  className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2"
-                >
+                <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2">
                   {isSearchingDni ? (
-                    <Loader2
-                      size={16}
-                      className="text-foreground"
-                    />
+                    <Loader2 size={16} className="text-foreground" />
                   ) : dniExitoso ? (
                     <CheckCircle
                       size={16}
@@ -462,15 +447,13 @@ export function OpcionesPago(props) {
 
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
             <div className="space-y-1">
-              <label
-                className="text-xs font-medium text-muted-foreground"
-              >
+              <label className="text-xs font-medium text-muted-foreground">
                 Nombres
               </label>
               <input
                 type="text"
                 id="nombres"
-                className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                className="h-10 w-full rounded-md border border-input  px-3 text-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                 placeholder="Nombres..."
                 onChange={(e) => {
                   setNombres(e.target.value);
@@ -479,15 +462,13 @@ export function OpcionesPago(props) {
               />
             </div>
             <div className="space-y-1">
-              <label
-                className="text-xs font-medium text-muted-foreground"
-              >
+              <label className="text-xs font-medium text-muted-foreground">
                 Apellidos
               </label>
               <input
                 type="text"
                 id="apellidos"
-                className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                className="h-10 w-full rounded-md border border-input  px-3 text-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                 placeholder="Apellidos..."
                 onChange={(e) => {
                   setApellidos(e.target.value);
@@ -509,15 +490,13 @@ export function OpcionesPago(props) {
           </h3>
 
           <div className="mb-2">
-            <label
-              className="text-xs font-medium text-muted-foreground"
-            >
+            <label className="text-xs font-medium text-muted-foreground">
               Número de RUC <span className="text-destructive">*</span>
             </label>
             <div className="relative">
               <input
                 type="text"
-                className={`h-10 w-full rounded-md border border-input bg-background px-3 pr-9 text-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring ${rucExitoso ? "border-emerald-500" : ""}`}
+                className={`h-10 w-full rounded-md border border-input  px-3 pr-9 text-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring ${rucExitoso ? "border-emerald-500" : ""}`}
                 id="num_documento_ruc"
                 placeholder="Ingrese 11 dígitos..."
                 maxLength={11}
@@ -529,14 +508,9 @@ export function OpcionesPago(props) {
                   setRucExitoso(false);
                 }}
               />
-              <div
-                className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2"
-              >
+              <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2">
                 {isSearchingRuc ? (
-                  <Loader2
-                    size={16}
-                    className="text-foreground"
-                  />
+                  <Loader2 size={16} className="text-foreground" />
                 ) : rucExitoso ? (
                   <CheckCircle
                     size={16}
@@ -553,14 +527,12 @@ export function OpcionesPago(props) {
           </div>
 
           <div className="mb-2">
-            <label
-              className="text-xs font-medium text-muted-foreground"
-            >
+            <label className="text-xs font-medium text-muted-foreground">
               Razón Social
             </label>
             <input
               type="text"
-              className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              className="h-10 w-full rounded-md border border-input  px-3 text-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
               id="nombreRazonSocial"
               placeholder="Nombre de la empresa..."
               onChange={(e) => {
@@ -571,15 +543,13 @@ export function OpcionesPago(props) {
           </div>
 
           <div className="mb-2">
-            <label
-              className="text-xs font-medium text-muted-foreground"
-            >
+            <label className="text-xs font-medium text-muted-foreground">
               Dirección Fiscal
             </label>
             <div className="relative">
               <input
                 type="text"
-                className="h-10 w-full rounded-md border border-input bg-background py-1 pl-9 pr-3 text-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                className="h-10 w-full rounded-md border border-input  py-1 pl-9 pr-3 text-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                 id="direccion"
                 placeholder="Dirección..."
                 onChange={(e) => setDireccion(e.target.value)}
@@ -599,17 +569,17 @@ export function OpcionesPago(props) {
           className={`space-y-2 rounded-lg border border-border/70 bg-muted/30 p-3 ${cuotas ? "block" : "hidden"}`}
         >
           {/* 🔥 Eliminamos el texto azul (text-primary -> text-dark) */}
-          <h3 className="mb-0 text-sm font-semibold text-foreground">Pago a crédito</h3>
-          <label
-            className="text-xs font-medium text-muted-foreground"
-          >
+          <h3 className="mb-0 text-sm font-semibold text-foreground">
+            Pago a crédito
+          </h3>
+          <label className="text-xs font-medium text-muted-foreground">
             Número de Cuotas
           </label>
           <input
             id="cuotas"
             type="number"
             min="1"
-            className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+            className="h-10 w-full rounded-md border border-input  px-3 text-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
             onChange={(e) => setNumeroCuotas(e.target.value)}
             placeholder="Ej. 3"
           />
