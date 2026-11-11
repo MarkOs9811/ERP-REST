@@ -8,7 +8,7 @@ import { GetConfi } from "../../service/accionesConfiguracion/GetConfi";
 import { Cargando } from "../componentesReutilizables/Cargando";
 import ModalRight from "../componentesReutilizables/ModalRight";
 import FormConfiguracionEmpresa from "./confiIntegraciones/FormConfiguracionEmpresa";
-import { UtensilsCrossed, Store, Settings2 } from "lucide-react";
+import { Store, Settings2, UtensilsCrossedIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import {
   Card,
@@ -27,6 +27,7 @@ export function MiEmpresa() {
   const [openModal, setOpenModal] = useState(false);
   const [tituloModal, setTituloModal] = useState("");
   const [data, setData] = useState([]);
+  
   const {
     data: configEmpresa = [],
     isLoading,
@@ -41,6 +42,13 @@ export function MiEmpresa() {
   const configuracionEmpresa = configEmpresa.filter(
     (item) => item.tipo?.toLowerCase() === "empresa",
   );
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
 
   useEffect(() => {
     const fetchDatosEmpresa = async () => {
@@ -63,14 +71,7 @@ export function MiEmpresa() {
     };
 
     fetchDatosEmpresa();
-  }, []);
-
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm();
+  }, [reset]);
 
   const onSubmit = async (data) => {
     try {
@@ -119,102 +120,74 @@ export function MiEmpresa() {
     },
   });
 
-  // HELPER: Determina la interfaz visual según el tipo de venta
+  // HELPER: Determina la interfaz visual 100% con clases de Tailwind
   const getVisualsTipoVenta = (clave) => {
     const tipo = (clave || "").toLowerCase();
 
     if (tipo === "comida" || tipo === "restaurante") {
       return {
         label: "Gastronomía",
-        color: "var(--fw-saffron)",
-        bgSoft: "var(--bg-saffron-soft)",
-        icon: (
-          <UtensilsCrossed
-            size={40}
-            color="var(--fw-saffron)"
-            strokeWidth={1.5}
-          />
-        ),
+        bgSoft: "bg-amber-500/10",
+        badgeClass: "bg-amber-500/20 text-amber-700 dark:text-amber-400",
+        icon: <UtensilsCrossedIcon className="size-10 text-amber-500 stroke-[1.5]" />,
       };
     } else if (tipo === "retail") {
       return {
         label: "Retail / Tienda",
-        color: "var(--fw-emerald)",
-        bgSoft: "var(--bg-emerald-soft)",
-        icon: <Store size={40} color="var(--fw-emerald)" strokeWidth={1.5} />,
+        bgSoft: "bg-emerald-500/10",
+        badgeClass: "bg-emerald-500/20 text-emerald-700 dark:text-emerald-400",
+        icon: <Store className="size-10 text-emerald-500 stroke-[1.5]" />,
       };
     }
 
     return {
       label: "Sin definir",
-      color: "var(--brand-secondary)",
-      bgSoft: "#f3f4f6",
-      icon: (
-        <Store size={40} color="var(--brand-secondary)" strokeWidth={1.5} />
-      ),
+      bgSoft: "bg-slate-100 dark:bg-slate-800",
+      badgeClass: "bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-300",
+      icon: <Store className="size-10 text-slate-500 stroke-[1.5]" />,
     };
   };
 
   return (
     <div className="w-full p-3">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="grid grid-cols-12 gap-3 mb-4">
+        <div className="grid grid-cols-12 gap-3 mb-4 items-stretch">
+          
           {/* Columna Logo y carga */}
-          <div className="md:col-span-4 col-span-full">
-            <Card
-              className="p-4 flex flex-col justify-center items-center h-full"
-              style={{ borderRadius: "var(--radius-lg)" }}
-            >
-              <h4
-                className="mb-3 font-bold text-center"
-                style={{ color: "var(--text-main)" }}
-              >
+          <div className="col-span-full md:col-span-4">
+            <Card className="flex flex-col items-center justify-center h-full p-4 rounded-xl border-border bg-card">
+              <h4 className="mb-4 font-bold text-center text-foreground text-lg">
                 Configuración de la Empresa
               </h4>
+              
               {/* Logo actual */}
               {logoActual && !logoPreview && (
                 <img
                   src={logoActual}
                   alt="Logo de la empresa"
-                  className="img-fluid mb-3"
-                  style={{
-                    maxWidth: "120px",
-                    borderRadius: "10px",
-                    boxShadow: "var(--shadow-hover)",
-                  }}
+                  className="mb-4 max-w-[120px] h-auto object-contain rounded-xl shadow-md hover:shadow-lg transition-shadow"
                 />
               )}
+              
               {/* Previsualización del logo */}
               {logoPreview && (
                 <img
                   src={logoPreview}
                   alt="Logo Previsualizado"
-                  className="img-fluid mb-3"
-                  style={{
-                    maxWidth: "120px",
-                    borderRadius: "10px",
-                    border: "2px solid var(--fw-saffron)",
-                    boxShadow: "var(--shadow-hover)",
-                  }}
+                  className="mb-4 max-w-[120px] h-auto object-contain rounded-xl border-2 border-primary shadow-md hover:shadow-lg transition-shadow"
                 />
               )}
-              <div className="mb-3 w-full">
+
+              <div className="w-full mb-2">
                 <label
                   htmlFor="logo"
-                  className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-semibold"
-                  style={{ color: "var(--text-muted)" }}
+                  className="block text-sm font-semibold text-muted-foreground mb-1.5"
                 >
                   Logo de la Empresa
                 </label>
                 <div
                   {...getRootProps()}
-                  className="dropzone rounded p-4 text-center flex flex-col justify-center items-center"
-                  style={{
-                    cursor: "pointer",
-                    minHeight: "100px",
-                    border: "1px dashed var(--fw-muetd)",
-                    backgroundColor: "var(--bg-saffron-soft)",
-                  }}
+                  className="flex flex-col items-center justify-center p-4 text-center cursor-pointer min-h-[100px] rounded-lg border border-dashed border-primary/50 bg-primary/5 hover:bg-primary/10 transition-colors"
                 >
                   <input
                     {...getInputProps()}
@@ -223,28 +196,19 @@ export function MiEmpresa() {
                     className="hidden"
                   />
                   {!logoPreview && (
-                    <p
-                      className="text-sm mb-2"
-                      style={{ color: "var(--brand-secondary)" }}
-                    >
+                    <p className="mb-2 text-sm text-muted-foreground font-medium">
                       Haz clic o arrastra aquí para cargar el logo
                     </p>
                   )}
                   <Button
                     type="button"
-                    className="bg-primary text-primary-foreground shadow hover:bg-primary/90 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 px-3 text-xs font-semibold"
-                    style={{
-                      backgroundColor: "var(--fw-white)",
-                      color: "var(--fw-saffron)",
-                      border: "1px solid var(--fw-saffron)",
-                      borderRadius: "var(--radius-sm)",
-                    }}
-                    variant="default"
+                    variant="outline"
+                    className="h-8 px-3 text-xs font-semibold bg-background hover:bg-accent border-primary/50 text-primary transition-colors"
                   >
                     Seleccionar archivo
                   </Button>
                 </div>
-                <p className="text-destructive text-sm mt-1">
+                <p className="mt-1 text-sm text-destructive font-medium">
                   {errors.logo?.message}
                 </p>
               </div>
@@ -252,98 +216,86 @@ export function MiEmpresa() {
           </div>
 
           {/* Columna datos */}
-          <div className="md:col-span-8 col-span-full">
-            <Card
-              className="p-4 h-full bg-card"
-              style={{
-                borderRadius: "var(--radius-lg)",
-              }}
-            >
-              <h5
-                className="font-bold mb-4"
-                style={{ color: "var(--brand-secondary)" }}
-              >
+          <div className="col-span-full md:col-span-8">
+            <Card className="flex flex-col h-full p-4 rounded-xl border-border bg-card">
+              <h5 className="mb-4 font-bold text-foreground text-lg">
                 Datos Generales
               </h5>
+              
               <div className="grid grid-cols-12 gap-3">
                 <div className="col-span-full md:col-span-6">
                   <label
                     htmlFor="ruc"
-                    className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-semibold"
-                    style={{ color: "var(--text-muted)" }}
+                    className="block text-sm font-semibold text-muted-foreground mb-1.5"
                   >
                     RUC
                   </label>
                   <input
                     type="text"
                     id="ruc"
-                    className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                    className="h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                     {...register("ruc", { required: "El RUC es obligatorio" })}
-                    defaultValue={datosEmpresa?.ruc || ""}
                   />
-                  <p className="text-destructive text-sm m-0">
+                  <p className="mt-1 text-sm text-destructive font-medium">
                     {errors.ruc?.message}
                   </p>
                 </div>
+                
                 <div className="col-span-full md:col-span-6">
                   <label
                     htmlFor="nombre"
-                    className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-semibold"
-                    style={{ color: "var(--text-muted)" }}
+                    className="block text-sm font-semibold text-muted-foreground mb-1.5"
                   >
                     Nombre de la Empresa
                   </label>
                   <input
                     type="text"
                     id="nombre"
-                    className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                    className="h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                     {...register("nombre", {
                       required: "El nombre es obligatorio",
                     })}
-                    defaultValue={datosEmpresa?.nombre || ""}
                   />
-                  <p className="text-destructive text-sm m-0">
+                  <p className="mt-1 text-sm text-destructive font-medium">
                     {errors.nombre?.message}
                   </p>
                 </div>
+                
                 <div className="col-span-full md:col-span-6">
                   <label
                     htmlFor="correo"
-                    className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-semibold"
-                    style={{ color: "var(--text-muted)" }}
+                    className="block text-sm font-semibold text-muted-foreground mb-1.5"
                   >
                     Correo Electrónico
                   </label>
                   <input
                     type="email"
                     id="correo"
-                    className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                    className="h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                     {...register("correo", {
                       required: "El correo es obligatorio",
                       pattern: {
-                        value:
-                          /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/,
+                        value: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/,
                         message: "Correo electrónico inválido",
                       },
                     })}
-                    defaultValue={datosEmpresa?.correo || ""}
                   />
-                  <p className="text-destructive text-sm m-0">
+                  <p className="mt-1 text-sm text-destructive font-medium">
                     {errors.correo?.message}
                   </p>
                 </div>
+                
                 <div className="col-span-full md:col-span-6">
                   <label
                     htmlFor="numero"
-                    className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-semibold"
-                    style={{ color: "var(--text-muted)" }}
+                    className="block text-sm font-semibold text-muted-foreground mb-1.5"
                   >
                     Número de Teléfono
                   </label>
                   <input
                     type="tel"
                     id="numero"
-                    className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                    className="h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                     {...register("numero", {
                       required: "El número es obligatorio",
                       pattern: {
@@ -351,40 +303,35 @@ export function MiEmpresa() {
                         message: "Número de teléfono inválido",
                       },
                     })}
-                    defaultValue={datosEmpresa?.numero || ""}
                   />
-                  <p className="text-destructive text-sm m-0">
+                  <p className="mt-1 text-sm text-destructive font-medium">
                     {errors.numero?.message}
                   </p>
                 </div>
+                
                 <div className="col-span-full">
                   <label
                     htmlFor="direccion"
-                    className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-semibold"
-                    style={{ color: "var(--text-muted)" }}
+                    className="block text-sm font-semibold text-muted-foreground mb-1.5"
                   >
                     Dirección
                   </label>
                   <input
                     type="text"
                     id="direccion"
-                    className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                    className="h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                     {...register("direccion", {
                       required: "La dirección es obligatoria",
                     })}
-                    defaultValue={datosEmpresa?.direccion || ""}
                   />
-                  <p className="text-destructive text-sm m-0">
+                  <p className="mt-1 text-sm text-destructive font-medium">
                     {errors.direccion?.message}
                   </p>
                 </div>
               </div>
-              <div className="mt-auto pt-4 flex justify-end">
-                <Button
-                  type="submit"
-                  className="btn-guardar px-4"
-                  variant="default"
-                >
+              
+              <div className="flex justify-end pt-4 mt-auto">
+                <Button type="submit" variant="default" className="px-5">
                   Guardar Cambios
                 </Button>
               </div>
@@ -396,14 +343,14 @@ export function MiEmpresa() {
       {/* Sección Configuraciones Extras */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-stretch">
         {isLoading && (
-          <div className="col-span-full text-center py-4">
+          <div className="col-span-full py-4 text-center">
             <Cargando />
           </div>
         )}
 
         {isError && (
           <div className="col-span-full">
-            <p className="text-destructive">
+            <p className="text-destructive font-medium">
               Hubo un error al obtener las configuraciones.
             </p>
           </div>
@@ -429,60 +376,37 @@ export function MiEmpresa() {
                   key={item.id}
                   className="col-span-full sm:col-span-6 lg:col-span-4 flex"
                 >
-                  <Card className="">
-                    <CardHeader className="border-0 px-5 pt-5">
-                      <h5
-                        className="font-bold mb-1"
-                        style={{ color: "var(--text-main)" }}
-                      >
+                  <Card className="flex flex-col w-full rounded-xl shadow-sm">
+                    <CardHeader className="border-0 px-5 pt-5 pb-2">
+                      <h5 className="font-bold text-foreground text-base">
                         {item.nombre}
                       </h5>
                     </CardHeader>
-                    <CardContent className="mb-auto flex flex-col items-center p-0">
-                      <p
-                        className="text-sm mb-3"
-                        style={{ color: "var(--text-muted)" }}
-                      >
+                    <CardContent className="flex flex-col items-center flex-1 p-0 px-5">
+                      <p className="mb-4 text-sm text-muted-foreground text-center">
                         {item.descripcion}
                       </p>
 
-                      <div
-                        className="flex justify-center items-center mb-3"
-                        style={{
-                          width: "72px",
-                          height: "72px",
-                          borderRadius: "50%",
-                          backgroundColor: visuals.bgSoft,
-                        }}
-                      >
+                      <div className={`flex items-center justify-center p-4 mb-4 rounded-full ${visuals.bgSoft}`}>
                         {visuals.icon}
                       </div>
 
-                      <span
-                        className="inline-flex items-center text-xs font-semibold transition-colors px-3 py-2 rounded-full mb-4"
-                        style={{
-                          backgroundColor: visuals.bgSoft,
-                          color: visuals.color,
-                          border: `1px solid ${visuals.color}`,
-                          fontSize: "0.85rem",
-                          fontWeight: "600",
-                        }}
-                      >
+                      <span className={`inline-flex items-center px-3 py-1 mb-4 text-xs font-semibold transition-colors rounded-full ${visuals.badgeClass}`}>
                         Modo actual: {visuals.label}
                       </span>
                     </CardContent>
-                    <CardFooter className="bg-transparent border-0 p-3 flex justify-end">
+                    <CardFooter className="flex justify-end p-4 pt-0 border-0 bg-transparent">
                       <Button
                         type="button"
-                        className="btn-generico px-3"
+                        variant="outline"
+                        className="flex items-center gap-2"
                         onClick={() => {
                           setOpenModal(true);
                           setTituloModal(item.nombre);
                           setData(item);
                         }}
-                        variant="default"
                       >
-                        <Settings2 size={18} />
+                        <Settings2 size={16} />
                         Configurar
                       </Button>
                     </CardFooter>
@@ -497,32 +421,26 @@ export function MiEmpresa() {
                 key={item.id}
                 className="col-span-full sm:col-span-6 lg:col-span-4 flex"
               >
-                <Card className="w-full p-4 flex flex-col">
-                  <div className="mb-auto">
-                    <h5
-                      className="font-bold mb-2"
-                      style={{ color: "var(--text-main)" }}
-                    >
+                <Card className="flex flex-col w-full p-5 rounded-xl shadow-sm">
+                  <div className="flex-1 mb-4">
+                    <h5 className="mb-2 text-base font-bold text-foreground">
                       {item.nombre}
                     </h5>
-                    <p
-                      className="text-sm m-0"
-                      style={{ color: "var(--text-muted)" }}
-                    >
+                    <p className="text-sm text-muted-foreground m-0">
                       {item.descripcion}
                     </p>
                   </div>
                   <Button
                     type="button"
-                    className="btn-generico"
+                    variant="outline"
+                    className="flex items-center gap-2 w-full sm:w-auto self-start"
                     onClick={() => {
                       setOpenModal(true);
                       setTituloModal(item.nombre);
                       setData(item);
                     }}
-                    variant="default"
                   >
-                    <Settings2 size={18} className="" />
+                    <Settings2 size={16} />
                     Configuración
                   </Button>
                 </Card>

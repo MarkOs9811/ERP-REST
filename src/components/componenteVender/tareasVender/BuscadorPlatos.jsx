@@ -10,7 +10,7 @@ export function BuscadorPlatos({ searchTerm, setSearchTerm }) {
   // 2. Listener optimizado para la tecla F4
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === "F2") {
+      if (e.key === "F4") {
         e.preventDefault();
         inputRef.current?.focus();
       }

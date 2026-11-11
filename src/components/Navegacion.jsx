@@ -1,5 +1,4 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-
 import {
   CookingPotIcon,
   Megaphone,
@@ -21,38 +20,32 @@ import {
   isRestaurantBusiness,
   isPathAvailableForBusiness,
 } from "../utils/modulePermissions";
+import { Input } from "./ui/input";
 
 export function Navegacion({ tipoNavegacion = null }) {
   const location = useLocation();
   const pathnames = location.pathname.split("/").filter((x) => x);
   const navigate = useNavigate();
   const { user: rol } = useAuth();
-  // 1. Obtenemos el nombre del cargo en minúsculas de forma segura
+  
   const nombreCargo = rol?.empleado?.cargo?.nombre?.toLowerCase() || "";
 
-  // 2. Definimos las raíces o palabras clave bloqueadas
   const palabrasBloqueadas = [
-    // Variantes para Delivery
     "delivery",
     "repartid",
     "motorizad",
     "despachad",
-    // Variantes para Cocina
     "cocin",
     "chef",
-    // Variantes para Mozo
     "mozo",
     "moso",
     "meser",
     "camarer",
   ];
 
-  // 3. Evaluamos si el cargo CONTIENE alguna de las palabras bloqueadas
-  // Retorna TRUE si encuentra alguna coincidencia
   const esRolBloqueadoParaCaja = palabrasBloqueadas.some((palabra) =>
     nombreCargo.includes(palabra),
   );
-  // =====================================
 
   const navegacionAnchura = tipoNavegacion;
   const routeNames = {
@@ -117,6 +110,7 @@ export function Navegacion({ tipoNavegacion = null }) {
       selectSearchOption(filteredSearch[activeSearchIndex]);
     }
   };
+
   const { data: configEmpresa = [] } = useQuery({
     queryKey: ["confiEmpresa"],
     queryFn: GetConfi,
@@ -134,6 +128,7 @@ export function Navegacion({ tipoNavegacion = null }) {
     ventas: "ventas",
     delivery: "delivery",
   };
+
   const searchOptions = Object.values(subMenuGroups)
     .flat()
     .filter(({ path }) => {
@@ -145,11 +140,13 @@ export function Navegacion({ tipoNavegacion = null }) {
       );
     })
     .map(({ label, path }) => ({ label, path }));
+
   const filteredSearch = searchOptions.filter((opt) =>
     opt.label.toLowerCase().includes(searchTerm.toLowerCase()),
   );
+
   const actionButtonClass =
-    "inline-flex h-9 items-center justify-center gap-2 rounded-lg border-border bg-background px-2.5 text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:px-3";
+    "inline-flex h-9 items-center justify-center gap-2 rounded-lg border border-border bg-background px-2.5 text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring sm:px-3";
 
   return (
     <div className={`w-full ${navegacionAnchura ? "px-3" : "px-0"}`}>
@@ -207,25 +204,21 @@ export function Navegacion({ tipoNavegacion = null }) {
 
         {/* --- CONTENEDOR DERECHO (Buscador + Acciones) --- */}
         <div className="ml-auto flex flex-wrap items-center justify-end gap-1.5 sm:gap-2">
-          {/* --- BUSCADOR MINIMALISTA --- */}
-          <div className="relative hidden w-55 md:block" ref={searchRef}>
+          
+          {/* --- BUSCADOR MINIMALISTA MODERNIZADO --- */}
+          <div className="relative hidden w-64 md:block" ref={searchRef}>
             <Search
               size={16}
               aria-hidden="true"
               className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
             />
-            <input
+            <Input
               type="text"
               aria-label="Buscar vista"
-              className="h-9 w-full rounded-lg border-input bg-background pl-9 pr-3 text-sm text-foreground shadow-sm outline-none transition placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40"
+              className="h-9 w-full rounded-md border-input bg-background/60 pl-9 pr-3 text-sm text-foreground shadow-sm outline-none transition-all placeholder:text-muted-foreground hover:bg-background focus-visible:bg-background focus-visible:ring-1 focus-visible:ring-ring"
               placeholder="Buscar vista..."
               value={searchTerm}
               aria-controls="navegacion-resultados-busqueda"
-              aria-activedescendant={
-                filteredSearch[activeSearchIndex]
-                  ? `resultado-busqueda-${activeSearchIndex}`
-                  : undefined
-              }
               onChange={(e) => {
                 setSearchTerm(e.target.value);
                 setActiveSearchIndex(0);
@@ -237,43 +230,48 @@ export function Navegacion({ tipoNavegacion = null }) {
               }}
               onKeyDown={handleSearchKeyDown}
             />
+            
+            {/* DROPDOWN FLUIDO */}
             {showSearchDropdown && searchTerm.trim() !== "" && (
-              <div className="absolute left-0 top-full z-50 mt-1 max-h-62.5 w-full overflow-y-auto rounded-lg border-border bg-popover py-1 text-popover-foreground shadow-md">
-                <ul
-                  id="navegacion-resultados-busqueda"
-                  role="listbox"
-                  className="m-0 list-none p-0"
-                >
-                  {filteredSearch.length > 0 ? (
-                    filteredSearch.map((item, idx) => (
-                      <li key={item.path}>
-                        <Button
-                          id={`resultado-busqueda-${idx}`}
-                          type="button"
-                          role="option"
-                          aria-selected={idx === activeSearchIndex}
-                          className={`w-full px-3 py-2 text-left text-sm transition-colors ${
-                            idx === activeSearchIndex
-                              ? "bg-accent text-accent-foreground"
-                              : "text-foreground hover:bg-accent/70"
-                          }`}
-                          onMouseEnter={() => setActiveSearchIndex(idx)}
-                          onClick={() => selectSearchOption(item)}
-                          variant="default"
-                        >
-                          {item.label}
-                        </Button>
+              <div className="absolute left-0 top-full z-50 mt-1.5 w-full overflow-hidden rounded-md border border-border bg-popover shadow-lg animate-in fade-in-0 zoom-in-95">
+                <div className="max-h-[260px] overflow-y-auto p-1 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border hover:[&::-webkit-scrollbar-thumb]:bg-muted-foreground/50 [&::-webkit-scrollbar-track]:bg-transparent">
+                  <ul
+                    id="navegacion-resultados-busqueda"
+                    role="listbox"
+                    className="flex flex-col gap-0.5 m-0 list-none p-0"
+                  >
+                    {filteredSearch.length > 0 ? (
+                      filteredSearch.map((item, idx) => (
+                        <li key={item.path}>
+                          <button
+                            id={`resultado-busqueda-${idx}`}
+                            type="button"
+                            role="option"
+                            aria-selected={idx === activeSearchIndex}
+                            className={`flex w-full items-center rounded-sm px-2.5 py-1.5 text-left text-sm outline-none transition-colors ${
+                              idx === activeSearchIndex
+                                ? "bg-accent text-accent-foreground"
+                                : "text-muted-foreground hover:bg-accent/50 hover:text-foreground"
+                            }`}
+                            onMouseEnter={() => setActiveSearchIndex(idx)}
+                            onClick={() => selectSearchOption(item)}
+                          >
+                            <Search size={14} className="mr-2 opacity-50 shrink-0" />
+                            <span className="truncate">{item.label}</span>
+                          </button>
+                        </li>
+                      ))
+                    ) : (
+                      <li className="px-3 py-4 text-center text-sm text-muted-foreground">
+                        No se encontraron resultados
                       </li>
-                    ))
-                  ) : (
-                    <li className="px-3 py-2 text-center text-sm text-muted-foreground">
-                      Sin resultados
-                    </li>
-                  )}
-                </ul>
+                    )}
+                  </ul>
+                </div>
               </div>
             )}
           </div>
+
           {/* 1. Asistencia */}
           {hasModuleAccess(rol, "rrhh") && (
             <Button asChild className={actionButtonClass} variant="outline">
@@ -302,7 +300,7 @@ export function Navegacion({ tipoNavegacion = null }) {
             </Button>
           )}
 
-          {/* 3. Pedidos Delivery (NUEVO - Solo visible para delivery y administradores) */}
+          {/* 3. Pedidos Delivery */}
           {hasModuleAccess(rol, "delivery") && (
             <Button asChild className={actionButtonClass} variant="outline">
               <Link to="/pedidosDelivery" title="Pedidos delivery">
@@ -311,11 +309,11 @@ export function Navegacion({ tipoNavegacion = null }) {
               </Link>
             </Button>
           )}
-          {/* 4. POS (Oculto estrictamente para roles que no abren caja usando palabras clave) */}
+          {/* 4. POS */}
           {hasModuleAccess(rol, "ventas") && !esRolBloqueadoParaCaja && (
             <Button
               asChild
-              className="inline-flex h-9 items-center justify-center gap-2 rounded-lg px-2.5 text-sm font-medium shadow-sm sm:px-3"
+              className="inline-flex h-9 items-center justify-center gap-2 rounded-lg px-2.5 text-sm font-medium shadow-sm sm:px-3 transition-transform active:scale-95"
             >
               <Link
                 to={esComida ? "/vender/mesas" : "/vender/ventasLlevar"}

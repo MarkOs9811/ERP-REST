@@ -53,6 +53,8 @@ export function ToLlevar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+
+  
   // Obtenemos items y la descripción del estado
   const { items, descripcion } = useSelector((state) => state.pedidoLlevar);
 
@@ -76,6 +78,7 @@ export function ToLlevar() {
         (item) => normalizeModuleName(item?.nombre) === "tipo venta",
       )
     : undefined;
+
   const esComida = isRestaurantBusiness(configEmpresa);
   const claveVenta = esComida
     ? "restaurante"
@@ -168,7 +171,7 @@ export function ToLlevar() {
 
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === "F4") {
+      if (e.key === "F2") {
         e.preventDefault();
         if (itemsRef.current.length > 0) {
           hanldleRealizarPago();
@@ -195,7 +198,9 @@ export function ToLlevar() {
                 Para llevar
               </h2>
               <div className="flex items-center gap-2">
-                <Button
+
+                {claveVenta === "restaurante" ? (
+                   <Button
                   size="sm"
                   variant="outline"
                   className="relative h-8 gap-2 rounded-lg border-border/70 px-3"
@@ -212,6 +217,8 @@ export function ToLlevar() {
                     </span>
                   )}
                 </Button>
+                ) : ("")}
+               
                 {items.length > 0 && (
                   <Button
                     size="sm"

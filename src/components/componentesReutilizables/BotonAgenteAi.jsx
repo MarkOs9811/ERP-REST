@@ -24,7 +24,7 @@ export function BotonAgenteAi() {
         onClose={() => setModalAgenteAi(false)}
         width={"520px"}
         hideFooter={true}
-        title={"Asistente IA"}
+        title={"Asistente IA (BETA)"}
         subtitulo="Asistentes inteligentes para consultar y gestionar tu operación."
         icono={<Sparkles />}
       >

@@ -144,9 +144,9 @@ export function TakeAsistencia() {
 
           <div className="flex justify-between gap-3">
             <Button
-              type="button"
-              className="btn-guardar w-full"
-              style={{ backgroundColor: "var(--fw-emerald)" }}
+              
+              className="btn-guardar "
+              
               onClick={registrarEntrada}
               disabled={loading}
               variant="default"
@@ -155,9 +155,8 @@ export function TakeAsistencia() {
               {loading ? "Procesando..." : "Entrada"}
             </Button>
             <Button
-              type="button"
-              className="btn-eliminar w-full"
-              style={{ backgroundColor: "var(--fw-strawberry)" }}
+              
+              className="btn-eliminar "
               onClick={registrarSalida}
               disabled={loading}
               variant="destructive"

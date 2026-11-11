@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
-// Importamos los iconos de Lucide
+import { useForm } from "react-hook-form";
 import {
   User,
   Mail,
-  MapPin,
   Briefcase,
   DollarSign,
   Clock,
@@ -14,7 +13,8 @@ import {
   X,
   Building2,
   ImagePlus,
-  Trash2Icon, // Para Sede
+  Trash2Icon,
+  Phone,
 } from "lucide-react";
 
 import ToastAlert from "../componenteToast/ToastAlert";
@@ -22,24 +22,38 @@ import axiosInstance from "../../api/AxiosInstance";
 import { useQueryClient } from "@tanstack/react-query";
 import { useDropzone } from "react-dropzone";
 import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 
 export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
-  const [formData, setFormData] = useState({
-    tipo_documento: "",
-    numero_documento: "",
-    nombres: "",
-    apellidos: "",
-    correo_electronico: "",
-    sede: "",
-    area: "",
-    cargo: "",
-    salario: "",
-    horario: "",
-  });
-
   const queryClient = useQueryClient();
 
-  // Estados para selectores
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    reset, // Usamos reset para poblar todo de golpe cuando los datos estén listos
+    watch,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      tipo_documento: "DNI",
+      numero_documento: "",
+      nombres: "",
+      apellidos: "",
+      telefono: "",
+      correo_electronico: "",
+      sede: "",
+      area: "",
+      cargo: "",
+      salario: "",
+      horario: "",
+      fotoPerfil: null,
+    },
+  });
+
+  const tipoDocumentoSeleccionado = watch("tipo_documento");
+
   const [cargos, setCargos] = useState([]);
   const [areas, setAreas] = useState([]);
   const [sedes, setSedes] = useState([]);
@@ -47,51 +61,61 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
 
   const [fotoPreview, setFotoPreview] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [errors, setError] = useState("");
-
-  // Carga de datos auxiliares
-  const cargasCargosAreasHorarios = async () => {
-    try {
-      const [cargosRes, areasRes, horariosRes, sedesRes] = await Promise.all([
-        axiosInstance.get("/cargos"),
-        axiosInstance.get("/areas"),
-        axiosInstance.get("/horarios"),
-        axiosInstance.get("/sedesAll"),
-      ]);
-
-      setCargos(cargosRes.data);
-      setAreas(areasRes.data.data || []);
-      setHorarios(horariosRes.data);
-      setSedes(sedesRes.data.data || []);
-    } catch (err) {
-      setError("Hubo un error al cargar los datos auxiliares.");
-    }
-  };
+  const [apiError, setApiError] = useState("");
 
   useEffect(() => {
-    if (data) {
-      setFormData({
-        tipo_documento: data.empleado?.persona.tipo_documento || "",
-        numero_documento: data.empleado?.persona.documento_identidad || "",
-        nombres: data.empleado?.persona.nombre || "",
-        apellidos: data.empleado?.persona.apellidos || "",
-        correo_electronico: data.empleado?.persona.correo || "",
-        area: data.empleado?.area?.id || "",
-        sede: data.sede?.id || "",
-        cargo: data.empleado?.cargo?.id || "",
-        salario: data.empleado?.salario || "",
-        horario: data.empleado?.horario?.id || "",
-      });
-      cargasCargosAreasHorarios();
-    }
-  }, [data]);
+    const initModalData = async () => {
+      if (!data) return;
 
-  const validacionesInput = (e) => {
-    const { value } = e.target;
-    if (formData.tipo_documento === "DNI" && value.length > 8) return;
-    if (formData.tipo_documento === "extranjeria" && value.length > 10) return;
-    setFormData({ ...formData, numero_documento: value });
-  };
+      try {
+        // 1. Cargar listas de selects primero
+        const [cargosRes, areasRes, horariosRes, sedesRes] = await Promise.all([
+          axiosInstance.get("/cargos"),
+          axiosInstance.get("/areas"),
+          axiosInstance.get("/horarios"),
+          axiosInstance.get("/sedesAll"),
+        ]);
+
+        const listCargos = cargosRes.data || [];
+        const listAreas = areasRes.data.data || [];
+        const listHorarios = horariosRes.data || [];
+        const listSedes = sedesRes.data.data || [];
+
+        setCargos(listCargos);
+        setAreas(listAreas);
+        setHorarios(listHorarios);
+        setSedes(listSedes);
+
+        // 2. Una vez cargadas las opciones en el estado, reseteamos el formulario con los valores del usuario
+        reset({
+          tipo_documento: data.empleado?.persona?.tipo_documento || "DNI",
+          numero_documento: data.empleado?.persona?.documento_identidad || "",
+          nombres: data.empleado?.persona?.nombre || "",
+          apellidos: data.empleado?.persona?.apellidos || "",
+          telefono: data.empleado?.persona?.telefono || "",
+          correo_electronico: data.empleado?.persona?.correo || "",
+          sede: data.sede?.id ? String(data.sede.id) : "",
+          area: data.empleado?.area?.id ? String(data.empleado.area.id) : "",
+          cargo: data.empleado?.cargo?.id ? String(data.empleado.cargo.id) : "",
+          salario: data.empleado?.salario || "",
+          horario: data.empleado?.horario?.id ? String(data.empleado.horario.id) : "",
+          fotoPerfil: null,
+        });
+
+        // 3. Cargar la vista previa de la foto de Cloudflare/S3
+        const fotoRegistrada = data.foto_url;
+        if (fotoRegistrada) {
+          setFotoPreview(fotoRegistrada);
+        } else {
+          setFotoPreview(null);
+        }
+      } catch (err) {
+        setApiError("Hubo un error al cargar los datos auxiliares.");
+      }
+    };
+
+    initModalData();
+  }, [data, reset]);
 
   const handleCargoChange = async (e) => {
     const selectedCargoId = e.target.value;
@@ -100,33 +124,28 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
         const response = await axiosInstance.get(
           `/getSalarioCargo/${selectedCargoId}`,
         );
-        setFormData({
-          ...formData,
-          cargo: selectedCargoId,
-          salario: response.data.salario || "",
-        });
+        setValue("salario", response.data.salario || "", { shouldValidate: true });
       } catch (error) {
         console.error("Error al obtener el salario:", error);
       }
     } else {
-      setFormData({ ...formData, cargo: "", salario: "" });
+      setValue("salario", "");
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmitForm = async (formData) => {
     if (loading) return;
-    setError("");
+    setApiError("");
     setLoading(true);
 
     try {
       const payload = new FormData();
 
-      // Aseguramos que todo sea un String limpio (Igual que en Platos)
       payload.append("tipo_documento", String(formData.tipo_documento));
       payload.append("numero_documento", String(formData.numero_documento));
       payload.append("nombres", String(formData.nombres));
       payload.append("apellidos", String(formData.apellidos));
+      payload.append("telefono", String(formData.telefono));
       payload.append("correo_electronico", String(formData.correo_electronico));
       payload.append("sede", String(formData.sede));
       payload.append("area", String(formData.area));
@@ -134,15 +153,12 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
       payload.append("salario", String(formData.salario));
       payload.append("horario", String(formData.horario));
 
-      // Si existe el archivo de la foto, lo agregamos
       if (formData.fotoPerfil) {
         payload.append("foto_perfil", formData.fotoPerfil);
       }
 
-      // Engaño a Laravel (Igual que en Platos)
       payload.append("_method", "POST");
 
-      // Mandamos la petición SIN headers manuales
       const response = await axiosInstance.post(
         `/updateUsuario/${data.id}`,
         payload,
@@ -166,13 +182,12 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
       setLoading(false);
     }
   };
-  // Estilos comunes para etiquetas y contenedores
-  const labelStyle = "text-sm font-bold text-secondary-foreground mb-1";
+
   const sectionTitleStyle =
     "text-destructive font-bold text-sm uppercase mb-3 mt-2 border-b pb-1";
-  // Dropzone
+
   const { getRootProps, getInputProps } = useDropzone({
-    accept: { "image/*": [] }, // Sintaxis moderna de dropzone
+    accept: { "image/*": [] },
     maxFiles: 1,
     onDrop: (acceptedFiles, fileRejections) => {
       if (fileRejections.length > 0)
@@ -180,7 +195,7 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
       const file = acceptedFiles[0];
       if (file) {
         setFotoPreview(URL.createObjectURL(file));
-        setFormData({ ...formData, fotoPerfil: file });
+        setValue("fotoPerfil", file, { shouldValidate: true });
       }
     },
   });
@@ -188,15 +203,22 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
   const removePhoto = (e) => {
     e.stopPropagation();
     setFotoPreview(null);
-    setFormData({ ...formData, fotoPerfil: null });
+    setValue("fotoPerfil", null);
   };
+
   return (
-    <form onSubmit={handleSubmit} className="p-3">
-      {loading && !formData.nombres ? (
+    <form onSubmit={handleSubmit(onSubmitForm)} className="p-3">
+      {loading && !watch("nombres") ? (
         <div className="text-center p-4">Cargando...</div>
       ) : (
         <>
-          {/* SECCIÓN 1: FOTO DE PERFIL (Diseño Horizontal Compacto) */}
+          {apiError && (
+            <div className="bg-destructive/15 text-destructive p-3 rounded-md mb-3 text-sm">
+              {apiError}
+            </div>
+          )}
+
+          {/* SECCIÓN 1: FOTO DE PERFIL */}
           <div className="flex items-center gap-3 mb-4 p-3 rounded-md border-dashed">
             <div
               {...getRootProps()}
@@ -206,9 +228,7 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
                 height: "80px",
                 cursor: "pointer",
                 overflow: "hidden",
-                border: errors.fotoPerfil
-                  ? "2px solid var(--bs-danger)"
-                  : "2px solid #e2e8f0",
+                border: "2px solid #e2e8f0",
               }}
             >
               <input {...getInputProps()} id="fotoPerfil" />
@@ -216,7 +236,7 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
                 <img
                   src={fotoPreview}
                   alt="Preview"
-                  className="w-full h-full object-fit-cover"
+                  className="w-full h-full object-cover"
                 />
               ) : (
                 <ImagePlus
@@ -240,241 +260,284 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
                 <Button
                   type="button"
                   onClick={removePhoto}
-                  className="shadow h-8 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border-destructive bg-background text-destructive hover:bg-destructive/10 py-0 px-2"
-                  style={{ fontSize: "0.75rem" }}
+                  className="h-7 text-xs px-2"
                   variant="destructive"
                 >
-                  <Trash2Icon size={12} className="me-1" /> Quitar foto
+                  <Trash2Icon size={12} className="mr-1" /> Quitar foto
                 </Button>
-              )}
-              {errors.fotoPerfil && (
-                <div className="text-destructive text-sm mt-1">
-                  {errors.fotoPerfil.message}
-                </div>
               )}
             </div>
           </div>
-          {/* SECCIÓN : INFORMACIÓN PERSONAL */}
-          <h6 className={sectionTitleStyle}>Información Personal</h6>
 
+          {/* SECCIÓN 2: INFORMACIÓN PERSONAL */}
+          <h6 className={sectionTitleStyle}>Información Personal</h6>
           <div className="grid grid-cols-12 gap-3 mb-3">
             {/* Tipo Doc */}
-            <div className="col-span-full md:col-span-5">
-              <label className={labelStyle}>Tipo Doc.</label>
-              <div className="flex w-full items-stretch">
-                <span className="inline-flex items-center rounded-md border-input px-3 text-sm bg-background text-muted-foreground">
-                  <FileText size={16} />
-                </span>
+            <div className="col-span-full md:col-span-4">
+              <Label className="mb-1.5 block">Tipo Doc.</Label>
+              <div className="relative w-full">
+                <FileText
+                  size={16}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+                />
                 <select
-                  className="h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                  value={formData.tipo_documento}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      tipo_documento: e.target.value,
-                      numero_documento: "",
-                    })
-                  }
+                  className={`flex h-9 w-full items-center justify-between rounded-md border bg-background px-3 pl-9 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-ring ${
+                    errors.tipo_documento ? "border-destructive ring-destructive" : "border-input"
+                  }`}
+                  {...register("tipo_documento", {
+                    required: "Seleccione tipo",
+                    onChange: () => setValue("numero_documento", "", { shouldValidate: true })
+                  })}
                 >
                   <option value="DNI">DNI</option>
                   <option value="extranjeria">C. Extranjería</option>
                 </select>
               </div>
+              {errors.tipo_documento && <span className="text-xs text-destructive font-medium mt-1 block">{errors.tipo_documento.message}</span>}
             </div>
 
             {/* Num Documento */}
-            <div className="col-span-full md:col-span-7">
-              <label className={labelStyle}>Número Documento</label>
-              <div className="flex w-full items-stretch">
-                <span className="inline-flex items-center rounded-md border-input px-3 text-sm bg-background text-muted-foreground">
-                  <CreditCard size={16} />
-                </span>
-                <input
+            <div className="col-span-full md:col-span-4">
+              <Label className="mb-1.5 block">Nº Documento</Label>
+              <div className="relative w-full">
+                <CreditCard
+                  size={16}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+                />
+                <Input
                   type="text"
-                  className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                  value={formData.numero_documento}
-                  onChange={validacionesInput}
+                  className={`pl-9 ${errors.numero_documento ? "border-destructive focus-visible:ring-destructive" : ""}`}
                   placeholder="Ingrese número"
+                  {...register("numero_documento", {
+                    required: "Documento requerido",
+                    pattern: {
+                      value: tipoDocumentoSeleccionado === "DNI" ? /^[0-9]{8}$/ : /^[a-zA-Z0-9]{1,12}$/,
+                      message: tipoDocumentoSeleccionado === "DNI" ? "Debe tener 8 dígitos exactos" : "Máximo 12 caracteres",
+                    }
+                  })}
+                  onInput={(e) => {
+                    if (tipoDocumentoSeleccionado === "DNI") {
+                      e.target.value = e.target.value.replace(/[^0-9]/g, "").slice(0, 8);
+                    } else {
+                      e.target.value = e.target.value.replace(/\s/g, "").slice(0, 12);
+                    }
+                  }}
                 />
               </div>
+              {errors.numero_documento && <span className="text-xs text-destructive font-medium mt-1 block">{errors.numero_documento.message}</span>}
+            </div>
+
+            {/* Teléfono */}
+            <div className="col-span-full md:col-span-4">
+              <Label className="mb-1.5 block">Teléfono</Label>
+              <div className="relative w-full">
+                <Phone
+                  size={16}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+                />
+                <Input
+                  type="tel"
+                  className={`pl-9 ${errors.telefono ? "border-destructive focus-visible:ring-destructive" : ""}`}
+                  placeholder="Ej. 987654321"
+                  {...register("telefono", {
+                    required: "Teléfono requerido",
+                    pattern: {
+                      value: /^[0-9]{9}$/,
+                      message: "Debe contener 9 números exactos",
+                    }
+                  })}
+                  onInput={(e) => {
+                    e.target.value = e.target.value.replace(/[^0-9]/g, "").slice(0, 9);
+                  }}
+                />
+              </div>
+              {errors.telefono && <span className="text-xs text-destructive font-medium mt-1 block">{errors.telefono.message}</span>}
             </div>
 
             {/* Nombres */}
             <div className="col-span-full md:col-span-6">
-              <label className={labelStyle}>Nombres</label>
-              <div className="flex w-full items-stretch">
-                <span className="inline-flex items-center rounded-md border-input px-3 text-sm bg-background text-muted-foreground">
-                  <User size={16} />
-                </span>
-                <input
+              <Label className="mb-1.5 block">Nombres</Label>
+              <div className="relative w-full">
+                <User
+                  size={16}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+                />
+                <Input
                   type="text"
-                  className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                  value={formData.nombres}
-                  onChange={(e) =>
-                    setFormData({ ...formData, nombres: e.target.value })
-                  }
+                  className={`pl-9 ${errors.nombres ? "border-destructive focus-visible:ring-destructive" : ""}`}
                   placeholder="Ej. Juan Carlos"
+                  {...register("nombres", { required: "Los nombres son requeridos" })}
                 />
               </div>
+              {errors.nombres && <span className="text-xs text-destructive font-medium mt-1 block">{errors.nombres.message}</span>}
             </div>
 
             {/* Apellidos */}
             <div className="col-span-full md:col-span-6">
-              <label className={labelStyle}>Apellidos</label>
-              <div className="flex w-full items-stretch">
-                <span className="inline-flex items-center rounded-md border-input px-3 text-sm bg-background text-muted-foreground">
-                  <User size={16} />
-                </span>
-                <input
+              <Label className="mb-1.5 block">Apellidos</Label>
+              <div className="relative w-full">
+                <User
+                  size={16}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+                />
+                <Input
                   type="text"
-                  className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                  value={formData.apellidos}
-                  onChange={(e) =>
-                    setFormData({ ...formData, apellidos: e.target.value })
-                  }
+                  className={`pl-9 ${errors.apellidos ? "border-destructive focus-visible:ring-destructive" : ""}`}
                   placeholder="Ej. Pérez López"
+                  {...register("apellidos", { required: "Los apellidos son requeridos" })}
                 />
               </div>
+              {errors.apellidos && <span className="text-xs text-destructive font-medium mt-1 block">{errors.apellidos.message}</span>}
             </div>
           </div>
 
-          {/* SECCIÓN 2: CUENTA Y ACCESO */}
+          {/* SECCIÓN 3: CUENTA Y ACCESO */}
           <h6 className={sectionTitleStyle}>Cuenta y Acceso</h6>
-
           <div className="grid grid-cols-12 gap-3 mb-3">
             <div className="col-span-full">
-              <label className={labelStyle}>Correo Electrónico</label>
-              <div className="flex w-full items-stretch">
-                <span className="inline-flex items-center rounded-md border-input px-3 text-sm bg-background text-muted-foreground">
-                  <Mail size={16} />
-                </span>
-                <input
+              <Label className="mb-1.5 block">Correo Electrónico</Label>
+              <div className="relative w-full">
+                <Mail
+                  size={16}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+                />
+                <Input
                   type="email"
-                  className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                  value={formData.correo_electronico}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      correo_electronico: e.target.value,
-                    })
-                  }
+                  className={`pl-9 ${errors.correo_electronico ? "border-destructive focus-visible:ring-destructive" : ""}`}
                   placeholder="usuario@empresa.com"
+                  {...register("correo_electronico", {
+                    required: "El correo es requerido",
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: "Formato de correo inválido",
+                    }
+                  })}
                 />
               </div>
+              {errors.correo_electronico && <span className="text-xs text-destructive font-medium mt-1 block">{errors.correo_electronico.message}</span>}
             </div>
           </div>
 
-          {/* SECCIÓN 3: DATOS LABORALES */}
+          {/* SECCIÓN 4: DATOS LABORALES */}
           <h6 className={sectionTitleStyle}>Datos Laborales</h6>
-
           <div className="grid grid-cols-12 gap-3">
             {/* Sede */}
             <div className="col-span-full md:col-span-6">
-              <label className={labelStyle}>Sede</label>
-              <div className="flex w-full items-stretch">
-                <span className="inline-flex items-center rounded-md border-input px-3 text-sm bg-background text-muted-foreground">
-                  <Building2 size={16} />
-                </span>
+              <Label className="mb-1.5 block">Sede</Label>
+              <div className="relative w-full">
+                <Building2
+                  size={16}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+                />
                 <select
-                  className="h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                  value={formData.sede}
-                  onChange={(e) =>
-                    setFormData({ ...formData, sede: parseInt(e.target.value) })
-                  }
+                  className={`flex h-9 w-full items-center justify-between rounded-md border bg-background px-3 pl-9 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-ring ${
+                    errors.sede ? "border-destructive ring-destructive" : "border-input"
+                  }`}
+                  {...register("sede", { required: "Seleccione sede" })}
                 >
                   <option value="">Seleccione...</option>
                   {sedes.map((s) => (
-                    <option key={s.id} value={s.id}>
+                    <option key={s.id} value={String(s.id)}>
                       {s.nombre}
                     </option>
                   ))}
                 </select>
               </div>
+              {errors.sede && <span className="text-xs text-destructive font-medium mt-1 block">{errors.sede.message}</span>}
             </div>
 
             {/* Área */}
             <div className="col-span-full md:col-span-6">
-              <label className={labelStyle}>Área</label>
-              <div className="flex w-full items-stretch">
-                <span className="inline-flex items-center rounded-md border-input px-3 text-sm bg-background text-muted-foreground">
-                  <LayoutGrid size={16} />
-                </span>
+              <Label className="mb-1.5 block">Área</Label>
+              <div className="relative w-full">
+                <LayoutGrid
+                  size={16}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+                />
                 <select
-                  className="h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                  value={formData.area}
-                  onChange={(e) =>
-                    setFormData({ ...formData, area: e.target.value })
-                  }
+                  className={`flex h-9 w-full items-center justify-between rounded-md border bg-background px-3 pl-9 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-ring ${
+                    errors.area ? "border-destructive ring-destructive" : "border-input"
+                  }`}
+                  {...register("area", { required: "Seleccione área" })}
                 >
                   <option value="">Seleccione...</option>
                   {areas.map((a) => (
-                    <option key={a.id} value={a.id}>
+                    <option key={a.id} value={String(a.id)}>
                       {a.nombre}
                     </option>
                   ))}
                 </select>
               </div>
+              {errors.area && <span className="text-xs text-destructive font-medium mt-1 block">{errors.area.message}</span>}
             </div>
 
             {/* Cargo */}
             <div className="col-span-full md:col-span-6">
-              <label className={labelStyle}>Cargo</label>
-              <div className="flex w-full items-stretch">
-                <span className="inline-flex items-center rounded-md border-input px-3 text-sm bg-background text-muted-foreground">
-                  <Briefcase size={16} />
-                </span>
+              <Label className="mb-1.5 block">Cargo</Label>
+              <div className="relative w-full">
+                <Briefcase
+                  size={16}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+                />
                 <select
-                  className="h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                  value={formData.cargo}
-                  onChange={handleCargoChange}
+                  className={`flex h-9 w-full items-center justify-between rounded-md border bg-background px-3 pl-9 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-ring ${
+                    errors.cargo ? "border-destructive ring-destructive" : "border-input"
+                  }`}
+                  {...register("cargo", {
+                    required: "Seleccione cargo",
+                    onChange: handleCargoChange
+                  })}
                 >
                   <option value="">Seleccione...</option>
                   {cargos.map((c) => (
-                    <option key={c.id} value={c.id}>
+                    <option key={c.id} value={String(c.id)}>
                       {c.nombre}
                     </option>
                   ))}
                 </select>
               </div>
+              {errors.cargo && <span className="text-xs text-destructive font-medium mt-1 block">{errors.cargo.message}</span>}
             </div>
 
             {/* Horario */}
             <div className="col-span-full md:col-span-6">
-              <label className={labelStyle}>Horario</label>
-              <div className="flex w-full items-stretch">
-                <span className="inline-flex items-center rounded-md border-input px-3 text-sm bg-background text-muted-foreground">
-                  <Clock size={16} />
-                </span>
+              <Label className="mb-1.5 block">Horario</Label>
+              <div className="relative w-full">
+                <Clock
+                  size={16}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+                />
                 <select
-                  className="h-9 w-full appearance-auto rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                  value={formData.horario}
-                  onChange={(e) =>
-                    setFormData({ ...formData, horario: e.target.value })
-                  }
+                  className={`flex h-9 w-full items-center justify-between rounded-md border bg-background px-3 pl-9 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-ring ${
+                    errors.horario ? "border-destructive ring-destructive" : "border-input"
+                  }`}
+                  {...register("horario", { required: "Seleccione horario" })}
                 >
                   <option value="">Seleccione...</option>
                   {horarios.map((h) => (
-                    <option key={h.id} value={h.id}>
+                    <option key={h.id} value={String(h.id)}>
                       {h.horaEntrada} - {h.horaSalida}
                     </option>
                   ))}
                 </select>
               </div>
+              {errors.horario && <span className="text-xs text-destructive font-medium mt-1 block">{errors.horario.message}</span>}
             </div>
 
             {/* Salario */}
             <div className="col-span-full md:col-span-6">
-              <label className={labelStyle}>Salario</label>
-              <div className="flex w-full items-stretch">
-                <span className="inline-flex items-center rounded-md border-input px-3 text-sm bg-background text-muted-foreground">
-                  <DollarSign size={16} />
-                </span>
-                <input
+              <Label className="mb-1.5 block">Salario</Label>
+              <div className="relative w-full">
+                <DollarSign
+                  size={16}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+                />
+                <Input
                   type="text"
-                  className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                  value={formData.salario}
+                  className="pl-9 bg-muted/50 cursor-not-allowed"
                   readOnly
                   placeholder="0.00"
+                  {...register("salario")}
                 />
               </div>
             </div>
@@ -484,20 +547,19 @@ export function UsuarioEditar({ handleCloseModal, data, onUsuarioUpdated }) {
           <div className="flex justify-end gap-2 mt-4 pt-3 border-t">
             <Button
               type="button"
-              className="btn-cerrar-modal flex items-center gap-2"
               onClick={handleCloseModal}
-              variant="default"
+              variant="outline"
+              className="flex items-center gap-2"
             >
-              <X size={18} /> Cancelar
+              <X size={16} /> Cancelar
             </Button>
 
             <Button
               type="submit"
-              className="btn-guardar flex items-center gap-2"
               disabled={loading}
-              variant="default"
+              className="flex items-center gap-2"
             >
-              <Save size={18} />
+              <Save size={16} />
               {loading ? "Guardando..." : "Actualizar Usuario"}
             </Button>
           </div>

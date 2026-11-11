@@ -4,6 +4,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import axiosInstance from "../../../api/AxiosInstance";
 import ToastAlert from "../../componenteToast/ToastAlert";
 import { Button } from "../../ui/button";
+import { Input } from "../../ui/input";
+import { Label } from "../../ui/label";
 
 export default function FormConfiguracionEmpresa({ configuracion, onClose }) {
   const queryClient = useQueryClient();
@@ -59,126 +61,99 @@ export default function FormConfiguracionEmpresa({ configuracion, onClose }) {
   if (configuracion?.nombre === "Tipo Venta") {
     return (
       <form onSubmit={handleUpdate} className="flex flex-col h-full p-3">
-        <p className="text-muted-foreground text-sm mb-4">
+        <p className="text-sm text-muted-foreground mb-4">
           {configuracion.descripcion}
         </p>
 
         <div className="flex flex-col gap-3 mb-4">
-          {/* Opcion Restaurante */}
+          {/* Opción Restaurante */}
           <div
-            className="p-3 flex items-center gap-3"
-            style={{
-              borderRadius: "var(--radius-md)",
-              backgroundColor:
-                valorConfig === "restaurante"
-                  ? "var(--bg-saffron-soft)"
-                  : "var(--bg-card)",
-              borderColor:
-                valorConfig === "restaurante"
-                  ? "var(--fw-saffron)"
-                  : "var(--glass-border)",
-              cursor: "pointer",
-              transition: "var(--transition-smooth)",
-            }}
+            className={`flex items-center gap-4 p-3 rounded-lg border-2 cursor-pointer transition-all duration-200 ${
+              valorConfig === "restaurante"
+                ? "bg-amber-500/5 border-amber-500 shadow-sm"
+                : "bg-card border-border/50 hover:border-amber-500/50 hover:bg-amber-500/5"
+            }`}
             onClick={() => setValorConfig("restaurante")}
           >
             <div
-              className="flex justify-center items-center rounded p-2"
-              style={{
-                backgroundColor:
-                  valorConfig === "restaurante"
-                    ? "var(--fw-saffron)"
-                    : "#f3f4f6",
-                color:
-                  valorConfig === "restaurante"
-                    ? "var(--fw-white)"
-                    : "var(--brand-secondary)",
-              }}
+              className={`flex items-center justify-center p-2.5 rounded-md transition-colors ${
+                valorConfig === "restaurante"
+                  ? "bg-amber-500 text-white"
+                  : "bg-muted text-muted-foreground"
+              }`}
             >
-              <UtensilsCrossed size={28} />
+              <UtensilsCrossed size={24} />
             </div>
+            
             <div className="grow">
-              <h6
-                className="font-bold mb-1"
-                style={{ color: "var(--text-main)" }}
-              >
+              <h6 className="font-bold text-foreground mb-0.5">
                 Gastronomía / Restaurante
               </h6>
-              <p className="mb-0 text-sm text-muted-foreground">
+              <p className="text-xs text-muted-foreground m-0 leading-tight">
                 Habilita mesas, comandas y pantalla de cocina (KDS).
               </p>
             </div>
-            <div>
-              {valorConfig === "restaurante" && (
-                <CheckCircle2 color="var(--fw-saffron)" size={24} />
+            
+            <div className="shrink-0">
+              {valorConfig === "restaurante" ? (
+                <CheckCircle2 className="text-amber-500 size-6 animate-in zoom-in" />
+              ) : (
+                <div className="size-6 rounded-full border-2 border-muted" />
               )}
             </div>
           </div>
 
-          {/* Opcion Retail */}
+          {/* Opción Retail */}
           <div
-            className="p-3 flex items-center gap-3"
-            style={{
-              borderRadius: "var(--radius-md)",
-              backgroundColor:
-                valorConfig === "retail"
-                  ? "var(--bg-emerald-soft)"
-                  : "var(--bg-card)",
-              borderColor:
-                valorConfig === "retail"
-                  ? "var(--fw-emerald)"
-                  : "var(--glass-border)",
-              cursor: "pointer",
-              transition: "var(--transition-smooth)",
-            }}
+            className={`flex items-center gap-4 p-3 rounded-lg border-2 cursor-pointer transition-all duration-200 ${
+              valorConfig === "retail"
+                ? "bg-emerald-500/5 border-emerald-500 shadow-sm"
+                : "bg-card border-border/50 hover:border-emerald-500/50 hover:bg-emerald-500/5"
+            }`}
             onClick={() => setValorConfig("retail")}
           >
             <div
-              className="flex justify-center items-center rounded p-2"
-              style={{
-                backgroundColor:
-                  valorConfig === "retail" ? "var(--fw-emerald)" : "#f3f4f6",
-                color:
-                  valorConfig === "retail"
-                    ? "var(--fw-white)"
-                    : "var(--brand-secondary)",
-              }}
+              className={`flex items-center justify-center p-2.5 rounded-md transition-colors ${
+                valorConfig === "retail"
+                  ? "bg-emerald-500 text-white"
+                  : "bg-muted text-muted-foreground"
+              }`}
             >
-              <Store size={28} />
+              <Store size={24} />
             </div>
+            
             <div className="grow">
-              <h6
-                className="font-bold mb-1"
-                style={{ color: "var(--text-main)" }}
-              >
+              <h6 className="font-bold text-foreground mb-0.5">
                 Retail / Tienda
               </h6>
-              <p className="mb-0 text-sm text-muted-foreground">
+              <p className="text-xs text-muted-foreground m-0 leading-tight">
                 Enfocado en ventas rápidas y lector de código de barras.
               </p>
             </div>
-            <div>
-              {valorConfig === "retail" && (
-                <CheckCircle2 color="var(--fw-emerald)" size={24} />
+            
+            <div className="shrink-0">
+              {valorConfig === "retail" ? (
+                <CheckCircle2 className="text-emerald-500 size-6 animate-in zoom-in" />
+              ) : (
+                <div className="size-6 rounded-full border-2 border-muted" />
               )}
             </div>
           </div>
         </div>
 
-        <div className="mt-auto flex justify-end gap-2">
+        <div className="flex justify-end gap-2 mt-auto pt-4 border-t border-border">
           <Button
             type="button"
-            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-muted text-foreground shadow-sm hover:bg-muted/80 px-4 font-semibold"
+            variant="outline"
             onClick={onClose}
-            variant="default"
+            className="px-4"
           >
             Cancelar
           </Button>
           <Button
             type="submit"
-            className="btn-guardar px-4"
             disabled={loading}
-            variant="default"
+            className="px-4"
           >
             {loading ? "Guardando..." : "Aplicar Cambios"}
           </Button>
@@ -190,37 +165,34 @@ export default function FormConfiguracionEmpresa({ configuracion, onClose }) {
   // CASO 2: Es cualquier otra configuración futura de tipo "empresa"
   return (
     <form onSubmit={handleUpdate} className="flex flex-col h-full p-3">
-      <p className="text-muted-foreground text-sm mb-4">
+      <p className="text-sm text-muted-foreground mb-4">
         {configuracion?.descripcion}
       </p>
 
-      <div className="mb-3">
-        <label className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-semibold text-muted-foreground text-sm">
-          Valor de Configuración
-        </label>
-        <input
+      <div className="mb-4">
+        <Label className="block mb-2">Valor de Configuración</Label>
+        <Input
           type="text"
-          className="h-9 w-full rounded-md border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
           value={valorConfig}
           onChange={(e) => setValorConfig(e.target.value)}
+          placeholder="Ingrese el valor..."
           required
         />
       </div>
 
-      <div className="mt-auto flex justify-end gap-2">
+      <div className="flex justify-end gap-2 mt-auto pt-4 border-t border-border">
         <Button
           type="button"
-          className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-muted text-foreground shadow-sm hover:bg-muted/80 px-4 font-semibold"
+          variant="outline"
           onClick={onClose}
-          variant="default"
+          className="px-4"
         >
           Cancelar
         </Button>
         <Button
           type="submit"
-          className="btn-guardar px-4"
           disabled={loading}
-          variant="default"
+          className="px-4"
         >
           {loading ? "Guardando..." : "Guardar Cambios"}
         </Button>
